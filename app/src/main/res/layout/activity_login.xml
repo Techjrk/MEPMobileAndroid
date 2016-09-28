@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.LoginViewModel"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            tools:context="com.lecet.app.content.LoginActivity">
+
+        <include layout="@layout/content_login"
+                 bind:viewModel="@{viewModel}"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>
+

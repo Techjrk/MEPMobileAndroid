@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Brand Color Palette -->
+    <color name="lecetWhite">#ffffff</color>
+    <color name="lecetLightGray">#d1d2d4</color>
+    <color name="lecetMediumGray">#939599</color>
+    <color name="lecetDarkGray">#48484a</color>
+    <color name="lecetBlack">#000000</color>
+    <color name="lecetLightOrange">#fcbc6c</color>
+    <color name="lecetMediumOrange">#f6882f</color>
+    <color name="lecetDarkOrange">#f26b2a</color>
+
+
+    <!-- Other Colors -->
+    <!--color name="colorWhite">#FFFFFF</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorMineShaft">#2C2C2C</color>
+    <color name="colorChristie">#57B116</color>
+    <color name="colorSilver">#cdcdcd</color>
+    <color name="colorGray">#888686</color>
+    <color name="colorWildSand">#F6F6F6</color>
+    <color name="colorHintOfRed">#FCFAFA</color>
+    <color name="colorTuatara">#3A3A39</color>
+    <color name="colorAthensGrey">#F9FAFB</color>
+    <color name="colorGorse">#F7FC52</color>
+    <color name="colorDoveGray">#737373</color>
+    <color name="colorLima">#75eb1f</color>
+    <color name="colorSeashell">#f1f0f0</color>
+    <color name="colorMercury">#e7e6e6</color>
+    <color name="colorDustyGray">#9b9a9a</color>
+    <color name="colorBlack">#000000</color-->
+</resources>

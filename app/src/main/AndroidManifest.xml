@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.lecet.app">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- Application -->
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+
+        <!-- HockeyApp Integration -->
+        <meta-data android:name="net.hockeyapp.android.appIdentifier"
+                   android:value="bf2b988cbd6245d48903f92ea181b6af" />
+
+        <!-- Activities -->
+        <activity android:name=".content.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".contentbase.NavigationBaseActivity"
+                android:label="@string/title_activity_navigation"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.LoginActivity"
+                android:label="@string/title_activity_login"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.MainActivity"
+                android:label="@string/title_activity_main"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.CreateAccountActivity"
+                android:label="@string/title_activity_create_account"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.ProfileActivity"
+                android:label="@string/title_activity_profile"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.List1Activity"
+                android:label="@string/title_activity_list_1"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.List2Activity"
+                android:label="@string/title_activity_list_2"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.CreatePasswordActivity"
+                android:label="@string/title_activity_create_password"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.ChangePasswordActivity"
+                android:label="@string/title_activity_change_password"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.UpdateProfileActivity"
+                android:label="@string/title_activity_update_profile"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.SelectionActivity"
+                android:label="@string/title_activity_selection"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.AddPaymentActivity"
+                android:label="@string/title_activity_add_payment"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.SettingsActivity"
+                android:label="@string/title_activity_settings"
+                android:theme="@style/AppTheme">
+        </activity>
+    </application>
+
+</manifest>

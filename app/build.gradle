@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        applicationId "com.lecet.app"
+        minSdkVersion 19
+        targetSdkVersion 24
+        versionCode 1
+        versionName "0.0.1"
+
+        // HockeyApp
+        manifestPlaceholders = [HOCKEY_APP_ID: "bf2b988cbd6245d48903f92ea181b6af"]
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Tests
+    testCompile 'junit:junit:4.12'
+
+    // Standard Android
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v4:24.0.0'
+
+    // Google Play Services
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'com.google.android.gms:play-services-location:9.4.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    // Retrofit / Networking
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+
+    // Agenda Calendar & Dependencies (optional)
+    compile project(path: ':agendacalendarview')
+    compile 'com.jakewharton:butterknife:7.0.0'
+
+    // HockeyApp
+    compile 'net.hockeyapp.android:HockeySDK:4.0.0'
+
+}

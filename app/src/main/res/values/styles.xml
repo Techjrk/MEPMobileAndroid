@@ -1,0 +1,294 @@
+<resources xmlns:android="http://schemas.android.com/tools">
+
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/lecetMediumOrange</item>
+        <item name="colorPrimaryDark">@color/lecetDarkOrange</item>
+        <item name="colorAccent">@color/lecetLightOrange</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay"  parent="ThemeOverlay.AppCompat.Light"/>
+
+    <!-- Navigation -->
+    <style name="CustomToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorAccent</item>
+        <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
+    </style>
+
+    <style name="FloatingActionButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:src">@mipmap/ic_add_black</item>
+    </style>
+
+    <!-- Common -->
+    <style name="FullScreenImageBackground">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="CommonText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+    </style>
+
+    <style name="CommonText.Large">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="CommonText.Medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="CommonText.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CommonButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:background">@color/lecetLightOrange</item>
+        <item name="android:textColorHint">@color/lecetLightGray</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="CommonButton.TranspWithBorder">
+        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:background">@drawable/shape_rect_transp_border_2</item>
+    </style>
+
+    <style name="CommonIcon">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="CommonIcon.Small">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+    </style>
+
+
+    <!-- Form fields and buttons -->
+    <style name="FormField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:background">@color/lecetLightOrange</item>
+        <item name="android:textColorHint">@color/lecetLightGray</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="FormField.EditText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:editable">true</item>
+    </style>
+
+    <style name="FormField.EditText.Secure">
+        <item name="android:inputType">textPassword</item>
+    </style>
+
+    <style name="FormField.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="FormField.Button">
+        <item name="android:background">@drawable/shape_rect_transp_border_2</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Help -->
+    <style name="HelpAnchorTextView">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Logo -->
+    <style name="LogoImage">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_height">96dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:src">@drawable/product_logo</item>
+    </style>
+
+    <style name="LogoImage.Medium">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+    </style>
+
+    <style name="LogoImage.Small">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+    </style>
+
+    <style name="LecetLogoTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/lecetWhite</item>
+    </style>
+
+    <style name="LecetLogoTextView.Small">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <!-- Onboarding -->
+    <style name="OnboardingTitleTextView">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">24dp</item>
+    </style>
+
+    <style name="OnboardingTitleTextView.NoPadding">
+        <item name="android:layout_marginTop">0dp</item>
+    </style>
+
+    <style name="SelectionItemIcon">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="SelectionItemTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">8dp</item>
+    </style>
+
+    <!-- Change Password -->
+    <style name="ChangePasswordTextViewSmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+    </style>
+
+    <!-- Settings -->
+    <style name="SettingsItemRelativeLayout" parent="android:style/Widget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">96dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="SettingsUserImage">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="SettingsImageIcon">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="SettingsTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">60dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">8dp</item>
+    </style>
+
+    <style name="SettingsTextView.Small">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="FormField.LogoutButton">
+        <item name="android:background">@drawable/shape_rect_transp_border_2</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Profile -->
+    <style name="ProfileTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="ProfileTextView.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="ProfileTextView.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- List Item 1 -->
+    <style name="ListItem1DetailTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/lecetDarkGray</item>
+    </style>
+
+    <style name="ListItem1DetailTextView.Medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ListItem1DetailTextView.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- List Item 2 -->
+    <style name="ListItem2DetailTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/lecetMediumGray</item>
+    </style>
+
+    <style name="ListItem2DetailTextView.Medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ListItem2DetailTextView.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>
