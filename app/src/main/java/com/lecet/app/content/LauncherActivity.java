@@ -48,8 +48,6 @@ public class LauncherActivity extends AppCompatActivity {
 //        logoTextView.setTextColor(ContextCompat.getColor(this, R.color.lecetDarkOrange));
         logoTextView.setText(appNameSpannable);
 
-        TextView poweredByTextView = (TextView) findViewById(R.id.powered_by_text_view);
-//        poweredByTextView.setTextColor(ContextCompat.getColor(this, R.color.lecetDarkOrange));
     }
 
     private void initTimerDelay(long delay) {

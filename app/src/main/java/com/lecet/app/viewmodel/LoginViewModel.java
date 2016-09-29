@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.content.CreateAccountActivity;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -138,9 +137,4 @@ public class LoginViewModel extends BaseObservable {
 
     }
 
-    public void onCreateAccountClicked(View view) {
-
-        Intent intent = new Intent(activity, CreateAccountActivity.class);
-        activity.startActivity(intent);
-    }
 }
