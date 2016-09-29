@@ -14,13 +14,18 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lecetDarkGray"
+            android:background="@color/lecetTextMediumGray"
             tools:context=".content.LauncherActivity">
 
         <ImageView style="@style/FullScreenImageBackground"
                    android:src="@drawable/content_bg_splash"/>
 
-        <include layout="@layout/include_lecet_logo"/>
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="48dp"
+                   android:layout_marginRight="48dp"
+                   android:layout_marginTop="144dp"
+                   android:src="@drawable/logo_mep"/>
 
     </RelativeLayout>
 </layout>

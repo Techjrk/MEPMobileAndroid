@@ -17,9 +17,9 @@
                 android:id="@+id/info"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:background="@color/lecetDarkGray"
+                android:background="@color/lecetTextMediumGray"
                 android:layout_weight="20"
-                android:textColor="@color/lecetLightGray"
+                android:textColor="@color/lecetTextLightGray"
                 android:textSize="20sp"
                 android:gravity="center"
                 tools:text="Info"/>

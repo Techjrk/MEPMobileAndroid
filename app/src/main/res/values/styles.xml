@@ -2,9 +2,9 @@
 
     <!-- Base application theme -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/lecetMediumOrange</item>
-        <item name="colorPrimaryDark">@color/lecetDarkOrange</item>
-        <item name="colorAccent">@color/lecetLightOrange</item>
+        <item name="colorPrimary">@color/lecetMediumBlue</item>
+        <item name="colorPrimaryDark">@color/lecetButtonDarkBlue</item>
+        <item name="colorAccent">@color/lecetLightBlue</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -33,10 +33,14 @@
         <item name="android:scaleType">fitXY</item>
     </style>
 
+    <style name="FullScreenImageBackground.Gradient1">
+        <item name="android:src">@drawable/content_bg_gradient_1</item>
+    </style>
+
     <style name="CommonText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
     <style name="CommonText.Large">
@@ -57,14 +61,14 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/lecetLightOrange</item>
-        <item name="android:textColorHint">@color/lecetLightGray</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:background">@color/lecetButtonDarkBlue</item>
+        <item name="android:textColorHint">@color/lecetTextLightGray</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_marginEnd">16dp</item>
     </style>
 
     <style name="CommonButton.TranspWithBorder">
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:background">@drawable/shape_rect_transp_border_2</item>
     </style>
 
@@ -90,9 +94,9 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/lecetLightOrange</item>
-        <item name="android:textColorHint">@color/lecetLightGray</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:background">@color/lecetLightBlue</item>
+        <item name="android:textColorHint">@color/lecetTextMediumGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
         <item name="android:layout_marginEnd">16dp</item>
     </style>
 
@@ -120,7 +124,7 @@
     <!-- Help -->
     <style name="HelpAnchorTextView">
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
@@ -128,10 +132,10 @@
 
     <!-- Logo -->
     <style name="LogoImage">
-        <item name="android:layout_width">96dp</item>
-        <item name="android:layout_height">96dp</item>
+        <item name="android:layout_width">192dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:src">@drawable/product_logo</item>
+        <item name="android:src">@drawable/logo_mep</item>
     </style>
 
     <style name="LogoImage.Medium">
@@ -148,7 +152,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
     </style>
 
     <style name="LecetLogoTextView.Small">
@@ -158,7 +162,7 @@
     <!-- Onboarding -->
     <style name="OnboardingTitleTextView">
         <item name="android:textSize">26sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">16dp</item>
@@ -181,7 +185,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">8dp</item>
     </style>
@@ -191,7 +195,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
     <!-- Settings -->
@@ -224,7 +228,7 @@
         <item name="android:layout_marginLeft">60dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">8dp</item>
     </style>
@@ -244,7 +248,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
         <item name="android:gravity">left</item>
     </style>
 
@@ -263,7 +267,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
     <style name="ListItem1DetailTextView.Medium">
@@ -280,7 +284,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/lecetMediumGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
     <style name="ListItem2DetailTextView.Medium">

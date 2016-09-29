@@ -2,17 +2,29 @@
 <resources>
 
     <!-- Brand Color Palette -->
-    <color name="lecetWhite">#ffffff</color>
-    <color name="lecetLightGray">#d1d2d4</color>
-    <color name="lecetMediumGray">#939599</color>
-    <color name="lecetDarkGray">#48484a</color>
-    <color name="lecetBlack">#000000</color>
-    <color name="lecetLightOrange">#fcbc6c</color>
-    <color name="lecetMediumOrange">#f6882f</color>
-    <color name="lecetDarkOrange">#f26b2a</color>
+    <color name="lecetTextWhite">#ffffff</color>
+    <color name="lecetTextLightGray">#939599</color>
+    <color name="lecetTextMediumGray">#48484a</color>
+    <color name="lecetTextDarkGray">#222222</color>
+
+    <color name="lecetLightBlue">#A8C3E6</color>
+    <color name="lecetMediumBlue">#4C91D1</color>
+    <color name="lecetButtonDarkBlue">#08497C</color>
+    <color name="lecetButtonDarkerBlue">#08497C</color>
+
+    <color name="lecetLightOrange">#FCB76C</color>
+    <color name="lecetMediumOrange">#F8AD40</color>
+    <color name="lecetDarkOrange">#F8981C</color>
+
+    <color name="lecetMapRed">#C30A0A</color>
+    <color name="lecetMapGreen">#4D870A</color>
 
 
     <!-- Other Colors -->
+    <color name="pureWhite">#ffffff</color>
+    <color name="pureBlack">#000000</color>
+    <color name="transparent">#00000000</color>
+
     <!--color name="colorWhite">#FFFFFF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
