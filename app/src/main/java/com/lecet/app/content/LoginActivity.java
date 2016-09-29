@@ -34,14 +34,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        TextView logoTV = (TextView) findViewById(R.id.logo_text_view);
-        Spannable ws = new SpannableString(getString(R.string.app_name));
-        ws.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lecetDarkGray)), 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ws.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lecetMediumOrange)), 6, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        logoTV.setText(ws);
-
-        TextView pTV = (TextView) findViewById(R.id.powered_by_text_view);
-        pTV.setTextColor(ContextCompat.getColor(this, R.color.lecetDarkGray));
+//        TextView logoTV = (TextView) findViewById(R.id.logo_text_view);
+//        Spannable ws = new SpannableString(getString(R.string.app_name));
+//        ws.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lecetDarkGray)), 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ws.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lecetMediumOrange)), 6, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        logoTV.setText(ws);
+//
+//        TextView pTV = (TextView) findViewById(R.id.powered_by_text_view);
+//        pTV.setTextColor(ContextCompat.getColor(this, R.color.lecetDarkGray));
     }
 
     private void setupBinding() {
