@@ -6,6 +6,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="add_photo">Add Photo</string>
     <string name="email">Email</string>
+    <string name="email_address">Email Address</string>
     <string name="phone">Phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
