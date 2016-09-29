@@ -1,0 +1,8 @@
+.gradle
+.idea
+intermediates
+build
+gradlew
+gradlew.bat
+Lecet.iml
+app.iml
