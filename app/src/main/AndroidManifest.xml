@@ -77,16 +77,6 @@
                 android:theme="@style/AppTheme">
         </activity>
         <activity
-                android:name=".content.SelectionActivity"
-                android:label="@string/title_activity_selection"
-                android:theme="@style/AppTheme">
-        </activity>
-        <activity
-                android:name=".content.AddPaymentActivity"
-                android:label="@string/title_activity_add_payment"
-                android:theme="@style/AppTheme">
-        </activity>
-        <activity
                 android:name=".content.SettingsActivity"
                 android:label="@string/title_activity_settings"
                 android:theme="@style/AppTheme">

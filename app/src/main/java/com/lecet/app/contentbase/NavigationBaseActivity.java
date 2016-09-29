@@ -6,11 +6,9 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.lecet.app.R;
-import com.lecet.app.content.AddPaymentActivity;
 import com.lecet.app.content.List1Activity;
 import com.lecet.app.content.List2Activity;
 import com.lecet.app.content.ProfileActivity;
-import com.lecet.app.content.SelectionActivity;
 import com.lecet.app.content.SettingsActivity;
 
 
@@ -61,20 +59,12 @@ public class NavigationBaseActivity extends AppCompatActivity {
                 launchClass = ProfileActivity.class;
                 break;
 
-            case R.id.menu_item_selection:
-                launchClass = SelectionActivity.class;
-                break;
-
             case R.id.menu_item_list1:
                 launchClass = List1Activity.class;
                 break;
 
             case R.id.menu_item_list2:
                 launchClass = List2Activity.class;
-                break;
-
-            case R.id.menu_item_payment:
-                launchClass = AddPaymentActivity.class;
                 break;
 
             case R.id.menu_item_settings:
