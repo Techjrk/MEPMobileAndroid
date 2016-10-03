@@ -1,7 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/tools">
 
 
-    <!-- Base application theme -->
+    <!-- Application theme -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/lecetMediumBlue</item>
         <item name="colorPrimaryDark">@color/lecetButtonDarkBlue</item>
@@ -9,7 +9,9 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <style name="AppTheme.PopupOverlay"  parent="ThemeOverlay.AppCompat.Light"/>
+
     <style name="AppTheme.FullScreen"    parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -62,7 +64,7 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/lecetButtonDarkBlue</item>
+        <item name="android:background">@color/lecetButtonDarkerBlue</item>
         <item name="android:textColorHint">@color/lecetTextLightGray</item>
         <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_marginEnd">16dp</item>
@@ -102,9 +104,19 @@
     </style>
 
     <style name="FormField.EditText">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/pureBlack</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
         <item name="android:editable">true</item>
+    </style>
+
+    <style name="FormField.EditText.Login">
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColorHint">@color/lecetTextMediumGray</item>
+        <item name="android:textColor">@color/pureBlack</item>
     </style>
 
     <style name="FormField.EditText.Secure">

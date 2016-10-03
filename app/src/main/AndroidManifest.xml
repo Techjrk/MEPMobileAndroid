@@ -36,7 +36,7 @@
         <activity
                 android:name=".content.LoginActivity"
                 android:label="@string/title_activity_login"
-                android:theme="@style/AppTheme">
+                android:theme="@style/AppTheme.FullScreen">
         </activity>
         <activity
                 android:name=".content.MainActivity"
@@ -50,12 +50,12 @@
         </activity>
         <activity
                 android:name=".content.MobileCoDetailProjBidsActivity"
-                android:label="@string/title_activity_list_1"
+                android:label="@string/title_activity_mobile_company_detail_project_bids"
                 android:theme="@style/AppTheme">
         </activity>
         <activity
                 android:name=".content.MobileProjTrackingListActivity"
-                android:label="@string/title_activity_list_2"
+                android:label="@string/title_activity_mobile_project_tracking_list"
                 android:theme="@style/AppTheme">
         </activity>
         <activity

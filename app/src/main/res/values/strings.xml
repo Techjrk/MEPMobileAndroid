@@ -17,7 +17,7 @@
     <string name="powered_by_domandtom">Powered by Dom &amp; Tom</string>
     <string name="new_create_account">New? Create an Account</string>
     <string name="login">Login</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up_for_mep_access"><u>Sign Up for MEP Access</u></string>
 
     <!-- Create Password -->
     <string name="title_activity_create_password">Create Password</string>
@@ -30,11 +30,11 @@
     <string name="new_password">New Password</string>
     <string name="update_password">Update Password</string>
 
-    <!-- List 1 -->
-    <string name="title_activity_list_1">List 1</string>
+    <!-- Mobile Company Detail: Project Bids List -->
+    <string name="title_activity_mobile_company_detail_project_bids">Mobile Company Detail: Project Bids</string>
 
-    <!-- List 2 -->
-    <string name="title_activity_list_2">List 2</string>
+    <!-- Mobile Project Tracking List-->
+    <string name="title_activity_mobile_project_tracking_list">Mobile Project Tracking List</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>

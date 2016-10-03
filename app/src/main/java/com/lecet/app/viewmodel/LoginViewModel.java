@@ -133,8 +133,8 @@ public class LoginViewModel extends BaseObservable {
         return activity.getString(R.string.error_invalid_email);
     }
 
-    public void onForgotPasswordClicked(View view) {
-
+    public void onSignUpClicked(View view) {
+        //TODO - fill in
     }
 
 }
