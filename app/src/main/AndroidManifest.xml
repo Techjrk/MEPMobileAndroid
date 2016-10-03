@@ -16,7 +16,7 @@
 
         <!-- HockeyApp Integration -->
         <meta-data android:name="net.hockeyapp.android.appIdentifier"
-                   android:value="bf2b988cbd6245d48903f92ea181b6af" />
+                   android:value="bf2b988cbd6245d48903f92ea181b6af" /> <!-- TODO: update with current app id -->
 
         <!-- Activities -->
         <activity android:name=".content.LauncherActivity">

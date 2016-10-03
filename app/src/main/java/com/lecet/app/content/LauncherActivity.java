@@ -32,7 +32,7 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         setupBinding();
         initViews();
-        initTimerDelay(10000);
+        initTimerDelay(5000);
     }
 
     private void setupBinding() {

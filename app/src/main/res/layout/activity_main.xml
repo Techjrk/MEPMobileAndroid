@@ -17,9 +17,4 @@
     <!-- Sliding Drawer Menu -->
     <include layout="@layout/include_menu_drawer_layout"/>
 
-    <!-- FAB -->
-    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            style="@style/FloatingActionButton"/>
-
 </android.support.design.widget.CoordinatorLayout>
