@@ -6,13 +6,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:showIn="@layout/activity_list_2"
-        tools:context="com.lecet.app.content.List2Activity">
+        tools:showIn="@layout/activity_mobile_proj_tracking_list"
+        tools:context="com.lecet.app.content.MobileProjTrackingListActivity">
 
     <ListView
             android:id="@+id/list_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/list_item_2"/>
+            tools:listitem="@layout/list_item_mobile_proj_tracking"/>
 
 </RelativeLayout>

@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.content.List1Activity;
-import com.lecet.app.content.List2Activity;
+import com.lecet.app.content.MobileCoDetailProjBidsActivity;
+import com.lecet.app.content.MobileProjTrackingListActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.SettingsActivity;
 import com.lecet.app.contentbase.NavigationBaseActivity;
@@ -63,11 +63,11 @@ public class NavigationBaseViewModel extends BaseObservable {
                 break;
 
             case R.id.menu_item_list1:
-                launchClass = List1Activity.class;
+                launchClass = MobileCoDetailProjBidsActivity.class;
                 break;
 
             case R.id.menu_item_list2:
-                launchClass = List2Activity.class;
+                launchClass = MobileProjTrackingListActivity.class;
                 break;
 
             case R.id.menu_item_settings:

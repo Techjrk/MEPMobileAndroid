@@ -8,13 +8,12 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 
 /**
- * List2Activity
+ * MobileCoDetailProjBidsActivity
  * Created by jasonm on 8/15/16.
  */
+public class MobileCoDetailProjBidsActivity extends NavigationBaseActivity {
 
-public class List2Activity extends NavigationBaseActivity {
-
-    private final String TAG = "List2Activity";
+    private final String TAG = "MobCoDetlProjBidsActvy";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +21,10 @@ public class List2Activity extends NavigationBaseActivity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_list_2);
+        setContentView(R.layout.activity_mobile_co_detail_proj_bids);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
     }
 
 }

@@ -47,12 +47,12 @@
                 android:theme="@style/AppTheme">
         </activity>
         <activity
-                android:name=".content.List1Activity"
+                android:name=".content.MobileCoDetailProjBidsActivity"
                 android:label="@string/title_activity_list_1"
                 android:theme="@style/AppTheme">
         </activity>
         <activity
-                android:name=".content.List2Activity"
+                android:name=".content.MobileProjTrackingListActivity"
                 android:label="@string/title_activity_list_2"
                 android:theme="@style/AppTheme">
         </activity>

@@ -6,13 +6,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.lecet.app.content.List1Activity">
+        tools:context="com.lecet.app.content.MobileCoDetailProjBidsActivity">
 
     <!-- App Bar -->
     <include layout="@layout/include_app_bar_layout"/>
 
     <!-- Content -->
-    <include layout="@layout/content_list_1"/>
+    <include layout="@layout/content_mobile_co_detail_proj_bids"/>
 
     <!-- Sliding Drawer Menu -->
     <include layout="@layout/include_menu_drawer_layout"/>

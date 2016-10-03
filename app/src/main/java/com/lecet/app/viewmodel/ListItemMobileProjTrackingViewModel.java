@@ -8,52 +8,54 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * File: ListItem2ViewModel Created: 8/28/16 Author: domandtom
+ * File: ListItemMobileProjTrackingViewModel Created: 8/28/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItem2ViewModel extends BaseObservable {
+public class ListItemMobileProjTrackingViewModel extends BaseObservable {
 
     private final Context context;
 
-    private String string1;
-    private String string2;
-    private String string3;
-    private ImageView imageView;
+    private String projectName;
+    private String location;
+    private String keywords;
+    private ImageView mapImageView;
+    // TODO: add new bid field
+    // TODO: add new note field
 
-    public ListItem2ViewModel(Context context) {
+    public ListItemMobileProjTrackingViewModel(Context context) {
 
         this.context = context;
     }
 
     @Bindable
-    public String getString1() {
-        return string1;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setString1(String string1) {
-        this.string1 = string1;
-        //notifyPropertyChanged(BR.string1);
-    }
-
-    @Bindable
-    public String getString2() {
-        return string2;
-    }
-
-    public void setString2(String string2) {
-        this.string2 = string2;
-        //notifyPropertyChanged(BR.string2);
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+        //notifyPropertyChanged(BR.projectName);
     }
 
     @Bindable
-    public String getString3() {
-        return string3;
+    public String getLocation() {
+        return location;
     }
 
-    public void setString3(String string3) {
-        this.string3 = string3;
-        //notifyPropertyChanged(BR.string3);
+    public void setLocation(String location) {
+        this.location = location;
+        //notifyPropertyChanged(BR.location);
+    }
+
+    @Bindable
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+        //notifyPropertyChanged(BR.keywords);
     }
 
     @BindingAdapter({"android:src"})
