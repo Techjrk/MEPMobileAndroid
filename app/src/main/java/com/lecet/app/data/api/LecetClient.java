@@ -19,17 +19,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LecetClient {
 
     private static final boolean IS_PRODUCTION = false;
-    private static final String STAGING_ENDPOINT = "http://looplinkapi.dt-staging.com/api/";     // TODO: CHANGE TO LECET ENDPOINT
-    private static final String PRODUCTION_ENDPOINT = "TBD";
+    private static final String STAGING_ENDPOINT = "http://lecet.dt-staging.com/";
+    private static final String PRODUCTION_ENDPOINT = "https://mepmobile.lecet.org/";
     private static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
-
-    public static final String CLIENT_ID = "KGOjT2B1QsZ5EXnpWPF6ekBexqXRiB6F";
-    public static final String CLIENT_SECRET = "q1smKhVW2d6yTnbxml17Nuuf2E7YgiXM";
 
     private static LecetClient ourInstance = new LecetClient();
 
     private AssetService assetService;
-    private AuthService authService;
     private CheckInService checkInService;
     private DeviceService deviceService;
     private List1Service list1Service;
@@ -60,7 +56,6 @@ public class LecetClient {
                 .client(httpClient.build())
                 .build();
 
-        authService = retrofit.create(AuthService.class);
         assetService = retrofit.create(AssetService.class);
         checkInService = retrofit.create(CheckInService.class);
         deviceService = retrofit.create(DeviceService.class);
@@ -68,9 +63,6 @@ public class LecetClient {
         userService = retrofit.create(UserService.class);
     }
 
-    public AuthService getAuthService() {
-        return authService;
-    }
 
     public AssetService getAssetService() {
         return assetService;
