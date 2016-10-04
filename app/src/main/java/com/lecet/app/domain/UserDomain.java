@@ -1,12 +1,9 @@
 package com.lecet.app.domain;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.api.request.CreateUserRequest;
-import com.lecet.app.data.api.response.UserResponse;
+import com.lecet.app.data.models.Access;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,11 +15,9 @@ import retrofit2.Callback;
  */
 public class UserDomain {
 
-    private final Context context;
     private final LecetClient lecetClient;
 
-    public UserDomain(Context context, LecetClient lecetClient) {
-        this.context = context;
+    public UserDomain(LecetClient lecetClient) {
         this.lecetClient = lecetClient;
     }
 
@@ -38,15 +33,15 @@ public class UserDomain {
         return !TextUtils.isEmpty(target) && target.length() > 1;
     }
 
-    public void postUser(@NonNull CreateUserRequest user, Callback<UserResponse> callback) {
+    /**
+     * API
+     **/
 
-        Call<UserResponse> call = lecetClient.getUserService().create(user);
+    public void login(String email, String password, Callback<Access> callback) {
+
+        Call<Access> call = lecetClient.getUserService().login(email, password);
         call.enqueue(callback);
     }
 
-    public void getUserByEmail(@NonNull String token, @NonNull String email, Callback<UserResponse> callback) {
 
-        Call<UserResponse> call = lecetClient.getUserService().userByEmail(token, email);
-        call.enqueue(callback);
-    }
 }

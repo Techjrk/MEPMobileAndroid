@@ -39,39 +39,10 @@ public class LoginDomain {
 
     public void login(String email, String password, Callback<Access> callback) {
 
-        final AuthRequest r = new AuthRequest.Builder(GRANT_TYPE_PASSWORD)
-                .clientID(LecetClient.CLIENT_ID)
-                .clientSecret(LecetClient.CLIENT_SECRET)
-                .userName(email)
-                .password(password)
-                .build();
-
-        Call<Access> call = lecetClient.getAuthService().login(r);
+        Call<Access> call = lecetClient.getUserService().login(email, password);
         call.enqueue(callback);
     }
 
-    public void refreshToken(String rt, Callback<Access> callback) {
-
-        final AuthRequest r = new AuthRequest.Builder(GRANT_TYPE_REFRESH)
-                .clientID(LecetClient.CLIENT_ID)
-                .clientSecret(LecetClient.CLIENT_SECRET)
-                .refreshToken(rt)
-                .build();
-
-        Call<Access> call = lecetClient.getAuthService().refreshToken(r);
-        call.enqueue(callback);
-    }
-
-    public void clientAccess(Callback<Access> callback) {
-
-        final AuthRequest r = new AuthRequest.Builder(GRANT_TYPE_CLIENT)
-                .clientID(LecetClient.CLIENT_ID)
-                .clientSecret(LecetClient.CLIENT_SECRET)
-                .build();
-
-        Call<Access> call = lecetClient.getAuthService().login(r);
-        call.enqueue(callback);
-    }
 
     public void logout(Callback<User> callback) {
 
