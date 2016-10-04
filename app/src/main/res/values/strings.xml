@@ -93,4 +93,7 @@
     <string name="error_network_title">Network Error</string>
     <string name="error_network_message">Please try again</string>
 
+    <!-- Web links -->
+    <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
+
 </resources>
