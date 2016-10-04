@@ -11,11 +11,6 @@
           android:title="@string/profile"
           android:onClick="onMenuItemClicked"/>
 
-    <item android:id="@+id/menu_item_selection"
-          android:icon="@mipmap/ic_grade_black"
-          android:title="@string/selection"
-          android:onClick="onMenuItemClicked"/>
-
     <item android:id="@+id/menu_item_list1"
           android:icon="@mipmap/ic_favorite_border_black"
           android:title="@string/list1"
@@ -24,11 +19,6 @@
     <item android:id="@+id/menu_item_list2"
           android:icon="@mipmap/ic_hot_tub_black"
           android:title="@string/list2"
-          android:onClick="onMenuItemClicked"/>
-
-    <item android:id="@+id/menu_item_payment"
-          android:icon="@mipmap/ic_account_balance_black"
-          android:title="@string/payment"
           android:onClick="onMenuItemClicked"/>
 
     <item android:id="@+id/menu_item_settings"

@@ -63,10 +63,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
-    // Agenda Calendar & Dependencies (optional)
-    compile project(path: ':agendacalendarview')
-    compile 'com.jakewharton:butterknife:7.0.0'
-
     // HockeyApp
     compile 'net.hockeyapp.android:HockeySDK:4.0.0'
 

@@ -32,7 +32,7 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         setupBinding();
         initViews();
-        initTimerDelay(10000);
+        initTimerDelay(5000);
     }
 
     private void setupBinding() {
@@ -43,13 +43,11 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        TextView logoTextView = (TextView) findViewById(R.id.logo_text_view);
-        Spannable appNameSpannable = new SpannableString(getString(R.string.app_name));
+//        TextView logoTextView = (TextView) findViewById(R.id.logo_text_view);
+//        Spannable appNameSpannable = new SpannableString(getString(R.string.app_name));
 //        logoTextView.setTextColor(ContextCompat.getColor(this, R.color.lecetDarkOrange));
-        logoTextView.setText(appNameSpannable);
+//        logoTextView.setText(appNameSpannable);
 
-        TextView poweredByTextView = (TextView) findViewById(R.id.powered_by_text_view);
-//        poweredByTextView.setTextColor(ContextCompat.getColor(this, R.color.lecetDarkOrange));
     }
 
     private void initTimerDelay(long delay) {
