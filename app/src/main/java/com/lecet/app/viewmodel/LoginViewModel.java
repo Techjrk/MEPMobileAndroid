@@ -97,9 +97,9 @@ public class LoginViewModel extends BaseObservable {
 
                     if (response.isSuccessful()) {
 
+                        //TODO: Handle Response
                         Access r = response.body();
-                        LecetSharedPreferenceUtil.getInstance(activity).setAccessToken(r.getAccessToken());
-                        LecetSharedPreferenceUtil.getInstance(activity).setRefreshToken(r.getRefreshToken());
+
 
                         Intent intent = new Intent(activity, MainActivity.class);
                         activity.startActivity(intent);
