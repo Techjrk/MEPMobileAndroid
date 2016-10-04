@@ -1,10 +1,6 @@
 package com.lecet.app.data.api;
 
-import com.lecet.app.data.api.service.AssetService;
-import com.lecet.app.data.api.service.AuthService;
-import com.lecet.app.data.api.service.CheckInService;
-import com.lecet.app.data.api.service.DeviceService;
-import com.lecet.app.data.api.service.List1Service;
+import com.lecet.app.data.api.service.BidService;
 import com.lecet.app.data.api.service.UserService;
 
 import okhttp3.OkHttpClient;
@@ -25,10 +21,7 @@ public class LecetClient {
 
     private static LecetClient ourInstance = new LecetClient();
 
-    private AssetService assetService;
-    private CheckInService checkInService;
-    private DeviceService deviceService;
-    private List1Service list1Service;
+    private BidService bidService;
     private UserService userService;
 
     public static LecetClient getInstance() {
@@ -56,28 +49,13 @@ public class LecetClient {
                 .client(httpClient.build())
                 .build();
 
-        assetService = retrofit.create(AssetService.class);
-        checkInService = retrofit.create(CheckInService.class);
-        deviceService = retrofit.create(DeviceService.class);
-        list1Service = retrofit.create(List1Service.class);
+        bidService = retrofit.create(BidService.class);
         userService = retrofit.create(UserService.class);
     }
 
 
-    public AssetService getAssetService() {
-        return assetService;
-    }
-
-    public DeviceService getDeviceService() {
-        return deviceService;
-    }
-
-    public CheckInService getCheckInService() {
-        return checkInService;
-    }
-
-    public List1Service getList1Service() {
-        return list1Service;
+    public BidService getBidService() {
+        return bidService;
     }
 
     public UserService getUserService() {

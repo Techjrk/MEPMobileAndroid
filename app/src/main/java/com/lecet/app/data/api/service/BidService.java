@@ -12,7 +12,7 @@ import retrofit2.http.POST;
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public interface AssetService {
+public interface BidService {
 
     @Headers({
             "Accept: application/vnd.api.v1+json",
