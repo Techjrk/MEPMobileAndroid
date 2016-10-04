@@ -13,6 +13,8 @@ android {
 
         // HockeyApp
         manifestPlaceholders = [HOCKEY_APP_ID: "bf2b988cbd6245d48903f92ea181b6af"]
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -28,8 +30,23 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Tests
+    // Tests -- JUnit 4 framework
     testCompile 'junit:junit:4.12'
+    // Optional -- Mockito framework
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+    // Android Tests
+    androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    // Optional -- Hamcrest library
+    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+    // Optional -- UI testing with Espresso
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    // Optional -- UI testing with UI Automator
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    // Optional -- OkHttp Mock
+    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.4.1'
 
     // Standard Android
     compile 'com.android.support:appcompat-v7:24.0.0'
@@ -44,7 +61,7 @@ dependencies {
     // Retrofit / Networking
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     // Agenda Calendar & Dependencies (optional)
     compile project(path: ':agendacalendarview')
