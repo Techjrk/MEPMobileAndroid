@@ -12,7 +12,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.domain.LoginDomain;
+import com.lecet.app.domain.UserDomain;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,17 +26,17 @@ import retrofit2.Response;
 public class LoginViewModel extends BaseObservable {
 
     private final AppCompatActivity activity;
-    private final LoginDomain loginDomain;
+    private final UserDomain userDomain;
 
     private String email;
     private String password;
     private boolean emailValid;
     private boolean passwordValid;
 
-    public LoginViewModel(AppCompatActivity activity, LoginDomain ld) {
+    public LoginViewModel(AppCompatActivity activity, UserDomain ld) {
 
         this.activity = activity;
-        this.loginDomain = ld;
+        this.userDomain = ld;
     }
 
     @Bindable
@@ -85,12 +85,12 @@ public class LoginViewModel extends BaseObservable {
 
     public void onLoginClicked(View view) {
 
-        emailValid = loginDomain.isValidEmail(email);
-        passwordValid = loginDomain.isValidPassword(password);
+        emailValid = userDomain.isValidEmail(email);
+        passwordValid = userDomain.isValidPassword(password);
 
         if (emailValid && passwordValid) {
 
-            loginDomain.login(email, password, new Callback<Access>() {
+            userDomain.login(email, password, new Callback<Access>() {
                 @Override
                 public void onResponse(Call<Access> call, Response<Access> response) {
 
@@ -99,6 +99,10 @@ public class LoginViewModel extends BaseObservable {
                         //TODO: Handle Response
                         Access r = response.body();
 
+                        // Store "ID" variable as session token and "userID" as
+                        LecetSharedPreferenceUtil sharedPreferenceUtil = LecetSharedPreferenceUtil.getInstance(activity.getApplication());
+                        sharedPreferenceUtil.setAccessToken(r.getId());
+                        sharedPreferenceUtil.setId(r.getUserId());
 
                         Intent intent = new Intent(activity, MainActivity.class);
                         activity.startActivity(intent);

@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.databinding.ActivityLoginBinding;
-import com.lecet.app.domain.LoginDomain;
+import com.lecet.app.domain.UserDomain;
 import com.lecet.app.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupBinding() {
         ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        LoginViewModel viewModel = new LoginViewModel(this, new LoginDomain(LecetClient.getInstance()));
+        LoginViewModel viewModel = new LoginViewModel(this, new UserDomain(LecetClient.getInstance()));
         binding.setViewModel(viewModel);
     }
 
