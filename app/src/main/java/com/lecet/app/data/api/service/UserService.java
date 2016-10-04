@@ -2,7 +2,10 @@ package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.api.request.CreateUserRequest;
 import com.lecet.app.data.api.response.UserResponse;
+import com.lecet.app.data.models.Access;
 
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -20,30 +23,19 @@ import retrofit2.http.Path;
  */
 public interface UserService {
 
-    @POST("users")
-    Call<UserResponse> create(@Body CreateUserRequest user);
-
     @Headers({
-            "Accept: application/vnd.api.v1+json",
-            "Content-Type: application/json"
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
     })
-    @GET("me")
-    Call<UserResponse> me(@Header("Authorization") String authorization);
-
-    @Headers({
-            "Accept: application/vnd.api.v1+json",
-            "Content-Type: application/json"
-    })
-    @GET("users/email/{user_email}")
-    Call<UserResponse> userByEmail(@Header("Authorization") String authorization, @Path("user_email") String userEmail);
-
-
-    @Headers({
-            "Accept: application/vnd.api.v1+json",
-            "Content-Type: application/json"
-    })
+    @POST("LecetUsers/login")
     @FormUrlEncoded
-    @POST("users/forgot-password")
-    Call<UserResponse> forgotPassword(@Header("Authorization") String authorization, @Field("email") String email);
+    Call<Access> login(@Field("email") String email, @Field("password") String password);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("LecetUsers/logout")
+    Call<ResponseBody> logout(@Header("Authorization") String token);
 
 }
