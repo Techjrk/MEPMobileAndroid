@@ -7,7 +7,6 @@ import android.databinding.BindingAdapter;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lecet.app.domain.LoginDomain;
 import com.lecet.app.domain.UserDomain;
 
 /**
@@ -19,7 +18,6 @@ public class ProfileViewModel extends BaseObservable {
 
     private final Context context;
     private final UserDomain userDomain;
-    private final LoginDomain loginDomain;
 
     private String firstName;
     private String lastName;
@@ -30,11 +28,10 @@ public class ProfileViewModel extends BaseObservable {
     private ImageView profileImage;
 
 
-    public ProfileViewModel(Context context, UserDomain ud, LoginDomain ld) {
+    public ProfileViewModel(Context context, UserDomain ud) {
 
         this.context = context;
         this.userDomain = ud;
-        this.loginDomain = ld;
     }
 
     @Bindable
