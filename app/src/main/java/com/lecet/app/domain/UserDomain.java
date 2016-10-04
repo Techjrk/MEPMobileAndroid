@@ -1,5 +1,6 @@
 package com.lecet.app.domain;
 
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
@@ -20,6 +21,10 @@ public class UserDomain {
     public UserDomain(LecetClient lecetClient) {
         this.lecetClient = lecetClient;
     }
+
+    /**
+     * VALIDATION
+     **/
 
     public boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
