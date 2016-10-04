@@ -18,7 +18,6 @@ public class LecetSharedPreferenceUtil {
     private static LecetSharedPreferenceUtil mInstance;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private String accesToken;
 
     public static LecetSharedPreferenceUtil getInstance(Context context) {
         if (!(mInstance instanceof LecetSharedPreferenceUtil)) {
@@ -59,6 +58,12 @@ public class LecetSharedPreferenceUtil {
         mEditor.putInt(name, value).apply();
     }
 
+    private void putLongPreferences(String name, long value) {
+        mEditor.putLong(name, value);
+    }
+
+    private long getLongPreferences(String name) { return mSharedPreferences.getLong(name, -1);}
+
     public void setAccessToken(String value) {
         putStringPreferences(ACCESS_TOKEN, value);
     }
@@ -67,11 +72,11 @@ public class LecetSharedPreferenceUtil {
         return getStringPreferences(ACCESS_TOKEN);
     }
 
-    public void setId(Integer value) {
-        putIntPreferences(ID, value);
+    public void setId(long value) {
+        putLongPreferences(ID, value);
     }
 
-    public Integer getId() {
-        return getIntPreferences(ID);
+    public long getId() {
+        return getLongPreferences(ID);
     }
 }
