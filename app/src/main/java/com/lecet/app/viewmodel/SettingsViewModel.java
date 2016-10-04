@@ -7,13 +7,6 @@ import android.databinding.BindingAdapter;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lecet.app.data.models.User;
-import com.lecet.app.domain.LoginDomain;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 /**
  * File: SettingsViewModel Created: 8/22/16 Author: domandtom
  *
@@ -22,7 +15,6 @@ import retrofit2.Response;
 public class SettingsViewModel extends BaseObservable {
 
     private final Context context;
-    private final LoginDomain loginDomain;
 
     private String string1;
     private String string2;
@@ -31,10 +23,9 @@ public class SettingsViewModel extends BaseObservable {
     private ImageView profileImage;
 
 
-    public SettingsViewModel(Context context, LoginDomain ld) {
+    public SettingsViewModel(Context context) {
 
         this.context = context;
-        this.loginDomain = ld;
     }
 
     @Bindable
@@ -102,24 +93,6 @@ public class SettingsViewModel extends BaseObservable {
     @SuppressWarnings("unused")
     public void onLogoutClicked(View view) {
 
-        loginDomain.logout(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                if (response.isSuccessful()) {
-
-
-                } else {
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
     }
 
 }
