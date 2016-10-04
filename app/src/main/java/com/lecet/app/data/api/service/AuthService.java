@@ -5,6 +5,8 @@ import com.lecet.app.data.models.Access;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -16,16 +18,17 @@ import retrofit2.http.POST;
 public interface AuthService {
 
     @Headers({
-            "Accept: application/vnd.api.v1+json",
-            "Content-Type: application/json"
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
     })
-    @POST("oauth/authorize")
-    Call<Access> login(@Body AuthRequest authRequest);
+    @POST("LecetUsers/authorize")
+    @FormUrlEncoded
+    Call<Access> login(@Field("email") String email, @Field("password") String password);
 
     @Headers({
             "Accept: application/vnd.api.v1+json",
             "Content-Type: application/json"
     })
     @POST("auth/refresh-token")
-    Call<Access> refreshToken(@Body AuthRequest authRequest);
+    Call<Access> refreshToken(@Field("email") String email, @Field("password") String password);
 }
