@@ -9,34 +9,34 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Access {
 
-    @SerializedName("access_token")
-    private String accessToken;
+    @SerializedName("id")
+    private String id;
 
-    @SerializedName("tokenType")
-    private String tokenType;
+    @SerializedName("ttl")
+    private long ttl;
 
-    @SerializedName("expires_in")
-    private String expiresIn;
+    @SerializedName("userId")
+    private long userId;
 
-    @SerializedName("refresh_token")
-    private String refreshToken;
+    @SerializedName("created")
+    private String created;
 
     public Access() {
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getId() {
+        return id;
     }
 
-    public String getExpiresIn() {
-        return expiresIn;
+    public long getUserId() {
+        return userId;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getCreated() {
+        return created;
     }
 
-    public String getTokenType() {
-        return tokenType;
+    public long getTtl() {
+        return ttl;
     }
 }
