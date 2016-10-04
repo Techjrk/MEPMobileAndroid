@@ -12,9 +12,7 @@ import android.util.Log;
 public class LecetSharedPreferenceUtil {
 
     private static final String NAME = "AppSharedPreference";
-    private static final String OAUTH_HEADER_NAME = "oAuthHeader";
     private static final String ACCESS_TOKEN = "accessToken";
-    private static final String REFRESH_TOKEN = "refreshToken";
 
     private static final String ID = "id";
     private static LecetSharedPreferenceUtil mInstance;
@@ -61,28 +59,12 @@ public class LecetSharedPreferenceUtil {
         mEditor.putInt(name, value).apply();
     }
 
-    public void setAuthorization(String value) {
-        putStringPreferences(OAUTH_HEADER_NAME, value);
-    }
-
-    public String getAuthorization() {
-        return getStringPreferences(OAUTH_HEADER_NAME);
-    }
-
     public void setAccessToken(String value) {
         putStringPreferences(ACCESS_TOKEN, value);
     }
 
     public String getAccessToken() {
         return getStringPreferences(ACCESS_TOKEN);
-    }
-
-    public void setRefreshToken(String value) {
-        putStringPreferences(REFRESH_TOKEN, value);
-    }
-
-    public String getRefreshToken() {
-        return getStringPreferences(REFRESH_TOKEN);
     }
 
     public void setId(Integer value) {
