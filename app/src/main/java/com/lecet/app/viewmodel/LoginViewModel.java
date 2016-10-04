@@ -3,6 +3,7 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -96,7 +97,6 @@ public class LoginViewModel extends BaseObservable {
 
                     if (response.isSuccessful()) {
 
-                        //TODO: Handle Response
                         Access r = response.body();
 
                         // Store "ID" variable as session token and "userID" as
@@ -138,7 +138,10 @@ public class LoginViewModel extends BaseObservable {
     }
 
     public void onSignUpClicked(View view) {
-        //TODO - fill in
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.lecet_signup_url)));
+        activity.startActivity(intent);
     }
+
 
 }
