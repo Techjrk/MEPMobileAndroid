@@ -1,6 +1,7 @@
 package com.lecet.app.data.api;
 
 import com.lecet.app.data.api.service.BidService;
+import com.lecet.app.data.api.service.ProjectService;
 import com.lecet.app.data.api.service.UserService;
 
 import okhttp3.OkHttpClient;
@@ -23,6 +24,7 @@ public class LecetClient {
 
     private BidService bidService;
     private UserService userService;
+    private ProjectService projectService;
 
     public static LecetClient getInstance() {
         return ourInstance;
@@ -50,12 +52,17 @@ public class LecetClient {
                 .build();
 
         bidService = retrofit.create(BidService.class);
+        projectService = retrofit.create(ProjectService.class);
         userService = retrofit.create(UserService.class);
     }
 
 
     public BidService getBidService() {
         return bidService;
+    }
+
+    public ProjectService getProjectService() {
+        return projectService;
     }
 
     public UserService getUserService() {
