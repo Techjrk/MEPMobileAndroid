@@ -2,7 +2,7 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ChangePasswordViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ContactDetailViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:background="@color/lecetButtonDarkBlue"
-            tools:context="com.lecet.app.content.ChangePasswordActivity">
+            tools:context="com.lecet.app.content.ContactDetailActivity">
 
         <android.support.design.widget.AppBarLayout
                 android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <include layout="@layout/content_change_password"
+        <include layout="@layout/content_contact_detail"
                  bind:viewModel="@{viewModel}"/>
 
     </android.support.design.widget.CoordinatorLayout>

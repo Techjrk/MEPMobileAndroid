@@ -7,9 +7,9 @@ import android.util.Log;
 
 import com.lecet.app.R;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class ContactDetailActivity extends AppCompatActivity {
 
-    private final String TAG = "ChangePasswordActivity";
+    private final String TAG = "ContactDetailActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_contact_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
