@@ -47,4 +47,11 @@ public class BidDomain {
         Date startDate = DateUtility.addDays(-30);
         getBidsRecentlyMade(startDate, limit, callback);
     }
+
+    public void getBidsRecentlyMade(Callback<List<Bid>> callback) {
+
+        int limit = 100;
+
+        getBidsRecentlyMade(limit, callback);
+    }
 }
