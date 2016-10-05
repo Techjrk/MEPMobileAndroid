@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * File: ListItemCompanyDetailProjectBidViewModel Created: 8/28/16 Author: domandtom
+ * File: ListItemCompanyDetailProjectBidVM Created: 8/28/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItemCompanyDetailProjectBidViewModel extends BaseObservable {
+public class ListItemCompanyDetailProjectBidVM extends BaseObservable {
 
     private final Context context;
 
@@ -24,7 +24,7 @@ public class ListItemCompanyDetailProjectBidViewModel extends BaseObservable {
     // TODO: add new bid field
     // TODO: add new note field
 
-    public ListItemCompanyDetailProjectBidViewModel(Context context) {
+    public ListItemCompanyDetailProjectBidVM(Context context) {
 
         this.context = context;
     }
