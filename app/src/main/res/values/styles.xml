@@ -46,15 +46,35 @@
         <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
-    <style name="CommonText.Large">
+    <style name="CommonText.Light">
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
+    </style>
+
+    <style name="CommonText.Light.Large">
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="CommonText.Medium">
+    <style name="CommonText.Light.Medium">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="CommonText.Small">
+    <style name="CommonText.Light.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CommonText.Dark">
+        <item name="android:textColor">@color/pureBlack</item>
+    </style>
+
+    <style name="CommonText.Dark.Large">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="CommonText.Dark.Medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="CommonText.Dark.Small">
         <item name="android:textSize">12sp</item>
     </style>
 

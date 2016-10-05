@@ -6,7 +6,7 @@
         tools:context="com.lecet.app.content.CompanyDetailProjectBidsActivity">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemCompanyDetailProjectBidViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemCompanyDetailProjectBidVM"/>
     </data>
 
     <LinearLayout android:orientation="vertical"

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:showIn="@layout/activity_contact_detail"
+            tools:context="com.lecet.app.content.ContactDetailActivity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lecetMediumBlue">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginTop="50dp"
+                      android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/job_title"
+                    style="@style/CommonText.Dark.Large"
+                    android:layout_marginLeft="40dp"
+                    tools:text="Manager at Jay Dee Construction, Inc."/>
+
+            <TextView
+                    android:id="@+id/address1"
+                    style="@style/CommonText.Dark.Small"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="40dp"
+                    tools:text="38881 Schoolcraft Rd"/>
+
+            <TextView
+                    android:id="@+id/address2"
+                    style="@style/CommonText.Dark.Small"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="40dp"
+                    tools:text="Livonia, MI 48150-1033"/>
+
+            <TextView
+                    android:id="@+id/phone"
+                    style="@style/CommonText.Dark.Small"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="40dp"
+                    tools:text="(734) 591-3400"/>
+
+            <TextView
+                    android:id="@+id/email"
+                    style="@style/CommonText.Dark.Small"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="40dp"
+                    tools:text="companyinfo@jaydeecontr.com"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

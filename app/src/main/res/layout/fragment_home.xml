@@ -17,12 +17,12 @@
                 android:layout_gravity="center"
                 android:src="@drawable/profile_photo"/>
 
-        <TextView style="@style/CommonText.Large"
+        <TextView style="@style/CommonText.Light.Large"
                   android:layout_marginTop="10dp"
                   android:gravity="center"
                   tools:text="User Name"/>
 
-        <TextView style="@style/CommonText.Medium"
+        <TextView style="@style/CommonText.Light.Medium"
                   android:layout_marginTop="10dp"
                   android:gravity="center"
                   tools:text="Subtitle"/>
@@ -34,7 +34,7 @@
                 android:layout_marginBottom="20dp"
                 android:text="@string/check_in"/>
 
-        <TextView style="@style/CommonText.Medium"
+        <TextView style="@style/CommonText.Light.Medium"
                   android:layout_marginTop="16dp"
                   android:gravity="center"
                   tools:text="Home Screen Info"/>
@@ -51,7 +51,7 @@
                       android:paddingRight="20dp"
                       android:background="@color/lecetLightBlue">
 
-            <TextView style="@style/CommonText.Small"
+            <TextView style="@style/CommonText.Dark.Small"
                       android:layout_width="wrap_content"
                       android:gravity="center"
                       tools:text="Details about the home screen info"/>
