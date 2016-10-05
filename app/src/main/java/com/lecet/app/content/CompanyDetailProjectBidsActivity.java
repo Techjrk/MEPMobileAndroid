@@ -8,10 +8,10 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 
 /**
- * MobileCoDetailProjBidsActivity
+ * CompanyDetailProjectBidsActivity
  * Created by jasonm on 8/15/16.
  */
-public class MobileCoDetailProjBidsActivity extends NavigationBaseActivity {
+public class CompanyDetailProjectBidsActivity extends NavigationBaseActivity {
 
     private final String TAG = "MobCoDetlProjBidsActvy";
 
@@ -21,7 +21,7 @@ public class MobileCoDetailProjBidsActivity extends NavigationBaseActivity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_mobile_co_detail_proj_bids);
+        setContentView(R.layout.activity_company_detail_project_bids);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

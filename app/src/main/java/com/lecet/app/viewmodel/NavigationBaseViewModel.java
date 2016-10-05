@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.content.MobileCoDetailProjBidsActivity;
+import com.lecet.app.content.CompanyDetailProjectBidsActivity;
 import com.lecet.app.content.MobileProjTrackingListActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.SettingsActivity;
@@ -63,7 +63,7 @@ public class NavigationBaseViewModel extends BaseObservable {
                 break;
 
             case R.id.menu_item_list1:
-                launchClass = MobileCoDetailProjBidsActivity.class;
+                launchClass = CompanyDetailProjectBidsActivity.class;
                 break;
 
             case R.id.menu_item_list2:
