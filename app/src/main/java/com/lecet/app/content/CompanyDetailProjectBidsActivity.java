@@ -13,7 +13,7 @@ import com.lecet.app.contentbase.NavigationBaseActivity;
  */
 public class CompanyDetailProjectBidsActivity extends NavigationBaseActivity {
 
-    private final String TAG = "MobCoDetlProjBidsActvy";
+    private final String TAG = "CompanyDetailPrjBidsAct";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

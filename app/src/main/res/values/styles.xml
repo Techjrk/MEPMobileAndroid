@@ -281,51 +281,51 @@
     </style>
 
 
-    <!-- Mobile Company Detail Project Bids List Item -->
-    <style name="ListItemMobileCoDetailProjectBidsTextView">
+    <!-- Company Detail Project Bids List Item -->
+    <style name="ListItemCompanyDetailProjectBidsTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
-    <style name="ListItemMobileCoDetailProjectBidsTextView.Title">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Title">
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="ListItemMobileCoDetailProjectBidsTextView.Detail1">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Detail1">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/lecetTextLightGray</item>
     </style>
 
-    <style name="ListItemMobileCoDetailProjectBidsTextView.Detail2">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Detail2">
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="ListItemMobileCoDetailProjectBidsTextView.Detail3">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Detail3">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/lecetTextLightGray</item>
     </style>
 
 
-    <!-- Mobile Project Tracking List Item -->
-    <style name="ListItemMobileProjectTrackingTextView">
+    <!-- Project Tracking List Item -->
+    <style name="ListItemProjectTrackingTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
-    <style name="ListItemMobileProjectTrackingTextView.Title">
+    <style name="ListItemProjectTrackingTextView.Title">
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="ListItemMobileProjectTrackingTextView.Detail1">
+    <style name="ListItemProjectTrackingTextView.Detail1">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/lecetTextLightGray</item>
     </style>
 
-    <style name="ListItemMobileProjectTrackingTextView.Detail2">
+    <style name="ListItemProjectTrackingTextView.Detail2">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/lecetTextLightGray</item>
     </style>

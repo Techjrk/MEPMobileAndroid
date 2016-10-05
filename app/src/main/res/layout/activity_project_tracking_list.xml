@@ -10,7 +10,7 @@
     <include layout="@layout/include_app_bar_layout"/>
 
     <!-- Content -->
-    <include layout="@layout/content_mobile_proj_tracking_list"/>
+    <include layout="@layout/content_project_tracking_list"/>
 
     <!-- Sliding Drawer Menu -->
     <include layout="@layout/include_menu_drawer_layout"/>

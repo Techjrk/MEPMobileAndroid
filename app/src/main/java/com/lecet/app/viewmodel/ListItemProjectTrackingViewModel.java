@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * File: ListItemMobileProjTrackingViewModel Created: 8/28/16 Author: domandtom
+ * File: ListItemProjectTrackingViewModel Created: 8/28/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItemMobileProjTrackingViewModel extends BaseObservable {
+public class ListItemProjectTrackingViewModel extends BaseObservable {
 
     private final Context context;
 
@@ -23,7 +23,7 @@ public class ListItemMobileProjTrackingViewModel extends BaseObservable {
     // TODO: add new bid field
     // TODO: add new note field
 
-    public ListItemMobileProjTrackingViewModel(Context context) {
+    public ListItemProjectTrackingViewModel(Context context) {
 
         this.context = context;
     }

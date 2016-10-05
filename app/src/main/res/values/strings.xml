@@ -30,11 +30,11 @@
     <string name="new_password">New Password</string>
     <string name="update_password">Update Password</string>
 
-    <!-- Mobile Company Detail: Project Bids List -->
-    <string name="title_activity_mobile_company_detail_project_bids">Mobile Company Detail: Project Bids</string>
+    <!-- Company Detail: Project Bids List -->
+    <string name="title_activity_company_detail_project_bids">Company Detail: Project Bids</string>
 
-    <!-- Mobile Project Tracking List-->
-    <string name="title_activity_mobile_project_tracking_list">Mobile Project Tracking List</string>
+    <!-- Project Tracking List-->
+    <string name="title_activity_project_tracking_list">Project Tracking List</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>

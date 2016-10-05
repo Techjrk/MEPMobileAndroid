@@ -8,13 +8,13 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 
 /**
- * MobileProjTrackingListActivity
+ * ProjectTrackingListActivity
  * Created by jasonm on 8/15/16.
  */
 
-public class MobileProjTrackingListActivity extends NavigationBaseActivity {
+public class ProjectTrackingListActivity extends NavigationBaseActivity {
 
-    private final String TAG = "MobileProjTrackListAtvy";
+    private final String TAG = "ProjectTrackingListAct";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MobileProjTrackingListActivity extends NavigationBaseActivity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_mobile_proj_tracking_list);
+        setContentView(R.layout.activity_project_tracking_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
