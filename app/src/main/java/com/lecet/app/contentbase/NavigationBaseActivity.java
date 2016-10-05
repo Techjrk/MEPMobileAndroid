@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.lecet.app.R;
-import com.lecet.app.content.MobileCoDetailProjBidsActivity;
-import com.lecet.app.content.MobileProjTrackingListActivity;
+import com.lecet.app.content.CompanyDetailProjectBidsActivity;
+import com.lecet.app.content.ProjectTrackingListActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.SettingsActivity;
 
@@ -52,11 +52,11 @@ public class NavigationBaseActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_item_list1:
-                launchClass = MobileCoDetailProjBidsActivity.class;
+                launchClass = CompanyDetailProjectBidsActivity.class;
                 break;
 
             case R.id.menu_item_list2:
-                launchClass = MobileProjTrackingListActivity.class;
+                launchClass = ProjectTrackingListActivity.class;
                 break;
 
             case R.id.menu_item_settings:
