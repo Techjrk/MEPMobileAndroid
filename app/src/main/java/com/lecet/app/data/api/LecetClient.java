@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LecetClient {
 
     private static final boolean IS_PRODUCTION = false;
-    private static final String STAGING_ENDPOINT = "http://lecet.dt-staging.com/";
+    private static final String STAGING_ENDPOINT = "http://lecet.dt-staging.com/api/";
     private static final String PRODUCTION_ENDPOINT = "https://mepmobile.lecet.org/";
     private static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
 
