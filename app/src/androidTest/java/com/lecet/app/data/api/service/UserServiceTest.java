@@ -1,8 +1,7 @@
-package com.lecet.data.api.service;
+package com.lecet.app.data.api.service;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.lecet.app.data.api.service.UserService;
 import com.lecet.app.data.models.Access;
 
 import org.junit.After;
