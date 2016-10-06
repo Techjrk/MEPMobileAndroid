@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+
 
 android {
     compileSdkVersion 24
@@ -65,5 +67,7 @@ dependencies {
 
     // HockeyApp
     compile 'net.hockeyapp.android:HockeySDK:4.0.0'
+
+    // Realm
 
 }
