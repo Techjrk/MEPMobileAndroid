@@ -2,6 +2,9 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * File: ProjectGroup Created: 10/5/16 Author: domandtom
  *
@@ -9,8 +12,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 
-public class ProjectGroup {
+public class ProjectGroup extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 

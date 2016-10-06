@@ -2,14 +2,18 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * File: ProjectStage Created: 10/5/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectStage {
+public class ProjectStage extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 

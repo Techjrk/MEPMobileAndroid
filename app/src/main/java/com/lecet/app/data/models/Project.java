@@ -2,13 +2,16 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * File: Project Created: 10/5/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class Project {
+public class Project extends RealmObject {
 
     @SerializedName("bidSubmitTo")
     private String bidSubmitTo;
@@ -40,6 +43,7 @@ public class Project {
     @SerializedName("primaryProjectTypeId")
     private long primaryProjectTypeId;
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 

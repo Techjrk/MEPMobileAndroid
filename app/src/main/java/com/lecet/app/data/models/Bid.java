@@ -2,13 +2,16 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * File: Bid Created: 10/5/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class Bid {
+public class Bid extends RealmObject {
 
     @SerializedName("awardInd")
     private boolean awardInd;
@@ -31,6 +34,7 @@ public class Bid {
     @SerializedName("zip5")
     private String zip5;
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 
@@ -43,6 +47,8 @@ public class Bid {
     @SerializedName("projectId")
     private long projectId;
 
+    @SerializedName("project")
+    private Project project;
 
     public Bid(){}
 
@@ -90,10 +96,14 @@ public class Bid {
         return projectId;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Bid)) return false;
 
         Bid bid = (Bid) o;
 
@@ -104,26 +114,31 @@ public class Bid {
         if (companyId != bid.companyId) return false;
         if (contactId != bid.contactId) return false;
         if (projectId != bid.projectId) return false;
-        if (!createDate.equals(bid.createDate)) return false;
-        if (!bidderRole.equals(bid.bidderRole)) return false;
-        if (!fipsCounty.equals(bid.fipsCounty)) return false;
-        return zip5 != null ? zip5.equals(bid.zip5) : bid.zip5 == null;
+        if (createDate != null ? !createDate.equals(bid.createDate) : bid.createDate != null)
+            return false;
+        if (bidderRole != null ? !bidderRole.equals(bid.bidderRole) : bid.bidderRole != null)
+            return false;
+        if (fipsCounty != null ? !fipsCounty.equals(bid.fipsCounty) : bid.fipsCounty != null)
+            return false;
+        if (zip5 != null ? !zip5.equals(bid.zip5) : bid.zip5 != null) return false;
+        return project != null ? project.equals(bid.project) : bid.project == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = (awardInd ? 1 : 0);
-        result = 31 * result + createDate.hashCode();
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (int) (amount ^ (amount >>> 32));
-        result = 31 * result + bidderRole.hashCode();
+        result = 31 * result + (bidderRole != null ? bidderRole.hashCode() : 0);
         result = 31 * result + rank;
-        result = 31 * result + fipsCounty.hashCode();
+        result = 31 * result + (fipsCounty != null ? fipsCounty.hashCode() : 0);
         result = 31 * result + (zip5 != null ? zip5.hashCode() : 0);
         result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (companyId ^ (companyId >>> 32));
         result = 31 * result + (int) (contactId ^ (contactId >>> 32));
         result = 31 * result + (int) (projectId ^ (projectId >>> 32));
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         return result;
     }
 
@@ -141,6 +156,7 @@ public class Bid {
                 ", companyId=" + companyId +
                 ", contactId=" + contactId +
                 ", projectId=" + projectId +
+                ", project=" + project +
                 '}';
     }
 }
