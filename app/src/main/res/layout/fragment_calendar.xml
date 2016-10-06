@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.lecet.app.content.CalendarFragment">
+
+
+    <TextView
+        android:id="@+id/tvMonth"
+        style="@style/CommonText.Light.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/calendar_month_container_height"
+        android:background="@drawable/calendar_month_background"
+        android:gravity="center"
+        android:textColor="@color/lecetTextWhite" />
+
+    <com.p_v.flexiblecalendar.FlexibleCalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@drawable/content_bg_gradient_1"
+        app:showDatesOutsideMonth="true" />
+
+</LinearLayout>
