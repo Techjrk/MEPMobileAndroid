@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -20,13 +22,15 @@ import retrofit2.Callback;
 
 public class BidDomain {
 
+    private final Realm realm;
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
 
-    public BidDomain(LecetClient lecetClient, final LecetSharedPreferenceUtil sharedPreferenceUtil) {
+    public BidDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
 
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
     }
 
     public void getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
@@ -53,5 +57,31 @@ public class BidDomain {
         int limit = 100;
 
         getBidsRecentlyMade(limit, callback);
+    }
+
+    public Bid copyToRealmTransaction(Bid bid) {
+
+        realm.beginTransaction();
+        Bid persistedBid = realm.copyToRealm(bid);
+        realm.commitTransaction();
+
+        return persistedBid;
+    }
+
+    public List<Bid> copyToRealmTransaction(List<Bid> bids) {
+
+        realm.beginTransaction();
+        List<Bid> persistedBids = realm.copyToRealm(bids);
+        realm.commitTransaction();
+        return persistedBids;
+    }
+
+    public RealmResults<Bid> fetchBids(long categoryId) {
+
+        RealmResults<Bid> bids = realm.where(Bid.class)
+                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .findAll();
+
+        return bids;
     }
 }
