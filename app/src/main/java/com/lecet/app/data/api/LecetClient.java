@@ -1,5 +1,8 @@
 package com.lecet.app.data.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import com.lecet.app.data.api.service.BidService;
 import com.lecet.app.data.api.service.ProjectService;
 import com.lecet.app.data.api.service.UserService;
@@ -45,8 +48,13 @@ public class LecetClient {
         // Add loggin interceptor
         httpClient.addInterceptor(logging);
 
+        // Custom GSON for date conversion
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(ENDPOINT)
                 .client(httpClient.build())
                 .build();
