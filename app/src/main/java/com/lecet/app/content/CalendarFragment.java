@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
@@ -18,7 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends Fragment implements FlexibleCalendarView.OnDateClickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -56,6 +57,8 @@ public class CalendarFragment extends Fragment {
         FlexibleCalendarView calendarView = (FlexibleCalendarView) view.findViewById(R.id.calendar_view);
         TextView tvMonth = (TextView) view.findViewById(R.id.tvMonth);
 
+        calendarView.setOnDateClickListener(this);
+
         Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         tvMonth.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
@@ -76,12 +79,19 @@ public class CalendarFragment extends Fragment {
 
             @Override
             public BaseCellView getWeekdayCellView(int position, View convertView, ViewGroup parent) {
-                return null;
+                BaseCellView cellView = (BaseCellView) convertView;
+                if (cellView == null) {
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
+                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, 0);
+                    cellView.setLayoutParams(params);
+                }
+                return cellView;
             }
 
             @Override
             public String getDayOfWeekDisplayValue(int dayOfWeek, String defaultValue) {
-                return null;
+                return "";
             }
         });
 
@@ -104,6 +114,13 @@ public class CalendarFragment extends Fragment {
 //        ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 //        CalendarViewModel viewModel = new CalendarViewModel(this);
 //        binding.setViewModel(viewModel);
+    }
+
+    @Override
+    public void onDateClick(int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        Toast.makeText(getActivity(), cal.getTime().toString() + " Clicked", Toast.LENGTH_SHORT).show();
     }
 
     public static class EventW implements Event {

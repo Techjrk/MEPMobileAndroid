@@ -25,6 +25,10 @@
     <color name="pureBlack">#000000</color>
     <color name="transparent">#00000000</color>
 
+    <!-- Calendar Colors -->
+    <color name="calendar_center_color">#0F3C6D</color>
+    <color name="calendar_end_color">#05224A</color>
+
     <!--color name="colorWhite">#FFFFFF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
