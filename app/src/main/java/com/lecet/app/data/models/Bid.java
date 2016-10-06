@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -17,7 +19,7 @@ public class Bid extends RealmObject {
     private boolean awardInd;
 
     @SerializedName("createDate")
-    private String createDate;
+    private Date createDate;
 
     @SerializedName("amount")
     private long amount;
@@ -56,7 +58,7 @@ public class Bid extends RealmObject {
         return awardInd;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 

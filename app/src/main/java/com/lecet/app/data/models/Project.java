@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -35,7 +37,7 @@ public class Project extends RealmObject {
     private double estLow;
 
     @SerializedName("bidDate")
-    private String bidDate;
+    private Date bidDate;
 
     @SerializedName("city")
     private String city;
@@ -69,7 +71,7 @@ public class Project extends RealmObject {
     private String dodgeNumber;
 
     @SerializedName("lastPublishDate")
-    private String lastPublishDate;
+    private Date lastPublishDate;
 
     @SerializedName("contractType")
     private String contractType;
@@ -93,10 +95,10 @@ public class Project extends RealmObject {
     private String fipsCounty;
 
     @SerializedName("targetFinishDate")
-    private String targetFinishDate;
+    private Date targetFinishDate;
 
     @SerializedName("priorPublishDate")
-    private String priorPublishDate;
+    private Date priorPublishDate;
 
     @SerializedName("numberOfBuildings")
     private String numberOfBuildings;
@@ -129,7 +131,7 @@ public class Project extends RealmObject {
     private String projectNotes;
 
     @SerializedName("targetStartDate")
-    private String targetStartDate;
+    private Date targetStartDate;
 
     @SerializedName("geoLocationType")
     private String geoLocationType;
@@ -138,7 +140,7 @@ public class Project extends RealmObject {
     private String county;
 
     @SerializedName("firstPublishDate")
-    private String firstPublishDate;
+    private Date firstPublishDate;
 
     @SerializedName("addendaInd")
     private String addendaInd;
@@ -162,6 +164,202 @@ public class Project extends RealmObject {
     private String ownerClass;
 
     public Project() {
+    }
+
+    public String getBidSubmitTo() {
+        return bidSubmitTo;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public String getStatusText() {
+        return statusText;
+    }
+
+    public ProjectStage getProjectStage() {
+        return projectStage;
+    }
+
+    public double getEstLow() {
+        return estLow;
+    }
+
+    public Date getBidDate() {
+        return bidDate;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public long getPrimaryProjectTypeId() {
+        return primaryProjectTypeId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getZip5() {
+        return zip5;
+    }
+
+    public String getCnProjectUrl() {
+        return cnProjectUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContractNbr() {
+        return contractNbr;
+    }
+
+    public String getNumberOfFloorsAboveGround() {
+        return numberOfFloorsAboveGround;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public String getDodgeNumber() {
+        return dodgeNumber;
+    }
+
+    public Date getLastPublishDate() {
+        return lastPublishDate;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+
+    public String getProjDlvrySys() {
+        return projDlvrySys;
+    }
+
+    public String getPlanInd() {
+        return planInd;
+    }
+
+    public String getDodgeVersion() {
+        return dodgeVersion;
+    }
+
+    public PrimaryProjectType getPrimaryProjectType() {
+        return primaryProjectType;
+    }
+
+    public String getSpecAvailable() {
+        return specAvailable;
+    }
+
+    public String getFipsCounty() {
+        return fipsCounty;
+    }
+
+    public Date getTargetFinishDate() {
+        return targetFinishDate;
+    }
+
+    public Date getPriorPublishDate() {
+        return priorPublishDate;
+    }
+
+    public String getNumberOfBuildings() {
+        return numberOfBuildings;
+    }
+
+    public String getStatusProjDlvrySys() {
+        return statusProjDlvrySys;
+    }
+
+    public double getEstHigh() {
+        return estHigh;
+    }
+
+    public String getStdIncludes() {
+        return stdIncludes;
+    }
+
+    public String getCurrencyType() {
+        return currencyType;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public Geocode getGeocode() {
+        return geocode;
+    }
+
+    public String getZipPlus4() {
+        return zipPlus4;
+    }
+
+    public String getProjectStageId() {
+        return projectStageId;
+    }
+
+    public String getProjectNotes() {
+        return projectNotes;
+    }
+
+    public Date getTargetStartDate() {
+        return targetStartDate;
+    }
+
+    public String getGeoLocationType() {
+        return geoLocationType;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public Date getFirstPublishDate() {
+        return firstPublishDate;
+    }
+
+    public String getAddendaInd() {
+        return addendaInd;
+    }
+
+    public String getAvailableFrom() {
+        return availableFrom;
+    }
+
+    public String getGeoType() {
+        return geoType;
+    }
+
+    public String getUnionDesignation() {
+        return unionDesignation;
+    }
+
+    public String getBidTimeZone() {
+        return bidTimeZone;
+    }
+
+    public String getBondInformation() {
+        return bondInformation;
+    }
+
+    public String getOwnerClass() {
+        return ownerClass;
     }
 
     @Override
