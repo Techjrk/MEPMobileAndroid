@@ -53,7 +53,7 @@ public class MainActivity extends NavigationBaseActivity {
      */
     private void setupViewPager() {
 
-        ViewPager vpPager = (ViewPager) findViewById(R.id.pager);
+        ViewPager vpPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
         adapterViewPager = new DashboardPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
 
