@@ -22,18 +22,18 @@ public class DashboardProjectsRecentlyUpdated extends Fragment {
 
     public static DashboardProjectsRecentlyUpdated newInstance(int page, String title) {
         Log.d(TAG, "newInstance");
-        DashboardProjectsRecentlyUpdated fragmentFourth = new DashboardProjectsRecentlyUpdated();
+        DashboardProjectsRecentlyUpdated fragmentInstance = new DashboardProjectsRecentlyUpdated();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
         args.putString("someTitle", title);
-        fragmentFourth.setArguments(args);
-        return fragmentFourth;
+        fragmentInstance.setArguments(args);
+        return fragmentInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
         page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("someTitle");
     }

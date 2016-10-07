@@ -22,18 +22,18 @@ public class DashboardBidsRecentlyMadeFragment extends Fragment {
 
     public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title) {
         Log.d(TAG, "newInstance");
-        DashboardBidsRecentlyMadeFragment fragmentFirst = new DashboardBidsRecentlyMadeFragment();
+        DashboardBidsRecentlyMadeFragment fragmentInstance = new DashboardBidsRecentlyMadeFragment();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
         args.putString("someTitle", title);
-        fragmentFirst.setArguments(args);
-        return fragmentFirst;
+        fragmentInstance.setArguments(args);
+        return fragmentInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
         page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("someTitle");
     }

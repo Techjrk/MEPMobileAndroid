@@ -22,12 +22,12 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
 
     public static DashboardBidsHappeningSoonFragment newInstance(int page, String title) {
         Log.d(TAG, "newInstance");
-        DashboardBidsHappeningSoonFragment fragmentSecond = new DashboardBidsHappeningSoonFragment();
+        DashboardBidsHappeningSoonFragment fragmentInstance = new DashboardBidsHappeningSoonFragment();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
         args.putString("someTitle", title);
-        fragmentSecond.setArguments(args);
-        return fragmentSecond;
+        fragmentInstance.setArguments(args);
+        return fragmentInstance;
     }
 
     @Override
