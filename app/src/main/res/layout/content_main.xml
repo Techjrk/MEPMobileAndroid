@@ -18,7 +18,7 @@
 
     <include layout="@layout/include_dashboard_viewpager_arrows"/>
 
-    <!--
+    <!-- Page Indicator Dots -->
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
