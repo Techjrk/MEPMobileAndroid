@@ -44,8 +44,9 @@ public class FourthFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fourth, container, false);
-        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
-        tvLabel.setText(page + " -- " + title);
+
+//        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
+//        tvLabel.setText(page + " -- " + title);
         return view;
     }
 }

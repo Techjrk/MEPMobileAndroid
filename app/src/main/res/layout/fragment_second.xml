@@ -3,21 +3,13 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ccaaaa"
-                android:gravity="center">
+                android:gravity="center|top">
 
-    <TextView
-            android:id="@+id/tvLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="Fragment 2"
-            android:textSize="24sp"
-            android:textColor="#FFFFFF"/>
-
+    <!-- PLACEHOLDER - CALENDAR - BIDS HAPPENING SOON -->
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_below="@+id/tvLabel"/>
+            android:layout_marginTop="16dp"
+            android:src="@drawable/placeholder_bids_happening_soon"/>
 
 </RelativeLayout>

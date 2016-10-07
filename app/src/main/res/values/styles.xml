@@ -37,7 +37,7 @@
     </style>
 
     <style name="FullScreenImageBackground.Gradient1">
-        <item name="android:src">@drawable/content_bg_gradient_1</item>
+        <item name="android:background">@drawable/content_bg_gradient_1</item>
     </style>
 
     <style name="CommonText">
@@ -226,6 +226,14 @@
         <item name="android:paddingLeft">8dp</item>
     </style>
 
+
+    <!-- Dashboard -->
+    <style name="DashboardPageIndicatorDot">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:background">@drawable/shape_dot_unselected</item>
+    </style>
 
     <!-- Change Password -->
     <style name="ChangePasswordTextViewSmall">

@@ -3,21 +3,13 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#aaaacc"
-                android:gravity="center">
+                android:gravity="center|top">
 
-    <TextView
-            android:id="@+id/tvLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="Fragment 3"
-            android:textSize="24sp"
-            android:textColor="#FFFFFF"/>
-
+    <!-- PLACEHOLDER - PROJECTS RECENTLY ADDED -->
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_below="@+id/tvLabel"/>
+            android:layout_marginTop="16dp"
+            android:src="@drawable/placeholder_projects_recently_added"/>
 
 </RelativeLayout>

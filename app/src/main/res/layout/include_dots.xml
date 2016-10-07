@@ -6,27 +6,10 @@
               android:layout_marginTop="4dp"
               android:gravity="center">
 
-    <View   android:id="@+id/dot_1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/shape_dot_unselected"/>
+    <View android:id="@+id/dot_1" style="@style/DashboardPageIndicatorDot"/>
+    <View android:id="@+id/dot_2" style="@style/DashboardPageIndicatorDot"/>
+    <View android:id="@+id/dot_3" style="@style/DashboardPageIndicatorDot"/>
+    <View android:id="@+id/dot_4" style="@style/DashboardPageIndicatorDot"/>
 
-    <View   android:id="@+id/dot_2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape_dot_unselected"/>
-
-    <View   android:id="@+id/dot_3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape_dot_unselected"/>
-
-    <View   android:id="@+id/dot_4"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape_dot_unselected"/>
 
 </LinearLayout>
