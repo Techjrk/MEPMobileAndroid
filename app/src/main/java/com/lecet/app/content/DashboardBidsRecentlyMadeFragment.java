@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.lecet.app.R;
 
@@ -14,16 +13,16 @@ import com.lecet.app.R;
  * Created by jasonm on 10/5/16.
  */
 
-public class FirstFragment extends Fragment {
+public class DashboardBidsRecentlyMadeFragment extends Fragment {
 
-    // Store instance variables
+    private static final String TAG = "BidsRecentlyMadeFrag";
+
     private String title;
     private int page;
 
-    // newInstance constructor for creating fragment with arguments
-    public static FirstFragment newInstance(int page, String title) {
-        Log.d("FirstFragment", "newInstance: ");
-        FirstFragment fragmentFirst = new FirstFragment();
+    public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title) {
+        Log.d(TAG, "newInstance");
+        DashboardBidsRecentlyMadeFragment fragmentFirst = new DashboardBidsRecentlyMadeFragment();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
         args.putString("someTitle", title);
@@ -31,23 +30,17 @@ public class FirstFragment extends Fragment {
         return fragmentFirst;
     }
 
-    // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("FirstFragment", "onCreate");
+        Log.d(TAG, "onCreate");
         page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("someTitle");
     }
 
-    // Inflate the view for the fragment based on layout XML
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
-
-
-//        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
-//        tvLabel.setText(page + " -- " + title);
+        View view = inflater.inflate(R.layout.fragment_dashboard_bids_recently_made, container, false);
         return view;
     }
 }

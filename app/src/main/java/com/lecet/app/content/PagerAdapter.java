@@ -19,13 +19,13 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new FirstFragment();
+                return new DashboardBidsRecentlyMadeFragment();
             case 1:
-                return new SecondFragment();
+                return new DashboardBidsHappeningSoonFragment();
             case 2:
-                return new ThirdFragment();
+                return new DashboardProjectsRecentlyAddedFragment();
             case 3:
-                return new FourthFragment();
+                return new DashboardProjectsRecentlyUpdated();
             default:
                 Log.w("PagerAdapter", "getItem: no case for position " + position);
         }

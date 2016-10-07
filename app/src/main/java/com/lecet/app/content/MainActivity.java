@@ -146,16 +146,16 @@ public class MainActivity extends NavigationBaseActivity {
             Log.d("MyPagerAdapter", "getItem: " + position);
             switch (position) {
                 case 0:
-                    return FirstFragment.newInstance(0, "First Fragment");
+                    return DashboardBidsRecentlyMadeFragment.newInstance(0, "First Fragment");
 
                 case 1:
-                    return SecondFragment.newInstance(1, "Second Fragment");
+                    return DashboardBidsHappeningSoonFragment.newInstance(1, "Second Fragment");
 
                 case 2:
-                    return ThirdFragment.newInstance(2, "Third Fragment");
+                    return DashboardProjectsRecentlyAddedFragment.newInstance(2, "Third Fragment");
 
                 case 3:
-                    return FourthFragment.newInstance(3, "Fourth Fragment");
+                    return DashboardProjectsRecentlyUpdated.newInstance(3, "Fourth Fragment");
 
                 default:
                     return null;

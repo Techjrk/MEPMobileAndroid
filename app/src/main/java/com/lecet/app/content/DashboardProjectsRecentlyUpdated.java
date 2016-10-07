@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.lecet.app.R;
 
@@ -14,39 +13,34 @@ import com.lecet.app.R;
  * Created by jasonm on 10/5/16.
  */
 
-public class ThirdFragment extends Fragment {
+public class DashboardProjectsRecentlyUpdated extends Fragment {
 
-    // Store instance variables
+    private static final String TAG = "ProjectsRecentlyUpdated";
+
     private String title;
     private int page;
 
-    // newInstance constructor for creating fragment with arguments
-    public static ThirdFragment newInstance(int page, String title) {
-        Log.d("ThirdFragment", "newInstance");
-        ThirdFragment fragmentThird = new ThirdFragment();
+    public static DashboardProjectsRecentlyUpdated newInstance(int page, String title) {
+        Log.d(TAG, "newInstance");
+        DashboardProjectsRecentlyUpdated fragmentFourth = new DashboardProjectsRecentlyUpdated();
         Bundle args = new Bundle();
         args.putInt("someInt", page);
         args.putString("someTitle", title);
-        fragmentThird.setArguments(args);
-        return fragmentThird;
+        fragmentFourth.setArguments(args);
+        return fragmentFourth;
     }
 
-    // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("ThirdFragment", "onCreate");
+        Log.d(TAG, "onCreate");
         page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("someTitle");
     }
 
-    // Inflate the view for the fragment based on layout XML
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_third, container, false);
-
-//        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
-//        tvLabel.setText(page + " -- " + title);
+        View view = inflater.inflate(R.layout.fragment_dashboard_projects_recently_updated, container, false);
         return view;
     }
 }
