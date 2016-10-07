@@ -9,12 +9,9 @@
         tools:context="com.lecet.app.content.MainActivity">
 
     <!-- App Bar -->
-    <include layout="@layout/include_app_bar_layout"/>
+    <!--include layout="@layout/include_app_bar_layout"/-->
 
     <!-- Content -->
     <include layout="@layout/content_main"/>
-
-    <!-- Sliding Drawer Menu -->
-    <include layout="@layout/include_menu_drawer_layout"/>
 
 </android.support.design.widget.CoordinatorLayout>
