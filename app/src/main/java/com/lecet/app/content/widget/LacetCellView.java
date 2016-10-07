@@ -2,7 +2,9 @@ package com.lecet.app.content.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.View;
 
 import com.lecet.app.R;
 import com.p_v.flexiblecalendar.entity.Event;
@@ -10,22 +12,19 @@ import com.p_v.flexiblecalendar.view.BaseCellView;
 
 import java.util.List;
 
-/**
- * @author p-v
- */
-public class BidEvent extends BaseCellView {
+public class LacetCellView extends BaseCellView {
 
     private boolean hasEvents;
 
-    public BidEvent(Context context) {
+    public LacetCellView(Context context) {
         super(context);
     }
 
-    public BidEvent(Context context, AttributeSet attrs) {
+    public LacetCellView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BidEvent(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LacetCellView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -40,6 +39,11 @@ public class BidEvent extends BaseCellView {
         if (getStateSet().contains(STATE_SELECTED) && hasEvents) {
             this.setBackgroundResource(R.drawable.calendar_day_selected_background);
         }
+        if (getStateSet().contains(STATE_OUTSIDE_MONTH)) {
+            setTextColor(ContextCompat.getColor(getContext(), R.color.lecetTextLightGray));
+        } else {
+            setTextColor(ContextCompat.getColor(getContext(), R.color.lecetTextWhite));
+        }
     }
 
     @Override
@@ -49,4 +53,8 @@ public class BidEvent extends BaseCellView {
         requestLayout();
     }
 
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        super.setOnClickListener(l);
+    }
 }
