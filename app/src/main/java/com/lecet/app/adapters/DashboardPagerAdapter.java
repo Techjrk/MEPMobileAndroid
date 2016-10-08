@@ -18,7 +18,7 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = "DashboardPagerAdapter";
 
-    private static int NUM_ITEMS = 4;
+    private static final int NUM_ITEMS = 4;
 
     public DashboardPagerAdapter(FragmentManager fm) {
         super(fm);

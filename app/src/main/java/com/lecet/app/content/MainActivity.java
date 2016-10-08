@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,10 +9,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
 import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.databinding.ActivityMainBinding;
+import com.lecet.app.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 
@@ -24,14 +28,18 @@ public class MainActivity extends NavigationBaseActivity {
     private final String TAG = "MainActivity";
 
     // Fragment Pager
-    FragmentPagerAdapter adapterViewPager;
+    ViewPager viewPager;
+    FragmentPagerAdapter viewPagerAdapter;
+    ArrayList<View> dots;
     View dot_1;
     View dot_2;
     View dot_3;
     View dot_4;
 
-    ArrayList<View> dots;
+    ImageButton pageLeftButton;
+    ImageButton pageRightButton;
 
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +47,42 @@ public class MainActivity extends NavigationBaseActivity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupBinding();
         setupViewPager();
         setupPageIndicator();
+        setupPageButtons();
     }
+
+    private void setupBinding() {
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        MainViewModel viewModel = new MainViewModel(this);
+        binding.setViewModel(viewModel);
+    }
+
+    public void prevViewPage() {
+        Log.d(TAG, "prevViewPage");
+        try {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
+        catch (Exception e) {
+            Log.w(TAG, "prevViewPage: viewPager may be null or page may not exist" );
+        }
+    }
+
+    public void nextViewPage() {
+        Log.d(TAG, "nextViewPage");
+        try {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        }
+        catch (Exception e) {
+            Log.w(TAG, "nextViewPage: viewPager may be null or page may not exist" );
+        }
+    }
+
 
     /**
      * Set up the Fragment Pager which contains the four main fragments used
@@ -53,11 +90,11 @@ public class MainActivity extends NavigationBaseActivity {
      */
     private void setupViewPager() {
 
-        ViewPager vpPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
-        adapterViewPager = new DashboardPagerAdapter(getSupportFragmentManager());
-        vpPager.setAdapter(adapterViewPager);
+        viewPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
+        viewPagerAdapter = new DashboardPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(viewPagerAdapter);
 
-        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
@@ -73,9 +110,10 @@ public class MainActivity extends NavigationBaseActivity {
             // Called when the scroll state changes
             @Override
             public void onPageScrollStateChanged(int state) {
-                //Log.d("MainActivity", "onPageScrollStateChanged: " + state); // 0 SCROLL_STATE_IDLE, 1 SCROLL_STATE_DRAGGING, 2 SCROLL_STATE_SETTLING
+                Log.d(TAG, "onPageScrollStateChanged: " + state); // 0 SCROLL_STATE_IDLE, 1 SCROLL_STATE_DRAGGING, 2 SCROLL_STATE_SETTLING
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
+                        updateViewPagerArrows();
                         break;
 
                     case ViewPager.SCROLL_STATE_DRAGGING:
@@ -84,6 +122,7 @@ public class MainActivity extends NavigationBaseActivity {
                     case ViewPager.SCROLL_STATE_SETTLING:
                         break;
                 }
+
             }
         });
     }
@@ -122,6 +161,27 @@ public class MainActivity extends NavigationBaseActivity {
         // set the selected dot
         View selectedView = dots.get(position);
         selectedView.setBackground(selectedDrawable);
+    }
+
+    private void setupPageButtons() {
+        pageLeftButton  = (ImageButton) findViewById(R.id.dashboard_page_left_button);
+        pageRightButton = (ImageButton) findViewById(R.id.dashboard_page_right_button);
+    }
+
+    /**
+     * Update the visibility of the left/right arrow ViewPager buttons
+     * so they do not appear on the first or last pages as appropriate
+     */
+    private void updateViewPagerArrows() {
+        if(viewPager.getCurrentItem() == 0) {
+            pageLeftButton.setVisibility(View.INVISIBLE);
+        }
+        else pageLeftButton.setVisibility(View.VISIBLE);
+
+        if(viewPager.getCurrentItem() == viewPagerAdapter.getCount() - 1) {
+            pageRightButton.setVisibility(View.INVISIBLE);
+        }
+        else pageRightButton.setVisibility(View.VISIBLE);
     }
 
 
