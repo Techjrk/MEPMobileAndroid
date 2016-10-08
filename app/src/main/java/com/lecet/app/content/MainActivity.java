@@ -110,19 +110,18 @@ public class MainActivity extends NavigationBaseActivity {
             // Called when the scroll state changes
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.d(TAG, "onPageScrollStateChanged: " + state); // 0 SCROLL_STATE_IDLE, 1 SCROLL_STATE_DRAGGING, 2 SCROLL_STATE_SETTLING
+                Log.d(TAG, "onPageScrollStateChanged: " + state);
                 switch (state) {
-                    case ViewPager.SCROLL_STATE_IDLE:
+                    case ViewPager.SCROLL_STATE_IDLE:       // 0
                         updateViewPagerArrows();
                         break;
 
-                    case ViewPager.SCROLL_STATE_DRAGGING:
+                    case ViewPager.SCROLL_STATE_DRAGGING:   // 1
                         break;
 
-                    case ViewPager.SCROLL_STATE_SETTLING:
+                    case ViewPager.SCROLL_STATE_SETTLING:   // 2
                         break;
                 }
-
             }
         });
     }
@@ -166,6 +165,7 @@ public class MainActivity extends NavigationBaseActivity {
     private void setupPageButtons() {
         pageLeftButton  = (ImageButton) findViewById(R.id.dashboard_page_left_button);
         pageRightButton = (ImageButton) findViewById(R.id.dashboard_page_right_button);
+        updateViewPagerArrows();
     }
 
     /**

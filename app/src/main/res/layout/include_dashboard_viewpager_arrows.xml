@@ -9,27 +9,17 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="160dp"
+              android:layout_marginTop="100dp"
               android:gravity="bottom">
 
     <ImageButton
             android:id="@+id/dashboard_page_left_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:src="@mipmap/ic_arrow_left"
-            android:background="@color/transparent"
-            android:layout_alignParentLeft="true"
+            style="@style/ViewPagerArrowButton.Left"
             android:onClick="@{viewModel.onPageLeftClicked}"/>
 
     <ImageButton
             android:id="@+id/dashboard_page_right_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="24dp"
-            android:src="@mipmap/ic_arrow_right"
-            android:background="@color/transparent"
-            android:layout_alignParentRight="true"
+            style="@style/ViewPagerArrowButton.Right"
             android:onClick="@{viewModel.onPageRightClicked}"/>
 
     </RelativeLayout>
