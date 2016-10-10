@@ -53,8 +53,8 @@ public class MainViewModel {
     public RealmResults<Project> fetchProjectsHappeningSoon() {
 
         calendar.setTime(new Date());
-        calendar.
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        return projectDomain.fetchProjectsRecentlyPublished();
+        return projectDomain.fetchProjectsRecentlyPublished(calendar.getTime());
     }
 }
