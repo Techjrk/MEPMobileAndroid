@@ -1,10 +1,14 @@
 package com.lecet.app.domain;
 
+import android.support.annotation.IntDef;
+
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +26,14 @@ import retrofit2.Callback;
 
 public class BidDomain {
 
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES})
+    public @interface BidGroup {}
+    public static final int ENGINEERING = 101;
+    public static final int BUILDING = 102;
+    public static final int HOUSING = 103;
+    public static final int UTILITIES = 105;
+
     private final Realm realm;
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
@@ -32,6 +44,8 @@ public class BidDomain {
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
     }
+
+    /** API **/
 
     public void getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
 
@@ -76,10 +90,13 @@ public class BidDomain {
         return persistedBids;
     }
 
-    public RealmResults<Bid> fetchBids(long categoryId) {
+    /** Persisted **/
+
+    public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
 
         RealmResults<Bid> bids = realm.where(Bid.class)
                 .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("project.hidden", false)
                 .findAll();
 
         return bids;
