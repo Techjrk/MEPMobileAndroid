@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -22,14 +25,18 @@ public class ProjectDomain {
 
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
+    private final Realm realm;
 
-    public ProjectDomain(LecetClient lecetClient, final LecetSharedPreferenceUtil sharedPreferenceUtil) {
+    public ProjectDomain(LecetClient lecetClient, final LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
 
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
     }
 
-    public void getBidsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
+    /** API **/
+
+    public void getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -46,23 +53,23 @@ public class ProjectDomain {
     }
 
 
-    public void getBidsHappeningSoon(int limit, Callback<List<Project>> callback) {
+    public void getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
 
         Date current = new Date();
         Date endDate = DateUtility.addDays(30);
-        getBidsHappeningSoon(current, endDate, limit, callback);
+        getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
-    public void getBidsHappeningSoon(Callback<List<Project>> callback) {
+    public void getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
         Date current = new Date();
         Date endDate = DateUtility.addDays(30);
         int limit = 150;
 
-        getBidsHappeningSoon(current, endDate, limit, callback);
+        getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
-    public void getBidsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
+    public void getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -77,17 +84,30 @@ public class ProjectDomain {
     }
 
 
-    public void getBidsRecentlyAdded(int limit, Callback<List<Project>> callback) {
+    public void getProjectsRecentlyAdded(int limit, Callback<List<Project>> callback) {
 
         Date endDate = DateUtility.addDays(-30);
 
-        getBidsRecentlyAdded(endDate, limit, callback);
+        getProjectsRecentlyAdded(endDate, limit, callback);
     }
 
-    public void getBidsRecentlyAdded(Callback<List<Project>> callback) {
+    public void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
         int limit = 150;
 
-        getBidsRecentlyAdded(limit, callback);
+        getProjectsRecentlyAdded(limit, callback);
     }
+
+    /** Persisted **/
+
+    public RealmResults<Project> fetchProjectsRecentlyPublished(Date startDate) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .equalTo("hidden", false)
+                .greaterThan("firstPublishDate", startDate)
+                .findAll();
+
+        return projectsResult;
+    }
+
 }
