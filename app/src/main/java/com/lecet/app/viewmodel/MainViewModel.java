@@ -80,7 +80,7 @@ public class MainViewModel extends BaseObservable {
     @SuppressWarnings("unused")
     public void onPageLeftClicked(View view) {
 
-        Log.d(TAG, "onPageLeftClicked");
+        //Log.d(TAG, "onPageLeftClicked");
         MainActivity activity = (MainActivity) this.context;
         activity.prevViewPage();
     }
@@ -88,7 +88,7 @@ public class MainViewModel extends BaseObservable {
     @SuppressWarnings("unused")
     public void onPageRightClicked(View view) {
 
-        Log.d(TAG, "onPageRightClicked");
+        //Log.d(TAG, "onPageRightClicked");
         MainActivity activity = (MainActivity) this.context;
         activity.nextViewPage();
     }

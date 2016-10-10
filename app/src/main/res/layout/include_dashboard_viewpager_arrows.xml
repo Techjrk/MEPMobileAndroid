@@ -12,6 +12,7 @@
               android:layout_marginTop="100dp"
               android:gravity="bottom">
 
+        <!-- Arrow buttons extend beyond margins -->
     <ImageButton
             android:id="@+id/dashboard_page_left_button"
             style="@style/ViewPagerArrowButton.Left"

@@ -64,7 +64,7 @@ public class MainActivity extends NavigationBaseActivity {
     }
 
     public void prevViewPage() {
-        Log.d(TAG, "prevViewPage");
+        //Log.d(TAG, "prevViewPage");
         try {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
@@ -74,7 +74,7 @@ public class MainActivity extends NavigationBaseActivity {
     }
 
     public void nextViewPage() {
-        Log.d(TAG, "nextViewPage");
+        //Log.d(TAG, "nextViewPage");
         try {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         }
@@ -110,7 +110,7 @@ public class MainActivity extends NavigationBaseActivity {
             // Called when the scroll state changes
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.d(TAG, "onPageScrollStateChanged: " + state);
+                //Log.d(TAG, "onPageScrollStateChanged: " + state);
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:       // 0
                         updateViewPagerArrows();
