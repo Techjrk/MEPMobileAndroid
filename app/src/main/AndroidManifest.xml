@@ -3,11 +3,12 @@
           package="com.lecet.app">
 
     <!-- Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!-- Application -->
     <application
+            android:name=".LecetApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -16,7 +17,7 @@
 
         <!-- HockeyApp Integration -->
         <meta-data android:name="net.hockeyapp.android.appIdentifier"
-                   android:value="bf2b988cbd6245d48903f92ea181b6af" /> <!-- TODO: update with current app id -->
+                   android:value="bf2b988cbd6245d48903f92ea181b6af"/> <!-- TODO: update with current app id -->
 
         <!-- Activities -->
         <activity android:name=".content.LauncherActivity"
