@@ -163,6 +163,8 @@ public class Project extends RealmObject {
     @SerializedName("ownerClass")
     private String ownerClass;
 
+    private boolean hidden;
+
     public Project() {
     }
 
@@ -362,65 +364,19 @@ public class Project extends RealmObject {
         return ownerClass;
     }
 
-    @Override
-    public String toString() {
-        return "Project{" +
-                "bidSubmitTo='" + bidSubmitTo + '\'' +
-                ", state='" + state + '\'' +
-                ", address1='" + address1 + '\'' +
-                ", address2='" + address2 + '\'' +
-                ", statusText='" + statusText + '\'' +
-                ", projectStage=" + projectStage +
-                ", estLow=" + estLow +
-                ", bidDate='" + bidDate + '\'' +
-                ", city='" + city + '\'' +
-                ", primaryProjectTypeId=" + primaryProjectTypeId +
-                ", id=" + id +
-                ", zip5='" + zip5 + '\'' +
-                ", cnProjectUrl='" + cnProjectUrl + '\'' +
-                ", title='" + title + '\'' +
-                ", contractNbr='" + contractNbr + '\'' +
-                ", numberOfFloorsAboveGround='" + numberOfFloorsAboveGround + '\'' +
-                ", details='" + details + '\'' +
-                ", dodgeNumber='" + dodgeNumber + '\'' +
-                ", lastPublishDate='" + lastPublishDate + '\'' +
-                ", contractType='" + contractType + '\'' +
-                ", projDlvrySys='" + projDlvrySys + '\'' +
-                ", planInd='" + planInd + '\'' +
-                ", dodgeVersion='" + dodgeVersion + '\'' +
-                ", primaryProjectType=" + primaryProjectType +
-                ", specAvailable='" + specAvailable + '\'' +
-                ", fipsCounty='" + fipsCounty + '\'' +
-                ", targetFinishDate='" + targetFinishDate + '\'' +
-                ", priorPublishDate='" + priorPublishDate + '\'' +
-                ", numberOfBuildings='" + numberOfBuildings + '\'' +
-                ", statusProjDlvrySys='" + statusProjDlvrySys + '\'' +
-                ", estHigh=" + estHigh +
-                ", stdIncludes='" + stdIncludes + '\'' +
-                ", currencyType='" + currencyType + '\'' +
-                ", country='" + country + '\'' +
-                ", geocode=" + geocode +
-                ", zipPlus4='" + zipPlus4 + '\'' +
-                ", projectStageId='" + projectStageId + '\'' +
-                ", projectNotes='" + projectNotes + '\'' +
-                ", targetStartDate='" + targetStartDate + '\'' +
-                ", geoLocationType='" + geoLocationType + '\'' +
-                ", county='" + county + '\'' +
-                ", firstPublishDate='" + firstPublishDate + '\'' +
-                ", addendaInd='" + addendaInd + '\'' +
-                ", availableFrom='" + availableFrom + '\'' +
-                ", geoType='" + geoType + '\'' +
-                ", unionDesignation='" + unionDesignation + '\'' +
-                ", bidTimeZone='" + bidTimeZone + '\'' +
-                ", bondInformation='" + bondInformation + '\'' +
-                ", ownerClass='" + ownerClass + '\'' +
-                '}';
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+
+        this.hidden = hidden;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Project)) return false;
 
         Project project = (Project) o;
 
@@ -428,6 +384,7 @@ public class Project extends RealmObject {
         if (primaryProjectTypeId != project.primaryProjectTypeId) return false;
         if (id != project.id) return false;
         if (Double.compare(project.estHigh, estHigh) != 0) return false;
+        if (hidden != project.hidden) return false;
         if (bidSubmitTo != null ? !bidSubmitTo.equals(project.bidSubmitTo) : project.bidSubmitTo != null)
             return false;
         if (state != null ? !state.equals(project.state) : project.state != null) return false;
@@ -570,6 +527,63 @@ public class Project extends RealmObject {
         result = 31 * result + (bidTimeZone != null ? bidTimeZone.hashCode() : 0);
         result = 31 * result + (bondInformation != null ? bondInformation.hashCode() : 0);
         result = 31 * result + (ownerClass != null ? ownerClass.hashCode() : 0);
+        result = 31 * result + (hidden ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "bidSubmitTo='" + bidSubmitTo + '\'' +
+                ", state='" + state + '\'' +
+                ", address1='" + address1 + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", statusText='" + statusText + '\'' +
+                ", projectStage=" + projectStage +
+                ", estLow=" + estLow +
+                ", bidDate=" + bidDate +
+                ", city='" + city + '\'' +
+                ", primaryProjectTypeId=" + primaryProjectTypeId +
+                ", id=" + id +
+                ", zip5='" + zip5 + '\'' +
+                ", cnProjectUrl='" + cnProjectUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", contractNbr='" + contractNbr + '\'' +
+                ", numberOfFloorsAboveGround='" + numberOfFloorsAboveGround + '\'' +
+                ", details='" + details + '\'' +
+                ", dodgeNumber='" + dodgeNumber + '\'' +
+                ", lastPublishDate=" + lastPublishDate +
+                ", contractType='" + contractType + '\'' +
+                ", projDlvrySys='" + projDlvrySys + '\'' +
+                ", planInd='" + planInd + '\'' +
+                ", dodgeVersion='" + dodgeVersion + '\'' +
+                ", primaryProjectType=" + primaryProjectType +
+                ", specAvailable='" + specAvailable + '\'' +
+                ", fipsCounty='" + fipsCounty + '\'' +
+                ", targetFinishDate=" + targetFinishDate +
+                ", priorPublishDate=" + priorPublishDate +
+                ", numberOfBuildings='" + numberOfBuildings + '\'' +
+                ", statusProjDlvrySys='" + statusProjDlvrySys + '\'' +
+                ", estHigh=" + estHigh +
+                ", stdIncludes='" + stdIncludes + '\'' +
+                ", currencyType='" + currencyType + '\'' +
+                ", country='" + country + '\'' +
+                ", geocode=" + geocode +
+                ", zipPlus4='" + zipPlus4 + '\'' +
+                ", projectStageId='" + projectStageId + '\'' +
+                ", projectNotes='" + projectNotes + '\'' +
+                ", targetStartDate=" + targetStartDate +
+                ", geoLocationType='" + geoLocationType + '\'' +
+                ", county='" + county + '\'' +
+                ", firstPublishDate=" + firstPublishDate +
+                ", addendaInd='" + addendaInd + '\'' +
+                ", availableFrom='" + availableFrom + '\'' +
+                ", geoType='" + geoType + '\'' +
+                ", unionDesignation='" + unionDesignation + '\'' +
+                ", bidTimeZone='" + bidTimeZone + '\'' +
+                ", bondInformation='" + bondInformation + '\'' +
+                ", ownerClass='" + ownerClass + '\'' +
+                ", hidden=" + hidden +
+                '}';
     }
 }
