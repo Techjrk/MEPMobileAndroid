@@ -18,6 +18,9 @@ import java.util.Calendar;
 import java.util.List;
 
 public class LecetCalendar extends FlexibleCalendarView {
+
+    private Calendar lastDateSelected;
+
     public LecetCalendar(Context context) {
         super(context);
         initializeCalendar();
@@ -84,6 +87,7 @@ public class LecetCalendar extends FlexibleCalendarView {
                 return null;
             }
         });
+        selectDate(Calendar.getInstance());
     }
 
     public class EventW implements Event {
@@ -92,5 +96,15 @@ public class LecetCalendar extends FlexibleCalendarView {
         public int getColor() {
             return 0;
         }
+    }
+
+    @Override
+    public void selectDate(Calendar calendar) {
+        super.selectDate(calendar);
+        lastDateSelected = calendar;
+    }
+
+    public Calendar getLastDateSelected() {
+        return lastDateSelected;
     }
 }

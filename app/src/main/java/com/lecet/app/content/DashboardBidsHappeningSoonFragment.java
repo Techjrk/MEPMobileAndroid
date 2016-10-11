@@ -70,9 +70,4 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
         binding.getViewModel().initializeCalendar(binding.calendarView);
         return view;
     }
-
-    private void updateBids(List<Bid> bids) {
-        this.mBids = bids;
-        binding.calendarView.addEventsToCalendar(bids);
-    }
 }

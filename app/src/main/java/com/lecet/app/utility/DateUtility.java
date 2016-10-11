@@ -26,11 +26,10 @@ public class DateUtility {
         return calendar.getTime();
     }
 
-    public static Date getFirstDateOfTheMonth(Date date) {
+    public static Calendar getFirstDateOfTheCurrentMonth() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        return calendar.getTime();
+        return calendar;
     }
 
     public static Date parseBidDate(String dateString) {

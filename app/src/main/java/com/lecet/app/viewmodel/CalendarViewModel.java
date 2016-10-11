@@ -14,7 +14,6 @@ import com.lecet.app.utility.DateUtility;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,18 +30,29 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
     private final BidDomain bidDomain;
 
     private String month;
+    private Calendar lastDateSelected;
 
     public CalendarViewModel(Fragment fragment, BidDomain bidDomain) {
         this.fragment = fragment;
         this.bidDomain = bidDomain;
     }
 
-    public void initializeCalendar(LecetCalendar calendarView) {
+    public void initializeCalendar(final LecetCalendar calendarView) {
         calendarView.setOnDateClickListener(this);
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         setMonth(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-
+        calendarView.setOnMonthChangeListener(new FlexibleCalendarView.OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month, int direction) {
+                calendarView.goToCurrentMonth();
+                if (lastDateSelected != null) {
+                    calendarView.selectDate(lastDateSelected);
+                } else {
+                    calendarView.selectDate(calendarView.getLastDateSelected());
+                }
+            }
+        });
     }
 
     @Bindable
@@ -56,8 +66,8 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
     }
 
     public void fetchBids(final LecetCalendar calendarView) {
-        Date date = DateUtility.getFirstDateOfTheMonth(new Date());
-        bidDomain.getBidsRecentlyMade(date, 100, new Callback<List<Bid>>() {
+        Calendar calendar = DateUtility.getFirstDateOfTheCurrentMonth();
+        bidDomain.getBidsRecentlyMade(calendar.getTime(), 100, new Callback<List<Bid>>() {
             @Override
             public void onResponse(Call<List<Bid>> call, Response<List<Bid>> response) {
                 calendarView.addEventsToCalendar(response.body());
@@ -74,6 +84,7 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
     public void onDateClick(int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
+        lastDateSelected = cal;
         Toast.makeText(fragment.getContext(), cal.getTime().toString() + " Clicked", Toast.LENGTH_SHORT).show();
     }
 }
