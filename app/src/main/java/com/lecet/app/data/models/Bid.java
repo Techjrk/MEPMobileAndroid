@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * File: Bid Created: 10/5/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -17,7 +17,7 @@ public class Bid {
     private String createDate;
 
     @SerializedName("amount")
-    private long amount;
+    private double amount;
 
     @SerializedName("bidderRole")
     private String bidderRole;
@@ -44,7 +44,8 @@ public class Bid {
     private long projectId;
 
 
-    public Bid(){}
+    public Bid() {
+    }
 
     public boolean isAwardInd() {
         return awardInd;
@@ -54,7 +55,7 @@ public class Bid {
         return createDate;
     }
 
-    public long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -114,8 +115,10 @@ public class Bid {
     @Override
     public int hashCode() {
         int result = (awardInd ? 1 : 0);
+        long temp;
         result = 31 * result + createDate.hashCode();
-        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + bidderRole.hashCode();
         result = 31 * result + rank;
         result = 31 * result + fipsCounty.hashCode();

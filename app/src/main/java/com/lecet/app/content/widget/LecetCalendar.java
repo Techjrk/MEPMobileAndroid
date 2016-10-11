@@ -68,29 +68,29 @@ public class LecetCalendar extends FlexibleCalendarView {
     }
 
     public void addEventsToCalendar(List<Bid> bids) {
+        if (bids == null) {
+            bids = new ArrayList<>();
+        }
         final List<Calendar> listOfBidDates = DateUtility.getBidDates(bids);
         setEventDataProvider(new FlexibleCalendarView.EventDataProvider() {
             @Override
             public List<? extends Event> getEventsForTheDay(int year, int month, int day) {
-//
-//                Calendar calendar = DateUtility.getCalendarHour0(year, month, day);
-//                if (listOfBidDates.contains(calendar)) {
-//                    List<CalendarFragment.EventW> eventList = new ArrayList<>();
-//                    eventList.add(new CalendarFragment.EventW());
-//                    return eventList;
-//                }
-                if (day % 7 == 0) {
-                    List<Event> eventList = new ArrayList<>();
-                    eventList.add(new Event() {
-                        @Override
-                        public int getColor() {
-                            return 0;
-                        }
-                    });
+                Calendar calendar = DateUtility.getCalendarHour0(year, month, day);
+                if (listOfBidDates.contains(calendar)) {
+                    List<EventW> eventList = new ArrayList<>();
+                    eventList.add(new EventW());
                     return eventList;
                 }
                 return null;
             }
         });
+    }
+
+    public class EventW implements Event {
+
+        @Override
+        public int getColor() {
+            return 0;
+        }
     }
 }

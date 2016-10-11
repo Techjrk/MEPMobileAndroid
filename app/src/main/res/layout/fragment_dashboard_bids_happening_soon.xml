@@ -1,10 +1,16 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.CalendarViewModel" />
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/content_bg_gradient_1"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context="com.lecet.app.content.CalendarFragment">
@@ -23,6 +29,7 @@
                 android:layout_height="@dimen/calendar_month_container_height"
                 android:background="@drawable/calendar_month_background"
                 android:gravity="center"
+                android:text="@={viewModel.month}"
                 android:textColor="@color/lecetTextWhite" />
 
             <com.lecet.app.content.widget.LecetCalendar

@@ -17,12 +17,19 @@ import java.util.List;
 
 public class DateUtility {
 
-    private static final SimpleDateFormat sBidFormat = new SimpleDateFormat("");
+    private static final SimpleDateFormat sBidFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public static Date addDays(int days) {
         Calendar calendar = Calendar.getInstance(); // this would default to now
         calendar.add(Calendar.DAY_OF_MONTH, days);
 
+        return calendar.getTime();
+    }
+
+    public static Date getFirstDateOfTheMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
     }
 

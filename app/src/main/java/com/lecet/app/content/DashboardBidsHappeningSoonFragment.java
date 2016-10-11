@@ -7,23 +7,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.lecet.app.R;
+import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.FragmentDashboardBidsHappeningSoonBinding;
-import com.p_v.flexiblecalendar.FlexibleCalendarView;
+import com.lecet.app.domain.BidDomain;
+import com.lecet.app.viewmodel.CalendarViewModel;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardBidsHappeningSoonFragment extends Fragment implements FlexibleCalendarView.OnDateClickListener {
+public class DashboardBidsHappeningSoonFragment extends Fragment {
 
     private static final String TAG = "CalendarBidsHappeningSoonFrag";
 
@@ -44,6 +43,9 @@ public class DashboardBidsHappeningSoonFragment extends Fragment implements Flex
         return fragmentInstance;
     }
 
+    public DashboardBidsHappeningSoonFragment() {
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,34 +55,24 @@ public class DashboardBidsHappeningSoonFragment extends Fragment implements Flex
         }
     }
 
-    public DashboardBidsHappeningSoonFragment() {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        binding.getViewModel().fetchBids(binding.calendarView);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_bids_happening_soon, container, false);
+        binding.setViewModel(new CalendarViewModel(this, new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getContext()))));
         View view = binding.getRoot();
-
-//        binding.calendarView.setOnDateClickListener(this);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(binding.calendarView.getSelectedDateItem().getYear(), binding.calendarView.getSelectedDateItem().getMonth(), 1);
-        binding.monthTextView.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-
-        updateBids(new ArrayList<Bid>());
+        binding.getViewModel().initializeCalendar(binding.calendarView);
         return view;
     }
 
     private void updateBids(List<Bid> bids) {
         this.mBids = bids;
         binding.calendarView.addEventsToCalendar(bids);
-    }
-
-    @Override
-    public void onDateClick(int year, int month, int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
-        Toast.makeText(getActivity(), cal.getTime().toString() + " Clicked", Toast.LENGTH_SHORT).show();
     }
 }
