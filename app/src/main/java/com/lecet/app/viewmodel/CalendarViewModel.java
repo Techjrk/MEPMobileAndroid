@@ -4,7 +4,6 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.content.widget.LecetCalendar;
@@ -37,6 +36,16 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
         this.bidDomain = bidDomain;
     }
 
+    @Bindable
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+        notifyPropertyChanged(BR.month);
+    }
+
     public void initializeCalendar(final LecetCalendar calendarView) {
         calendarView.setOnDateClickListener(this);
         final Calendar cal = Calendar.getInstance();
@@ -53,16 +62,6 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
                 }
             }
         });
-    }
-
-    @Bindable
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-        notifyPropertyChanged(BR.month);
     }
 
     public void fetchBids(final LecetCalendar calendarView) {
@@ -85,6 +84,5 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
         lastDateSelected = cal;
-        Toast.makeText(fragment.getContext(), cal.getTime().toString() + " Clicked", Toast.LENGTH_SHORT).show();
     }
 }

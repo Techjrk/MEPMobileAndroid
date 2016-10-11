@@ -54,7 +54,7 @@ public class LecetCalendar extends FlexibleCalendarView {
             @Override
             public BaseCellView getWeekdayCellView(int position, View convertView, ViewGroup parent) {
                 BaseCellView cellView = (BaseCellView) convertView;
-                if (cellView == null) {
+                if (cellView == null) { //removing week day name
                     LayoutInflater inflater = LayoutInflater.from(getContext());
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
                     ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, 0);
