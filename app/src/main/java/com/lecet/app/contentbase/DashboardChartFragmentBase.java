@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.lecet.app.R;
 
@@ -29,33 +30,41 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
 
     private static final String TAG = "DashboardChartFragBase";
 
-    private String title;
+    private String title = "DEFAULT";
+    private String subtitle;
     private int page;
     PieChart pieChart;
 
-    public static DashboardChartFragmentBase newInstance(int page, String title) {
+    public static DashboardChartFragmentBase newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardChartFragmentBase fragmentInstance = new DashboardChartFragmentBase();
         Bundle args = new Bundle();
         //args.putInt("someInt", page);
-        //args.putString("someTitle", title);
+        args.putString("fragmentTitle", title);
+        args.putString("fragmentSubtitle", subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         //page = getArguments().getInt("someInt", 0);
-        //title = getArguments().getString("someTitle");
-
+        title = getArguments().getString("fragmentTitle");
+        subtitle = getArguments().getString("fragmentSubtitle");
+        Log.d(TAG, "onCreate: " + title);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_dashboard_chart_base, container, false);
+
+        TextView fragmentTitleText = (TextView) view.findViewById(R.id.title_text);
+        fragmentTitleText.setText(this.title);
+
+        TextView fragmentSubtitleText = (TextView) view.findViewById(R.id.subtitle_text);
+        fragmentSubtitleText.setText(this.subtitle);
 
         initPieChart(view);
 
@@ -71,7 +80,7 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
         pieChart = (PieChart) view.findViewById(R.id.pie_chart);
         pieChart.setTransparentCircleRadius(0);
         pieChart.setTransparentCircleAlpha(0);
-        pieChart.setHoleRadius(80.0f);
+        pieChart.setHoleRadius(70.0f);
         pieChart.setHoleColor(getResources().getColor(R.color.transparent));
         pieChart.setDrawMarkerViews(false);
         pieChart.setDrawEntryLabels(false);

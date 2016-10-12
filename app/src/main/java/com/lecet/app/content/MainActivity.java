@@ -91,7 +91,7 @@ public class MainActivity extends NavigationBaseActivity {
     private void setupViewPager() {
 
         viewPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
-        viewPagerAdapter = new DashboardPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter = new DashboardPagerAdapter(getSupportFragmentManager(), this.getBaseContext());
         viewPager.setAdapter(viewPagerAdapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

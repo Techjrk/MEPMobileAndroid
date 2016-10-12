@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center|top">
+                android:gravity="center|top"
+                tools:context="com.lecet.app.content.MainActivity">
 
-    <!-- PLACEHOLDER - CALENDAR - BIDS HAPPENING SOON -->
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/placeholder_bids_happening_soon"/>
+
+    <LinearLayout
+            android:id="@+id/calendar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/title_text"
+                style="@style/DashboardText.Title"
+                tools:text="@string/dashboard_bids"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/subtitle_num"
+                    style="@style/DashboardText.Subitle"
+                    android:text="14"/>
+
+            <TextView
+                    android:id="@+id/subtitle_text"
+                    style="@style/DashboardText.Subitle"
+                    android:layout_marginLeft="8dp"
+                    tools:text="HAPPENING SOON"/>
+
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:src="@drawable/placeholder_bids_happening_soon"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

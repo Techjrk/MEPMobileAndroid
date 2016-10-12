@@ -19,6 +19,22 @@
     <string name="login">Login</string>
     <string name="sign_up_for_mep_access"><u>Sign Up for MEP Access</u></string>
 
+    <!-- Dashboard -->
+    <string name="title_fragment_bids_recently_made">Bids Recently Made</string>
+    <string name="title_fragment_bids_happening_soon">Bids Happening Soon</string>
+    <string name="title_fragment_projects_recently_added">Projects Recently Added</string>
+    <string name="title_fragment_projects_recently_updated">Projects Recently Updated</string>
+    <string name="dashboard_bids">BIDS</string>
+    <string name="dashboard_projects">PROJECTS</string>
+    <string name="dashboard_recently_made">RECENTLY MADE</string>
+    <string name="dashboard_happening_soon">HAPPENING SOON</string>
+    <string name="dashboard_recently_added">RECENTLY ADDED</string>
+    <string name="dashboard_recently_updated">RECENTLY UPDATED</string>
+    <string name="dashboard_housing">HOUSING</string>
+    <string name="dashboard_engineering">ENGINEERING</string>
+    <string name="dashboard_building">BUILDING</string>
+    <string name="dashboard_utilities">UTILITIES</string>
+
     <!-- Create Password -->
     <string name="title_activity_create_password">Create Password</string>
     <string name="lets_create_a_password">Let\'s create a password for your account.</string>

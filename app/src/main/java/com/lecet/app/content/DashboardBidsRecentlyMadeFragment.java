@@ -19,24 +19,27 @@ public class DashboardBidsRecentlyMadeFragment extends DashboardChartFragmentBas
     private static final String TAG = "BidsRecentlyMadeFrag";
 
     private String title;
+    private String subtitle;
     private int page;
 
-    public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title) {
+    public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardBidsRecentlyMadeFragment fragmentInstance = new DashboardBidsRecentlyMadeFragment();
         Bundle args = new Bundle();
         //args.putInt("someInt", page);
-        //args.putString("someTitle", title);
+        args.putString("fragmentTitle", title);
+        args.putString("fragmentSubtitle", subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         //page = getArguments().getInt("someInt", 0);
-        //title = getArguments().getString("someTitle");
+        title = getArguments().getString("fragmentTitle");
+        subtitle = getArguments().getString("fragmentSubtitle");
+        Log.d(TAG, "onCreate: " + title);
     }
 
 }
