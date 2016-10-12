@@ -373,6 +373,8 @@ public class Project extends RealmObject {
         this.hidden = hidden;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
