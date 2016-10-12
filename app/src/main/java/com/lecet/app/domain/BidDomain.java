@@ -10,11 +10,15 @@ import com.lecet.app.utility.DateUtility;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -73,10 +77,40 @@ public class BidDomain {
         getBidsRecentlyMade(limit, callback);
     }
 
+    /** Persisted **/
+
+    public RealmResults<Bid> fetchBids(Date cutoffDate) {
+
+        RealmResults<Bid> bids = realm.where(Bid.class)
+                .greaterThan("createDate", cutoffDate)
+                .equalTo("project.hidden", false)
+                .findAllSorted("createDate", Sort.DESCENDING);
+
+        return bids;
+    }
+
+    public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
+
+        RealmResults<Bid> bids = realm.where(Bid.class)
+                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("project.hidden", false)
+                .findAllSorted("createDate", Sort.DESCENDING);
+
+        return bids;
+    }
+
+    public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
+
+        return result.where()
+                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("project.hidden", false)
+                .findAllSorted("createDate", Sort.DESCENDING);
+    }
+
     public Bid copyToRealmTransaction(Bid bid) {
 
         realm.beginTransaction();
-        Bid persistedBid = realm.copyToRealm(bid);
+        Bid persistedBid = realm.copyToRealmOrUpdate(bid);
         realm.commitTransaction();
 
         return persistedBid;
@@ -85,20 +119,73 @@ public class BidDomain {
     public List<Bid> copyToRealmTransaction(List<Bid> bids) {
 
         realm.beginTransaction();
-        List<Bid> persistedBids = realm.copyToRealm(bids);
+        List<Bid> persistedBids = realm.copyToRealmOrUpdate(bids);
         realm.commitTransaction();
         return persistedBids;
     }
 
-    /** Persisted **/
+    /** Utility **/
+    public TreeMap<Long, TreeSet<Bid>> sortRealmResults(RealmResults<Bid> result) {
 
-    public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
+        RealmResults<Bid> engineering = queryResult(ENGINEERING, result);
+        RealmResults<Bid> building = queryResult(BUILDING, result);
+        RealmResults<Bid> housing  = queryResult(HOUSING, result);
+        RealmResults<Bid> utilities = queryResult(UTILITIES, result);
 
-        RealmResults<Bid> bids = realm.where(Bid.class)
-                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("project.hidden", false)
-                .findAll();
+        TreeMap<Long, TreeSet<Bid>> treeMap = new TreeMap<>();
 
-        return bids;
+        Comparator<Bid> bidComparator = new Comparator<Bid>() {
+            @Override
+            public int compare(Bid bid, Bid t1) {
+                return bid.getCreateDate().after(t1.getCreateDate()) ? 1 : -1;
+            }
+        };
+
+        // Cycle through engineering bids
+        if (engineering.size() > 0) {
+
+            TreeSet<Bid> bids = new TreeSet<>(bidComparator);
+
+            for (int i=0; i < engineering.size(); i++) {
+                bids.add(engineering.get(i));
+            }
+
+            treeMap.put(Long.valueOf(ENGINEERING), bids);
+        }
+
+        // Cycle through building bids
+        if (building.size() > 0) {
+
+            TreeSet<Bid> bids = new TreeSet<>(bidComparator);
+            for (int i=0; i < building.size(); i++) {
+                bids.add(building.get(i));
+            }
+
+            treeMap.put(Long.valueOf(BUILDING), bids);
+        }
+
+        // Cycle through housing bids
+        if (housing.size() > 0) {
+
+            TreeSet<Bid> bids = new TreeSet<>(bidComparator);
+            for (int i=0; i < housing.size(); i++) {
+                bids.add(housing.get(i));
+            }
+
+            treeMap.put(Long.valueOf(HOUSING), bids);
+        }
+
+        // Cycle through utilities bids
+        if (engineering.size() > 0) {
+
+            TreeSet<Bid> bids = new TreeSet<>(bidComparator);
+            for (int i=0; i < utilities.size(); i++) {
+                bids.add(utilities.get(i));
+            }
+
+            treeMap.put(Long.valueOf(UTILITIES), bids);
+        }
+
+        return treeMap;
     }
 }
