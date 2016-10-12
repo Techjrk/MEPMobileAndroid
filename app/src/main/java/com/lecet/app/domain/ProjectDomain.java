@@ -100,14 +100,30 @@ public class ProjectDomain {
 
     /** Persisted **/
 
-    public RealmResults<Project> fetchProjectsRecentlyPublished(Date startDate) {
+    public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("firstPublishDate", startDate)
+                .greaterThan("bidDate", startDate)
                 .findAll();
 
         return projectsResult;
     }
 
+    public Project copyToRealmTransaction(Project project) {
+
+        realm.beginTransaction();
+        Project persistedProject = realm.copyToRealmOrUpdate(project);
+        realm.commitTransaction();
+
+        return persistedProject;
+    }
+
+    public List<Project> copyToRealmTransaction(List<Project> projects) {
+
+        realm.beginTransaction();
+        List<Project> persistedProjects = realm.copyToRealmOrUpdate(projects);
+        realm.commitTransaction();
+        return persistedProjects;
+    }
 }
