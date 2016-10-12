@@ -22,7 +22,7 @@ public class Bid extends RealmObject {
     private Date createDate;
 
     @SerializedName("amount")
-    private long amount;
+    private double amount;
 
     @SerializedName("bidderRole")
     private String bidderRole;
@@ -62,7 +62,7 @@ public class Bid extends RealmObject {
         return createDate;
     }
 
-    public long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -110,7 +110,7 @@ public class Bid extends RealmObject {
         Bid bid = (Bid) o;
 
         if (awardInd != bid.awardInd) return false;
-        if (amount != bid.amount) return false;
+        if (Double.compare(bid.amount, amount) != 0) return false;
         if (rank != bid.rank) return false;
         if (id != bid.id) return false;
         if (companyId != bid.companyId) return false;
@@ -129,9 +129,12 @@ public class Bid extends RealmObject {
 
     @Override
     public int hashCode() {
-        int result = (awardInd ? 1 : 0);
+        int result;
+        long temp;
+        result = (awardInd ? 1 : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
-        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (bidderRole != null ? bidderRole.hashCode() : 0);
         result = 31 * result + rank;
         result = 31 * result + (fipsCounty != null ? fipsCounty.hashCode() : 0);
