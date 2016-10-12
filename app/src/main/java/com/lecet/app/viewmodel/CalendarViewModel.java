@@ -51,17 +51,6 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
         final Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         setMonth(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH));
-        calendarView.setOnMonthChangeListener(new FlexibleCalendarView.OnMonthChangeListener() {
-            @Override
-            public void onMonthChange(int year, int month, int direction) {
-                calendarView.goToCurrentMonth();
-                if (lastDateSelected != null) {
-                    calendarView.selectDate(lastDateSelected);
-                } else {
-                    calendarView.selectDate(calendarView.getLastDateSelected());
-                }
-            }
-        });
     }
 
     public void fetchBids(final LecetCalendar calendarView) {

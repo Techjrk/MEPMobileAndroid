@@ -67,6 +67,8 @@ dependencies {
     compile 'net.hockeyapp.android:HockeySDK:4.0.0'
 
     //Calendar
-    compile 'com.p_v:flexiblecalendar:1.2.1'
+    compile(name: 'flexible_calendar', ext: 'aar') {
+        transitive = true
+    }
 
 }
