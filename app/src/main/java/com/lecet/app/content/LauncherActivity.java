@@ -5,10 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -28,7 +25,7 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate");
-        
+
         setContentView(R.layout.activity_launcher);
         setupBinding();
         initTimerDelay(5000);
