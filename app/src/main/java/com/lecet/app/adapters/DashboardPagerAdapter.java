@@ -22,7 +22,7 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "DashboardPagerAdapter";
 
     private Context context;
-    private static final int NUM_ITEMS = 4;
+    public static final int NUM_ITEMS = 4;
 
     public DashboardPagerAdapter(FragmentManager fm, Context context) {
         super(fm);

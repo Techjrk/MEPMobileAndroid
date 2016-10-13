@@ -91,6 +91,7 @@ public class MainActivity extends NavigationBaseActivity {
     private void setupViewPager() {
 
         viewPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
+        viewPager.setOffscreenPageLimit(DashboardPagerAdapter.NUM_ITEMS);
         viewPagerAdapter = new DashboardPagerAdapter(getSupportFragmentManager(), this.getBaseContext());
         viewPager.setAdapter(viewPagerAdapter);
 
