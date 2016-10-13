@@ -254,6 +254,22 @@
         <item name="android:background">@drawable/shape_dot_unselected</item>
     </style>
 
+    <style name="DashboardText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/lecetTextWhite</item>
+    </style>
+
+    <style name="DashboardText.Title">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DashboardText.Subitle">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
 
     <!-- Change Password -->
     <style name="ChangePasswordTextViewSmall">

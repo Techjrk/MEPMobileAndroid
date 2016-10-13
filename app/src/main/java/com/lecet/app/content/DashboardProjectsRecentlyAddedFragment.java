@@ -8,39 +8,38 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.contentbase.DashboardChartFragmentBase;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardProjectsRecentlyAddedFragment extends Fragment {
+public class DashboardProjectsRecentlyAddedFragment extends DashboardChartFragmentBase {
 
     private static final String TAG = "ProjectsRecentlyAddFrag";
 
     private String title;
+    private String subtitle;
     private int page;
 
-    public static DashboardProjectsRecentlyAddedFragment newInstance(int page, String title) {
+    public static DashboardProjectsRecentlyAddedFragment newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardProjectsRecentlyAddedFragment fragmentInstance = new DashboardProjectsRecentlyAddedFragment();
         Bundle args = new Bundle();
-        args.putInt("someInt", page);
-        args.putString("someTitle", title);
+        //args.putInt("someInt", page);
+        args.putString("fragmentTitle", title);
+        args.putString("fragmentSubtitle", subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        page = getArguments().getInt("someInt", 0);
-        title = getArguments().getString("someTitle");
+        //page = getArguments().getInt("someInt", 0);
+        title = getArguments().getString("fragmentTitle");
+        subtitle = getArguments().getString("fragmentSubtitle");
+        Log.d(TAG, "onCreate: " + title);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dashboard_projects_recently_added, container, false);
-        return view;
-    }
 }

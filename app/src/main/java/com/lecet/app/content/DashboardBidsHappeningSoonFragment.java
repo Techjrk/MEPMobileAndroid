@@ -28,17 +28,20 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
 
     private static final String ARG_PAGE = "page";
     private static final String ARG_TITLE = "title";
+    private static final String ARG_SUBTITLE = "subtitle";
 
     private List<Bid> mBids;
     private FragmentDashboardBidsHappeningSoonBinding binding;
     private int mPage;
     private String mTitle;
+    private String mSubtitle;
 
-    public static DashboardBidsHappeningSoonFragment newInstance(int page, String title) {
+    public static DashboardBidsHappeningSoonFragment newInstance(int page, String title, String subtitle) {
         DashboardBidsHappeningSoonFragment fragmentInstance = new DashboardBidsHappeningSoonFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         args.putString(ARG_TITLE, title);
+        args.putString(ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -52,6 +55,7 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
             mTitle = getArguments().getString(ARG_TITLE);
+            mSubtitle = getArguments().getString(ARG_SUBTITLE);
         }
     }
 
