@@ -30,18 +30,22 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
 
     private static final String TAG = "DashboardChartFragBase";
 
-    private String title = "DEFAULT";
-    private String subtitle;
-    private int page;
+    public static final String ARG_PAGE = "page";
+    public static final String ARG_TITLE = "title";
+    public static final String ARG_SUBTITLE = "subtitle";
+
+    protected int page;
+    protected String title = "Title";
+    protected String subtitle = "Subtitle";
     PieChart pieChart;
 
     public static DashboardChartFragmentBase newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardChartFragmentBase fragmentInstance = new DashboardChartFragmentBase();
         Bundle args = new Bundle();
-        //args.putInt("someInt", page);
-        args.putString("fragmentTitle", title);
-        args.putString("fragmentSubtitle", subtitle);
+        args.putInt(ARG_PAGE, page);
+        args.putString(ARG_TITLE, title);
+        args.putString(ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -49,10 +53,12 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //page = getArguments().getInt("someInt", 0);
-        title = getArguments().getString("fragmentTitle");
-        subtitle = getArguments().getString("fragmentSubtitle");
-        //Log.d(TAG, "onCreate: " + title);
+        if (getArguments() != null) {
+            page = getArguments().getInt(ARG_PAGE, 0);
+            title = getArguments().getString(ARG_TITLE);
+            subtitle = getArguments().getString(ARG_SUBTITLE);
+        }
+        Log.d(TAG, "onCreate: " + title + " " + subtitle);
     }
 
     @Override

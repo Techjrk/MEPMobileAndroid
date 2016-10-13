@@ -18,17 +18,14 @@ public class DashboardProjectsRecentlyAddedFragment extends DashboardChartFragme
 
     private static final String TAG = "ProjectsRecentlyAddFrag";
 
-    private String title;
-    private String subtitle;
-    private int page;
 
     public static DashboardProjectsRecentlyAddedFragment newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardProjectsRecentlyAddedFragment fragmentInstance = new DashboardProjectsRecentlyAddedFragment();
         Bundle args = new Bundle();
-        //args.putInt("someInt", page);
-        args.putString("fragmentTitle", title);
-        args.putString("fragmentSubtitle", subtitle);
+        args.putInt(DashboardChartFragmentBase.ARG_PAGE, page);
+        args.putString(DashboardChartFragmentBase.ARG_TITLE, title);
+        args.putString(DashboardChartFragmentBase.ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -36,10 +33,6 @@ public class DashboardProjectsRecentlyAddedFragment extends DashboardChartFragme
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //page = getArguments().getInt("someInt", 0);
-        title = getArguments().getString("fragmentTitle");
-        subtitle = getArguments().getString("fragmentSubtitle");
-        Log.d(TAG, "onCreate: " + title + " " + subtitle);
     }
 
 }
