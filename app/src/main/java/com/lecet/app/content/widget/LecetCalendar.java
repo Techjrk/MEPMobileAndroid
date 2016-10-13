@@ -15,6 +15,7 @@ import com.lecet.app.utility.DateUtility;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.MonthViewPager;
 import com.p_v.flexiblecalendar.entity.Event;
+import com.p_v.flexiblecalendar.entity.SelectedDateItem;
 import com.p_v.flexiblecalendar.view.BaseCellView;
 
 import java.lang.reflect.Field;
@@ -23,27 +24,6 @@ import java.util.Calendar;
 import java.util.List;
 
 public class LecetCalendar extends FlexibleCalendarView {
-
-    private Calendar lastDateSelected;
-
-    private int displayYear;
-    private int displayMonth;
-    private int startDisplayDay;
-    private int weekdayHorizontalSpacing;
-    private int weekdayVerticalSpacing;
-    private int monthDayHorizontalSpacing;
-    private int monthDayVerticalSpacing;
-    private int monthViewBackground;
-    private int weekViewBackground;
-    private boolean showDatesOutsideMonth;
-    private boolean decorateDatesOutsideMonth;
-    private boolean disableAutoDateSelection;
-
-    /**
-     * First day of the week in the calendar
-     */
-    private int startDayOfTheWeek;
-
 
     public LecetCalendar(Context context) {
         super(context);
@@ -153,13 +133,22 @@ public class LecetCalendar extends FlexibleCalendarView {
     }
 
     @Override
-    public void selectDate(Calendar calendar) {
-        super.selectDate(calendar);
-        lastDateSelected = calendar;
-    }
+    public void onDateClick(SelectedDateItem selectedItem) {
+        boolean dispatchClick = false;
+        if (this.selectedDateItem.getYear() == selectedItem.getYear() && this.selectedDateItem.getMonth() == selectedItem.getMonth()) {
+            dispatchClick = true;
+            this.selectedDateItem = selectedItem;
+        }
 
-    public Calendar getLastDateSelected() {
-        return lastDateSelected;
-    }
+        if (dispatchClick) {
+            this.redrawMonthGrid(this.lastPosition % 4);
+            if (this.disableAutoDateSelection) {
+                this.userSelectedItem = selectedItem.clone();
+            }
 
+            if (this.onDateClickListener != null) {
+                this.onDateClickListener.onDateClick(selectedItem.getYear(), selectedItem.getMonth(), selectedItem.getDay());
+            }
+        }
+    }
 }
