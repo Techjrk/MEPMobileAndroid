@@ -35,17 +35,17 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        //Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         //page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("fragmentTitle");
         subtitle = getArguments().getString("fragmentSubtitle");
-        Log.d(TAG, "onCreate: " + title);
+        Log.d(TAG, "onCreate: " + title + " " + subtitle);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+        //Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_dashboard_bids_happening_soon, container, false);
 
         TextView fragmentTitleText = (TextView) view.findViewById(R.id.title_text);

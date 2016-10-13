@@ -52,12 +52,12 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
         //page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("fragmentTitle");
         subtitle = getArguments().getString("fragmentSubtitle");
-        Log.d(TAG, "onCreate: " + title);
+        //Log.d(TAG, "onCreate: " + title);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+        //Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_dashboard_chart_base, container, false);
 
         TextView fragmentTitleText = (TextView) view.findViewById(R.id.title_text);
@@ -76,7 +76,7 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
     }
 
     private void initPieChart(View view) {
-        Log.d(TAG, "initPieChart");
+        //Log.d(TAG, "initPieChart");
         pieChart = (PieChart) view.findViewById(R.id.pie_chart);
         pieChart.setTransparentCircleRadius(0);
         pieChart.setTransparentCircleAlpha(0);
@@ -94,7 +94,7 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
     }
 
     private void updatePieChart(int[] rawData) {
-        Log.d(TAG, "updatePieChart");
+        //Log.d(TAG, "updatePieChart");
         List<PieEntry> entries = new ArrayList<>();
 
         entries.add(new PieEntry(rawData[0]));       // housing

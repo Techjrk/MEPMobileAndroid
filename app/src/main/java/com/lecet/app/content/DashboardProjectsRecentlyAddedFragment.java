@@ -39,7 +39,7 @@ public class DashboardProjectsRecentlyAddedFragment extends DashboardChartFragme
         //page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("fragmentTitle");
         subtitle = getArguments().getString("fragmentSubtitle");
-        Log.d(TAG, "onCreate: " + title);
+        Log.d(TAG, "onCreate: " + title + " " + subtitle);
     }
 
 }

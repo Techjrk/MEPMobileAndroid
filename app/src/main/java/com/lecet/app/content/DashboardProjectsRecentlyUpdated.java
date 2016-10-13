@@ -35,12 +35,12 @@ public class DashboardProjectsRecentlyUpdated extends DashboardChartFragmentBase
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        //Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         //page = getArguments().getInt("someInt", 0);
         title = getArguments().getString("fragmentTitle");
         subtitle = getArguments().getString("fragmentSubtitle");
-        Log.d(TAG, "onCreate: " + title);
+        Log.d(TAG, "onCreate: " + title + " " + subtitle);
     }
 
 }
