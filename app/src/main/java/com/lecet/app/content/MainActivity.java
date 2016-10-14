@@ -83,18 +83,15 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         setupViewPager();
         setupPageIndicator();
         setupPageButtons();
-
-        BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        Calendar calendar = Calendar.getInstance();
-
-        //TODO: Attach Model to layout
-        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar);
     }
 
     private void setupBinding() {
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        MainViewModel viewModel = new MainViewModel(this);
+
+        BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        Calendar calendar = Calendar.getInstance();
+        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar);
         binding.setViewModel(viewModel);
     }
 
@@ -246,6 +243,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void calendarSelected(Date selectedDate) {
 
+        Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
     }
 
 }
