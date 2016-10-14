@@ -8,10 +8,15 @@ import android.util.Log;
 import com.lecet.app.BR;
 import com.lecet.app.content.widget.LecetCalendar;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.BidDomain;
+import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.interfaces.MHSDataSource;
+import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.utility.DateUtility;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -25,15 +30,19 @@ import retrofit2.Response;
  */
 
 public class CalendarViewModel extends BaseObservable implements FlexibleCalendarView.OnDateClickListener {
+
     private final Fragment fragment;
-    private final BidDomain bidDomain;
+    private MHSDataSource dataSource;
+    private MHSDelegate delegate;
 
     private String month;
     private Calendar lastDateSelected;
 
-    public CalendarViewModel(Fragment fragment, BidDomain bidDomain) {
+    public CalendarViewModel(Fragment fragment, MHSDataSource dataSource, MHSDelegate delegate) {
+
         this.fragment = fragment;
-        this.bidDomain = bidDomain;
+        this.dataSource = dataSource;
+        this.delegate = delegate;
     }
 
     @Bindable
@@ -54,16 +63,17 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
     }
 
     public void fetchBids(final LecetCalendar calendarView) {
-        Calendar calendar = DateUtility.getFirstDateOfTheCurrentMonth();
-        bidDomain.getBidsRecentlyMade(calendar.getTime(), 100, new Callback<List<Bid>>() {
+
+        dataSource.refreshProjectsHappeningSoon(new LecetCallback<Project[]>() {
             @Override
-            public void onResponse(Call<List<Bid>> call, Response<List<Bid>> response) {
-                calendarView.addEventsToCalendar(response.body());
+            public void onSuccess(Project[] result) {
+
+                calendarView.addEventsToCalendar(Arrays.asList(result));
             }
 
             @Override
-            public void onFailure(Call<List<Bid>> call, Throwable t) {
-                Log.d("TAG", "log");
+            public void onFailure(int code, String message) {
+
             }
         });
     }
@@ -73,5 +83,6 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
         lastDateSelected = cal;
+        delegate.calendarSelected(lastDateSelected.getTime());
     }
 }
