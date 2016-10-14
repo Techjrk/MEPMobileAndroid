@@ -11,6 +11,7 @@ import android.widget.Scroller;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.utility.DateUtility;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.MonthViewPager;
@@ -104,16 +105,36 @@ public class LecetCalendar extends FlexibleCalendarView {
         }
     }
 
-    public void addEventsToCalendar(List<Bid> bids) {
-        if (bids == null) {
-            bids = new ArrayList<>();
+//    public void addEventsToCalendar(List<Bid> bids) {
+//        if (bids == null) {
+//            bids = new ArrayList<>();
+//        }
+//        final List<Calendar> listOfBidDates = DateUtility.getBidDates(bids);
+//        setEventDataProvider(new EventDataProvider() {
+//            @Override
+//            public List<? extends Event> getEventsForTheDay(int year, int month, int day) {
+//                Calendar calendar = DateUtility.getCalendarHour0(year, month, day);
+//                if (listOfBidDates.contains(calendar)) {
+//                    List<EventW> eventList = new ArrayList<>();
+//                    eventList.add(new EventW());
+//                    return eventList;
+//                }
+//                return null;
+//            }
+//        });
+//        selectDate(Calendar.getInstance());
+//    }
+
+    public void addEventsToCalendar(List<Project> projects) {
+        if (projects == null) {
+            projects = new ArrayList<>();
         }
-        final List<Calendar> listOfBidDates = DateUtility.getBidDates(bids);
+        final List<Calendar> listOfProjectDates = DateUtility.getProjectDates(projects);
         setEventDataProvider(new EventDataProvider() {
             @Override
             public List<? extends Event> getEventsForTheDay(int year, int month, int day) {
                 Calendar calendar = DateUtility.getCalendarHour0(year, month, day);
-                if (listOfBidDates.contains(calendar)) {
+                if (listOfProjectDates.contains(calendar)) {
                     List<EventW> eventList = new ArrayList<>();
                     eventList.add(new EventW());
                     return eventList;
