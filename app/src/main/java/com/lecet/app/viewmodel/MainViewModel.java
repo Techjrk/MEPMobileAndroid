@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.lecet.app.R;
+import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.BidDomain;
@@ -147,4 +149,21 @@ public class MainViewModel {
         return projectDomain.fetchProjectsHappeningSoon(calendar.getTime());
     }
 
+    /** OnClick handlers **/
+
+    @SuppressWarnings("unused")
+    public void onPageLeftClicked(View view) {
+
+        //Log.d(TAG, "onPageLeftClicked");
+        MainActivity activity = (MainActivity) appCompatActivity;
+        activity.prevViewPage();
+    }
+
+    @SuppressWarnings("unused")
+    public void onPageRightClicked(View view) {
+
+        //Log.d(TAG, "onPageRightClicked");
+        MainActivity activity = (MainActivity) appCompatActivity;
+        activity.nextViewPage();
+    }
 }

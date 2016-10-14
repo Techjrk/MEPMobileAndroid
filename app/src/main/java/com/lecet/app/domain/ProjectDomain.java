@@ -126,4 +126,42 @@ public class ProjectDomain {
         realm.commitTransaction();
         return persistedProjects;
     }
+
+    public void getBidsHappeningSoon(Callback<List<Project>> callback) {
+
+        Date current = new Date();
+        Date endDate = DateUtility.addDays(30);
+        int limit = 150;
+
+        getBidsHappeningSoon(current, endDate, limit, callback);
+    }
+
+    public void getBidsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedStart = sdf.format(startDate);
+
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
+
+        Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
+        call.enqueue(callback);
+    }
+
+
+    public void getBidsRecentlyAdded(int limit, Callback<List<Project>> callback) {
+
+        Date endDate = DateUtility.addDays(-30);
+
+        getBidsRecentlyAdded(endDate, limit, callback);
+    }
+
+    public void getBidsRecentlyAdded(Callback<List<Project>> callback) {
+
+        int limit = 150;
+
+        getBidsRecentlyAdded(limit, callback);
+    }
 }

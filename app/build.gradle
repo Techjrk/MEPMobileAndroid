@@ -55,6 +55,9 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.android.support:support-v4:24.0.0'
 
+    // MPAndroidChart
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
+
     // Google Play Services
     compile 'com.google.android.gms:play-services-gcm:9.4.0'
     compile 'com.google.android.gms:play-services-location:9.4.0'
@@ -68,6 +71,9 @@ dependencies {
     // HockeyApp
     compile 'net.hockeyapp.android:HockeySDK:4.0.0'
 
-    // Realm
+    //Calendar
+    compile(name: 'flexible_calendar', ext: 'aar') {
+        transitive = true
+    }
 
 }
