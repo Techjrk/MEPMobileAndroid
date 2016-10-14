@@ -127,15 +127,6 @@ public class ProjectDomain {
         return persistedProjects;
     }
 
-    public void getBidsHappeningSoon(Callback<List<Project>> callback) {
-
-        Date current = new Date();
-        Date endDate = DateUtility.addDays(30);
-        int limit = 150;
-
-        getBidsHappeningSoon(current, endDate, limit, callback);
-    }
-
     public void getBidsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
