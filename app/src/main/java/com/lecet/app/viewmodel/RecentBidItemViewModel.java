@@ -60,6 +60,11 @@ public class RecentBidItemViewModel {
         return simpleDateFormat.format(bid.getCreateDate());
     }
 
+    public String getStartDateString() {
+
+        return null;
+    }
+
     public boolean isUnion() {
 
         Project project = bid.getProject();

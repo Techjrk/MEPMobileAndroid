@@ -5,6 +5,7 @@
 
     <data>
         <variable name="viewModel" type="com.lecet.app.viewmodel.RecentBidItemViewModel"/>
+        <import type="android.view.View"/>
     </data>
 
     <LinearLayout
@@ -79,8 +80,7 @@
             <ImageView android:id="@+id/bid_location_image_view"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
-                       android:scaleType="fitCenter"
-                       app:imageUrl="@{viewModel.mapUrl}"/>
+                       android:scaleType="fitCenter"/>
 
             <TextView android:id="@+id/bid_union_text_view"
                       android:layout_width="wrap_content"
