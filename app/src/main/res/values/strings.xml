@@ -83,6 +83,9 @@
     <string name="next">Next</string>
     <string name="skip">Skip</string>
 
+    <!-- Dashboard -->
+    <string name="union_mark">N</string>
+
     <!-- Errors -->
     <string name="error_invalid_email">Invalid email</string>
     <string name="error_invalid_password_length">Invalid password length</string>
