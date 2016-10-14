@@ -1,6 +1,7 @@
 package com.lecet.app.utility;
 
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Project;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +46,23 @@ public class DateUtility {
         List<Calendar> bidDates = new ArrayList<>();
         for (Bid bid : bids) {
             Calendar calendar = Calendar.getInstance();
-            Date date = DateUtility.parseBidDate(bid.getCreateDate());
+            Date date = bid.getCreateDate();
+            calendar.setTime(date);
+            calendar.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            bidDates.add(calendar);
+        }
+        return bidDates;
+    }
+
+    public static List<Calendar> getProjectDates(List<Project> projects) {
+
+        List<Calendar> bidDates = new ArrayList<>();
+        for (Project project : projects) {
+            Calendar calendar = Calendar.getInstance();
+            Date date = project.getBidDate();
             calendar.setTime(date);
             calendar.set(Calendar.MILLISECOND, 0);
             calendar.set(Calendar.SECOND, 0);
