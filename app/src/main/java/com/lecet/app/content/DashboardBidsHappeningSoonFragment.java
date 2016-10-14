@@ -1,5 +1,7 @@
 package com.lecet.app.content;
 
+import android.app.Activity;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,9 +17,13 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.FragmentDashboardBidsHappeningSoonBinding;
 import com.lecet.app.domain.BidDomain;
+import com.lecet.app.interfaces.MHSDataSource;
+import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.viewmodel.CalendarViewModel;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by jasonm on 10/5/16.
@@ -26,6 +32,9 @@ import java.util.List;
 public class DashboardBidsHappeningSoonFragment extends Fragment {
 
     private static final String TAG = "CalendarBidsHappeningSoonFrag";
+
+    private MHSDataSource dataSource;
+    private MHSDelegate delegate;
 
     private List<Bid> mBids;
     private FragmentDashboardBidsHappeningSoonBinding binding;
@@ -57,8 +66,26 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            delegate = (MHSDelegate) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement MHSDelegate");
+        }
+
+        try {
+            dataSource = (MHSDataSource) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement MHSDataSource");
+        }
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         binding.getViewModel().fetchBids(binding.calendarView);
     }
 
@@ -66,7 +93,7 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_bids_happening_soon, container, false);
-        binding.setViewModel(new CalendarViewModel(this, new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getContext()))));
+        binding.setViewModel(new CalendarViewModel(this, dataSource, delegate));
         View view = binding.getRoot();
         binding.getViewModel().initializeCalendar(binding.calendarView);
         return view;
