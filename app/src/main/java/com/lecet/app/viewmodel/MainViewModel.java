@@ -4,17 +4,19 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.R;
+import com.lecet.app.adapters.RecentBidsAdapter;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.LecetCallback;
-import com.lecet.app.utility.DateUtility;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -51,6 +53,7 @@ public class MainViewModel {
     /**
      * Public
      **/
+
     public void getBidsRecentlyMade(@NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
 
         getBidsRecentlyMade(new Callback<List<Bid>>() {
@@ -64,6 +67,12 @@ public class MainViewModel {
                     // Fetch Realm managed Projects
                     RealmResults<Bid> realmResults = bidDomain.fetchBids(cutoffDate);
                     callback.onSuccess(bidDomain.sortRealmResults(realmResults));
+
+                    // Display all Bids until set is selected
+                    RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
+                    setupRecyclerView(recyclerView);
+                    RecyclerView.Adapter adapter = getMBRAdapter(realmResults.toArray(new Bid[realmResults.size()]));
+                    recyclerView.setAdapter(adapter);
 
                 } else {
 
@@ -112,7 +121,9 @@ public class MainViewModel {
         });
     }
 
-    /** Private **/
+    /**
+     * Private
+     **/
     private String getString(@StringRes int stringID) {
 
         return appCompatActivity.getString(stringID);
@@ -149,7 +160,9 @@ public class MainViewModel {
         return projectDomain.fetchProjectsHappeningSoon(calendar.getTime());
     }
 
-    /** OnClick handlers **/
+    /**
+     * OnClick handlers
+     **/
 
     @SuppressWarnings("unused")
     public void onPageLeftClicked(View view) {
@@ -165,5 +178,24 @@ public class MainViewModel {
         //Log.d(TAG, "onPageRightClicked");
         MainActivity activity = (MainActivity) appCompatActivity;
         activity.nextViewPage();
+    }
+
+
+    /** RecyclerView Management **/
+
+    public void setupRecyclerView(RecyclerView recyclerView) {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    public RecyclerView getProjectRecyclerView(@IdRes int recyclerView) {
+
+        return (RecyclerView) appCompatActivity.findViewById(recyclerView);
+    }
+
+    public RecyclerView.Adapter getMBRAdapter(Bid[] data) {
+
+        return new RecentBidsAdapter(data);
     }
 }
