@@ -1,12 +1,14 @@
 package com.lecet.app.adapters;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
-
-import java.util.TreeSet;
+import com.lecet.app.databinding.ListItemRecentBidBinding;
+import com.lecet.app.viewmodel.RecentBidItemViewModel;
 
 
 /**
@@ -15,18 +17,27 @@ import java.util.TreeSet;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class RecentBidsAdapter extends RecyclerView.Adapter {
+public class RecentBidsAdapter extends RecyclerView.Adapter<RecentBidsAdapter.ViewHolder> {
 
-    private TreeSet<Bid> data;
+    private Bid[] data;
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public RecentBidsAdapter(Bid[] data) {
+
+        this.data = data;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+        ListItemRecentBidBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_recent_bid, parent, false);
+
+        return new ViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+
+        holder.getBinding().setViewModel(new RecentBidItemViewModel(data[position], "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
     }
 
     @Override
@@ -34,15 +45,22 @@ public class RecentBidsAdapter extends RecyclerView.Adapter {
 
         if (data == null) return 0;
 
-        return data.size();
+        return data.length;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        private ListItemRecentBidBinding binding;
+
+        public ViewHolder(ListItemRecentBidBinding binding) {
+
+            super(binding.getRoot());
+
+            this.binding = binding;
         }
 
-
+        public ListItemRecentBidBinding getBinding() {
+            return binding;
+        }
     }
 }
