@@ -8,6 +8,8 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,6 +20,7 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.LecetCallback;
@@ -27,23 +30,14 @@ import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.viewmodel.MainViewModel;
-import com.lecet.app.databinding.ActivityMainBinding;
-import com.lecet.app.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * MainActivity Created by jasonm on 8/15/16.
@@ -76,10 +70,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Log.d(TAG, "onCreate");
 
         //setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         setupBinding();
+        setupToolbar();
         setupViewPager();
         setupPageIndicator();
         setupPageButtons();
@@ -93,6 +85,11 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Calendar calendar = Calendar.getInstance();
         viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar);
         binding.setViewModel(viewModel);
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     public void prevViewPage() {
@@ -247,4 +244,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity, menu);
+        return true;
+    }
 }
