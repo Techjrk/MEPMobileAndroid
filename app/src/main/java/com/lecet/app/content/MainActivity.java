@@ -90,15 +90,15 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle(R.string.dashboard_bids);
     }
 
     public void prevViewPage() {
         //Log.d(TAG, "prevViewPage");
         try {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        }
-        catch (Exception e) {
-            Log.w(TAG, "prevViewPage: viewPager may be null or page may not exist" );
+        } catch (Exception e) {
+            Log.w(TAG, "prevViewPage: viewPager may be null or page may not exist");
         }
     }
 
@@ -106,9 +106,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         //Log.d(TAG, "nextViewPage");
         try {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-        }
-        catch (Exception e) {
-            Log.w(TAG, "nextViewPage: viewPager may be null or page may not exist" );
+        } catch (Exception e) {
+            Log.w(TAG, "nextViewPage: viewPager may be null or page may not exist");
         }
     }
 
@@ -129,6 +128,18 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             @Override
             public void onPageSelected(int position) {
                 //Log.d("MainActivity", "onPageSelected: " + position);
+                int title = 0;
+                switch (position) {
+                    case 0:
+                    case 1:
+                        title = R.string.dashboard_bids;
+                        break;
+                    case 2:
+                    case 3:
+                        title = R.string.dashboard_projects;
+                        break;
+                }
+                setTitle(title);
             }
 
             @Override
@@ -174,13 +185,14 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     /**
      * Update the page indicator dots UI to show the current page/fragment shown
+     *
      * @param position
      */
     private void updatePageIndicator(int position) {
         //Log.d(TAG, "updatePageIndicator: " + position);
 
         Drawable unselectedDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.shape_dot_unselected, null);
-        Drawable selectedDrawable   = ResourcesCompat.getDrawable(getResources(), R.drawable.shape_dot_selected, null);
+        Drawable selectedDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.shape_dot_selected, null);
 
         // first set all to unselected
         for (View dotView : dots) {
@@ -193,7 +205,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     }
 
     private void setupPageButtons() {
-        pageLeftButton  = (ImageButton) findViewById(R.id.dashboard_page_left_button);
+        pageLeftButton = (ImageButton) findViewById(R.id.dashboard_page_left_button);
         pageRightButton = (ImageButton) findViewById(R.id.dashboard_page_right_button);
         updateViewPagerArrows();
     }
@@ -203,22 +215,19 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
      * so they do not appear on the first or last pages as appropriate
      */
     private void updateViewPagerArrows() {
-        if(viewPager.getCurrentItem() == 0) {
+        if (viewPager.getCurrentItem() == 0) {
             pageLeftButton.setVisibility(View.INVISIBLE);
-        }
-        else pageLeftButton.setVisibility(View.VISIBLE);
+        } else pageLeftButton.setVisibility(View.VISIBLE);
 
-        if(viewPager.getCurrentItem() == viewPagerAdapter.getCount() - 1) {
+        if (viewPager.getCurrentItem() == viewPagerAdapter.getCount() - 1) {
             pageRightButton.setVisibility(View.INVISIBLE);
-        }
-        else pageRightButton.setVisibility(View.VISIBLE);
+        } else pageRightButton.setVisibility(View.VISIBLE);
     }
 
 
-
-
-
-    /** MBR Implementation **/
+    /**
+     * MBR Implementation
+     **/
 
     @Override
     public void refreshRecentlyMadeBids(LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
@@ -231,7 +240,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     }
 
-    /** MHS Implementation **/
+    /**
+     * MHS Implementation
+     **/
     @Override
     public void refreshProjectsHappeningSoon(final LecetCallback<Project[]> callback) {
 
