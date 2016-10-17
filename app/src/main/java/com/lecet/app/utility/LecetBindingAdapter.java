@@ -27,8 +27,15 @@ public class LecetBindingAdapter {
         textView.setTypeface(Typeface.createFromAsset(textView.getContext().getAssets(), "fonts/" + fontName));
     }
 
+    /*
     @BindingAdapter({"bind:imageUrl", "bind:error"})
     public static void loadImage(ImageView view, String url, Drawable error) {
         Picasso.with(view.getContext()).load(url).error(error).into(view);
     }
+    */
+    @BindingAdapter("bind:imageUrl")
+    public static void loadImage(ImageView view, String url) {
+        Picasso.with(view.getContext()).load(url).into(view);
+    }
+
 }
