@@ -21,6 +21,7 @@
     <color name="lecetMapGreen">#4D870A</color>
 
     <color name="lecetLightGray">#9FA4A6</color>
+    <color name="lecetBidGray">#f5f5f5</color>
 
     <!-- Other Colors -->
     <color name="pureWhite">#ffffff</color>
