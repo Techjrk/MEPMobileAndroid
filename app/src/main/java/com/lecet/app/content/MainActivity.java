@@ -8,6 +8,8 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,6 +20,7 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.LecetCallback;
@@ -27,23 +30,14 @@ import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.viewmodel.MainViewModel;
-import com.lecet.app.databinding.ActivityMainBinding;
-import com.lecet.app.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * MainActivity Created by jasonm on 8/15/16.
@@ -76,10 +70,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Log.d(TAG, "onCreate");
 
         //setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         setupBinding();
+        setupToolbar();
         setupViewPager();
         setupPageIndicator();
         setupPageButtons();
@@ -95,13 +87,18 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         binding.setViewModel(viewModel);
     }
 
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.dashboard_bids);
+    }
+
     public void prevViewPage() {
         //Log.d(TAG, "prevViewPage");
         try {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        }
-        catch (Exception e) {
-            Log.w(TAG, "prevViewPage: viewPager may be null or page may not exist" );
+        } catch (Exception e) {
+            Log.w(TAG, "prevViewPage: viewPager may be null or page may not exist");
         }
     }
 
@@ -109,9 +106,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         //Log.d(TAG, "nextViewPage");
         try {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-        }
-        catch (Exception e) {
-            Log.w(TAG, "nextViewPage: viewPager may be null or page may not exist" );
+        } catch (Exception e) {
+            Log.w(TAG, "nextViewPage: viewPager may be null or page may not exist");
         }
     }
 
@@ -132,6 +128,18 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             @Override
             public void onPageSelected(int position) {
                 //Log.d("MainActivity", "onPageSelected: " + position);
+                int title = 0;
+                switch (position) {
+                    case 0:
+                    case 1:
+                        title = R.string.dashboard_bids;
+                        break;
+                    case 2:
+                    case 3:
+                        title = R.string.dashboard_projects;
+                        break;
+                }
+                setTitle(title);
             }
 
             @Override
@@ -177,13 +185,14 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     /**
      * Update the page indicator dots UI to show the current page/fragment shown
+     *
      * @param position
      */
     private void updatePageIndicator(int position) {
         //Log.d(TAG, "updatePageIndicator: " + position);
 
         Drawable unselectedDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.shape_dot_unselected, null);
-        Drawable selectedDrawable   = ResourcesCompat.getDrawable(getResources(), R.drawable.shape_dot_selected, null);
+        Drawable selectedDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.shape_dot_selected, null);
 
         // first set all to unselected
         for (View dotView : dots) {
@@ -196,7 +205,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     }
 
     private void setupPageButtons() {
-        pageLeftButton  = (ImageButton) findViewById(R.id.dashboard_page_left_button);
+        pageLeftButton = (ImageButton) findViewById(R.id.dashboard_page_left_button);
         pageRightButton = (ImageButton) findViewById(R.id.dashboard_page_right_button);
         updateViewPagerArrows();
     }
@@ -206,22 +215,19 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
      * so they do not appear on the first or last pages as appropriate
      */
     private void updateViewPagerArrows() {
-        if(viewPager.getCurrentItem() == 0) {
+        if (viewPager.getCurrentItem() == 0) {
             pageLeftButton.setVisibility(View.INVISIBLE);
-        }
-        else pageLeftButton.setVisibility(View.VISIBLE);
+        } else pageLeftButton.setVisibility(View.VISIBLE);
 
-        if(viewPager.getCurrentItem() == viewPagerAdapter.getCount() - 1) {
+        if (viewPager.getCurrentItem() == viewPagerAdapter.getCount() - 1) {
             pageRightButton.setVisibility(View.INVISIBLE);
-        }
-        else pageRightButton.setVisibility(View.VISIBLE);
+        } else pageRightButton.setVisibility(View.VISIBLE);
     }
 
 
-
-
-
-    /** MBR Implementation **/
+    /**
+     * MBR Implementation
+     **/
 
     @Override
     public void refreshRecentlyMadeBids(LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
@@ -234,7 +240,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     }
 
-    /** MHS Implementation **/
+    /**
+     * MHS Implementation
+     **/
     @Override
     public void refreshProjectsHappeningSoon(final LecetCallback<Project[]> callback) {
 
@@ -247,4 +255,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity, menu);
+        return true;
+    }
 }

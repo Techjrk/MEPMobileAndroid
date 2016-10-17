@@ -2,24 +2,26 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.MainViewModel"/>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.MainViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            style="@style/FullScreenImageBackground.Gradient1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            tools:context="com.lecet.app.content.MainActivity">
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/FullScreenImageBackground.Gradient1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lecet.app.content.MainActivity">
 
         <!-- App Bar -->
-        <!--include layout="@layout/include_app_bar_layout"/-->
+        <include layout="@layout/include_app_bar_layout" />
 
         <!-- Content -->
-        <include layout="@layout/content_main" bind:viewModel="@{viewModel}"/>
+        <include
+            layout="@layout/content_main"
+            bind:viewModel="@{viewModel}" />
 
     </android.support.design.widget.CoordinatorLayout>
 

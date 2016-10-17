@@ -24,7 +24,7 @@
     <style name="CustomToolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
