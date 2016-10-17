@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lecet.app.R;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
@@ -18,6 +16,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.lecet.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Created by jasonm on 10/5/16.
  */
-public class DashboardChartFragmentBase extends Fragment implements OnChartValueSelectedListener {
+public class DashboardChartFragmentBase extends Fragment implements OnChartValueSelectedListener, View.OnClickListener {
 
     private static final String TAG = "DashboardChartFragBase";
 
@@ -73,12 +72,20 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
         fragmentSubtitleText.setText(this.subtitle);
 
         initPieChart(view);
+        initStripButtons(view);
 
         // update pie chart data
         int[] newPieChartData = getNewData();
         updatePieChart(newPieChartData);
 
         return view;
+    }
+
+    private void initStripButtons(View view) {
+        view.findViewById(R.id.button_housing).setOnClickListener(this);
+        view.findViewById(R.id.button_engineering).setOnClickListener(this);
+        view.findViewById(R.id.button_building).setOnClickListener(this);
+        view.findViewById(R.id.button_utilities).setOnClickListener(this);
     }
 
     private void initPieChart(View view) {
@@ -113,11 +120,11 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
         dataSet.setSliceSpace(1.0f);
         dataSet.setHighlightEnabled(true);
         dataSet.setSelectionShift(20.0f);
-        dataSet.setColors(new int[] { R.color.lecetLightOrange, // housing
-                                      R.color.lecetDarkOrange,  // engineering
-                                      R.color.lecetLightBlue,   // building
-                                      R.color.lecetMediumBlue}, // utilities
-                                      this.getContext());
+        dataSet.setColors(new int[]{R.color.lecetLightOrange, // housing
+                        R.color.lecetDarkOrange,  // engineering
+                        R.color.lecetLightBlue,   // building
+                        R.color.lecetMediumBlue}, // utilities
+                this.getContext());
 
         PieData data = new PieData(dataSet);
         pieChart.setData(data);
@@ -138,11 +145,25 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
 
     private int[] getNewData() {
         int[] newPieChartData = new int[4];
-        newPieChartData[0] = (int) Math.floor(Math.random()*100);
-        newPieChartData[1] = (int) Math.floor(Math.random()*20);
-        newPieChartData[2] = (int) Math.floor(Math.random()*5);
-        newPieChartData[3] = (int) Math.floor(Math.random()*50);
+        newPieChartData[0] = (int) Math.floor(Math.random() * 100);
+        newPieChartData[1] = (int) Math.floor(Math.random() * 20);
+        newPieChartData[2] = (int) Math.floor(Math.random() * 5);
+        newPieChartData[3] = (int) Math.floor(Math.random() * 50);
         return newPieChartData;
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.button_housing:
+                break;
+            case R.id.button_engineering:
+                break;
+            case R.id.button_building:
+                break;
+            case R.id.button_utilities:
+                break;
+        }
+    }
 }

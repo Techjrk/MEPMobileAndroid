@@ -12,4 +12,8 @@
     <dimen name="calendar_height">270dp</dimen>
     <dimen name="calendar_width">320dp</dimen>
 
+    <!-- Dashboard Strip -->
+    <dimen name="strip_corner_radius">3dp</dimen>
+    <dimen name="strip_vertical_spacing">3dp</dimen>
+
 </resources>
