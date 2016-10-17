@@ -15,14 +15,16 @@ import java.text.SimpleDateFormat;
 public class RecentBidItemViewModel {
 
     private final Bid bid;
+    private final String mapsApiKey;
 
-    public RecentBidItemViewModel(Bid bid) {
+    public RecentBidItemViewModel(Bid bid, String mapsApiKey) {
         this.bid = bid;
+        this.mapsApiKey = mapsApiKey;
     }
 
     public String getBidAmount() {
 
-        DecimalFormat formatter = new DecimalFormat("#,###");
+        DecimalFormat formatter = new DecimalFormat("$ #,###");
 
         return formatter.format(bid.getAmount());
     }
@@ -33,36 +35,51 @@ public class RecentBidItemViewModel {
         return null;
     }
 
-    public String getClientCompany() {
+    public String getProjectName() {
 
-        return null;
+        return bid.getProject().getTitle();
     }
 
     public String getClientLocation() {
 
-        return null;
+        return bid.getProject().getCity() + " , " + bid.getProject().getState();
     }
 
     public String getBidType() {
 
-        return null;
+        StringBuilder sb = new StringBuilder();
+        if (bid.getProject().getPrimaryProjectType() != null && bid.getProject().getPrimaryProjectType().getTitle() !=null) {
+
+            sb.append(bid.getProject().getPrimaryProjectType().getTitle());
+
+            if (bid.getProject().getPrimaryProjectType().getProjectCategory() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getTitle() != null) {
+
+                sb.append(" ");
+                sb.append(bid.getProject().getPrimaryProjectType().getProjectCategory().getTitle());
+
+                if (bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle() != null) {
+
+                    sb.append(" ");
+                    sb.append(bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle());
+                }
+            }
+        }
+
+        return sb.toString();
     }
 
     public String getMapUrl() {
 
-        return null;
-    }
-
-    public String getBidDate() {
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMMM d");
-
-        return simpleDateFormat.format(bid.getCreateDate());
+        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
+                "markers=color:blue|%.6f,%.6f&key=%s", bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(),
+                bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(), mapsApiKey);
     }
 
     public String getStartDateString() {
 
-        return null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
+
+        return simpleDateFormat.format(bid.getCreateDate());
     }
 
     public boolean isUnion() {
