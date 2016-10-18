@@ -99,6 +99,7 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
         pieChart.setDrawEntryLabels(false);
         pieChart.setCenterText("");
         pieChart.setDescription("");
+        pieChart.setRotationEnabled(false);
         pieChart.setHighlightPerTapEnabled(true);
         pieChart.setOnChartValueSelectedListener(this);
 
