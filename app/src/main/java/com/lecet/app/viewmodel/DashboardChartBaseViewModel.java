@@ -55,6 +55,7 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     public void initializeChart(final PieChart pieChartView) {
         Log.d(TAG, "initializeChart");
         pieChartView.setOnClickListener(this);
+        pieChartView.setOnChartValueSelectedListener(this);
     }
 
     @Override

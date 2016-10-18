@@ -74,12 +74,7 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
 
         //View view = inflater.inflate(R.layout.fragment_dashboard_chart_base, container, false);
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_chart_base, container, false);
-        binding.setViewModel(new DashboardChartBaseViewModel(this /*, dataSource, delegate*/));
-        View view = binding.getRoot();
-        PieChart pieChartView = binding.pieChartView;
-        DashboardChartBaseViewModel viewModel = binding.getViewModel();
-        viewModel.initializeChart(pieChartView);
+        View view = initDataBinding(inflater, container);
 
         TextView fragmentSubtitleText = (TextView) view.findViewById(R.id.subtitle_text);
         fragmentSubtitleText.setText(this.subtitle);
@@ -91,6 +86,16 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
         int[] newPieChartData = getNewData();
         updatePieChart(newPieChartData);
 
+        return view;
+    }
+
+    private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_chart_base, container, false);
+        binding.setViewModel(new DashboardChartBaseViewModel(this /*, dataSource, delegate*/));
+        View view = binding.getRoot();
+        PieChart pieChartView = binding.pieChartView;
+        DashboardChartBaseViewModel viewModel = binding.getViewModel();
+        viewModel.initializeChart(pieChartView);
         return view;
     }
 
