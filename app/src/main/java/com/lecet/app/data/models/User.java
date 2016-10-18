@@ -136,73 +136,73 @@ public class User {
         public Builder() {
         }
 
-        Builder firstName(String firstName) {
+        public Builder firstName(String firstName) {
 
             this.firstName = firstName;
             return this;
         }
 
-        Builder lastName(String lastName) {
+        public Builder lastName(String lastName) {
 
             this.lastName = lastName;
             return this;
         }
 
-        Builder phoneNumber(String phoneNumber) {
+        public Builder phoneNumber(String phoneNumber) {
 
             this.phoneNumber = phoneNumber;
             return this;
         }
 
-        Builder email(String email) {
+        public Builder email(String email) {
 
             this.email = email;
             return this;
         }
 
-        Builder streetAddress(String streetAddress) {
+        public Builder streetAddress(String streetAddress) {
 
             this.streetAddress = streetAddress;
             return this;
         }
 
-        Builder city(String city) {
+        public Builder city(String city) {
 
             this.city = city;
             return this;
         }
 
-        Builder state(String state) {
+        public Builder state(String state) {
 
             this.state = state;
             return this;
         }
 
-        Builder zip(String zip) {
+        public Builder zip(String zip) {
 
             this.zip = zip;
             return this;
         }
 
-        Builder rank(String rank) {
+        public Builder rank(String rank) {
 
             this.rank = rank;
             return this;
         }
 
-        Builder group(String group) {
+        public Builder group(String group) {
 
             this.group = group;
             return this;
         }
 
-        Builder avatar(String avatar) {
+        public Builder avatar(String avatar) {
 
             this.avatar = avatar;
             return this;
         }
 
-        User build() {
+        public User build() {
 
             return new User(this);
         }

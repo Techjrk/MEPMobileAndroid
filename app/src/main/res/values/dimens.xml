@@ -12,4 +12,8 @@
     <dimen name="calendar_height">270dp</dimen>
     <dimen name="calendar_width">320dp</dimen>
 
+    <!-- Overflow Menu -->
+    <dimen name="overflow_menu_width">400dp</dimen>
+    <dimen name="overflow_menu_height">270dp</dimen>
+
 </resources>
