@@ -7,11 +7,6 @@
               android:layout_marginTop="4dp"
                 android:layout_gravity="center">
 
-    <TextView
-            android:id="@+id/title_text"
-            style="@style/DashboardText.Title"
-            tools:text="@string/dashboard_bids"/>
-
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,12 +14,12 @@
 
         <TextView
                 android:id="@+id/subtitle_num"
-                style="@style/DashboardText.Subitle"
+                style="@style/DashboardText.Subtitle"
                 android:text="14"/>
 
         <TextView
                 android:id="@+id/subtitle_text"
-                style="@style/DashboardText.Subitle"
+                style="@style/DashboardText.Subtitle"
                 android:layout_marginLeft="8dp"
                 tools:text="HAPPENING SOON"/>
 

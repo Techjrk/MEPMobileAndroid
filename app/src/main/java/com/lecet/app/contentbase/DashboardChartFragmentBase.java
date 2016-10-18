@@ -65,9 +65,6 @@ public class DashboardChartFragmentBase extends Fragment implements OnChartValue
         //Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_dashboard_chart_base, container, false);
 
-        TextView fragmentTitleText = (TextView) view.findViewById(R.id.title_text);
-        fragmentTitleText.setText(this.title);
-
         TextView fragmentSubtitleText = (TextView) view.findViewById(R.id.subtitle_text);
         fragmentSubtitleText.setText(this.subtitle);
 
