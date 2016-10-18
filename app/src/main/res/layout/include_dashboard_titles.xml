@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-                android:layout_gravity="center">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <data>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.DashboardChartBaseViewModel" />
+    </data>
 
-        <TextView
-                android:id="@+id/subtitle_num"
-                style="@style/DashboardText.Subtitle"
-                android:text="14"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="4dp"
+                    android:layout_gravity="center">
 
-        <TextView
-                android:id="@+id/subtitle_text"
-                style="@style/DashboardText.Subtitle"
-                android:layout_marginLeft="8dp"
-                tools:text="HAPPENING SOON"/>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/subtitle_num"
+                    style="@style/DashboardText.Subtitle"
+                    android:text="@={viewModel.subtitle}"
+                    />
+
+            <TextView
+                    android:id="@+id/subtitle_text"
+                    style="@style/DashboardText.Subtitle"
+                    android:layout_marginLeft="8dp"
+                    tools:text="HAPPENING SOON"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>

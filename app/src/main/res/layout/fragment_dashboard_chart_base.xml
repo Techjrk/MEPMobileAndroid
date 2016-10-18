@@ -1,29 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Pie Chart Base -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center|top"
-    android:orientation="vertical"
-    tools:context="com.lecet.app.content.MainActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/chart_layout"
+    <data>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.DashboardChartBaseViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="460dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        tools:context="com.lecet.app.content.MainActivity">
 
-        <include layout="@layout/include_dashboard_titles" />
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pie_chart"
+        <LinearLayout
+            android:id="@+id/chart_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_height="460dp"
+            android:orientation="vertical">
 
-        <include layout="@layout/include_dashboard_chart_buttons"
-            />
+            <include layout="@layout/include_dashboard_titles"
+                     bind:viewModel="@{viewModel}"/>
 
-    </LinearLayout>
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pie_chart_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-</RelativeLayout>
+            <include layout="@layout/include_dashboard_chart_buttons"
+                     bind:viewModel="@{viewModel}"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>
