@@ -30,10 +30,10 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     private final String TAG = "DashboardChartBaseVM";
 
-    private final float CHART_VALUE_HOUSING     = 0.0f;
+    private final float CHART_VALUE_HOUSING = 0.0f;
     private final float CHART_VALUE_ENGINEERING = 1.0f;
-    private final float CHART_VALUE_BUILDING    = 2.0f;
-    private final float CHART_VALUE_UTILITIES   = 3.0f;
+    private final float CHART_VALUE_BUILDING = 2.0f;
+    private final float CHART_VALUE_UTILITIES = 3.0f;
 
     private final Fragment fragment;
     private String subtitle = "99";
@@ -70,6 +70,25 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         Log.d(TAG, "onValueSelected: " + h);
+
+        float highlightX = h.getX();
+        View fragmentView = fragment.getView();
+        View buttonToSelect = null;
+
+        if (highlightX == CHART_VALUE_HOUSING) {
+            buttonToSelect = fragmentView.findViewById(R.id.button_housing);
+        }
+        else if (highlightX == CHART_VALUE_ENGINEERING) {
+            buttonToSelect = fragmentView.findViewById(R.id.button_engineering);
+        }
+        else if (highlightX == CHART_VALUE_BUILDING) {
+            buttonToSelect = fragmentView.findViewById(R.id.button_building);
+        }
+        else if (highlightX == CHART_VALUE_UTILITIES) {
+            buttonToSelect = fragmentView.findViewById(R.id.button_utilities);
+        }
+
+        setSelected(buttonToSelect);
     }
 
     @Override
@@ -108,17 +127,19 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     }
 
     private void setSelected(View view) {
-        LinearLayout housingButton     = (LinearLayout) fragment.getView().findViewById(R.id.button_housing);
-        LinearLayout engineeringButton = (LinearLayout) fragment.getView().findViewById(R.id.button_engineering);
-        LinearLayout buildingButton    = (LinearLayout) fragment.getView().findViewById(R.id.button_building);
-        LinearLayout utilitiesButton   = (LinearLayout) fragment.getView().findViewById(R.id.button_utilities);
+        if (view != null) {
+            LinearLayout housingButton     = (LinearLayout) fragment.getView().findViewById(R.id.button_housing);
+            LinearLayout engineeringButton = (LinearLayout) fragment.getView().findViewById(R.id.button_engineering);
+            LinearLayout buildingButton    = (LinearLayout) fragment.getView().findViewById(R.id.button_building);
+            LinearLayout utilitiesButton   = (LinearLayout) fragment.getView().findViewById(R.id.button_utilities);
 
-        housingButton.setSelected(false);
-        engineeringButton.setSelected(false);
-        buildingButton.setSelected(false);
-        utilitiesButton.setSelected(false);
+            housingButton.setSelected(false);
+            engineeringButton.setSelected(false);
+            buildingButton.setSelected(false);
+            utilitiesButton.setSelected(false);
 
-        LinearLayout selectedButton = (LinearLayout) view;
-        selectedButton.setSelected(true);
+            LinearLayout selectedButton = (LinearLayout) view;
+            selectedButton.setSelected(true);
+        }
     }
 }
