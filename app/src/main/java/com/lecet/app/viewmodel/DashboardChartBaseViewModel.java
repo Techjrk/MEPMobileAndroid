@@ -28,8 +28,14 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     private final String TAG = "DashboardChartBaseVM";
 
+    private final float CHART_VALUE_HOUSING     = 0.0f;
+    private final float CHART_VALUE_ENGINEERING = 1.0f;
+    private final float CHART_VALUE_BUILDING    = 2.0f;
+    private final float CHART_VALUE_UTILITIES   = 3.0f;
+
     private final Fragment fragment;
     private String subtitle = "99";
+    private PieChart pieChartView;
 
     //private MHSDataSource dataSource;
     //private MHSDelegate delegate;
@@ -54,8 +60,9 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     public void initializeChart(final PieChart pieChartView) {
         Log.d(TAG, "initializeChart");
-        pieChartView.setOnClickListener(this);
-        pieChartView.setOnChartValueSelectedListener(this);
+        this.pieChartView = pieChartView;
+        this.pieChartView.setOnClickListener(this);
+        this.pieChartView.setOnChartValueSelectedListener(this);
     }
 
     @Override
@@ -70,30 +77,27 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG, "onClick " + view.getId());
+        Log.d(TAG, "onClick");
 
-        switch (view.getId()) {
-
-        }
     }
 
     public void onHousingButtonClick(View view) {
         Log.d(TAG, "onHousingButtonClick");
-
+        pieChartView.highlightValue(CHART_VALUE_HOUSING, 0);
     }
 
     public void onEngineeringButtonClick(View view) {
         Log.d(TAG, "onEngineeringButtonClick");
-
+        pieChartView.highlightValue(CHART_VALUE_ENGINEERING, 0);
     }
 
     public void onBuildingButtonClick(View view) {
         Log.d(TAG, "onBuildingButtonClick");
-
+        pieChartView.highlightValue(CHART_VALUE_BUILDING, 0);
     }
 
     public void onUtilitiesButtonClick(View view) {
         Log.d(TAG, "onUtilitiesButtonClick");
-
+        pieChartView.highlightValue(CHART_VALUE_UTILITIES, 0);
     }
 }
