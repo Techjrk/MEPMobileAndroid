@@ -1,6 +1,7 @@
 package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
@@ -12,6 +13,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -98,34 +100,6 @@ public class ProjectDomain {
         getProjectsRecentlyAdded(limit, callback);
     }
 
-    /** Persisted **/
-
-    public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate) {
-
-        RealmResults<Project> projectsResult = realm.where(Project.class)
-                .equalTo("hidden", false)
-                .greaterThan("bidDate", startDate)
-                .findAll();
-
-        return projectsResult;
-    }
-
-    public Project copyToRealmTransaction(Project project) {
-
-        realm.beginTransaction();
-        Project persistedProject = realm.copyToRealmOrUpdate(project);
-        realm.commitTransaction();
-
-        return persistedProject;
-    }
-
-    public List<Project> copyToRealmTransaction(List<Project> projects) {
-
-        realm.beginTransaction();
-        List<Project> persistedProjects = realm.copyToRealmOrUpdate(projects);
-        realm.commitTransaction();
-        return persistedProjects;
-    }
 
     public void getBidsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
@@ -155,4 +129,53 @@ public class ProjectDomain {
 
         getBidsRecentlyAdded(limit, callback);
     }
+
+    public void getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
+        call.enqueue(callback);
+    }
+
+    /** Persisted **/
+
+    public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .equalTo("hidden", false)
+                .greaterThan("bidDate", startDate)
+                .findAll();
+
+        return projectsResult;
+    }
+
+    public RealmResults<Project> fetchProjectsByBidDate(Date bidDate) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .equalTo("hidden", false)
+                .greaterThan("bidDate", bidDate)
+                .findAll();
+
+        return projectsResult;
+    }
+
+    public Project copyToRealmTransaction(Project project) {
+
+        realm.beginTransaction();
+        Project persistedProject = realm.copyToRealmOrUpdate(project);
+        realm.commitTransaction();
+
+        return persistedProject;
+    }
+
+    public List<Project> copyToRealmTransaction(List<Project> projects) {
+
+        realm.beginTransaction();
+        List<Project> persistedProjects = realm.copyToRealmOrUpdate(projects);
+        realm.commitTransaction();
+        return persistedProjects;
+    }
+
 }
