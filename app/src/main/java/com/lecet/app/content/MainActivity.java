@@ -40,8 +40,8 @@ import java.util.TreeSet;
 import io.realm.Realm;
 
 /**
- * MainActivity Created by jasonm on 8/15/16.
- * This Activity represents the Dashboard, landed on after logging in.
+ * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
+ * after logging in.
  */
 public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource {
 
@@ -113,8 +113,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
 
     /**
-     * Set up the Fragment Pager which contains the four main fragments used
-     * in the upper third of the Dashboard
+     * Set up the Fragment Pager which contains the four main fragments used in the upper third of
+     * the Dashboard
      */
     private void setupViewPager() {
 
@@ -127,7 +127,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
             @Override
             public void onPageSelected(int position) {
-                //Log.d("MainActivity", "onPageSelected: " + position);
+
+                // Notify view model of latest position.
+                viewModel.currentPagerPosition(position);
+
                 int title = 0;
                 switch (position) {
                     case 0:
@@ -185,8 +188,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     /**
      * Update the page indicator dots UI to show the current page/fragment shown
-     *
-     * @param position
      */
     private void updatePageIndicator(int position) {
         //Log.d(TAG, "updatePageIndicator: " + position);
@@ -211,8 +212,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     }
 
     /**
-     * Update the visibility of the left/right arrow ViewPager buttons
-     * so they do not appear on the first or last pages as appropriate
+     * Update the visibility of the left/right arrow ViewPager buttons so they do not appear on the
+     * first or last pages as appropriate
      */
     private void updateViewPagerArrows() {
         if (viewPager.getCurrentItem() == 0) {
@@ -253,6 +254,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     public void calendarSelected(Date selectedDate) {
 
         Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
+        viewModel.fetchProjectsByBidDate(selectedDate);
     }
 
     @Override
