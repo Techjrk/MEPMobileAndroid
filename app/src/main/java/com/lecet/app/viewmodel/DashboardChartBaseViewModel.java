@@ -71,5 +71,29 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     @Override
     public void onClick(View view) {
         Log.d(TAG, "onClick " + view.getId());
+
+        switch (view.getId()) {
+
+        }
+    }
+
+    public void onHousingButtonClick(View view) {
+        Log.d(TAG, "onHousingButtonClick");
+
+    }
+
+    public void onEngineeringButtonClick(View view) {
+        Log.d(TAG, "onEngineeringButtonClick");
+
+    }
+
+    public void onBuildingButtonClick(View view) {
+        Log.d(TAG, "onBuildingButtonClick");
+
+    }
+
+    public void onUtilitiesButtonClick(View view) {
+        Log.d(TAG, "onUtilitiesButtonClick");
+
     }
 }

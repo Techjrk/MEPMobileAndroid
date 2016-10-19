@@ -7,6 +7,7 @@
                 type="com.lecet.app.viewmodel.DashboardChartBaseViewModel" />
     </data>
 
+    <!-- Housing -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -24,7 +25,7 @@
             android:background="@drawable/dashboard_button_left_background_selector"
             android:gravity="center"
             android:orientation="vertical"
-            android:onClick="@{viewModel.onClick}">
+            android:onClick="@{viewModel.onHousingButtonClick}">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -42,6 +43,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Engineering -->
         <LinearLayout
             android:id="@+id/button_engineering"
             android:layout_width="0dp"
@@ -50,7 +52,7 @@
             android:background="@drawable/dashboard_button_center_background_selector"
             android:gravity="center"
             android:orientation="vertical"
-            android:onClick="@{viewModel.onClick}">
+            android:onClick="@{viewModel.onEngineeringButtonClick}">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -68,6 +70,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Building -->
         <LinearLayout
             android:id="@+id/button_building"
             android:layout_width="0dp"
@@ -76,7 +79,7 @@
             android:background="@drawable/dashboard_button_center_background_selector"
             android:gravity="center"
             android:orientation="vertical"
-            android:onClick="@{viewModel.onClick}">
+            android:onClick="@{viewModel.onBuildingButtonClick}">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -94,6 +97,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Utilities -->
         <LinearLayout
             android:id="@+id/button_utilities"
             android:layout_width="0dp"
@@ -102,7 +106,7 @@
             android:background="@drawable/dashboard_button_right_background_selector"
             android:gravity="center"
             android:orientation="vertical"
-            android:onClick="@{viewModel.onClick}">
+            android:onClick="@{viewModel.onUtilitiesButtonClick}">
 
             <ImageView
                 android:layout_width="wrap_content"
