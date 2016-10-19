@@ -132,7 +132,7 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
         entries.add(new PieEntry(rawData[3]));       // utilities
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setDrawValues(true);
+        dataSet.setDrawValues(false);
         dataSet.setSliceSpace(1.0f);
         dataSet.setHighlightEnabled(true);
         dataSet.setSelectionShift(20.0f);
@@ -164,8 +164,8 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
     private int[] getNewData() {
         int[] newPieChartData = new int[4];
         newPieChartData[0] = (int) Math.floor(Math.random() * 100);
-        newPieChartData[1] = (int) Math.floor(Math.random() * 20);
-        newPieChartData[2] = (int) Math.floor(Math.random() * 5);
+        newPieChartData[1] = (int) Math.floor(Math.random() * 40);
+        newPieChartData[2] = (int) Math.floor(Math.random() * 20);
         newPieChartData[3] = (int) Math.floor(Math.random() * 50);
         return newPieChartData;
     }

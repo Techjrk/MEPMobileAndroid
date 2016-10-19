@@ -2,6 +2,7 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -9,8 +10,12 @@ import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
@@ -18,6 +23,7 @@ import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
@@ -67,10 +73,38 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         this.pieChartView.setOnChartValueSelectedListener(this);
     }
 
+    public class CustomValueFormatter implements ValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public CustomValueFormatter() {
+            mFormat = new DecimalFormat("###,###,##0"); // no decimal
+        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            Log.d("MainActivity", "getFormattedValue: " + value);
+            //
+            return mFormat.format(value) + ""; // suffixes
+        }
+    }
+
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         Log.d(TAG, "onValueSelected: " + h);
 
+        // update chart values display
+        PieData data = pieChartView.getData();
+        data.setDrawValues(false);
+        IPieDataSet dataSet = data.getDataSetByIndex(h.getDataSetIndex());
+
+        dataSet.setDrawValues(true);
+        dataSet.setValueTextColor(Color.WHITE);
+        dataSet.setValueTextSize(14.0f);
+        dataSet.setValueFormatter(new CustomValueFormatter());
+        pieChartView.invalidate(); // refresh
+
+        // highlighting of values
         float highlightX = h.getX();
         View fragmentView = fragment.getView();
         View buttonToSelect = null;
@@ -94,6 +128,13 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     @Override
     public void onNothingSelected() {
         //Log.d(TAG, "onNothingSelected ");
+
+        // hide chart values
+        PieData data = pieChartView.getData();
+        IPieDataSet dataSet = data.getDataSet();
+        data.setDrawValues(false);
+        pieChartView.invalidate();
+
     }
 
     @Override
