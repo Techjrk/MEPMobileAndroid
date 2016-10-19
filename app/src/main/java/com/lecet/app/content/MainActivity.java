@@ -67,9 +67,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate");
-
-        //setContentView(R.layout.activity_main);
         setupBinding();
         setupToolbar();
         setupViewPager();
