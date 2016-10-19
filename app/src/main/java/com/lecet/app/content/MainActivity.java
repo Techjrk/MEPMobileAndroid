@@ -1,33 +1,43 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
+import com.lecet.app.adapters.OverflowMenuAdapter;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.UserDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
 import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
+import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.viewmodel.MainViewModel;
 
@@ -43,7 +53,7 @@ import io.realm.Realm;
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
  */
-public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource {
+public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback {
 
     private static final String TAG = "MainActivity";
 
@@ -60,6 +70,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     ImageButton pageLeftButton;
     ImageButton pageRightButton;
+
+    ListPopupWindow overflowMenu;
 
     //
 
@@ -259,5 +271,87 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menu_item_arrow:
+                return true;
+            case R.id.menu_item_folder:
+                return true;
+            case R.id.menu_item_search:
+                return true;
+            case R.id.menu_item_more:
+                toogleOverflowMenu();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Call this when you want to show the ListPopupWindow
+    private void toogleOverflowMenu() {
+        if (overflowMenu == null) {
+            createOverflowMenu(findViewById(R.id.menu_item_more));
+        }
+        overflowMenu.show();
+    }
+
+    private void createOverflowMenu(View anchor) {
+        if (overflowMenu == null) {
+            overflowMenu = new ListPopupWindow(this);
+
+            UserDomain userDomain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            User user = userDomain.fetchLoggedInUser();
+
+            OverflowMenuAdapter adapter = new OverflowMenuAdapter(this, user, getResources().getStringArray(R.array.overflow_menu_options));
+
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
+            int offset = (int) (width * 0.875); //enough to show it below more item menu
+            overflowMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.overflow_menu_background));
+            overflowMenu.setAnchorView(anchor);
+            overflowMenu.setModal(true);
+            overflowMenu.setWidth(width);
+            overflowMenu.setHeight(getResources().getDimensionPixelSize(R.dimen.overflow_menu_height));
+            overflowMenu.setHorizontalOffset(-offset);
+            overflowMenu.setAdapter(adapter);
+            overflowMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position) {
+                        case 0:
+                        case 1:
+                            MainActivity.this.onProfileClicked();
+                            break;
+                        case 2:
+                            MainActivity.this.onHiddenObjectsClicked();
+                            break;
+                        case 3:
+                            MainActivity.this.onSettingsClicked();
+                            break;
+                    }
+                }
+            }); // the callback for when a list item is selected
+        }
+    }
+
+    @Override
+    public void onProfileClicked() {
+
+    }
+
+    @Override
+    public void onHiddenObjectsClicked() {
+
+    }
+
+    @Override
+    public void onSettingsClicked() {
+
     }
 }
