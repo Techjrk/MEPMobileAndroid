@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -162,6 +163,9 @@ public class Project extends RealmObject {
 
     @SerializedName("ownerClass")
     private String ownerClass;
+
+    @SerializedName("contacts")
+    private RealmList<Contact> contacts;
 
     private boolean hidden;
 
@@ -364,6 +368,10 @@ public class Project extends RealmObject {
         return ownerClass;
     }
 
+    public RealmList<Contact> getContacts() {
+        return contacts;
+    }
+
     public boolean isHidden() {
         return hidden;
     }
@@ -372,8 +380,6 @@ public class Project extends RealmObject {
 
         this.hidden = hidden;
     }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -470,7 +476,9 @@ public class Project extends RealmObject {
             return false;
         if (bondInformation != null ? !bondInformation.equals(project.bondInformation) : project.bondInformation != null)
             return false;
-        return ownerClass != null ? ownerClass.equals(project.ownerClass) : project.ownerClass == null;
+        if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
+            return false;
+        return contacts != null ? contacts.equals(project.contacts) : project.contacts == null;
 
     }
 
@@ -529,6 +537,7 @@ public class Project extends RealmObject {
         result = 31 * result + (bidTimeZone != null ? bidTimeZone.hashCode() : 0);
         result = 31 * result + (bondInformation != null ? bondInformation.hashCode() : 0);
         result = 31 * result + (ownerClass != null ? ownerClass.hashCode() : 0);
+        result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         return result;
     }
@@ -585,6 +594,7 @@ public class Project extends RealmObject {
                 ", bidTimeZone='" + bidTimeZone + '\'' +
                 ", bondInformation='" + bondInformation + '\'' +
                 ", ownerClass='" + ownerClass + '\'' +
+                ", contacts=" + contacts +
                 ", hidden=" + hidden +
                 '}';
     }
