@@ -6,12 +6,14 @@ import android.databinding.Bindable;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Access;
+import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.UserDomain;
 
@@ -25,6 +27,8 @@ import retrofit2.Response;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 public class LoginViewModel extends BaseObservable {
+
+    private static final String TAG = "LoginViewModel";
 
     private final AppCompatActivity activity;
     private final UserDomain userDomain;
@@ -99,14 +103,14 @@ public class LoginViewModel extends BaseObservable {
 
                         Access r = response.body();
 
+                        Log.d(TAG, "Access ID = " + r.getUserId());
+
                         // Store "ID" variable as session token and "userID" as
                         LecetSharedPreferenceUtil sharedPreferenceUtil = LecetSharedPreferenceUtil.getInstance(activity.getApplication());
                         sharedPreferenceUtil.setAccessToken(r.getId());
                         sharedPreferenceUtil.setId(r.getUserId());
 
-                        Intent intent = new Intent(activity, MainActivity.class);
-                        activity.startActivity(intent);
-                        activity.finish();
+                        getUser(r.getUserId());
 
                     } else {
 
@@ -143,5 +147,42 @@ public class LoginViewModel extends BaseObservable {
         activity.startActivity(intent);
     }
 
+    public void getUser(long userId) {
 
+        userDomain.getUser(userId, new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                if (response.isSuccessful()) {
+
+                    User r = response.body();
+                    userDomain.copyToRealmTransaction(r);
+
+                    Intent intent = new Intent(activity, MainActivity.class);
+                    activity.startActivity(intent);
+                    activity.finish();
+
+                } else {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(activity.getString(R.string.error_login_title));
+                    builder.setMessage(activity.getString(R.string.error_login_message));
+                    builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                    builder.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(activity.getString(R.string.error_network_title));
+                builder.setMessage(activity.getString(R.string.error_network_message));
+                builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                builder.show();
+            }
+        });
+    }
 }
