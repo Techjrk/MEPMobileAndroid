@@ -5,12 +5,14 @@ import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lecet.app.BR;
+import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MHSDataSource;
@@ -67,12 +69,12 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-        Log.d(TAG, "onValueSelected: " + e);
+        Log.d(TAG, "onValueSelected: " + h);
     }
 
     @Override
     public void onNothingSelected() {
-        Log.d(TAG, "onNothingSelected ");
+        //Log.d(TAG, "onNothingSelected ");
     }
 
     @Override
@@ -82,22 +84,41 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     }
 
     public void onHousingButtonClick(View view) {
-        Log.d(TAG, "onHousingButtonClick");
+        //Log.d(TAG, "onHousingButtonClick");
         pieChartView.highlightValue(CHART_VALUE_HOUSING, 0);
+        setSelected(view);
     }
 
     public void onEngineeringButtonClick(View view) {
-        Log.d(TAG, "onEngineeringButtonClick");
+        //Log.d(TAG, "onEngineeringButtonClick");
         pieChartView.highlightValue(CHART_VALUE_ENGINEERING, 0);
+        setSelected(view);
     }
 
     public void onBuildingButtonClick(View view) {
-        Log.d(TAG, "onBuildingButtonClick");
+        //Log.d(TAG, "onBuildingButtonClick");
         pieChartView.highlightValue(CHART_VALUE_BUILDING, 0);
+        setSelected(view);
     }
 
     public void onUtilitiesButtonClick(View view) {
-        Log.d(TAG, "onUtilitiesButtonClick");
+        //Log.d(TAG, "onUtilitiesButtonClick");
         pieChartView.highlightValue(CHART_VALUE_UTILITIES, 0);
+        setSelected(view);
+    }
+
+    private void setSelected(View view) {
+        LinearLayout housingButton     = (LinearLayout) fragment.getView().findViewById(R.id.button_housing);
+        LinearLayout engineeringButton = (LinearLayout) fragment.getView().findViewById(R.id.button_engineering);
+        LinearLayout buildingButton    = (LinearLayout) fragment.getView().findViewById(R.id.button_building);
+        LinearLayout utilitiesButton   = (LinearLayout) fragment.getView().findViewById(R.id.button_utilities);
+
+        housingButton.setSelected(false);
+        engineeringButton.setSelected(false);
+        buildingButton.setSelected(false);
+        utilitiesButton.setSelected(false);
+
+        LinearLayout selectedButton = (LinearLayout) view;
+        selectedButton.setSelected(true);
     }
 }
