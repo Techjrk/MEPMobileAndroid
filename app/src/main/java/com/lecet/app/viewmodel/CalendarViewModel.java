@@ -3,27 +3,18 @@ package com.lecet.app.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.lecet.app.BR;
 import com.lecet.app.content.widget.LecetCalendar;
-import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.domain.BidDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
-import com.lecet.app.utility.DateUtility;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Josué Rodríguez on 5/10/2016.
@@ -36,6 +27,7 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
     private MHSDelegate delegate;
 
     private String month;
+    private String bidsHappeningSoon;
     private Calendar lastDateSelected;
 
     public CalendarViewModel(Fragment fragment, MHSDataSource dataSource, MHSDelegate delegate) {
@@ -55,6 +47,16 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
         notifyPropertyChanged(BR.month);
     }
 
+    @Bindable
+    public String getBidsHappeningSoon() {
+        return bidsHappeningSoon;
+    }
+
+    public void setBidsHappeningSoon(String bidsHappeningSoon) {
+        this.bidsHappeningSoon = bidsHappeningSoon;
+        notifyPropertyChanged(BR.bidsHappeningSoon);
+    }
+
     public void initializeCalendar(final LecetCalendar calendarView) {
         calendarView.setOnDateClickListener(this);
         final Calendar cal = Calendar.getInstance();
@@ -67,8 +69,8 @@ public class CalendarViewModel extends BaseObservable implements FlexibleCalenda
         dataSource.refreshProjectsHappeningSoon(new LecetCallback<Project[]>() {
             @Override
             public void onSuccess(Project[] result) {
-
                 calendarView.addEventsToCalendar(Arrays.asList(result));
+                setBidsHappeningSoon(Integer.toString(result.length));
             }
 
             @Override
