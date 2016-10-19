@@ -1,6 +1,7 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -308,10 +310,17 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
             OverflowMenuAdapter adapter = new OverflowMenuAdapter(this, user, getResources().getStringArray(R.array.overflow_menu_options));
 
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
+            int offset = (int) (width * 0.875); //enough to show it below more item menu
             overflowMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.overflow_menu_background));
             overflowMenu.setAnchorView(anchor);
-            overflowMenu.setWidth(getResources().getDimensionPixelSize(R.dimen.overflow_menu_width)); // note: don't use pixels, use a dimen resource
+            overflowMenu.setModal(true);
+            overflowMenu.setWidth(width);
             overflowMenu.setHeight(getResources().getDimensionPixelSize(R.dimen.overflow_menu_height));
+            overflowMenu.setHorizontalOffset(-offset);
             overflowMenu.setAdapter(adapter);
             overflowMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
