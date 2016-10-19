@@ -1,10 +1,14 @@
 package com.lecet.app.viewmodel;
 
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+
+import io.realm.RealmList;
 
 /**
  * File: RecentBidItemViewModel Created: 10/13/16 Author: domandtom
@@ -32,7 +36,17 @@ public class RecentBidItemViewModel {
 
     public String getBidCompany() {
 
-        return null;
+        RealmList<Contact> contacts = bid.getProject().getContacts();
+
+        if (contacts.size() > 0) {
+
+            Contact contact = contacts.get(0);
+            Company company = contact.getCompany();
+
+            return company.getName();
+        }
+
+        return "";
     }
 
     public String getProjectName() {
