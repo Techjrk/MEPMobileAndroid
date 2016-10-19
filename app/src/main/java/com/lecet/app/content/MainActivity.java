@@ -31,6 +31,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.UserDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
@@ -302,8 +303,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         if (overflowMenu == null) {
             overflowMenu = new ListPopupWindow(this);
 
-            //TODO replace this with the current user instance
-            User user = new User.Builder().firstName("Katey").lastName("Bailev").email("kbailey@lacet.org").build();
+            UserDomain userDomain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            User user = userDomain.fetchLoggedInUser();
 
             OverflowMenuAdapter adapter = new OverflowMenuAdapter(this, user, getResources().getStringArray(R.array.overflow_menu_options));
 
