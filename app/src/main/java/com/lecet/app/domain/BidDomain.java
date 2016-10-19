@@ -99,6 +99,17 @@ public class BidDomain {
         return bids;
     }
 
+    public RealmResults<Bid> fetchBids(@BidGroup int categoryId, Date cutoffDate) {
+
+        RealmResults<Bid> bids = realm.where(Bid.class)
+                .greaterThan("createDate", cutoffDate)
+                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("project.hidden", false)
+                .findAllSorted("createDate", Sort.DESCENDING);
+
+        return bids;
+    }
+
     public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
 
         return result.where()
