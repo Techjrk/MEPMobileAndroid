@@ -27,6 +27,13 @@ public class DateUtility {
         return calendar.getTime();
     }
 
+    public static Date addMinutes(int minutes) {
+        Calendar calendar = Calendar.getInstance(); // this would default to now
+        calendar.add(Calendar.MINUTE, minutes);
+
+        return calendar.getTime();
+    }
+
     public static Calendar getFirstDateOfTheCurrentMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
