@@ -1,11 +1,13 @@
 package com.lecet.app.domain;
 
-import android.content.Intent;
 import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Access;
+import com.lecet.app.data.models.User;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -17,9 +19,13 @@ import retrofit2.Callback;
 public class UserDomain {
 
     private final LecetClient lecetClient;
+    private final LecetSharedPreferenceUtil sharedPreferenceUtil;
+    private final Realm realm;
 
-    public UserDomain(LecetClient lecetClient) {
+    public UserDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
+        this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
     }
 
     /**
@@ -48,5 +54,36 @@ public class UserDomain {
         call.enqueue(callback);
     }
 
+    public void getUser(long userId, Callback<User> callback) {
 
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        Call<User> call = lecetClient.getUserService().getUser(token, userId);
+        call.enqueue(callback);
+    }
+
+    /**
+     * Persisted
+     **/
+
+    public User copyToRealmTransaction(User bid) {
+
+        realm.beginTransaction();
+        User persistedUser = realm.copyToRealmOrUpdate(bid);
+        realm.commitTransaction();
+
+        return persistedUser;
+    }
+
+    public User fetchUser(long userID) {
+
+        return realm.where(User.class).equalTo("id", userID).findFirst();
+    }
+
+    public User fetchLoggedInUser() {
+
+        long userId = sharedPreferenceUtil.getId();
+
+        return fetchUser(userId);
+    }
 }

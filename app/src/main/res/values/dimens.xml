@@ -16,4 +16,8 @@
     <dimen name="strip_corner_radius">3dp</dimen>
     <dimen name="strip_vertical_spacing">3dp</dimen>
 
+    <!-- Overflow Menu -->
+    <dimen name="overflow_menu_width">14dp</dimen>
+    <dimen name="overflow_menu_height">270dp</dimen>
+
 </resources>

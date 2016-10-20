@@ -1,10 +1,16 @@
 package com.lecet.app.viewmodel;
 
+import android.util.Log;
+
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+
+import io.realm.RealmList;
 
 /**
  * File: RecentBidItemViewModel Created: 10/13/16 Author: domandtom
@@ -13,6 +19,8 @@ import java.text.SimpleDateFormat;
  */
 
 public class RecentBidItemViewModel {
+
+    private static final String TAG = "RecentBidItemViewModel";
 
     private final Bid bid;
     private final String mapsApiKey;
@@ -32,7 +40,20 @@ public class RecentBidItemViewModel {
 
     public String getBidCompany() {
 
-        return null;
+        Contact contact = bid.getContact();
+
+        if (contact != null) {
+
+            Company company = contact.getCompany();
+
+            if (company != null) {
+
+                return company.getName();
+            }
+
+        }
+
+        return "";
     }
 
     public String getProjectName() {
@@ -70,7 +91,9 @@ public class RecentBidItemViewModel {
 
     public String getMapUrl() {
 
-        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
+        if (bid.getProject().getGeocode() == null) return null;
+
+        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x300&" +
                 "markers=color:blue|%.6f,%.6f&key=%s", bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(),
                 bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(), mapsApiKey);
     }

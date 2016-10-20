@@ -59,7 +59,7 @@ public class LecetSharedPreferenceUtil {
     }
 
     private void putLongPreferences(String name, long value) {
-        mEditor.putLong(name, value);
+        mEditor.putLong(name, value).apply();
     }
 
     private long getLongPreferences(String name) { return mSharedPreferences.getLong(name, -1);}

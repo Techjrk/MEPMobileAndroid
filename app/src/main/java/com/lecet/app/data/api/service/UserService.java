@@ -3,6 +3,7 @@ package com.lecet.app.data.api.service;
 import com.lecet.app.data.api.request.CreateUserRequest;
 import com.lecet.app.data.api.response.UserResponse;
 import com.lecet.app.data.models.Access;
+import com.lecet.app.data.models.User;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -38,4 +39,10 @@ public interface UserService {
     @POST("LecetUsers/logout")
     Call<ResponseBody> logout(@Header("Authorization") String token);
 
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("LecetUsers/{userId}")
+    Call<User> getUser(@Header("Authorization") String token, @Path("userId") long userId);
 }
