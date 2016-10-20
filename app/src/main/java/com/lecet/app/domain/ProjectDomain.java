@@ -7,6 +7,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class ProjectDomain {
     public void getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
         Date current = new Date();
-        Date endDate = DateUtility.addDays(30);
+        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
         int limit = 150;
 
         getProjectsHappeningSoon(current, endDate, limit, callback);
@@ -141,21 +142,21 @@ public class ProjectDomain {
 
     /** Persisted **/
 
-    public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate) {
+    public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("bidDate", startDate)
+                .between("bidDate", startDate, endDate)
                 .findAll();
 
         return projectsResult;
     }
 
-    public RealmResults<Project> fetchProjectsByBidDate(Date bidDate) {
+    public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("bidDate", bidDate)
+                .between("bidDate", start, end)
                 .findAll();
 
         return projectsResult;
