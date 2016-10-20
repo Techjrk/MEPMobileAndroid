@@ -287,7 +287,7 @@ public class MainViewModel {
         return new RecentBidsAdapter(data);
     }
 
-    private RecyclerView.Adapter getMBSAdapter(Project[] data) {
+    private RecyclerView.Adapter getMHSAdapter(Project[] data) {
 
         return new BidsHappeningSoonAdapter(data);
     }
@@ -315,7 +315,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        RecyclerView.Adapter adapter = getMBRAdapter(realmResults.toArray(new Bid[realmResults.size()]));
+        RecyclerView.Adapter adapter = realmResults != null ? getMBRAdapter(realmResults.toArray(new Bid[realmResults.size()])) : getMBRAdapter(new Bid[0]);
         recyclerView.setAdapter(adapter);
     }
 
@@ -323,7 +323,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        RecyclerView.Adapter adapter = getMBSAdapter(realmResults.toArray(new Project[realmResults.size()]));
+        RecyclerView.Adapter adapter = realmResults != null ? getMHSAdapter(realmResults.toArray(new Project[realmResults.size()])) : getMHSAdapter(new Project[0]);
         recyclerView.setAdapter(adapter);
     }
 }
