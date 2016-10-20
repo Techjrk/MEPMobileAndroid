@@ -23,6 +23,8 @@ import com.lecet.app.utility.DateUtility;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -70,9 +72,8 @@ public class MainViewModel {
         this.appCompatActivity = appCompatActivity;
     }
 
-    /**
-     * Public
-     **/
+
+    /** API **/
 
     public void getBidsRecentlyMade(@NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
 
@@ -126,12 +127,6 @@ public class MainViewModel {
         }
     }
 
-    public void fetchBidsRecentlyMade(@BidDomain.BidGroup int bidGroup, @NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
-
-        realmResultsMBR = bidDomain.fetchBids(bidGroup, cutoffDate);
-        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
-    }
-
     public void getProjectsHappeningSoon(@NonNull final LecetCallback<Project[]> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
@@ -183,6 +178,15 @@ public class MainViewModel {
             }
         }
     }
+
+    /** Persisted **/
+
+    public void fetchBidsRecentlyMade(@BidDomain.BidGroup int bidGroup, @NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
+
+        realmResultsMBR = bidDomain.fetchBids(bidGroup, cutoffDate);
+        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
+    }
+
 
     public void fetchProjectsByBidDate(Date bidDate) {
 
