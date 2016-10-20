@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.DashboardChartBaseViewModel" />
+    </data>
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/dashboard_icon_housing"
+                style="@style/DashboardChartCenterIcon"
+                android:src="@drawable/ic_housing" />
+
+        <ImageView
+                android:id="@+id/dashboard_icon_engineering"
+                style="@style/DashboardChartCenterIcon"
+                android:src="@drawable/ic_engineering" />
+
+        <ImageView
+                android:id="@+id/dashboard_icon_building"
+                style="@style/DashboardChartCenterIcon"
+                android:src="@drawable/ic_building" />
+
+        <ImageView
+                android:id="@+id/dashboard_icon_utilities"
+                style="@style/DashboardChartCenterIcon"
+                android:src="@drawable/ic_utilities" />
+
+    </FrameLayout>
+
+</layout>

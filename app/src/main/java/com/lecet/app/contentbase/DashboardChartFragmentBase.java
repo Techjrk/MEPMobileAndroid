@@ -3,6 +3,7 @@ package com.lecet.app.contentbase;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * Created by jasonm on 10/5/16.
  */
-public class DashboardChartFragmentBase extends Fragment /*implements OnChartValueSelectedListener, View.OnClickListener*/ {
+public class DashboardChartFragmentBase extends Fragment {
 
     private static final String TAG = "DashboardChartFragBase";
 
@@ -80,7 +81,6 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
         fragmentSubtitleText.setText(this.subtitle);
 
         initPieChart(view);
-        initStripButtons(view);
 
         // update pie chart data
         int[] newPieChartData = getNewData();
@@ -95,12 +95,9 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
         View view = binding.getRoot();
         PieChart pieChartView = binding.pieChartView;
         DashboardChartBaseViewModel viewModel = binding.getViewModel();
+        viewModel.initialize(view);
         viewModel.initializeChart(pieChartView);
         return view;
-    }
-
-    private void initStripButtons(View view) {
-        //
     }
 
     private void initPieChart(View view) {
@@ -108,15 +105,14 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
         pieChart = (PieChart) view.findViewById(R.id.pie_chart_view);
         pieChart.setTransparentCircleRadius(0);
         pieChart.setTransparentCircleAlpha(0);
-        pieChart.setHoleRadius(70.0f);
-        pieChart.setHoleColor(getResources().getColor(R.color.transparent));
+        pieChart.setHoleRadius(72.0f);
+        pieChart.setHoleColor(ContextCompat.getColor(getContext(), R.color.transparent)); //TODO - update
         pieChart.setDrawMarkerViews(false);
         pieChart.setDrawEntryLabels(false);
         pieChart.setCenterText("");
         pieChart.setDescription("");
         pieChart.setRotationEnabled(false);
         pieChart.setHighlightPerTapEnabled(true);
-        //pieChart.setOnChartValueSelectedListener(this);
 
         Legend legend = pieChart.getLegend();
         legend.setEnabled(false);
@@ -133,9 +129,9 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setDrawValues(false);
-        dataSet.setSliceSpace(1.0f);
+        dataSet.setSliceSpace(0.5f);
         dataSet.setHighlightEnabled(true);
-        dataSet.setSelectionShift(20.0f);
+        dataSet.setSelectionShift(24.0f);
         dataSet.setColors(new int[]{R.color.lecetLightOrange, // housing
                                     R.color.lecetDarkOrange,  // engineering
                                     R.color.lecetLightBlue,   // building
@@ -147,19 +143,6 @@ public class DashboardChartFragmentBase extends Fragment /*implements OnChartVal
         pieChart.notifyDataSetChanged();
         pieChart.invalidate(); // refresh
     }
-
-    /*
-    @Override
-    public void onValueSelected(Entry e, Highlight h) {
-        Log.d(TAG, "onValueSelected: " + e);
-        //pieChart.highlightValue(e.getX(), 1);
-    }
-
-    @Override
-    public void onNothingSelected() {
-        Log.d(TAG, "onNothingSelected");
-    }
-    */
 
     private int[] getNewData() {
         int[] newPieChartData = new int[4];

@@ -11,9 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="460dp"
         android:gravity="center|top"
-        android:orientation="vertical"
         tools:context="com.lecet.app.content.MainActivity">
 
         <LinearLayout
@@ -35,6 +34,17 @@
                      bind:viewModel="@{viewModel}"/>
 
         </LinearLayout>
+
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true">
+
+            <include layout="@layout/include_dashboard_chart_icons"
+                     bind:viewModel="@{viewModel}"/>
+
+        </FrameLayout>
 
     </RelativeLayout>
 

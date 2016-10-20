@@ -16,17 +16,11 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.data.models.Project;
-import com.lecet.app.interfaces.LecetCallback;
-import com.lecet.app.interfaces.MHSDataSource;
-import com.lecet.app.interfaces.MHSDelegate;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by Jason M on 5/10/2016.
@@ -45,6 +39,16 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     private String subtitle = "99";
     private PieChart pieChartView;
 
+    private View housingIcon = null;
+    private View engineeringIcon = null;
+    private View buildingIcon = null;
+    private View utilitiesIcon = null;
+
+    private LinearLayout housingButton = null;
+    private LinearLayout engineeringButton = null;
+    private LinearLayout buildingButton = null;
+    private LinearLayout utilitiesButton = null;
+
     //private MHSDataSource dataSource;
     //private MHSDelegate delegate;
 
@@ -53,6 +57,20 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         this.fragment = fragment;
 //        this.dataSource = dataSource;
 //        this.delegate = delegate;
+    }
+
+    public void initialize(View view) {
+        View fragmentView = view;
+
+        housingIcon       = fragmentView.findViewById(R.id.dashboard_icon_housing);
+        engineeringIcon   = fragmentView.findViewById(R.id.dashboard_icon_engineering);
+        buildingIcon      = fragmentView.findViewById(R.id.dashboard_icon_building);
+        utilitiesIcon     = fragmentView.findViewById(R.id.dashboard_icon_utilities);
+
+        housingButton     = (LinearLayout) fragmentView.findViewById(R.id.button_housing);
+        engineeringButton = (LinearLayout) fragmentView.findViewById(R.id.button_engineering);
+        buildingButton    = (LinearLayout) fragmentView.findViewById(R.id.button_building);
+        utilitiesButton   = (LinearLayout) fragmentView.findViewById(R.id.button_utilities);
     }
 
     @Bindable
@@ -73,6 +91,9 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         this.pieChartView.setOnChartValueSelectedListener(this);
     }
 
+    /**
+     * Custom ValueFormatter for use in displaying chart values
+     */
     public class CustomValueFormatter implements ValueFormatter {
 
         private DecimalFormat mFormat;
@@ -106,23 +127,26 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
         // highlighting of values
         float highlightX = h.getX();
-        View fragmentView = fragment.getView();
         View buttonToSelect = null;
 
         if (highlightX == CHART_VALUE_HOUSING) {
-            buttonToSelect = fragmentView.findViewById(R.id.button_housing);
+            buttonToSelect = housingButton;
         }
         else if (highlightX == CHART_VALUE_ENGINEERING) {
-            buttonToSelect = fragmentView.findViewById(R.id.button_engineering);
+            buttonToSelect = engineeringButton;
         }
         else if (highlightX == CHART_VALUE_BUILDING) {
-            buttonToSelect = fragmentView.findViewById(R.id.button_building);
+            buttonToSelect = buildingButton;
         }
         else if (highlightX == CHART_VALUE_UTILITIES) {
-            buttonToSelect = fragmentView.findViewById(R.id.button_utilities);
+            buttonToSelect = utilitiesButton;
         }
 
-        setSelected(buttonToSelect);
+        setCategoryButtonState(buttonToSelect);
+        setCategoryIcon(h);
+
+        //TODO - notify the activity that a value has been selected so the bottom map fragments can filter
+        // expose the group ID that is selected. notify the delegate. see calendar or d's example
     }
 
     @Override
@@ -135,45 +159,44 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         data.setDrawValues(false);
         pieChartView.invalidate();
 
+        hideCategoryIcons();
     }
 
     @Override
     public void onClick(View view) {
         Log.d(TAG, "onClick");
-
     }
 
     public void onHousingButtonClick(View view) {
         //Log.d(TAG, "onHousingButtonClick");
         pieChartView.highlightValue(CHART_VALUE_HOUSING, 0);
-        setSelected(view);
+        setCategoryButtonState(view);
     }
 
     public void onEngineeringButtonClick(View view) {
         //Log.d(TAG, "onEngineeringButtonClick");
         pieChartView.highlightValue(CHART_VALUE_ENGINEERING, 0);
-        setSelected(view);
+        setCategoryButtonState(view);
     }
 
     public void onBuildingButtonClick(View view) {
         //Log.d(TAG, "onBuildingButtonClick");
         pieChartView.highlightValue(CHART_VALUE_BUILDING, 0);
-        setSelected(view);
+        setCategoryButtonState(view);
     }
 
     public void onUtilitiesButtonClick(View view) {
         //Log.d(TAG, "onUtilitiesButtonClick");
         pieChartView.highlightValue(CHART_VALUE_UTILITIES, 0);
-        setSelected(view);
+        setCategoryButtonState(view);
     }
 
-    private void setSelected(View view) {
+    /**
+     * Set the pressed state of the selected category button in the button strip
+     * @param view
+     */
+    private void setCategoryButtonState(View view) {
         if (view != null) {
-            LinearLayout housingButton     = (LinearLayout) fragment.getView().findViewById(R.id.button_housing);
-            LinearLayout engineeringButton = (LinearLayout) fragment.getView().findViewById(R.id.button_engineering);
-            LinearLayout buildingButton    = (LinearLayout) fragment.getView().findViewById(R.id.button_building);
-            LinearLayout utilitiesButton   = (LinearLayout) fragment.getView().findViewById(R.id.button_utilities);
-
             housingButton.setSelected(false);
             engineeringButton.setSelected(false);
             buildingButton.setSelected(false);
@@ -183,4 +206,39 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
             selectedButton.setSelected(true);
         }
     }
+
+    /**
+     * Update the category icon in the center of the pie chart
+     * @param highlight
+     */
+    private void setCategoryIcon(Highlight highlight) {
+
+        float highlightX = highlight.getX();
+        View iconToShow = null;
+
+        hideCategoryIcons();
+
+        if (highlightX == CHART_VALUE_HOUSING) {
+            iconToShow = housingIcon;
+        }
+        else if (highlightX == CHART_VALUE_ENGINEERING) {
+            iconToShow = engineeringIcon;
+        }
+        else if (highlightX == CHART_VALUE_BUILDING) {
+            iconToShow = buildingIcon;
+        }
+        else if (highlightX == CHART_VALUE_UTILITIES) {
+            iconToShow = utilitiesIcon;
+        }
+
+        iconToShow.setVisibility(View.VISIBLE);
+    }
+
+    private void hideCategoryIcons() {
+        housingIcon.setVisibility(View.INVISIBLE);
+        engineeringIcon.setVisibility(View.INVISIBLE);
+        buildingIcon.setVisibility(View.INVISIBLE);
+        utilitiesIcon.setVisibility(View.INVISIBLE);
+    }
+
 }
