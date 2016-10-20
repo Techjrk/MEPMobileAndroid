@@ -1,5 +1,7 @@
 package com.lecet.app.viewmodel;
 
+import android.util.Log;
+
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
@@ -17,6 +19,8 @@ import io.realm.RealmList;
  */
 
 public class RecentBidItemViewModel {
+
+    private static final String TAG = "RecentBidItemViewModel";
 
     private final Bid bid;
     private final String mapsApiKey;
@@ -36,14 +40,17 @@ public class RecentBidItemViewModel {
 
     public String getBidCompany() {
 
-        RealmList<Contact> contacts = bid.getProject().getContacts();
+        Contact contact = bid.getContact();
 
-        if (contacts.size() > 0) {
+        if (contact != null) {
 
-            Contact contact = contacts.get(0);
             Company company = contact.getCompany();
 
-            return company.getName();
+            if (company != null) {
+
+                return company.getName();
+            }
+
         }
 
         return "";
@@ -84,7 +91,9 @@ public class RecentBidItemViewModel {
 
     public String getMapUrl() {
 
-        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
+        if (bid.getProject().getGeocode() == null) return null;
+
+        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x300&" +
                 "markers=color:blue|%.6f,%.6f&key=%s", bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(),
                 bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(), mapsApiKey);
     }

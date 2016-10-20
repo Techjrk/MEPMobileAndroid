@@ -56,6 +56,8 @@ public class BidHappeningSoonItemViewModel {
 
     public String getMapUrl() {
 
+        if (project.getGeocode() == null) return null;
+
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
                         "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
@@ -72,7 +74,7 @@ public class BidHappeningSoonItemViewModel {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
-        return simpleDateFormat.format(project.getFirstPublishDate());
+        return simpleDateFormat.format(project.getBidDate());
     }
 
 
