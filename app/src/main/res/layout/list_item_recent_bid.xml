@@ -18,7 +18,7 @@
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="8"
+                        android:layout_weight="9"
                         android:background="@color/lecetNavyBlue">
 
             <ImageView android:id="@+id/calendar_image_view"
@@ -42,7 +42,7 @@
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="0dp"
-                      android:layout_weight="22"
+                      android:layout_weight="21"
                       android:orientation="vertical"
                       android:background="@color/lecetButtonDarkerBlue">
 
@@ -62,7 +62,7 @@
             <TextView android:id="@+id/bid_company_text_view"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginTop="5dp"
+                      android:layout_marginTop="2dp"
                       android:layout_marginLeft="10dp"
                       android:layout_marginRight="10dp"
                       android:maxLines="1"
@@ -81,7 +81,6 @@
             <ImageView android:id="@+id/bid_location_image_view"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
-                       android:scaleType="fitXY"
                        bind:imageUrl="@{viewModel.mapUrl}"/>
 
             <TextView android:id="@+id/bid_union_text_view"
@@ -121,7 +120,7 @@
 
             <RelativeLayout android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="2dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp">
 
@@ -148,7 +147,7 @@
 
             <RelativeLayout android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="2dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp">
 
