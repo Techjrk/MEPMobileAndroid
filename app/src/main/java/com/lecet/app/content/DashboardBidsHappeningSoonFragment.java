@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.DashboardChartFragmentBase;
+import com.lecet.app.contentbase.BaseDashboardChartFragment;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.databinding.FragmentDashboardBidsHappeningSoonBinding;
 import com.lecet.app.interfaces.MHSDataSource;
@@ -39,9 +39,9 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
     public static DashboardBidsHappeningSoonFragment newInstance(int page, String title, String subtitle) {
         DashboardBidsHappeningSoonFragment fragmentInstance = new DashboardBidsHappeningSoonFragment();
         Bundle args = new Bundle();
-        args.putInt(DashboardChartFragmentBase.ARG_PAGE, page);
-        args.putString(DashboardChartFragmentBase.ARG_TITLE, title);
-        args.putString(DashboardChartFragmentBase.ARG_SUBTITLE, subtitle);
+        args.putInt(BaseDashboardChartFragment.ARG_PAGE, page);
+        args.putString(BaseDashboardChartFragment.ARG_TITLE, title);
+        args.putString(BaseDashboardChartFragment.ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -53,9 +53,9 @@ public class DashboardBidsHappeningSoonFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            page = getArguments().getInt(DashboardChartFragmentBase.ARG_PAGE);
-            title = getArguments().getString(DashboardChartFragmentBase.ARG_TITLE);
-            subtitle = getArguments().getString(DashboardChartFragmentBase.ARG_SUBTITLE);
+            page = getArguments().getInt(BaseDashboardChartFragment.ARG_PAGE);
+            title = getArguments().getString(BaseDashboardChartFragment.ARG_TITLE);
+            subtitle = getArguments().getString(BaseDashboardChartFragment.ARG_SUBTITLE);
         }
     }
 

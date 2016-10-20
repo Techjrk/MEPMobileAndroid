@@ -1,20 +1,15 @@
 package com.lecet.app.content;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.lecet.app.R;
-import com.lecet.app.contentbase.DashboardChartFragmentBase;
+import com.lecet.app.contentbase.BaseDashboardChartFragment;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardProjectsRecentlyUpdated extends DashboardChartFragmentBase {
+public class DashboardProjectsRecentlyUpdated extends BaseDashboardChartFragment {
 
     private static final String TAG = "ProjectsRecentlyUpdated";
 
@@ -23,9 +18,9 @@ public class DashboardProjectsRecentlyUpdated extends DashboardChartFragmentBase
         Log.d(TAG, "newInstance");
         DashboardProjectsRecentlyUpdated fragmentInstance = new DashboardProjectsRecentlyUpdated();
         Bundle args = new Bundle();
-        args.putInt(DashboardChartFragmentBase.ARG_PAGE, page);
-        args.putString(DashboardChartFragmentBase.ARG_TITLE, title);
-        args.putString(DashboardChartFragmentBase.ARG_SUBTITLE, subtitle);
+        args.putInt(BaseDashboardChartFragment.ARG_PAGE, page);
+        args.putString(BaseDashboardChartFragment.ARG_TITLE, title);
+        args.putString(BaseDashboardChartFragment.ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }

@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by jasonm on 10/5/16.
  */
-public class DashboardChartFragmentBase extends Fragment {
+public class BaseDashboardChartFragment extends Fragment {
 
     private static final String TAG = "DashboardChartFragBase";
 
@@ -47,9 +47,9 @@ public class DashboardChartFragmentBase extends Fragment {
     protected String subtitle = "Subtitle";
     PieChart pieChart;
 
-    public static DashboardChartFragmentBase newInstance(int page, String title, String subtitle) {
+    public static BaseDashboardChartFragment newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
-        DashboardChartFragmentBase fragmentInstance = new DashboardChartFragmentBase();
+        BaseDashboardChartFragment fragmentInstance = new BaseDashboardChartFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         args.putString(ARG_TITLE, title);
