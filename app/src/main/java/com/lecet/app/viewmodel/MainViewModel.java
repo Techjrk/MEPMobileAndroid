@@ -19,6 +19,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.utility.DateUtility;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -185,7 +186,10 @@ public class MainViewModel {
 
     public void fetchProjectsByBidDate(Date bidDate) {
 
-        realmResultsMHS = projectDomain.fetchProjectsByBidDate(bidDate);
+        Date start = DateUtility.setDateToStartOfDate(bidDate);
+        Date end = DateUtility.addDays(start, 1);
+
+        realmResultsMHS = projectDomain.fetchProjectsByBidDate(start, end);
         displayAdapter(dashboardPosition);
     }
 
@@ -232,7 +236,7 @@ public class MainViewModel {
         calendar.setTime(new Date());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        return projectDomain.fetchProjectsHappeningSoon(calendar.getTime());
+        return projectDomain.fetchProjectsHappeningSoon(calendar.getTime(), DateUtility.getLastDateOfTheCurrentMonth());
     }
 
     /**
