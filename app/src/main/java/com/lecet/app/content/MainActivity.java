@@ -3,6 +3,7 @@ package com.lecet.app.content;
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
@@ -73,17 +74,30 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     ListPopupWindow overflowMenu;
 
-    //
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setupBinding();
         setupToolbar();
-        setupViewPager();
-        setupPageIndicator();
-        setupPageButtons();
+
+        if (isNetworkConnected()) {
+
+            setupViewPager();
+            setupPageIndicator();
+            setupPageButtons();
+        }
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+
+        if (isConnected && viewPager == null) {
+
+            setupViewPager();
+            setupPageIndicator();
+            setupPageButtons();
+        }
     }
 
     private void setupBinding() {
@@ -265,6 +279,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
         viewModel.fetchProjectsByBidDate(selectedDate);
     }
+
+
+    /** Menu **/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
