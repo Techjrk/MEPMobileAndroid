@@ -52,7 +52,11 @@ public class Bid extends RealmObject {
     @SerializedName("project")
     private Project project;
 
-    public Bid(){}
+    @SerializedName("contact")
+    private Contact contact;
+
+    public Bid() {
+    }
 
     public boolean isAwardInd() {
         return awardInd;
@@ -102,6 +106,29 @@ public class Bid extends RealmObject {
         return project;
     }
 
+    public Contact getContact() {
+        return contact;
+    }
+
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "awardInd=" + awardInd +
+                ", createDate=" + createDate +
+                ", amount=" + amount +
+                ", bidderRole='" + bidderRole + '\'' +
+                ", rank=" + rank +
+                ", fipsCounty='" + fipsCounty + '\'' +
+                ", zip5='" + zip5 + '\'' +
+                ", id=" + id +
+                ", companyId=" + companyId +
+                ", contactId=" + contactId +
+                ", projectId=" + projectId +
+                ", project=" + project +
+                ", contact=" + contact +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,7 +150,8 @@ public class Bid extends RealmObject {
         if (fipsCounty != null ? !fipsCounty.equals(bid.fipsCounty) : bid.fipsCounty != null)
             return false;
         if (zip5 != null ? !zip5.equals(bid.zip5) : bid.zip5 != null) return false;
-        return project != null ? project.equals(bid.project) : bid.project == null;
+        if (project != null ? !project.equals(bid.project) : bid.project != null) return false;
+        return contact != null ? contact.equals(bid.contact) : bid.contact == null;
 
     }
 
@@ -144,24 +172,8 @@ public class Bid extends RealmObject {
         result = 31 * result + (int) (contactId ^ (contactId >>> 32));
         result = 31 * result + (int) (projectId ^ (projectId >>> 32));
         result = 31 * result + (project != null ? project.hashCode() : 0);
+        result = 31 * result + (contact != null ? contact.hashCode() : 0);
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "Bid{" +
-                "awardInd=" + awardInd +
-                ", createDate='" + createDate + '\'' +
-                ", amount=" + amount +
-                ", bidderRole='" + bidderRole + '\'' +
-                ", rank=" + rank +
-                ", fipsCounty='" + fipsCounty + '\'' +
-                ", zip5='" + zip5 + '\'' +
-                ", id=" + id +
-                ", companyId=" + companyId +
-                ", contactId=" + contactId +
-                ", projectId=" + projectId +
-                ", project=" + project +
-                '}';
-    }
 }
