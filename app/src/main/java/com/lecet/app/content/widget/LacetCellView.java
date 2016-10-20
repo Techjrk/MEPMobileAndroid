@@ -30,15 +30,13 @@ public class LacetCellView extends BaseCellView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!getStateSet().contains(STATE_SELECTED)
-                && getStateSet().contains(STATE_REGULAR)
-                && hasEvents) {
-            this.setBackgroundResource(R.drawable.bid_event_background);
-
-        }
         if (getStateSet().contains(STATE_SELECTED)) {
             this.setBackgroundResource(R.drawable.calendar_day_selected_background);
+        } else if ((getStateSet().contains(STATE_REGULAR) || getStateSet().contains(STATE_TODAY))
+                && hasEvents) {
+            this.setBackgroundResource(R.drawable.bid_event_background);
         }
+
         if (getStateSet().contains(STATE_OUTSIDE_MONTH)) {
             setTextColor(ContextCompat.getColor(getContext(), R.color.lecetTextLightGray));
         } else {
