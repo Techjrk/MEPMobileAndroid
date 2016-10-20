@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.lecet.app.R;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityLoginBinding;
@@ -17,7 +18,7 @@ import com.lecet.app.viewmodel.LoginViewModel;
 
 import io.realm.Realm;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends LecetBaseActivity {
 
     private final String TAG = "LoginActivity";
 
