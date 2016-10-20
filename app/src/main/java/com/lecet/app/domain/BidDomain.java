@@ -32,7 +32,9 @@ public class BidDomain {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES})
-    public @interface BidGroup {}
+    public @interface BidGroup {
+    }
+
     public static final int ENGINEERING = 101;
     public static final int BUILDING = 102;
     public static final int HOUSING = 103;
@@ -49,14 +51,16 @@ public class BidDomain {
         this.realm = realm;
     }
 
-    /** API **/
+    /**
+     * API
+     **/
 
     public void getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
-        String filter = String.format("{\"include\":[\"contact\",{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
+        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
                 "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]}}", limit, formattedDate);
 
         Call<List<Bid>> call = lecetClient.getBidService().bids(token, filter);
@@ -77,7 +81,9 @@ public class BidDomain {
         getBidsRecentlyMade(limit, callback);
     }
 
-    /** Persisted **/
+    /**
+     * Persisted
+     **/
 
     public RealmResults<Bid> fetchBids(Date cutoffDate) {
 
@@ -135,12 +141,14 @@ public class BidDomain {
         return persistedBids;
     }
 
-    /** Utility **/
+    /**
+     * Utility
+     **/
     public TreeMap<Long, TreeSet<Bid>> sortRealmResults(RealmResults<Bid> result) {
 
         RealmResults<Bid> engineering = queryResult(ENGINEERING, result);
         RealmResults<Bid> building = queryResult(BUILDING, result);
-        RealmResults<Bid> housing  = queryResult(HOUSING, result);
+        RealmResults<Bid> housing = queryResult(HOUSING, result);
         RealmResults<Bid> utilities = queryResult(UTILITIES, result);
 
         TreeMap<Long, TreeSet<Bid>> treeMap = new TreeMap<>();
@@ -157,7 +165,7 @@ public class BidDomain {
 
             TreeSet<Bid> bids = new TreeSet<>(bidComparator);
 
-            for (int i=0; i < engineering.size(); i++) {
+            for (int i = 0; i < engineering.size(); i++) {
                 bids.add(engineering.get(i));
             }
 
@@ -168,7 +176,7 @@ public class BidDomain {
         if (building.size() > 0) {
 
             TreeSet<Bid> bids = new TreeSet<>(bidComparator);
-            for (int i=0; i < building.size(); i++) {
+            for (int i = 0; i < building.size(); i++) {
                 bids.add(building.get(i));
             }
 
@@ -179,7 +187,7 @@ public class BidDomain {
         if (housing.size() > 0) {
 
             TreeSet<Bid> bids = new TreeSet<>(bidComparator);
-            for (int i=0; i < housing.size(); i++) {
+            for (int i = 0; i < housing.size(); i++) {
                 bids.add(housing.get(i));
             }
 
@@ -190,7 +198,7 @@ public class BidDomain {
         if (engineering.size() > 0) {
 
             TreeSet<Bid> bids = new TreeSet<>(bidComparator);
-            for (int i=0; i < utilities.size(); i++) {
+            for (int i = 0; i < utilities.size(); i++) {
                 bids.add(utilities.get(i));
             }
 
