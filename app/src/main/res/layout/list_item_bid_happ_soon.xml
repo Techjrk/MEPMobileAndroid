@@ -36,6 +36,7 @@
                       android:layout_centerVertical="true"
                       android:textColor="@color/pureWhite"
                       android:text="@{viewModel.startDateString}"
+                      bind:typeface="@{`Lato-Regular.ttf`}"
                       tools:text="January 2014"/>
 
         </RelativeLayout>
@@ -69,6 +70,7 @@
                           android:textColor="@color/pureWhite"
                           android:textSize="12sp"
                           android:text="@{viewModel.bidTime}"
+                          bind:typeface="@{`Lato-Regular.ttf`}"
                           tools:text="11:30 AM"/>
 
             </RelativeLayout>
@@ -97,7 +99,8 @@
                       android:gravity="center"
                       android:text="@string/union_mark"
                       android:visibility="@{viewModel.isUnion ? View.VISIBLE : View.GONE}"
-                      android:background="@drawable/shape_rect_union"/>
+                      android:background="@drawable/shape_rect_union"
+                      bind:typeface="@{`Lato-Bold.ttf`}"/>
 
         </RelativeLayout>
 
@@ -118,6 +121,7 @@
                       android:textColor="@color/pureBlack"
                       android:textSize="14sp"
                       android:text="@{viewModel.projectName}"
+                      bind:typeface="@{`Lato-Regular.ttf`}"
                       tools:text="Metro Youth Services"/>
 
             <RelativeLayout android:layout_width="match_parent"
@@ -143,6 +147,7 @@
                           android:textColor="@color/lecetLightGray"
                           android:textSize="12sp"
                           android:text="@{viewModel.clientLocation}"
+                          bind:typeface="@{`Lato-Regular.ttf`}"
                           tools:text="Boston, MA"/>
 
             </RelativeLayout>
@@ -170,6 +175,7 @@
                           android:textColor="@color/lecetLightGray"
                           android:textSize="12sp"
                           android:text="@{viewModel.bidType}"
+                          bind:typeface="@{`Lato-Regular.ttf`}"
                           tools:text="Recreational, Alterations"/>
 
             </RelativeLayout>

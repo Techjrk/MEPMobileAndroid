@@ -36,6 +36,7 @@
                       android:layout_centerVertical="true"
                       android:textColor="@color/pureWhite"
                       android:text="@{viewModel.startDateString}"
+                      bind:typeface="@{`Lato-Regular.ttf`}"
                       tools:text="January 2014"/>
 
         </RelativeLayout>
@@ -49,7 +50,7 @@
             <TextView android:id="@+id/bid_amount_text_view"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginTop="5dp"
+                      android:layout_marginTop="1dp"
                       android:layout_marginLeft="10dp"
                       android:layout_marginRight="10dp"
                       android:ellipsize="end"
@@ -57,12 +58,13 @@
                       android:textColor="@color/pureWhite"
                       android:textSize="16sp"
                       android:text="@{viewModel.bidAmount}"
+                      bind:typeface="@{`Lato-Black.ttf`}"
                       tools:text="$1,000,684"/>
 
             <TextView android:id="@+id/bid_company_text_view"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginTop="2dp"
+                      android:layout_marginTop="1dp"
                       android:layout_marginLeft="10dp"
                       android:layout_marginRight="10dp"
                       android:maxLines="1"
@@ -70,6 +72,7 @@
                       android:textColor="@color/pureWhite"
                       android:textSize="12sp"
                       android:text="@{viewModel.bidCompany}"
+                      bind:typeface="@{`Lato-Regular.ttf`}"
                       tools:text="Northern City Construction Company"/>
 
         </LinearLayout>
@@ -116,6 +119,7 @@
                       android:textColor="@color/pureBlack"
                       android:textSize="14sp"
                       android:text="@{viewModel.projectName}"
+                      bind:typeface="@{`Lato-Regular.ttf`}"
                       tools:text="Metro Youth Services"/>
 
             <RelativeLayout android:layout_width="match_parent"
@@ -141,6 +145,7 @@
                           android:textColor="@color/lecetLightGray"
                           android:textSize="12sp"
                           android:text="@{viewModel.clientLocation}"
+                          bind:typeface="@{`Lato-Regular.ttf`}"
                           tools:text="Boston, MA"/>
 
             </RelativeLayout>
@@ -168,6 +173,7 @@
                           android:textColor="@color/lecetLightGray"
                           android:textSize="12sp"
                           android:text="@{viewModel.bidType}"
+                          bind:typeface="@{`Lato-Regular.ttf`}"
                           tools:text="Recreational, Alterations"/>
 
             </RelativeLayout>
