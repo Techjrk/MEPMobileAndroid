@@ -34,9 +34,18 @@
                     bind:viewModel="@{viewModel}"/>
 
             <!-- Page Indicator Dots -->
-            <include
-                    layout="@layout/include_dashboard_page_indicator"
-                    bind:viewModel="@{viewModel}"/>
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentBottom="true"
+                         android:layout_marginBottom="10dp">
+
+                <include
+                        layout="@layout/include_dashboard_page_indicator"
+                        bind:viewModel="@{viewModel}"/>
+
+            </FrameLayout>
+
 
         </RelativeLayout>
 
