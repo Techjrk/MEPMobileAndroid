@@ -27,6 +27,15 @@ public class DateUtility {
         return calendar.getTime();
     }
 
+    public static Date addDays(Date date, int days) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, days);
+
+        return calendar.getTime();
+    }
+
     public static Date addMinutes(int minutes) {
         Calendar calendar = Calendar.getInstance(); // this would default to now
         calendar.add(Calendar.MINUTE, minutes);
@@ -40,6 +49,13 @@ public class DateUtility {
         return calendar;
     }
 
+    public static Date getLastDateOfTheCurrentMonth() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
     public static Date parseBidDate(String dateString) {
         try {
             return sBidFormat.parse(dateString);
@@ -47,6 +63,18 @@ public class DateUtility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Date setDateToStartOfDate(Date date) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        return calendar.getTime();
     }
 
     public static List<Calendar> getBidDates(List<Bid> bids) {
