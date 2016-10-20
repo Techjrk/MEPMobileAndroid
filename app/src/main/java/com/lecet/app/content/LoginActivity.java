@@ -1,6 +1,7 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,6 +31,11 @@ public class LoginActivity extends LecetBaseActivity {
 
         setupBinding();
         animateLoginLayout();
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+
     }
 
     private void setupBinding() {

@@ -34,12 +34,16 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
             if (networkInfo != null && networkInfo.isConnected()) {
 
+                onNetworkConnectionChanged(true, networkInfo);
+
                 if (isDisplayingNetworkAlert()) {
 
                     hideNetworkAlert();
                 }
 
             } else {
+
+                onNetworkConnectionChanged(false, networkInfo);
 
                 showNetworkAlert();
             }
@@ -69,6 +73,12 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
         unregisterReceiver(networkReceiver);
     }
+
+    /** Subclasses should override **/
+
+    public abstract void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo);
+
+    /** Network connectivity logic **/
 
     public boolean isNetworkConnected() {
 
@@ -105,4 +115,6 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
         networkAlertDialog = builder.show();
     }
+
+
 }
