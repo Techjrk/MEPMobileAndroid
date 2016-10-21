@@ -25,6 +25,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.domain.BidDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
@@ -301,18 +302,22 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         if (label.equals(Long.toString(RESULT_CODE_HOUSING))) {
             buttonToSelect = housingButton;
             iconToShow = housingIcon;
+            delegate.bidGroupSelected(BidDomain.HOUSING);
         }
         else if (label.equals(Long.toString(RESULT_CODE_ENGINEERING))) {
             buttonToSelect = engineeringButton;
             iconToShow = engineeringIcon;
+            delegate.bidGroupSelected(BidDomain.ENGINEERING);
         }
         else if (label.equals(Long.toString(RESULT_CODE_BUILDING))) {
             buttonToSelect = buildingButton;
             iconToShow = buildingIcon;
+            delegate.bidGroupSelected(BidDomain.BUILDING);
         }
         else if (label.equals(Long.toString(RESULT_CODE_UTILITIES))) {
             buttonToSelect = utilitiesButton;
             iconToShow = utilitiesIcon;
+            delegate.bidGroupSelected(BidDomain.UTILITIES);
         }
         else Log.w(TAG, "onValueSelected: ERROR");
 
@@ -325,6 +330,7 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
         //TODO - notify the activity that a value has been selected so the bottom map fragments can filter
         // expose the group ID that is selected. notify the delegate. see calendar or d's example
+
     }
 
     @Override
