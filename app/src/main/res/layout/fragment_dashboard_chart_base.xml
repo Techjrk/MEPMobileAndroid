@@ -19,6 +19,7 @@
             android:id="@+id/chart_layout"
             android:layout_width="match_parent"
             android:layout_height="460dp"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <include layout="@layout/include_dashboard_titles"

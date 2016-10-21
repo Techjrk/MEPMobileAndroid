@@ -49,10 +49,10 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     private final Long RESULT_CODE_BUILDING = 102L;
     private final Long RESULT_CODE_UTILITIES = 105L;
 
-    private final float CHART_VALUE_HOUSING = 0.0f;
-    private final float CHART_VALUE_ENGINEERING = 1.0f;
-    private final float CHART_VALUE_BUILDING = 2.0f;
-    private final float CHART_VALUE_UTILITIES = 3.0f;
+    //private final float CHART_VALUE_HOUSING = 0.0f;
+    //private final float CHART_VALUE_ENGINEERING = 1.0f;
+    //private final float CHART_VALUE_BUILDING = 2.0f;
+    //private final float CHART_VALUE_UTILITIES = 3.0f;
 
     private float housingChartX;
     private float engineeringChartX;
@@ -182,35 +182,47 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
                 List<Integer> colorsList = new ArrayList<Integer>();
 
+                setReferences();
 
                 PieEntry entry;
                 float xValue = -1;
 
                 // for any result category that contains data, add a pie chart Entry and add the corresponding color for the chart segment
                 if(housingTreeSetSize > 0) {
-                    entry = new PieEntry(housingTreeSetSize, Long.toString(RESULT_CODE_HOUSING));
-                    entries.add(entry);                                             // housing - 103 - light orange
+                    entry = new PieEntry(housingTreeSetSize, Long.toString(RESULT_CODE_HOUSING));           // housing - 103 - light orange
+                    entries.add(entry);
                     housingChartX = ++xValue;
                     colorsList.add(R.color.lecetLightOrange);
+                    housingButton.setVisibility(View.VISIBLE);
                 }
+                else housingButton.setVisibility(View.GONE);
+
                 if(engineeringTreeSetSize > 0) {
-                    entry = new PieEntry(engineeringTreeSetSize, Long.toString(RESULT_CODE_ENGINEERING));
-                    entries.add(entry);                                             // engineering - 101 - dark orange
+                    entry = new PieEntry(engineeringTreeSetSize, Long.toString(RESULT_CODE_ENGINEERING));   // engineering - 101 - dark orange
+                    entries.add(entry);
                     engineeringChartX = ++xValue;
                     colorsList.add(R.color.lecetDarkOrange);
+                    engineeringButton.setVisibility(View.VISIBLE);
                 }
+                else engineeringButton.setVisibility(View.GONE);
+
                 if(buildingTreeSetSize > 0) {
-                    entry = new PieEntry(buildingTreeSetSize, Long.toString(RESULT_CODE_BUILDING));
-                    entries.add(entry);                                             // housingChartX = entry.getX();
+                    entry = new PieEntry(buildingTreeSetSize, Long.toString(RESULT_CODE_BUILDING));         // building - 102 - light blue
+                    entries.add(entry);
                     buildingChartX = ++xValue;
                     colorsList.add(R.color.lecetLightBlue);
+                    buildingButton.setVisibility(View.VISIBLE);
                 }
+                else buildingButton.setVisibility(View.GONE);
+
                 if(utilitiesTreeSetSize > 0) {
-                    entry = new PieEntry(utilitiesTreeSetSize, Long.toString(RESULT_CODE_UTILITIES));
-                    entries.add(entry);                                             // utilities - 105 - medium blue
+                    entry = new PieEntry(utilitiesTreeSetSize, Long.toString(RESULT_CODE_UTILITIES));       // utilities - 105 - medium blue
+                    entries.add(entry);
                     utilitiesChartX = ++xValue;
                     colorsList.add(R.color.lecetMediumBlue);
+                    utilitiesButton.setVisibility(View.VISIBLE);
                 }
+                else utilitiesButton.setVisibility(View.GONE);
 
                 int[] colorsArr = new int[colorsList.size()];
                 for(int i=0; i<colorsList.size(); i++) {
@@ -320,13 +332,18 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         //Log.d(TAG, "onNothingSelected ");
 
         // hide chart values
-        PieData data = pieChartView.getData();
-        IPieDataSet dataSet = data.getDataSet();
-        data.setDrawValues(false);
-        pieChartView.invalidate();
+        try {
+            PieData data = pieChartView.getData();
+            //IPieDataSet dataSet = data.getDataSet();
+            data.setDrawValues(false);
+            pieChartView.invalidate();
 
-        resetButtonStates();
-        hideCategoryIcons();
+            resetButtonStates();
+            hideCategoryIcons();
+        }
+        catch (NullPointerException e) {
+            Log.w(TAG, "onNothingSelected: chart data may be null");
+        }
     }
 
     @Override
@@ -336,31 +353,29 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     public void onHousingButtonClick(View view) {
         //Log.d(TAG, "onHousingButtonClick");
-        //pieChartView.highlightValue(CHART_VALUE_HOUSING, 0);
-
-        PieEntry entry = getEntryXByResultCode(RESULT_CODE_HOUSING);
-        //pieChartView.highlightValue(f, 0);
         pieChartView.highlightValue(housingChartX, 0);
-
         setCategoryButtonState(view);
     }
 
     public void onEngineeringButtonClick(View view) {
         //Log.d(TAG, "onEngineeringButtonClick");
-        //pieChartView.highlightValue(CHART_VALUE_ENGINEERING, 0);
-        //pieChartView.highlightValue(engineeringChartX, 0);
-
-//        PieEntry entry = pieChartView.getData().getDataSet().getEntryForIndex(0);
-
-        ArrayList<String> entryLabels = new ArrayList<>();
-
-        PieEntry entry = getEntryXByResultCode(RESULT_CODE_ENGINEERING);
         pieChartView.highlightValue(engineeringChartX, 0);
-
         setCategoryButtonState(view);
     }
 
-    private PieEntry getEntryXByResultCode(long resultCode) {
+    public void onBuildingButtonClick(View view) {
+        //Log.d(TAG, "onBuildingButtonClick");
+        pieChartView.highlightValue(buildingChartX, 0);
+        setCategoryButtonState(view);
+    }
+
+    public void onUtilitiesButtonClick(View view) {
+        //Log.d(TAG, "onUtilitiesButtonClick");
+        pieChartView.highlightValue(utilitiesChartX, 0);
+        setCategoryButtonState(view);
+    }
+
+    /*private PieEntry getEntryXByResultCode(long resultCode) {
         String resultCodeStr = Long.toString(resultCode);
 
         PieEntry entry = null;
@@ -375,29 +390,7 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         }
 
         return entry;
-    }
-
-    public void onBuildingButtonClick(View view) {
-        //Log.d(TAG, "onBuildingButtonClick");
-//        pieChartView.highlightValue(CHART_VALUE_BUILDING, 0);
-
-        //float f = getEntryXByResultCode(RESULT_CODE_BUILDING);
-        //pieChartView.highlightValue(f, 0);
-        pieChartView.highlightValue(buildingChartX, 0);
-
-        setCategoryButtonState(view);
-    }
-
-    public void onUtilitiesButtonClick(View view) {
-        //Log.d(TAG, "onUtilitiesButtonClick");
-//        pieChartView.highlightValue(CHART_VALUE_UTILITIES, 0);
-
-        //float f = getEntryXByResultCode(RESULT_CODE_UTILITIES);
-        //pieChartView.highlightValue(f, 0);
-        pieChartView.highlightValue(utilitiesChartX, 0);
-
-        setCategoryButtonState(view);
-    }
+    }*/
 
     /**
      * Set the pressed state of the selected category button in the button strip
@@ -418,32 +411,12 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         utilitiesButton.setSelected(false);
     }
 
-    /**
-     * Update the category icon in the center of the pie chart
-     * @param
-     */
-    /*private void setCategoryIcon(Highlight highlight) {
-
-        float highlightX = highlight.getX();
-        View iconToShow = null;
-
-        hideCategoryIcons();
-
-        if (highlightX == CHART_VALUE_HOUSING) {
-            iconToShow = housingIcon;
-        }
-        else if (highlightX == CHART_VALUE_ENGINEERING) {
-            iconToShow = engineeringIcon;
-        }
-        else if (highlightX == CHART_VALUE_BUILDING) {
-            iconToShow = buildingIcon;
-        }
-        else if (highlightX == CHART_VALUE_UTILITIES) {
-            iconToShow = utilitiesIcon;
-        }
-
-        iconToShow.setVisibility(View.VISIBLE);
-    }*/
+    public void hideAllButtons() {
+        housingButton.setVisibility(View.INVISIBLE);
+        engineeringButton.setVisibility(View.INVISIBLE);
+        buildingButton.setVisibility(View.INVISIBLE);
+        utilitiesButton.setVisibility(View.INVISIBLE);
+    }
 
     private void hideCategoryIcons() {
         housingIcon.setVisibility(View.INVISIBLE);

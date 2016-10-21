@@ -11,10 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.databinding.FragmentDashboardChartBaseBinding;
@@ -24,7 +20,6 @@ import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.viewmodel.DashboardChartBaseViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -79,17 +74,11 @@ public class BaseDashboardChartFragment extends Fragment {
 
         View view = initDataBinding(inflater, container);
 
-        TextView fragmentSubtitleNum = (TextView) view.findViewById(R.id.subtitle_num);
+        //TextView fragmentSubtitleNum = (TextView) view.findViewById(R.id.subtitle_num);
         //fragmentSubtitleText.setText(this.subtitle);
 
-        TextView fragmentTitleText = (TextView) view.findViewById(R.id.subtitle_text);
+        //TextView fragmentTitleText = (TextView) view.findViewById(R.id.subtitle_text);
         //fragmentSubtitleText.setText(this.subtitle);
-
-//        initPieChart(view);
-
-        // update pie chart data
-//        int[] newPieChartData = getNewData();
-//        updatePieChart(newPieChartData);
 
         return view;
     }
@@ -104,58 +93,5 @@ public class BaseDashboardChartFragment extends Fragment {
         viewModel.initializeChart(pieChartView);
         return view;
     }
-
-    /*private void initPieChart(View view) {
-        //Log.d(TAG, "initPieChart");
-        pieChart = (PieChart) view.findViewById(R.id.pie_chart_view);
-        pieChart.setTransparentCircleRadius(0);
-        pieChart.setTransparentCircleAlpha(0);
-        pieChart.setHoleRadius(72.0f);
-        pieChart.setHoleColor(ContextCompat.getColor(getContext(), R.color.transparent)); //TODO - update
-        pieChart.setDrawMarkerViews(false);
-        pieChart.setDrawEntryLabels(false);
-        pieChart.setCenterText("");
-        pieChart.setDescription("");
-        pieChart.setRotationEnabled(false);
-        pieChart.setHighlightPerTapEnabled(true);
-
-        Legend legend = pieChart.getLegend();
-        legend.setEnabled(false);
-    }*/
-
-    /*private void updatePieChart(int[] rawData) {
-        //Log.d(TAG, "updatePieChart");
-        List<PieEntry> entries = new ArrayList<>();
-
-        entries.add(new PieEntry(rawData[0]));       // housing
-        entries.add(new PieEntry(rawData[1]));       // engineering
-        entries.add(new PieEntry(rawData[2]));       // building
-        entries.add(new PieEntry(rawData[3]));       // utilities
-
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setDrawValues(false);
-        dataSet.setSliceSpace(0.5f);
-        dataSet.setHighlightEnabled(true);
-        dataSet.setSelectionShift(24.0f);
-        dataSet.setColors(new int[]{R.color.lecetLightOrange, // housing
-                                    R.color.lecetDarkOrange,  // engineering
-                                    R.color.lecetLightBlue,   // building
-                                    R.color.lecetMediumBlue}, // utilities
-                                    this.getContext());
-
-        PieData data = new PieData(dataSet);
-        pieChart.setData(data);
-        pieChart.notifyDataSetChanged();
-        pieChart.invalidate(); // refresh
-    }*/
-
-    /*private int[] getNewData() {
-        int[] newPieChartData = new int[4];
-        newPieChartData[0] = (int) Math.floor(Math.random() * 100);
-        newPieChartData[1] = (int) Math.floor(Math.random() * 40);
-        newPieChartData[2] = (int) Math.floor(Math.random() * 20);
-        newPieChartData[3] = (int) Math.floor(Math.random() * 50);
-        return newPieChartData;
-    }*/
 
 }

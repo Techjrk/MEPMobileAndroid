@@ -7,24 +7,23 @@
                 type="com.lecet.app.viewmodel.DashboardChartBaseViewModel" />
     </data>
 
-    <!-- Housing -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="65dp"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:weightSum="4">
+        >
 
+    <!-- Housing -->
         <LinearLayout
             android:id="@+id/button_housing"
-            android:layout_width="0dp"
+            android:layout_width="88dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/dashboard_button_left_background_selector"
             android:gravity="center"
             android:orientation="vertical"
+            android:visibility="gone"
             android:onClick="@{viewModel.onHousingButtonClick}">
 
             <ImageView
@@ -46,12 +45,13 @@
         <!-- Engineering -->
         <LinearLayout
             android:id="@+id/button_engineering"
-            android:layout_width="0dp"
+            android:layout_width="88dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/dashboard_button_center_background_selector"
             android:gravity="center"
             android:orientation="vertical"
+            android:visibility="gone"
             android:onClick="@{viewModel.onEngineeringButtonClick}">
 
             <ImageView
@@ -73,12 +73,13 @@
         <!-- Building -->
         <LinearLayout
             android:id="@+id/button_building"
-            android:layout_width="0dp"
+            android:layout_width="88dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/dashboard_button_center_background_selector"
             android:gravity="center"
             android:orientation="vertical"
+            android:visibility="gone"
             android:onClick="@{viewModel.onBuildingButtonClick}">
 
             <ImageView
@@ -100,12 +101,13 @@
         <!-- Utilities -->
         <LinearLayout
             android:id="@+id/button_utilities"
-            android:layout_width="0dp"
+            android:layout_width="88dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/dashboard_button_right_background_selector"
             android:gravity="center"
             android:orientation="vertical"
+            android:visibility="gone"
             android:onClick="@{viewModel.onUtilitiesButtonClick}">
 
             <ImageView
