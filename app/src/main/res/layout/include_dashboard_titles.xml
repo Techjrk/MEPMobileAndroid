@@ -23,14 +23,13 @@
             <TextView
                     android:id="@+id/subtitle_num"
                     style="@style/DashboardText.Subtitle"
-                    android:text="@={viewModel.subtitle}"
-                    />
+                    android:text="@={viewModel.bidsRecentlyMade}"/>
 
             <TextView
                     android:id="@+id/subtitle_text"
                     style="@style/DashboardText.Subtitle"
                     android:layout_marginLeft="8dp"
-                    tools:text="HAPPENING SOON"/>
+                    android:text="@={viewModel.subtitle}"/>
 
         </LinearLayout>
 

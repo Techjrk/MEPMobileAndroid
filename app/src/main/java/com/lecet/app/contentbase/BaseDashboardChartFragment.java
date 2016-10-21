@@ -18,6 +18,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.databinding.FragmentDashboardChartBaseBinding;
+import com.lecet.app.interfaces.MBRDataSource;
+import com.lecet.app.interfaces.MBRDelegate;
 import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.viewmodel.DashboardChartBaseViewModel;
@@ -37,8 +39,8 @@ public class BaseDashboardChartFragment extends Fragment {
     public static final String ARG_TITLE = "title";
     public static final String ARG_SUBTITLE = "subtitle";
 
-    private MHSDataSource dataSource;
-    private MHSDelegate delegate;
+    private MBRDataSource dataSource;
+    private MBRDelegate delegate;
 
     private List<Bid> bids;
     private FragmentDashboardChartBaseBinding binding;
@@ -77,21 +79,24 @@ public class BaseDashboardChartFragment extends Fragment {
 
         View view = initDataBinding(inflater, container);
 
-        TextView fragmentSubtitleText = (TextView) view.findViewById(R.id.subtitle_text);
-        fragmentSubtitleText.setText(this.subtitle);
+        TextView fragmentSubtitleNum = (TextView) view.findViewById(R.id.subtitle_num);
+        //fragmentSubtitleText.setText(this.subtitle);
 
-        initPieChart(view);
+        TextView fragmentTitleText = (TextView) view.findViewById(R.id.subtitle_text);
+        //fragmentSubtitleText.setText(this.subtitle);
+
+//        initPieChart(view);
 
         // update pie chart data
-        int[] newPieChartData = getNewData();
-        updatePieChart(newPieChartData);
+//        int[] newPieChartData = getNewData();
+//        updatePieChart(newPieChartData);
 
         return view;
     }
 
-    private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
+    protected View initDataBinding(LayoutInflater inflater, ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_chart_base, container, false);
-        binding.setViewModel(new DashboardChartBaseViewModel(this /*, dataSource, delegate*/));
+        binding.setViewModel(new DashboardChartBaseViewModel(this, dataSource, delegate));
         View view = binding.getRoot();
         PieChart pieChartView = binding.pieChartView;
         DashboardChartBaseViewModel viewModel = binding.getViewModel();
@@ -100,7 +105,7 @@ public class BaseDashboardChartFragment extends Fragment {
         return view;
     }
 
-    private void initPieChart(View view) {
+    /*private void initPieChart(View view) {
         //Log.d(TAG, "initPieChart");
         pieChart = (PieChart) view.findViewById(R.id.pie_chart_view);
         pieChart.setTransparentCircleRadius(0);
@@ -116,9 +121,9 @@ public class BaseDashboardChartFragment extends Fragment {
 
         Legend legend = pieChart.getLegend();
         legend.setEnabled(false);
-    }
+    }*/
 
-    private void updatePieChart(int[] rawData) {
+    /*private void updatePieChart(int[] rawData) {
         //Log.d(TAG, "updatePieChart");
         List<PieEntry> entries = new ArrayList<>();
 
@@ -142,15 +147,15 @@ public class BaseDashboardChartFragment extends Fragment {
         pieChart.setData(data);
         pieChart.notifyDataSetChanged();
         pieChart.invalidate(); // refresh
-    }
+    }*/
 
-    private int[] getNewData() {
+    /*private int[] getNewData() {
         int[] newPieChartData = new int[4];
         newPieChartData[0] = (int) Math.floor(Math.random() * 100);
         newPieChartData[1] = (int) Math.floor(Math.random() * 40);
         newPieChartData[2] = (int) Math.floor(Math.random() * 20);
         newPieChartData[3] = (int) Math.floor(Math.random() * 50);
         return newPieChartData;
-    }
+    }*/
 
 }
