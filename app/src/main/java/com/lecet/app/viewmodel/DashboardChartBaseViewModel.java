@@ -54,6 +54,11 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     private final float CHART_VALUE_BUILDING = 2.0f;
     private final float CHART_VALUE_UTILITIES = 3.0f;
 
+    private float housingChartX;
+    private float engineeringChartX;
+    private float buildingChartX;
+    private float utilitiesChartX;
+
     private final Fragment fragment;
     private String bidsRecentlyMade = "";
     private String subtitle = "";
@@ -80,17 +85,22 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     }
 
     public void initialize(View view) {
-        View fragmentView = view;
+        setReferences();
+    }
 
-        housingIcon       = fragmentView.findViewById(R.id.dashboard_icon_housing);
-        engineeringIcon   = fragmentView.findViewById(R.id.dashboard_icon_engineering);
-        buildingIcon      = fragmentView.findViewById(R.id.dashboard_icon_building);
-        utilitiesIcon     = fragmentView.findViewById(R.id.dashboard_icon_utilities);
+    private void setReferences() {
+        if(fragment != null && fragment.getView() != null) {
+            View fragmentView = fragment.getView();
+            housingIcon       = fragmentView.findViewById(R.id.dashboard_icon_housing);
+            engineeringIcon   = fragmentView.findViewById(R.id.dashboard_icon_engineering);
+            buildingIcon      = fragmentView.findViewById(R.id.dashboard_icon_building);
+            utilitiesIcon     = fragmentView.findViewById(R.id.dashboard_icon_utilities);
 
-        housingButton     = (LinearLayout) fragmentView.findViewById(R.id.button_housing);
-        engineeringButton = (LinearLayout) fragmentView.findViewById(R.id.button_engineering);
-        buildingButton    = (LinearLayout) fragmentView.findViewById(R.id.button_building);
-        utilitiesButton   = (LinearLayout) fragmentView.findViewById(R.id.button_utilities);
+            housingButton     = (LinearLayout) fragmentView.findViewById(R.id.button_housing);
+            engineeringButton = (LinearLayout) fragmentView.findViewById(R.id.button_engineering);
+            buildingButton    = (LinearLayout) fragmentView.findViewById(R.id.button_building);
+            utilitiesButton   = (LinearLayout) fragmentView.findViewById(R.id.button_utilities);
+        }
     }
 
     @Bindable
@@ -172,21 +182,33 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
                 List<Integer> colorsList = new ArrayList<Integer>();
 
+
+                PieEntry entry;
+                float xValue = -1;
+
                 // for any result category that contains data, add a pie chart Entry and add the corresponding color for the chart segment
                 if(housingTreeSetSize > 0) {
-                    entries.add(new PieEntry(housingTreeSetSize));       // housing - 103 - light orange
+                    entry = new PieEntry(housingTreeSetSize, Long.toString(RESULT_CODE_HOUSING));
+                    entries.add(entry);                                             // housing - 103 - light orange
+                    housingChartX = ++xValue;
                     colorsList.add(R.color.lecetLightOrange);
                 }
                 if(engineeringTreeSetSize > 0) {
-                    entries.add(new PieEntry(engineeringTreeSetSize));   // engineering - 101 - dark orange
+                    entry = new PieEntry(engineeringTreeSetSize, Long.toString(RESULT_CODE_ENGINEERING));
+                    entries.add(entry);                                             // engineering - 101 - dark orange
+                    engineeringChartX = ++xValue;
                     colorsList.add(R.color.lecetDarkOrange);
                 }
                 if(buildingTreeSetSize > 0) {
-                    entries.add(new PieEntry(buildingTreeSetSize));      // building - 102 - light blue
+                    entry = new PieEntry(buildingTreeSetSize, Long.toString(RESULT_CODE_BUILDING));
+                    entries.add(entry);                                             // housingChartX = entry.getX();
+                    buildingChartX = ++xValue;
                     colorsList.add(R.color.lecetLightBlue);
                 }
                 if(utilitiesTreeSetSize > 0) {
-                    entries.add(new PieEntry(utilitiesTreeSetSize));     // utilities - 105 - medium blue
+                    entry = new PieEntry(utilitiesTreeSetSize, Long.toString(RESULT_CODE_UTILITIES));
+                    entries.add(entry);                                             // utilities - 105 - medium blue
+                    utilitiesChartX = ++xValue;
                     colorsList.add(R.color.lecetMediumBlue);
                 }
 
@@ -240,13 +262,16 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
     }
 
     @Override
-    public void onValueSelected(Entry e, Highlight h) {
-        Log.d(TAG, "onValueSelected: " + h);
+    public void onValueSelected(Entry entry, Highlight highlight) {
+        PieEntry pieEntry = (PieEntry) entry;
+        String label = pieEntry.getLabel();
+
+        Log.d(TAG, "onValueSelected: " + label + ", " + highlight);
 
         // update chart values display
         PieData data = pieChartView.getData();
         data.setDrawValues(false);
-        IPieDataSet dataSet = data.getDataSetByIndex(h.getDataSetIndex());
+        IPieDataSet dataSet = data.getDataSetByIndex(highlight.getDataSetIndex());
 
         dataSet.setDrawValues(true);
         dataSet.setValueTextColor(Color.WHITE);
@@ -254,25 +279,37 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         dataSet.setValueFormatter(new CustomValueFormatter());
         pieChartView.invalidate(); // refresh
 
-        // highlighting of values
-        float highlightX = h.getX();
+        // highlighting of values (references seem to be null here, so reset them)
+        setReferences();
+
+        float highlightX = highlight.getX();
         View buttonToSelect = null;
+        View iconToShow = null;
 
-        if (highlightX == CHART_VALUE_HOUSING) {
+        if (label.equals(Long.toString(RESULT_CODE_HOUSING))) {
             buttonToSelect = housingButton;
+            iconToShow = housingIcon;
         }
-        else if (highlightX == CHART_VALUE_ENGINEERING) {
+        else if (label.equals(Long.toString(RESULT_CODE_ENGINEERING))) {
             buttonToSelect = engineeringButton;
+            iconToShow = engineeringIcon;
         }
-        else if (highlightX == CHART_VALUE_BUILDING) {
+        else if (label.equals(Long.toString(RESULT_CODE_BUILDING))) {
             buttonToSelect = buildingButton;
+            iconToShow = buildingIcon;
         }
-        else if (highlightX == CHART_VALUE_UTILITIES) {
+        else if (label.equals(Long.toString(RESULT_CODE_UTILITIES))) {
             buttonToSelect = utilitiesButton;
+            iconToShow = utilitiesIcon;
         }
+        else Log.w(TAG, "onValueSelected: ERROR");
 
+        // show the corresponding category button
         setCategoryButtonState(buttonToSelect);
-        setCategoryIcon(h);
+
+        // show the corresponding center icon
+        hideCategoryIcons();
+        iconToShow.setVisibility(View.VISIBLE);
 
         //TODO - notify the activity that a value has been selected so the bottom map fragments can filter
         // expose the group ID that is selected. notify the delegate. see calendar or d's example
@@ -288,6 +325,7 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         data.setDrawValues(false);
         pieChartView.invalidate();
 
+        resetButtonStates();
         hideCategoryIcons();
     }
 
@@ -298,25 +336,66 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
 
     public void onHousingButtonClick(View view) {
         //Log.d(TAG, "onHousingButtonClick");
-        pieChartView.highlightValue(CHART_VALUE_HOUSING, 0);
+        //pieChartView.highlightValue(CHART_VALUE_HOUSING, 0);
+
+        PieEntry entry = getEntryXByResultCode(RESULT_CODE_HOUSING);
+        //pieChartView.highlightValue(f, 0);
+        pieChartView.highlightValue(housingChartX, 0);
+
         setCategoryButtonState(view);
     }
 
     public void onEngineeringButtonClick(View view) {
         //Log.d(TAG, "onEngineeringButtonClick");
-        pieChartView.highlightValue(CHART_VALUE_ENGINEERING, 0);
+        //pieChartView.highlightValue(CHART_VALUE_ENGINEERING, 0);
+        //pieChartView.highlightValue(engineeringChartX, 0);
+
+//        PieEntry entry = pieChartView.getData().getDataSet().getEntryForIndex(0);
+
+        ArrayList<String> entryLabels = new ArrayList<>();
+
+        PieEntry entry = getEntryXByResultCode(RESULT_CODE_ENGINEERING);
+        pieChartView.highlightValue(engineeringChartX, 0);
+
         setCategoryButtonState(view);
+    }
+
+    private PieEntry getEntryXByResultCode(long resultCode) {
+        String resultCodeStr = Long.toString(resultCode);
+
+        PieEntry entry = null;
+        float entryX = -1f;
+        for(int i=0; i<pieChartView.getData().getDataSet().getEntryCount(); i++) {
+            entry = pieChartView.getData().getDataSet().getEntryForIndex(i);
+            if(entry.getLabel().equals(resultCodeStr)) {
+                //Entry genericEntry = (Entry) entry;
+                //entryX = genericEntry.getX();
+                break;
+            }
+        }
+
+        return entry;
     }
 
     public void onBuildingButtonClick(View view) {
         //Log.d(TAG, "onBuildingButtonClick");
-        pieChartView.highlightValue(CHART_VALUE_BUILDING, 0);
+//        pieChartView.highlightValue(CHART_VALUE_BUILDING, 0);
+
+        //float f = getEntryXByResultCode(RESULT_CODE_BUILDING);
+        //pieChartView.highlightValue(f, 0);
+        pieChartView.highlightValue(buildingChartX, 0);
+
         setCategoryButtonState(view);
     }
 
     public void onUtilitiesButtonClick(View view) {
         //Log.d(TAG, "onUtilitiesButtonClick");
-        pieChartView.highlightValue(CHART_VALUE_UTILITIES, 0);
+//        pieChartView.highlightValue(CHART_VALUE_UTILITIES, 0);
+
+        //float f = getEntryXByResultCode(RESULT_CODE_UTILITIES);
+        //pieChartView.highlightValue(f, 0);
+        pieChartView.highlightValue(utilitiesChartX, 0);
+
         setCategoryButtonState(view);
     }
 
@@ -326,21 +405,24 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
      */
     private void setCategoryButtonState(View view) {
         if (view != null) {
-            housingButton.setSelected(false);
-            engineeringButton.setSelected(false);
-            buildingButton.setSelected(false);
-            utilitiesButton.setSelected(false);
-
+            resetButtonStates();
             LinearLayout selectedButton = (LinearLayout) view;
             selectedButton.setSelected(true);
         }
     }
 
+    private void resetButtonStates() {
+        housingButton.setSelected(false);
+        engineeringButton.setSelected(false);
+        buildingButton.setSelected(false);
+        utilitiesButton.setSelected(false);
+    }
+
     /**
      * Update the category icon in the center of the pie chart
-     * @param highlight
+     * @param
      */
-    private void setCategoryIcon(Highlight highlight) {
+    /*private void setCategoryIcon(Highlight highlight) {
 
         float highlightX = highlight.getX();
         View iconToShow = null;
@@ -361,7 +443,7 @@ public class DashboardChartBaseViewModel extends BaseObservable implements OnCha
         }
 
         iconToShow.setVisibility(View.VISIBLE);
-    }
+    }*/
 
     private void hideCategoryIcons() {
         housingIcon.setVisibility(View.INVISIBLE);
