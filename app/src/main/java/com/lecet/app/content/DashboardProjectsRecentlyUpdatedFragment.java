@@ -81,7 +81,7 @@ public class DashboardProjectsRecentlyUpdatedFragment extends BaseDashboardChart
         View view = binding.getRoot();
         pieChart = binding.pieChartView;
         DashboardProjectsRecentlyUpdatedVM viewModel = binding.getViewModel();
-        viewModel.initialize(view, dataSource, delegate);
+        viewModel.initialize(view, subtitle, dataSource, delegate);
         viewModel.initializeChart(pieChart);
         return view;
     }

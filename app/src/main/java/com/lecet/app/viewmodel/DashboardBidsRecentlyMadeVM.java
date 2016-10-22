@@ -30,9 +30,10 @@ public class DashboardBidsRecentlyMadeVM extends BaseDashboardChartViewModel imp
         super(fragment);
     }
 
-    public void initialize(View view, MBRDataSource dataSource, MBRDelegate delegate) {
+    public void initialize(View view, String subtitle, MBRDataSource dataSource, MBRDelegate delegate) {
         this.dataSource = dataSource;
         this.delegate = delegate;
+        setSubtitle(subtitle);
         setReferences();
     }
 

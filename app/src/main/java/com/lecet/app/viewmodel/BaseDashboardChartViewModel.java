@@ -55,7 +55,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
     protected float utilitiesChartX;
 
     protected Fragment fragment;
-    protected String bidsRecentlyMade = "";
+    protected String subtitleNum = "";
     protected String subtitle = "";
     protected PieChart pieChartView;
 
@@ -202,8 +202,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         pieChartView.notifyDataSetChanged();
         pieChartView.invalidate();              // refresh chart display
 
-        setBidsRecentlyMade(Integer.toString(totalSize));
-        setSubtitle(fragment.getContext().getResources().getString(R.string.dashboard_recently_made));  //TODO - make dynamic
+        setSubtitleNum(Integer.toString(totalSize));
     }
 
     /**
@@ -369,22 +368,12 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     @Bindable
     public String getSubtitleNum() {
-        return bidsRecentlyMade;
+        return subtitleNum;
     }
 
     public void setSubtitleNum(String subtitleNum) {
-        this.bidsRecentlyMade = subtitleNum;
-        notifyPropertyChanged(BR.bidsRecentlyMade);     //TODO - this needs to use subtitle_num or bidsRecentlyMade as generated
-    }
-
-    @Bindable
-    public String getBidsRecentlyMade() {
-        return bidsRecentlyMade;
-    }
-
-    public void setBidsRecentlyMade(String bidsRecentlyMade) {
-        this.bidsRecentlyMade = bidsRecentlyMade;
-        notifyPropertyChanged(BR.bidsRecentlyMade);     //TODO - this needs to use subtitle_num or bidsRecentlyMade as generated
+        this.subtitleNum = subtitleNum;
+        notifyPropertyChanged(BR.subtitleNum);     //TODO - this needs to use subtitle_num or bidsRecentlyMade as generated
     }
 
     @Bindable

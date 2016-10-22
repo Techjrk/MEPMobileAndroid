@@ -26,9 +26,10 @@ public class DashboardProjectsRecentlyAddedVM extends BaseDashboardChartViewMode
         super(fragment);
     }
 
-    public void initialize(View view, MHSDataSource dataSource, MHSDelegate delegate) {
+    public void initialize(View view, String subtitle, MHSDataSource dataSource, MHSDelegate delegate) {
         this.dataSource = dataSource;
         this.delegate = delegate;
+        setSubtitle(subtitle);
         setReferences();
     }
 
