@@ -11,34 +11,24 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.BaseDashboardChartFragment;
-import com.lecet.app.data.models.Bid;
-import com.lecet.app.databinding.FragmentDashboardChartBaseBinding;
-import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.databinding.FragmentDashboardBidsRecentlyMadeBinding;
+import com.lecet.app.interfaces.DashboardChart;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
-import com.lecet.app.viewmodel.CalendarViewModel;
-import com.lecet.app.viewmodel.DashboardChartBaseViewModel;
-
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import com.lecet.app.viewmodel.DashboardBidsRecentlyMadeVM;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragment {
+public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragment implements DashboardChart {
 
     private static final String TAG = "BidsRecentlyMadeFrag";
 
     private MBRDataSource dataSource;
     private MBRDelegate delegate;
 
-    private List<Bid> mBids;
-    private FragmentDashboardChartBaseBinding binding;
-    private int page;
-    private String title;
-    private String subtitle;
+    private FragmentDashboardBidsRecentlyMadeBinding binding;
 
     public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
@@ -52,16 +42,6 @@ public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragmen
     }
 
     public DashboardBidsRecentlyMadeFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            page = getArguments().getInt(BaseDashboardChartFragment.ARG_PAGE);
-            title = getArguments().getString(BaseDashboardChartFragment.ARG_TITLE);
-            subtitle = getArguments().getString(BaseDashboardChartFragment.ARG_SUBTITLE);
-        }
     }
 
     @Override
@@ -84,29 +64,25 @@ public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragmen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        binding.getViewModel().fetchBids(binding.pieChartView);
-
-        /*dataSource.refreshRecentlyMadeBids(new LecetCallback<TreeMap<Long, TreeSet<Bid>>>() {
-            @Override
-            public void onSuccess(TreeMap<Long, TreeSet<Bid>> result) {
-                Log.d(TAG, "********************* onSuccess: " + result);
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-                Log.e(TAG, "********************* onFailure: " + message);
-
-            }
-        });*/
+        binding.getViewModel().fetchData(binding.pieChartView);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_chart_base, container, false);
-        binding.setViewModel(new DashboardChartBaseViewModel(this, dataSource, delegate));
+        Log.d(TAG, "onCreateView");
+        View view = initDataBinding(inflater, container);
+        return view;
+    }
+
+    @Override
+    public View initDataBinding(LayoutInflater inflater, ViewGroup container) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_bids_recently_made, container, false);
+        binding.setViewModel(new DashboardBidsRecentlyMadeVM(this));
         View view = binding.getRoot();
-        binding.getViewModel().initializeChart(binding.pieChartView);
+        pieChart = binding.pieChartView;
+        DashboardBidsRecentlyMadeVM viewModel = binding.getViewModel();
+        viewModel.initialize(view, dataSource, delegate);
+        viewModel.initializeChart(pieChart);
         return view;
     }
 

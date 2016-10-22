@@ -4,7 +4,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.lecet.app.viewmodel.DashboardChartBaseViewModel" />
+                type="com.lecet.app.viewmodel.BaseDashboardChartViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

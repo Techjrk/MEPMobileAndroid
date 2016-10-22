@@ -11,28 +11,28 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.BaseDashboardChartFragment;
-import com.lecet.app.databinding.FragmentDashboardProjectsRecentlyAddedBinding;
+import com.lecet.app.databinding.FragmentDashboardProjectsRecentlyUpdatedBinding;
 import com.lecet.app.interfaces.DashboardChart;
 import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
-import com.lecet.app.viewmodel.DashboardProjectsRecentlyAddedVM;
+import com.lecet.app.viewmodel.DashboardProjectsRecentlyUpdatedVM;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFragment implements DashboardChart {
+public class DashboardProjectsRecentlyUpdatedFragment extends BaseDashboardChartFragment implements DashboardChart  {
 
-    private static final String TAG = "ProjectsRecentlyAddFrag";
+    private static final String TAG = "ProjectsRecentlyUpdated";
 
     private MHSDataSource dataSource;
     private MHSDelegate delegate;
 
-    private FragmentDashboardProjectsRecentlyAddedBinding binding;
+    private FragmentDashboardProjectsRecentlyUpdatedBinding binding;
 
-    public static DashboardProjectsRecentlyAddedFragment newInstance(int page, String title, String subtitle) {
+    public static DashboardProjectsRecentlyUpdatedFragment newInstance(int page, String title, String subtitle) {
         Log.d(TAG, "newInstance");
-        DashboardProjectsRecentlyAddedFragment fragmentInstance = new DashboardProjectsRecentlyAddedFragment();
+        DashboardProjectsRecentlyUpdatedFragment fragmentInstance = new DashboardProjectsRecentlyUpdatedFragment();
         Bundle args = new Bundle();
         args.putInt(BaseDashboardChartFragment.ARG_PAGE, page);
         args.putString(BaseDashboardChartFragment.ARG_TITLE, title);
@@ -41,7 +41,7 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
         return fragmentInstance;
     }
 
-    public DashboardProjectsRecentlyAddedFragment() {
+    public DashboardProjectsRecentlyUpdatedFragment() {
     }
 
     @Override
@@ -52,7 +52,7 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
             delegate = (MHSDelegate) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement MHSDelegate");
-        }
+    }
 
         try {
             dataSource = (MHSDataSource) context;
@@ -76,11 +76,11 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
 
     @Override
     public View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_projects_recently_added, container, false);
-        binding.setViewModel(new DashboardProjectsRecentlyAddedVM(this));
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_projects_recently_updated, container, false);
+        binding.setViewModel(new DashboardProjectsRecentlyUpdatedVM(this));
         View view = binding.getRoot();
         pieChart = binding.pieChartView;
-        DashboardProjectsRecentlyAddedVM viewModel = binding.getViewModel();
+        DashboardProjectsRecentlyUpdatedVM viewModel = binding.getViewModel();
         viewModel.initialize(view, dataSource, delegate);
         viewModel.initializeChart(pieChart);
         return view;

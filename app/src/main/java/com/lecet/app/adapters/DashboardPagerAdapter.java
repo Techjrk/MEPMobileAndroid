@@ -1,7 +1,6 @@
 package com.lecet.app.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,7 +10,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.DashboardBidsHappeningSoonFragment;
 import com.lecet.app.content.DashboardBidsRecentlyMadeFragment;
 import com.lecet.app.content.DashboardProjectsRecentlyAddedFragment;
-import com.lecet.app.content.DashboardProjectsRecentlyUpdated;
+import com.lecet.app.content.DashboardProjectsRecentlyUpdatedFragment;
 
 /**
  * Created by jasonm on 10/5/16.
@@ -67,7 +66,7 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 fragmentTitle    = context.getResources().getString(R.string.dashboard_projects);
                 fragmentSubtitle = context.getResources().getString(R.string.dashboard_recently_updated);
-                return DashboardProjectsRecentlyUpdated.newInstance(3, fragmentTitle, fragmentSubtitle);
+                return DashboardProjectsRecentlyUpdatedFragment.newInstance(3, fragmentTitle, fragmentSubtitle);
 
             default:
                 Log.w(TAG, "getItem: no such item");
