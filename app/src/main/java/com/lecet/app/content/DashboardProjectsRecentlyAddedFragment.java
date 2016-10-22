@@ -30,12 +30,10 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
 
     private FragmentDashboardProjectsRecentlyAddedBinding binding;
 
-    public static DashboardProjectsRecentlyAddedFragment newInstance(int page, String title, String subtitle) {
+    public static DashboardProjectsRecentlyAddedFragment newInstance(String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardProjectsRecentlyAddedFragment fragmentInstance = new DashboardProjectsRecentlyAddedFragment();
         Bundle args = new Bundle();
-        args.putInt(BaseDashboardChartFragment.ARG_PAGE, page);
-        args.putString(BaseDashboardChartFragment.ARG_TITLE, title);
         args.putString(BaseDashboardChartFragment.ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;

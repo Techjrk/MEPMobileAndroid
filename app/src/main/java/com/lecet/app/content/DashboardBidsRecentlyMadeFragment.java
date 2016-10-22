@@ -30,12 +30,10 @@ public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragmen
 
     private FragmentDashboardBidsRecentlyMadeBinding binding;
 
-    public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title, String subtitle) {
+    public static DashboardBidsRecentlyMadeFragment newInstance(String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardBidsRecentlyMadeFragment fragmentInstance = new DashboardBidsRecentlyMadeFragment();
         Bundle args = new Bundle();
-        args.putInt(BaseDashboardChartFragment.ARG_PAGE, page);
-        args.putString(BaseDashboardChartFragment.ARG_TITLE, title);
         args.putString(BaseDashboardChartFragment.ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
