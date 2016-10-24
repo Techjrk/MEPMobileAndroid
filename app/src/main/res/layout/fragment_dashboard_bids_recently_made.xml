@@ -55,9 +55,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"/>
 
-            <!-- BUTTON STRIP -->
+            <!-- BUTTON STRIP - VISIBILITY=GONE BY DEFAULT -->
             <LinearLayout android:layout_width="wrap_content"
-                          android:layout_height="65dp"
+                          android:layout_height="60dp"
                           android:background="@android:color/transparent"
                           android:orientation="horizontal">
 
@@ -66,6 +66,7 @@
                         android:id="@+id/button_housing"
                         android:layout_width="88dp"
                         android:layout_height="match_parent"
+                        android:paddingTop="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/dashboard_button_left_background_selector"
                         android:gravity="center"
@@ -74,8 +75,8 @@
                         android:onClick="@{viewModel.onHousingButtonClick}">
 
                     <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_marginBottom="@dimen/strip_vertical_spacing"
                             android:src="@drawable/ic_housing" />
 
@@ -85,8 +86,8 @@
                             android:layout_marginTop="@dimen/strip_vertical_spacing"
                             android:text="@string/dashboard_housing"
                             android:textColor="@color/lecetMediumOrange"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            bind:typeface="@{`Lato-Regular.ttf`}" />
                 </LinearLayout>
 
                 <!-- Engineering -->
@@ -94,6 +95,7 @@
                         android:id="@+id/button_engineering"
                         android:layout_width="88dp"
                         android:layout_height="match_parent"
+                        android:paddingTop="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/dashboard_button_center_background_selector"
                         android:gravity="center"
@@ -102,8 +104,8 @@
                         android:onClick="@{viewModel.onEngineeringButtonClick}">
 
                     <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_marginBottom="@dimen/strip_vertical_spacing"
                             android:src="@drawable/ic_engineering" />
 
@@ -113,8 +115,8 @@
                             android:layout_marginTop="@dimen/strip_vertical_spacing"
                             android:text="@string/dashboard_engineering"
                             android:textColor="@color/lecetDarkOrange"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            bind:typeface="@{`Lato-Regular.ttf`}" />
                 </LinearLayout>
 
                 <!-- Building -->
@@ -122,6 +124,7 @@
                         android:id="@+id/button_building"
                         android:layout_width="88dp"
                         android:layout_height="match_parent"
+                        android:paddingTop="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/dashboard_button_center_background_selector"
                         android:gravity="center"
@@ -130,8 +133,8 @@
                         android:onClick="@{viewModel.onBuildingButtonClick}">
 
                     <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_marginBottom="@dimen/strip_vertical_spacing"
                             android:src="@drawable/ic_building" />
 
@@ -141,8 +144,8 @@
                             android:layout_marginTop="@dimen/strip_vertical_spacing"
                             android:text="@string/dashboard_building"
                             android:textColor="@color/lecetLightBlue"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            bind:typeface="@{`Lato-Regular.ttf`}" />
                 </LinearLayout>
 
                 <!-- Utilities -->
@@ -150,6 +153,7 @@
                         android:id="@+id/button_utilities"
                         android:layout_width="88dp"
                         android:layout_height="match_parent"
+                        android:paddingTop="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/dashboard_button_right_background_selector"
                         android:gravity="center"
@@ -158,8 +162,8 @@
                         android:onClick="@{viewModel.onUtilitiesButtonClick}">
 
                     <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_marginBottom="@dimen/strip_vertical_spacing"
                             android:src="@drawable/ic_utilities" />
 
@@ -169,8 +173,8 @@
                             android:layout_marginTop="@dimen/strip_vertical_spacing"
                             android:text="@string/dashboard_utilities"
                             android:textColor="@color/lecetMediumBlue"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            bind:typeface="@{`Lato-Regular.ttf`}" />
                 </LinearLayout>
 
             </LinearLayout>
