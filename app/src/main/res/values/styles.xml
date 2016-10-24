@@ -230,18 +230,18 @@
 
     <!-- Dashboard -->
     <style name="ViewPagerArrowButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">36dp</item>
     </style>
 
     <style name="ViewPagerArrowButton.Left">
-        <item name="android:layout_marginLeft">-24dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:background">@drawable/button_arrow_left_selector</item>
     </style>
 
     <style name="ViewPagerArrowButton.Right">
-        <item name="android:layout_marginRight">-24dp</item>
+        <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">@drawable/button_arrow_right_selector</item>
     </style>
