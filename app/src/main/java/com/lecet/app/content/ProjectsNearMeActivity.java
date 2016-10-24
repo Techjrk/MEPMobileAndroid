@@ -9,7 +9,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -22,7 +21,7 @@ import io.realm.Realm;
 public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ActivityProjectsNearMeBinding binding;
-    ProjectDomain projectDomain;
+    ProjectsNearMeViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,9 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     private void setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_projects_near_me);
-        projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        binding.setViewModel(new ProjectsNearMeViewModel(this, projectDomain));
+        ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        viewModel = new ProjectsNearMeViewModel(this, projectDomain);
+        binding.setViewModel(viewModel);
 
     }
 
@@ -57,8 +57,9 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
+        LatLng dummyLatLong = new LatLng(34.7364493, -86.5501654);
+        viewModel.setMap(map);
+        viewModel.fetchProjectsNearMe(dummyLatLong);
     }
+
 }
