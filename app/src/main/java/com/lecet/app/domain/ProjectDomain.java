@@ -131,6 +131,33 @@ public class ProjectDomain {
         getBidsRecentlyAdded(limit, callback);
     }
 
+    public void getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedStart = sdf.format(publishDate);
+
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], \"where\":{\"lastPublishDate\":{\"lte”:”%s”}}," +
+                "\"limit\":%d,\"dashboardTypes\":true,\"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
+
+        Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
+        call.enqueue(callback);
+    }
+
+    public void getProjectsRecentlyUpdated(int limit, Callback<List<Project>> callback) {
+
+        Date publishDate = DateUtility.addDays(-30);
+        getProjectsRecentlyUpdated(publishDate, limit, callback);
+    }
+
+    public void getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
+
+        int limit = 150;
+        Date publishDate = DateUtility.addDays(-30);
+        getProjectsRecentlyUpdated(publishDate, limit, callback);
+    }
+
     public void getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
@@ -161,6 +188,27 @@ public class ProjectDomain {
 
         return projectsResult;
     }
+
+    public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .equalTo("hidden", false)
+                .greaterThan("firstPublishDate", publishDate)
+                .findAll();
+
+        return projectsResult;
+    }
+
+    public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .equalTo("hidden", false)
+                .greaterThan("lastPublishDate", lastPublishDate)
+                .findAll();
+
+        return projectsResult;
+    }
+
 
     public Project copyToRealmTransaction(Project project) {
 

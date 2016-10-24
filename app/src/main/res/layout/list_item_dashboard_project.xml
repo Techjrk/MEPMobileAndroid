@@ -4,7 +4,7 @@
         xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.RecentBidItemViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.DashboardProjectItemViewModel"/>
         <import type="android.view.View"/>
     </data>
 
@@ -16,70 +16,10 @@
             android:baselineAligned="false"
             android:orientation="vertical">
 
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="9"
-                        android:background="@color/lecetNavyBlue">
-
-            <ImageView android:id="@+id/calendar_image_view"
-                       android:layout_width="12dp"
-                       android:layout_height="13dp"
-                       android:layout_marginLeft="10dp"
-                       android:layout_centerVertical="true"
-                       android:scaleType="fitXY"
-                       android:src="@drawable/fa_calendar"/>
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_toRightOf="@id/calendar_image_view"
-                      android:layout_marginLeft="10dp"
-                      android:layout_centerVertical="true"
-                      android:textColor="@color/pureWhite"
-                      android:text="@{viewModel.startDateString}"
-                      bind:typeface="@{`Lato-Regular.ttf`}"
-                      tools:text="January 2014"/>
-
-        </RelativeLayout>
-
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="0dp"
-                      android:layout_weight="21"
-                      android:orientation="vertical"
-                      android:background="@color/lecetButtonDarkerBlue">
-
-            <TextView android:id="@+id/bid_amount_text_view"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginTop="1dp"
-                      android:layout_marginLeft="10dp"
-                      android:layout_marginRight="10dp"
-                      android:ellipsize="end"
-                      android:maxLines="1"
-                      android:textColor="@color/pureWhite"
-                      android:textSize="16sp"
-                      android:text="@{viewModel.bidAmount}"
-                      bind:typeface="@{`Lato-Black.ttf`}"
-                      tools:text="$1,000,684"/>
-
-            <TextView android:id="@+id/bid_company_text_view"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginTop="1dp"
-                      android:layout_marginLeft="10dp"
-                      android:layout_marginRight="10dp"
-                      android:maxLines="1"
-                      android:ellipsize="end"
-                      android:textColor="@color/pureWhite"
-                      android:textSize="12sp"
-                      android:text="@{viewModel.bidCompany}"
-                      bind:typeface="@{`Lato-Regular.ttf`}"
-                      tools:text="Northern City Construction Company"/>
-
-        </LinearLayout>
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="39">
+                        android:layout_weight="69">
 
             <ImageView android:id="@+id/bid_location_image_view"
                        android:layout_width="match_parent"
@@ -98,7 +38,8 @@
                       android:gravity="center"
                       android:text="@string/union_mark"
                       android:visibility="@{viewModel.isUnion ? View.VISIBLE : View.GONE}"
-                      android:background="@drawable/shape_rect_union"/>
+                      android:background="@drawable/shape_rect_union"
+                      bind:typeface="@{`Lato-Bold.ttf`}"/>
 
         </RelativeLayout>
 

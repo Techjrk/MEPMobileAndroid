@@ -2,7 +2,9 @@ package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
@@ -32,6 +36,7 @@ import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.enums.LacetFont;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
@@ -39,8 +44,10 @@ import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
+import com.lecet.app.utility.TextViewUtility;
 import com.lecet.app.viewmodel.MainViewModel;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,17 +80,30 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     ListPopupWindow overflowMenu;
 
-    //
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setupBinding();
         setupToolbar();
-        setupViewPager();
-        setupPageIndicator();
-        setupPageButtons();
+
+        if (isNetworkConnected()) {
+
+            setupViewPager();
+            setupPageIndicator();
+            setupPageButtons();
+        }
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+
+        if (isConnected && viewPager == null) {
+
+            setupViewPager();
+            setupPageIndicator();
+            setupPageButtons();
+        }
     }
 
     private void setupBinding() {
@@ -100,6 +120,16 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.dashboard_bids);
+        TextView toolbarTitle = null;
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            toolbarTitle = (TextView) f.get(toolbar);
+            TextViewUtility.changeTypeface(toolbarTitle, LacetFont.LATO_REGULAR);
+            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
     }
 
     public void prevViewPage() {
@@ -265,6 +295,11 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
         viewModel.fetchProjectsByBidDate(selectedDate);
     }
+
+
+    /**
+     * Menu
+     **/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
