@@ -13,20 +13,20 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.BaseDashboardChartFragment;
 import com.lecet.app.databinding.FragmentDashboardProjectsRecentlyUpdatedBinding;
 import com.lecet.app.interfaces.DashboardChart;
-import com.lecet.app.interfaces.MHSDataSource;
-import com.lecet.app.interfaces.MHSDelegate;
+import com.lecet.app.interfaces.MRUDataSource;
+import com.lecet.app.interfaces.MRUDelegate;
 import com.lecet.app.viewmodel.DashboardProjectsRecentlyUpdatedVM;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardProjectsRecentlyUpdatedFragment extends BaseDashboardChartFragment implements DashboardChart  {
+public class DashboardProjectsRecentlyUpdatedFragment extends BaseDashboardChartFragment implements DashboardChart {
 
     private static final String TAG = "ProjectsRecentlyUpdated";
 
-    private MHSDataSource dataSource;
-    private MHSDelegate delegate;
+    private MRUDataSource dataSource;
+    private MRUDelegate delegate;
 
     private FragmentDashboardProjectsRecentlyUpdatedBinding binding;
 
@@ -39,21 +39,23 @@ public class DashboardProjectsRecentlyUpdatedFragment extends BaseDashboardChart
         return fragmentInstance;
     }
 
+
     public DashboardProjectsRecentlyUpdatedFragment() {
     }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         try {
-            delegate = (MHSDelegate) context;
+            delegate = (MRUDelegate) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement MHSDelegate");
-    }
+        }
 
         try {
-            dataSource = (MHSDataSource) context;
+            dataSource = (MRUDataSource) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement MHSDataSource");
         }
