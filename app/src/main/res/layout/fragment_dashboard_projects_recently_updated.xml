@@ -52,7 +52,9 @@
             <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pie_chart_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="280dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"/>
 
             <!-- BUTTON STRIP - VISIBILITY=GONE BY DEFAULT -->
@@ -124,6 +126,7 @@
                         android:id="@+id/button_building"
                         android:layout_width="88dp"
                         android:layout_height="match_parent"
+                        android:paddingTop="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/dashboard_button_center_background_selector"
                         android:gravity="center"
