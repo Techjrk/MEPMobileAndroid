@@ -39,6 +39,12 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     private final String TAG = "DashboardChartBaseVM";
 
+    private final float CHART_HOLE_RADIUS_UNSELECTED = 50.0f;
+    private final float CHART_HOLE_RADIUS_SELECTED = 72.0f;
+    private final float CHART_SLICE_SPACING = 0.5f;
+    private final float CHART_SELECTION_SHIFT = 24.0f;
+    private final float CHART_VALUE_TEXT_SIZE = 14.0f;
+
     protected static final Long RESULT_CODE_HOUSING = 103L;
     protected static final Long RESULT_CODE_ENGINEERING = 101L;
     protected static final Long RESULT_CODE_BUILDING = 102L;
@@ -107,7 +113,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         pieChartView.setTransparentCircleRadius(0);
         pieChartView.setTransparentCircleAlpha(0);
-        pieChartView.setHoleRadius(72.0f);
+        pieChartView.setHoleRadius(CHART_HOLE_RADIUS_UNSELECTED);
         pieChartView.setHoleColor(ContextCompat.getColor(this.fragment.getContext(), R.color.transparent)); //TODO - update?
         pieChartView.setDrawMarkerViews(false);
         pieChartView.setDrawEntryLabels(false);
@@ -191,9 +197,9 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         // populate pie chart data and set its params
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setDrawValues(false);
-        dataSet.setSliceSpace(0.5f);
+        dataSet.setSliceSpace(CHART_SLICE_SPACING);
         dataSet.setHighlightEnabled(true);
-        dataSet.setSelectionShift(24.0f);
+        dataSet.setSelectionShift(CHART_SELECTION_SHIFT);
         dataSet.setColors(colorsArr, fragment.getContext());
 
         PieData data = new PieData(dataSet);
@@ -237,8 +243,9 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         dataSet.setDrawValues(true);
         dataSet.setValueTextColor(Color.WHITE);
-        dataSet.setValueTextSize(14.0f);
+        dataSet.setValueTextSize(CHART_VALUE_TEXT_SIZE);
         dataSet.setValueFormatter(new CustomValueFormatter());
+        pieChartView.setHoleRadius(CHART_HOLE_RADIUS_SELECTED);
         pieChartView.invalidate(); // refresh
 
         // highlighting of values (references seem to be null here, so reset them)
@@ -290,6 +297,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             PieData data = pieChartView.getData();
             //IPieDataSet dataSet = data.getDataSet();
             data.setDrawValues(false);
+            pieChartView.setHoleRadius(CHART_HOLE_RADIUS_UNSELECTED);
             pieChartView.invalidate();
 
             resetButtonStates();
