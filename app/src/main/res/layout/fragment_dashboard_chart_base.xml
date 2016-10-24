@@ -11,14 +11,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="460dp"
+        android:layout_height="wrap_content"
         android:gravity="center|top"
         tools:context="com.lecet.app.content.MainActivity">
 
         <LinearLayout
             android:id="@+id/chart_layout"
             android:layout_width="match_parent"
-            android:layout_height="460dp"
+            android:layout_height="280dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
