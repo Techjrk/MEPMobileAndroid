@@ -1,6 +1,7 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.lecet.app.R;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityLoginBinding;
@@ -17,7 +19,7 @@ import com.lecet.app.viewmodel.LoginViewModel;
 
 import io.realm.Realm;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends LecetBaseActivity {
 
     private final String TAG = "LoginActivity";
 
@@ -29,6 +31,11 @@ public class LoginActivity extends AppCompatActivity {
 
         setupBinding();
         animateLoginLayout();
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+
     }
 
     private void setupBinding() {

@@ -16,21 +16,9 @@ import com.lecet.app.content.SettingsActivity;
  * NavigationBaseActivity
  * Base class for Activities which use the sliding-drawer menu.
  */
-public class NavigationBaseActivity extends AppCompatActivity {
+public abstract class NavigationBaseActivity extends LecetBaseActivity {
 
     private final String TAG = "NavigationBaseActivity";
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Log.d(TAG, "onCreate");
-
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-    }*/
 
     /**
      * Menu Navigation Click Handler

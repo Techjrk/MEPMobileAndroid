@@ -22,17 +22,11 @@ public class LecetBindingAdapter {
     }
 
     @BindingAdapter("bind:typeface")
-    public static void setTypeface(TextView textView, String fontName) {
+    public static void textTypeface(TextView textView, String fontName) {
 
         textView.setTypeface(Typeface.createFromAsset(textView.getContext().getAssets(), "fonts/" + fontName));
     }
 
-    /*
-    @BindingAdapter({"bind:imageUrl", "bind:error"})
-    public static void loadImage(ImageView view, String url, Drawable error) {
-        Picasso.with(view.getContext()).load(url).error(error).into(view);
-    }
-    */
     @BindingAdapter("bind:imageUrl")
     public static void loadImage(ImageView view, String url) {
         Picasso.with(view.getContext()).load(url).fit().into(view);

@@ -10,12 +10,12 @@ import java.text.SimpleDateFormat;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class BidHappeningSoonItemViewModel {
+public class DashboardProjectItemViewModel {
 
     private final Project project;
     private final String mapsApiKey;
 
-    public BidHappeningSoonItemViewModel(Project project, String mapsApiKey) {
+    public DashboardProjectItemViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
     }

@@ -11,8 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.BidsHappeningSoonAdapter;
-import com.lecet.app.adapters.RecentBidsAdapter;
+import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
@@ -21,12 +20,15 @@ import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.utility.DateUtility;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,18 +43,23 @@ import retrofit2.Response;
 public class MainViewModel {
 
     @IntDef({DASHBOARD_POSITION_MBR, DASHBOARD_POSITION_MHS, DASHBOARD_POSITION_MRA, DASHBOARD_POSITION_MRU})
-    @interface DashboardPosition {}
-    private static final int DASHBOARD_POSITION_MBR = 0;
-    private static final int DASHBOARD_POSITION_MHS = 1;
-    private static final int DASHBOARD_POSITION_MRA = 2;
-    private static final int DASHBOARD_POSITION_MRU = 3;
+    public @interface DashboardPosition {
+    }
+
+    public static final int DASHBOARD_POSITION_MBR = 0;
+    public static final int DASHBOARD_POSITION_MHS = 1;
+    public static final int DASHBOARD_POSITION_MRA = 2;
+    public static final int DASHBOARD_POSITION_MRU = 3;
 
     private final BidDomain bidDomain;
     private final ProjectDomain projectDomain;
     private final Calendar calendar;
     private final AppCompatActivity appCompatActivity;
 
-    private @DashboardPosition int dashboardPosition;
+    private
+    @DashboardPosition
+    int dashboardPosition;
+
     private Date lastFetchedMBR;
     private Date lastFetchedMHS;
     private Date lastFetchedMRA;
@@ -60,7 +67,11 @@ public class MainViewModel {
 
     private RealmResults<Bid> realmResultsMBR;
     private RealmResults<Project> realmResultsMHS;
+    private RealmResults<Project> realmResultsMRA;
+    private RealmResults<Project> realmResultsMRU;
 
+    private DashboardRecyclerViewAdapter dashboardAdapter;
+    private List<RealmObject> adapterData;
 
     public MainViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain, Calendar calendar) {
 
@@ -68,10 +79,13 @@ public class MainViewModel {
         this.projectDomain = projectDomain;
         this.calendar = calendar;
         this.appCompatActivity = appCompatActivity;
+
+        initializeAdapter();
     }
 
+
     /**
-     * Public
+     * API
      **/
 
     public void getBidsRecentlyMade(@NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
@@ -96,7 +110,7 @@ public class MainViewModel {
                         // Display all Bids until set is selected
                         if (dashboardPosition == DASHBOARD_POSITION_MBR) {
 
-                           setupMBRAdapter(realmResultsMBR);
+                            setupAdapterWithBids(realmResultsMBR);
                         }
 
                     } else {
@@ -121,15 +135,9 @@ public class MainViewModel {
 
             if (dashboardPosition == DASHBOARD_POSITION_MBR) {
 
-                setupMBRAdapter(realmResultsMBR);
+                setupAdapterWithBids(realmResultsMBR);
             }
         }
-    }
-
-    public void fetchBidsRecentlyMade(@BidDomain.BidGroup int bidGroup, @NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
-
-        realmResultsMBR = bidDomain.fetchBids(bidGroup, cutoffDate);
-        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
     }
 
     public void getProjectsHappeningSoon(@NonNull final LecetCallback<Project[]> callback) {
@@ -151,11 +159,11 @@ public class MainViewModel {
 
                         // Fetch Realm managed Projects
                         realmResultsMHS = fetchProjectsHappeningSoon();
-                        callback.onSuccess(realmResultsMHS.toArray(new Project[realmResultsMHS.size()]));
+                        callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
 
                         if (dashboardPosition == DASHBOARD_POSITION_MHS) {
 
-                            setupMHSAdapter(realmResultsMHS);
+                            setupAdapterWithProjects(realmResultsMHS);
                         }
 
                     } else {
@@ -175,14 +183,129 @@ public class MainViewModel {
 
             // Fetch Realm managed Projects
             realmResultsMHS = fetchProjectsHappeningSoon();
-            callback.onSuccess(realmResultsMHS.toArray(new Project[realmResultsMHS.size()]));
+            callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
 
             if (dashboardPosition == DASHBOARD_POSITION_MHS) {
 
-                setupMHSAdapter(realmResultsMHS);
+                setupAdapterWithProjects(realmResultsMHS);
             }
         }
     }
+
+    public void getProjectsRecentlyAdded(@NonNull final LecetCallback<Project[]> callback) {
+
+        // Check if data has been recently fetched and display those results from Realm
+        if (lastFetchedMRA == null || lastFetchedMRA != null && minutesElapsed(new Date(), lastFetchedMRA) > 3) {
+
+            getProjectsRecentlyAdded(new Callback<List<Project>>() {
+                @Override
+                public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+
+                    if (response.isSuccessful()) {
+
+                        lastFetchedMRA = new Date();
+
+                        // Store in Realm
+                        List<Project> body = response.body();
+                        projectDomain.copyToRealmTransaction(body);
+
+                        // Fetch Realm managed Projects
+                        realmResultsMRA = fetchProjectsRecentlyAdded();
+                        callback.onSuccess(realmResultsMRA != null ? realmResultsMRA.toArray(new Project[realmResultsMRA.size()]) : new Project[0]);
+
+                        if (dashboardPosition == DASHBOARD_POSITION_MRA) {
+
+                            setupAdapterWithProjects(realmResultsMRA);
+                        }
+
+                    } else {
+
+                        callback.onFailure(response.code(), response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Project>> call, Throwable t) {
+
+                    callback.onFailure(-1, "Network Failure");
+                }
+            });
+
+        } else {
+
+            // Fetch Realm managed Projects
+            realmResultsMRA = fetchProjectsRecentlyAdded();
+            callback.onSuccess(realmResultsMRA != null ? realmResultsMRA.toArray(new Project[realmResultsMRA.size()]) : new Project[0]);
+
+            if (dashboardPosition == DASHBOARD_POSITION_MRA) {
+
+                setupAdapterWithProjects(realmResultsMRA);
+            }
+        }
+    }
+
+    public void getProjectsRecentlyUpdated(@NonNull final LecetCallback<Project[]> callback) {
+
+        // Check if data has been recently fetched and display those results from Realm
+        if (lastFetchedMRU == null || lastFetchedMRU != null && minutesElapsed(new Date(), lastFetchedMRU) > 3) {
+
+            getProjectsRecentlyAdded(new Callback<List<Project>>() {
+                @Override
+                public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+
+                    if (response.isSuccessful()) {
+
+                        lastFetchedMRU = new Date();
+
+                        // Store in Realm
+                        List<Project> body = response.body();
+                        projectDomain.copyToRealmTransaction(body);
+
+                        // Fetch Realm managed Projects
+                        realmResultsMRU = fetchProjectsRecentlyUpdated();
+                        callback.onSuccess(realmResultsMRU != null ? realmResultsMRU.toArray(new Project[realmResultsMRU.size()]) : new Project[0]);
+
+                        if (dashboardPosition == DASHBOARD_POSITION_MRU) {
+
+                            setupAdapterWithProjects(realmResultsMRU);
+                        }
+
+                    } else {
+
+                        callback.onFailure(response.code(), response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Project>> call, Throwable t) {
+
+                    callback.onFailure(-1, "Network Failure");
+                }
+            });
+
+        } else {
+
+            // Fetch Realm managed Projects
+            realmResultsMRU = fetchProjectsRecentlyUpdated();
+            callback.onSuccess(realmResultsMRU != null ? realmResultsMRU.toArray(new Project[realmResultsMRU.size()]) : new Project[0]);
+
+            if (dashboardPosition == DASHBOARD_POSITION_MRU) {
+
+                setupAdapterWithProjects(realmResultsMRU);
+            }
+        }
+    }
+
+    /**
+     * Persisted
+     **/
+
+    public void fetchBidsRecentlyMade(@BidDomain.BidGroup int bidGroup, @NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
+
+        realmResultsMBR = bidDomain.fetchBids(bidGroup, cutoffDate);
+        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
+    }
+
 
     public void fetchProjectsByBidDate(Date bidDate) {
 
@@ -193,7 +316,9 @@ public class MainViewModel {
         displayAdapter(dashboardPosition);
     }
 
-    /** Private **/
+    /**
+     * Private
+     **/
 
     private String getString(@StringRes int stringID) {
 
@@ -222,6 +347,16 @@ public class MainViewModel {
         projectDomain.getProjectsHappeningSoon(callback);
     }
 
+    private void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
+
+        projectDomain.getProjectsRecentlyAdded(callback);
+    }
+
+    private void getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
+
+        projectDomain.getProjectsRecentlyUpdated(callback);
+    }
+
     /**
      * Persisted
      **/
@@ -238,6 +373,23 @@ public class MainViewModel {
 
         return projectDomain.fetchProjectsHappeningSoon(calendar.getTime(), DateUtility.getLastDateOfTheCurrentMonth());
     }
+
+    private RealmResults<Project> fetchProjectsRecentlyAdded() {
+
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, -30);
+
+        return projectDomain.fetchProjectsRecentlyAdded(calendar.getTime());
+    }
+
+    private RealmResults<Project> fetchProjectsRecentlyUpdated() {
+
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, -30);
+
+        return projectDomain.fetchProjectsRecentlyUpdated(calendar.getTime());
+    }
+
 
     /**
      * OnClick handlers
@@ -259,7 +411,9 @@ public class MainViewModel {
         activity.nextViewPage();
     }
 
-    /** ViewPager Event Handling **/
+    /**
+     * ViewPager Event Handling
+     **/
 
     public void currentPagerPosition(int position) {
 
@@ -269,7 +423,9 @@ public class MainViewModel {
         displayAdapter(dashboardPosition);
     }
 
-    /** RecyclerView Management **/
+    /**
+     * RecyclerView Management
+     **/
 
     private void setupRecyclerView(RecyclerView recyclerView) {
 
@@ -282,48 +438,55 @@ public class MainViewModel {
         return (RecyclerView) appCompatActivity.findViewById(recyclerView);
     }
 
-    private RecyclerView.Adapter getMBRAdapter(Bid[] data) {
+    /**
+     * Adapter Data Management
+     **/
 
-        return new RecentBidsAdapter(data);
+    private void initializeAdapter() {
+
+        adapterData = new ArrayList<>();
+
+        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
+        setupRecyclerView(recyclerView);
+        dashboardAdapter = new DashboardRecyclerViewAdapter(adapterData, dashboardPosition);
+        recyclerView.setAdapter(dashboardAdapter);
     }
-
-    private RecyclerView.Adapter getMBSAdapter(Project[] data) {
-
-        return new BidsHappeningSoonAdapter(data);
-    }
-
-    /** Adapter Data Management **/
 
     private void displayAdapter(@DashboardPosition int dashboardPosition) {
 
         if (dashboardPosition == DASHBOARD_POSITION_MBR) {
 
-            setupMBRAdapter(realmResultsMBR);
+            setupAdapterWithBids(realmResultsMBR);
 
         } else if (dashboardPosition == DASHBOARD_POSITION_MHS) {
 
-            setupMHSAdapter(realmResultsMHS);
+            setupAdapterWithProjects(realmResultsMHS);
 
         } else if (dashboardPosition == DASHBOARD_POSITION_MRA) {
 
+            setupAdapterWithProjects(realmResultsMRA);
+
         } else if (dashboardPosition == DASHBOARD_POSITION_MRU) {
 
+            setupAdapterWithProjects(realmResultsMRU);
         }
     }
 
-    private void setupMBRAdapter(RealmResults<Bid> realmResults) {
+    private void setupAdapterWithBids(RealmResults<Bid> realmResults) {
 
-        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
-        setupRecyclerView(recyclerView);
-        RecyclerView.Adapter adapter = getMBRAdapter(realmResults.toArray(new Bid[realmResults.size()]));
-        recyclerView.setAdapter(adapter);
+        Bid[] data = realmResults != null ? realmResults.toArray(new Bid[realmResults.size()]) : new Bid[0];
+        adapterData.clear();
+        adapterData.addAll(Arrays.asList(data));
+        dashboardAdapter.setAdapterType(dashboardPosition);
+        dashboardAdapter.notifyDataSetChanged();
     }
 
-    private void setupMHSAdapter(RealmResults<Project> realmResults) {
+    private void setupAdapterWithProjects(RealmResults<Project> realmResults) {
 
-        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
-        setupRecyclerView(recyclerView);
-        RecyclerView.Adapter adapter = getMBSAdapter(realmResults.toArray(new Project[realmResults.size()]));
-        recyclerView.setAdapter(adapter);
+        Project[] data = realmResults != null ? realmResults.toArray(new Project[realmResults.size()]) : new Project[0];
+        adapterData.clear();
+        adapterData.addAll(Arrays.asList(data));
+        dashboardAdapter.setAdapterType(dashboardPosition);
+        dashboardAdapter.notifyDataSetChanged();
     }
 }

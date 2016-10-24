@@ -110,7 +110,7 @@
     <string name="error_login_title">Login Error</string>
     <string name="error_login_message">You don\’t have permission to access MEP using your account</string>
     <string name="error_network_title">Network Error</string>
-    <string name="error_network_message">Please try again</string>
+    <string name="error_network_message">Please check your internet connection and try again</string>
 
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>

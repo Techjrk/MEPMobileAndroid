@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,4 +28,8 @@ public class CompanyDetailProjectBidsActivity extends NavigationBaseActivity {
 
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+
+    }
 }
