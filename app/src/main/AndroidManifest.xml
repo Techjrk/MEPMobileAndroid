@@ -16,13 +16,16 @@
             android:theme="@style/AppTheme">
 
         <!-- HockeyApp Integration -->
-        <meta-data android:name="net.hockeyapp.android.appIdentifier"
-                   android:value="bf2b988cbd6245d48903f92ea181b6af"/> <!-- TODO: update with current app id -->
+        <meta-data
+                android:name="net.hockeyapp.android.appIdentifier"
+                android:value="bf2b988cbd6245d48903f92ea181b6af"/> <!-- TODO: update with current app id -->
+
 
         <!-- Activities -->
-        <activity android:name=".content.LauncherActivity"
-                  android:label="@string/app_name"
-                  android:theme="@style/AppTheme.FullScreen">
+        <activity
+                android:name=".content.LauncherActivity"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -73,6 +76,8 @@
                 android:name=".content.SettingsActivity"
                 android:label="@string/title_activity_settings"
                 android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".content.ProjectDetailActivity">
         </activity>
     </application>
 
