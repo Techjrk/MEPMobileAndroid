@@ -7,8 +7,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
+import com.lecet.app.content.widget.LacetInfoWindowAdapter;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
@@ -26,6 +28,7 @@ import retrofit2.Response;
 public class ProjectsNearMeViewModel extends BaseObservable {
 
     private static final int DEFAULT_DISTANCE = 5;
+    private static final int DEFAULT_ZOOM = 12;
 
     private final Activity activity;
     private ProjectDomain projectDomain;
@@ -41,9 +44,9 @@ public class ProjectsNearMeViewModel extends BaseObservable {
     }
 
     public void fetchProjectsNearMe(LatLng location) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
 
-        projectDomain.getProjectsNear(location.latitude, location.longitude, 10, new Callback<ProjectsNearResponse>() {
+        projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
             public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
                 populateMap(response.body().getResults());
@@ -58,10 +61,12 @@ public class ProjectsNearMeViewModel extends BaseObservable {
 
     private void populateMap(List<Project> projects) {
         for (Project project : projects) {
-            map.addMarker(new MarkerOptions()
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .title(Long.toString(project.getId()))
+                    .infoWindowAnchor(5.4f, 5f)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker))
-                    .position(project.getGeocode().toLatLng())
-                    .title("Marker"));
+                    .position(project.getGeocode().toLatLng()));
+            marker.setTag(project);
         }
     }
 

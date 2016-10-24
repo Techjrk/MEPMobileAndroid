@@ -117,4 +117,7 @@
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
 
+    <!-- Info Window -->
+    <string name="get_directions">Get Directions</string>
+
 </resources>

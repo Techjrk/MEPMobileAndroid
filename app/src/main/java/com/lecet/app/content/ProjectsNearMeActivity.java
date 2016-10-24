@@ -10,6 +10,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
+import com.lecet.app.content.widget.LacetInfoWindowAdapter;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectsNearMeBinding;
@@ -57,6 +58,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap map) {
+        map.setInfoWindowAdapter(new LacetInfoWindowAdapter(this));
         LatLng dummyLatLong = new LatLng(34.7364493, -86.5501654);
         viewModel.setMap(map);
         viewModel.fetchProjectsNearMe(dummyLatLong);

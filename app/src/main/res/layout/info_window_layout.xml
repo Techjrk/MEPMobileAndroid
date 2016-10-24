@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/ic_info_window_triangle" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/biding_status"
+                android:layout_width="@dimen/info_window_width"
+                android:layout_height="20dp"
+                android:background="@drawable/info_window_title_background"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/info_window_padding"
+                android:text="POST BID"
+                android:textColor="@color/lecetTextWhite"
+                android:textSize="13sp"
+                bind:typeface="@{`Lato-Regular.ttf`}" />
+
+            <LinearLayout
+                android:layout_width="@dimen/info_window_width"
+                android:layout_height="60dp"
+                android:background="@color/lecetMediumOrange"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/info_window_padding"
+                android:paddingRight="@dimen/info_window_padding">
+
+                <TextView
+                    android:id="@+id/project_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="James G. Davis"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Washington, DC"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="14sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/info_window_width"
+                android:layout_height="110dp"
+                android:background="@drawable/info_window_address_background"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/address1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/info_window_padding"
+                    android:paddingRight="@dimen/info_window_padding"
+                    android:text="LIUNA Headquarters FACILITY"
+                    android:textColor="@color/pureBlack"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}" />
+
+                <TextView
+                    android:id="@+id/address2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:lines="2"
+                    android:maxLines="2"
+                    android:paddingLeft="@dimen/info_window_padding"
+                    android:paddingRight="@dimen/info_window_padding"
+                    android:text="905 16th St NW Washingntong, DC 2006"
+                    android:textColor="@color/lecetTextLightGray"
+                    android:textSize="13sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingLeft="@dimen/info_window_padding"
+                    android:paddingRight="@dimen/info_window_padding"
+                    android:text="@string/get_directions"
+                    android:textColor="@color/lecetMediumBlue"
+                    android:textSize="13sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
