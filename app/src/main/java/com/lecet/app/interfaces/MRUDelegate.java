@@ -1,5 +1,7 @@
 package com.lecet.app.interfaces;
 
+import com.lecet.app.domain.BidDomain;
+
 /**
  * File: MRUDelegate Created: 10/24/16 Author: domandtom
  *
@@ -7,4 +9,5 @@ package com.lecet.app.interfaces;
  */
 
 public interface MRUDelegate {
+    void mruBidGroupSelected(@BidDomain.BidGroup int group);
 }

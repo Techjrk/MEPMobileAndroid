@@ -1,5 +1,10 @@
 package com.lecet.app.interfaces;
 
+import com.lecet.app.data.models.Project;
+
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 /**
  * File: MRADataSource Created: 10/24/16 Author: domandtom
  *
@@ -7,4 +12,6 @@ package com.lecet.app.interfaces;
  */
 
 public interface MRADataSource {
+    void refreshRecentlyAddedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback);
 }
+
