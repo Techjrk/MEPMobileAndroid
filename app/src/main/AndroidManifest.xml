@@ -30,11 +30,6 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".contentbase.NavigationBaseActivity"
-                android:label="@string/title_activity_navigation"
-                android:theme="@style/AppTheme">
-        </activity>
-        <activity
                 android:name=".content.LoginActivity"
                 android:label="@string/title_activity_login"
                 android:theme="@style/AppTheme.FullScreen">
