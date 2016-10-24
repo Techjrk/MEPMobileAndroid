@@ -1,15 +1,18 @@
 package com.lecet.app.viewmodel;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.domain.BidDomain;
 import com.lecet.app.interfaces.DashboardChartFetchData;
 import com.lecet.app.interfaces.LecetCallback;
-import com.lecet.app.interfaces.MHSDataSource;
-import com.lecet.app.interfaces.MHSDelegate;
+import com.lecet.app.interfaces.MRADataSource;
+import com.lecet.app.interfaces.MRADelegate;
+
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Created by Jason M on 5/10/2016.
@@ -19,14 +22,14 @@ public class DashboardProjectsRecentlyAddedVM extends BaseDashboardChartViewMode
 
     private final String TAG = "DashboardProjsRtlyAddVM";
 
-    private MHSDataSource dataSource;
-    private MHSDelegate delegate;
+    private MRADataSource dataSource;
+    private MRADelegate delegate;
 
     public DashboardProjectsRecentlyAddedVM(Fragment fragment) {
         super(fragment);
     }
 
-    public void initialize(View view, String subtitle, MHSDataSource dataSource, MHSDelegate delegate) {
+    public void initialize(View view, String subtitle, MRADataSource dataSource, MRADelegate delegate) {
         this.dataSource = dataSource;
         this.delegate = delegate;
         setSubtitle(subtitle);
@@ -36,72 +39,55 @@ public class DashboardProjectsRecentlyAddedVM extends BaseDashboardChartViewMode
     @Override
     public void fetchData(final PieChart pieChartView) {
 
-        dataSource.refreshProjectsHappeningSoon(new LecetCallback<Project[]>()  {
-
+        dataSource.refreshRecentlyAddedProjects(new LecetCallback<TreeMap<Long, TreeSet<Project>>>() {
             @Override
-            public void onSuccess(Project[] result) {
-                Log.d(TAG, "onSuccess: " + result);
-
-                Project p;
-                long parentId;
-                int len = result.length;
+            public void onSuccess(TreeMap<Long, TreeSet<Project>> result) {
 
                 resetDataSetSizes();
 
-                for(int i=0; i<len; i++) {
-                    p = result[i];
-                    if(p.getProjectStage() != null) {
-                        parentId = p.getProjectStage().getParentId();
-                        if(parentId > 0) {
-                            if(parentId == RESULT_CODE_HOUSING) {
-                                ++housingSetSize;
-                                continue;
-                            }
-                            else if(parentId == RESULT_CODE_ENGINEERING) {
-                                ++engineeringSetSize;
-                                continue;
-                            }
-                            else if(parentId == RESULT_CODE_BUILDING) {
-                                ++buildingSetSize;
-                                continue;
-                            }
-                            else if(parentId == RESULT_CODE_UTILITIES) {
-                                ++utilitiesSetSize;
-                                continue;
-                            }
-                        }
-                    }
+                TreeSet<Project> housing = result.get(Long.valueOf(RESULT_CODE_HOUSING));
+                TreeSet<Project> engineering = result.get(Long.valueOf(RESULT_CODE_ENGINEERING));
+                TreeSet<Project> building = result.get(Long.valueOf(RESULT_CODE_BUILDING));
+                TreeSet<Project> utilities = result.get(Long.valueOf(RESULT_CODE_UTILITIES));
+
+                if (housing != null) {
+                    housingSetSize = housing.size();
                 }
 
-                Log.d(TAG, "onSuccess: housingSetSize: " + housingSetSize);
-                Log.d(TAG, "onSuccess: engineeringSetSize: " + engineeringSetSize);
-                Log.d(TAG, "onSuccess: buildingSetSize: " + buildingSetSize);
-                Log.d(TAG, "onSuccess: utilitiesSetSize: " + utilitiesSetSize);
+                if (engineering != null) {
+                    engineeringSetSize = engineering.size();
+                }
+
+                if (building != null) {
+                    buildingSetSize = building.size();
+                }
+
+                if (utilities != null) {
+                    utilitiesSetSize = utilities.size();
+                }
 
                 handleIncomingData();
             }
 
             @Override
             public void onFailure(int code, String message) {
-                Log.e(TAG, "onFailure: " + message);
+
                 // TODO - check behavior of chart on no data - currently displays 'no data' text
             }
         });
+
     }
 
     @Override
     public void notifyDelegateOfSelection(Long category) {
-        if(category == RESULT_CODE_HOUSING) {
-            //TODO: add delegate call equivalent to bidGoupSelected
-        }
-        else if(category == RESULT_CODE_ENGINEERING) {
-            //TODO: add delegate call equivalent to bidGoupSelected
-        }
-        else if(category == RESULT_CODE_BUILDING) {
-            //TODO: add delegate call equivalent to bidGoupSelected
-        }
-        else if(category == RESULT_CODE_UTILITIES) {
-            //TODO: add delegate call equivalent to bidGoupSelected
+        if (category == RESULT_CODE_HOUSING) {
+            delegate.mraBidGroupSelected(BidDomain.HOUSING);
+        } else if (category == RESULT_CODE_ENGINEERING) {
+            delegate.mraBidGroupSelected(BidDomain.ENGINEERING);
+        } else if (category == RESULT_CODE_BUILDING) {
+            delegate.mraBidGroupSelected(BidDomain.BUILDING);
+        } else if (category == RESULT_CODE_UTILITIES) {
+            delegate.mraBidGroupSelected(BidDomain.UTILITIES);
         }
     }
 

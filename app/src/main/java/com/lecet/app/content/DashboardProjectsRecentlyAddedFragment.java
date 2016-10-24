@@ -13,8 +13,8 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.BaseDashboardChartFragment;
 import com.lecet.app.databinding.FragmentDashboardProjectsRecentlyAddedBinding;
 import com.lecet.app.interfaces.DashboardChart;
-import com.lecet.app.interfaces.MHSDataSource;
-import com.lecet.app.interfaces.MHSDelegate;
+import com.lecet.app.interfaces.MRADataSource;
+import com.lecet.app.interfaces.MRADelegate;
 import com.lecet.app.viewmodel.DashboardProjectsRecentlyAddedVM;
 
 /**
@@ -25,8 +25,8 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
 
     private static final String TAG = "ProjectsRecentlyAddFrag";
 
-    private MHSDataSource dataSource;
-    private MHSDelegate delegate;
+    private MRADataSource dataSource;
+    private MRADelegate delegate;
 
     private FragmentDashboardProjectsRecentlyAddedBinding binding;
 
@@ -47,13 +47,13 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
         super.onAttach(context);
 
         try {
-            delegate = (MHSDelegate) context;
+            delegate = (MRADelegate) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement MHSDelegate");
         }
 
         try {
-            dataSource = (MHSDataSource) context;
+            dataSource = (MRADataSource) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement MHSDataSource");
         }
