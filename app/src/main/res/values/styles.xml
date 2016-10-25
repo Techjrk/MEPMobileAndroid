@@ -17,6 +17,7 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:orientation">vertical</item>
     </style>
 
 
@@ -229,26 +230,34 @@
 
     <!-- Dashboard -->
     <style name="ViewPagerArrowButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">36dp</item>
     </style>
 
     <style name="ViewPagerArrowButton.Left">
-        <item name="android:layout_marginLeft">-24dp</item>
+        <item name="android:layout_marginLeft">4dp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:background">@drawable/button_arrow_left_selector</item>
     </style>
 
     <style name="ViewPagerArrowButton.Right">
-        <item name="android:layout_marginRight">-24dp</item>
+        <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">@drawable/button_arrow_right_selector</item>
+    </style>
+
+    <style name="DashboardChartCenterIcon">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:visibility">invisible</item>
     </style>
 
 
     <style name="DashboardPageIndicatorDot">
         <item name="android:layout_width">10dp</item>
         <item name="android:layout_height">10dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
         <item name="android:layout_marginLeft">4dp</item>
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:background">@drawable/shape_dot_unselected</item>
@@ -260,13 +269,9 @@
         <item name="android:textColor">@color/lecetTextWhite</item>
     </style>
 
-    <style name="DashboardText.Title">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="DashboardText.Subitle">
-        <item name="android:textSize">16sp</item>
+    <style name="DashboardText.Subtitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginLeft">16sp</item>
     </style>
 
 

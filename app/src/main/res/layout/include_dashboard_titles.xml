@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-                android:layout_gravity="center">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-            android:id="@+id/title_text"
-            style="@style/DashboardText.Title"
-            tools:text="@string/dashboard_bids"/>
+    <data>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.BaseDashboardChartViewModel" />
+    </data>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  xmlns:bind="http://schemas.android.com/apk/res-auto"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="4dp"
+                  android:layout_gravity="center">
 
-        <TextView
-                android:id="@+id/subtitle_num"
-                style="@style/DashboardText.Subitle"
-                android:text="14"/>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-                android:id="@+id/subtitle_text"
-                style="@style/DashboardText.Subitle"
-                android:layout_marginLeft="8dp"
-                tools:text="HAPPENING SOON"/>
+            <TextView
+                    android:id="@+id/subtitle_num"
+                    style="@style/DashboardText.Subtitle"
+                    android:text="@={viewModel.subtitleNum}"/>
+
+            <TextView
+                    android:id="@+id/subtitle_text"
+                    style="@style/DashboardText.Subtitle"
+                    android:layout_marginLeft="8dp"
+                    android:text="@={viewModel.subtitle}"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>

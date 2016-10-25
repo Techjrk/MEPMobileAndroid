@@ -3,6 +3,7 @@ package com.lecet.app.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * File: PrimaryProjectType Created: 10/5/16 Author: domandtom
@@ -12,6 +13,7 @@ import io.realm.RealmObject;
 
 public class PrimaryProjectType extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 

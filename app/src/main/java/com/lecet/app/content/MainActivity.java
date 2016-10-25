@@ -43,6 +43,10 @@ import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
 import com.lecet.app.interfaces.MHSDataSource;
 import com.lecet.app.interfaces.MHSDelegate;
+import com.lecet.app.interfaces.MRADataSource;
+import com.lecet.app.interfaces.MRADelegate;
+import com.lecet.app.interfaces.MRUDataSource;
+import com.lecet.app.interfaces.MRUDelegate;
 import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.TextViewUtility;
@@ -61,7 +65,8 @@ import io.realm.Realm;
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
  */
-public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback {
+public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
+        MRADelegate, MRUDelegate, MRUDataSource{
 
     private static final String TAG = "MainActivity";
 
@@ -279,6 +284,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void bidGroupSelected(@BidDomain.BidGroup int group) {
 
+        viewModel.fetchBidsRecentlyMade(group, DateUtility.addDays(-30));
     }
 
     /**
@@ -293,9 +299,40 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void calendarSelected(Date selectedDate) {
 
-        Log.d(TAG, "CalendarSelected: " + selectedDate.toString());
         viewModel.fetchProjectsByBidDate(selectedDate);
     }
+
+    /** MRA Implementation **/
+
+    @Override
+    public void refreshRecentlyAddedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
+
+        viewModel.getProjectsRecentlyAdded(callback);
+    }
+
+    @Override
+    public void mraBidGroupSelected(@BidDomain.BidGroup int group) {
+
+        Date publishDate = DateUtility.addDays(-30);
+        viewModel.fetchProjectsRecentlyAdded(group, publishDate);
+    }
+
+
+    /** MRU Implementation **/
+
+    @Override
+    public void refreshRecentlyUpdatedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
+
+        viewModel.getProjectsRecentlyUpdated(callback);
+    }
+
+    @Override
+    public void mruBidGroupSelected(@BidDomain.BidGroup int group) {
+
+        Date publishDate = DateUtility.addDays(-30);
+        viewModel.fetchProjectsRecentlyUpdated(group, publishDate);
+    }
+
 
 
     /**
@@ -391,4 +428,5 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     public void onSettingsClicked() {
 
     }
+
 }

@@ -1,50 +1,45 @@
 package com.lecet.app.content;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.DashboardChartFragmentBase;
-import com.lecet.app.data.models.Bid;
-import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.contentbase.BaseDashboardChartFragment;
+import com.lecet.app.databinding.FragmentDashboardBidsRecentlyMadeBinding;
+import com.lecet.app.interfaces.DashboardChart;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
-
-import java.util.TreeMap;
-import java.util.TreeSet;
+import com.lecet.app.viewmodel.DashboardBidsRecentlyMadeVM;
 
 /**
  * Created by jasonm on 10/5/16.
  */
 
-public class DashboardBidsRecentlyMadeFragment extends DashboardChartFragmentBase {
+public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragment implements DashboardChart {
 
     private static final String TAG = "BidsRecentlyMadeFrag";
 
-    private MBRDelegate delegate;
     private MBRDataSource dataSource;
+    private MBRDelegate delegate;
 
+    private FragmentDashboardBidsRecentlyMadeBinding binding;
 
-    public static DashboardBidsRecentlyMadeFragment newInstance(int page, String title, String subtitle) {
+    public static DashboardBidsRecentlyMadeFragment newInstance(String subtitle) {
         Log.d(TAG, "newInstance");
         DashboardBidsRecentlyMadeFragment fragmentInstance = new DashboardBidsRecentlyMadeFragment();
         Bundle args = new Bundle();
-        args.putInt(DashboardChartFragmentBase.ARG_PAGE, page);
-        args.putString(DashboardChartFragmentBase.ARG_TITLE, title);
-        args.putString(DashboardChartFragmentBase.ARG_SUBTITLE, subtitle);
+        args.putString(BaseDashboardChartFragment.ARG_SUBTITLE, subtitle);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public DashboardBidsRecentlyMadeFragment() {
     }
 
     @Override
@@ -60,24 +55,33 @@ public class DashboardBidsRecentlyMadeFragment extends DashboardChartFragmentBas
         try {
             dataSource = (MBRDataSource) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement MHSDataSource");
+            throw new ClassCastException(context.toString() + " must implement MBRDataSource");
         }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        dataSource.refreshRecentlyMadeBids(new LecetCallback<TreeMap<Long, TreeSet<Bid>>>() {
-            @Override
-            public void onSuccess(TreeMap<Long, TreeSet<Bid>> result) {
-
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-
-            }
-        });
+        binding.getViewModel().fetchData(binding.pieChartView);
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
+        View view = initDataBinding(inflater, container);
+        return view;
+    }
+
+    @Override
+    public View initDataBinding(LayoutInflater inflater, ViewGroup container) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_bids_recently_made, container, false);
+        binding.setViewModel(new DashboardBidsRecentlyMadeVM(this));
+        View view = binding.getRoot();
+        pieChart = binding.pieChartView;
+        DashboardBidsRecentlyMadeVM viewModel = binding.getViewModel();
+        viewModel.initialize(view, subtitle, dataSource, delegate);
+        viewModel.initializeChart(pieChart);
+        return view;
+    }
+
 }

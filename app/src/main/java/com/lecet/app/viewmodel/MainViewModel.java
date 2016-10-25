@@ -192,7 +192,7 @@ public class MainViewModel {
         }
     }
 
-    public void getProjectsRecentlyAdded(@NonNull final LecetCallback<Project[]> callback) {
+    public void getProjectsRecentlyAdded(@NonNull final LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
         if (lastFetchedMRA == null || lastFetchedMRA != null && minutesElapsed(new Date(), lastFetchedMRA) > 3) {
@@ -211,7 +211,7 @@ public class MainViewModel {
 
                         // Fetch Realm managed Projects
                         realmResultsMRA = fetchProjectsRecentlyAdded();
-                        callback.onSuccess(realmResultsMRA != null ? realmResultsMRA.toArray(new Project[realmResultsMRA.size()]) : new Project[0]);
+                        callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
 
                         if (dashboardPosition == DASHBOARD_POSITION_MRA) {
 
@@ -235,7 +235,7 @@ public class MainViewModel {
 
             // Fetch Realm managed Projects
             realmResultsMRA = fetchProjectsRecentlyAdded();
-            callback.onSuccess(realmResultsMRA != null ? realmResultsMRA.toArray(new Project[realmResultsMRA.size()]) : new Project[0]);
+            callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
 
             if (dashboardPosition == DASHBOARD_POSITION_MRA) {
 
@@ -244,7 +244,7 @@ public class MainViewModel {
         }
     }
 
-    public void getProjectsRecentlyUpdated(@NonNull final LecetCallback<Project[]> callback) {
+    public void getProjectsRecentlyUpdated(@NonNull final LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
         if (lastFetchedMRU == null || lastFetchedMRU != null && minutesElapsed(new Date(), lastFetchedMRU) > 3) {
@@ -263,7 +263,7 @@ public class MainViewModel {
 
                         // Fetch Realm managed Projects
                         realmResultsMRU = fetchProjectsRecentlyUpdated();
-                        callback.onSuccess(realmResultsMRU != null ? realmResultsMRU.toArray(new Project[realmResultsMRU.size()]) : new Project[0]);
+                        callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
 
                         if (dashboardPosition == DASHBOARD_POSITION_MRU) {
 
@@ -287,7 +287,7 @@ public class MainViewModel {
 
             // Fetch Realm managed Projects
             realmResultsMRU = fetchProjectsRecentlyUpdated();
-            callback.onSuccess(realmResultsMRU != null ? realmResultsMRU.toArray(new Project[realmResultsMRU.size()]) : new Project[0]);
+            callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
 
             if (dashboardPosition == DASHBOARD_POSITION_MRU) {
 
@@ -300,10 +300,10 @@ public class MainViewModel {
      * Persisted
      **/
 
-    public void fetchBidsRecentlyMade(@BidDomain.BidGroup int bidGroup, @NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
+    public void fetchBidsRecentlyMade(@BidDomain.BidGroup int bidGroup, @NonNull final Date cutoffDate) {
 
         realmResultsMBR = bidDomain.fetchBids(bidGroup, cutoffDate);
-        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
+        displayAdapter(dashboardPosition);
     }
 
 
@@ -315,6 +315,22 @@ public class MainViewModel {
         realmResultsMHS = projectDomain.fetchProjectsByBidDate(start, end);
         displayAdapter(dashboardPosition);
     }
+
+
+    public void fetchProjectsRecentlyAdded(@BidDomain.BidGroup int bidGroup, @NonNull final Date firstPublishDate) {
+
+        realmResultsMRA = projectDomain.fetchProjectsRecentlyAdded(firstPublishDate, bidGroup);
+        displayAdapter(dashboardPosition);
+    }
+
+
+    public void fetchProjectsRecentlyUpdated(@BidDomain.BidGroup int bidGroup, @NonNull final Date lastPublishDate) {
+
+        realmResultsMRU = projectDomain.fetchProjectsRecentlyUpdated(lastPublishDate, bidGroup);
+        displayAdapter(dashboardPosition);
+    }
+
+
 
     /**
      * Private

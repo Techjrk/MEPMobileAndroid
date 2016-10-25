@@ -65,8 +65,8 @@
                 android:id="@+id/calendar_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:monthDayHorizontalSpacing="4dp"
-                app:monthDayVerticalSpacing="8dp"
+                app:monthDayHorizontalSpacing="@dimen/calendar_horizontal_spacing"
+                app:monthDayVerticalSpacing="@dimen/calendar_vertical_spacing"
                 app:showDatesOutsideMonth="true" />
 
         </LinearLayout>
