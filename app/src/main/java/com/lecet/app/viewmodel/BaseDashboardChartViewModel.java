@@ -1,23 +1,24 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -229,6 +230,51 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         }
     }
 
+    /**
+     * Inner Class: Custom Marker View
+     * For displaying dynamic custom value views in chart segments.
+     */
+    public class CustomMarkerView extends MarkerView {
+
+        private TextView markerTextView;
+
+        public CustomMarkerView (Context context, int layoutResource) {
+            super(context, layoutResource);
+            // this markerview only displays a textview
+            markerTextView = (TextView) findViewById(R.id.chart_marker_text);
+        }
+
+        // callbacks everytime the MarkerView is redrawn, can be used to update the
+        // content (user-interface)
+        @Override
+        public void refreshContent(Entry e, Highlight highlight) {
+            markerTextView.setText(Integer.toString((int)e.getY())); // set the entry-value as the display text
+
+            int index = (int) highlight.getX();
+
+            Log.d("MainActivity", "refreshContent: index: " +  index);
+            Log.d("MainActivity", "refreshContent: color 0: " +  pieChartView.getData().getDataSet().getColor(0));
+            Log.d("MainActivity", "refreshContent: color 1: " +  pieChartView.getData().getDataSet().getColor(1));
+            Log.d("MainActivity", "refreshContent: color 2: " +  pieChartView.getData().getDataSet().getColor(2));
+            Log.d("MainActivity", "refreshContent: color 3: " +  pieChartView.getData().getDataSet().getColor(3));
+            int color = pieChartView.getData().getDataSet().getColor(index);
+            markerTextView.setTextColor(color);
+        }
+
+        @Override
+        public int getXOffset(float xpos) {
+            return -(getWidth() / 2);   // position custom label in center X of default label location
+        }
+
+        @Override
+        public int getYOffset(float ypos) {
+            return -getHeight() / 2;    // position custom label in center Y of default label location
+        }
+
+
+    }
+
+
     @Override
     public void onValueSelected(Entry entry, Highlight highlight) {
         PieEntry pieEntry = (PieEntry) entry;
@@ -239,12 +285,19 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         // update chart values display
         PieData data = pieChartView.getData();
         data.setDrawValues(false);
-        IPieDataSet dataSet = data.getDataSetByIndex(highlight.getDataSetIndex());
+//        IPieDataSet dataSet = data.getDataSetByIndex(highlight.getDataSetIndex());
 
-        dataSet.setDrawValues(true);
-        dataSet.setValueTextColor(Color.WHITE);
-        dataSet.setValueTextSize(CHART_VALUE_TEXT_SIZE);
-        dataSet.setValueFormatter(new CustomValueFormatter());
+//        dataSet.setDrawValues(false);
+//        dataSet.setValueTextColor(Color.WHITE);
+//        dataSet.setValueTextSize(CHART_VALUE_TEXT_SIZE);
+//        dataSet.setValueFormatter(new CustomValueFormatter());
+
+
+        // custom dynamic chart value marker view
+        CustomMarkerView mv = new CustomMarkerView (fragment.getContext(), R.layout.dashboard_chart_marker_view);
+        pieChartView.setDrawMarkerViews(true);
+        pieChartView.setMarkerView(mv);
+
         pieChartView.setHoleRadius(CHART_HOLE_RADIUS_SELECTED);
         pieChartView.invalidate(); // refresh
 
