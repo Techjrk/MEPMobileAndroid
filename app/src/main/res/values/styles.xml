@@ -6,13 +6,14 @@
         <item name="colorPrimary">@color/lecetMediumBlue</item>
         <item name="colorPrimaryDark">@color/lecetButtonDarkBlue</item>
         <item name="colorAccent">@color/lecetLightBlue</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_button</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay"  parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.FullScreen"    parent="Theme.AppCompat.Light">
+    <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
@@ -26,6 +27,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@android:color/transparent</item>
+        <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
+    </style>
+
+    <style name="LacetToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@drawable/activity_bar_background</item>
         <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
@@ -273,7 +281,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:layout_marginLeft">16sp</item>
     </style>
-
 
 
     <!-- Change Password -->

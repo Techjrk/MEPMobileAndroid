@@ -2,8 +2,13 @@ package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,10 +48,16 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
-        setTitle(R.string.dashboard_bids);
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            LayoutInflater inflater = getLayoutInflater();
+            View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
+            actionBar.setCustomView(searchBarView);
+            actionBar.setDisplayShowCustomEnabled(true);
         }
     }
 
@@ -64,4 +75,14 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         viewModel.fetchProjectsNearMe(dummyLatLong);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

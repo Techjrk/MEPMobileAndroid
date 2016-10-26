@@ -60,6 +60,7 @@ public class ProjectsNearMeViewModel extends BaseObservable {
     }
 
     private void populateMap(List<Project> projects) {
+        //TODO check if the activity is active
         for (Project project : projects) {
             Marker marker = map.addMarker(new MarkerOptions()
                     .title(Long.toString(project.getId()))

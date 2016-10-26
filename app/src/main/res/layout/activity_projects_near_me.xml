@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.ProjectsNearMeViewModel" />
@@ -15,7 +16,7 @@
         tools:context="com.lecet.app.content.ProjectsNearMeActivity">
 
         <!-- App Bar -->
-        <include layout="@layout/include_app_bar_layout" />
+        <include layout="@layout/include_activity_bar_layout" />
 
         <!-- Map -->
         <FrameLayout
