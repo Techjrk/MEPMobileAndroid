@@ -236,42 +236,61 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
      */
     public class CustomMarkerView extends MarkerView {
 
+        private final static float MARKER_PLACEMENT_SHIFT = .20f;
+
         private TextView markerTextView;
+        private float origXPx = 0;
+        private float origYPx = 0;
 
         public CustomMarkerView (Context context, int layoutResource) {
             super(context, layoutResource);
-            // this markerview only displays a textview
             markerTextView = (TextView) findViewById(R.id.chart_marker_text);
         }
 
-        // callbacks everytime the MarkerView is redrawn, can be used to update the
-        // content (user-interface)
+        /**
+         * Callbacks everytime the MarkerView is redrawn, can be used to update the UI
+         */
         @Override
         public void refreshContent(Entry e, Highlight highlight) {
             markerTextView.setText(Integer.toString((int)e.getY())); // set the entry-value as the display text
 
+            origXPx = highlight.getXPx();
+            origYPx = highlight.getYPx();
+
             int index = (int) highlight.getX();
 
-            Log.d("MainActivity", "refreshContent: index: " +  index);
-            Log.d("MainActivity", "refreshContent: color 0: " +  pieChartView.getData().getDataSet().getColor(0));
-            Log.d("MainActivity", "refreshContent: color 1: " +  pieChartView.getData().getDataSet().getColor(1));
-            Log.d("MainActivity", "refreshContent: color 2: " +  pieChartView.getData().getDataSet().getColor(2));
-            Log.d("MainActivity", "refreshContent: color 3: " +  pieChartView.getData().getDataSet().getColor(3));
+            //Log.d(TAG, "refreshContent: index: " +  index);
             int color = pieChartView.getData().getDataSet().getColor(index);
             markerTextView.setTextColor(color);
         }
 
+        /**
+         * X Positioning for the marker
+         */
         @Override
         public int getXOffset(float xpos) {
-            return -(getWidth() / 2);   // position custom label in center X of default label location
+            int origX = -(getWidth() / 2);
+            int chartCenterX = pieChartView.getWidth() / 2;
+            int dx = (int) (origXPx - chartCenterX);
+            int addedX = (int) (MARKER_PLACEMENT_SHIFT * dx);
+            int extendedXOffset = origX + addedX;
+            //return origX;             // orig unshifted x
+            return extendedXOffset;     // position custom label in center X of default label location
         }
 
+        /**
+         * Y Positioning for the marker
+         */
         @Override
         public int getYOffset(float ypos) {
-            return -getHeight() / 2;    // position custom label in center Y of default label location
+            int origY = -(getHeight() / 2);
+            int chartCenterY = pieChartView.getHeight() / 2;
+            int dy = (int) (origYPx - chartCenterY);
+            int addY = (int) (MARKER_PLACEMENT_SHIFT * dy);
+            int extendedYOffset = origY + addY;
+            //return origY;             // orig unshifted y
+            return extendedYOffset;     // position custom label in center Y of default label location
         }
-
-
     }
 
 
