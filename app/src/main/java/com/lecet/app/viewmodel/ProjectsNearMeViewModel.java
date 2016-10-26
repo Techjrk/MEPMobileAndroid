@@ -10,7 +10,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
-import com.lecet.app.content.widget.LacetInfoWindowAdapter;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
@@ -25,7 +24,7 @@ import retrofit2.Response;
  * Created by Josué Rodríguez on 5/10/2016.
  */
 
-public class ProjectsNearMeViewModel extends BaseObservable {
+public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener {
 
     private static final int DEFAULT_DISTANCE = 5;
     private static final int DEFAULT_ZOOM = 12;
@@ -33,6 +32,7 @@ public class ProjectsNearMeViewModel extends BaseObservable {
     private final Activity activity;
     private ProjectDomain projectDomain;
     private GoogleMap map;
+    private Marker lastMarkerTapped;
 
     public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain) {
         this.activity = activity;
@@ -41,6 +41,9 @@ public class ProjectsNearMeViewModel extends BaseObservable {
 
     public void setMap(GoogleMap map) {
         this.map = map;
+        this.map.setOnMarkerClickListener(this);
+        this.map.setOnInfoWindowClickListener(this);
+        this.map.setOnInfoWindowCloseListener(this);
     }
 
     public void fetchProjectsNearMe(LatLng location) {
@@ -71,4 +74,28 @@ public class ProjectsNearMeViewModel extends BaseObservable {
         }
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (lastMarkerTapped != null) {
+            lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker));
+        }
+
+        lastMarkerTapped = marker;
+        lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker));
+
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //TODO open something? Campture the get direction tap?
+    }
+
+    @Override
+    public void onInfoWindowClose(Marker marker) {
+        if (lastMarkerTapped != null) {
+            lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker));
+        }
+        lastMarkerTapped = null;
+    }
 }
