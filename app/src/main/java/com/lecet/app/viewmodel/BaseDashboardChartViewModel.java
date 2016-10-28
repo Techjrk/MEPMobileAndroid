@@ -215,7 +215,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
     /**
      * Custom ValueFormatter for use in displaying chart values
      */
-    public class CustomValueFormatter implements ValueFormatter {
+    /*public class CustomValueFormatter implements ValueFormatter {
 
         private DecimalFormat mFormat;
 
@@ -228,7 +228,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             //Log.d(TAG, "getFormattedValue: " + value);
             return mFormat.format(value) + ""; // suffixes
         }
-    }
+    }*/
 
     /**
      * Inner Class: Custom Marker View
@@ -254,8 +254,16 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         public void refreshContent(Entry e, Highlight highlight) {
             markerTextView.setText(Integer.toString((int)e.getY())); // set the entry-value as the display text
 
-            origXPx = highlight.getXPx();
-            origYPx = highlight.getYPx();
+            if(!Float.isNaN(highlight.getY())) {
+                origXPx = highlight.getXPx();
+                origYPx = highlight.getYPx();
+            }
+            else
+            {
+                Log.d(TAG, "refreshContent: WARNING *** Highlight Y is NaN");   //TODO - handle
+                origXPx = 0;
+                origYPx = 0;
+            }
 
             int index = (int) highlight.getX();
 
@@ -266,6 +274,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         /**
          * X Positioning for the marker
+         * TODO - fix known issue where enlarging slices via button strip throws off getXOffset values
          */
         @Override
         public int getXOffset(float xpos) {
@@ -280,6 +289,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         /**
          * Y Positioning for the marker
+         * TODO - fix known issue where enlarging slices via button strip throws off getYOffset values
          */
         @Override
         public int getYOffset(float ypos) {
