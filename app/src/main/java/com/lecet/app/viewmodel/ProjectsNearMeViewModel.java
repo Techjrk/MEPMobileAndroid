@@ -15,6 +15,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,16 +34,17 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     private static final int DEFAULT_DISTANCE = 3;
     private static final int DEFAULT_ZOOM = 12;
 
-    private final Activity activity;
+    private WeakReference<Activity> activity;
     private ProjectDomain projectDomain;
     private GoogleMap map;
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
 
     public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain) {
-        this.activity = activity;
+        this.activity = new WeakReference<>(activity);
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
+
     }
 
     public void setMap(GoogleMap map) {
@@ -72,7 +74,7 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     }
 
     private void populateMap(List<Project> projects) {
-        if (!activity.isFinishing() && !activity.isDestroyed()) {
+        if (activity.get() != null && !activity.get().isFinishing() && !activity.get().isDestroyed()) {
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
                     Marker marker = map.addMarker(new MarkerOptions()
