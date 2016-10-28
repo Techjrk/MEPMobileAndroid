@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="25dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="25dp">
+
+        <TextView
+            android:id="@+id/label_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="8dp"
+            android:text="@string/confirm_share_your_location_description"
+            android:textColor="@color/pureBlack"
+            android:textSize="16sp"
+            bind:typeface="@{`Lato-Regular.ttf`}" />
+
+        <TextView
+            android:id="@+id/button_confirm"
+            style="@style/CommonButton"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/confirm_share_your_location"
+            android:textSize="14sp"
+            bind:typeface="@{`Lato-Regular.ttf`}" />
+
+        <TextView
+            android:id="@+id/button_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/confirm_cancel"
+            android:textColor="@color/lecetButtonDarkerBlue"
+            bind:typeface="@{`Lato-Regular.ttf`}" />
+    </LinearLayout>
+
+</layout>

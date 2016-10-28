@@ -15,7 +15,6 @@
         android:paddingLeft="45dp"
         android:paddingRight="45dp"
         android:singleLine="true"
-        android:text="905 16th Street, NW, Washingtog, DC"
         android:textColor="@color/lecetTextWhite"
         android:textSize="17sp" />
 

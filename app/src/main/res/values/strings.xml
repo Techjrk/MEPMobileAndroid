@@ -120,4 +120,11 @@
     <!-- Info Window -->
     <string name="get_directions">Get Directions</string>
 
+    <!-- Projects Near Me Confirm Dialog Fragment -->
+    <string name="confirm_share_your_location_description">This feature is only available when you share your location with this app. Please tap OK when prompted.</string>
+    <string name="confirm_enable_your_location_description">This feature is only available when you share your location with this app.</string>
+    <string name="confirm_share_your_location">SHARE MY LOCATION</string>
+    <string name="confirm_go_to_settings">GO TO SETTINGS</string>
+    <string name="confirm_cancel">CANCEL</string>
+
 </resources>

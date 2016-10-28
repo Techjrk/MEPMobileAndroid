@@ -1,15 +1,5 @@
 package com.lecet.app.utility;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -22,6 +12,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.lecet.app.service.GeofenceTransitionsIntentService;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ import java.util.List;
 public class LocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    public static final int LECET_LOCATION_PERMISSION_REQUEST = -1293;
+    public static final int LECET_LOCATION_PERMISSION_REQUEST = 1293;
 
     private final AppCompatActivity context;
     private final GoogleApiClient apiClient;
@@ -118,7 +117,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         return LocationServices.FusedLocationApi.getLastLocation(apiClient);
     }
 
-    protected void startLocationUpdates() {
+    public void startLocationUpdates() {
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -132,9 +131,11 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, mLocationRequest, this);
     }
 
-    protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                apiClient, this);
+    public void stopLocationUpdates() {
+        if (apiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    apiClient, this);
+        }
     }
 
     /** Geofencing **/

@@ -2,6 +2,7 @@ package com.lecet.app.viewmodel;
 
 import android.app.Activity;
 import android.databinding.BaseObservable;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +15,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,19 +26,23 @@ import retrofit2.Response;
  * Created by Josué Rodríguez on 5/10/2016.
  */
 
-public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener {
+public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap.OnMarkerClickListener
+        , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener
+        , View.OnClickListener, GoogleMap.OnCameraMoveListener {
 
-    private static final int DEFAULT_DISTANCE = 5;
+    private static final int DEFAULT_DISTANCE = 3;
     private static final int DEFAULT_ZOOM = 12;
 
     private final Activity activity;
     private ProjectDomain projectDomain;
     private GoogleMap map;
     private Marker lastMarkerTapped;
+    private HashMap<Long, Marker> markers;
 
     public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain) {
         this.activity = activity;
         this.projectDomain = projectDomain;
+        this.markers = new HashMap<>();
     }
 
     public void setMap(GoogleMap map) {
@@ -44,11 +50,10 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
         this.map.setOnInfoWindowCloseListener(this);
+        this.map.setOnCameraMoveListener(this);
     }
 
     public void fetchProjectsNearMe(LatLng location) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
-
         projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
             public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
@@ -62,15 +67,23 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         });
     }
 
+    public void moveMapCamera(LatLng location) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+    }
+
     private void populateMap(List<Project> projects) {
-        //TODO check if the activity is active
-        for (Project project : projects) {
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .title(Long.toString(project.getId()))
-                    .infoWindowAnchor(5.4f, 5f)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker))
-                    .position(project.getGeocode().toLatLng()));
-            marker.setTag(project);
+        if (!activity.isFinishing() && !activity.isDestroyed()) {
+            for (Project project : projects) {
+                if (!markers.containsKey(project.getId())) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .title(Long.toString(project.getId()))
+                            .infoWindowAnchor(5.4f, 5f)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker))
+                            .position(project.getGeocode().toLatLng()));
+                    marker.setTag(project);
+                    markers.put(project.getId(), marker);
+                }
+            }
         }
     }
 
@@ -97,5 +110,15 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
             lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker));
         }
         lastMarkerTapped = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onCameraMove() {
+        fetchProjectsNearMe(map.getCameraPosition().target);
     }
 }
