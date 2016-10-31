@@ -113,7 +113,7 @@ public class ProjectDomain {
 
     public void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
-        int limit = 150;
+        int limit = 250;
 
         getProjectsRecentlyAdded(limit, callback);
     }
@@ -214,8 +214,8 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("firstPublishDate", publishDate)
-                .findAll();
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
         return projectsResult;
     }
@@ -224,7 +224,7 @@ public class ProjectDomain {
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThan("firstPublishDate", publishDate)
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("firstPublishDate", Sort.DESCENDING);
@@ -237,7 +237,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("lastPublishDate", lastPublishDate)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
 
         return projectsResult;
@@ -247,7 +247,7 @@ public class ProjectDomain {
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThan("lastPublishDate", lastPublishDate)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
