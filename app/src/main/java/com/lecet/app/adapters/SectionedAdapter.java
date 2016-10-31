@@ -49,6 +49,10 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
 
+        // Clear any existing data
+        sectionIndexPositionMap.clear();
+        sectionCountMap.clear();
+
         // We will collect the number of sections then call the data source to determine
         // the number of items in section.
         int sections = getSectionCount();
@@ -56,10 +60,6 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
 
         int i;
         for (i = 0; i < sections; i++) {
-
-            // Clear any existing data
-            sectionIndexPositionMap.clear();
-            sectionCountMap.clear();
 
             int itemsInSection = getItemCountForSection(i);
             sectionCountMap.put(i, itemsInSection);
@@ -135,21 +135,31 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
             throw new SectionAdapterException(String.format("Given position %d, does not have a corresponding section!", position));
         }
 
-        return lowKeyMatch.getKey();
+        return lowKeyMatch.getValue();
     }
 
 
     private Integer findPositionInSection(Integer section, int position) {
 
         Integer sectionStartPosition = sectionIndexPositionMap.get(section);
+        Integer sectionPosition;
 
         if (sectionStartPosition == null) {
 
             throw new SectionAdapterException(String.format("Given position %d, does not have a corresponding section!", position));
         }
 
-        // We can now with certainty that the modulo remainder is the actual position within the aggregate data
-        Integer sectionPosition = position % sectionStartPosition;
+        // Section zero (0) positions are their natural position.
+        if (section == 0) {
+
+            sectionPosition = position;
+
+        } else {
+
+            // We can now with certainty that the modulo remainder is the actual position within the aggregate data
+            sectionPosition = position % sectionStartPosition;
+        }
+
 
         // We then take account for the section header in the aggregate item count to get the position within
         // the subsection of data. Ex Position 15 in data set with 2 sections with the first section comprising of
