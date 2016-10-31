@@ -24,9 +24,9 @@
     <string name="title_fragment_bids_happening_soon">Bids Happening Soon</string>
     <string name="title_fragment_projects_recently_added">Projects Recently Added</string>
     <string name="title_fragment_projects_recently_updated">Projects Recently Updated</string>
-    <string name="dashboard_bids">BIDS</string>
+    <!--string name="dashboard_bids">BIDS</string-->
     <string name="dashboard_projects">PROJECTS</string>
-    <string name="dashboard_recently_made">RECENTLY RECENTLY BID</string>
+    <string name="dashboard_recently_made">PROJECTS RECENTLY BID</string>
     <string name="dashboard_happening_soon">PROJECTS BIDDING SOON</string>
     <string name="dashboard_recently_added">PROJECTS RECENTLY ADDED</string>
     <string name="dashboard_recently_updated">PROJECTS RECENTLY UPDATED</string>

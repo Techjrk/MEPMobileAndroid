@@ -174,19 +174,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
                 // Notify view model of latest position.
                 viewModel.currentPagerPosition(position);
-
-                int title = 0;
-                switch (position) {
-                    case 0:
-                    case 1:
-                        title = R.string.dashboard_bids;
-                        break;
-                    case 2:
-                    case 3:
-                        title = R.string.dashboard_projects;
-                        break;
-                }
-                setTitle(title);
+                setTitle(R.string.dashboard_projects);
             }
 
             @Override
