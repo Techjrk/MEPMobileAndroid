@@ -124,7 +124,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.dashboard_bids);
+        setTitle(R.string.dashboard_projects);
         TextView toolbarTitle = null;
         try {
             Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
