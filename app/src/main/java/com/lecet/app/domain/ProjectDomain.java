@@ -1,20 +1,25 @@
 package com.lecet.app.domain;
 
+import android.support.annotation.IntDef;
+
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
-import okhttp3.ResponseBody;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -25,6 +30,16 @@ import retrofit2.Callback;
  */
 
 public class ProjectDomain {
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES})
+    public @interface BidGroup {
+    }
+
+    public static final int ENGINEERING = 101;
+    public static final int BUILDING = 102;
+    public static final int HOUSING = 103;
+    public static final int UTILITIES = 105;
 
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
@@ -37,7 +52,9 @@ public class ProjectDomain {
         this.realm = realm;
     }
 
-    /** API **/
+    /**
+     * API
+     **/
 
     public void getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
@@ -96,7 +113,7 @@ public class ProjectDomain {
 
     public void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
-        int limit = 150;
+        int limit = 250;
 
         getProjectsRecentlyAdded(limit, callback);
     }
@@ -167,7 +184,9 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
-    /** Persisted **/
+    /**
+     * Persisted
+     **/
 
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
 
@@ -179,6 +198,7 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
@@ -189,22 +209,48 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("firstPublishDate", publishDate)
-                .findAll();
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
         return projectsResult;
     }
+
+
+    public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("hidden", false)
+                .findAllSorted("firstPublishDate", Sort.DESCENDING);
+
+        return projectsResult;
+    }
+
 
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("lastPublishDate", lastPublishDate)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
+
+        return projectsResult;
+    }
+
+
+    public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
+
+        RealmResults<Project> projectsResult = realm.where(Project.class)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("hidden", false)
+                .findAllSorted("lastPublishDate", Sort.DESCENDING);
 
         return projectsResult;
     }
@@ -219,6 +265,7 @@ public class ProjectDomain {
         return persistedProject;
     }
 
+
     public List<Project> copyToRealmTransaction(List<Project> projects) {
 
         realm.beginTransaction();
@@ -227,4 +274,98 @@ public class ProjectDomain {
         return persistedProjects;
     }
 
+
+    public RealmResults<Project> queryResult(@BidGroup int categoryId, RealmResults<Project> result, String sortFieldName) {
+
+        return result.where()
+                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                .equalTo("hidden", false)
+                .findAllSorted(sortFieldName, Sort.DESCENDING);
+    }
+
+    /**
+     * Utility
+     **/
+    private TreeMap<Long, TreeSet<Project>> sortRealmResults(RealmResults<Project> result, Comparator<Project> projectComparator, String sortFieldName) {
+
+        RealmResults<Project> engineering = queryResult(ENGINEERING, result, sortFieldName);
+        RealmResults<Project> building = queryResult(BUILDING, result, sortFieldName);
+        RealmResults<Project> housing = queryResult(HOUSING, result, sortFieldName);
+        RealmResults<Project> utilities = queryResult(UTILITIES, result, sortFieldName);
+
+        TreeMap<Long, TreeSet<Project>> treeMap = new TreeMap<>();
+
+        // Cycle through engineering bids
+        if (engineering.size() > 0) {
+
+            TreeSet<Project> projects = new TreeSet<>(projectComparator);
+
+            for (int i = 0; i < engineering.size(); i++) {
+                projects.add(engineering.get(i));
+            }
+
+            treeMap.put(Long.valueOf(ENGINEERING), projects);
+        }
+
+        // Cycle through building bids
+        if (building.size() > 0) {
+
+            TreeSet<Project> bids = new TreeSet<>(projectComparator);
+            for (int i = 0; i < building.size(); i++) {
+                bids.add(building.get(i));
+            }
+
+            treeMap.put(Long.valueOf(BUILDING), bids);
+        }
+
+        // Cycle through housing bids
+        if (housing.size() > 0) {
+
+            TreeSet<Project> bids = new TreeSet<>(projectComparator);
+            for (int i = 0; i < housing.size(); i++) {
+                bids.add(housing.get(i));
+            }
+
+            treeMap.put(Long.valueOf(HOUSING), bids);
+        }
+
+        // Cycle through utilities bids
+        if (engineering.size() > 0) {
+
+            TreeSet<Project> bids = new TreeSet<>(projectComparator);
+            for (int i = 0; i < utilities.size(); i++) {
+                bids.add(utilities.get(i));
+            }
+
+            treeMap.put(Long.valueOf(UTILITIES), bids);
+        }
+
+        return treeMap;
+    }
+
+
+    public TreeMap<Long, TreeSet<Project>> sortRealmResultsByFirstPublished(RealmResults<Project> result) {
+
+        Comparator<Project> projectComparator = new Comparator<Project>() {
+            @Override
+            public int compare(Project proj, Project t1) {
+                return proj.getFirstPublishDate().after(t1.getFirstPublishDate()) ? 1 : -1;
+            }
+        };
+
+        return sortRealmResults(result, projectComparator, "firstPublishDate");
+    }
+
+
+    public TreeMap<Long, TreeSet<Project>> sortRealmResultsByLastPublished(RealmResults<Project> result) {
+
+        Comparator<Project> projectComparator = new Comparator<Project>() {
+            @Override
+            public int compare(Project proj, Project t1) {
+                return proj.getLastPublishDate().after(t1.getLastPublishDate()) ? 1 : -1;
+            }
+        };
+
+        return sortRealmResults(result, projectComparator, "lastPublishDate");
+    }
 }

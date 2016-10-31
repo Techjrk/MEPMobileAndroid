@@ -5,12 +5,18 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Calendar -->
-    <dimen name="calendar_cell_size">32dp</dimen>
-    <dimen name="calendar_cell_selected_size">32dp</dimen>
+    <dimen name="calendar_cell_size">30dp</dimen>
+    <dimen name="calendar_cell_selected_size">30dp</dimen>
     <dimen name="calendar_month_container_height">34dp</dimen>
     <dimen name="calendar_corner_radius">5dp</dimen>
-    <dimen name="calendar_height">270dp</dimen>
+    <dimen name="calendar_height">260dp</dimen>
     <dimen name="calendar_width">320dp</dimen>
+    <dimen name="calendar_vertical_spacing">7dp</dimen>
+    <dimen name="calendar_horizontal_spacing">4dp</dimen>
+
+    <!-- Dashboard Strip -->
+    <dimen name="strip_corner_radius">3dp</dimen>
+    <dimen name="strip_vertical_spacing">3dp</dimen>
 
     <!-- Overflow Menu -->
     <dimen name="overflow_menu_width">14dp</dimen>

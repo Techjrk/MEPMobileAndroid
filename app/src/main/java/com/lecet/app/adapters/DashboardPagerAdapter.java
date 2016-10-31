@@ -1,7 +1,6 @@
 package com.lecet.app.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,7 +10,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.DashboardBidsHappeningSoonFragment;
 import com.lecet.app.content.DashboardBidsRecentlyMadeFragment;
 import com.lecet.app.content.DashboardProjectsRecentlyAddedFragment;
-import com.lecet.app.content.DashboardProjectsRecentlyUpdated;
+import com.lecet.app.content.DashboardProjectsRecentlyUpdatedFragment;
 
 /**
  * Created by jasonm on 10/5/16.
@@ -40,34 +39,23 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         //Log.d(TAG, "getItem: " + position);
 
-        String fragmentTitle;
-        String fragmentSubtitle;
-
         switch (position) {
 
             // Bids Recently Made
             case 0:
-                fragmentTitle    = context.getResources().getString(R.string.dashboard_bids);
-                fragmentSubtitle = context.getResources().getString(R.string.dashboard_recently_made);
-                return DashboardBidsRecentlyMadeFragment.newInstance(0, fragmentTitle, fragmentSubtitle);
+                return DashboardBidsRecentlyMadeFragment.newInstance(context.getResources().getString(R.string.dashboard_recently_made));
 
             // Bids Happening Soon
             case 1:
-                fragmentTitle    = context.getResources().getString(R.string.dashboard_bids);
-                fragmentSubtitle = context.getResources().getString(R.string.dashboard_happening_soon);
-                return DashboardBidsHappeningSoonFragment.newInstance(1, fragmentTitle, fragmentSubtitle);
+                return DashboardBidsHappeningSoonFragment.newInstance(context.getResources().getString(R.string.dashboard_happening_soon));
 
             // Projects Recently Added
             case 2:
-                fragmentTitle    = context.getResources().getString(R.string.dashboard_projects);
-                fragmentSubtitle = context.getResources().getString(R.string.dashboard_recently_added);
-                return DashboardProjectsRecentlyAddedFragment.newInstance(2, fragmentTitle, fragmentSubtitle);
+                return DashboardProjectsRecentlyAddedFragment.newInstance(context.getResources().getString(R.string.dashboard_recently_added));
 
             // Projects Recently Updated
             case 3:
-                fragmentTitle    = context.getResources().getString(R.string.dashboard_projects);
-                fragmentSubtitle = context.getResources().getString(R.string.dashboard_recently_updated);
-                return DashboardProjectsRecentlyUpdated.newInstance(3, fragmentTitle, fragmentSubtitle);
+                return DashboardProjectsRecentlyUpdatedFragment.newInstance(context.getResources().getString(R.string.dashboard_recently_updated));
 
             default:
                 Log.w(TAG, "getItem: no such item");
