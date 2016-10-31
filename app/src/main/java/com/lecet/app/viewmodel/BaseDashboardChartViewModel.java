@@ -30,8 +30,6 @@ import com.lecet.app.interfaces.DashboardChartFetchData;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
-import com.lecet.app.interfaces.MHSDataSource;
-import com.lecet.app.interfaces.MHSDelegate;
 import com.lecet.app.interfaces.MRADataSource;
 import com.lecet.app.interfaces.MRADelegate;
 import com.lecet.app.interfaces.MRUDataSource;
@@ -91,15 +89,13 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     private final int dataSourceType;
 
-    public static final int DATA_SOURCE_TYPE_MBR = 1;
-    public static final int DATA_SOURCE_TYPE_MHS = 2;
-    public static final int DATA_SOURCE_TYPE_MRA = 3;
-    public static final int DATA_SOURCE_TYPE_MRU = 4;
+    public static final int DATA_SOURCE_TYPE_MBR = 1;   // for Bids Recently Made (PieChart)
+    public static final int DATA_SOURCE_TYPE_MHS = 2;   // for Bids Happening Soon (Calendar only)
+    public static final int DATA_SOURCE_TYPE_MRA = 3;   // for Projects Recently Added (PieChart)
+    public static final int DATA_SOURCE_TYPE_MRU = 4;   // for Projects Recently Updated (PieChart)
 
     private MBRDataSource dataSourceMBR;
     private MBRDelegate delegateMBR;
-    private MHSDataSource dataSourceMHS;
-    private MHSDelegate delegateMHS;
     private MRADataSource dataSourceMRA;
     private MRADelegate delegateMRA;
     private MRUDataSource dataSourceMRU;
@@ -116,14 +112,6 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         setReferences();
         setSubtitle(subtitle);
     }
-
-    // MHS is only for Calendar, not PieChar, so this is unused
-    /*public void initializeMHS(View view, String subtitle, MHSDataSource dataSource, MHSDelegate delegate) {
-        this.dataSourceMHS = dataSource;
-        this.delegateMHS = delegate;
-        setReferences();
-        setSubtitle(subtitle);
-    }*/
 
     public void initializeMRA(View view, String subtitle, MRADataSource dataSource, MRADelegate delegate) {
         this.dataSourceMRA = dataSource;
@@ -298,10 +286,6 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
                 }
             });
         }
-        else if (this.dataSourceType == DATA_SOURCE_TYPE_MHS) {
-            // MHS is only used in Calendar, not in PieChart, so no behavior is required here
-        }
-
     }
 
     protected void resetDataSetSizes() {
@@ -384,24 +368,6 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         setSubtitleNum(Integer.toString(totalSize));
     }
-
-    /**
-     * Custom ValueFormatter for use in displaying chart values
-     */
-    /*public class CustomValueFormatter implements ValueFormatter {
-
-        private DecimalFormat mFormat;
-
-        public CustomValueFormatter() {
-            mFormat = new DecimalFormat("###,###,##0"); // no decimal
-        }
-
-        @Override
-        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-            //Log.d(TAG, "getFormattedValue: " + value);
-            return mFormat.format(value) + ""; // suffixes
-        }
-    }*/
 
     /**
      * Inner Class: Custom Marker View
@@ -588,12 +554,6 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
                 delegateMRU.mruBidGroupSelected(BidDomain.UTILITIES);
             }
         }
-
-        // MHS
-        else if(dataSourceType == DATA_SOURCE_TYPE_MHS) {
-            // MHS is only used for Calendar, not PieChart, so no behavior needed here
-        }
-
     }
 
     @Override
