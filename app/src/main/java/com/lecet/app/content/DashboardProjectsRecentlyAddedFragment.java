@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.BaseDashboardChartFragment;
-import com.lecet.app.databinding.FragmentDashboardProjectsRecentlyAddedBinding;
+import com.lecet.app.databinding.FragmentDashboardChartBaseBinding;
 import com.lecet.app.interfaces.DashboardChart;
 import com.lecet.app.interfaces.MRADataSource;
 import com.lecet.app.interfaces.MRADelegate;
-import com.lecet.app.viewmodel.DashboardProjectsRecentlyAddedVM;
+import com.lecet.app.viewmodel.BaseDashboardChartViewModel;
 
 /**
  * Created by jasonm on 10/5/16.
@@ -28,7 +28,7 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
     private MRADataSource dataSource;
     private MRADelegate delegate;
 
-    private FragmentDashboardProjectsRecentlyAddedBinding binding;
+    private FragmentDashboardChartBaseBinding binding;
 
     public static DashboardProjectsRecentlyAddedFragment newInstance(String subtitle) {
         Log.d(TAG, "newInstance");
@@ -49,13 +49,13 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
         try {
             delegate = (MRADelegate) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement MHSDelegate");
+            throw new ClassCastException(context.toString() + " must implement MRADelegate");
         }
 
         try {
             dataSource = (MRADataSource) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement MHSDataSource");
+            throw new ClassCastException(context.toString() + " must implement MRADataSource");
         }
     }
 
@@ -74,12 +74,12 @@ public class DashboardProjectsRecentlyAddedFragment extends BaseDashboardChartFr
 
     @Override
     public View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_projects_recently_added, container, false);
-        binding.setViewModel(new DashboardProjectsRecentlyAddedVM(this));
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_chart_base, container, false);
+        binding.setViewModel(new BaseDashboardChartViewModel(this, BaseDashboardChartViewModel.DATA_SOURCE_TYPE_MRA));
         View view = binding.getRoot();
         pieChart = binding.pieChartView;
-        DashboardProjectsRecentlyAddedVM viewModel = binding.getViewModel();
-        viewModel.initialize(view, subtitle, dataSource, delegate);
+        BaseDashboardChartViewModel viewModel = binding.getViewModel();
+        viewModel.initializeMRA(view, subtitle, dataSource, delegate);
         viewModel.initializeChart(pieChart);
         return view;
     }
