@@ -649,7 +649,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     public void setSubtitleNum(String subtitleNum) {
         this.subtitleNum = subtitleNum;
-        notifyPropertyChanged(BR.subtitleNum);     //TODO - this needs to use subtitle_num or bidsRecentlyMade as generated
+        notifyPropertyChanged(BR.subtitleNum);     
     }
 
     @Bindable
