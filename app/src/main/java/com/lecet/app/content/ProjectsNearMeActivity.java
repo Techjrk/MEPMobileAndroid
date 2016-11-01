@@ -91,6 +91,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
             actionBar.setDisplayShowTitleEnabled(false);
             LayoutInflater inflater = getLayoutInflater();
             View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
+            viewModel.setToolbar(searchBarView);
             actionBar.setCustomView(searchBarView);
             actionBar.setDisplayShowCustomEnabled(true);
         }

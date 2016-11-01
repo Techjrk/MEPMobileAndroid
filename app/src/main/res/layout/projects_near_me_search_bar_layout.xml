@@ -7,6 +7,7 @@
     android:paddingTop="8dp">
 
     <EditText
+        android:id="@+id/search_entry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/search_near_me_bar_background"
@@ -34,6 +35,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:scaleType="center"
-        android:src="@drawable/ic_action_clear_near_me" />
+        android:src="@drawable/ic_action_clear_near_me"
+        android:visibility="gone" />
 
 </RelativeLayout>

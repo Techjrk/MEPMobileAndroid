@@ -113,6 +113,7 @@
     <string name="error_login_message">You don\’t have permission to access MEP using your account</string>
     <string name="error_network_title">Network Error</string>
     <string name="error_network_message">Please check your internet connection and try again</string>
+    <string name="error_fetching_address">Address not found.</string>
 
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
@@ -126,5 +127,6 @@
     <string name="confirm_share_your_location">SHARE MY LOCATION</string>
     <string name="confirm_go_to_settings">GO TO SETTINGS</string>
     <string name="confirm_cancel">CANCEL</string>
+
 
 </resources>
