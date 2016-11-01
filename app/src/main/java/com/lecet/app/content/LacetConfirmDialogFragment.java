@@ -2,16 +2,17 @@ package com.lecet.app.content;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.FragmentConfirmDialogLayoutBinding;
+import com.lecet.app.enums.LacetFont;
+import com.lecet.app.utility.TextViewUtility;
 
 /**
  * Created by Josué Rodríguez on 27/10/2016.
@@ -19,11 +20,12 @@ import com.lecet.app.databinding.FragmentConfirmDialogLayoutBinding;
 
 public class LacetConfirmDialogFragment extends DialogFragment implements View.OnClickListener {
 
+    public static final String TAG = "LacetConfirmDialogFragment";
+
     private static final String ARG_MESSAGE = "message";
     private static final String ARG_CONFIRM_MESSAGE = "confirm_message";
     private static final String ARG_CANCEL_MESSAGE = "cancel_message";
 
-    FragmentConfirmDialogLayoutBinding binding;
     ConfirmDialogListener mListener;
     String message;
     String confirmMessage;
@@ -52,25 +54,26 @@ public class LacetConfirmDialogFragment extends DialogFragment implements View.O
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_confirm_dialog_layout, null, false);
+        TextView labelMessage = (TextView) view.findViewById(R.id.label_message);
+        TextView buttonConfirm = (TextView) view.findViewById(R.id.button_confirm);
+        TextView buttonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_confirm_dialog_layout, null, false);
+        TextViewUtility.changeTypeface(labelMessage, LacetFont.LATO_REGULAR);
+        TextViewUtility.changeTypeface(buttonConfirm, LacetFont.LATO_REGULAR);
+        TextViewUtility.changeTypeface(buttonCancel, LacetFont.LATO_REGULAR);
 
-        builder.setView(binding.getRoot());
+        labelMessage.setText(message);
+        buttonConfirm.setText(confirmMessage);
+        buttonCancel.setText(cancelMessage);
+
+        view.findViewById(R.id.button_confirm).setOnClickListener(this);
+        view.findViewById(R.id.button_cancel).setOnClickListener(this);
+
+        builder.setView(view);
+
         return builder.create();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.labelMessage.setText(message);
-        binding.buttonConfirm.setText(confirmMessage);
-        binding.buttonCancel.setText(cancelMessage);
-
-        binding.buttonConfirm.setOnClickListener(this);
-        binding.buttonCancel.setOnClickListener(this);
     }
 
     @Override
@@ -84,13 +87,14 @@ public class LacetConfirmDialogFragment extends DialogFragment implements View.O
         } else if (id == R.id.button_cancel) {
             if (mListener != null) {
                 mListener.onDialogNegativeClick(this);
-                dismiss();
             }
         }
+        dismiss();
     }
 
     public interface ConfirmDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
+
         void onDialogNegativeClick(DialogFragment dialog);
     }
 

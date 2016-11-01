@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
@@ -35,27 +36,27 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         , LocationManager.LocationManagerListener, LacetConfirmDialogFragment.ConfirmDialogListener {
 
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
+    public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
+
+    private static final int REQUEST_LOCATION_SETTINGS = 1;
 
     ActivityProjectsNearMeBinding binding;
     ProjectsNearMeViewModel viewModel;
     LocationManager locationManager;
     boolean enableLocationUpdates;
+    boolean isAskingForPermission;
     Location lastKnowLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         enableLocationUpdates = false;
+        isAskingForPermission = false;
         setupBinding();
         setupToolbar();
-
-
         setupLocationManager();
-
-//        LacetConfirmDialogFragment.newInstance(getString(R.string.confirm_share_your_location_description)
-//                , getString(R.string.confirm_share_your_location), getString(R.string.confirm_cancel)).show(getSupportFragmentManager(), "jfkdlskjfds");
-
         checkPermissions();
     }
 
@@ -170,9 +171,22 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     private void checkPermissions() {
         if (locationManager.isLocationPermissionEnabled()) {
-            continueSetup();
+            checkGps();
         } else {
-            locationManager.requestLocationPermission();
+            showLocationPermissionRequiredDialog();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOCATION_SETTINGS) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkGps();
+                }
+            }, 500);
         }
     }
 
@@ -188,7 +202,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        continueSetup();
+                        checkGps();
                     }
                 }, 500);
             } else {
@@ -204,21 +218,55 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_ENABLE_LOCATION, enableLocationUpdates);
+        outState.putBoolean(EXTRA_ASKING_FOR_PERMISSION, isAskingForPermission);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         enableLocationUpdates = savedInstanceState.getBoolean(EXTRA_ENABLE_LOCATION);
+        isAskingForPermission = savedInstanceState.getBoolean(EXTRA_ASKING_FOR_PERMISSION);
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-
+        if (isAskingForPermission) {
+            isAskingForPermission = false;
+            locationManager.requestLocationPermission();
+        } else { //is asking to enable location
+            openLocationSettings();
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+        finish();
+    }
 
+    private void checkGps() {
+        if (locationManager.isGpsEnabled()) {
+            continueSetup();
+        } else {
+            showLocationEnableRequired();
+        }
+    }
+
+    private void showLocationPermissionRequiredDialog() {
+        isAskingForPermission = true;
+        LacetConfirmDialogFragment.newInstance(getString(R.string.confirm_share_your_location_description)
+                , getString(R.string.confirm_share_your_location), getString(R.string.confirm_cancel))
+                .show(getSupportFragmentManager(), LacetConfirmDialogFragment.TAG);
+    }
+
+    private void showLocationEnableRequired() {
+        LacetConfirmDialogFragment.newInstance(getString(R.string.confirm_enable_your_location_description)
+                , getString(R.string.confirm_go_to_settings), getString(R.string.confirm_cancel))
+                .show(getSupportFragmentManager(), LacetConfirmDialogFragment.TAG);
+    }
+
+    private void openLocationSettings() {
+        Intent gpsOptionsIntent = new Intent(
+                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivityForResult(gpsOptionsIntent, REQUEST_LOCATION_SETTINGS);
     }
 }

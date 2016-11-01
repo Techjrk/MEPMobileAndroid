@@ -2,6 +2,7 @@ package com.lecet.app.utility;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -28,7 +29,7 @@ import java.util.List;
 
 /**
  * File: LocationManager Created: 8/26/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 public class LocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -93,11 +94,13 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     // Public
 
-    /** Permissions **/
+    /**
+     * Permissions
+     **/
 
     public boolean isLocationPermissionEnabled() {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestLocationPermission() {
@@ -107,7 +110,9 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                 LECET_LOCATION_PERMISSION_REQUEST);
     }
 
-    /** Location **/
+    /**
+     * Location
+     **/
     public Location retrieveLastKnownLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -138,7 +143,15 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
-    /** Geofencing **/
+    public boolean isGpsEnabled() {
+        android.location.LocationManager manager
+                = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return manager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+    }
+
+    /**
+     * Geofencing
+     **/
 
     private PendingIntent getGeofencePendingIntent() {
 
@@ -212,8 +225,12 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
     public interface LocationManagerListener {
 
         void onConnected(@Nullable Bundle connectionHint);
+
         void onConnectionSuspended();
+
         void onConnectionFailed(@NonNull ConnectionResult connectionResult);
+
         void onLocationChanged(Location location);
     }
+
 }
