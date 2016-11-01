@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -40,14 +41,20 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
 
+    private BitmapDescriptor redMarker;
+    private BitmapDescriptor greenMarker;
+    private BitmapDescriptor yellowMarker;
+
     public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain) {
         this.activity = new WeakReference<>(activity);
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
-
     }
 
     public void setMap(GoogleMap map) {
+        this.redMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
+        this.greenMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
+        this.yellowMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
         this.map = map;
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
@@ -77,10 +84,10 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         if (activity.get() != null && !activity.get().isFinishing() && !activity.get().isDestroyed()) {
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
+                    BitmapDescriptor icon = project.getProjectStage().getId() == 102 ? redMarker : greenMarker;
                     Marker marker = map.addMarker(new MarkerOptions()
-                            .title(Long.toString(project.getId()))
                             .infoWindowAnchor(5.4f, 5f)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker))
+                            .icon(icon)
                             .position(project.getGeocode().toLatLng()));
                     marker.setTag(project);
                     markers.put(project.getId(), marker);
@@ -92,11 +99,12 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (lastMarkerTapped != null) {
-            lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker));
+            BitmapDescriptor icon = ((Project) marker.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
+            lastMarkerTapped.setIcon(icon);
         }
 
         lastMarkerTapped = marker;
-        lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker));
+        lastMarkerTapped.setIcon(yellowMarker);
 
         return false;
     }
@@ -109,7 +117,8 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     @Override
     public void onInfoWindowClose(Marker marker) {
         if (lastMarkerTapped != null) {
-            lastMarkerTapped.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker));
+            BitmapDescriptor icon = ((Project) marker.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
+            lastMarkerTapped.setIcon(icon);
         }
         lastMarkerTapped = null;
     }
