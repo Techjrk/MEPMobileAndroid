@@ -75,7 +75,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
     private void setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_projects_near_me);
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        viewModel = new ProjectsNearMeViewModel(this, projectDomain);
+        viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
         binding.setViewModel(viewModel);
 
     }

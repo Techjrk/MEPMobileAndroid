@@ -2,6 +2,7 @@ package com.lecet.app.viewmodel;
 
 import android.app.Activity;
 import android.databinding.BaseObservable;
+import android.os.Handler;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,10 +46,13 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
 
-    public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain) {
+    private Handler timer;
+
+    public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain, Handler timer) {
         this.activity = new WeakReference<>(activity);
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
+        this.timer = timer;
     }
 
     public void setMap(GoogleMap map) {
@@ -130,6 +134,14 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
 
     @Override
     public void onCameraMove() {
-        fetchProjectsNearMe(map.getCameraPosition().target);
+        timer.removeCallbacks(fetchProjectsOnMapStopMoving);
+        timer.postDelayed(fetchProjectsOnMapStopMoving, 1000); //this is to prevent downloading projects while the user is moving the map
     }
+
+    private Runnable fetchProjectsOnMapStopMoving = new Runnable() {
+        @Override
+        public void run() {
+            fetchProjectsNearMe(map.getCameraPosition().target);
+        }
+    };
 }
