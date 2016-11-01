@@ -37,6 +37,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
+    public static final String EXTRA_LOCATION_MANAGER_CONNECTED = "location_manager_connected";
 
     private static final int REQUEST_LOCATION_SETTINGS = 1;
 
@@ -45,6 +46,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
     LocationManager locationManager;
     boolean enableLocationUpdates;
     boolean isAskingForPermission;
+    boolean isLocationManagerConnected;
     Location lastKnowLocation;
 
 
@@ -54,6 +56,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
         enableLocationUpdates = false;
         isAskingForPermission = false;
+        isLocationManagerConnected = false;
         setupBinding();
         setupToolbar();
         setupLocationManager();
@@ -66,6 +69,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     private void setupLocationManager() {
         locationManager = new LocationManager(this, this);
+        locationManager.handleOnStart();
     }
 
     private void setupBinding() {
@@ -113,7 +117,9 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
             viewModel.fetchProjectsNearMe(location);
         } else {
             enableLocationUpdates = true;
-            locationManager.startLocationUpdates();
+            if (isLocationManagerConnected) {
+                locationManager.startLocationUpdates();
+            }
         }
     }
 
@@ -130,7 +136,10 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onConnected(@Nullable Bundle connectionHint) {
-
+        isLocationManagerConnected = true;
+        if (enableLocationUpdates) {
+            locationManager.startLocationUpdates();
+        }
     }
 
     @Override
@@ -157,15 +166,27 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
     protected void onStart() {
         super.onStart();
         locationManager.handleOnStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isLocationManagerConnected = false;
+        locationManager.handleOnStop();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (enableLocationUpdates) {
             locationManager.startLocationUpdates();
         }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        locationManager.handleOnStop();
+    protected void onPause() {
+        super.onPause();
         locationManager.stopLocationUpdates();
     }
 
@@ -219,6 +240,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_ENABLE_LOCATION, enableLocationUpdates);
         outState.putBoolean(EXTRA_ASKING_FOR_PERMISSION, isAskingForPermission);
+        outState.putBoolean(EXTRA_LOCATION_MANAGER_CONNECTED, isLocationManagerConnected);
     }
 
     @Override
@@ -226,6 +248,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         super.onRestoreInstanceState(savedInstanceState);
         enableLocationUpdates = savedInstanceState.getBoolean(EXTRA_ENABLE_LOCATION);
         isAskingForPermission = savedInstanceState.getBoolean(EXTRA_ASKING_FOR_PERMISSION);
+        isLocationManagerConnected = savedInstanceState.getBoolean(EXTRA_LOCATION_MANAGER_CONNECTED);
     }
 
     @Override

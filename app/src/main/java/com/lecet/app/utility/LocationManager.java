@@ -59,12 +59,16 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     // Must be called in the Activity onStart
     public void handleOnStart() {
-        apiClient.connect();
+        if (!apiClient.isConnected() && !apiClient.isConnecting()) {
+            apiClient.connect();
+        }
     }
 
     // Must be called in the Activity onStop
     public void handleOnStop() {
-        apiClient.disconnect();
+        if (apiClient.isConnected() || apiClient.isConnecting()) {
+            apiClient.disconnect();
+        }
     }
 
     // GoogleApiClient.ConnectionCallbacks
