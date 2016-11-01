@@ -125,7 +125,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.dashboard_bids);
+        setTitle(R.string.dashboard_projects);
         TextView toolbarTitle = null;
         try {
             Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
@@ -175,19 +175,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
                 // Notify view model of latest position.
                 viewModel.currentPagerPosition(position);
-
-                int title = 0;
-                switch (position) {
-                    case 0:
-                    case 1:
-                        title = R.string.dashboard_bids;
-                        break;
-                    case 2:
-                    case 3:
-                        title = R.string.dashboard_projects;
-                        break;
-                }
-                setTitle(title);
+                setTitle(R.string.dashboard_projects);
             }
 
             @Override
