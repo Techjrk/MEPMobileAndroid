@@ -76,6 +76,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         binding = DataBindingUtil.setContentView(this, R.layout.activity_projects_near_me);
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
+        viewModel.setNavigationButton(binding.buttonNavigate);
         binding.setViewModel(viewModel);
 
     }
@@ -103,6 +104,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap map) {
+        map.getUiSettings().setMapToolbarEnabled(false);
         map.setInfoWindowAdapter(new LacetInfoWindowAdapter(this));
         viewModel.setMap(map);
 

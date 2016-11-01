@@ -1,9 +1,12 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +44,7 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     private GoogleMap map;
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
+    private ImageButton navigationButton;
 
     private BitmapDescriptor redMarker;
     private BitmapDescriptor greenMarker;
@@ -53,6 +57,10 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
+    }
+
+    public void setNavigationButton(ImageButton navigationButton) {
+        this.navigationButton = navigationButton;
     }
 
     public void setMap(GoogleMap map) {
@@ -110,7 +118,17 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         lastMarkerTapped = marker;
         lastMarkerTapped.setIcon(yellowMarker);
 
+        navigationButton.setVisibility(View.VISIBLE);
+
         return false;
+    }
+
+    public void onNavigationClicked(View view) {
+        Uri gmmIntentUri = Uri.parse(String.format("google.navigation:q=%s,%s"
+                , lastMarkerTapped.getPosition().latitude, lastMarkerTapped.getPosition().longitude));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        activity.get().startActivity(mapIntent);
     }
 
     @Override
@@ -124,6 +142,7 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
             BitmapDescriptor icon = ((Project) marker.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
             lastMarkerTapped.setIcon(icon);
         }
+        navigationButton.setVisibility(View.GONE);
         lastMarkerTapped = null;
     }
 
