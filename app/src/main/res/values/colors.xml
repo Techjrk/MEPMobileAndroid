@@ -35,4 +35,8 @@
     <color name="calendar_center_color">#0F3C6D</color>
     <color name="calendar_end_color">#05224A</color>
 
+    <!-- Near Me Bar Colors -->
+    <color name="near_me_bar_end_color">#516A89</color>
+    <color name="near_me_bar_start_color">#557292</color>
+
 </resources>

@@ -1,12 +1,13 @@
 package com.lecet.app.data.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 
 /**
  * File: Geocode Created: 10/5/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -36,6 +37,10 @@ public class Geocode extends RealmObject {
 
     public void setLat(double lat) {
         this.lat = lat;
+    }
+
+    public LatLng toLatLng() {
+        return new LatLng(lat, lng);
     }
 
     @Override

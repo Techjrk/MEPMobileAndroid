@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -338,6 +339,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_item_arrow:
+                startActivity(new Intent(this, ProjectsNearMeActivity.class));
                 return true;
             case R.id.menu_item_folder:
                 return true;

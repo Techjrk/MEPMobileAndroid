@@ -22,4 +22,10 @@
     <dimen name="overflow_menu_width">14dp</dimen>
     <dimen name="overflow_menu_height">270dp</dimen>
 
+    <!-- Map Info Window -->
+    <dimen name="info_window_height">175dp</dimen>
+    <dimen name="info_window_width">180dp</dimen>
+    <dimen name="info_window_padding">16dp</dimen>
+    <dimen name="info_window_corner_size">5dp</dimen>
+
 </resources>
