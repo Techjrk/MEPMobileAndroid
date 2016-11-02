@@ -20,8 +20,6 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
     private TreeMap<Integer, Integer> positionToSectionMap; // Maps the position of each section start.
 
 
-    // TreeMap
-
     public SectionedAdapter() {
 
         positionToSectionMap = new TreeMap<>();
@@ -38,9 +36,13 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
 
     public abstract int getHeaderViewType(int section);
 
-    public abstract void onBindViewHolder(RecyclerView.ViewHolder holder, int section, int position);
+    public abstract void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position);
 
-    public abstract void onBindViewHolder(RecyclerView.ViewHolder holder, int section, int position, List payloads);
+    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position, List payloads) {
+        onBindItemViewHolder(holder, section, position);
+    }
+
+    public abstract void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int section);
 
     /**
      * Implementation of Adapter required methods
@@ -91,11 +93,9 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
 
-        Integer boxedPosition = position;
+        if (positionToSectionMap.containsKey(position)) {
 
-        if (positionToSectionMap.containsKey(boxedPosition)) {
-
-            return getHeaderViewType(positionToSectionMap.get(boxedPosition));
+            return getHeaderViewType(positionToSectionMap.get(position));
         }
 
         Integer section = findSectionByPosition(position);
@@ -107,18 +107,16 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         Integer section = findSectionByPosition(position);
-        Integer positionInSection = findPositionInSection(section, position);
 
-        onBindViewHolder(holder, section, positionInSection);
-    }
+        if (positionToSectionMap.containsKey(position)) {
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+            onBindHeaderViewHolder(holder, section);
 
-        Integer section = findSectionByPosition(position);
-        Integer positionInSection = findPositionInSection(section, position);
+        } else {
 
-        onBindViewHolder(holder, section, positionInSection, payloads);
+            Integer positionInSection = findPositionInSection(section, position);
+            onBindItemViewHolder(holder, section, positionInSection);
+        }
     }
 
 
