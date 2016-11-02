@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.content.widget.LacetInfoWindowAdapter;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectsNearMeBinding;
@@ -32,7 +33,7 @@ import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 
 import io.realm.Realm;
 
-public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapReadyCallback
+public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
         , LocationManager.LocationManagerListener, LacetConfirmDialogFragment.ConfirmDialogListener {
 
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
@@ -76,7 +77,6 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         binding = DataBindingUtil.setContentView(this, R.layout.activity_projects_near_me);
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
-        viewModel.setNavigationButton(binding.buttonNavigate);
         binding.setViewModel(viewModel);
 
     }
@@ -105,18 +105,21 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap map) {
-        map.getUiSettings().setMapToolbarEnabled(false);
         map.setInfoWindowAdapter(new LacetInfoWindowAdapter(this));
         viewModel.setMap(map);
 
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
-        fetchProjects();
+        fetchProjects(false);
     }
 
-    private void fetchProjects() {
+    private void fetchProjects(boolean animateCamera) {
         if (lastKnowLocation != null) {
             LatLng location = new LatLng(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
-            viewModel.moveMapCamera(location);
+            if (animateCamera) {
+                viewModel.animateMapCamera(location);
+            } else {
+                viewModel.moveMapCamera(location);
+            }
             viewModel.fetchProjectsNearMe(location);
         } else {
             enableLocationUpdates = true;
@@ -161,7 +164,7 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
             enableLocationUpdates = false;
             lastKnowLocation = location;
             locationManager.stopLocationUpdates();
-            fetchProjects();
+            fetchProjects(true);
         }
     }
 
@@ -169,6 +172,13 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
     protected void onStart() {
         super.onStart();
         locationManager.handleOnStart();
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+        if (isConnected) {
+            fetchProjects(false);
+        }
     }
 
     @Override
@@ -294,5 +304,14 @@ public class ProjectsNearMeActivity extends AppCompatActivity implements OnMapRe
         Intent gpsOptionsIntent = new Intent(
                 android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivityForResult(gpsOptionsIntent, REQUEST_LOCATION_SETTINGS);
+    }
+
+    public void onNavigationPressed(View view) {
+        enableLocationUpdates = true;
+        lastKnowLocation = locationManager.retrieveLastKnownLocation();
+        if (lastKnowLocation != null) {
+            fetchProjects(true);
+        }
+        locationManager.startLocationUpdates();
     }
 }

@@ -54,7 +54,6 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     private GoogleMap map;
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
-    private ImageButton navigationButton;
 
     private BitmapDescriptor redMarker;
     private BitmapDescriptor greenMarker;
@@ -72,10 +71,6 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
-    }
-
-    public void setNavigationButton(ImageButton navigationButton) {
-        this.navigationButton = navigationButton;
     }
 
     public void setMap(GoogleMap map) {
@@ -144,6 +139,10 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
     }
 
+    public void animateMapCamera(LatLng location) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+    }
+
     private void populateMap(List<Project> projects) {
         if (activity.get() != null && !activity.get().isFinishing() && !activity.get().isDestroyed()) {
             for (Project project : projects) {
@@ -163,19 +162,19 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (lastMarkerTapped != null) {
-            BitmapDescriptor icon = ((Project) marker.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
+            BitmapDescriptor icon = ((Project) lastMarkerTapped.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
             lastMarkerTapped.setIcon(icon);
         }
 
         lastMarkerTapped = marker;
         lastMarkerTapped.setIcon(yellowMarker);
 
-        navigationButton.setVisibility(View.VISIBLE);
-
         return false;
     }
 
     public void onNavigationClicked(View view) {
+
+        //TODO center map on current location
         Uri gmmIntentUri = Uri.parse(String.format("google.navigation:q=%s,%s"
                 , lastMarkerTapped.getPosition().latitude, lastMarkerTapped.getPosition().longitude));
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -191,10 +190,9 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     @Override
     public void onInfoWindowClose(Marker marker) {
         if (lastMarkerTapped != null) {
-            BitmapDescriptor icon = ((Project) marker.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
+            BitmapDescriptor icon = ((Project) lastMarkerTapped.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
             lastMarkerTapped.setIcon(icon);
         }
-        navigationButton.setVisibility(View.GONE);
         lastMarkerTapped = null;
     }
 
