@@ -79,7 +79,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         if (viewType == headerType1) {
 
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.test_section_1, parent, false);
+                    .inflate(R.layout.list_item_detail_header, parent, false);
 
             return new SectionHeaderVH(v);
 
