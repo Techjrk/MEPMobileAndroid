@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -105,9 +107,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap map) {
+        MapsInitializer.initialize(this);
         map.setInfoWindowAdapter(new LacetInfoWindowAdapter(this));
         viewModel.setMap(map);
-
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
     }
