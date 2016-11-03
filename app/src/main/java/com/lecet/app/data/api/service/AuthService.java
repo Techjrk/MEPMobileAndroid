@@ -1,10 +1,8 @@
 package com.lecet.app.data.api.service;
 
-import com.lecet.app.data.api.request.AuthRequest;
 import com.lecet.app.data.models.Access;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
