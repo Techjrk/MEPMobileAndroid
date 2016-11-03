@@ -36,6 +36,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.enums.LacetFont;
 import com.lecet.app.interfaces.LecetCallback;
@@ -98,6 +99,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+            viewModel.getUserProjectTrackingList();
         }
     }
 
@@ -109,6 +111,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+            viewModel.getUserProjectTrackingList();
         }
     }
 
@@ -117,8 +120,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         Calendar calendar = Calendar.getInstance();
-        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar);
+        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar, trackingListDomain);
         binding.setViewModel(viewModel);
     }
 

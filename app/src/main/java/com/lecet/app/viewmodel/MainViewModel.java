@@ -15,8 +15,10 @@ import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.utility.DateUtility;
 
@@ -42,6 +44,8 @@ import retrofit2.Response;
 
 public class MainViewModel {
 
+    private static final String TAG = "MainViewModel";
+
     @IntDef({DASHBOARD_POSITION_MBR, DASHBOARD_POSITION_MHS, DASHBOARD_POSITION_MRA, DASHBOARD_POSITION_MRU})
     public @interface DashboardPosition {
     }
@@ -55,6 +59,7 @@ public class MainViewModel {
     private final ProjectDomain projectDomain;
     private final Calendar calendar;
     private final AppCompatActivity appCompatActivity;
+    private final TrackingListDomain projectTrackingListDomain;
 
     private
     @DashboardPosition
@@ -73,12 +78,13 @@ public class MainViewModel {
     private DashboardRecyclerViewAdapter dashboardAdapter;
     private List<RealmObject> adapterData;
 
-    public MainViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain, Calendar calendar) {
+    public MainViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain, Calendar calendar, TrackingListDomain trackingListDomain) {
 
         this.bidDomain = bidDomain;
         this.projectDomain = projectDomain;
         this.calendar = calendar;
         this.appCompatActivity = appCompatActivity;
+        this.projectTrackingListDomain = trackingListDomain;
 
         initializeAdapter();
     }
@@ -294,6 +300,26 @@ public class MainViewModel {
                 setupAdapterWithProjects(realmResultsMRU);
             }
         }
+    }
+
+    public void getUserProjectTrackingList() {
+
+        // First lets delete any existing data
+        projectTrackingListDomain.deleteAllProjectTrackingLists();
+
+        projectTrackingListDomain.getUserProjectTrackingLists(new Callback<List<ProjectTrackingList>>() {
+            @Override
+            public void onResponse(Call<List<ProjectTrackingList>> call, Response<List<ProjectTrackingList>> response) {
+
+                List<ProjectTrackingList> data = response.body();
+                projectTrackingListDomain.copyToRealmTransaction(data);
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectTrackingList>> call, Throwable t) {
+
+            }
+        });
     }
 
     /**
