@@ -5,7 +5,7 @@ import com.lecet.app.data.models.Project;
 import java.text.SimpleDateFormat;
 
 /**
- * File: BidHappeningSoonItemViewModel Created: 10/17/16 Author: domandtom
+ * File: DashboardProjectItemViewModel Created: 10/17/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */

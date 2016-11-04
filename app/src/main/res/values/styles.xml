@@ -387,6 +387,7 @@
 
     <style name="ListItemProjectTrackingTextView.Title">
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
 
     <style name="ListItemProjectTrackingTextView.Detail1">
@@ -397,6 +398,11 @@
     <style name="ListItemProjectTrackingTextView.Detail2">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/lecetTextLightGray</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.Expandable">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/pureWhite</item>
     </style>
 
 

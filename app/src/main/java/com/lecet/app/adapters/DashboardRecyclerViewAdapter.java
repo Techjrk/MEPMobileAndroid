@@ -20,7 +20,7 @@ import java.util.List;
 import io.realm.RealmObject;
 
 /**
- * File: DashboardAdapter Created: 10/21/16 Author: domandtom
+ * File: DashboardRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
