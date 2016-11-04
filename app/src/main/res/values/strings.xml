@@ -128,5 +128,8 @@
     <string name="confirm_go_to_settings">GO TO SETTINGS</string>
     <string name="confirm_cancel">CANCEL</string>
 
+    <!-- MTM Menu -->
+    <string name="mtm_menu_number_company">%s Companies</string>
+    <string name="mtm_menu_number_projects">%s Projects</string>
 
 </resources>
