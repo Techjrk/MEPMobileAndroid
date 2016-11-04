@@ -431,8 +431,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             Point size = new Point();
             display.getSize(size);
             int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
-            int offset = (int) (width * 0.59); //enough to show it below more item menu
-            mtmMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.mtm_menu_background));
+            int offset = (int) (width * 0.592); //enough to show it below more item menu
+            mtmMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.mtm_back));
             mtmMenu.setAnchorView(anchor);
             mtmMenu.setModal(true);
             mtmMenu.setWidth(width);
