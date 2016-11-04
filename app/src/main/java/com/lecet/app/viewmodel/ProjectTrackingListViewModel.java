@@ -88,7 +88,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         return (RecyclerView) appCompatActivity.findViewById(recyclerView);
     }
 
-    public void getTrackingListProjects(@NonNull final LecetCallback<Project[]> callback) {
+    /*public void getTrackingListProjects(@NonNull final LecetCallback<Project[]> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
         if (realmResultsMPL == null) {
@@ -138,7 +138,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
 //        return projectDomain.fetchProjects();
         return new RealmResults<Project>();
-    }
+    }*/
 
 
     private void setupAdapterWithProjects(RealmResults<Project> realmResults) {
