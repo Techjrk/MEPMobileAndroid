@@ -5,24 +5,26 @@
 
         <variable
                 name="viewModel"
-                type="com.lecet.app.viewmodel.ProjectTrackingListViewModel" />
+                type="com.lecet.app.viewmodel.ProjectTrackingListViewModel"/>
     </data>
 
-    <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:showIn="@layout/activity_project_tracking_list"
-            tools:context="com.lecet.app.content.ProjectTrackingListActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:weightSum="100"
+                  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                  tools:context="com.lecet.app.content.ProjectTrackingListActivity">
 
-        <ListView
-                android:id="@+id/project_tracking_list_view"
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/project_tracking_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/lecetLightGray"
                 tools:listitem="@layout/list_item_project_tracking"/>
 
-    </RelativeLayout>
+    </LinearLayout>
+
 </layout>
