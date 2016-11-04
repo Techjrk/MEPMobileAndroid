@@ -3,7 +3,6 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
+import com.lecet.app.adapters.MTMMenuAdapter;
 import com.lecet.app.adapters.OverflowMenuAdapter;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
@@ -36,6 +36,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.enums.LacetFont;
 import com.lecet.app.interfaces.LecetCallback;
@@ -66,7 +67,7 @@ import io.realm.Realm;
  * after logging in.
  */
 public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
-        MRADelegate, MRUDelegate, MRUDataSource{
+        MRADelegate, MRUDelegate, MRUDataSource {
 
     private static final String TAG = "MainActivity";
 
@@ -85,6 +86,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     ImageButton pageRightButton;
 
     ListPopupWindow overflowMenu;
+    ListPopupWindow mtmMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+            viewModel.getUserProjectTrackingList();
         }
     }
 
@@ -109,6 +112,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+            viewModel.getUserProjectTrackingList();
         }
     }
 
@@ -117,8 +121,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         Calendar calendar = Calendar.getInstance();
-        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar);
+        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar, trackingListDomain);
         binding.setViewModel(viewModel);
     }
 
@@ -290,7 +295,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         viewModel.fetchProjectsByBidDate(selectedDate);
     }
 
-    /** MRA Implementation **/
+    /**
+     * MRA Implementation
+     **/
 
     @Override
     public void refreshRecentlyAddedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
@@ -306,7 +313,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     }
 
 
-    /** MRU Implementation **/
+    /**
+     * MRU Implementation
+     **/
 
     @Override
     public void refreshRecentlyUpdatedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
@@ -320,7 +329,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Date publishDate = DateUtility.addDays(-30);
         viewModel.fetchProjectsRecentlyUpdated(group, publishDate);
     }
-
 
 
     /**
@@ -339,10 +347,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_item_arrow:
+                startActivity(new Intent(this, ProjectsNearMeActivity.class));
                 return true;
             case R.id.menu_item_folder:
-                Intent intent = new Intent(this, ProjectTrackingListActivity.class);        //TODO - temp
-                this.startActivity(intent);
+                toogleMTMMenu();
                 return true;
             case R.id.menu_item_search:
                 return true;
@@ -360,6 +368,13 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             createOverflowMenu(findViewById(R.id.menu_item_more));
         }
         overflowMenu.show();
+    }
+
+    private void toogleMTMMenu() {
+        if (mtmMenu == null) {
+            createMTMMenu(findViewById(R.id.menu_item_folder));
+        }
+        mtmMenu.show();
     }
 
     private void createOverflowMenu(View anchor) {
@@ -398,6 +413,36 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
                             MainActivity.this.onSettingsClicked();
                             break;
                     }
+                }
+            }); // the callback for when a list item is selected
+        }
+    }
+
+    private void createMTMMenu(View anchor) {
+        if (mtmMenu == null) {
+            mtmMenu = new ListPopupWindow(this);
+
+            UserDomain userDomain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            User user = userDomain.fetchLoggedInUser();
+
+            MTMMenuAdapter adapter = new MTMMenuAdapter(this, user, getResources().getStringArray(R.array.overflow_menu_options));
+
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
+            int offset = (int) (width * 0.59); //enough to show it below more item menu
+            mtmMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.mtm_menu_background));
+            mtmMenu.setAnchorView(anchor);
+            mtmMenu.setModal(true);
+            mtmMenu.setWidth(width);
+            mtmMenu.setHeight(getResources().getDimensionPixelSize(R.dimen.overflow_menu_height));
+            mtmMenu.setHorizontalOffset(-offset);
+            mtmMenu.setAdapter(adapter);
+            mtmMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //TODO do something
                 }
             }); // the callback for when a list item is selected
         }
