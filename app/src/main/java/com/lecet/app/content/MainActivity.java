@@ -99,7 +99,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
-            viewModel.getUserProjectTrackingList();
+            viewModel.getTrackingLists();
         }
     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
-            viewModel.getUserProjectTrackingList();
+            viewModel.getTrackingLists();
         }
     }
 

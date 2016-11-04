@@ -1,5 +1,6 @@
 package com.lecet.app.data.api.service;
 
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public interface TrackingListService {
     @GET("LecetUsers/{userId}/projectTrackingLists")
     Call<List<ProjectTrackingList>> getUserProjectTrackingList(@Header("Authorization") String token, @Path("userId") long userId, @Query("filter") String filter);
 
-
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("LecetUsers/{userId}/companyTrackingLists")
+    Call<List<CompanyTrackingList>> getUserCompanyTrackingList(@Header("Authorization") String token, @Path("userId") long userId, @Query("filter") String filter);
 }

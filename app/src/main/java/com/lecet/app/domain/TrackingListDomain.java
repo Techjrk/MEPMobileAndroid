@@ -1,6 +1,7 @@
 package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
@@ -43,29 +44,35 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
-    // Persisted
+    public void getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        long userID = sharedPreferenceUtil.getId();
+
+        String filter = "{\"include\":[\"companies\"]}";
+
+        Call<List<CompanyTrackingList>> call = lecetClient.getTrackingListService().getUserCompanyTrackingList(token, userID, filter);
+        call.enqueue(callback);
+    }
+
+    /** Persisted **/
+
+    // Fetch
+
     public RealmResults<ProjectTrackingList> fetchUserProjectTrackingList() {
 
         RealmResults<ProjectTrackingList> results = realm.where(ProjectTrackingList.class).findAll();
         return results;
     }
 
-    public ProjectTrackingList copyToRealmTransaction(ProjectTrackingList trackingList) {
+    public RealmResults<CompanyTrackingList> fetchUserCompanyTrackingList() {
 
-        realm.beginTransaction();
-        ProjectTrackingList persistedTrackingList = realm.copyToRealmOrUpdate(trackingList);
-        realm.commitTransaction();
-
-        return persistedTrackingList;
+        RealmResults<CompanyTrackingList> results = realm.where(CompanyTrackingList.class).findAll();
+        return results;
     }
 
-    public List<ProjectTrackingList> copyToRealmTransaction(List<ProjectTrackingList> trackingLists) {
 
-        realm.beginTransaction();
-        List<ProjectTrackingList> persistedTrackingLists = realm.copyToRealmOrUpdate(trackingLists);
-        realm.commitTransaction();
-        return persistedTrackingLists;
-    }
+    // Delete
 
     public void deleteAllProjectTrackingLists() {
 
@@ -78,5 +85,48 @@ public class TrackingListDomain {
                 results.deleteAllFromRealm();
             }
         });
+    }
+
+
+    public void deleteAllCompanyTrackingLists() {
+
+        final RealmResults<ProjectTrackingList> results = fetchUserProjectTrackingList();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                results.deleteAllFromRealm();
+            }
+        });
+    }
+
+    // Realm transactions
+
+    public ProjectTrackingList copyToRealmTransaction(ProjectTrackingList trackingList) {
+
+        realm.beginTransaction();
+        ProjectTrackingList persistedTrackingList = realm.copyToRealmOrUpdate(trackingList);
+        realm.commitTransaction();
+
+        return persistedTrackingList;
+    }
+
+
+    public List<CompanyTrackingList> copyCompanyTrackingListsToRealmTransaction(List<CompanyTrackingList> trackingLists) {
+
+        realm.beginTransaction();
+        List<CompanyTrackingList> persistedTrackingLists = realm.copyToRealmOrUpdate(trackingLists);
+        realm.commitTransaction();
+        return persistedTrackingLists;
+    }
+
+
+    public List<ProjectTrackingList> copyProjectTrackingListsToRealmTransaction(List<ProjectTrackingList> trackingLists) {
+
+        realm.beginTransaction();
+        List<ProjectTrackingList> persistedTrackingLists = realm.copyToRealmOrUpdate(trackingLists);
+        realm.commitTransaction();
+        return persistedTrackingLists;
     }
 }

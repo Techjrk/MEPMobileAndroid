@@ -14,6 +14,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
@@ -302,6 +303,14 @@ public class MainViewModel {
         }
     }
 
+
+    public void getTrackingLists() {
+
+        getUserProjectTrackingList();
+        getUserCompanyTrackingList();
+    }
+
+
     public void getUserProjectTrackingList() {
 
         // First lets delete any existing data
@@ -312,7 +321,7 @@ public class MainViewModel {
             public void onResponse(Call<List<ProjectTrackingList>> call, Response<List<ProjectTrackingList>> response) {
 
                 List<ProjectTrackingList> data = response.body();
-                projectTrackingListDomain.copyToRealmTransaction(data);
+                projectTrackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
             }
 
             @Override
@@ -321,6 +330,28 @@ public class MainViewModel {
             }
         });
     }
+
+
+    public void getUserCompanyTrackingList() {
+
+        // First lets delete any existing data
+        projectTrackingListDomain.deleteAllCompanyTrackingLists();
+
+        projectTrackingListDomain.getUserCompanyTrackingLists(new Callback<List<CompanyTrackingList>>() {
+            @Override
+            public void onResponse(Call<List<CompanyTrackingList>> call, Response<List<CompanyTrackingList>> response) {
+
+                List<CompanyTrackingList> data = response.body();
+                projectTrackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
+            }
+
+            @Override
+            public void onFailure(Call<List<CompanyTrackingList>> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     /**
      * Persisted
