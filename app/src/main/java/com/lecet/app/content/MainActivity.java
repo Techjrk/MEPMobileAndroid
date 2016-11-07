@@ -422,10 +422,14 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         if (mtmMenu == null) {
             mtmMenu = new ListPopupWindow(this);
 
-            UserDomain userDomain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-            User user = userDomain.fetchLoggedInUser();
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
 
-            MTMMenuAdapter adapter = new MTMMenuAdapter(this, user, getResources().getStringArray(R.array.overflow_menu_options));
+            final MTMMenuAdapter adapter
+                    = new MTMMenuAdapter(this
+                    , getResources().getStringArray(R.array.mtm_menu)
+                    , trackingListDomain.fetchUserProjectTrackingList()
+                    , trackingListDomain.fetchUserCompanyTrackingList());
+
 
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -436,7 +440,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             mtmMenu.setAnchorView(anchor);
             mtmMenu.setModal(true);
             mtmMenu.setWidth(width);
-            mtmMenu.setHeight(getResources().getDimensionPixelSize(R.dimen.overflow_menu_height));
             mtmMenu.setHorizontalOffset(-offset);
             mtmMenu.setAdapter(adapter);
             mtmMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
