@@ -34,7 +34,13 @@ public class ListItemProjectTrackingViewModel {
 
     public String getProjectNote() {
 
-        return "NOTE";  //TODO - update
+        return project.getProjectNotes();
+    }
+
+    public String getProjectBidDate() {
+
+        if(project.getBidDate() != null) return project.getBidDate().toString();
+        return null;
     }
 
     public String getClientLocation() {
@@ -55,7 +61,7 @@ public class ListItemProjectTrackingViewModel {
     //////////////////////////////////////
     // PROJECT BIDS
 
-    public String getBidType() {
+    /*public String getBidType() {
 
         StringBuilder sb = new StringBuilder();
         if (project.getPrimaryProjectType() != null && project.getPrimaryProjectType().getTitle() != null) {
@@ -96,11 +102,11 @@ public class ListItemProjectTrackingViewModel {
     public boolean isUnion() {
 
         return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
-    }
+    }*/
 
     public boolean hasBid() {
         //TODO: update
-        return true;    //project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
+        return project.getBidDate() != null;
     }
 
 
@@ -108,7 +114,8 @@ public class ListItemProjectTrackingViewModel {
     // PROJECT NOTES
 
     public boolean hasNote() {
-        return true;//project.getProjectNotes().length() > 0;
+        if(project.getProjectNotes() == null || project.getProjectNotes().length() == 0) return false;
+        return true;
     }
 
 
