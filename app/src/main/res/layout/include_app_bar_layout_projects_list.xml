@@ -6,64 +6,47 @@
                 android:layout_height="?attr/actionBarSize"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:background="@color/lecetButtonDarkerBlue">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+                android:background="@color/transparent">
 
         <ImageView
                 android:id="@+id/back_button"
-                android:layout_width="48dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:scaleType="center"
+                android:layout_marginLeft="16dp"
+                android:gravity="left"
                 android:src="@drawable/ic_back_button"
                 android:visibility="visible" />
 
-        <LinearLayout
+        <!-- bind:typeface="@{`Lato-Regular.ttf`}" not working -->
+        <TextView
+                android:id="@+id/title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_centerHorizontal="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/lecetTextWhite"
+                android:textSize="17sp"
+                android:text="Trains and Metros"/>
 
-
-            <!-- bind:typeface="@{`Lato-Regular.ttf`}" not working -->
-            <TextView
-                    android:id="@+id/title_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/lecetTextWhite"
-                    android:textSize="17sp"
-                    android:text="Trains and Metros"/>
-
-            <TextView
-                    android:id="@+id/subtitle_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:maxLines="1"
-                    android:textColor="@color/lecetTextWhite"
-                    android:textSize="12sp"
-                    android:text="17 Projects"/>
-
-        </LinearLayout>
+        <TextView
+                android:id="@+id/subtitle_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_text_view"
+                android:layout_centerHorizontal="true"
+                android:maxLines="1"
+                android:textColor="@color/lecetTextLightGray"
+                android:textSize="12sp"
+                android:text="17 Projects"/>
 
         <ImageView
                 android:id="@+id/sort_menu_button"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:gravity="right"
-                android:src="@drawable/ic_action_arrow"/>
-
-    </LinearLayout>
+                android:src="@drawable/ic_sort_menu"/>
 
 </RelativeLayout>
