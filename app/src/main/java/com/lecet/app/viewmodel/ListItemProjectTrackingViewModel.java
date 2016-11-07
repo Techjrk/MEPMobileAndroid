@@ -108,7 +108,7 @@ public class ListItemProjectTrackingViewModel {
     // PROJECT NOTES
 
     public boolean hasNote() {
-        return project.getProjectNotes().length() > 0;
+        return true;//project.getProjectNotes().length() > 0;
     }
 
 

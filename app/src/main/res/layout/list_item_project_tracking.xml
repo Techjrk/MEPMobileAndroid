@@ -20,10 +20,10 @@
                   android:background="@drawable/shape_rect_list_item_bg_1">
 
         <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="6dp"
-                android:orientation="horizontal"
+                android:layout_marginTop="-4dp"
                 android:gravity="center_vertical"
                 android:onClick="@{viewModel.onClick}">
 
@@ -32,6 +32,7 @@
                     android:id="@+id/project_locatation_image_view"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:layout_marginTop="6dp"
                     android:layout_marginLeft="10dp"
                     bind:imageUrl="@{viewModel.mapUrl}"/>
 
@@ -47,19 +48,19 @@
                         android:paddingTop="14dp"
                         tools:text="Parks Building"
                         style="@style/ListItemProjectTrackingTextView.Title"
-                        bind:typeface="@{`Lato-Bold.ttf`}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
                         android:text="@{viewModel.projectName}"/>
 
                 <!-- Location -->
                 <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="20dp">
+                        android:layout_height="22dp"
+                        android:orientation="horizontal">
 
                     <ImageView
                             android:layout_width="9dp"
                             android:layout_height="13dp"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:layout_marginRight="2dp"
                             android:src="@mipmap/ic_bid_location"/>
 
@@ -75,12 +76,13 @@
                 <!-- Keywords / Tags -->
                 <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="18dp">
+                        android:layout_height="20dp"
+                        android:orientation="horizontal">
 
                     <ImageView
                             android:layout_width="11dp"
                             android:layout_height="16dp"
+                            android:layout_marginTop="2dp"
                             android:layout_marginRight="2dp"
                             android:src="@drawable/tag_icon"/>
 
@@ -102,6 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:layout_marginTop="8dp">
 
             <!-- Expandable Bid View -->

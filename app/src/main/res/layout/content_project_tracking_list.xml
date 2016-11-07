@@ -22,7 +22,6 @@
                 android:id="@+id/project_tracking_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lecetLightGray"
                 tools:listitem="@layout/list_item_project_tracking"/>
 
     </LinearLayout>

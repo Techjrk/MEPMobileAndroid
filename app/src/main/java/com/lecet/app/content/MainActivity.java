@@ -31,6 +31,7 @@ import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
@@ -422,7 +423,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         if (mtmMenu == null) {
             mtmMenu = new ListPopupWindow(this);
 
-            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
 
             final MTMMenuAdapter adapter
                     = new MTMMenuAdapter(this
@@ -445,7 +446,19 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             mtmMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO do something
+                    Object o = adapter.getItem(position);
+                    try {
+                        ProjectTrackingList listItem = (ProjectTrackingList) o;
+                        long listItemId = listItem.getId();
+                        Intent intent = new Intent(parent.getContext(), ProjectTrackingListActivity.class);
+                        intent.putExtra("listItemPosition", position);      //TODO = make static
+                        intent.putExtra("listItemId", listItemId);          //TODO = make static
+                        startActivity(intent);
+                    }
+                    catch (ClassCastException e) {
+                        e.printStackTrace();
+                        // TODO - handle
+                    }
                 }
             }); // the callback for when a list item is selected
         }

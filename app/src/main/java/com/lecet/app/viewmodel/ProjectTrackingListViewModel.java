@@ -13,6 +13,7 @@ import android.util.Log;
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.LecetCallback;
@@ -22,6 +23,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -45,10 +48,10 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private RecyclerView recyclerView;
     private ProjectListRecyclerViewAdapter projectListAdapter;
     private List<RealmObject> adapterData;
-    private RealmResults<Project> realmResultsMPL;
+    private RealmResults<Project> projectListResults;
 
 
-    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain) {
+    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList projectList, BidDomain bidDomain, ProjectDomain projectDomain) {
 
         Log.d(TAG, "Constructor");
 
@@ -57,6 +60,13 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.projectDomain = projectDomain;
 
         initializeAdapter();
+
+        //projectListResults = Realm.getDefaultInstance().where(Project.class).equalTo("id", projectList.getId()).findAll();
+        projectListResults = Realm.getDefaultInstance().where(Project.class).lessThan("id", 1000).findAll();  //TODO - temp. uses id range rather than passed list from dashboard menu
+        Log.d(TAG, "Constructor: projectListResults: " + projectListResults);
+        //RealmList<Project> results = new RealmList<Project>();
+        //results.addAll(projectListResults.subList(0, projectListResults.size()));
+        setupAdapterWithProjects(projectListResults);
     }
 
     /**
@@ -150,18 +160,18 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         projectListAdapter.notifyDataSetChanged();
     }
 
-
+/*
     @Bindable
     public Project[] getProjects() {
         Project project = new Project();
         Project[] projects = new Project[1];
         projects[1] = project;
         return projects;
-    }
-
+    }*/
+/*
     @BindingAdapter({"bind:projects"})
     public static void entries(RecyclerView recyclerView, Project[] projects) {
         //TODO - set RecyclerView adapter
-    }
+    }*/
 
 }
