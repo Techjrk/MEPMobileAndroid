@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.lecet.app.data.models.Project;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -39,7 +40,7 @@ public class ListItemProjectTrackingViewModel {
 
     public String getProjectBidDate() {
 
-        if(project.getBidDate() != null) return project.getBidDate().toString();
+        if(project.getBidDate() != null) return DateFormat.getDateTimeInstance().format(project.getBidDate());
         return null;
     }
 
