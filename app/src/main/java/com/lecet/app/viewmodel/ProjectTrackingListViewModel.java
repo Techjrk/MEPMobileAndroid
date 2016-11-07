@@ -8,7 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
@@ -49,6 +55,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private ProjectListRecyclerViewAdapter projectListAdapter;
     private List<RealmObject> adapterData;
     private RealmResults<Project> projectListResults;
+    private TextView titleTextView;
+    private TextView subtitleTextView;
 
 
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList projectList, BidDomain bidDomain, ProjectDomain projectDomain) {
@@ -61,13 +69,23 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
         initializeAdapter();
 
+        // see MTM branch Project Tracking List Domain
         //projectListResults = Realm.getDefaultInstance().where(Project.class).equalTo("id", projectList.getId()).findAll();
-        projectListResults = Realm.getDefaultInstance().where(Project.class).lessThan("id", 1000).findAll();  //TODO - temp. uses id range rather than passed list from dashboard menu
+        projectListResults = Realm.getDefaultInstance().where(Project.class).lessThan("id", 2000).findAll();  //TODO - temp. uses id range rather than passed list from dashboard menu
         Log.d(TAG, "Constructor: projectListResults: " + projectListResults);
         //RealmList<Project> results = new RealmList<Project>();
         //results.addAll(projectListResults.subList(0, projectListResults.size()));
         setupAdapterWithProjects(projectListResults);
     }
+
+    public void setToolbar(View toolbar, String title, String subtitle) {
+        titleTextView    = (TextView) toolbar.findViewById(R.id.title_text_view);
+        subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
+
+        titleTextView.setText(title);
+        subtitleTextView.setText(subtitle);
+    }
+
 
     /**
      * Adapter Data Management

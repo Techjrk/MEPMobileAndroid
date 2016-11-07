@@ -3,10 +3,11 @@ package com.lecet.app.content;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.NavigationBaseActivity;
@@ -17,11 +18,7 @@ import com.lecet.app.databinding.ActivityProjectTrackingListBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
-import com.lecet.app.enums.LacetFont;
-import com.lecet.app.utility.TextViewUtility;
 import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
-
-import java.lang.reflect.Field;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -35,6 +32,11 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
 
     private final String TAG = "ProjectTrackingListAct";
 
+    public static final String PROJECT_LIST_ITEM_ID = "listItemId";
+    public static final String PROJECT_LIST_ITEM_TITLE = "listItemTitle";
+    public static final String PROJECT_LIST_ITEM_SIZE = "listItemSize";
+    public static final String PROJECT_LIST_ITEM_POSITION = "listItemPosition";
+
     private ProjectTrackingListViewModel viewModel;
 
 
@@ -44,20 +46,18 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
 
         Log.d(TAG, "onCreate");
 
-        long listItemPosition = getIntent().getIntExtra("listItemPosition", -1);
-        long listItemId = getIntent().getLongExtra("listItemId", -1);
+        int listItemPosition = getIntent().getIntExtra(PROJECT_LIST_ITEM_POSITION, -1);
+        long listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
+        String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
+        int listItemSize = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
 
-        // TODO - accomodate company list also
+        // TODO - accommodate company list also
         final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         RealmResults<ProjectTrackingList> allProjectLists = trackingListDomain.fetchUserProjectTrackingList();
-        ProjectTrackingList projectList = allProjectLists.get((int) listItemPosition - 1);  // get just the one list of projects we need
+        ProjectTrackingList projectList = allProjectLists.get(listItemPosition - 1);  // TODO - get just the one list of projects we need
 
         setupBinding(projectList);
-        setupToolbar();
-
-        //setContentView(R.layout.activity_project_tracking_list);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setupToolbar(listItemTitle, new String(listItemSize + " Projects"));
     }
 
     private void setupBinding(ProjectTrackingList projectList) {
@@ -69,23 +69,24 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
         binding.setViewModel(viewModel);
     }
 
-    private void setupToolbar() {
+    private void setupToolbar(String title, String subtitle) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
-        setTitle(R.string.dashboard_projects);
-        TextView toolbarTitle = null;
-        try {
-            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
-            f.setAccessible(true);
-            toolbarTitle = (TextView) f.get(toolbar);
-            TextViewUtility.changeTypeface(toolbarTitle, LacetFont.LATO_REGULAR);
-            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
-        } catch (NoSuchFieldException e) {
-        } catch (IllegalAccessException e) {
+
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            LayoutInflater inflater = getLayoutInflater();
+
+            View tb = inflater.inflate(R.layout.include_app_bar_layout_projects_list, null);
+            viewModel.setToolbar(tb, title, subtitle);
+
+            actionBar.setCustomView(tb);
+            actionBar.setDisplayShowCustomEnabled(true);
         }
     }
-
-
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {

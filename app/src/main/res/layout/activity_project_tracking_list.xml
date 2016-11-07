@@ -16,13 +16,20 @@
             android:layout_height="match_parent"
             tools:context="com.lecet.app.content.ProjectTrackingListActivity">
 
-        <!-- App Bar -->
-        <include layout="@layout/include_app_bar_layout" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <!-- Content -->
-        <include
-                layout="@layout/content_project_tracking_list"
-                bind:viewModel="@{viewModel}" />
+            <!-- App Bar -->
+            <include layout="@layout/include_app_bar_layout" />
+
+            <!-- Content -->
+            <include
+                    layout="@layout/content_project_tracking_list"
+                    bind:viewModel="@{viewModel}" />
+
+        </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

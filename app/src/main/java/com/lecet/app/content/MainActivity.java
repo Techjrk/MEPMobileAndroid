@@ -450,9 +450,13 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
                     try {
                         ProjectTrackingList listItem = (ProjectTrackingList) o;
                         long listItemId = listItem.getId();
+                        int listItemSize = listItem.getProjects().size();
+                        String listItemTitle = listItem.getName();
                         Intent intent = new Intent(parent.getContext(), ProjectTrackingListActivity.class);
-                        intent.putExtra("listItemPosition", position);      //TODO = make static
-                        intent.putExtra("listItemId", listItemId);          //TODO = make static
+                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_POSITION, position);
+                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, listItemId);
+                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE, listItemTitle);
+                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, listItemSize);
                         startActivity(intent);
                     }
                     catch (ClassCastException e) {
