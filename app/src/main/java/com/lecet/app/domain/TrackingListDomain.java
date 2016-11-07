@@ -72,7 +72,7 @@ public class TrackingListDomain {
         return results;
     }
 
-    
+
     public ProjectTrackingList fetchProjectTrackingList(long id) {
 
         return realm.where(ProjectTrackingList.class).equalTo("id", id).findFirst();
