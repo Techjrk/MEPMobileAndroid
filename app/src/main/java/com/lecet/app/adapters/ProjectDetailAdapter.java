@@ -1,6 +1,7 @@
 package com.lecet.app.adapters;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +11,13 @@ import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.databinding.ListItemHeaderProjectBinding;
+import com.lecet.app.databinding.ListItemProjectDetailBinding;
+import com.lecet.app.databinding.ListItemProjectNoteBinding;
+import com.lecet.app.databinding.ListItemSectionHeaderBinding;
+import com.lecet.app.viewmodel.HeaderViewModel;
 import com.lecet.app.viewmodel.ProjDetailItemViewModel;
+import com.lecet.app.viewmodel.ProjectDetailHeaderViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -92,11 +99,39 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int section) {
 
+        if (holder instanceof ProjectHeaderViewHolder) {
 
+            ((ProjectHeaderViewHolder) holder).getBinding().setViewModel(new ProjectDetailHeaderViewModel(project));
+        } else if (holder instanceof SectionHeaderVH) {
+
+            if (section == SECTION_NOTES) {
+
+                ((SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel("Notes"));
+
+            } else if (section == SECTION_PARTICIPANTS) {
+
+                ((SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel("Participants"));
+
+            } else if (section == SECTION_BIDDERS) {
+
+                ((SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel("Project Bidders"));
+            }
+        }
     }
 
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position) {
+
+        if (holder instanceof LineItemViewHolder) {
+
+            ProjDetailItemViewModel viewModel = data.get(section).get(position);
+            ((LineItemViewHolder) holder).getBinding().setViewModel(viewModel);
+
+        } else if (holder instanceof NotesViewHolder) {
+
+            ProjDetailItemViewModel viewModel = data.get(section).get(position);
+            ((NotesViewHolder) holder).getBinding().setViewModel(viewModel);
+        }
 
     }
 
@@ -106,18 +141,15 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
         switch (viewType) {
             case PROJECT_HEADER: {
-                View v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_header_project, parent, false);
 
-                return new ProjectHeaderViewHolder(v);
+                ListItemHeaderProjectBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_header_project, parent, false);
+                return new ProjectHeaderViewHolder(binding);
             }
 
             case SECTION_HEADER: {
 
-                View v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_section_header, parent, false);
-
-                return new SectionHeaderVH(v);
+                ListItemSectionHeaderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_section_header, parent, false);
+                return new SectionHeaderVH(binding);
             }
 
             case SHARE_HEADER: {
@@ -130,25 +162,19 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
             case ALL_VIEW_TYPE: {
 
-                View v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_project_detail, parent, false);
-
-                return new LineItemViewHolder(v);
+                ListItemProjectDetailBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_detail, parent, false);
+                return new LineItemViewHolder(binding);
             }
 
             case NOTE_VIEW_TYPE: {
 
-                View v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_project_note, parent, false);
-
-                return new NotesViewHolder(v);
+                ListItemProjectNoteBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_note, parent, false);
+                return new NotesViewHolder(binding);
             }
             default: {
 
-                View v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_project_detail, parent, false);
-
-                return new LineItemViewHolder(v);
+                ListItemProjectDetailBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_detail, parent, false);
+                return new LineItemViewHolder(binding);
             }
         }
     }
@@ -171,11 +197,12 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getProjectTypes()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,f", project.getEstLow())));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
 
         // Notes
         List<ProjDetailItemViewModel> section2 = new ArrayList<>();
+        data.add(section2);
 
         String notes = "";
 
@@ -192,23 +219,30 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
     private class SectionHeaderVH extends RecyclerView.ViewHolder {
 
-        private TextView textView;
+        private final ListItemSectionHeaderBinding binding;
 
-        public SectionHeaderVH(View itemView) {
-            super(itemView);
+        public SectionHeaderVH(ListItemSectionHeaderBinding binding) {
+            super(binding.getRoot());
 
-            textView = (TextView) itemView.findViewById(R.id.section_1_text_view);
+            this.binding = binding;
         }
 
-        public TextView getTextView() {
-            return textView;
+        public ListItemSectionHeaderBinding getBinding() {
+            return binding;
         }
     }
 
     private class ProjectHeaderViewHolder extends RecyclerView.ViewHolder {
 
-        public ProjectHeaderViewHolder(View view) {
-            super(view);
+        private final ListItemHeaderProjectBinding binding;
+
+        public ProjectHeaderViewHolder(ListItemHeaderProjectBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public ListItemHeaderProjectBinding getBinding() {
+            return binding;
         }
     }
 
@@ -221,15 +255,30 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
     private class NotesViewHolder extends RecyclerView.ViewHolder {
 
-        public NotesViewHolder(View itemView) {
-            super(itemView);
+        private final ListItemProjectNoteBinding binding;
+
+        private NotesViewHolder(ListItemProjectNoteBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public ListItemProjectNoteBinding getBinding() {
+            return binding;
         }
     }
 
     private class LineItemViewHolder extends RecyclerView.ViewHolder {
 
-        public LineItemViewHolder(View itemView) {
-            super(itemView);
+        private final ListItemProjectDetailBinding binding;
+
+        public LineItemViewHolder(ListItemProjectDetailBinding binding) {
+            super(binding.getRoot());
+
+            this.binding = binding;
+        }
+
+        public ListItemProjectDetailBinding getBinding() {
+            return binding;
         }
     }
 }
