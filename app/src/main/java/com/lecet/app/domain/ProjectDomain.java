@@ -188,6 +188,11 @@ public class ProjectDomain {
      * Persisted
      **/
 
+    public Project fetchProjectById(long id) {
+
+        return realm.where(Project.class).equalTo("id", id).findFirst();
+    }
+
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
