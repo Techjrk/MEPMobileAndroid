@@ -71,7 +71,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
         // see MTM branch Project Tracking List Domain
         //projectListResults = Realm.getDefaultInstance().where(Project.class).equalTo("id", projectList.getId()).findAll();
-        projectListResults = Realm.getDefaultInstance().where(Project.class).lessThan("id", 2000).findAll();  //TODO - temp. uses id range rather than passed list from dashboard menu
+        projectListResults = Realm.getDefaultInstance().where(Project.class).lessThan("id", 10000).findAll();  //TODO - temp. uses id range rather than passed list from dashboard menu
         Log.d(TAG, "Constructor: projectListResults: " + projectListResults);
         //RealmList<Project> results = new RealmList<Project>();
         //results.addAll(projectListResults.subList(0, projectListResults.size()));

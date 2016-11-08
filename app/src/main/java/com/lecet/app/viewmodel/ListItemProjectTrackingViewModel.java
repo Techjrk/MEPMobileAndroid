@@ -2,7 +2,10 @@ package com.lecet.app.viewmodel;
 
 import android.view.View;
 
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectCategory;
+import com.lecet.app.data.models.ProjectGroup;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,12 +19,14 @@ public class ListItemProjectTrackingViewModel {
 
     private final Project project;
     private final String mapsApiKey;
+    String projectKeywords;
 
     public ListItemProjectTrackingViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
-    }
 
+        projectKeywords = generateProjectKeywords();
+    }
 
     public String getProjectName() {
 
@@ -29,8 +34,40 @@ public class ListItemProjectTrackingViewModel {
     }
 
     public String getProjectKeywords() {
+        return this.projectKeywords;
+    }
 
-        return "KEYWORDS";  //TODO - update
+    /*
+    Return a String built from a list of the project's PrimaryProjectType, ProjectCategory, and ProjectGroup
+     */
+    public String generateProjectKeywords() {
+        StringBuilder sb = new StringBuilder();
+        long id = project.getPrimaryProjectTypeId();
+        PrimaryProjectType primaryProjectType = project.getPrimaryProjectType();
+        if(primaryProjectType != null) {
+            String pptTitle = primaryProjectType.getTitle();
+            if (pptTitle != null) sb.append(pptTitle);
+            ProjectCategory category = primaryProjectType.getProjectCategory();
+            if (category != null) {
+                String categoryTitle = category.getTitle();
+                if (categoryTitle != null) {
+                    sb.append(",");
+                    sb.append(categoryTitle);
+                }
+                ProjectGroup group = category.getProjectGroup();
+                if (group != null) {
+                    String groupTitle = group.getTitle();
+                    if(groupTitle != null) {
+                        sb.append(",");
+                        sb.append(groupTitle);
+                    }
+                }
+            }
+        }
+
+        String str = sb.toString();
+        if(str.length() == 0) return null;
+        return str;
     }
 
     public String getProjectNote() {
