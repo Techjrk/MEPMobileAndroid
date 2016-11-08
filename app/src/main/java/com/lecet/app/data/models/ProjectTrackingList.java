@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * File: ProjectTrackingList Created: 11/3/16 Author: domandtom
@@ -13,6 +14,7 @@ import io.realm.RealmObject;
 
 public class ProjectTrackingList extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("id")
     private long id;
 
