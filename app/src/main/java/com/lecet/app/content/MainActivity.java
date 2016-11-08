@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
@@ -30,7 +31,9 @@ import com.lecet.app.adapters.OverflowMenuAdapter;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
@@ -48,6 +51,7 @@ import com.lecet.app.interfaces.MRADataSource;
 import com.lecet.app.interfaces.MRADelegate;
 import com.lecet.app.interfaces.MRUDataSource;
 import com.lecet.app.interfaces.MRUDelegate;
+import com.lecet.app.interfaces.MTMMenuCallback;
 import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.TextViewUtility;
@@ -67,7 +71,7 @@ import io.realm.Realm;
  * after logging in.
  */
 public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
-        MRADelegate, MRUDelegate, MRUDataSource {
+        MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";
 
@@ -428,7 +432,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
                     = new MTMMenuAdapter(this
                     , getResources().getStringArray(R.array.mtm_menu)
                     , trackingListDomain.fetchUserProjectTrackingList()
-                    , trackingListDomain.fetchUserCompanyTrackingList());
+                    , trackingListDomain.fetchUserCompanyTrackingList()
+                    , this);
 
 
             Display display = getWindowManager().getDefaultDisplay();
@@ -466,4 +471,15 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     }
 
+    @Override
+    public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
+        //TODO open activity?
+        Toast.makeText(this, "Project Tracking List Clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
+        //TODO open activity?
+        Toast.makeText(this, "Company Tracking List Clicked", Toast.LENGTH_SHORT).show();
+    }
 }
