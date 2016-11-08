@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:background="@color/lecetMediumBlue"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <!-- App Bar -->
-    <include layout="@layout/include_app_bar_layout"/>
+    <data>
 
-    <!-- Content -->
-    <include layout="@layout/content_project_tracking_list"/>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.ProjectTrackingListViewModel" />
+    </data>
 
-    <!-- Sliding Drawer Menu -->
-    <include layout="@layout/include_menu_drawer_layout"/>
+    <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            style="@style/FullScreenImageBackground.Gradient1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.lecet.app.content.ProjectTrackingListActivity">
 
-</LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+            <!-- App Bar -->
+            <include layout="@layout/include_app_bar_layout" />
+
+            <!-- Content -->
+            <include
+                    layout="@layout/content_project_tracking_list"
+                    bind:viewModel="@{viewModel}" />
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>

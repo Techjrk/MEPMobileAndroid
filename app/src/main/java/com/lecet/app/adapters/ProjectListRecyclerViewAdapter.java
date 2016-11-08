@@ -8,31 +8,27 @@ import android.view.ViewGroup;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.databinding.ListItemBidHappSoonBinding;
-import com.lecet.app.databinding.ListItemDashboardProjectBinding;
-import com.lecet.app.databinding.ListItemRecentBidBinding;
-import com.lecet.app.viewmodel.DashboardProjectItemViewModel;
-import com.lecet.app.viewmodel.MainViewModel;
-import com.lecet.app.viewmodel.RecentBidItemViewModel;
+import com.lecet.app.databinding.ListItemProjectTrackingBinding;
+import com.lecet.app.viewmodel.ListItemProjectTrackingViewModel;
 
 import java.util.List;
 
 import io.realm.RealmObject;
 
 /**
- * File: DashboardRecyclerViewAdapter Created: 10/21/16 Author: domandtom
+ * File: ProjectListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    @MainViewModel.DashboardPosition
+//    @MainViewModel.TrackingListType
     private int adapterType;
 
     private List<RealmObject> data;
 
-    public DashboardRecyclerViewAdapter(List<RealmObject> data, @MainViewModel.DashboardPosition int adapterType) {
+    public ProjectListRecyclerViewAdapter(List<RealmObject> data, int adapterType/*, @MainViewModel.DashboardPosition int adapterType*/) {
 
         this.data = data;
         this.adapterType = adapterType;
@@ -43,15 +39,15 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         RecyclerView.ViewHolder viewHolder = null;
 
-        switch (viewType) {
+        /*switch (viewType) {
 
             case MainViewModel.DASHBOARD_POSITION_MBR:
-                com.lecet.app.databinding.ListItemRecentBidBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_recent_bid, parent, false);
+                ListItemRecentBidBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_recent_bid, parent, false);
                 viewHolder = new MBRViewHolder(binding);
                 break;
 
             case MainViewModel.DASHBOARD_POSITION_MHS:
-                com.lecet.app.databinding.ListItemBidHappSoonBinding bindingMHS = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_bid_happ_soon, parent, false);
+                ListItemBidHappSoonBinding bindingMHS = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_bid_happ_soon, parent, false);
                 viewHolder = new MHSViewHolder(bindingMHS);
                 break;
 
@@ -60,7 +56,10 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 ListItemDashboardProjectBinding bindingMRU = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_dashboard_project, parent, false);
                 viewHolder = new MRAViewHolder(bindingMRU);
                 break;
-        }
+        }*/
+
+        ListItemProjectTrackingBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_tracking, parent, false);
+        viewHolder = new ProjectListViewHolder(projectBinding);
 
         return viewHolder;
     }
@@ -68,7 +67,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof MBRViewHolder) {
+        /*if (holder instanceof MBRViewHolder) {
 
             MBRViewHolder viewHolder = (MBRViewHolder) holder;
             viewHolder.getBinding().setViewModel(new RecentBidItemViewModel((Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
@@ -76,13 +75,17 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         } else if (holder instanceof MHSViewHolder) {
 
             MHSViewHolder viewHolder = (MHSViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.getBinding().setViewModel(new ListItemTracking((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
 
         } else if (holder instanceof MRAViewHolder) {
 
             MRAViewHolder viewHolder = (MRAViewHolder) holder;
             viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
-        }
+        }*/
+
+        ProjectListViewHolder viewHolder = (ProjectListViewHolder) holder;
+        viewHolder.getBinding().setViewModel(new ListItemProjectTrackingViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+
     }
 
     @Override
@@ -107,52 +110,21 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
      * View Holders
      **/
 
-    class MBRViewHolder extends RecyclerView.ViewHolder {
+    class ProjectListViewHolder extends RecyclerView.ViewHolder {
 
-        private com.lecet.app.databinding.ListItemRecentBidBinding binding;
+        private ListItemProjectTrackingBinding binding;
 
-        public MBRViewHolder(com.lecet.app.databinding.ListItemRecentBidBinding binding) {
+        public ProjectListViewHolder(ListItemProjectTrackingBinding binding) {
 
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public com.lecet.app.databinding.ListItemRecentBidBinding getBinding() {
+        public ListItemProjectTrackingBinding getBinding() {
             return binding;
         }
     }
 
-
-    public class MHSViewHolder extends RecyclerView.ViewHolder {
-
-        private com.lecet.app.databinding.ListItemBidHappSoonBinding binding;
-
-        public MHSViewHolder(com.lecet.app.databinding.ListItemBidHappSoonBinding binding) {
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        public com.lecet.app.databinding.ListItemBidHappSoonBinding getBinding() {
-            return binding;
-        }
-    }
-
-
-    public class MRAViewHolder extends RecyclerView.ViewHolder {
-
-        private final ListItemDashboardProjectBinding binding;
-
-        public MRAViewHolder(ListItemDashboardProjectBinding binding) {
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        public ListItemDashboardProjectBinding getBinding() {
-            return binding;
-        }
-    }
 
 }

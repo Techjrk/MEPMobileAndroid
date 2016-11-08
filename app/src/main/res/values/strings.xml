@@ -132,4 +132,8 @@
     <string name="mtm_menu_number_company">%s Companies</string>
     <string name="mtm_menu_number_projects">%s Projects</string>
 
+    <!-- MPL Project Tracking List -->
+    <string name="show_updates">Show Updates</string>
+    <string name="edit">EDIT</string>
+
 </resources>
