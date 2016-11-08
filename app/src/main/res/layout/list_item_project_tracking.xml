@@ -7,33 +7,39 @@
 
     <data>
         <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemProjectTrackingViewModel"/>
+        <import type="android.view.View"/>
     </data>
 
     <LinearLayout android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:paddingBottom="6dp">
+                  android:layout_marginLeft="6dp"
+                  android:layout_marginRight="6dp"
+                  android:layout_marginTop="6dp"
+                  android:paddingBottom="6dp"
+                  android:background="@drawable/shape_rect_list_item_bg_1">
 
         <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:weightSum="100"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-4dp"
+                android:gravity="center_vertical"
                 android:onClick="@{viewModel.onClick}">
 
-            <!-- Image -->
+            <!-- Map Image -->
             <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/project_locatation_image_view"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="6dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="20"
-                    android:src="@mipmap/ic_crop_original_black"/>
+                    bind:imageUrl="@{viewModel.mapUrl}"/>
 
             <!-- Details -->
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="80"
                     android:orientation="vertical"
                     android:paddingLeft="12dp">
 
@@ -42,21 +48,148 @@
                         android:paddingTop="14dp"
                         tools:text="Parks Building"
                         style="@style/ListItemProjectTrackingTextView.Title"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
                         android:text="@{viewModel.projectName}"/>
 
-                <TextView
-                        android:id="@+id/location"
-                        tools:text="Tampa, FL"
-                        style="@style/ListItemProjectTrackingTextView.Detail1"
-                        android:text="@{viewModel.location}"/>
+                <!-- Location -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:orientation="horizontal">
 
-                <TextView
+                    <ImageView
+                            android:layout_width="9dp"
+                            android:layout_height="13dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="2dp"
+                            android:src="@mipmap/ic_bid_location"/>
+
+                    <TextView
+                            android:id="@+id/location"
+                            tools:text="Tampa, FL"
+                            style="@style/ListItemProjectTrackingTextView.Detail1"
+                            bind:typeface="@{`Lato-Regular.ttf`}"
+                            android:text="@{viewModel.clientLocation}"/>
+
+                </LinearLayout>
+
+                <!-- Keywords / Tags -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:orientation="horizontal">
+
+                    <ImageView
+                            android:layout_width="11dp"
+                            android:layout_height="16dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="2dp"
+                            android:src="@drawable/tag_icon"/>
+
+                    <TextView
                         android:id="@+id/keywords"
-                        tools:text="Vehicle Sales/Service "
+                        tools:text="Vehicle Sales/Service"
                         style="@style/ListItemProjectTrackingTextView.Detail2"
-                        android:text="@{viewModel.keywords}"/>
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        android:text="@{viewModel.projectKeywords}"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Vertical Layout for Optional Expandable Bid & Note Views -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp">
+
+            <!-- Expandable Bid View -->
+            <RelativeLayout
+                    android:id="@+id/expandable_layout_bids"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="8dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/shape_rect_list_item_expand_1"
+                    android:visibility="@{viewModel.hasBid ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{viewModel.onBidLayoutClick}">
+
+                <ImageView
+                        android:id="@+id/add_icon"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/ic_add"/>
+
+                <TextView
+                        android:id="@+id/expandable_text_bid"
+                        tools:text="A new bid has been placed"
+                        style="@style/ListItemProjectTrackingTextView.Expandable"
+                        android:layout_toRightOf="@id/add_icon"
+                        android:layout_height="wrap_content"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        android:text="@{viewModel.projectBidDate}"/>
+
+                <ImageView
+                        android:layout_width="11dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/ic_caret_down"/>
+
+            </RelativeLayout>
+
+            <!-- Expandable Note View -->
+            <RelativeLayout
+                    android:id="@+id/expandable_layout_notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="8dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/shape_rect_list_item_expand_1"
+                    android:visibility="@{viewModel.hasNote ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{viewModel.onNoteLayoutClick}">
+
+                <ImageView
+                        android:id="@+id/note_icon"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/ic_add_note"/>
+
+                <TextView
+                        android:id="@+id/expandable_text_note"
+                        tools:text="A new note has been added"
+                        style="@style/ListItemProjectTrackingTextView.Expandable"
+                        android:layout_toRightOf="@id/note_icon"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        android:text="@{viewModel.projectNote}"/>
+
+                <ImageView
+                        android:layout_width="11dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/ic_caret_down"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
