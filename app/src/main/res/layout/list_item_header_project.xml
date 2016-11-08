@@ -22,7 +22,7 @@
                   android:textColor="@color/pureWhite"
                   android:text="@{viewModel.title}"
                   android:maxLines="2"
-                  bind:typeface="@{`Lato-Regular.ttf`}"
+                  bind:typeface="@{`Lato-Black.ttf`}"
                   tools:text="Updated Primary Clarifier 1/ Aeration Basin 2 Rehabilitation"/>
 
 
