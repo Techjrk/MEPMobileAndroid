@@ -10,6 +10,17 @@
     <string name="phone">Phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
+    <string name="county">County</string>
+    <string name="project_id">Project ID</string>
+    <string name="project_type">Project Type</string>
+    <string name="est_low">Est. Low</string>
+    <string name="stage">Stage</string>
+    <string name="notes">Notes</string>
+    <string name="participants">Participants</string>
+    <string name="architects">Architects</string>
+    <string name="owner">Owner</string>
+    <string name="project_bidders">Project Bidders</string>
+    <string name="architect">Architect</string>
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>

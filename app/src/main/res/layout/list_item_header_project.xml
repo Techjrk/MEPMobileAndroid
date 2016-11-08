@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailHeaderViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lecetDarkOrange">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingTop="10dp"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:textSize="20sp"
+                  android:textColor="@color/pureWhite"
+                  android:text="@{viewModel.title}"
+                  android:maxLines="2"
+                  bind:typeface="@{`Lato-Regular.ttf`}"
+                  tools:text="Updated Primary Clarifier 1/ Aeration Basin 2 Rehabilitation"/>
+
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="10dp"
+                      android:orientation="horizontal">
+
+            <ImageView android:layout_width="8dp"
+                       android:layout_height="12dp"
+                       android:layout_gravity="center_vertical"
+                       android:src="@drawable/proj_location_icon"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:padding="10dp"
+                      android:textSize="14sp"
+                      android:textColor="@color/pureWhite"
+                      android:text="@{viewModel.address}"
+                      android:maxLines="2"
+                      bind:typeface="@{`Lato-Regular.ttf`}"
+                      tools:text="South Lake Tahoe, CA"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
