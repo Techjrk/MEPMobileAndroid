@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
@@ -30,6 +31,7 @@ import com.lecet.app.adapters.OverflowMenuAdapter;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.User;
@@ -49,6 +51,7 @@ import com.lecet.app.interfaces.MRADataSource;
 import com.lecet.app.interfaces.MRADelegate;
 import com.lecet.app.interfaces.MRUDataSource;
 import com.lecet.app.interfaces.MRUDelegate;
+import com.lecet.app.interfaces.MTMMenuCallback;
 import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.TextViewUtility;
@@ -68,7 +71,7 @@ import io.realm.Realm;
  * after logging in.
  */
 public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
-        MRADelegate, MRUDelegate, MRUDataSource {
+        MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";
 
@@ -88,6 +91,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     ListPopupWindow overflowMenu;
     ListPopupWindow mtmMenu;
+    MTMMenuAdapter mtmAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -374,6 +378,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     private void toogleMTMMenu() {
         if (mtmMenu == null) {
             createMTMMenu(findViewById(R.id.menu_item_folder));
+        } else {
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            mtmAdapter.setCompanyTrackingList(trackingListDomain.fetchUserCompanyTrackingList());
+            mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
         }
         mtmMenu.show();
     }
@@ -423,13 +431,14 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         if (mtmMenu == null) {
             mtmMenu = new ListPopupWindow(this);
 
-            final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
 
-            final MTMMenuAdapter adapter
+            mtmAdapter
                     = new MTMMenuAdapter(this
                     , getResources().getStringArray(R.array.mtm_menu)
                     , trackingListDomain.fetchUserProjectTrackingList()
-                    , trackingListDomain.fetchUserCompanyTrackingList());
+                    , trackingListDomain.fetchUserCompanyTrackingList()
+                    , this);
 
 
             Display display = getWindowManager().getDefaultDisplay();
@@ -442,29 +451,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             mtmMenu.setModal(true);
             mtmMenu.setWidth(width);
             mtmMenu.setHorizontalOffset(-offset);
-            mtmMenu.setAdapter(adapter);
-            mtmMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Object o = adapter.getItem(position);
-                    try {
-                        ProjectTrackingList listItem = (ProjectTrackingList) o;
-                        long listItemId = listItem.getId();
-                        int listItemSize = listItem.getProjects().size();
-                        String listItemTitle = listItem.getName();
-                        Intent intent = new Intent(parent.getContext(), ProjectTrackingListActivity.class);
-                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_POSITION, position);
-                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, listItemId);
-                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE, listItemTitle);
-                        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, listItemSize);
-                        startActivity(intent);
-                    }
-                    catch (ClassCastException e) {
-                        e.printStackTrace();
-                        // TODO - handle
-                    }
-                }
-            }); // the callback for when a list item is selected
+            mtmMenu.setAdapter(mtmAdapter);
         }
     }
 
@@ -483,4 +470,19 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     }
 
+    @Override
+    public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
+        Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
+        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_POSITION, 1);
+        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
+        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
+        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
+        //TODO open activity?
+        Toast.makeText(this, "Company Tracking List Clicked", Toast.LENGTH_SHORT).show();
+    }
 }

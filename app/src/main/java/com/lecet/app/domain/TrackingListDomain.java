@@ -65,10 +65,23 @@ public class TrackingListDomain {
         return results;
     }
 
+
     public RealmResults<CompanyTrackingList> fetchUserCompanyTrackingList() {
 
         RealmResults<CompanyTrackingList> results = realm.where(CompanyTrackingList.class).findAll();
         return results;
+    }
+
+
+    public ProjectTrackingList fetchProjectTrackingList(long id) {
+
+        return realm.where(ProjectTrackingList.class).equalTo("id", id).findFirst();
+    }
+
+
+    public CompanyTrackingList fetchCompanyTrackingList(long id) {
+
+        return realm.where(CompanyTrackingList.class).equalTo("id", id).findFirst();
     }
 
 

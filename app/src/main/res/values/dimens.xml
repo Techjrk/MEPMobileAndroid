@@ -28,4 +28,9 @@
     <dimen name="info_window_padding">16dp</dimen>
     <dimen name="info_window_corner_size">5dp</dimen>
 
+    <!-- MTM Mobile Tracking List -->
+    <dimen name="mtm_item_height">50dp</dimen>
+    <dimen name="mtm_item_text_size">14sp</dimen>
+    <dimen name="mtm_item_title_size">15sp</dimen>
+
 </resources>
