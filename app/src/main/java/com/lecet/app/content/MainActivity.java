@@ -91,6 +91,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     ListPopupWindow overflowMenu;
     ListPopupWindow mtmMenu;
+    MTMMenuAdapter mtmAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -377,6 +378,11 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     private void toogleMTMMenu() {
         if (mtmMenu == null) {
             createMTMMenu(findViewById(R.id.menu_item_folder));
+        } else {
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            mtmAdapter.setCompanyTrackingList(trackingListDomain.fetchUserCompanyTrackingList());
+            mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
+            mtmAdapter.notifyDataSetChanged();
         }
         mtmMenu.show();
     }
@@ -428,7 +434,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
             TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
 
-            final MTMMenuAdapter adapter
+            mtmAdapter
                     = new MTMMenuAdapter(this
                     , getResources().getStringArray(R.array.mtm_menu)
                     , trackingListDomain.fetchUserProjectTrackingList()
@@ -446,13 +452,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             mtmMenu.setModal(true);
             mtmMenu.setWidth(width);
             mtmMenu.setHorizontalOffset(-offset);
-            mtmMenu.setAdapter(adapter);
-            mtmMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO do something
-                }
-            }); // the callback for when a list item is selected
+            mtmMenu.setAdapter(mtmAdapter);
         }
     }
 
