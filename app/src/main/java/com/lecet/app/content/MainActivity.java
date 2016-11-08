@@ -132,7 +132,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             f.setAccessible(true);
             toolbarTitle = (TextView) f.get(toolbar);
             TextViewUtility.changeTypeface(toolbarTitle, LacetFont.LATO_REGULAR);
-            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         } catch (NoSuchFieldException e) {
         } catch (IllegalAccessException e) {
         }
