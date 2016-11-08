@@ -382,7 +382,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
             mtmAdapter.setCompanyTrackingList(trackingListDomain.fetchUserCompanyTrackingList());
             mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
-            mtmAdapter.notifyDataSetChanged();
         }
         mtmMenu.show();
     }

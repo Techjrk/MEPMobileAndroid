@@ -52,13 +52,21 @@ public class MTMMenuAdapter extends BaseAdapter {
     }
 
     public void setCompanyTrackingList(List<CompanyTrackingList> companyTrackingList) {
+        int oldLength = companyTrackingList == null ? 0 : companyTrackingList.size();
         this.companyTrackingList = companyTrackingList;
-        //TODO if visible then update size
+        if (isCompanyListVisible) {
+            size = size - oldLength + companyTrackingList.size();
+            notifyDataSetInvalidated();
+        }
     }
 
     public void setProjectTrackingList(List<ProjectTrackingList> projectTrackingList) {
+        int oldLength = projectTrackingList == null ? 0 : projectTrackingList.size();
         this.projectTrackingList = projectTrackingList;
-        //TODO if visible then update size
+        if (isProjectListVisible) {
+            size = size - oldLength + projectTrackingList.size();
+            notifyDataSetInvalidated();
+        }
     }
 
     public void setProjectListVisible(boolean projectListVisible) {
