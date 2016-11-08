@@ -147,23 +147,9 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
             throw new SectionAdapterException(String.format("Given position %d, does not have a corresponding section!", position));
         }
 
-        // Section zero (0) positions are their natural position.
-        if (section == 0) {
+        sectionPosition = position - sectionStartPosition;
 
-            sectionPosition = position;
-
-        } else {
-
-            // We can now with certainty that the modulo remainder is the actual position within the aggregate data
-            sectionPosition = position % sectionStartPosition;
-        }
-
-
-        // We then take account for the section header in the aggregate item count to get the position within
-        // the subsection of data. Ex Position 15 in data set with 2 sections with the first section comprising of
-        // seven (7) items plus the header. Section one (1) header will then be at position nine (9). 15 % 9 would then yield
-        // six (6) which is the items in the section plus the header. Subtracting the header element from the data would yield
-        // five (5) which is where the item position is within section 1.
+        // Subtract one (1) since the header is the first element in the section.
         return sectionPosition - 1;
     }
 
