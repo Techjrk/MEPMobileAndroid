@@ -461,7 +461,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        dashboardAdapter = new DashboardRecyclerViewAdapter(adapterData, dashboardPosition);
+        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition);
         recyclerView.setAdapter(dashboardAdapter);
     }
 

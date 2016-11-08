@@ -1,6 +1,7 @@
 package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -31,9 +32,11 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private int adapterType;
 
     private List<RealmObject> data;
+    private AppCompatActivity activity;
 
-    public DashboardRecyclerViewAdapter(List<RealmObject> data, @MainViewModel.DashboardPosition int adapterType) {
+    public DashboardRecyclerViewAdapter(AppCompatActivity activity, List<RealmObject> data, @MainViewModel.DashboardPosition int adapterType) {
 
+        this.activity = activity;
         this.data = data;
         this.adapterType = adapterType;
     }
@@ -71,7 +74,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         if (holder instanceof MBRViewHolder) {
 
             MBRViewHolder viewHolder = (MBRViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel((Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel((Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", activity));
 
         } else if (holder instanceof MHSViewHolder) {
 
