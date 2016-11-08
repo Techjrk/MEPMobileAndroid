@@ -76,7 +76,7 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
 
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
             LayoutInflater inflater = getLayoutInflater();
 

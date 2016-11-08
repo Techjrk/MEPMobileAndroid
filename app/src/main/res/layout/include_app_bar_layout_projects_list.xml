@@ -4,15 +4,15 @@
                 xmlns:bind="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 android:background="@color/transparent">
 
         <ImageView
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:gravity="left"
                 android:src="@drawable/ic_back_button"
                 android:visibility="visible" />
@@ -23,10 +23,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:paddingTop="12dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/lecetTextWhite"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:text="Trains and Metros"/>
 
         <TextView
@@ -44,9 +45,9 @@
                 android:id="@+id/sort_menu_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:paddingRight="18dp"
                 android:src="@drawable/ic_sort_menu"/>
 
 </RelativeLayout>
