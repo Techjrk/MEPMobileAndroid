@@ -21,7 +21,6 @@ import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * ProjectTrackingListActivity
@@ -46,6 +45,7 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
 
         Log.d(TAG, "onCreate");
 
+        // get extras from Intent
         int listItemPosition = getIntent().getIntExtra(PROJECT_LIST_ITEM_POSITION, -1);
         long listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
         String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
@@ -54,8 +54,7 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
         // TODO - accommodate company list also
         // TODO - get primary category, project type, primary project type
         final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        RealmResults<ProjectTrackingList> allProjectLists = trackingListDomain.fetchUserProjectTrackingList();
-        ProjectTrackingList projectList = allProjectLists.get(listItemPosition - 1);  // TODO - get just the one list of projects we need
+        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
 
         setupBinding(projectList);
         setupToolbar(listItemTitle, new String(listItemSize + " Projects"));
