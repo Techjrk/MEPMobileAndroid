@@ -381,6 +381,53 @@ public class Project extends RealmObject {
         this.hidden = hidden;
     }
 
+    /** Convenience **/
+
+    public String getFullAddress() {
+
+        String fullAddress  = "";
+
+        if (this.address1 != null) {
+
+            fullAddress = this.address1;
+        }
+
+        if (this.state != null) {
+
+            fullAddress = fullAddress + ", " + this.state;
+        }
+
+        if (this.zip5 != null) {
+
+            fullAddress = fullAddress + " " + zip5;
+        }
+
+        return fullAddress;
+    }
+
+
+    public String getProjectTypes() {
+
+        String projectType = "";
+
+        if (this.primaryProjectType != null ) {
+
+            projectType = primaryProjectType.getTitle();
+
+            if (this.primaryProjectType.getProjectCategory() != null) {
+
+                projectType = projectType + " " + this.primaryProjectType.getProjectCategory().getTitle();
+
+                if (this.primaryProjectType.getProjectCategory().getProjectGroup() != null) {
+
+                    projectType = projectType + " " + this.primaryProjectType.getProjectCategory().getProjectGroup().getTitle();
+                }
+            }
+        }
+
+        return projectType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
