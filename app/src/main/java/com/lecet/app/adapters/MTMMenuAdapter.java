@@ -50,8 +50,12 @@ public class MTMMenuAdapter extends BaseAdapter {
         this.companyFormat = context.getString(R.string.mtm_menu_number_company);
         this.callback = callback;
         //showing both groups expanded at the start
-        setProjectListVisible(true, false);
-        setCompanyListVisible(true, false);
+        if (!projectTrackingList.isEmpty()) {
+            setProjectListVisible(true, false);
+        }
+        if (!companyTrackingList.isEmpty()) {
+            setCompanyListVisible(true, false);
+        }
     }
 
     public void setCompanyTrackingList(List<CompanyTrackingList> companyTrackingList) {
