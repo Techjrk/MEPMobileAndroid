@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="@dimen/mtm_item_height"
     android:background="@color/pureWhite"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
@@ -18,6 +18,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:textColor="@color/lecetLightGray"
+        android:textSize="@dimen/mtm_item_text_size"
         tools:text="17 Projects" />
 
 
@@ -29,6 +30,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/text2"
         android:textColor="@color/lecetTextDarkGray"
+        android:textSize="@dimen/mtm_item_text_size"
         tools:text="Trains and Metros" />
 
     <FrameLayout
