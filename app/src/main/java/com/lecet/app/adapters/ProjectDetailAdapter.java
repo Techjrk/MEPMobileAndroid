@@ -1,5 +1,7 @@
 package com.lecet.app.adapters;
 
+import android.content.Context;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.Project;
+import com.lecet.app.viewmodel.ProjDetailItemViewModel;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,19 +25,35 @@ import java.util.List;
 
 public class ProjectDetailAdapter extends SectionedAdapter {
 
-    //private static final int
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({PROJECT_HEADER, SECTION_HEADER, SHARE_HEADER, ALL_VIEW_TYPE, NOTE_VIEW_TYPE})
+    @interface ViewTypes {
+    }
 
-    private static final int headerType1 = 0;
-    private static final int headerType2 = 1;
-    private static final int sectionType1 = 2;
-    private static final int sectionType2 = 3;
+    private static final int PROJECT_HEADER = 0;
+    private static final int SECTION_HEADER = 1;
+    private static final int SHARE_HEADER = 2;
+    private static final int ALL_VIEW_TYPE = 3;
+    private static final int NOTE_VIEW_TYPE = 4;
 
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SECTION_TITLE, SECTION_SHARE, SECTION_NOTES, SECTION_PARTICIPANTS, SECTION_BIDDERS})
+    @interface Sections {
+    }
 
-    private List<List<String>> data;
+    private static final int SECTION_TITLE = 0;
+    private static final int SECTION_SHARE = 1;
+    private static final int SECTION_NOTES = 2;
+    private static final int SECTION_PARTICIPANTS = 3;
+    private static final int SECTION_BIDDERS = 4;
 
-    public ProjectDetailAdapter(List<List<String>> data) {
+    private List<List<ProjDetailItemViewModel>> data;
+    private Project project;
 
-        this.data = data;
+    public ProjectDetailAdapter(Project project, Context context) {
+
+        this.project = project;
+        this.data = buildDetails(project, context);
     }
 
     @Override
@@ -46,19 +69,24 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     @Override
     public int getItemViewType(int section, int position) {
 
-        if (section == 0 && section == 1) {
-            return sectionType1;
-        } else {
-
-            return sectionType2;
+        switch (section) {
+            case SECTION_NOTES:
+                return NOTE_VIEW_TYPE;
+            default:
+                return ALL_VIEW_TYPE;
         }
     }
 
     @Override
     public int getHeaderViewType(int section) {
-        if (section == 0) return headerType1;
-
-        return headerType2;
+        switch (section) {
+            case SECTION_TITLE:
+                return PROJECT_HEADER;
+            case SECTION_SHARE:
+                return SHARE_HEADER;
+            default:
+                return SECTION_HEADER;
+        }
     }
 
     @Override
@@ -76,17 +104,91 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType == headerType1) {
+        switch (viewType) {
+            case PROJECT_HEADER: {
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_header_project, parent, false);
 
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_detail_header, parent, false);
+                return new ProjectHeaderViewHolder(v);
+            }
 
-            return new SectionHeaderVH(v);
+            case SECTION_HEADER: {
 
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_section_header, parent, false);
+
+                return new SectionHeaderVH(v);
+            }
+
+            case SHARE_HEADER: {
+
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_header_share, parent, false);
+
+                return new ShareViewHolder(v);
+            }
+
+            case ALL_VIEW_TYPE: {
+
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_project_detail, parent, false);
+
+                return new LineItemViewHolder(v);
+            }
+
+            case NOTE_VIEW_TYPE: {
+
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_project_note, parent, false);
+
+                return new NotesViewHolder(v);
+            }
+            default: {
+
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_project_detail, parent, false);
+
+                return new LineItemViewHolder(v);
+            }
         }
-
-        return null;
     }
+
+    /** Private **/
+
+    private List<List<ProjDetailItemViewModel>> buildDetails(Project project, Context context) {
+
+        List<List<ProjDetailItemViewModel>> data = new ArrayList<>();
+
+        // First section will only have a header
+        List<ProjDetailItemViewModel> section0 = new ArrayList<>();
+        data.add(section0);
+
+
+        // Build Project Details
+        List<ProjDetailItemViewModel> section1 = new ArrayList<>();
+        data.add(section1);
+
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getProjectTypes()));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,f", project.getEstLow())));
+
+        // Notes
+        List<ProjDetailItemViewModel> section2 = new ArrayList<>();
+
+        String notes = "";
+
+        if (project.getProjectNotes() != null) notes = project.getProjectNotes();
+        if (project.getStdIncludes() != null) notes = notes + " " + project.getStdIncludes();
+
+        section2.add(new ProjDetailItemViewModel(null, notes));
+
+        return data;
+    }
+
+
+    /** ViewHolders **/
 
     private class SectionHeaderVH extends RecyclerView.ViewHolder {
 
@@ -103,17 +205,16 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         }
     }
 
+    private class ProjectHeaderViewHolder extends RecyclerView.ViewHolder {
 
-    private class ProjectTitleViewHolder extends RecyclerView.ViewHolder {
-
-        public ProjectTitleViewHolder(View view) {
+        public ProjectHeaderViewHolder(View view) {
             super(view);
         }
     }
 
-    private class CallToActionViewHolder extends RecyclerView.ViewHolder {
+    private class ShareViewHolder extends RecyclerView.ViewHolder {
 
-        public CallToActionViewHolder(View itemView) {
+        public ShareViewHolder(View itemView) {
             super(itemView);
         }
     }
