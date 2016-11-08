@@ -7,7 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
@@ -44,6 +46,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private RealmResults<Project> projectListResults;
     private TextView titleTextView;
     private TextView subtitleTextView;
+    private ImageView backButton;
+    private ImageView sortButton;
 
 
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList projectList, BidDomain bidDomain, ProjectDomain projectDomain) {
@@ -59,9 +63,25 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     }
 
     public void setToolbar(View toolbar, String title, String subtitle) {
-        titleTextView    = (TextView) toolbar.findViewById(R.id.title_text_view);
-        subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
+        titleTextView    = (TextView)  toolbar.findViewById(R.id.title_text_view);
+        subtitleTextView = (TextView)  toolbar.findViewById(R.id.subtitle_text_view);
+        backButton       = (ImageView) toolbar.findViewById(R.id.back_button);
+        sortButton       = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
+        //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
+        backButton.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+                                              onBackButtonClick(v);
+                                          }
+                                      });
+
+        sortButton.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+                                              onSortButtonClick(v);
+                                          }
+                                      });
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);
     }
@@ -79,21 +99,6 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         setupRecyclerView(recyclerView);
         projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData, 1);  //TODO - allow for multiple init types, default to 1 for now
         recyclerView.setAdapter(projectListAdapter);
-    }
-
-    /**
-     * RecyclerView Management
-     **/
-
-    private void setupRecyclerView(RecyclerView recyclerView) {
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-    }
-
-    private RecyclerView getProjectRecyclerView(@IdRes int recyclerView) {
-
-        return (RecyclerView) appCompatActivity.findViewById(recyclerView);
     }
 
     private void setupAdapterWithProjectList(ProjectTrackingList projectTrackingList) {
@@ -115,5 +120,35 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         projectListAdapter.setAdapterType(1);       //TODO - needed? support multiple types? also see initializeAdapter()
         projectListAdapter.notifyDataSetChanged();
     }*/
+
+    /**
+     * RecyclerView Management
+     **/
+
+    private void setupRecyclerView(RecyclerView recyclerView) {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private RecyclerView getProjectRecyclerView(@IdRes int recyclerView) {
+
+        return (RecyclerView) appCompatActivity.findViewById(recyclerView);
+    }
+
+    /**
+     * Click handling
+     **/
+
+    public void onBackButtonClick(View view) {
+        Log.d(TAG, "onBackButtonClick");
+        appCompatActivity.onBackPressed();
+    }
+
+    public void onSortButtonClick(View view) {
+        Log.d(TAG, "onSortButtonClick");
+        Toast.makeText(appCompatActivity, "Sort button pressed", Toast.LENGTH_SHORT).show();
+    }
+
 
 }
