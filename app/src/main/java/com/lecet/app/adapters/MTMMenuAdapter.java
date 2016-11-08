@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
+import com.lecet.app.interfaces.MTMMenuCallback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,7 +21,6 @@ import java.util.List;
  */
 
 public class MTMMenuAdapter extends BaseAdapter {
-
 
     private Context context;
     private String[] titles;
@@ -33,9 +33,10 @@ public class MTMMenuAdapter extends BaseAdapter {
     private List<ProjectTrackingList> projectTrackingList;
     private String companyFormat;
     private String projectFormat;
+    private MTMMenuCallback callback;
 
     public MTMMenuAdapter(Context context, String[] titles, List<ProjectTrackingList> projectTrackingList
-            , List<CompanyTrackingList> companyTrackingList) {
+            , List<CompanyTrackingList> companyTrackingList, MTMMenuCallback callback) {
         this.isProjectListVisible = false;
         this.isCompanyListVisible = false;
         this.projectTitleIndex = 0;
@@ -47,16 +48,25 @@ public class MTMMenuAdapter extends BaseAdapter {
         this.projectTrackingList = projectTrackingList;
         this.projectFormat = context.getString(R.string.mtm_menu_number_projects);
         this.companyFormat = context.getString(R.string.mtm_menu_number_company);
+        this.callback = callback;
     }
 
     public void setCompanyTrackingList(List<CompanyTrackingList> companyTrackingList) {
+        int oldLength = companyTrackingList == null ? 0 : companyTrackingList.size();
         this.companyTrackingList = companyTrackingList;
-        //TODO if visible then update size
+        if (isCompanyListVisible) {
+            size = size - oldLength + companyTrackingList.size();
+            notifyDataSetInvalidated();
+        }
     }
 
     public void setProjectTrackingList(List<ProjectTrackingList> projectTrackingList) {
+        int oldLength = projectTrackingList == null ? 0 : projectTrackingList.size();
         this.projectTrackingList = projectTrackingList;
-        //TODO if visible then update size
+        if (isProjectListVisible) {
+            size = size - oldLength + projectTrackingList.size();
+            notifyDataSetInvalidated();
+        }
     }
 
     public void setProjectListVisible(boolean projectListVisible) {
@@ -148,13 +158,29 @@ public class MTMMenuAdapter extends BaseAdapter {
                 }
             });
         } else if (item instanceof ProjectTrackingList) {
-            ProjectTrackingList projectTracking = (ProjectTrackingList) item;
+            final ProjectTrackingList projectTracking = (ProjectTrackingList) item;
             holder.text1.setText(projectTracking.getName());
             holder.text2.setText(String.format(projectFormat, projectTracking.getProjects().size()));
+            holder.root.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callback != null) {
+                        callback.onProjectTrackingListClicked(projectTracking);
+                    }
+                }
+            });
         } else { //company tracking list
-            CompanyTrackingList projectTracking = (CompanyTrackingList) item;
-            holder.text1.setText(projectTracking.getName());
-            holder.text2.setText(String.format(companyFormat, projectTracking.getCompanies().size()));
+            final CompanyTrackingList companyTracking = (CompanyTrackingList) item;
+            holder.text1.setText(companyTracking.getName());
+            holder.text2.setText(String.format(companyFormat, companyTracking.getCompanies().size()));
+            holder.root.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callback != null) {
+                        callback.onCompanyTrackingListClicked(companyTracking);
+                    }
+                }
+            });
         }
 
         return convertView;
