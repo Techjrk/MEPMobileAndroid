@@ -1,5 +1,8 @@
 package com.lecet.app.viewmodel;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.data.models.PrimaryProjectType;
@@ -10,16 +13,21 @@ import com.lecet.app.data.models.ProjectGroup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import com.lecet.app.BR;
+
 /**
  * File: ListItemProjectTrackingViewModel Created: 10/17/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItemProjectTrackingViewModel {
+public class ListItemProjectTrackingViewModel extends BaseObservable {
+
+    private static final String TAG = "ListItemProjTrackingVM";
 
     private final Project project;
     private final String mapsApiKey;
-    String projectKeywords;
+    private String projectKeywords;
+    private boolean bidViewExpanded = false;
 
     public ListItemProjectTrackingViewModel(Project project, String mapsApiKey) {
         this.project = project;
@@ -95,6 +103,19 @@ public class ListItemProjectTrackingViewModel {
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
+    @Bindable
+    public boolean getBidViewExpanded() {
+        return bidViewExpanded;
+    }
+
+    public void setBidViewExpanded(boolean bidViewExpanded) {
+        this.bidViewExpanded = bidViewExpanded;
+        notifyPropertyChanged(BR.bidViewExpanded);
+    }
+
+
+
+
 
     //////////////////////////////////////
     // PROJECT BIDS
@@ -163,34 +184,18 @@ public class ListItemProjectTrackingViewModel {
 
     public void onBidLayoutClick(View view) {
         //TODO - fill in
+        Log.d(TAG, "onBidLayoutClick: " + view);
+        setBidViewExpanded(!bidViewExpanded);
     }
 
     public void onNoteLayoutClick(View view) {
         //TODO - fill in
+        Log.d(TAG, "onNoteLayoutClick: " + view);
     }
 
-    /** OnClick handler for clicking the entire Pojo1 List Item view **/
-
     public void onClick(View view) {
-
-        /*domain.handleItemClick(new Callback<Pojo1>() {
-            @Override
-            public void onResponse(Call<Pojo1> call, Response<Pojo1> response) {
-
-                if (response.isSuccessful()) {
-
-
-                } else {
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Pojo1> call, Throwable t) {
-
-            }
-        });*/
+        //TODO - fill in
+        Log.d(TAG, "onClick: " + view);
     }
 
 

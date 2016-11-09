@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
