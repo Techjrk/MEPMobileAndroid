@@ -11,7 +11,6 @@ import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectGroup;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import com.lecet.app.BR;
 
@@ -27,12 +26,16 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private final Project project;
     private final String mapsApiKey;
     private String projectKeywords;
-    private boolean bidViewExpanded = false;
+    private boolean expandableViewExpanded;
+    private String expandableViewTitle = "";
+    private String expandableViewMessage = "";
 
     public ListItemProjectTrackingViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
 
+        setExpandableViewTitle(generateExpandableViewTitle());
+        setExpandableViewMessage(generateExpandableViewMessage());
         projectKeywords = generateProjectKeywords();
     }
 
@@ -89,6 +92,26 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return null;
     }
 
+    private String generateExpandableViewTitle() {
+        if(hasBid()) {
+            return "A new bid has been placed"; //TODO - externalize
+        }
+        else if(hasNote()) {
+            return "A new note has been added";
+        }
+        return null;
+    }
+
+    private String generateExpandableViewMessage() {
+        if(hasBid()) {
+            return "Bid message body";
+        }
+        else if(hasNote()) {
+            return "Note message body";
+        }
+        return null;
+    }
+
     public String getClientLocation() {
 
         return project.getCity() + " , " + project.getState();
@@ -104,15 +127,34 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     }
 
     @Bindable
-    public boolean getBidViewExpanded() {
-        return bidViewExpanded;
+    public boolean getExpandableViewExpanded() {
+        return expandableViewExpanded;
     }
 
-    public void setBidViewExpanded(boolean bidViewExpanded) {
-        this.bidViewExpanded = bidViewExpanded;
-        notifyPropertyChanged(BR.bidViewExpanded);
+    public void setExpandableViewExpanded(boolean expandableViewExpanded) {
+        this.expandableViewExpanded = expandableViewExpanded;
+        notifyPropertyChanged(BR.expandableViewExpanded);
     }
 
+    @Bindable
+    public String getExpandableViewTitle() {
+        return expandableViewTitle;
+    }
+
+    public void setExpandableViewTitle(String expandableViewTitle) {
+        this.expandableViewTitle = expandableViewTitle;
+        notifyPropertyChanged(BR.expandableViewTitle);
+    }
+
+    @Bindable
+    public String getExpandableViewMessage() {
+        return expandableViewMessage;
+    }
+
+    public void setExpandableViewMessage(String expandableViewMessage) {
+        this.expandableViewMessage = expandableViewMessage;
+        notifyPropertyChanged(BR.expandableViewMessage);
+    }
 
 
 
@@ -163,6 +205,10 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
     }*/
 
+    public boolean showExpandableView() {
+        return (expandableViewMessage != null && expandableViewMessage.length() > 0);
+    }
+
     public boolean hasBid() {
         //TODO: update
         return project.getBidDate() != null;
@@ -182,16 +228,16 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     ////////////////////////////////////
     // CLICK HANDLERS
 
-    public void onBidLayoutClick(View view) {
+    public void onExpandableViewClick(View view) {
         //TODO - fill in
-        Log.d(TAG, "onBidLayoutClick: " + view);
-        setBidViewExpanded(!bidViewExpanded);
+        Log.d(TAG, "onExpandableViewClick: " + view);
+        setExpandableViewExpanded(!expandableViewExpanded);
     }
 
-    public void onNoteLayoutClick(View view) {
+    /*public void onNoteLayoutClick(View view) {
         //TODO - fill in
         Log.d(TAG, "onNoteLayoutClick: " + view);
-    }
+    }*/
 
     public void onClick(View view) {
         //TODO - fill in
