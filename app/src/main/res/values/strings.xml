@@ -51,6 +51,8 @@
 
     <!-- Project Tracking List-->
     <string name="title_activity_project_tracking_list">Project Tracking List</string>
+    <string name="new_bid_placed">A new bid has been placed</string>
+    <string name="new_note_added">A new note has been added</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>

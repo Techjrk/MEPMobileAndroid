@@ -153,7 +153,7 @@ public class ListItemProjectTrackingViewModel {
 
     public boolean hasNote() {
         if(project.getProjectNotes() == null || project.getProjectNotes().length() == 0) return false;
-        return true;
+        return false;   //TODO - undo
     }
 
 
