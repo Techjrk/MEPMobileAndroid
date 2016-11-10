@@ -1,46 +1,49 @@
 package com.lecet.app.content;
 
-import android.support.v7.app.AppCompatActivity;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.ProjectDetailAdapter;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.lecet.app.viewmodel.ProjectDetailViewModel;
 
 import io.realm.Realm;
 
-public class ProjectDetailActivity extends AppCompatActivity {
+public class ProjectDetailActivity extends LecetBaseActivity {
 
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
 
-    private ProjectDetailAdapter detailAdapter;
+    private ProjectDetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_detail);
 
-        ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-
         long projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
 
-        Project project = projectDomain.fetchProjectById(projectId);
-
-        detailAdapter = new ProjectDetailAdapter(project, this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(detailAdapter);
+        ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
+        viewModel = new ProjectDetailViewModel(this, projectId, getString(R.string.google_maps_key), projectDomain);
+        viewModel.getProjectDetail();
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+
+        if (isConnected) {
+
+            // Check if we need to retry the network request to populate the screen
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        viewModel.cancelGetProjectDetailRequest();
+    }
 }
