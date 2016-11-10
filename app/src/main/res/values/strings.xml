@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Lecet</string>
 
+    <!-- API Keyts -->
+    <string name="google_maps_key">AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU</string>
+
     <!-- Common -->
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
