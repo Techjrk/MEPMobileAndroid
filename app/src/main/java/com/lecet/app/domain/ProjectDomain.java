@@ -4,6 +4,8 @@ import android.support.annotation.IntDef;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
@@ -55,6 +57,18 @@ public class ProjectDomain {
     /**
      * API
      **/
+
+    public Call<Project> getProjectDetail(long projectID, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\":[\"company\",\"contact\"]},{\"contacts\":[\"contactType\",\"company\"]}]}";
+
+        Call<Project> call = lecetClient.getProjectService().project(token, projectID, filter);
+        call.enqueue(callback);
+
+        return call;
+    }
 
     public void getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
@@ -260,6 +274,25 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+
+    public RealmResults<Contact> fetchProjectContacts(long projectID) {
+
+        RealmResults<Contact> contactsResult = realm.where(Contact.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("contactTypeId", Sort.DESCENDING);
+
+        return contactsResult;
+    }
+
+
+    public RealmResults<Bid> fetchProjectBids(long projectID) {
+
+        RealmResults<Bid> bidsResult = realm.where(Bid.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("amount", Sort.ASCENDING);
+
+        return bidsResult;
+    }
 
     public Project copyToRealmTransaction(Project project) {
 
