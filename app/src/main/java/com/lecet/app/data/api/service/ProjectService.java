@@ -11,6 +11,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -28,10 +29,20 @@ public interface ProjectService {
     @GET("Projects")
     Call<List<Project>> projects(@Header("Authorization") String authorization, @Query("filter") String filter);
 
+
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
     })
     @GET("Projects/near")
     Call<ProjectsNearResponse> projectsNear(@Header("Authorization") String authorization, @Query("lat") double lat, @Query("lng") double lng, @Query("dist") int dist, @Query("filter") String filter);
+
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("Projects/{projectID}")
+    Call<Project> project(@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
+
 }
