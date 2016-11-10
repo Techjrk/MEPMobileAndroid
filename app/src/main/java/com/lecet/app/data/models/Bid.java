@@ -55,6 +55,9 @@ public class Bid extends RealmObject {
     @SerializedName("contact")
     private Contact contact;
 
+    @SerializedName("company")
+    private Company company;
+
     public Bid() {
     }
 
@@ -110,24 +113,10 @@ public class Bid extends RealmObject {
         return contact;
     }
 
-    @Override
-    public String toString() {
-        return "Bid{" +
-                "awardInd=" + awardInd +
-                ", createDate=" + createDate +
-                ", amount=" + amount +
-                ", bidderRole='" + bidderRole + '\'' +
-                ", rank=" + rank +
-                ", fipsCounty='" + fipsCounty + '\'' +
-                ", zip5='" + zip5 + '\'' +
-                ", id=" + id +
-                ", companyId=" + companyId +
-                ", contactId=" + contactId +
-                ", projectId=" + projectId +
-                ", project=" + project +
-                ", contact=" + contact +
-                '}';
+    public Company getCompany() {
+        return company;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -151,7 +140,8 @@ public class Bid extends RealmObject {
             return false;
         if (zip5 != null ? !zip5.equals(bid.zip5) : bid.zip5 != null) return false;
         if (project != null ? !project.equals(bid.project) : bid.project != null) return false;
-        return contact != null ? contact.equals(bid.contact) : bid.contact == null;
+        if (contact != null ? !contact.equals(bid.contact) : bid.contact != null) return false;
+        return company != null ? company.equals(bid.company) : bid.company == null;
 
     }
 
@@ -173,7 +163,28 @@ public class Bid extends RealmObject {
         result = 31 * result + (int) (projectId ^ (projectId >>> 32));
         result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (contact != null ? contact.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
         return result;
     }
 
+
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "awardInd=" + awardInd +
+                ", createDate=" + createDate +
+                ", amount=" + amount +
+                ", bidderRole='" + bidderRole + '\'' +
+                ", rank=" + rank +
+                ", fipsCounty='" + fipsCounty + '\'' +
+                ", zip5='" + zip5 + '\'' +
+                ", id=" + id +
+                ", companyId=" + companyId +
+                ", contactId=" + contactId +
+                ", projectId=" + projectId +
+                ", project=" + project +
+                ", contact=" + contact +
+                ", company=" + company +
+                '}';
+    }
 }
