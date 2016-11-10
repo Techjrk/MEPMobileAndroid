@@ -11,6 +11,8 @@ import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectGroup;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.lecet.app.BR;
 
@@ -22,6 +24,8 @@ import com.lecet.app.BR;
 public class ListItemProjectTrackingViewModel extends BaseObservable {
 
     private static final String TAG = "ListItemProjTrackingVM";
+
+    private final long RECENT_BID_MS = 1210000000L;//1000 * 60 * 60 * 24 * 4000; // ms * secs * mins * hrs * days   // 1210000000 = 14 days
 
     private final Project project;
     private final String mapsApiKey;
@@ -93,7 +97,7 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     }
 
     private String generateExpandableViewTitle() {
-        if(hasBid()) {
+        if(recentBid()) {
             return "A new bid has been placed"; //TODO - externalize
         }
         else if(hasNote()) {
@@ -103,13 +107,28 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     }
 
     private String generateExpandableViewMessage() {
-        if(hasBid()) {
-            return "Bid message body";
+
+        // Bid
+        if(recentBid()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy, hh:mm aaa");
+            String formattedDate = sdf.format(project.getBidDate());
+            return "A bid was placed at " + formattedDate;
         }
+
+        // Note
         else if(hasNote()) {
             return "Note message body";
         }
         return null;
+    }
+
+    private boolean recentBid() {
+        if(project.getBidDate() == null) return false;
+
+        Date now = new Date();
+        long timeSinceBid = now.getTime() - project.getBidDate().getTime();
+        boolean isRecent = timeSinceBid < RECENT_BID_MS;
+        return (isRecent);
     }
 
     public String getClientLocation() {
@@ -209,10 +228,10 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return (expandableViewMessage != null && expandableViewMessage.length() > 0);
     }
 
-    public boolean hasBid() {
+    /*public boolean hasBid() {
         //TODO: update
         return project.getBidDate() != null;
-    }
+    }*/
 
 
     ////////////////////////////////////
