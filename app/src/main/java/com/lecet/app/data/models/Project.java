@@ -167,6 +167,9 @@ public class Project extends RealmObject {
     @SerializedName("contacts")
     private RealmList<Contact> contacts;
 
+    @SerializedName("bids")
+    private RealmList<Bid> bids;
+
     private boolean hidden;
 
     public Project() {
@@ -381,6 +384,10 @@ public class Project extends RealmObject {
         this.hidden = hidden;
     }
 
+    public RealmList<Bid> getBids() {
+        return bids;
+    }
+
     /** Convenience **/
 
     public String getFullAddress() {
@@ -525,7 +532,9 @@ public class Project extends RealmObject {
             return false;
         if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
             return false;
-        return contacts != null ? contacts.equals(project.contacts) : project.contacts == null;
+        if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
+            return false;
+        return bids != null ? bids.equals(project.bids) : project.bids == null;
 
     }
 
@@ -585,6 +594,7 @@ public class Project extends RealmObject {
         result = 31 * result + (bondInformation != null ? bondInformation.hashCode() : 0);
         result = 31 * result + (ownerClass != null ? ownerClass.hashCode() : 0);
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
+        result = 31 * result + (bids != null ? bids.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         return result;
     }
@@ -642,6 +652,7 @@ public class Project extends RealmObject {
                 ", bondInformation='" + bondInformation + '\'' +
                 ", ownerClass='" + ownerClass + '\'' +
                 ", contacts=" + contacts +
+                ", bids=" + bids +
                 ", hidden=" + hidden +
                 '}';
     }
