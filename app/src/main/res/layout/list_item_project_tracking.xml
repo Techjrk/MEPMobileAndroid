@@ -123,19 +123,19 @@
                     android:onClick="@{viewModel.onExpandableViewClick}">
 
                 <ImageView
-                        android:id="@+id/add_icon"
+                        android:id="@+id/expandable_icon"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="4dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@mipmap/ic_add"/>
+                        android:src="@{viewModel.useBidIcon ? @drawable/ic_add : @drawable/ic_add_note}"/>
 
                 <TextView
                         android:id="@+id/expandable_title"
                         tools:text="A new bid has been placed"
                         style="@style/ListItemProjectTrackingTextView.Expandable"
-                        android:layout_toRightOf="@id/add_icon"
+                        android:layout_toRightOf="@id/expandable_icon"
                         android:layout_height="wrap_content"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         android:text="@{viewModel.expandableViewTitle}"/>
@@ -178,48 +178,6 @@
 
 
             </RelativeLayout>
-
-            <!-- Expandable Note View -->
-            <!--RelativeLayout
-                    android:id="@+id/expandable_layout_notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="2dp"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="8dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/shape_rect_list_item_expand_1"
-                    android:visibility="@{viewModel.hasNote ? View.VISIBLE : View.GONE}"
-                    android:onClick="@{viewModel.onNoteLayoutClick}">
-
-                <ImageView
-                        android:id="@+id/note_icon"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@mipmap/ic_add_note"/>
-
-                <TextView
-                        android:id="@+id/expandable_text_note"
-                        tools:text="A new note has been added"
-                        style="@style/ListItemProjectTrackingTextView.Expandable"
-                        android:layout_toRightOf="@id/note_icon"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@string/new_note_added"/>
-
-                <ImageView
-                        android:layout_width="11dp"
-                        android:layout_height="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="12dp"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_caret_down"/>
-
-            </RelativeLayout-->
 
         </LinearLayout>
 

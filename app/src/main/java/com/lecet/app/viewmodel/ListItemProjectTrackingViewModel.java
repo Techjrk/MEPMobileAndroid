@@ -2,9 +2,12 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.lecet.app.R;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectCategory;
@@ -24,9 +27,18 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
 
     private static final String TAG = "ListItemProjTrackingVM";
 
-    private final String NEW_BID_PLACED = "A new bid has been placed";
+    public static final String EXPANDABLE_MODE_GONE = "gone";
+    public static final String EXPANDABLE_MODE_BID = "bid";
+    public static final String EXPANDABLE_MODE_NOTE = "note";
+    public static final String EXPANDABLE_MODE_STAGE = "stage";
+
+    private String expandableMode = EXPANDABLE_MODE_GONE;
+
+
+    private final String NEW_BID_PLACED = "A new bid has been placed";      // TODO - Externalize, which will require Context
     private final String NEW_NOTE_ADDED = "A new note has been added";
     private final String BID_PLACED_AT  = "A bid was placed at";
+    private final String STAGE_UPDATED  = "The project stage is now";
     private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14; // ms * secs * mins * hrs * days
 
     private final Project project;
@@ -40,9 +52,8 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
 
-        setExpandableViewTitle(generateExpandableViewTitle());
-        setExpandableViewMessage(generateExpandableViewMessage());
         projectKeywords = generateProjectKeywords();
+        setExpandableMode();
     }
 
     public String getProjectName() {
@@ -87,45 +98,34 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return str;
     }
 
-    /*public String getProjectNote() {
-
-        return project.getProjectNotes();
-    }
-
-    public String getProjectBidDate() {
-
-        if(project.getBidDate() != null) return DateFormat.getDateTimeInstance().format(project.getBidDate());
-        return null;
-    }*/
-
-    private String generateExpandableViewTitle() {
-
-        // Bid
+    private void setExpandableMode() {
+        // Bid mode
         if(recentBid()) {
-            return NEW_BID_PLACED; //TODO - externalize... need a Context to get resources though
-        }
-
-        // Note, if no bid
-        else if(hasNote()) {
-            return NEW_NOTE_ADDED;
-        }
-        return null;
-    }
-
-    private String generateExpandableViewMessage() {
-
-        // Bid
-       if (recentBid()) {
+            setExpandableMode(EXPANDABLE_MODE_BID);
+            setExpandableViewTitle(NEW_BID_PLACED);
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy, hh:mm aaa");
             String formattedDate = sdf.format(project.getBidDate());
-            return BID_PLACED_AT + " " + formattedDate;
+            setExpandableViewMessage(BID_PLACED_AT + " " + formattedDate);
+            //TODO - set icon
         }
-
-        // Note (if no bid)
+        // Note Mode
         else if(hasNote()) {
-            return project.getProjectNotes();
+            setExpandableMode(EXPANDABLE_MODE_BID);
+            setExpandableViewTitle(NEW_NOTE_ADDED);
+            setExpandableViewMessage(project.getProjectNotes());
         }
-        return null;
+        // Stage Update Mode
+        else if(hasStageUpdate()) {
+            setExpandableMode(EXPANDABLE_MODE_STAGE);
+            setExpandableViewTitle(STAGE_UPDATED);
+            setExpandableViewMessage(project.getProjectStage().getName());
+        }
+        // Hide
+        else {
+            setExpandableMode(EXPANDABLE_MODE_GONE);
+            setExpandableViewTitle("");
+            setExpandableViewMessage("");
+        }
     }
 
     private boolean recentBid() {
@@ -150,6 +150,41 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
                         "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
+
+    private boolean hasNote() {
+        if (project.getProjectNotes() == null || project.getProjectNotes().length() == 0) {
+            return false;
+        }
+        else return true;
+    }
+
+    private boolean hasStageUpdate() {
+        //TODO - fill in to return true if there is a project stage update
+        return false;
+    }
+
+    public String getExpandableMode() {
+        return expandableMode;
+    }
+
+    public void setExpandableMode(String expandableMode) {
+        this.expandableMode = expandableMode;
+    }
+
+    public boolean showExpandableView() {
+        return (expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
+    }
+
+    // TODO - icon is not updating correctly
+    public boolean useBidIcon() {
+        return expandableMode == EXPANDABLE_MODE_BID;
+    }
+
+
+
+
+    ///////////////////////////////
+    // BINDINGS
 
     @Bindable
     public boolean getExpandableViewExpanded() {
@@ -181,21 +216,10 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         notifyPropertyChanged(BR.expandableViewMessage);
     }
 
-
-    public boolean showExpandableView() {
-        return (recentBid() || hasNote());
-    }
-
-
-    ////////////////////////////////////
-    // PROJECT NOTES
-
-    public boolean hasNote() {
-        if (project.getProjectNotes() == null || project.getProjectNotes().length() == 0) {
-            return false;
-        }
-        else return true;
-    }
+    /*@BindingAdapter({"android:src"})
+    public static void setImageViewResource(ImageView imageView, int resource) {
+        imageView.setImageResource(resource);
+    }*/
 
 
     ////////////////////////////////////
