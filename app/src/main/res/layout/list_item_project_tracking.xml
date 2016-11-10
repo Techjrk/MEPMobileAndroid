@@ -141,11 +141,13 @@
                         android:text="@{viewModel.expandableViewTitle}"/>
 
                 <ImageView
+                        android:id="@+id/expandable_caret"
                         android:layout_width="11dp"
                         android:layout_height="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
                         android:layout_alignParentRight="true"
+                        android:rotation="@{viewModel.expandableViewExpanded ? 0 : 180}"
                         android:src="@mipmap/ic_caret_down"/>
 
             </RelativeLayout>
