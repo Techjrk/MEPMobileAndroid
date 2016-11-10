@@ -15,10 +15,20 @@
                 style="@style/CustomToolbar"
                 app:layout_collapseMode="pin"/>
 
-        <ImageView android:id="@+id/parallax_image_view"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   app:layout_collapseMode="parallax"/>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     app:layout_collapseMode="parallax">
+
+            <ImageView android:id="@+id/parallax_image_view"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"/>
+
+            <View android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@drawable/map_gradient"/>
+
+        </FrameLayout>
+
 
     </android.support.design.widget.CollapsingToolbarLayout>
 </android.support.design.widget.AppBarLayout>
