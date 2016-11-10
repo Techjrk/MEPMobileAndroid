@@ -162,7 +162,7 @@
 
                 <TextView
                         android:id="@+id/expanded_message"
-                        tools:text="Message body"
+                        tools:text="Message\nbody"
                         style="@style/ListItemProjectTrackingTextView.Expandable"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
@@ -173,6 +173,7 @@
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         android:background="@drawable/shape_rect_list_item_expand_2"
                         android:minLines="2"
+                        android:ellipsize="none"
                         android:text="@{viewModel.expandableViewMessage}"/>
 
 

@@ -10,7 +10,6 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectGroup;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,7 +24,10 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
 
     private static final String TAG = "ListItemProjTrackingVM";
 
-    private final long RECENT_BID_MS = 1210000000L;//1000 * 60 * 60 * 24 * 4000; // ms * secs * mins * hrs * days   // 1210000000 = 14 days
+    private final String NEW_BID_PLACED = "A new bid has been placed";
+    private final String NEW_NOTE_ADDED = "A new note has been added";
+    private final String BID_PLACED_AT  = "A bid was placed at";
+    private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14; // ms * secs * mins * hrs * days
 
     private final Project project;
     private final String mapsApiKey;
@@ -52,9 +54,9 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return this.projectKeywords;
     }
 
-    /*
-    Return a String built from a list of the project's PrimaryProjectType, ProjectCategory, and ProjectGroup
-     */
+    /**
+     Return a String built from a list of the project's PrimaryProjectType, ProjectCategory, and ProjectGroup
+     **/
     public String generateProjectKeywords() {
         StringBuilder sb = new StringBuilder();
         long id = project.getPrimaryProjectTypeId();
@@ -85,7 +87,7 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return str;
     }
 
-    public String getProjectNote() {
+    /*public String getProjectNote() {
 
         return project.getProjectNotes();
     }
@@ -94,14 +96,18 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
 
         if(project.getBidDate() != null) return DateFormat.getDateTimeInstance().format(project.getBidDate());
         return null;
-    }
+    }*/
 
     private String generateExpandableViewTitle() {
+
+        // Bid
         if(recentBid()) {
-            return "A new bid has been placed"; //TODO - externalize
+            return NEW_BID_PLACED; //TODO - externalize... need a Context to get resources though
         }
+
+        // Note, if no bid
         else if(hasNote()) {
-            return "A new note has been added";
+            return NEW_NOTE_ADDED;
         }
         return null;
     }
@@ -109,15 +115,15 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private String generateExpandableViewMessage() {
 
         // Bid
-        if(recentBid()) {
+       if (recentBid()) {
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy, hh:mm aaa");
             String formattedDate = sdf.format(project.getBidDate());
-            return "A bid was placed at " + formattedDate;
+            return BID_PLACED_AT + " " + formattedDate;
         }
 
-        // Note
+        // Note (if no bid)
         else if(hasNote()) {
-            return "Note message body";
+            return project.getProjectNotes();
         }
         return null;
     }
@@ -176,87 +182,29 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     }
 
 
-
-
-    //////////////////////////////////////
-    // PROJECT BIDS
-
-    /*public String getBidType() {
-
-        StringBuilder sb = new StringBuilder();
-        if (project.getPrimaryProjectType() != null && project.getPrimaryProjectType().getTitle() != null) {
-
-            sb.append(project.getPrimaryProjectType().getTitle());
-
-            if (project.getPrimaryProjectType().getProjectCategory() != null && project.getPrimaryProjectType().getProjectCategory().getTitle() != null) {
-
-                sb.append(" ");
-                sb.append(project.getPrimaryProjectType().getProjectCategory().getTitle());
-
-                if (project.getPrimaryProjectType().getProjectCategory().getProjectGroup() != null && project.getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle() != null) {
-
-                    sb.append(" ");
-                    sb.append(project.getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle());
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public String getBidTime() {
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
-
-        return simpleDateFormat.format(project.getBidDate());
-    }
-
-    public String getStartDateString() {
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
-
-        return simpleDateFormat.format(project.getBidDate());
-    }
-
-
-    public boolean isUnion() {
-
-        return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
-    }*/
-
     public boolean showExpandableView() {
-        return (expandableViewMessage != null && expandableViewMessage.length() > 0);
+        return (recentBid() || hasNote());
     }
-
-    /*public boolean hasBid() {
-        //TODO: update
-        return project.getBidDate() != null;
-    }*/
 
 
     ////////////////////////////////////
     // PROJECT NOTES
 
     public boolean hasNote() {
-        if(project.getProjectNotes() == null || project.getProjectNotes().length() == 0) return false;
-        return false;   //TODO - undo
+        if (project.getProjectNotes() == null || project.getProjectNotes().length() == 0) {
+            return false;
+        }
+        else return true;
     }
-
 
 
     ////////////////////////////////////
     // CLICK HANDLERS
 
     public void onExpandableViewClick(View view) {
-        //TODO - fill in
-        Log.d(TAG, "onExpandableViewClick: " + view);
+        //Log.d(TAG, "onExpandableViewClick: " + view);
         setExpandableViewExpanded(!expandableViewExpanded);
     }
-
-    /*public void onNoteLayoutClick(View view) {
-        //TODO - fill in
-        Log.d(TAG, "onNoteLayoutClick: " + view);
-    }*/
 
     public void onClick(View view) {
         //TODO - fill in
