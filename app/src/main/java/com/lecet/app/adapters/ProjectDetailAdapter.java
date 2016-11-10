@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemHeaderProjectBinding;
 import com.lecet.app.databinding.ListItemProjectDetailBinding;
@@ -23,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmList;
 
 /**
  * File: ProjectDetailAdapter Created: 10/27/16 Author: domandtom
@@ -55,12 +58,12 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private static final int SECTION_BIDDERS = 4;
 
     private List<List<ProjDetailItemViewModel>> data;
-    private Project project;
+    private ProjectDetailHeaderViewModel headerViewModel;
 
-    public ProjectDetailAdapter(Project project, Context context) {
+    public ProjectDetailAdapter(List<List<ProjDetailItemViewModel>> data, ProjectDetailHeaderViewModel headerViewModel) {
 
-        this.project = project;
-        this.data = buildDetails(project, context);
+        this.data = data;
+        this.headerViewModel = headerViewModel;
     }
 
     @Override
@@ -101,7 +104,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
         if (holder instanceof ProjectHeaderViewHolder) {
 
-            ((ProjectHeaderViewHolder) holder).getBinding().setViewModel(new ProjectDetailHeaderViewModel(project));
+            ((ProjectHeaderViewHolder) holder).getBinding().setViewModel(headerViewModel);
         } else if (holder instanceof SectionHeaderVH) {
 
             if (section == SECTION_NOTES) {
@@ -180,42 +183,6 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     }
 
     /** Private **/
-
-    private List<List<ProjDetailItemViewModel>> buildDetails(Project project, Context context) {
-
-        List<List<ProjDetailItemViewModel>> data = new ArrayList<>();
-
-        // First section will only have a header
-        List<ProjDetailItemViewModel> section0 = new ArrayList<>();
-        data.add(section0);
-
-
-        // Build Project Details
-        List<ProjDetailItemViewModel> section1 = new ArrayList<>();
-        data.add(section1);
-
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
-
-        // Notes
-        List<ProjDetailItemViewModel> section2 = new ArrayList<>();
-        data.add(section2);
-
-        String notes = "";
-
-        if (project.getProjectNotes() != null) notes = project.getProjectNotes();
-        if (project.getStdIncludes() != null) notes = notes + " " + project.getStdIncludes();
-
-        section2.add(new ProjDetailItemViewModel(null, notes));
-
-        return data;
-    }
-
-
-    /** ViewHolders **/
 
     private class SectionHeaderVH extends RecyclerView.ViewHolder {
 
