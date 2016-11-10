@@ -32,6 +32,9 @@ public class Contact extends RealmObject {
     @SerializedName("company")
     private Company company;
 
+    @SerializedName("contactType")
+    private ContactType contactType;
+
     public Contact() {}
 
     public long getId() {
@@ -58,6 +61,10 @@ public class Contact extends RealmObject {
         return company;
     }
 
+    public ContactType getContactType() {
+        return contactType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,7 +77,9 @@ public class Contact extends RealmObject {
         if (companyId != contact.companyId) return false;
         if (projectId != contact.projectId) return false;
         if (contactTypeId != contact.contactTypeId) return false;
-        return company != null ? company.equals(contact.company) : contact.company == null;
+        if (company != null ? !company.equals(contact.company) : contact.company != null)
+            return false;
+        return contactType != null ? contactType.equals(contact.contactType) : contact.contactType == null;
 
     }
 
@@ -82,6 +91,7 @@ public class Contact extends RealmObject {
         result = 31 * result + (int) (projectId ^ (projectId >>> 32));
         result = 31 * result + (int) (contactTypeId ^ (contactTypeId >>> 32));
         result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (contactType != null ? contactType.hashCode() : 0);
         return result;
     }
 
@@ -94,6 +104,7 @@ public class Contact extends RealmObject {
                 ", projectId=" + projectId +
                 ", contactTypeId=" + contactTypeId +
                 ", company=" + company +
+                ", contactType=" + contactType +
                 '}';
     }
 }
