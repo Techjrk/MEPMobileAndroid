@@ -1,19 +1,21 @@
 package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import android.graphics.Point;
 import android.support.annotation.IdRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -32,7 +34,7 @@ import io.realm.RealmResults;
  * File: ProjectTrackingListViewModel
  * Created: 11/2/16
  * Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 public class ProjectTrackingListViewModel extends BaseObservable {
@@ -50,6 +52,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
+    private ListPopupWindow mtmSortMenu;
+    private MenuTitleListAdapter mtmSortAdapter;
 
 
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList projectList, BidDomain bidDomain, ProjectDomain projectDomain) {
@@ -65,25 +69,25 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     }
 
     public void setToolbar(View toolbar, String title, String subtitle) {
-        titleTextView    = (TextView)  toolbar.findViewById(R.id.title_text_view);
-        subtitleTextView = (TextView)  toolbar.findViewById(R.id.subtitle_text_view);
-        backButton       = (ImageView) toolbar.findViewById(R.id.back_button);
-        sortButton       = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
+        titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
+        subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
+        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
+        sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
         //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
         backButton.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-                                              onBackButtonClick(v);
-                                          }
-                                      });
+            @Override
+            public void onClick(View v) {
+                onBackButtonClick(v);
+            }
+        });
 
         sortButton.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-                                              onSortButtonClick(v);
-                                          }
-                                      });
+            @Override
+            public void onClick(View v) {
+                onSortButtonClick(v);
+            }
+        });
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);
     }
@@ -147,10 +151,42 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         appCompatActivity.onBackPressed();
     }
 
-    public void onSortButtonClick(View view) {
-        Log.d(TAG, "onSortButtonClick");
-        Toast.makeText(appCompatActivity, "Sort button pressed", Toast.LENGTH_SHORT).show();
+    private void toogleMTMSortMenu() {
+        if (mtmSortMenu == null) {
+            createMTMSortMenu(appCompatActivity.findViewById(R.id.sort_menu_button));
+        }
+        mtmSortMenu.show();
     }
 
+    private void createMTMSortMenu(View anchor) {
+        if (mtmSortMenu == null) {
+            mtmSortMenu = new ListPopupWindow(appCompatActivity);
+
+            mtmSortAdapter
+                    = new MenuTitleListAdapter(appCompatActivity
+                    , appCompatActivity.getResources().getString(R.string.mtm_sort_menu_title)
+                    , appCompatActivity.getResources().getStringArray(R.array.mobile_tracking_list_sort_menu));
+
+            Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0]
+                    - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
+            mtmSortMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.overflow_menu_background));
+            mtmSortMenu.setAnchorView(anchor);
+            mtmSortMenu.setModal(true);
+            mtmSortMenu.setWidth(width);
+            mtmSortMenu.setHorizontalOffset(-offset);
+            mtmSortMenu.setVerticalOffset(anchor.getHeight());
+            mtmSortMenu.setAdapter(mtmSortAdapter);
+        }
+    }
+
+    public void onSortButtonClick(View view) {
+        toogleMTMSortMenu();
+    }
 
 }

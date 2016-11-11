@@ -139,4 +139,7 @@
     <string name="show_updates">Show Updates</string>
     <string name="edit">EDIT</string>
 
+    <!-- MTM Sort Menu -->
+    <string name="mtm_sort_menu_title">Sort by</string>
+
 </resources>
