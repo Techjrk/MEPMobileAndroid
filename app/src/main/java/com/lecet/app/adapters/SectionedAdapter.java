@@ -15,8 +15,8 @@ import java.util.TreeMap;
 
 public abstract class SectionedAdapter extends RecyclerView.Adapter {
 
-    private SparseIntArray sectionIndexPositionMap; // Maps each section to data source aggregate item position which includes items plus headers.
-    private SparseIntArray sectionCountMap; // Maps each sections item count.
+    private SparseIntArray sectionIndexPositionMap; // Tracks each section to data source over all item position which includes items plus headers and footers.
+    private SparseIntArray sectionFooterMap; // Tracks each section footer to data source position
     private TreeMap<Integer, Integer> positionToSectionMap; // Maps the position of each section start.
 
 
@@ -24,7 +24,7 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
 
         positionToSectionMap = new TreeMap<>();
         sectionIndexPositionMap = new SparseIntArray();
-        sectionCountMap = new SparseIntArray();
+        sectionFooterMap = new SparseIntArray();
     }
 
 
@@ -36,13 +36,30 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
 
     public abstract int getHeaderViewType(int section);
 
+    public abstract int getFooterViewType(int section);
+
     public abstract void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position);
 
-    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position, List payloads) {
+    @SuppressWarnings("unused")
+    protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position, List payloads) {
         onBindItemViewHolder(holder, section, position);
     }
 
     public abstract void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int section);
+
+    public abstract void onBindFooterViewHolder(RecyclerView.ViewHolder holder, int section);
+
+    @SuppressWarnings("unused")
+    public boolean enableHeaderForSection(int section) {
+
+        return false;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean enableFooterForSection(int section) {
+
+        return false;
+    }
 
     /**
      * Implementation of Adapter required methods
@@ -50,6 +67,9 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
+
+        // Maps each sections item count.
+        SparseIntArray sectionCountMap; sectionCountMap = new SparseIntArray();
 
         // Clear any existing data
         sectionIndexPositionMap.clear();
@@ -60,35 +80,46 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
         int sections = getSectionCount();
         int count = 0;
 
-        int i;
-        for (i = 0; i < sections; i++) {
+        int section;
+        for (section = 0; section < sections; section++) {
 
-            int itemsInSection = getItemCountForSection(i);
-            sectionCountMap.put(i, itemsInSection);
+            // Keep track of total count for each section
+            int itemsInSection = getItemCountForSection(section);
+            sectionCountMap.put(section, itemsInSection);
+
+            // Determine if need a header or footer for this section
+            boolean headerEnabled = enableHeaderForSection(section);
+            boolean footerEnabled = enableFooterForSection(section);
 
             // If the first index is zero, header position is zero.
-            if (i == 0) {
+            if (section == 0) {
 
-                sectionIndexPositionMap.put(i, i);
-                positionToSectionMap.put(i, i);
+                sectionIndexPositionMap.put(section, 0);
+                positionToSectionMap.put(section, 0);
 
             } else {
 
-                int previousSectionStart = sectionIndexPositionMap.get(i - 1);
-                int previousSectionLength = sectionCountMap.get(i - 1);
+                int previousSection = section - 1;
+                int previousSectionStart = sectionIndexPositionMap.get(section - 1);
+                int previousSectionLength = sectionCountMap.get(section - 1);
 
                 // Index of the next section header will be intuitively the length of the previous
-                // section plus 1.
-                int currentSectionStart = previousSectionStart + previousSectionLength + 1;
-                sectionIndexPositionMap.put(i, currentSectionStart);
-                positionToSectionMap.put(currentSectionStart, i);
+                // section plus 1. If there is a footer for the section. Then its plus 2
+                int currentSectionStart = previousSectionStart + previousSectionLength + (enableHeaderForSection(previousSection) ? 1 : 0) + (enableFooterForSection(previousSection) ? 1 : 0);
+                sectionIndexPositionMap.put(section, currentSectionStart);
+                positionToSectionMap.put(currentSectionStart, section);
+
+                if (footerEnabled) {
+                    sectionFooterMap.put(currentSectionStart + itemsInSection + (headerEnabled ? 1 : 0), section);
+                }
             }
 
-            count = count + itemsInSection + 1;
+            count = count + itemsInSection + (headerEnabled ? 1 : 0) + (footerEnabled ? 1 : 0);
         }
 
         return count;
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -96,12 +127,17 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
         if (positionToSectionMap.containsKey(position)) {
 
             return getHeaderViewType(positionToSectionMap.get(position));
+
+        } else if (sectionFooterMap.get(position, -1) != -1) {
+
+            return getFooterViewType(sectionFooterMap.get(position));
         }
 
         Integer section = findSectionByPosition(position);
 
         return getItemViewType(section, findPositionInSection(section, position));
     }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -111,6 +147,10 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
         if (positionToSectionMap.containsKey(position)) {
 
             onBindHeaderViewHolder(holder, section);
+
+        } else if (sectionFooterMap.get(position, -1) != -1) {
+
+            onBindFooterViewHolder(holder, section);
 
         } else {
 
@@ -123,15 +163,12 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
     /**
      * Private
      **/
-
     private Integer findSectionByPosition(int position) {
 
         Map.Entry<Integer, Integer> lowKeyMatch = positionToSectionMap.floorEntry(position);
 
-        if (lowKeyMatch == null) {
-
+        if (lowKeyMatch == null)
             throw new SectionAdapterException(String.format("Given position %d, does not have a corresponding section!", position));
-        }
 
         return lowKeyMatch.getValue();
     }
@@ -142,10 +179,8 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
         Integer sectionStartPosition = sectionIndexPositionMap.get(section);
         Integer sectionPosition;
 
-        if (sectionStartPosition == null) {
-
+        if (sectionStartPosition == null)
             throw new SectionAdapterException(String.format("Given position %d, does not have a corresponding section!", position));
-        }
 
         sectionPosition = position - sectionStartPosition;
 
