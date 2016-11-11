@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data></data>
 
-</LinearLayout>
+    <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerInParent="true">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/see_all"
+                      android:textColor="@color/lecetFooterGray"
+                      bind:typeface="@{`Lato-Black.ttf`}"/>
+
+            <ImageView android:layout_width="8dp"
+                       android:layout_height="12dp"
+                       android:layout_gravity="center"
+                       android:layout_marginLeft="5dp"
+                       android:src="@drawable/down_chevron"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>
+
