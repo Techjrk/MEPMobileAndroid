@@ -142,4 +142,9 @@
     <!-- MTM Sort Menu -->
     <string name="mtm_sort_menu_title">Sort by</string>
 
+    <!-- MTM Sort Activity -->
+    <string name="remove">REMOVE</string>
+    <string name="move">MOVE</string>
+    <string name="x_selected">%s Selected</string>
+
 </resources>

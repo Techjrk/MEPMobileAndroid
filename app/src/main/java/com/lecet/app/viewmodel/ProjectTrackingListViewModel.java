@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.graphics.Point;
 import android.support.annotation.IdRes;
@@ -11,12 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
+import com.lecet.app.content.ProjectTrackingListSortedActivity;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
@@ -182,6 +185,13 @@ public class ProjectTrackingListViewModel extends BaseObservable {
             mtmSortMenu.setHorizontalOffset(-offset);
             mtmSortMenu.setVerticalOffset(anchor.getHeight());
             mtmSortMenu.setAdapter(mtmSortAdapter);
+            mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //TODO send the sort option selected
+                    appCompatActivity.startActivity(new Intent(appCompatActivity, ProjectTrackingListSortedActivity.class));
+                }
+            }); // the callback for when a list item is selected
         }
     }
 
