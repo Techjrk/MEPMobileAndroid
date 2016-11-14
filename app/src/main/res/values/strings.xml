@@ -146,5 +146,6 @@
     <string name="remove">REMOVE</string>
     <string name="move">MOVE</string>
     <string name="x_selected">%s Selected</string>
+    <string name="move_to">Move to</string>
 
 </resources>

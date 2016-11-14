@@ -1,6 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Point;
@@ -9,35 +8,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.Display;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.adapters.MenuTitleListAdapter;
-import com.lecet.app.content.ProjectTrackingListSortedActivity;
-import com.lecet.app.domain.BidDomain;
-import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.adapters.MoveToAdapter;
+import com.lecet.app.data.models.CompanyTrackingList;
+import com.lecet.app.data.models.ProjectTrackingList;
+import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.interfaces.MTMMenuCallback;
+
+import java.util.List;
 
 /**
  * Created by Josué Rodríguez on 12/11/2016.
  */
 
-public class ProjectTrackingListSortedViewModel extends BaseObservable {
+public class ProjectTrackingListSortedViewModel extends BaseObservable implements MTMMenuCallback {
 
-    private final BidDomain bidDomain;
-    private final ProjectDomain projectDomain;
     private final AppCompatActivity appCompatActivity;
+    private final TrackingListDomain trackingListDomain;
 
     private ListPopupWindow mtmSortMenu;
-    private MenuTitleListAdapter mtmSortAdapter;
+    private MoveToAdapter moveToAdapter;
 
     private String projectsSelected;
 
-    public ProjectTrackingListSortedViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain) {
+    public ProjectTrackingListSortedViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain) {
         this.appCompatActivity = appCompatActivity;
-        this.bidDomain = bidDomain;
-        this.projectDomain = projectDomain;
+        this.trackingListDomain = trackingListDomain;
     }
 
     @Bindable
@@ -61,6 +60,8 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable {
     private void toogleMTMSortMenu(View view) {
         if (mtmSortMenu == null) {
             createMTMSortMenu(view);
+        } else {
+            moveToAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
         }
         mtmSortMenu.show();
     }
@@ -69,10 +70,11 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable {
         if (mtmSortMenu == null) {
             mtmSortMenu = new ListPopupWindow(appCompatActivity);
 
-            mtmSortAdapter
-                    = new MenuTitleListAdapter(appCompatActivity
-                    , appCompatActivity.getResources().getString(R.string.mtm_sort_menu_title)
-                    , appCompatActivity.getResources().getStringArray(R.array.mobile_tracking_list_sort_menu));
+            List<ProjectTrackingList> projectTrackingLists = trackingListDomain.fetchUserProjectTrackingList();
+            moveToAdapter
+                    = new MoveToAdapter(appCompatActivity
+                    , appCompatActivity.getResources().getString(R.string.move_to)
+                    , projectTrackingLists, this);
 
             Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -88,15 +90,17 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable {
             mtmSortMenu.setWidth(width);
             mtmSortMenu.setHorizontalOffset(-offset);
 //            mtmSortMenu.setVerticalOffset(anchor.getHeight());
-            mtmSortMenu.setAdapter(mtmSortAdapter);
-            mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO send the sort option selected
-                    appCompatActivity.startActivity(new Intent(appCompatActivity, ProjectTrackingListSortedActivity.class));
-                }
-            }); // the callback for when a list item is selected
+            mtmSortMenu.setAdapter(moveToAdapter);
         }
     }
 
+    @Override
+    public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
+        //TODO call the things to change the project of list
+    }
+
+    @Override
+    public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
+        //DO NOTHING
+    }
 }
