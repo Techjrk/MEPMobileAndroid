@@ -24,6 +24,7 @@
     <string name="owner">Owner</string>
     <string name="project_bidders">Project Bidders</string>
     <string name="architect">Architect</string>
+    <string name="see_all">See All</string>
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
