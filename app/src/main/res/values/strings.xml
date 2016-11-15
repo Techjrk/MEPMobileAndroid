@@ -139,10 +139,10 @@
     <string name="show_updates">Show Updates</string>
     <string name="edit">EDIT</string>
 
-    <!-- MTM Sort Menu -->
+    <!-- MTM SortBy Menu -->
     <string name="mtm_sort_menu_title">Sort by</string>
 
-    <!-- MTM Sort Activity -->
+    <!-- MTM SortBy Activity -->
     <string name="remove">REMOVE</string>
     <string name="move">MOVE</string>
     <string name="x_selected">%s Selected</string>

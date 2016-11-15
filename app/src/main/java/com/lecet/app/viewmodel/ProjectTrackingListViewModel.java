@@ -1,6 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.graphics.Point;
 import android.support.annotation.IdRes;
@@ -19,11 +18,13 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
+import com.lecet.app.content.ProjectTrackingListActivity;
 import com.lecet.app.content.ProjectTrackingListSortedActivity;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.enums.SortBy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -188,8 +189,11 @@ public class ProjectTrackingListViewModel extends BaseObservable {
             mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO send the sort option selected
-                    appCompatActivity.startActivity(new Intent(appCompatActivity, ProjectTrackingListSortedActivity.class));
+                    SortBy sortBy = SortBy.values()[position - 1];//removing the title
+                    long listItemId = appCompatActivity.getIntent().getLongExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, -1);
+                    String listItemTitle = appCompatActivity.getIntent().getStringExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE);
+                    int listItemSize = appCompatActivity.getIntent().getIntExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, 0);
+                    ProjectTrackingListSortedActivity.startActivityForResult(appCompatActivity, listItemId, listItemTitle, listItemSize, sortBy);
                 }
             }); // the callback for when a list item is selected
         }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lecet.app.content.CompanyDetailProjectBidsActivity">
+
+    <data>
+
+        <variable
+            name="project"
+            type="com.lecet.app.data.models.Project" />
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.ListItemCompanyDetailProjectBidVM" />
+    </data>
+
+
+    <!-- Left View and Details -->
+    <com.lecet.app.content.widget.CheckableLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:button="@drawable/check_box_square_selector" />
+
+
+        <!-- Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/project_name"
+                style="@style/ListItemCompanyDetailProjectBidsTextView.Title"
+                android:layout_marginBottom="2.5dp"
+                android:paddingBottom="0dp"
+                tools:text="Maline Creek CSO 051 &amp; 052 Storage…" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2.5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_location" />
+
+                <TextView
+                    android:id="@+id/location"
+                    style="@style/ListItemCompanyDetailProjectBidsTextView.Detail1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="0dp"
+                    tools:text="Saint Louis, MO" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </com.lecet.app.content.widget.CheckableLinearLayout>
+
+</layout>

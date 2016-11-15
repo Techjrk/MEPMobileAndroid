@@ -8,10 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -29,8 +33,14 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable implement
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
 
-    private ListPopupWindow mtmSortMenu;
+    private ListPopupWindow moveMenu;
     private MoveToAdapter moveToAdapter;
+    private ListPopupWindow mtmSortMenu;
+    private MenuTitleListAdapter mtmSortAdapter;
+    private TextView titleTextView;
+    private TextView subtitleTextView;
+    private ImageView backButton;
+    private ImageView sortButton;
 
     private String projectsSelected;
 
@@ -49,26 +59,18 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable implement
         notifyPropertyChanged(BR.projectsSelected);
     }
 
-    public void onMoveButtonClicked(View view) {
-        toogleMTMSortMenu(view);
-    }
-
-    public void onRemoveButtonClicked(View view) {
-        Toast.makeText(appCompatActivity, "Remove button clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    private void toogleMTMSortMenu(View view) {
-        if (mtmSortMenu == null) {
-            createMTMSortMenu(view);
+    private void toogleMoveMenu(View view) {
+        if (moveMenu == null) {
+            createMoveMenu(view);
         } else {
             moveToAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
         }
-        mtmSortMenu.show();
+        moveMenu.show();
     }
 
-    private void createMTMSortMenu(View anchor) {
-        if (mtmSortMenu == null) {
-            mtmSortMenu = new ListPopupWindow(appCompatActivity);
+    private void createMoveMenu(View anchor) {
+        if (moveMenu == null) {
+            moveMenu = new ListPopupWindow(appCompatActivity);
 
             List<ProjectTrackingList> projectTrackingLists = trackingListDomain.fetchUserProjectTrackingList();
             moveToAdapter
@@ -84,14 +86,77 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable implement
             anchor.getLocationOnScreen(coordinates);
             int offset = (int) (coordinates[0]
                     - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
-            mtmSortMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.more_menu_upsidedown_background));
+            moveMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.more_menu_upsidedown_background));
+            moveMenu.setAnchorView(anchor);
+            moveMenu.setModal(true);
+            moveMenu.setWidth(width);
+            moveMenu.setHorizontalOffset(-offset);
+            moveMenu.setAdapter(moveToAdapter);
+        }
+    }
+
+    private void toogleMTMSortMenu(View view) {
+        if (mtmSortMenu == null) {
+            createMTMSortMenu(view);
+        }
+        mtmSortMenu.show();
+    }
+
+    private void createMTMSortMenu(View anchor) {
+        if (mtmSortMenu == null) {
+            mtmSortMenu = new ListPopupWindow(appCompatActivity);
+
+            mtmSortAdapter
+                    = new MenuTitleListAdapter(appCompatActivity
+                    , appCompatActivity.getResources().getString(R.string.mtm_sort_menu_title)
+                    , appCompatActivity.getResources().getStringArray(R.array.mobile_tracking_list_sort_menu));
+
+            Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0]
+                    - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
+            mtmSortMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.overflow_menu_background));
             mtmSortMenu.setAnchorView(anchor);
             mtmSortMenu.setModal(true);
             mtmSortMenu.setWidth(width);
             mtmSortMenu.setHorizontalOffset(-offset);
-//            mtmSortMenu.setVerticalOffset(anchor.getHeight());
-            mtmSortMenu.setAdapter(moveToAdapter);
+            mtmSortMenu.setVerticalOffset(anchor.getHeight());
+            mtmSortMenu.setAdapter(mtmSortAdapter);
+            mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //TODO sort the current project list
+                }
+            }); // the callback for when a list item is selected
         }
+    }
+
+    public void setToolbar(View toolbar, String title, String subtitle) {
+        titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
+        subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
+        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
+        sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
+
+        //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackButtonClick(v);
+            }
+        });
+
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSortButtonClick(v);
+            }
+        });
+        titleTextView.setText(title);
+        subtitleTextView.setText(subtitle);
     }
 
     @Override
@@ -103,4 +168,21 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable implement
     public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
         //DO NOTHING
     }
+
+    public void onMoveButtonClicked(View view) {
+        toogleMoveMenu(view);
+    }
+
+    public void onRemoveButtonClicked(View view) {
+        Toast.makeText(appCompatActivity, "Remove button clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onBackButtonClick(View view) {
+        appCompatActivity.onBackPressed();
+    }
+
+    public void onSortButtonClick(View view) {
+        toogleMTMSortMenu(view);
+    }
+
 }
