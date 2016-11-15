@@ -52,8 +52,7 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
         String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
         int listItemSize = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
 
-        // TODO - accommodate company list also
-        // TODO - get primary category, project type, primary project type
+        // TODO - accommodate multiple list types such as Company Lists
         final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
 
