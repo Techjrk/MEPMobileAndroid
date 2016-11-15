@@ -1,17 +1,14 @@
 package com.lecet.app.adapters;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.Contact;
-import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemHeaderProjectBinding;
 import com.lecet.app.databinding.ListItemProjectDetailBinding;
 import com.lecet.app.databinding.ListItemProjectNoteBinding;
@@ -22,10 +19,7 @@ import com.lecet.app.viewmodel.ProjectDetailHeaderViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmList;
 
 /**
  * File: ProjectDetailAdapter Created: 10/27/16 Author: domandtom
@@ -34,6 +28,8 @@ import io.realm.RealmList;
  */
 
 public class ProjectDetailAdapter extends SectionedAdapter {
+
+    private static final String TAG = "ProjectDetailAdapter";
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PROJECT_HEADER, SECTION_HEADER, SHARE_HEADER, ALL_VIEW_TYPE, NOTE_VIEW_TYPE})
@@ -45,6 +41,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private static final int SHARE_HEADER = 2;
     private static final int ALL_VIEW_TYPE = 3;
     private static final int NOTE_VIEW_TYPE = 4;
+    private static final int FOOTER_VIEW_TYPE = 5;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SECTION_TITLE, SECTION_SHARE, SECTION_NOTES, SECTION_PARTICIPANTS, SECTION_BIDDERS})
@@ -100,6 +97,26 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     }
 
     @Override
+    public int getFooterViewType(int section) {
+        return FOOTER_VIEW_TYPE;
+    }
+
+    @Override
+    public boolean enableHeaderForSection(int section) {
+        return true;
+    }
+
+    @Override
+    public boolean enableFooterForSection(int section) {
+
+        if (section == SECTION_SHARE || section == SECTION_BIDDERS) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int section) {
 
         if (holder instanceof ProjectHeaderViewHolder) {
@@ -135,9 +152,19 @@ public class ProjectDetailAdapter extends SectionedAdapter {
             ProjDetailItemViewModel viewModel = data.get(section).get(position);
             ((NotesViewHolder) holder).getBinding().setViewModel(viewModel);
         }
-
     }
 
+    @Override
+    public void onBindFooterViewHolder(RecyclerView.ViewHolder holder, final int section) {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.d(TAG, "Footer Section: " + section + " Clicked");
+            }
+        });
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -174,6 +201,15 @@ public class ProjectDetailAdapter extends SectionedAdapter {
                 ListItemProjectNoteBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_note, parent, false);
                 return new NotesViewHolder(binding);
             }
+
+            case FOOTER_VIEW_TYPE: {
+
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_mpd_footer, parent, false);
+
+                return new FooterViewHolder(v);
+            }
+
             default: {
 
                 ListItemProjectDetailBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_detail, parent, false);
@@ -182,7 +218,9 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         }
     }
 
-    /** Private **/
+    /**
+     * Private
+     **/
 
     private class SectionHeaderVH extends RecyclerView.ViewHolder {
 
@@ -246,6 +284,13 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
         public ListItemProjectDetailBinding getBinding() {
             return binding;
+        }
+    }
+
+    private class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
         }
     }
 }
