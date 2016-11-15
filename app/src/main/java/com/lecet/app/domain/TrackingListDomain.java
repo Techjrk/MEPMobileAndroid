@@ -2,13 +2,16 @@ package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.CompanyTrackingList;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -85,6 +88,7 @@ public class TrackingListDomain {
     }
 
 
+
     // Delete
 
     public void deleteAllProjectTrackingLists() {
@@ -113,6 +117,38 @@ public class TrackingListDomain {
             }
         });
     }
+
+    // Sorting
+
+    public RealmResults<Project> sortProjectList(RealmList<Project> projects, String field, Sort sortType) {
+
+        return projects.sort(field, sortType);
+    }
+
+
+    public RealmResults<Project> sortProjectListByBidDate(RealmList<Project> projects) {
+
+        return sortProjectList(projects, "bidDate", Sort.DESCENDING);
+    }
+
+
+    public RealmResults<Project> sortProjectListByLastUpdated(RealmList<Project> projects) {
+
+        return sortProjectList(projects, "lastPublishDate", Sort.DESCENDING);
+    }
+
+
+    public RealmResults<Project> sortProjectListByDateAdded(RealmList<Project> projects) {
+
+        return sortProjectList(projects, "firstPublishDate", Sort.DESCENDING);
+    }
+
+
+    public RealmResults<Project> sortProjectListByValue(RealmList<Project> projects, Sort sortType) {
+
+        return sortProjectList(projects, "estLow", sortType);
+    }
+
 
     // Realm transactions
 
