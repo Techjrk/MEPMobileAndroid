@@ -41,6 +41,7 @@
                     android:gravity="left"
                     android:textColor="@color/pureWhite"
                     android:textSize="12sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
                     android:text="@string/show_updates"/>
 
             <TextView
@@ -51,6 +52,7 @@
                     android:layout_alignParentRight="true"
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}"
                     android:text="@string/edit"/>
 
         </RelativeLayout>

@@ -26,7 +26,6 @@
                 android:src="@drawable/ic_back_button"
                 android:onClick="@{viewModel.onBackButtonClick}"/>
 
-        <!-- bind:typeface="@{`Lato-Regular.ttf`}" not working -->
         <TextView
                 android:id="@+id/title_text_view"
                 android:layout_width="wrap_content"
@@ -37,6 +36,7 @@
                 android:maxLines="1"
                 android:textColor="@color/lecetTextWhite"
                 android:textSize="16sp"
+                bind:typeface="@{`Lato-Regular.ttf`}"
                 android:text="Trains and Metros"/>
 
         <TextView
@@ -48,6 +48,7 @@
                 android:maxLines="1"
                 android:textColor="@color/lecetTextLightGray"
                 android:textSize="12sp"
+                bind:typeface="@{`Lato-Regular.ttf`}"
                 android:text="17 Projects"/>
 
         <ImageView
