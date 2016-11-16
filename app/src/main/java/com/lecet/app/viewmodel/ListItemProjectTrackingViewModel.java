@@ -79,14 +79,14 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
             if (category != null) {
                 String categoryTitle = category.getTitle();
                 if (categoryTitle != null) {
-                    sb.append(",");
+                    sb.append(", ");
                     sb.append(categoryTitle);
                 }
                 ProjectGroup group = category.getProjectGroup();
                 if (group != null) {
                     String groupTitle = group.getTitle();
                     if(groupTitle != null) {
-                        sb.append(",");
+                        sb.append(", ");
                         sb.append(groupTitle);
                     }
                 }

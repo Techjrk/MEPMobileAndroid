@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.graphics.Point;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
@@ -12,10 +13,13 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.lecet.app.R;
+import com.lecet.app.BR;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
 import com.lecet.app.content.ProjectTrackingListActivity;
@@ -51,11 +55,12 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private RecyclerView recyclerView;
     private ProjectListRecyclerViewAdapter projectListAdapter;
     private List<RealmObject> adapterData;
-    private RealmResults<Project> projectListResults;
     private TextView titleTextView;
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
+    private Switch showUpdatesToggle;
+    private boolean showUpdates = true;
     private ListPopupWindow mtmSortMenu;
     private MenuTitleListAdapter mtmSortAdapter;
 
@@ -68,8 +73,33 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.bidDomain = bidDomain;
         this.projectDomain = projectDomain;
 
+        initShowUpdatesSwitch();
         initializeAdapter();
         setupAdapterWithProjectList(projectList);
+    }
+
+    private void initShowUpdatesSwitch() {
+        if(this.appCompatActivity != null) {
+            showUpdatesToggle = (Switch) appCompatActivity.findViewById(R.id.toggle_button);
+
+            showUpdatesToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.d(TAG, "initShowUpdatesSwitch: onCheckedChanged: " + isChecked);
+                    setShowUpdates(isChecked);
+                    //projectListAdapter.notifyDataSetChanged();    // removed but does not fix flicker on scroll
+                }
+            });
+
+            //check the current state before we display the screen
+            if(showUpdatesToggle.isChecked()){
+                //
+            }
+            else {
+                //
+            }
+        }
     }
 
     public void setToolbar(View toolbar, String title, String subtitle) {
@@ -107,7 +137,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
         recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
         setupRecyclerView(recyclerView);
-        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData, 1);  //TODO - allow for multiple init types, default to 1 for now
+        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
         recyclerView.setAdapter(projectListAdapter);
     }
 
@@ -118,18 +148,9 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
         adapterData.clear();
         adapterData.addAll(Arrays.asList(data));
-        projectListAdapter.setAdapterType(1);       //TODO - needed? support multiple types? also see initializeAdapter()
+        //projectListAdapter.setAdapterType(1);
         projectListAdapter.notifyDataSetChanged();
     }
-
-    /*private void setupAdapterWithProjects(RealmResults<Project> realmResults) {
-
-        Project[] data = realmResults != null ? realmResults.toArray(new Project[realmResults.size()]) : new Project[0];
-        adapterData.clear();
-        adapterData.addAll(Arrays.asList(data));
-        projectListAdapter.setAdapterType(1);       //TODO - needed? support multiple types? also see initializeAdapter()
-        projectListAdapter.notifyDataSetChanged();
-    }*/
 
     /**
      * RecyclerView Management
@@ -198,6 +219,21 @@ public class ProjectTrackingListViewModel extends BaseObservable {
             }); // the callback for when a list item is selected
         }
     }
+
+
+    ///////////////////////////////
+    // BINDINGS
+
+    @Bindable
+    public boolean getShowUpdates() {
+        return showUpdates;
+    }
+
+    public void setShowUpdates(boolean showUpdates) {
+        this.showUpdates = showUpdates;
+        notifyPropertyChanged(BR.showUpdates);
+    }
+
 
     public void onSortButtonClick(View view) {
         toogleMTMSortMenu();
