@@ -45,6 +45,8 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private final String mapsApiKey;
     private String projectKeywords;
     private boolean expandableViewExpanded;
+
+    private int expandableViewIconId;
     private String expandableViewTitle = "";
     private String expandableViewMessage = "";
 
@@ -52,8 +54,8 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
 
-        projectKeywords = generateProjectKeywords();
         setExpandableMode();
+        projectKeywords = generateProjectKeywords();
     }
 
     public String getProjectName() {
@@ -102,21 +104,23 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         // Bid mode
         if(recentBid()) {
             setExpandableMode(EXPANDABLE_MODE_BID);
+            setExpandableViewIconId(R.drawable.ic_add);
             setExpandableViewTitle(NEW_BID_PLACED);
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy, hh:mm aaa");
             String formattedDate = sdf.format(project.getBidDate());
             setExpandableViewMessage(BID_PLACED_AT + " " + formattedDate);
-            //TODO - set icon
         }
         // Note Mode
         else if(hasNote()) {
             setExpandableMode(EXPANDABLE_MODE_BID);
+            setExpandableViewIconId(R.drawable.ic_add_note);
             setExpandableViewTitle(NEW_NOTE_ADDED);
             setExpandableViewMessage(project.getProjectNotes());
         }
         // Stage Update Mode
         else if(hasStageUpdate()) {
             setExpandableMode(EXPANDABLE_MODE_STAGE);
+            setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'stage' icon, TBD
             setExpandableViewTitle(STAGE_UPDATED);
             setExpandableViewMessage(project.getProjectStage().getName());
         }
@@ -126,6 +130,8 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
             setExpandableViewTitle("");
             setExpandableViewMessage("");
         }
+
+        Log.d(TAG, "setExpandableMode: " + project.getTitle() + ", " + expandableMode);
     }
 
     private boolean recentBid() {
@@ -181,8 +187,6 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     }
 
 
-
-
     ///////////////////////////////
     // BINDINGS
 
@@ -194,6 +198,16 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     public void setExpandableViewExpanded(boolean expandableViewExpanded) {
         this.expandableViewExpanded = expandableViewExpanded;
         notifyPropertyChanged(BR.expandableViewExpanded);
+    }
+
+    @Bindable
+    public int getExpandableViewIconId() {
+        return expandableViewIconId;
+    }
+
+    public void setExpandableViewIconId(int expandableViewIconId) {
+        this.expandableViewIconId = expandableViewIconId;
+        //notifyPropertyChanged(BR.expandableViewIconId);
     }
 
     @Bindable

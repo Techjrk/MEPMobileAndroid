@@ -130,7 +130,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="4dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@{viewModel.useBidIcon ? @drawable/ic_add : @drawable/ic_add_note}"/>
+                        android:src="@{viewModel.expandableViewIconId}"/>
 
                 <TextView
                         android:id="@+id/expandable_title"
