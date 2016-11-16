@@ -19,7 +19,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
 import com.lecet.app.content.ProjectTrackingListActivity;
-import com.lecet.app.content.ProjectTrackingListSortedActivity;
+import com.lecet.app.content.ModifyProjectTrackingListActivity;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
@@ -193,7 +193,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
                     long listItemId = appCompatActivity.getIntent().getLongExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, -1);
                     String listItemTitle = appCompatActivity.getIntent().getStringExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE);
                     int listItemSize = appCompatActivity.getIntent().getIntExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, 0);
-                    ProjectTrackingListSortedActivity.startActivityForResult(appCompatActivity, listItemId, listItemTitle, listItemSize, sortBy);
+                    ModifyProjectTrackingListActivity.startActivityForResult(appCompatActivity, listItemId, listItemTitle, listItemSize, sortBy);
                 }
             }); // the callback for when a list item is selected
         }

@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.ProjectTrackingListSortedViewModel" />
+            type="com.lecet.app.viewmodel.ModifyProjectTrackingListViewModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ProjectTrackingListSortedActivity">
+        tools:context="com.lecet.app.content.ModifyProjectTrackingListActivity">
 
         <!-- App Bar -->
         <include

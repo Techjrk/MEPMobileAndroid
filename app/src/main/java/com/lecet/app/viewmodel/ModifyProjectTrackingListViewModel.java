@@ -28,7 +28,7 @@ import java.util.List;
  * Created by Josué Rodríguez on 12/11/2016.
  */
 
-public class ProjectTrackingListSortedViewModel extends BaseObservable implements MTMMenuCallback {
+public class ModifyProjectTrackingListViewModel extends BaseObservable implements MTMMenuCallback {
 
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
@@ -44,7 +44,7 @@ public class ProjectTrackingListSortedViewModel extends BaseObservable implement
 
     private String projectsSelected;
 
-    public ProjectTrackingListSortedViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain) {
+    public ModifyProjectTrackingListViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain) {
         this.appCompatActivity = appCompatActivity;
         this.trackingListDomain = trackingListDomain;
     }

@@ -8,14 +8,14 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.ProjectTrackingListSortedViewModel" />
+            type="com.lecet.app.viewmodel.ModifyProjectTrackingListViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.lecet.app.content.ProjectTrackingListSortedActivity">
+        tools:context="com.lecet.app.content.ModifyProjectTrackingListActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"

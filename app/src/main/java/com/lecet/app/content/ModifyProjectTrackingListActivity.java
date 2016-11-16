@@ -16,10 +16,10 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.ActivityProjectTrackingListSortedBinding;
+import com.lecet.app.databinding.ActivityModifyProjectTrackingListBinding;
 import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.enums.SortBy;
-import com.lecet.app.viewmodel.ProjectTrackingListSortedViewModel;
+import com.lecet.app.viewmodel.ModifyProjectTrackingListViewModel;
 
 import io.realm.Realm;
 
@@ -27,18 +27,18 @@ import io.realm.Realm;
  * Created by Josué Rodríguez on 12/11/2016.
  */
 
-public class ProjectTrackingListSortedActivity extends LecetBaseActivity {
+public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
 
     public static final String EXTRA_PROJECT_LIST_ITEM_ID = "listItemId";
     public static final String EXTRA_PROJECT_LIST_ITEM_TITLE = "listItemTitle";
     public static final String EXTRA_PROJECT_LIST_ITEM_SIZE = "listItemSize";
     public static final String EXTRA_SORT_BY = "sortBy";
 
-    private ProjectTrackingListSortedViewModel viewModel;
+    private ModifyProjectTrackingListViewModel viewModel;
 
 
     public static void startActivityForResult(Activity activity, long listItemId, String listItemTitle, int listItemSize, SortBy sort) {
-        Intent intent = new Intent(activity, ProjectTrackingListSortedActivity.class);
+        Intent intent = new Intent(activity, ModifyProjectTrackingListActivity.class);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_ID, listItemId);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_TITLE, listItemTitle);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_SIZE, listItemSize);
@@ -59,11 +59,11 @@ public class ProjectTrackingListSortedActivity extends LecetBaseActivity {
     }
 
     private void setupBinding() {
-        ActivityProjectTrackingListSortedBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_tracking_list_sorted);
+        ActivityModifyProjectTrackingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_project_tracking_list);
 
         TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
 
-        viewModel = new ProjectTrackingListSortedViewModel(this, trackingListDomain);
+        viewModel = new ModifyProjectTrackingListViewModel(this, trackingListDomain);
         binding.setViewModel(viewModel);
     }
 
