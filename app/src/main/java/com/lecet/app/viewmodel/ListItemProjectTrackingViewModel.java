@@ -44,6 +44,7 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private final Project project;
     private final String mapsApiKey;
     private String projectKeywords;
+    private boolean showExpandableView;
     private boolean expandableViewExpanded;
 
     private int expandableViewIconId;
@@ -131,6 +132,9 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
             setExpandableViewMessage("");
         }
 
+        // set the showExpandableView to true if this item is in a mode such as Bid, Note, or Stage
+        setShowExpandableView(expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
+
         Log.d(TAG, "setExpandableMode: " + project.getTitle() + ", " + expandableMode);
     }
 
@@ -177,10 +181,6 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.expandableMode = expandableMode;
     }
 
-    public boolean showExpandableView() {
-        return (expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
-    }
-
     // TODO - icon is not updating correctly
     public boolean useBidIcon() {
         return expandableMode == EXPANDABLE_MODE_BID;
@@ -189,6 +189,15 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
 
     ///////////////////////////////
     // BINDINGS
+
+    @Bindable
+    public boolean getShowExpandableView() {
+        return showExpandableView;
+    }
+
+    public void setShowExpandableView(boolean showExpandableView) {
+        this.showExpandableView = showExpandableView;
+    }
 
     @Bindable
     public boolean getExpandableViewExpanded() {

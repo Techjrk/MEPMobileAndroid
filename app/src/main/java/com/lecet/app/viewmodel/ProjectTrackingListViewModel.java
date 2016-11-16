@@ -46,7 +46,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private final AppCompatActivity appCompatActivity;
     private RecyclerView recyclerView;
     private ProjectListRecyclerViewAdapter projectListAdapter;
-    private List<RealmObject> adapterData;
+    private List<Project> adapterData;
     private TextView titleTextView;
     private TextView subtitleTextView;
     private ImageView backButton;
@@ -64,8 +64,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.projectDomain = projectDomain;
 
         initShowUpdatesSwitch();
-        initializeAdapter();
-        setupAdapterWithProjectList(projectList);
+        initializeAdapter(projectList);
+        //setupAdapterWithProjectList(projectList);
     }
 
     private void initShowUpdatesSwitch() {
@@ -121,17 +121,27 @@ public class ProjectTrackingListViewModel extends BaseObservable {
      * Adapter Data Management
      **/
 
-    private void initializeAdapter() {
+    private void initializeAdapter(ProjectTrackingList projectTrackingList) {
 
         adapterData = new ArrayList<>();
+
+        RealmList<Project> projects = projectTrackingList.getProjects();
+        Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
+
+        //adapterData.clear();
+        adapterData.addAll(Arrays.asList(data));
+        //projectListAdapter.setAdapterType(1);
+//        projectListAdapter.notifyDataSetChanged();
 
         recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
         setupRecyclerView(recyclerView);
         projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
         recyclerView.setAdapter(projectListAdapter);
+
+
     }
 
-    private void setupAdapterWithProjectList(ProjectTrackingList projectTrackingList) {
+    /*private void setupAdapterWithProjectList(ProjectTrackingList projectTrackingList) {
 
         RealmList<Project> projects = projectTrackingList.getProjects();
         Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
@@ -140,7 +150,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         adapterData.addAll(Arrays.asList(data));
         //projectListAdapter.setAdapterType(1);
         projectListAdapter.notifyDataSetChanged();
-    }
+    }*/
 
     /**
      * RecyclerView Management
