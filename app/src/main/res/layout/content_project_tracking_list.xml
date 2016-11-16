@@ -25,13 +25,15 @@
                 android:layout_marginBottom="8dp"
                 android:background="@color/lecetDarkestBlue">
 
+            <!-- Show Updates toggle switch (note @= for two-way binding is nec) -->
             <Switch
                     android:id="@+id/toggle_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:layout_marginLeft="16dp"/>
+                    android:layout_marginLeft="16dp"
+                    android:checked="@={viewModel.showUpdates}"/>
 
             <TextView
                     android:layout_width="wrap_content"

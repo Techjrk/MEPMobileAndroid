@@ -2,10 +2,8 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.PrimaryProjectType;
@@ -39,11 +37,12 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private final String NEW_NOTE_ADDED = "A new note has been added";
     private final String BID_PLACED_AT  = "A bid was placed at";
     private final String STAGE_UPDATED  = "The project stage is now";
-    private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14; // ms * secs * mins * hrs * days
+    private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14;            // ms * secs * mins * hrs * days
 
     private final Project project;
     private final String mapsApiKey;
     private String projectKeywords;
+    private final boolean showUpdates;
     private boolean showExpandableView;
     private boolean expandableViewExpanded;
 
@@ -51,9 +50,10 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private String expandableViewTitle = "";
     private String expandableViewMessage = "";
 
-    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey) {
+    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
+        this.showUpdates = showUpdates;
 
         setExpandableMode();
         projectKeywords = generateProjectKeywords();
@@ -135,7 +135,7 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         // set the showExpandableView to true if this item is in a mode such as Bid, Note, or Stage
         setShowExpandableView(expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
 
-        Log.d(TAG, "setExpandableMode: " + project.getTitle() + ", " + expandableMode);
+        //Log.d(TAG, "setExpandableMode: " + project.getTitle() + ", " + expandableMode);
     }
 
     private boolean recentBid() {
@@ -191,6 +191,11 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     // BINDINGS
 
     @Bindable
+    public boolean getShowUpdates() {
+        return showUpdates;
+    }
+
+    @Bindable
     public boolean getShowExpandableView() {
         return showExpandableView;
     }
@@ -238,11 +243,6 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.expandableViewMessage = expandableViewMessage;
         notifyPropertyChanged(BR.expandableViewMessage);
     }
-
-    /*@BindingAdapter({"android:src"})
-    public static void setImageViewResource(ImageView imageView, int resource) {
-        imageView.setImageResource(resource);
-    }*/
 
 
     ////////////////////////////////////
