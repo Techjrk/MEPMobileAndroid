@@ -413,7 +413,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         /**
          * X Positioning for the marker
-         * TODO - fix known issue where enlarging slices via button strip throws off getXOffset values
+         * Known issue where enlarging slices via button strip throws off getXOffset values
          */
         @Override
         public int getXOffset(float xpos) {
@@ -428,7 +428,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
         /**
          * Y Positioning for the marker
-         * TODO - fix known issue where enlarging slices via button strip throws off getYOffset values
+         * Known issue where enlarging slices via button strip throws off getYOffset values
          */
         @Override
         public int getYOffset(float ypos) {
@@ -461,10 +461,10 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 //        dataSet.setValueFormatter(new CustomValueFormatter());
 
 
-        // custom dynamic chart value marker view
-        CustomMarkerView mv = new CustomMarkerView (fragment.getContext(), R.layout.dashboard_chart_marker_view);
+        // custom dynamic chart value marker view - TODO - these next three lines enable/disable the custom value highlighting. iOS does not use it.
+        /*CustomMarkerView mv = new CustomMarkerView (fragment.getContext(), R.layout.dashboard_chart_marker_view);
         pieChartView.setDrawMarkerViews(true);
-        pieChartView.setMarkerView(mv);
+        pieChartView.setMarkerView(mv);*/
 
         pieChartView.setHoleRadius(CHART_HOLE_RADIUS_SELECTED);
         pieChartView.invalidate(); // refresh
