@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 /**
  * File: ProjectTrackingListViewModel
@@ -44,12 +43,13 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private final AppCompatActivity appCompatActivity;
     private RecyclerView recyclerView;
     private ProjectListRecyclerViewAdapter projectListAdapter;
-    private List<RealmObject> adapterData;
-    private RealmResults<Project> projectListResults;
+    private List<Project> adapterData;
     private TextView titleTextView;
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
+    private Switch showUpdatesToggle;
+    private boolean showUpdates = true;
 
 
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList projectList, BidDomain bidDomain, ProjectDomain projectDomain) {
@@ -60,8 +60,14 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.bidDomain = bidDomain;
         this.projectDomain = projectDomain;
 
-        initializeAdapter();
-        setupAdapterWithProjectList(projectList);
+        initShowUpdatesSwitch();
+        initializeAdapter(projectList);
+    }
+
+    private void initShowUpdatesSwitch() {
+        if(this.appCompatActivity != null) {
+            showUpdatesToggle = (Switch) appCompatActivity.findViewById(R.id.toggle_button);
+        }
     }
 
     public void setToolbar(View toolbar, String title, String subtitle) {
@@ -93,35 +99,21 @@ public class ProjectTrackingListViewModel extends BaseObservable {
      * Adapter Data Management
      **/
 
-    private void initializeAdapter() {
+    private void initializeAdapter(ProjectTrackingList projectTrackingList) {
 
         adapterData = new ArrayList<>();
-
-        recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
-        setupRecyclerView(recyclerView);
-        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData, 1);  //TODO - allow for multiple init types, default to 1 for now
-        recyclerView.setAdapter(projectListAdapter);
-    }
-
-    private void setupAdapterWithProjectList(ProjectTrackingList projectTrackingList) {
 
         RealmList<Project> projects = projectTrackingList.getProjects();
         Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
 
-        adapterData.clear();
         adapterData.addAll(Arrays.asList(data));
-        projectListAdapter.setAdapterType(1);       //TODO - needed? support multiple types? also see initializeAdapter()
-        projectListAdapter.notifyDataSetChanged();
+        //projectListAdapter.notifyDataSetChanged();
+
+        recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
+        setupRecyclerView(recyclerView);
+        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
+        recyclerView.setAdapter(projectListAdapter);
     }
-
-    /*private void setupAdapterWithProjects(RealmResults<Project> realmResults) {
-
-        Project[] data = realmResults != null ? realmResults.toArray(new Project[realmResults.size()]) : new Project[0];
-        adapterData.clear();
-        adapterData.addAll(Arrays.asList(data));
-        projectListAdapter.setAdapterType(1);       //TODO - needed? support multiple types? also see initializeAdapter()
-        projectListAdapter.notifyDataSetChanged();
-    }*/
 
     /**
      * RecyclerView Management
@@ -151,6 +143,23 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         Log.d(TAG, "onSortButtonClick");
         Toast.makeText(appCompatActivity, "Sort button pressed", Toast.LENGTH_SHORT).show();
     }
+
+
+    ///////////////////////////////
+    // BINDINGS
+
+    @Bindable
+    public boolean getShowUpdates() {
+        return showUpdates;
+    }
+
+    public void setShowUpdates(boolean showUpdates) {
+        this.showUpdates = showUpdates;
+        notifyPropertyChanged(BR.showUpdates);
+        projectListAdapter.setShowUpdates(this.showUpdates);
+        projectListAdapter.notifyDataSetChanged();
+    }
+
 
 
 }

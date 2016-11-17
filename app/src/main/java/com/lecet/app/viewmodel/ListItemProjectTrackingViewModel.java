@@ -2,10 +2,8 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.PrimaryProjectType;
@@ -39,21 +37,26 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private final String NEW_NOTE_ADDED = "A new note has been added";
     private final String BID_PLACED_AT  = "A bid was placed at";
     private final String STAGE_UPDATED  = "The project stage is now";
-    private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14; // ms * secs * mins * hrs * days
+    private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14;            // ms * secs * mins * hrs * days
 
     private final Project project;
     private final String mapsApiKey;
     private String projectKeywords;
+    private final boolean showUpdates;
+    private boolean showExpandableView;
     private boolean expandableViewExpanded;
+
+    private int expandableViewIconId;
     private String expandableViewTitle = "";
     private String expandableViewMessage = "";
 
-    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey) {
+    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
+        this.showUpdates = showUpdates;
 
-        projectKeywords = generateProjectKeywords();
         setExpandableMode();
+        projectKeywords = generateProjectKeywords();
     }
 
     public String getProjectName() {
@@ -79,14 +82,14 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
             if (category != null) {
                 String categoryTitle = category.getTitle();
                 if (categoryTitle != null) {
-                    sb.append(",");
+                    sb.append(", ");
                     sb.append(categoryTitle);
                 }
                 ProjectGroup group = category.getProjectGroup();
                 if (group != null) {
                     String groupTitle = group.getTitle();
                     if(groupTitle != null) {
-                        sb.append(",");
+                        sb.append(", ");
                         sb.append(groupTitle);
                     }
                 }
@@ -102,21 +105,23 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         // Bid mode
         if(recentBid()) {
             setExpandableMode(EXPANDABLE_MODE_BID);
+            setExpandableViewIconId(R.drawable.ic_add);
             setExpandableViewTitle(NEW_BID_PLACED);
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy, hh:mm aaa");
             String formattedDate = sdf.format(project.getBidDate());
             setExpandableViewMessage(BID_PLACED_AT + " " + formattedDate);
-            //TODO - set icon
         }
         // Note Mode
         else if(hasNote()) {
             setExpandableMode(EXPANDABLE_MODE_BID);
+            setExpandableViewIconId(R.drawable.ic_add_note);
             setExpandableViewTitle(NEW_NOTE_ADDED);
             setExpandableViewMessage(project.getProjectNotes());
         }
         // Stage Update Mode
         else if(hasStageUpdate()) {
             setExpandableMode(EXPANDABLE_MODE_STAGE);
+            setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'stage' icon, TBD
             setExpandableViewTitle(STAGE_UPDATED);
             setExpandableViewMessage(project.getProjectStage().getName());
         }
@@ -126,6 +131,11 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
             setExpandableViewTitle("");
             setExpandableViewMessage("");
         }
+
+        // set the showExpandableView to true if this item is in a mode such as Bid, Note, or Stage
+        setShowExpandableView(expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
+
+        //Log.d(TAG, "setExpandableMode: " + project.getTitle() + ", " + expandableMode);
     }
 
     private boolean recentBid() {
@@ -171,20 +181,28 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.expandableMode = expandableMode;
     }
 
-    public boolean showExpandableView() {
-        return (expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
-    }
-
     // TODO - icon is not updating correctly
     public boolean useBidIcon() {
         return expandableMode == EXPANDABLE_MODE_BID;
     }
 
 
-
-
     ///////////////////////////////
     // BINDINGS
+
+    @Bindable
+    public boolean getShowUpdates() {
+        return showUpdates;
+    }
+
+    @Bindable
+    public boolean getShowExpandableView() {
+        return showExpandableView;
+    }
+
+    public void setShowExpandableView(boolean showExpandableView) {
+        this.showExpandableView = showExpandableView;
+    }
 
     @Bindable
     public boolean getExpandableViewExpanded() {
@@ -194,6 +212,16 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     public void setExpandableViewExpanded(boolean expandableViewExpanded) {
         this.expandableViewExpanded = expandableViewExpanded;
         notifyPropertyChanged(BR.expandableViewExpanded);
+    }
+
+    @Bindable
+    public int getExpandableViewIconId() {
+        return expandableViewIconId;
+    }
+
+    public void setExpandableViewIconId(int expandableViewIconId) {
+        this.expandableViewIconId = expandableViewIconId;
+        //notifyPropertyChanged(BR.expandableViewIconId);
     }
 
     @Bindable
@@ -215,11 +243,6 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.expandableViewMessage = expandableViewMessage;
         notifyPropertyChanged(BR.expandableViewMessage);
     }
-
-    /*@BindingAdapter({"android:src"})
-    public static void setImageViewResource(ImageView imageView, int resource) {
-        imageView.setImageResource(resource);
-    }*/
 
 
     ////////////////////////////////////

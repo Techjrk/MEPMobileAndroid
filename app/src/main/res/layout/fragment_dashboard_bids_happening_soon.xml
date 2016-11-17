@@ -26,7 +26,8 @@
             <TextView
                 android:id="@+id/bids_happening_soon_text_view"
                 style="@style/DashboardText.Subtitle"
-                android:text="@={viewModel.bidsHappeningSoon}" />
+                android:text="@={viewModel.bidsHappeningSoon}"
+                bind:typeface="@{`Lato-Bold.ttf`}" />
 
             <TextView
                 style="@style/DashboardText.Subtitle"

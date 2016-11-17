@@ -142,7 +142,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             f.setAccessible(true);
             toolbarTitle = (TextView) f.get(toolbar);
             TextViewUtility.changeTypeface(toolbarTitle, LacetFont.LATO_REGULAR);
-            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         } catch (NoSuchFieldException e) {
         } catch (IllegalAccessException e) {
         }
@@ -398,8 +398,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
-            int offset = (int) (width * 0.875); //enough to show it below more item menu
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0] - (getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space) / 2.0));
             overflowMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.overflow_menu_background));
             overflowMenu.setAnchorView(anchor);
             overflowMenu.setModal(true);
@@ -444,8 +446,11 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
-            int offset = (int) (width * 0.592); //enough to show it below more item menu
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0] - (getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space) / 2.0));
+
             mtmMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.mtm_back));
             mtmMenu.setAnchorView(anchor);
             mtmMenu.setModal(true);
