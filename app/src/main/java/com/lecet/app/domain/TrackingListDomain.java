@@ -47,6 +47,7 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
+
     public void getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
@@ -56,6 +57,15 @@ public class TrackingListDomain {
 
         Call<List<CompanyTrackingList>> call = lecetClient.getTrackingListService().getUserCompanyTrackingList(token, userID, filter);
         call.enqueue(callback);
+    }
+
+    public void getProjectTrackingListDetails(long projectTrackingListID) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
+
+
     }
 
     /** Persisted **/
