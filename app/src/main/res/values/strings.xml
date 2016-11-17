@@ -49,11 +49,14 @@
     <!-- Company Detail: Project Bids List -->
     <string name="title_activity_company_detail_project_bids">Company Detail: Project Bids</string>
 
-    <!-- Project Tracking List-->
+    <!-- MPL Project Tracking List -->
     <string name="title_activity_project_tracking_list">Project Tracking List</string>
     <string name="new_bid_placed">A new bid has been placed</string>
     <string name="bid_placed_at">A bid was placed at</string>
     <string name="new_note_added">A new note has been added</string>
+    <string name="show_updates">Show Updates</string>
+    <string name="edit">EDIT</string>
+    <string name="projects">Projects</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
@@ -135,8 +138,5 @@
     <string name="mtm_menu_number_company">%s Companies</string>
     <string name="mtm_menu_number_projects">%s Projects</string>
 
-    <!-- MPL Project Tracking List -->
-    <string name="show_updates">Show Updates</string>
-    <string name="edit">EDIT</string>
 
 </resources>

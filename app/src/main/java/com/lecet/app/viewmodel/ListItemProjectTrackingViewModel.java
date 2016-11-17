@@ -181,11 +181,6 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.expandableMode = expandableMode;
     }
 
-    // TODO - icon is not updating correctly
-    public boolean useBidIcon() {
-        return expandableMode == EXPANDABLE_MODE_BID;
-    }
-
 
     ///////////////////////////////
     // BINDINGS
