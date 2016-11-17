@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,7 +34,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.RealmList;
-import io.realm.RealmObject;
 
 /**
  * File: ProjectTrackingListViewModel
@@ -53,7 +51,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private final AppCompatActivity appCompatActivity;
     private RecyclerView recyclerView;
     private ProjectListRecyclerViewAdapter projectListAdapter;
-    private List<RealmObject> adapterData;
+    private List<Project> adapterData;
     private TextView titleTextView;
     private TextView subtitleTextView;
     private ImageView backButton;
@@ -73,30 +71,12 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.projectDomain = projectDomain;
 
         initShowUpdatesSwitch();
-        initializeAdapter();
-        setupAdapterWithProjectList(projectList);
+        initializeAdapter(projectList);
     }
 
     private void initShowUpdatesSwitch() {
         if (this.appCompatActivity != null) {
             showUpdatesToggle = (Switch) appCompatActivity.findViewById(R.id.toggle_button);
-
-            showUpdatesToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.d(TAG, "initShowUpdatesSwitch: onCheckedChanged: " + isChecked);
-                    setShowUpdates(isChecked);
-                    //projectListAdapter.notifyDataSetChanged();    // removed but does not fix flicker on scroll
-                }
-            });
-
-            //check the current state before we display the screen
-            if (showUpdatesToggle.isChecked()) {
-                //
-            } else {
-                //
-            }
         }
     }
 
@@ -129,25 +109,20 @@ public class ProjectTrackingListViewModel extends BaseObservable {
      * Adapter Data Management
      **/
 
-    private void initializeAdapter() {
+    private void initializeAdapter(ProjectTrackingList projectTrackingList) {
 
         adapterData = new ArrayList<>();
+
+        RealmList<Project> projects = projectTrackingList.getProjects();
+        Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
+
+        adapterData.addAll(Arrays.asList(data));
+        //projectListAdapter.notifyDataSetChanged();
 
         recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
         setupRecyclerView(recyclerView);
         projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
         recyclerView.setAdapter(projectListAdapter);
-    }
-
-    private void setupAdapterWithProjectList(ProjectTrackingList projectTrackingList) {
-
-        RealmList<Project> projects = projectTrackingList.getProjects();
-        Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
-
-        adapterData.clear();
-        adapterData.addAll(Arrays.asList(data));
-        //projectListAdapter.setAdapterType(1);
-        projectListAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -233,6 +208,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     public void setShowUpdates(boolean showUpdates) {
         this.showUpdates = showUpdates;
         notifyPropertyChanged(BR.showUpdates);
+        projectListAdapter.setShowUpdates(this.showUpdates);
+        projectListAdapter.notifyDataSetChanged();
     }
 
 

@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemProjectTrackingBinding;
 import com.lecet.app.viewmodel.ListItemProjectTrackingViewModel;
 
 import java.util.List;
-
-import io.realm.RealmObject;
 
 /**
  * File: ProjectListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -26,12 +23,13 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     public static int ADAPTER_TYPE_PROJECTS = 1;
 
     private int adapterType;
-    private List<RealmObject> data;
+    private List<Project> data;
+    private boolean showUpdates;
 
     /**
      * Default Constructor
      */
-    public ProjectListRecyclerViewAdapter(List<RealmObject> data) {
+    public ProjectListRecyclerViewAdapter(List<Project> data) {
 
         this.data = data;
         this.adapterType = ADAPTER_TYPE_PROJECTS;
@@ -40,7 +38,7 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     /**
      * Alternate Constructor for use with adapter types other than the default
      */
-    public ProjectListRecyclerViewAdapter(List<RealmObject> data, int adapterType) {
+    public ProjectListRecyclerViewAdapter(List<Project> data, int adapterType) {
 
         this.data = data;
         this.adapterType = adapterType;
@@ -58,7 +56,7 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     @Override
     public void onBindViewHolder(ProjectListViewHolder holder, int position) {
 
-        holder.getBinding().setViewModel(new ListItemProjectTrackingViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+        holder.getBinding().setViewModel(new ListItemProjectTrackingViewModel(data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", showUpdates));
     }
 
 
@@ -79,6 +77,11 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     public void setAdapterType(int adapterType) {
         this.adapterType = adapterType;
     }
+
+    public void setShowUpdates(boolean showUpdates) {
+        this.showUpdates = showUpdates;
+    }
+
 
     /**
      * View Holders
