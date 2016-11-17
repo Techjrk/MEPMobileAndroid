@@ -57,31 +57,29 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
     protected static final Long RESULT_CODE_ENGINEERING = 101L;
     protected static final Long RESULT_CODE_BUILDING = 102L;
     protected static final Long RESULT_CODE_UTILITIES = 105L;
+    protected static final Long CONSOLIDATED_CODE_B = 901L;
+    protected static final Long CONSOLIDATED_CODE_H = 902L;
 
     protected int housingSetSize = 0;
     protected int engineeringSetSize = 0;
     protected int buildingSetSize = 0;
     protected int utilitiesSetSize = 0;
+    protected int b_setSize = 0;
+    protected int h_setSize = 0;
 
-    protected float housingChartX;
-    protected float engineeringChartX;
-    protected float buildingChartX;
-    protected float utilitiesChartX;
+    protected float b_chartX;
+    protected float h_chartX;
 
     protected Fragment fragment;
     protected String subtitleNum = "";
     protected String subtitle = "";
     protected PieChart pieChartView;
 
-    protected View housingIcon = null;
-    protected View engineeringIcon = null;
-    protected View buildingIcon = null;
-    protected View utilitiesIcon = null;
+    protected View b_icon = null;
+    protected View h_icon = null;
 
-    protected LinearLayout housingButton = null;
-    protected LinearLayout engineeringButton = null;
-    protected LinearLayout buildingButton = null;
-    protected LinearLayout utilitiesButton = null;
+    protected LinearLayout b_button = null;
+    protected LinearLayout h_button = null;
 
     @IntDef({DATA_SOURCE_TYPE_MBR, DATA_SOURCE_TYPE_MHS, DATA_SOURCE_TYPE_MRA, DATA_SOURCE_TYPE_MRU})
     public @interface DashboardDataSource {
@@ -130,15 +128,12 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
     protected void setReferences() {
         if(fragment != null && fragment.getView() != null) {
             View fragmentView = fragment.getView();
-            housingIcon       = fragmentView.findViewById(R.id.dashboard_icon_housing);
-            engineeringIcon   = fragmentView.findViewById(R.id.dashboard_icon_engineering);
-            buildingIcon      = fragmentView.findViewById(R.id.dashboard_icon_building);
-            utilitiesIcon     = fragmentView.findViewById(R.id.dashboard_icon_utilities);
 
-            housingButton     = (LinearLayout) fragmentView.findViewById(R.id.button_housing);
-            engineeringButton = (LinearLayout) fragmentView.findViewById(R.id.button_engineering);
-            buildingButton    = (LinearLayout) fragmentView.findViewById(R.id.button_building);
-            utilitiesButton   = (LinearLayout) fragmentView.findViewById(R.id.button_utilities);
+            b_icon   = fragmentView.findViewById(R.id.dashboard_icon_b);
+            h_icon   = fragmentView.findViewById(R.id.dashboard_icon_h);
+
+            b_button = (LinearLayout) fragmentView.findViewById(R.id.button_b);
+            h_button = (LinearLayout) fragmentView.findViewById(R.id.button_h);
         }
     }
 
@@ -164,6 +159,11 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         legend.setEnabled(false);
     }
 
+    /**
+     * Note: Requirements state to consolidate all project types into Heavy-Highway and Building in the UI.
+     * Heavy-Highway will include Engineering (101) and Utilities (105).
+     * Building will include Housing (103) and Building (102).
+     */
     public void fetchData(final PieChart pieChartView) {    //TODO - this arg is not used
 
         if (this.dataSourceType == DATA_SOURCE_TYPE_MBR) {
@@ -171,7 +171,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
                 @Override
                 public void onSuccess(TreeMap<Long, TreeSet<Bid>> result) {
-                    Log.d(TAG, "MBR: onSuccess: " + result);
+                    Log.d(TAG, "MBR: onSuccess");
 
                     TreeSet<Bid> housingSet = result.get(RESULT_CODE_HOUSING);
                     TreeSet<Bid> engineeringSet = result.get(RESULT_CODE_ENGINEERING);
@@ -295,13 +295,20 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         utilitiesSetSize = 0;
     }
 
+    protected void consolidateDataSetSizes() {
+        b_setSize = buildingSetSize + housingSetSize;
+        h_setSize = engineeringSetSize + utilitiesSetSize;
+    }
+
     protected void handleIncomingData() {
         Log.d(TAG, "handleIncomingData");
+
+        consolidateDataSetSizes();
 
         List<PieEntry> entries = new ArrayList<>();
 
         // total size of data sets, for text display
-        int totalSize = housingSetSize + engineeringSetSize + buildingSetSize + utilitiesSetSize;
+        int totalSize = h_setSize + b_setSize;
 
         List<Integer> colorsList = new ArrayList<Integer>();
 
@@ -311,41 +318,23 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         float xValue = -1;
 
         // for any result category that contains data, add a pie chart Entry and add the corresponding color for the chart segment
-        if(housingSetSize > 0) {
-            entry = new PieEntry(housingSetSize, Long.toString(RESULT_CODE_HOUSING));           // housing - 103 - light orange
+        if(b_setSize > 0) {
+            entry = new PieEntry(b_setSize, Long.toString(CONSOLIDATED_CODE_B));      // B - light blue
             entries.add(entry);
-            housingChartX = ++xValue;
-            colorsList.add(R.color.lecetLightOrange);
-            housingButton.setVisibility(View.VISIBLE);
-        }
-        else housingButton.setVisibility(View.GONE);
-
-        if(engineeringSetSize > 0) {
-            entry = new PieEntry(engineeringSetSize, Long.toString(RESULT_CODE_ENGINEERING));   // engineering - 101 - dark orange
-            entries.add(entry);
-            engineeringChartX = ++xValue;
-            colorsList.add(R.color.lecetDarkOrange);
-            engineeringButton.setVisibility(View.VISIBLE);
-        }
-        else engineeringButton.setVisibility(View.GONE);
-
-        if(buildingSetSize > 0) {
-            entry = new PieEntry(buildingSetSize, Long.toString(RESULT_CODE_BUILDING));         // building - 102 - light blue
-            entries.add(entry);
-            buildingChartX = ++xValue;
+            b_chartX = ++xValue;
             colorsList.add(R.color.lecetLightBlue);
-            buildingButton.setVisibility(View.VISIBLE);
+            b_button.setVisibility(View.VISIBLE);
         }
-        else buildingButton.setVisibility(View.GONE);
+        else b_button.setVisibility(View.GONE);
 
-        if(utilitiesSetSize > 0) {
-            entry = new PieEntry(utilitiesSetSize, Long.toString(RESULT_CODE_UTILITIES));       // utilities - 105 - medium blue
+        if(h_setSize > 0) {
+            entry = new PieEntry(h_setSize, Long.toString(CONSOLIDATED_CODE_H));      // H - dark orange
             entries.add(entry);
-            utilitiesChartX = ++xValue;
-            colorsList.add(R.color.lecetMediumBlue);
-            utilitiesButton.setVisibility(View.VISIBLE);
+            h_chartX = ++xValue;
+            colorsList.add(R.color.lecetDarkOrange);
+            h_button.setVisibility(View.VISIBLE);
         }
-        else utilitiesButton.setVisibility(View.GONE);
+        else h_button.setVisibility(View.GONE);
 
         int[] colorsArr = new int[colorsList.size()];
         for(int i=0; i<colorsList.size(); i++) {
@@ -475,25 +464,15 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         View buttonToSelect = null;
         View iconToShow = null;
 
-        if (label.equals(Long.toString(RESULT_CODE_HOUSING))) {
-            buttonToSelect = housingButton;
-            iconToShow = housingIcon;
-            notifyDelegateOfSelection(RESULT_CODE_HOUSING);
+        if (label.equals(Long.toString(CONSOLIDATED_CODE_B))) {
+            buttonToSelect = b_button;
+            iconToShow = b_icon;
+            notifyDelegateOfSelection(CONSOLIDATED_CODE_B);
         }
-        else if (label.equals(Long.toString(RESULT_CODE_ENGINEERING))) {
-            buttonToSelect = engineeringButton;
-            iconToShow = engineeringIcon;
-            notifyDelegateOfSelection(RESULT_CODE_ENGINEERING);
-        }
-        else if (label.equals(Long.toString(RESULT_CODE_BUILDING))) {
-            buttonToSelect = buildingButton;
-            iconToShow = buildingIcon;
-            notifyDelegateOfSelection(RESULT_CODE_BUILDING);
-        }
-        else if (label.equals(Long.toString(RESULT_CODE_UTILITIES))) {
-            buttonToSelect = utilitiesButton;
-            iconToShow = utilitiesIcon;
-            notifyDelegateOfSelection(RESULT_CODE_UTILITIES);
+        else if (label.equals(Long.toString(CONSOLIDATED_CODE_H))) {
+            buttonToSelect = h_button;
+            iconToShow = h_icon;
+            notifyDelegateOfSelection(CONSOLIDATED_CODE_H);
         }
         else Log.w(TAG, "onValueSelected: ERROR");
 
@@ -505,7 +484,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         iconToShow.setVisibility(View.VISIBLE);
     }
 
-    public void notifyDelegateOfSelection(Long category) {
+    public void notifyDelegateOfSelection(Long category) {      //TODO - update to new B and H system
 
         // MBR
         if(dataSourceType == DATA_SOURCE_TYPE_MBR) {
@@ -581,27 +560,15 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         Log.d(TAG, "onClick: " + view);
     }
 
-    public void onHousingButtonClick(View view) {
-        //Log.d(TAG, "onHousingButtonClick");
-        pieChartView.highlightValue(housingChartX, 0);
+    public void onButtonClickH(View view) {
+        //Log.d(TAG, "onButtonClickH");
+        pieChartView.highlightValue(h_chartX, 0);
         setCategoryButtonState(view);
     }
 
-    public void onEngineeringButtonClick(View view) {
-        //Log.d(TAG, "onEngineeringButtonClick");
-        pieChartView.highlightValue(engineeringChartX, 0);
-        setCategoryButtonState(view);
-    }
-
-    public void onBuildingButtonClick(View view) {
-        //Log.d(TAG, "onBuildingButtonClick");
-        pieChartView.highlightValue(buildingChartX, 0);
-        setCategoryButtonState(view);
-    }
-
-    public void onUtilitiesButtonClick(View view) {
-        //Log.d(TAG, "onUtilitiesButtonClick");
-        pieChartView.highlightValue(utilitiesChartX, 0);
+    public void onButtonClickB(View view) {
+        //Log.d(TAG, "onButtonClickB");
+        pieChartView.highlightValue(b_chartX, 0);
         setCategoryButtonState(view);
     }
 
@@ -618,24 +585,18 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
     }
 
     private void resetButtonStates() {
-        housingButton.setSelected(false);
-        engineeringButton.setSelected(false);
-        buildingButton.setSelected(false);
-        utilitiesButton.setSelected(false);
+        b_button.setSelected(false);
+        h_button.setSelected(false);
     }
 
     public void hideAllButtons() {
-        housingButton.setVisibility(View.INVISIBLE);
-        engineeringButton.setVisibility(View.INVISIBLE);
-        buildingButton.setVisibility(View.INVISIBLE);
-        utilitiesButton.setVisibility(View.INVISIBLE);
+        b_button.setVisibility(View.INVISIBLE);
+        h_button.setVisibility(View.INVISIBLE);
     }
 
     private void hideCategoryIcons() {
-        housingIcon.setVisibility(View.INVISIBLE);
-        engineeringIcon.setVisibility(View.INVISIBLE);
-        buildingIcon.setVisibility(View.INVISIBLE);
-        utilitiesIcon.setVisibility(View.INVISIBLE);
+        b_icon.setVisibility(View.INVISIBLE);
+        h_icon.setVisibility(View.INVISIBLE);
     }
 
 
