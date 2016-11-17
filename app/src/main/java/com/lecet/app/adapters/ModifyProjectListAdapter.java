@@ -64,7 +64,7 @@ public class ModifyProjectListAdapter extends BaseAdapter {
         Project project = getItem(position);
 
         holder.binding.projectName.setText(project.getTitle());
-        holder.binding.location.setText("Test Address");
+        holder.binding.location.setText(String.format("%s, %s", project.getCity(), project.getState()));
 
         return convertView;
     }
