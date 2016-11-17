@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
@@ -45,7 +46,7 @@ public class LecetCalendar extends FlexibleCalendarView {
                     LayoutInflater inflater = LayoutInflater.from(getContext());
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
                     int size = getResources().getDimensionPixelSize(R.dimen.calendar_cell_size);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(size, size);
+                    ViewGroup.LayoutParams params = new GridView.LayoutParams(size, size);
                     cellView.setLayoutParams(params);
                 }
                 return cellView;
@@ -57,7 +58,7 @@ public class LecetCalendar extends FlexibleCalendarView {
                 if (cellView == null) { //removing week day name
                     LayoutInflater inflater = LayoutInflater.from(getContext());
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, 0);
+                    ViewGroup.LayoutParams params = new GridView.LayoutParams(0, 0);
                     cellView.setLayoutParams(params);
                 }
                 return cellView;
