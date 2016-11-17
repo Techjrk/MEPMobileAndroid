@@ -15,6 +15,7 @@ import android.view.View;
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityModifyProjectTrackingListBinding;
 import com.lecet.app.domain.TrackingListDomain;
@@ -37,6 +38,8 @@ public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
     private ModifyProjectTrackingListViewModel viewModel;
 
 
+    private long listItemId;
+
     public static void startActivityForResult(Activity activity, long listItemId, String listItemTitle, int listItemSize, SortBy sort) {
         Intent intent = new Intent(activity, ModifyProjectTrackingListActivity.class);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_ID, listItemId);
@@ -49,10 +52,9 @@ public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long listItemId = getIntent().getLongExtra(EXTRA_PROJECT_LIST_ITEM_ID, -1);
+        listItemId = getIntent().getLongExtra(EXTRA_PROJECT_LIST_ITEM_ID, -1);
         String listItemTitle = getIntent().getStringExtra(EXTRA_PROJECT_LIST_ITEM_TITLE);
         int listItemSize = getIntent().getIntExtra(EXTRA_PROJECT_LIST_ITEM_SIZE, 0);
-        SortBy sort = (SortBy) getIntent().getSerializableExtra(EXTRA_SORT_BY);
 
         setupBinding();
         setupToolbar(listItemTitle, getString(R.string.mtm_menu_number_projects, Integer.toString(listItemSize)));
@@ -62,8 +64,10 @@ public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
         ActivityModifyProjectTrackingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_project_tracking_list);
 
         TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-
-        viewModel = new ModifyProjectTrackingListViewModel(this, trackingListDomain);
+        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
+        trackingListDomain.sortProjectListByBidDate(projectList.getProjects());
+        SortBy sort = (SortBy) getIntent().getSerializableExtra(EXTRA_SORT_BY);
+        viewModel = new ModifyProjectTrackingListViewModel(this, trackingListDomain, projectList, sort);
         binding.setViewModel(viewModel);
     }
 

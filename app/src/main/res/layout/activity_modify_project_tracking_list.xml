@@ -22,7 +22,7 @@
 
         <!-- Content -->
         <include
-            layout="@layout/content_project_tracking_list_sorted"
+            layout="@layout/content_modify_project_tracking_list"
             bind:viewModel="@{viewModel}" />
 
     </android.support.design.widget.CoordinatorLayout>

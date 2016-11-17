@@ -11,11 +11,20 @@
             type="com.lecet.app.viewmodel.ModifyProjectTrackingListViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.lecet.app.content.ModifyProjectTrackingListActivity">
+
+
+        <ListView
+            android:id="@+id/projects_sorted_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:listitem="@layout/modify_list_item_project" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,8 +76,9 @@
                 android:textSize="12sp"
                 bind:typeface="@{`Lato-Regular.ttf`}" />
 
+
         </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </layout>

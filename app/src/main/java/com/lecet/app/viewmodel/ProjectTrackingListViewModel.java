@@ -18,12 +18,12 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.lecet.app.R;
 import com.lecet.app.BR;
+import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
-import com.lecet.app.content.ProjectTrackingListActivity;
 import com.lecet.app.content.ModifyProjectTrackingListActivity;
+import com.lecet.app.content.ProjectTrackingListActivity;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
@@ -36,7 +36,6 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 /**
  * File: ProjectTrackingListViewModel
@@ -79,7 +78,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     }
 
     private void initShowUpdatesSwitch() {
-        if(this.appCompatActivity != null) {
+        if (this.appCompatActivity != null) {
             showUpdatesToggle = (Switch) appCompatActivity.findViewById(R.id.toggle_button);
 
             showUpdatesToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -93,10 +92,9 @@ public class ProjectTrackingListViewModel extends BaseObservable {
             });
 
             //check the current state before we display the screen
-            if(showUpdatesToggle.isChecked()){
+            if (showUpdatesToggle.isChecked()) {
                 //
-            }
-            else {
+            } else {
                 //
             }
         }
@@ -210,11 +208,14 @@ public class ProjectTrackingListViewModel extends BaseObservable {
             mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    SortBy sortBy = SortBy.values()[position - 1];//removing the title
-                    long listItemId = appCompatActivity.getIntent().getLongExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, -1);
-                    String listItemTitle = appCompatActivity.getIntent().getStringExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE);
-                    int listItemSize = appCompatActivity.getIntent().getIntExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, 0);
-                    ModifyProjectTrackingListActivity.startActivityForResult(appCompatActivity, listItemId, listItemTitle, listItemSize, sortBy);
+                    if (position > 0) {
+                        mtmSortMenu.dismiss();
+                        SortBy sortBy = SortBy.values()[position - 1];//removing the title
+                        long listItemId = appCompatActivity.getIntent().getLongExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, -1);
+                        String listItemTitle = appCompatActivity.getIntent().getStringExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE);
+                        int listItemSize = appCompatActivity.getIntent().getIntExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, 0);
+                        ModifyProjectTrackingListActivity.startActivityForResult(appCompatActivity, listItemId, listItemTitle, listItemSize, sortBy);
+                    }
                 }
             }); // the callback for when a list item is selected
         }

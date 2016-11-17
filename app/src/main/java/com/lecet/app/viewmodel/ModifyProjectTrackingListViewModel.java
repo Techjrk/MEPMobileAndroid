@@ -8,21 +8,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.view.Display;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
+import com.lecet.app.adapters.ModifyProjectListAdapter;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.data.models.CompanyTrackingList;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.enums.SortBy;
 import com.lecet.app.interfaces.MTMMenuCallback;
 
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.Sort;
 
 /**
  * Created by Josué Rodríguez on 12/11/2016.
@@ -41,12 +49,19 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
+    private ListView listView;
 
     private String projectsSelected;
+    private ProjectTrackingList projectTrackingList;
+    private SortBy sortBy;
 
-    public ModifyProjectTrackingListViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain) {
+
+    public ModifyProjectTrackingListViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, ProjectTrackingList projectTrackingList, SortBy sortBy) {
         this.appCompatActivity = appCompatActivity;
         this.trackingListDomain = trackingListDomain;
+        this.projectTrackingList = projectTrackingList;
+        this.sortBy = sortBy;
+        setupAdapter(projectTrackingList);
     }
 
     @Bindable
@@ -57,6 +72,35 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
     public void setProjectsSelected(String projectsSelected) {
         this.projectsSelected = projectsSelected;
         notifyPropertyChanged(BR.projectsSelected);
+    }
+
+    private void setupAdapter(ProjectTrackingList projectTrackingList) {
+        listView = (ListView) appCompatActivity.findViewById(R.id.projects_sorted_list);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        populateList(projectTrackingList.getProjects(), sortBy);
+    }
+
+    private void populateList(RealmList<Project> projects, SortBy sortBy) {
+        List<Project> sortedList = null;
+        switch (sortBy) {
+            case BID_DATE:
+                sortedList = trackingListDomain.sortProjectListByBidDate(projects);
+                break;
+            case LAST_UPDATED:
+                sortedList = trackingListDomain.sortProjectListByLastUpdated(projects);
+                break;
+            case DATE_ADDED:
+                sortedList = trackingListDomain.sortProjectListByDateAdded(projects);
+                break;
+            case VALUE_HIGH_TO_LOW:
+                sortedList = trackingListDomain.sortProjectListByValue(projects, Sort.DESCENDING);
+                break;
+            case VALUE_LOW_TO_HIGH:
+                sortedList = trackingListDomain.sortProjectListByValue(projects, Sort.ASCENDING);
+                break;
+        }
+        ModifyProjectListAdapter adapter = new ModifyProjectListAdapter(appCompatActivity, sortedList);
+        listView.setAdapter(adapter);
     }
 
     private void toogleMoveMenu(View view) {
@@ -129,7 +173,10 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
             mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO sort the current project list
+                    if (position > 0) {
+                        mtmSortMenu.dismiss();
+                        populateList(projectTrackingList.getProjects(), SortBy.values()[position - 1]);
+                    }
                 }
             }); // the callback for when a list item is selected
         }
