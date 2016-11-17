@@ -24,6 +24,7 @@
             <TextView
                     android:id="@+id/subtitle_num"
                     style="@style/DashboardText.Subtitle"
+                    bind:typeface="@{`Lato-Bold.ttf`}"
                     android:text="@={viewModel.subtitleNum}"/>
 
             <TextView

@@ -49,6 +49,13 @@ public class MTMMenuAdapter extends BaseAdapter {
         this.projectFormat = context.getString(R.string.mtm_menu_number_projects);
         this.companyFormat = context.getString(R.string.mtm_menu_number_company);
         this.callback = callback;
+        //showing both groups expanded at the start
+        if (!projectTrackingList.isEmpty()) {
+            setProjectListVisible(true, false);
+        }
+        if (!companyTrackingList.isEmpty()) {
+            setCompanyListVisible(true, false);
+        }
     }
 
     public void setCompanyTrackingList(List<CompanyTrackingList> companyTrackingList) {
@@ -69,7 +76,7 @@ public class MTMMenuAdapter extends BaseAdapter {
         }
     }
 
-    public void setProjectListVisible(boolean projectListVisible) {
+    private void setProjectListVisible(boolean projectListVisible, boolean notifyDataSetChanged) {
         boolean oldValue = isProjectListVisible;
         isProjectListVisible = projectListVisible;
         if (oldValue != isProjectListVisible) { //means the value changed and we need to update the size
@@ -78,17 +85,22 @@ public class MTMMenuAdapter extends BaseAdapter {
             //the company title is moved from its place, so we have to update the index
             companyTitleIndex += displacement;
 
-            notifyDataSetChanged();
+            if (notifyDataSetChanged) {
+                notifyDataSetChanged();
+            }
         }
     }
 
-    public void setCompanyListVisible(boolean companyListVisible) {
+    private void setCompanyListVisible(boolean companyListVisible, boolean notifyDataSetChanged) {
         boolean oldValue = isCompanyListVisible;
         isCompanyListVisible = companyListVisible;
 
         if (oldValue != isCompanyListVisible) { //means the value changed and we need to update the size
             size += isCompanyListVisible ? companyTrackingList.size() : -companyTrackingList.size();
-            notifyDataSetChanged();
+
+            if (notifyDataSetChanged) {
+                notifyDataSetChanged();
+            }
         }
     }
 
@@ -151,9 +163,9 @@ public class MTMMenuAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (auxIndex == projectTitleIndex) {
-                        setProjectListVisible(!isProjectListVisible);
+                        setProjectListVisible(!isProjectListVisible, true);
                     } else {
-                        setCompanyListVisible(!isCompanyListVisible);
+                        setCompanyListVisible(!isCompanyListVisible, true);
                     }
                 }
             });
