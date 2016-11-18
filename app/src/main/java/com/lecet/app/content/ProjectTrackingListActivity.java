@@ -33,9 +33,8 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
     private final String TAG = "ProjectTrackingListAct";
 
     public static final String PROJECT_LIST_ITEM_ID = "listItemId";
-    public static final String PROJECT_LIST_ITEM_TITLE = "listItemTitle";
     public static final String PROJECT_LIST_ITEM_SIZE = "listItemSize";
-    public static final String PROJECT_LIST_ITEM_POSITION = "listItemPosition";
+    public static final String PROJECT_LIST_ITEM_TITLE = "listItemTitle";
 
     private ProjectTrackingListViewModel viewModel;
 
@@ -47,25 +46,20 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
         Log.d(TAG, "onCreate");
 
         // get extras from Intent
-        int listItemPosition = getIntent().getIntExtra(PROJECT_LIST_ITEM_POSITION, -1);
-        long listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
+        long listItemId      = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
+        int listItemSize     = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
         String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
-        int listItemSize = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
 
-        // TODO - accommodate multiple list types such as Company Lists
-        final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
-
-        setupBinding(projectList);
-        setupToolbar(listItemTitle, new String(listItemSize + " Projects"));
+        setupBinding(listItemId);
+        setupToolbar(listItemTitle, new String(listItemSize + " " + getResources().getString(R.string.projects)));
     }
 
-    private void setupBinding(ProjectTrackingList projectList) {
+    private void setupBinding(long listItemId) {
         ActivityProjectTrackingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_tracking_list);
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        viewModel = new ProjectTrackingListViewModel(this, projectList, bidDomain, projectDomain);
+        viewModel = new ProjectTrackingListViewModel(this, listItemId, bidDomain, projectDomain);
         binding.setViewModel(viewModel);
     }
 
