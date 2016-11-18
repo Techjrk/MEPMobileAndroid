@@ -478,10 +478,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
         Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
-        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_POSITION, 1);
         intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
-        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
         intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
+        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
         startActivity(intent);
     }
 

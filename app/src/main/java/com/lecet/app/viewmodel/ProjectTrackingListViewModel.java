@@ -21,18 +21,22 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
+import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.content.ModifyProjectTrackingListActivity;
 import com.lecet.app.content.ProjectTrackingListActivity;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.enums.SortBy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 
 /**
@@ -62,7 +66,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private MenuTitleListAdapter mtmSortAdapter;
 
 
-    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList projectList, BidDomain bidDomain, ProjectDomain projectDomain) {
+    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
 
         Log.d(TAG, "Constructor");
 
@@ -71,7 +75,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.projectDomain = projectDomain;
 
         initShowUpdatesSwitch();
-        initializeAdapter(projectList);
+        initializeAdapter(listItemId);
     }
 
     private void initShowUpdatesSwitch() {
@@ -109,15 +113,21 @@ public class ProjectTrackingListViewModel extends BaseObservable {
      * Adapter Data Management
      **/
 
-    private void initializeAdapter(ProjectTrackingList projectTrackingList) {
+    private void initializeAdapter(long listItemId) {
 
         adapterData = new ArrayList<>();
 
-        RealmList<Project> projects = projectTrackingList.getProjects();
-        Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
+        final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance());
+        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
 
-        adapterData.addAll(Arrays.asList(data));
-        //projectListAdapter.notifyDataSetChanged();
+        if(projectList != null) {
+            RealmList<Project> projects = projectList.getProjects();
+            Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
+
+            adapterData.addAll(Arrays.asList(data));
+            //projectListAdapter.notifyDataSetChanged();
+        }
+        else Log.w(TAG, "initializeAdapter: WARNING: projectList is null");
 
         recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
         setupRecyclerView(recyclerView);

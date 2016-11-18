@@ -80,6 +80,7 @@ public class ProjectDomain {
         getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
+
     public void getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
         Date current = new Date();
@@ -141,12 +142,14 @@ public class ProjectDomain {
         getBidsRecentlyAdded(endDate, limit, callback);
     }
 
+
     public void getBidsRecentlyAdded(Callback<List<Project>> callback) {
 
         int limit = 150;
 
         getBidsRecentlyAdded(limit, callback);
     }
+
 
     public void getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
 
@@ -162,11 +165,13 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
+
     public void getProjectsRecentlyUpdated(int limit, Callback<List<Project>> callback) {
 
         Date publishDate = DateUtility.addDays(-30);
         getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
+
 
     public void getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
 
