@@ -8,8 +8,9 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="65dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
         >
@@ -17,10 +18,11 @@
         <!-- H -->
         <LinearLayout
             android:id="@+id/button_h"
-            android:layout_width="88dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
             android:layout_weight="1"
-            android:background="@drawable/dashboard_button_center_background_selector"
+            android:background="@drawable/dashboard_button_left_background_selector"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone"
@@ -45,10 +47,11 @@
         <!-- B -->
         <LinearLayout
             android:id="@+id/button_b"
-            android:layout_width="88dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginRight="12dp"
             android:layout_weight="1"
-            android:background="@drawable/dashboard_button_center_background_selector"
+            android:background="@drawable/dashboard_button_right_background_selector"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone"
