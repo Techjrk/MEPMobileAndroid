@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
+import android.util.SparseBooleanArray;
 import android.view.Display;
 import android.view.View;
 import android.widget.AbsListView;
@@ -27,6 +28,7 @@ import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.enums.SortBy;
 import com.lecet.app.interfaces.MTMMenuCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -36,7 +38,7 @@ import io.realm.Sort;
  * Created by Josué Rodríguez on 12/11/2016.
  */
 
-public class ModifyProjectTrackingListViewModel extends BaseObservable implements MTMMenuCallback {
+public class ModifyProjectTrackingListViewModel extends BaseObservable implements MTMMenuCallback, AdapterView.OnItemClickListener {
 
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
@@ -77,7 +79,9 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
     private void setupAdapter(ProjectTrackingList projectTrackingList) {
         listView = (ListView) appCompatActivity.findViewById(R.id.projects_sorted_list);
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        listView.setOnItemClickListener(this);
         populateList(projectTrackingList.getProjects(), sortBy);
+
     }
 
     private void populateList(RealmList<Project> projects, SortBy sortBy) {
@@ -175,6 +179,8 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (position > 0) {
                         mtmSortMenu.dismiss();
+                        listView.clearChoices();
+                        setProjectsSelected(null);
                         populateList(projectTrackingList.getProjects(), SortBy.values()[position - 1]);
                     }
                 }
@@ -188,7 +194,6 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
-        //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,4 +237,25 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
         toogleMTMSortMenu(view);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        int selectedProjectsCount = listView.getCheckedItemCount();
+        if (selectedProjectsCount == 0) {
+            setProjectsSelected(null);
+        } else {
+            setProjectsSelected(appCompatActivity.getString(R.string.x_selected, Integer.toString(selectedProjectsCount)));
+        }
+    }
+
+    private List<Project> getSelectedProjects() {
+        SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+        List<Project> projects = new ArrayList<>();
+        ModifyProjectListAdapter adapter = (ModifyProjectListAdapter) listView.getAdapter();
+        for (int i = 0; i < checkedItems.size(); i++) {
+            if (checkedItems.valueAt(i)) {
+                projects.add(adapter.getItem(i));
+            }
+        }
+        return projects;
+    }
 }
