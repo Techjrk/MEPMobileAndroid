@@ -29,19 +29,13 @@
             android:onClick="@{viewModel.onButtonClickH}">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/strip_vertical_spacing"
+                style="@style/DashboardChartButtonImage"
                 android:src="@drawable/ic_engineering" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/strip_vertical_spacing"
+                style="@style/DashboardChartButtonText"
                 android:text="@string/dashboard_heavy_highway"
-                android:textColor="@color/lecetDarkOrange"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textColor="@color/lecetDarkOrange"/>
         </LinearLayout>
 
         <!-- B -->
@@ -58,19 +52,13 @@
             android:onClick="@{viewModel.onButtonClickB}">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/strip_vertical_spacing"
+                style="@style/DashboardChartButtonImage"
                 android:src="@drawable/ic_building" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/strip_vertical_spacing"
+                style="@style/DashboardChartButtonText"
                 android:text="@string/dashboard_building"
-                android:textColor="@color/lecetLightBlue"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textColor="@color/lecetLightBlue"/>
         </LinearLayout>
 
     </LinearLayout>
