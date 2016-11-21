@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import com.lecet.app.data.api.service.BidService;
 import com.lecet.app.data.api.service.ProjectService;
+import com.lecet.app.data.api.service.SearchService;
 import com.lecet.app.data.api.service.TrackingListService;
 import com.lecet.app.data.api.service.UserService;
 
@@ -30,6 +31,7 @@ public class LecetClient {
     private UserService userService;
     private ProjectService projectService;
     private TrackingListService trackingListService;
+    private SearchService searchService;
 
     public static LecetClient getInstance() {
         return ourInstance;
@@ -65,6 +67,7 @@ public class LecetClient {
         projectService = retrofit.create(ProjectService.class);
         userService = retrofit.create(UserService.class);
         trackingListService = retrofit.create(TrackingListService.class);
+        searchService = retrofit.create(SearchService.class);
     }
 
 
@@ -83,4 +86,6 @@ public class LecetClient {
     public TrackingListService getTrackingListService() {
         return trackingListService;
     }
+
+    public SearchService getSearchService() { return searchService; }
 }
