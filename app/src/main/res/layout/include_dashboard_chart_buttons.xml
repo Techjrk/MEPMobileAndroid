@@ -8,122 +8,57 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="65dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
         >
 
-    <!-- Housing -->
+        <!-- H -->
         <LinearLayout
-            android:id="@+id/button_housing"
-            android:layout_width="88dp"
+            android:id="@+id/button_h"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
             android:layout_weight="1"
             android:background="@drawable/dashboard_button_left_background_selector"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone"
-            android:onClick="@{viewModel.onHousingButtonClick}">
+            android:onClick="@{viewModel.onButtonClickH}">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/strip_vertical_spacing"
-                android:src="@drawable/ic_housing" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/strip_vertical_spacing"
-                android:text="@string/dashboard_housing"
-                android:textColor="@color/lecetMediumOrange"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Engineering -->
-        <LinearLayout
-            android:id="@+id/button_engineering"
-            android:layout_width="88dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/dashboard_button_center_background_selector"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:onClick="@{viewModel.onEngineeringButtonClick}">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/strip_vertical_spacing"
+                style="@style/DashboardChartButtonImage"
                 android:src="@drawable/ic_engineering" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/strip_vertical_spacing"
-                android:text="@string/dashboard_engineering"
-                android:textColor="@color/lecetDarkOrange"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                style="@style/DashboardChartButtonText"
+                android:text="@string/dashboard_heavy_highway"
+                android:textColor="@color/lecetDarkOrange"/>
         </LinearLayout>
 
-        <!-- Building -->
+        <!-- B -->
         <LinearLayout
-            android:id="@+id/button_building"
-            android:layout_width="88dp"
+            android:id="@+id/button_b"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/dashboard_button_center_background_selector"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:onClick="@{viewModel.onBuildingButtonClick}">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/strip_vertical_spacing"
-                android:src="@drawable/ic_building" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/strip_vertical_spacing"
-                android:text="@string/dashboard_building"
-                android:textColor="@color/lecetLightBlue"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Utilities -->
-        <LinearLayout
-            android:id="@+id/button_utilities"
-            android:layout_width="88dp"
-            android:layout_height="match_parent"
+            android:layout_marginRight="12dp"
             android:layout_weight="1"
             android:background="@drawable/dashboard_button_right_background_selector"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone"
-            android:onClick="@{viewModel.onUtilitiesButtonClick}">
+            android:onClick="@{viewModel.onButtonClickB}">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/strip_vertical_spacing"
-                android:src="@drawable/ic_utilities" />
+                style="@style/DashboardChartButtonImage"
+                android:src="@drawable/ic_building" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/strip_vertical_spacing"
-                android:text="@string/dashboard_utilities"
-                android:textColor="@color/lecetMediumBlue"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                style="@style/DashboardChartButtonText"
+                android:text="@string/dashboard_building"
+                android:textColor="@color/lecetLightBlue"/>
         </LinearLayout>
 
     </LinearLayout>
