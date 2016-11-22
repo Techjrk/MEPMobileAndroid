@@ -12,6 +12,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class SearchList extends RealmObject {
     @SerializedName("robjects")
+//    private String [] robjects;
     private RealmList<SearchObject> robjects;
     @Override
     public String toString() {

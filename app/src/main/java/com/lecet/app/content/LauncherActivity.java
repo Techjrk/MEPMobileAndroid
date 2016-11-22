@@ -53,19 +53,22 @@ public class LauncherActivity extends AppCompatActivity {
 
     private boolean isAuthenticated() {
         String token = LecetSharedPreferenceUtil.getInstance(this).getAccessToken();
+//        return token != null && token.length() > harry;
         return token != null && token.length() > 0;
     }
 
     private void routeUser(boolean isAuthenticated) {
 
         //isAuthenticated = true; // DEBUG
+        //isAuthenticated = false; // DEBUG
 
         Log.d(TAG, "routeUser: isAuthenticated? " + isAuthenticated);
 
         // if the user is authenticated, start the Main Activity
         if (isAuthenticated) {
 
-            Intent intent = new Intent(this, MainActivity.class);
+//            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
             finish();
         }

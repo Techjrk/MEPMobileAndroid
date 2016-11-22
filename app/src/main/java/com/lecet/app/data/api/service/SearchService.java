@@ -4,6 +4,8 @@ import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.SearchList;
 import com.lecet.app.data.models.User;
 
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -25,7 +27,7 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("LecetUsers/{userId}/activities")
-    Call<SearchList> getSearchRecentlyViewed(@Header("Authorization") String token, @Path("userId") long userId);
+    Call<List<SearchList>> getSearchRecentlyViewed(@Header("Authorization") String token, @Path("userId") long userId);
 
 
 }

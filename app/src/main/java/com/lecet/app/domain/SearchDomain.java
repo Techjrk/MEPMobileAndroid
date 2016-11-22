@@ -6,6 +6,8 @@ import com.lecet.app.data.models.SearchList;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
+import java.util.List;
+
 import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,21 +26,21 @@ public class SearchDomain {
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
     }
-    public void getSearchRecentlyViewed(long userId, Callback<SearchList> callback) {
+    public void getSearchRecentlyViewed(long userId, Callback<List<SearchList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
-        Call<SearchList> call = lecetClient.getSearchService().getSearchRecentlyViewed(token, userId);
+        Call<List<SearchList>> call = lecetClient.getSearchService().getSearchRecentlyViewed(token, userId);
         call.enqueue(callback);
     }
 
-    public SearchList copyToRealmTransaction(SearchList searchList) {
+   /* public SearchList copyToRealmTransaction(SearchList searchList) {
 
         realm.beginTransaction();
         SearchList persistedSearchList = realm.copyToRealmOrUpdate(searchList);
         realm.commitTransaction();
 
         return persistedSearchList;
-    }
+    }*/
 }
 

@@ -33,7 +33,7 @@ public class SearchActivity extends AppCompatActivity {
 //        LoginViewModel viewModel = new LoginViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
 //        binding.setViewModel(viewModel);
         SearchViewModel viewModel = new SearchViewModel(this, new SearchDomain(LecetClient.getInstance(),LecetSharedPreferenceUtil.getInstance(getApplication()),Realm.getDefaultInstance()));
-        tvsearch.setText(viewModel.getSlist());
+     //   tvsearch.setText(viewModel.getSlist());
     }
 }
 

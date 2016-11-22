@@ -17,6 +17,8 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.domain.UserDomain;
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.annotations.PrimaryKey;
 import retrofit2.Call;
@@ -36,7 +38,7 @@ public class SearchViewModel extends BaseObservable {
     private final AppCompatActivity activity;
    // private final UserDomain userDomain;
 private final SearchDomain searchDomain;
-private    SearchList slist;
+private    List<SearchList> slist;
     public String getSlist() {
         return slist.toString();
     }
@@ -54,14 +56,17 @@ private    SearchList slist;
     public void getUserRecentlyViewed(long userId) {
 
 //        userDomain.getUser(userId, new Callback<User>() {
-   searchDomain.getSearchRecentlyViewed(userId, new Callback<SearchList>() {
+   searchDomain.getSearchRecentlyViewed(userId, new Callback<List<SearchList>>() {
             @Override
-            public void onResponse(Call<SearchList> call, Response<SearchList> response) {
+            public void onResponse(Call<List<SearchList>> call, Response<List<SearchList>> response) {
 
                 if (response.isSuccessful()) {
                       slist = response.body();
-                    Log.d("Search List: ","search list: "+slist.toString());
-
+                    int ctr=0;
+                    for (SearchList s:slist) {
+                       ctr++;
+                        Log.d("Search List: "+ctr,"search list: "+s.toString());
+                    }
                     //User r = response.body();
                     //userDomain.copyToRealmTransaction(r);
 
@@ -81,13 +86,13 @@ private    SearchList slist;
             }
 
             @Override
-            public void onFailure(Call<SearchList> call, Throwable t) {
+            public void onFailure(Call<List<SearchList>> call, Throwable t) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(activity.getString(R.string.error_network_title));
+                builder.setTitle(activity.getString(R.string.error_network_title)+"\r\n"+t.getLocalizedMessage());
                 builder.setMessage(activity.getString(R.string.error_network_message));
                 builder.setNegativeButton(activity.getString(R.string.ok), null);
-
+                Log.e("onFailure","onFailure: "+t.getMessage());
                 builder.show();
             }
         });
