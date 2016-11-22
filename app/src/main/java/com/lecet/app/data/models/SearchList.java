@@ -63,10 +63,10 @@ public class SearchList extends RealmObject {
     @SerializedName("updatedAt")
     private  String updatedAt;
 
-    @SerializedName("robjects")
+//    @SerializedName("robjects")
 //    private String [] robjects;
 //    private RealmList<SearchObject> robjects;
-    private SearchObject robjects;
+//    private SearchObject robjects;
 
     public int getId() {
         return id;
@@ -76,12 +76,14 @@ public class SearchList extends RealmObject {
         return updatedAt;
     }
 
-    public SearchObject getRobjects() {
-        return robjects;
-    }
 
     public String getCode() {
         return code;
+    }
+
+/*
+    public SearchObject getRobjects() {
+        return robjects;
     }
 
     @Override
@@ -89,4 +91,6 @@ public class SearchList extends RealmObject {
     public String toString() {
         return ".. SearchList Result.. {" +robjects+ '}';
     }
+*/
+
 }

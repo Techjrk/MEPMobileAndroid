@@ -14,8 +14,10 @@ import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.viewmodel.LoginViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
-
 import io.realm.Realm;
+
+//userid: harry.camigla@domandtom.com
+//password: 3nB72JTrRB7Uu4mFRpFppV6PN
 
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";

@@ -19,13 +19,14 @@ public class LecetApplication extends Application {
 Realm realm;
         Realm.init(this);
 //
-        /*RealmConfiguration config = new RealmConfiguration
+/*
+        RealmConfiguration config = new RealmConfiguration
                 .Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
         realm = Realm.getInstance(config);
-        Realm.init(this);
+
 */
     }
 
