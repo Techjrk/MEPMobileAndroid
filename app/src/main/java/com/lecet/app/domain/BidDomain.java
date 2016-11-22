@@ -61,7 +61,7 @@ public class BidDomain {
 
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
         String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
-                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]}}", limit, formattedDate);
+                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
 
         Call<List<Bid>> call = lecetClient.getBidService().bids(token, filter);
         call.enqueue(callback);
