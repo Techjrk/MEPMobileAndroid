@@ -34,6 +34,7 @@
     <string name="dashboard_engineering">ENGINEERING</string>
     <string name="dashboard_building">BUILDING</string>
     <string name="dashboard_utilities">UTILITIES</string>
+    <string name="dashboard_heavy_highway">HEAVY HIGHWAY</string>
 
     <!-- Create Password -->
     <string name="title_activity_create_password">Create Password</string>
