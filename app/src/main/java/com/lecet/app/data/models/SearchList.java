@@ -7,7 +7,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by getdevsinc on 11/21/16.
+ * Created by Noel Anonas getdevsinc on 11/21/16.
  */
 
 public class SearchList extends RealmObject {

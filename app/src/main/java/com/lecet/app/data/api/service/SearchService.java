@@ -15,6 +15,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * File: SearchService Created: 8/16/16 Author: domandtom
@@ -29,5 +30,10 @@ public interface SearchService {
     @GET("LecetUsers/{userId}/activities")
     Call<List<SearchList>> getSearchRecentlyViewed(@Header("Authorization") String token, @Path("userId") long userId);
 
-
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("LecetUsers/{userId}/activities")
+    Call<List<SearchList>> getSearchRecentlyViewedWithFilter(@Header("Authorization") String token, @Path("userId") long userId, @Query("filter") String filter);
 }

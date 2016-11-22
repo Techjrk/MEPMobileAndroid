@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Debug;
@@ -28,58 +29,54 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by getdevsinc on 11/21/16.
+ * Created by Noel Anonas on 11/21/16.
  */
 
 public class SearchViewModel extends BaseObservable {
-    private StringBuilder sb = new StringBuilder("Recently Viewed"); //for testing only...
-
 
     private static final String TAG = "SearchViewModel";
+
+    private StringBuilder sb = new StringBuilder("Recently Viewed"); //for testing only...
     @Bindable
     public String getSb() {
         return sb.toString();
     }
 
     private final AppCompatActivity activity;
-   // private final UserDomain userDomain;
 private final SearchDomain searchDomain;
 private    List<SearchList> slist;
     public String getSlist() {
         return slist.toString();
     }
 
+    //**constructor
     public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
-//        public SearchViewModel(AppCompatActivity activity, UserDomain ld) {
         this.activity = activity;
         this.searchDomain = sd;
-//        this.userDomain = ld;
+
         LecetSharedPreferenceUtil sharedPreferenceUtil = LecetSharedPreferenceUtil.getInstance(activity.getApplication());
         getUserRecentlyViewed( sharedPreferenceUtil.getId());
     }
 
-    public void getUserRecentlyViewed(long userId) {
 
-//        userDomain.getUser(userId, new Callback<User>() {
-   searchDomain.getSearchRecentlyViewed(userId, new Callback<List<SearchList>>() {
+
+    //function to get the list of recently viewed by the user
+    public void getUserRecentlyViewed(long userId) {
+      //Using the searchDomain to call the method to start retrofitting...
+       searchDomain.getSearchRecentlyViewed(userId, new Callback<List<SearchList>>() {
             @Override
             public void onResponse(Call<List<SearchList>> call, Response<List<SearchList>> response) {
 
                 if (response.isSuccessful()) {
                       slist = response.body();
+                    //searchDomain.copyToRealmTransaction(slist);
                     int ctr=0;
                     for (SearchList s:slist) {
                        ctr++;
-                        Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
+                     //   Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
                     sb.append("\r\n"+ctr+" code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId()+" createdAt:"+s.getCreatedAt()+"\r\n");
                     }
                     notifyPropertyChanged(BR._all);
-                    //User r = response.body();
-                    //userDomain.copyToRealmTransaction(r);
-
-                  //  Intent intent = new Intent(activity, MainActivity.class);
-                  //  activity.startActivity(intent);
-                  //  activity.finish();
 
                 } else {
 

@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.content.res.AssetManager;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,12 @@ import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.viewmodel.LoginViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import io.realm.Realm;
 
 //userid: harry.camigla@domandtom.com
@@ -21,22 +28,35 @@ import io.realm.Realm;
 
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
-    TextView tvsearch;
+  //  TextView tvsearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-
+        getFilterFromAsset();
         setContentView(R.layout.activity_search);
-        tvsearch = (TextView) findViewById(R.id.tvsearch);
+//        tvsearch = (TextView) findViewById(R.id.tvsearch);
         setupBinding();
     }
     private void setupBinding() {
         ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
-//        LoginViewModel viewModel = new LoginViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
         SearchViewModel viewModel = new SearchViewModel(this, new SearchDomain(LecetClient.getInstance(),LecetSharedPreferenceUtil.getInstance(getApplication()),Realm.getDefaultInstance()));
         binding.setViewModel(viewModel);
-     //   tvsearch.setText(viewModel.getSlist());
+    }
+    private void getFilterFromAsset() {
+        AssetManager am = getAssets();
+        try {
+            InputStream is =  am.open("filtersearch_rviewed.txt");
+            BufferedReader br = new BufferedReader(  new InputStreamReader(is));
+            StringBuilder scontent = new StringBuilder();
+            String st="";
+            while ( (st = br.readLine())!=null){
+                scontent.append(st);
+            }
+            Log.d("FILTER","filter recently viewed:"+scontent.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
