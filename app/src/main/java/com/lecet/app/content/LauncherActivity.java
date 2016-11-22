@@ -13,6 +13,7 @@ import com.lecet.app.databinding.ActivityLauncherBinding;
 import com.lecet.app.viewmodel.LauncherViewModel;
 
 
+
 /**
  * LauncherActivity - functions as the app's Splash Screen
  */
@@ -23,6 +24,7 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         Log.d(TAG, "onCreate");
 
@@ -60,7 +62,7 @@ public class LauncherActivity extends AppCompatActivity {
     private void routeUser(boolean isAuthenticated) {
 
         //isAuthenticated = true; // DEBUG
-        //isAuthenticated = false; // DEBUG
+      //  isAuthenticated = false; // DEBUG
 
         Log.d(TAG, "routeUser: isAuthenticated? " + isAuthenticated);
 

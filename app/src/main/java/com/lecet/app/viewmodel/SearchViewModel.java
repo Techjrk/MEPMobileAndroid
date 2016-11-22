@@ -2,12 +2,14 @@ package com.lecet.app.viewmodel;
 
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.os.Debug;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Company;
@@ -30,10 +32,14 @@ import retrofit2.Response;
  */
 
 public class SearchViewModel extends BaseObservable {
+    private StringBuilder sb = new StringBuilder("Recently Viewed"); //for testing only...
 
-    @PrimaryKey
 
     private static final String TAG = "SearchViewModel";
+    @Bindable
+    public String getSb() {
+        return sb.toString();
+    }
 
     private final AppCompatActivity activity;
    // private final UserDomain userDomain;
@@ -52,7 +58,6 @@ private    List<SearchList> slist;
         getUserRecentlyViewed( sharedPreferenceUtil.getId());
     }
 
-
     public void getUserRecentlyViewed(long userId) {
 
 //        userDomain.getUser(userId, new Callback<User>() {
@@ -65,8 +70,10 @@ private    List<SearchList> slist;
                     int ctr=0;
                     for (SearchList s:slist) {
                        ctr++;
-                        Log.d("Search List: "+ctr,"search list: "+s.toString());
+                        Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
+                    sb.append("\r\n"+ctr+" code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId()+" createdAt:"+s.getCreatedAt());
                     }
+                    notifyPropertyChanged(BR._all);
                     //User r = response.body();
                     //userDomain.copyToRealmTransaction(r);
 

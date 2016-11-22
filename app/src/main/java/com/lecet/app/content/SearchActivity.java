@@ -9,6 +9,7 @@ import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityLoginBinding;
+import com.lecet.app.databinding.ActivitySearchBinding;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.viewmodel.LoginViewModel;
@@ -29,10 +30,10 @@ public class SearchActivity extends AppCompatActivity {
         setupBinding();
     }
     private void setupBinding() {
-//        ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
 //        LoginViewModel viewModel = new LoginViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
-//        binding.setViewModel(viewModel);
         SearchViewModel viewModel = new SearchViewModel(this, new SearchDomain(LecetClient.getInstance(),LecetSharedPreferenceUtil.getInstance(getApplication()),Realm.getDefaultInstance()));
+        binding.setViewModel(viewModel);
      //   tvsearch.setText(viewModel.getSlist());
     }
 }
