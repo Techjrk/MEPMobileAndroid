@@ -62,15 +62,15 @@ public class LauncherActivity extends AppCompatActivity {
     private void routeUser(boolean isAuthenticated) {
 
         //isAuthenticated = true; // DEBUG
-      //  isAuthenticated = false; // DEBUG
+       // isAuthenticated = false; // DEBUG
 
         Log.d(TAG, "routeUser: isAuthenticated? " + isAuthenticated);
 
         // if the user is authenticated, start the Main Activity
         if (isAuthenticated) {
 
-//            Intent intent = new Intent(this, MainActivity.class);
-            Intent intent = new Intent(this, SearchActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
+//            Intent intent = new Intent(this, SearchActivity.class); //For testing the SearchActivity only - Noel
             startActivity(intent);
             finish();
         }

@@ -3,6 +3,7 @@ package com.lecet.app.domain;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.service.SearchService;
 import com.lecet.app.data.models.SearchList;
+import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
@@ -20,12 +21,20 @@ public class SearchDomain {
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
+    private String sfilter;
 
     public SearchDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
     }
+    public SearchDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm, String filter) {
+        this.lecetClient = lecetClient;
+        this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
+        sfilter = filter;
+    }
+
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
@@ -33,7 +42,21 @@ public class SearchDomain {
         Call<List<SearchList>> call = lecetClient.getSearchService().getSearchRecentlyViewed(token, userId);
         call.enqueue(callback);
     }
+    public void getSearchRecentlyViewedWithFilter(long userId, Callback<List<SearchList>> callback) {
 
+        String token = sharedPreferenceUtil.getAccessToken();
+     //   sfilter = sfilter.replace("10","5");
+        Call<List<SearchList>> call = lecetClient.getSearchService().getSearchRecentlyViewedWithFilter(token, userId,sfilter);
+        call.enqueue(callback);
+    }
+
+    public void getSearchSaved(long userId, Callback<List<SearchSaved>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        Call<List<SearchSaved>> call = lecetClient.getSearchService().getSearchSaved(token, userId);
+        call.enqueue(callback);
+    }
    /* public SearchList copyToRealmTransaction(SearchList searchList) {
 
         realm.beginTransaction();

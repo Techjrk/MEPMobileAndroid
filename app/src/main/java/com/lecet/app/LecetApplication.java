@@ -19,7 +19,9 @@ public class LecetApplication extends Application {
 Realm realm;
         Realm.init(this);
 //
+
 /*
+  //Testing - Deleting existing database - Migration needed for new RealmObject created - Noel
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
                 .deleteRealmIfMigrationNeeded()
@@ -28,6 +30,8 @@ Realm realm;
         realm = Realm.getInstance(config);
 
 */
+
+
     }
 
 

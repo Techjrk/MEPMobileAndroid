@@ -2,6 +2,7 @@ package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.SearchList;
+import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.models.User;
 
 import java.util.List;
@@ -36,4 +37,12 @@ public interface SearchService {
     })
     @GET("LecetUsers/{userId}/activities")
     Call<List<SearchList>> getSearchRecentlyViewedWithFilter(@Header("Authorization") String token, @Path("userId") long userId, @Query("filter") String filter);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("LecetUsers/{userId}/searches")
+    Call<List<SearchSaved>> getSearchSaved(@Header("Authorization") String token, @Path("userId") long userId);
+
 }

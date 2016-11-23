@@ -5,15 +5,12 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.ActivityLoginBinding;
 import com.lecet.app.databinding.ActivitySearchBinding;
 import com.lecet.app.domain.SearchDomain;
-import com.lecet.app.domain.UserDomain;
-import com.lecet.app.viewmodel.LoginViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.io.BufferedReader;
@@ -40,23 +37,28 @@ public class SearchActivity extends AppCompatActivity {
     }
     private void setupBinding() {
         ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
-        SearchViewModel viewModel = new SearchViewModel(this, new SearchDomain(LecetClient.getInstance(),LecetSharedPreferenceUtil.getInstance(getApplication()),Realm.getDefaultInstance()));
+//        SearchViewModel viewModel = new SearchViewModel(this, new SearchDomain(LecetClient.getInstance(),LecetSharedPreferenceUtil.getInstance(getApplication()),Realm.getDefaultInstance()));
+        SearchViewModel viewModel = new SearchViewModel(this, new SearchDomain(LecetClient.getInstance(),LecetSharedPreferenceUtil.getInstance(getApplication()),Realm.getDefaultInstance(),
+                getFilterFromAsset()));
         binding.setViewModel(viewModel);
     }
-    private void getFilterFromAsset() {
+    private String getFilterFromAsset() {
         AssetManager am = getAssets();
+        StringBuilder scontent = new StringBuilder();
         try {
-            InputStream is =  am.open("filtersearch_rviewed.txt");
+            InputStream is =  am.open("filters/filtersearch_rviewed.txt");
             BufferedReader br = new BufferedReader(  new InputStreamReader(is));
-            StringBuilder scontent = new StringBuilder();
+
             String st="";
             while ( (st = br.readLine())!=null){
                 scontent.append(st);
             }
-            Log.d("FILTER","filter recently viewed:"+scontent.toString());
+        //    Log.d("FILTER","filter recently viewed:"+scontent.toString());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return scontent.toString();
     }
 }
 
