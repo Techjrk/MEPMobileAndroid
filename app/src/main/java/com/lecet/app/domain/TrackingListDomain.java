@@ -2,9 +2,11 @@ package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
+import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
+import com.lecet.app.data.models.ProjectUpdate;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
 
@@ -15,6 +17,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,12 +78,15 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
-//    public void getProjectTrackingListDetails(long projectTrackingListID) {
-//
-//        String token = sharedPreferenceUtil.getAccessToken();
-//
-//        String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
-//    }
+    public void getProjectTrackingListDetails(long projectTrackingListID, Callback<List<ProjectTrackingListDetailResponse>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
+
+        Call<List<ProjectTrackingListDetailResponse>> call = lecetClient.getTrackingListService().getProjectTrackingListDetail(token, projectTrackingListID, filter);
+        call.enqueue(callback);
+    }
 
     private Call<ProjectTrackingList> moveProjectsFromProjectTrackingList(long projectTrackingListId, List<Long> projectIds , Callback<ProjectTrackingList> callback) {
 
@@ -200,6 +206,10 @@ public class TrackingListDomain {
             }
         });
     }
+
+    // Project Update Mapping
+
+    
 
     // Sorting
 
