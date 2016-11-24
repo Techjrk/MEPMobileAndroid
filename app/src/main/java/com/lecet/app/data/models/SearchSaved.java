@@ -14,12 +14,7 @@ public class SearchSaved extends RealmObject {
     @SerializedName("modelName")
     private String modelName;
 
-    public String getModelName() {
-        return modelName;
-    }
-
     @SerializedName("query")
-
     private String query;
     @SerializedName("filter")
     private SearchObject filter;
@@ -33,8 +28,9 @@ public class SearchSaved extends RealmObject {
     public String getTitle() {
         return title;
     }
-
-
+    public String getModelName() {
+        return modelName;
+    }
     public String getQuery() {
         return query;
     }
