@@ -18,6 +18,40 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.lecet.app.content.ModifyProjectTrackingListActivity">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/lacetLightBlueTitleBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:onClick="@{viewModel.onCancelButtonClicked}"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/cancel"
+                android:textAllCaps="true"
+                android:textColor="@color/lacetLightBlueTitleColor"
+                android:textSize="16sp"
+                bind:typeface="@{`Lato-Regular.ttf`}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:onClick="@{viewModel.onDoneButtonClicked}"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/done"
+                android:textAllCaps="true"
+                android:textColor="@color/lacetLightBlueTitleColor"
+                android:textSize="16sp"
+                bind:typeface="@{`Lato-Regular.ttf`}" />
+
+        </RelativeLayout>
+
 
         <ListView
             android:id="@+id/projects_sorted_list"

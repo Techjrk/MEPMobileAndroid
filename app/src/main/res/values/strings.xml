@@ -104,6 +104,7 @@
     <string name="no">No</string>
     <string name="decline">Decline</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
     <string name="continue_str">Continue</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>

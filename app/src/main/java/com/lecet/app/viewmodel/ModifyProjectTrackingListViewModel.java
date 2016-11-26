@@ -229,6 +229,15 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
         Toast.makeText(appCompatActivity, "Remove button clicked", Toast.LENGTH_SHORT).show();
     }
 
+    public void onCancelButtonClicked(View view) {
+        listView.clearChoices();
+        setProjectsSelected(null);
+    }
+
+    public void onDoneButtonClicked(View view) {
+        Toast.makeText(appCompatActivity, "Done button clicked", Toast.LENGTH_SHORT).show();
+    }
+
     public void onBackButtonClick(View view) {
         appCompatActivity.onBackPressed();
     }
@@ -236,6 +245,7 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
     public void onSortButtonClick(View view) {
         toogleMTMSortMenu(view);
     }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
