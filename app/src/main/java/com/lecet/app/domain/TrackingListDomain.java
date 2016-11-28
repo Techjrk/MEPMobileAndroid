@@ -10,6 +10,8 @@ import com.lecet.app.data.models.ProjectUpdate;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -33,6 +35,7 @@ public class TrackingListDomain {
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
+    private ProjectDomain projectDomain;
 
     @Deprecated
     public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
@@ -41,11 +44,20 @@ public class TrackingListDomain {
         this.realm = realm;
     }
 
+
     public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm, RealmChangeListener listener) {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
         this.realm.addChangeListener(listener);
+    }
+
+    public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm, RealmChangeListener listener, ProjectDomain projectDomain) {
+        this.lecetClient = lecetClient;
+        this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
+        this.realm.addChangeListener(listener);
+        this.projectDomain = projectDomain;
     }
 
     // Realm Management
@@ -209,7 +221,46 @@ public class TrackingListDomain {
 
     // Project Update Mapping
 
-    
+    public void asyncMapUpdatesToProjects(final List<ProjectUpdate> updates, Realm.Transaction.OnSuccess successCallback,
+                                          final Realm.Transaction.OnError errorCallback) {
+
+        final WeakReference<ProjectDomain> domainWeakReference = new WeakReference<>(projectDomain);
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                // First we need add the updates to Realm
+                List<ProjectUpdate> insertedUpdates = realm.copyToRealmOrUpdate(updates);
+
+                // If we don't have a ProjectDomain then we exit.
+                ProjectDomain domain = domainWeakReference.get();
+                if (domain == null) {
+
+                    // Notify error callback if its not null and cancel execution
+                    if (errorCallback != null) errorCallback.onError(new Throwable("ProjectDomain is null!"));
+
+                    return;
+                }
+
+                // Now let's cycle through the updates and associate with their respective Project
+                for (ProjectUpdate update : insertedUpdates) {
+
+                    Project project = domain.fetchProjectById(realm, update.getProjectId());
+                    if (project != null) {
+
+                        RealmList<ProjectUpdate> projectUpdates = project.getUpdates();
+                        if (projectUpdates == null) {
+                            projectUpdates = new RealmList<>();
+                        }
+
+                        projectUpdates.add(update);
+                    }
+                }
+            }
+
+        }, successCallback, errorCallback);
+    }
 
     // Sorting
 
