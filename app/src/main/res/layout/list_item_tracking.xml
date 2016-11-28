@@ -30,7 +30,7 @@
 
             <!-- Map Image -->
             <ImageView
-                    android:id="@+id/project_locatation_image_view"
+                    android:id="@+id/map_image_view"
                     style="@style/ListItemProjectTrackingImage.DetailMap"
                     bind:imageUrl="@{viewModel.mapUrl}"/>
 
@@ -42,11 +42,11 @@
                     android:paddingLeft="12dp">
 
                 <TextView
-                        android:id="@+id/project_name"
+                        android:id="@+id/item_name"
                         tools:text="Parks Building"
                         style="@style/ListItemProjectTrackingTextView.Title"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.projectName}"/>
+                        android:text="@{viewModel.itemName}"/>
 
                 <!-- Location -->
                 <LinearLayout
@@ -63,7 +63,7 @@
                             tools:text="Tampa, FL"
                             style="@style/ListItemProjectTrackingTextView.Detail1"
                             bind:typeface="@{`Lato-Regular.ttf`}"
-                            android:text="@{viewModel.clientLocation}"/>
+                            android:text="@{viewModel.location}"/>
 
                 </LinearLayout>
 
@@ -82,7 +82,7 @@
                         tools:text="Vehicle Sales/Service"
                         style="@style/ListItemProjectTrackingTextView.Detail2"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.projectKeywords}"/>
+                        android:text="@{viewModel.keywords}"/>
 
                 </LinearLayout>
 

@@ -1,13 +1,12 @@
 package com.lecet.app.contentbase;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.lecet.app.R;
 import com.lecet.app.content.CompanyDetailProjectBidsActivity;
-import com.lecet.app.content.ProjectTrackingListActivity;
+import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.SettingsActivity;
 
@@ -44,7 +43,7 @@ public abstract class NavigationBaseActivity extends LecetBaseActivity {
                 break;
 
             case R.id.menu_item_list2:
-                launchClass = ProjectTrackingListActivity.class;
+                launchClass = TrackingListActivity.class;
                 break;
 
             case R.id.menu_item_settings:

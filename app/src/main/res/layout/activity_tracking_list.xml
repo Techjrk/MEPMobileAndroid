@@ -27,7 +27,7 @@
 
             <!-- Content -->
             <include
-                    layout="@layout/content_project_tracking_list"
+                    layout="@layout/content_tracking_list"
                     bind:viewModel="@{viewModel}" />
 
         </LinearLayout>

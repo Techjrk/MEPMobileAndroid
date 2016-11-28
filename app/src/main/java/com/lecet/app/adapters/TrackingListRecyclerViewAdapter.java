@@ -6,11 +6,15 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.content.TrackingListActivity;
+import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.databinding.ListItemProjectTrackingBinding;
+import com.lecet.app.databinding.ListItemTrackingBinding;
 import com.lecet.app.viewmodel.ListItemTrackingViewModel;
 
 import java.util.List;
+
+import io.realm.RealmObject;
 
 /**
  * File: TrackingListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -18,45 +22,53 @@ import java.util.List;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<TrackingListRecyclerViewAdapter.ProjectListViewHolder> {
+public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<TrackingListRecyclerViewAdapter.TrackingListViewHolder> {
 
-    public static int ADAPTER_TYPE_PROJECTS = 1;
-
-    private int adapterType;
-    private List<Project> data;
+    private String listType;
+    private List<RealmObject> data;
     private boolean showUpdates;
 
     /**
      * Default Constructor
      */
-    public TrackingListRecyclerViewAdapter(List<Project> data) {
+    public TrackingListRecyclerViewAdapter(List<RealmObject> data) {
 
         this.data = data;
-        this.adapterType = ADAPTER_TYPE_PROJECTS;
+        this.listType = TrackingListActivity.TRACKING_LIST_TYPE_PROJECT;
     }
 
     /**
      * Alternate Constructor for use with adapter types other than the default
      */
-    public TrackingListRecyclerViewAdapter(List<Project> data, int adapterType) {
+    public TrackingListRecyclerViewAdapter(String listType, List<RealmObject> data) {
 
+        this.listType = listType;
         this.data = data;
-        this.adapterType = adapterType;
     }
 
     @Override
-    public ProjectListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrackingListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ListItemProjectTrackingBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_project_tracking, parent, false);
-        ProjectListViewHolder viewHolder = new ProjectListViewHolder(projectBinding);
+        ListItemTrackingBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_tracking, parent, false);
+        TrackingListViewHolder viewHolder = new TrackingListViewHolder(projectBinding);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ProjectListViewHolder holder, int position) {
+    public void onBindViewHolder(TrackingListViewHolder holder, int position) {
 
-        holder.getBinding().setViewModel(new ListItemTrackingViewModel(data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", showUpdates));
+        final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";    //TODO - externalize?
+
+        // Project List
+        if(this.listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_PROJECT)) {
+            holder.getBinding().setViewModel(new ListItemTrackingViewModel(this.listType, (Project) data.get(position), mapsApiKey, showUpdates));
+        }
+
+        // Company List
+        else if(this.listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_COMPANY)) {
+            holder.getBinding().setViewModel(new ListItemTrackingViewModel(this.listType, (Company) data.get(position), mapsApiKey, showUpdates));
+        }
     }
 
 
@@ -71,11 +83,12 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
     @Override
     public int getItemViewType(int position) {
 
-        return adapterType;
+        //return listType;
+        return 1;   //TODO - check
     }
 
-    public void setAdapterType(int adapterType) {
-        this.adapterType = adapterType;
+    public void setListType(String listType) {
+        this.listType = listType;
     }
 
     public void setShowUpdates(boolean showUpdates) {
@@ -87,21 +100,39 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
      * View Holders
      **/
 
-    public class ProjectListViewHolder extends RecyclerView.ViewHolder {
+    public class TrackingListViewHolder extends RecyclerView.ViewHolder {
 
-        private ListItemProjectTrackingBinding binding;
+        private ListItemTrackingBinding binding;
 
-        public ProjectListViewHolder(ListItemProjectTrackingBinding binding) {
+        public TrackingListViewHolder(ListItemTrackingBinding binding) {
 
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemProjectTrackingBinding getBinding() {
+        public ListItemTrackingBinding getBinding() {
             return binding;
         }
     }
 
+/*
+    public class TrackingListViewHolder extends RecyclerView.ViewHolder {
+
+        private ListItemTrackingBinding binding;
+
+        public TrackingListViewHolder(ListItemTrackingBinding binding) {
+
+            super(binding.getRoot());
+
+            this.binding = binding;
+        }
+
+        public ListItemTrackingBinding getBinding() {
+            return binding;
+        }
+    }
+
+*/
 
 }
