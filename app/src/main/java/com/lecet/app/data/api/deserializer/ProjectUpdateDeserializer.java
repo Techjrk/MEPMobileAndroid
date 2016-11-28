@@ -14,6 +14,10 @@ import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectUpdate;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * File: ProjectUpdateDeserializer Created: 11/22/16 Author: domandtom
@@ -137,6 +141,34 @@ public class ProjectUpdateDeserializer implements JsonDeserializer<ProjectUpdate
             final long projectId = jsonProjectId.getAsLong();
             projectUpdate.setProjectId(projectId);
 
+        }
+
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+        final JsonElement jsonCreatedAt = jsonObject.get("createdAt");
+        if (jsonCreatedAt != null && !jsonCreatedAt.isJsonNull()) {
+
+            try {
+
+                final Date createdAt = format.parse(jsonCreatedAt.getAsString());
+                projectUpdate.setCreatedAt(createdAt);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        final JsonElement jsonUpdatedAt = jsonObject.get("updatedAt");
+        if (jsonUpdatedAt != null && !jsonUpdatedAt.isJsonNull()) {
+
+            try {
+
+                final Date updatedAt = format.parse(jsonUpdatedAt.getAsString());
+                projectUpdate.setUpdatedAt(updatedAt);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         return projectUpdate;
