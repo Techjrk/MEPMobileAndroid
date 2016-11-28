@@ -65,6 +65,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
@@ -126,7 +127,13 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
+            @Override
+            public void onChange(Object element) {
+
+            }
+        });
+
         Calendar calendar = Calendar.getInstance();
         viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar, trackingListDomain);
         binding.setViewModel(viewModel);
