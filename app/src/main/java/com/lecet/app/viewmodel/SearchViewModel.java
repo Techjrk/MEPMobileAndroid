@@ -14,6 +14,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchList;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.models.User;
@@ -62,6 +63,18 @@ private final SearchDomain searchDomain;
           getUserSavedSearches( sharedPreferenceUtil.getId());   //testing for getting savedsearches result data -noel
     }
 
+  //constructor with input data last parameter
+    public SearchViewModel(AppCompatActivity activity, SearchDomain sd, String query) {
+        this.activity = activity;
+        this.searchDomain = sd;
+
+        LecetSharedPreferenceUtil sharedPreferenceUtil = LecetSharedPreferenceUtil.getInstance(activity.getApplication());
+//        getUserRecentlyViewed( sharedPreferenceUtil.getId());   //testing for getting recentlyviewed result data -noel
+
+ //***TESTING THE SEARCH FUNCTIONALITY ***
+        getProject(query);   //testing for search project result data -noel
+        getCompany(query);   //testing for search company result data -noel
+    }
     //function to get the list of recently viewed by the user
     public void getUserSavedSearches(long userId) {
         //Using the searchDomain to call the method to start retrofitting...
@@ -103,6 +116,91 @@ private final SearchDomain searchDomain;
             }
         });
     }
+    //***==========
+    //function to search the project based on query string
+    public void getProject(String q) {
+        //Using the searchDomain to call the method to start retrofitting...
+        searchDomain.getSearchProject(q, new Callback<List<Project>>() {
+            @Override
+            public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+                List<Project> slist;
+                if (response.isSuccessful()) {
+                    slist = response.body();
+                    //searchDomain.copyToRealmTransaction(slist);
+                    int ctr=0;
+                    for (Project ps:slist) {
+                        ctr++;
+                        //   Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
+                        sb.append("\r\n"+ctr+" id:"+ps.getId()+ " Title:"+ps.getTitle()+" Address:"+ps.getAddress1()+" GeoCode:"+ps.getGeocode()+" BidDate:"+ps.getBidDate()+"\r\n");
+                    }
+                    notifyPropertyChanged(BR._all);
+
+                } else {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(activity.getString(R.string.error_login_title));
+                    builder.setMessage(activity.getString(R.string.error_login_message));
+                    builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                    builder.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Project>> call, Throwable t) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(activity.getString(R.string.error_network_title)+"\r\n"+t.getLocalizedMessage());
+                builder.setMessage(activity.getString(R.string.error_network_message));
+                builder.setNegativeButton(activity.getString(R.string.ok), null);
+                Log.e("onFailure","onFailure: "+t.getMessage());
+                builder.show();
+            }
+        });
+    }
+    //***==========
+    //function to search the company based on query string
+    public void getCompany(String q) {
+        //Using the searchDomain to call the method to start retrofitting...
+        searchDomain.getSearchCompany(q, new Callback<List<Company>>() {
+            @Override
+            public void onResponse(Call<List<Company>> call, Response<List<Company>> response) {
+                List<Company> slist;
+                if (response.isSuccessful()) {
+                    slist = response.body();
+                    //searchDomain.copyToRealmTransaction(slist);
+                    int ctr=0;
+                    for (Company cs:slist) {
+                        ctr++;
+                        //   Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
+                        sb.append("\r\n"+ctr+" id:"+cs.getId()+ " Name:"+cs.getName()+" Address:"+cs.getAddress1()+" City:"+cs.getCity()+" Country:"+cs.getCountry()+"\r\n");
+                    }
+                    notifyPropertyChanged(BR._all);
+
+                } else {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(activity.getString(R.string.error_login_title));
+                    builder.setMessage(activity.getString(R.string.error_login_message));
+                    builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                    builder.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Company>> call, Throwable t) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(activity.getString(R.string.error_network_title)+"\r\n"+t.getLocalizedMessage());
+                builder.setMessage(activity.getString(R.string.error_network_message));
+                builder.setNegativeButton(activity.getString(R.string.ok), null);
+                Log.e("onFailure","onFailure: "+t.getMessage());
+                builder.show();
+            }
+        });
+    }
+
 //***=============
     //function to get the list of recently viewed by the user
     public void getUserRecentlyViewed(long userId) {

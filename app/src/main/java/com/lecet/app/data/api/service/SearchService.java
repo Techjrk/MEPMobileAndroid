@@ -1,7 +1,10 @@
 package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.models.Access;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchList;
+import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.models.User;
 
@@ -38,11 +41,28 @@ public interface SearchService {
     @GET("LecetUsers/{userId}/activities")
     Call<List<SearchList>> getSearchRecentlyViewedWithFilter(@Header("Authorization") String token, @Path("userId") long userId, @Query("filter") String filter);
 
+//***SavedSearch
     @Headers({
             "Accept: application/json",
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("LecetUsers/{userId}/searches")
     Call<List<SearchSaved>> getSearchSaved(@Header("Authorization") String token, @Path("userId") long userId);
+
+//***Project Search
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("Projects/search")
+    Call<List<Project>> getSearchProject(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+
+    //***Company Search
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("Companies/search")
+    Call<List<Company>> getSearchCompany(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
 
 }

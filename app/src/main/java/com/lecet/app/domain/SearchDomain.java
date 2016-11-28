@@ -2,6 +2,8 @@ package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.service.SearchService;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchList;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.models.User;
@@ -21,7 +23,7 @@ public class SearchDomain {
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
-    private String sfilter;
+    private String sfilter="";
 
     public SearchDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
@@ -55,6 +57,20 @@ public class SearchDomain {
         String token = sharedPreferenceUtil.getAccessToken();
 
         Call<List<SearchSaved>> call = lecetClient.getSearchService().getSearchSaved(token, userId);
+        call.enqueue(callback);
+    }
+
+    public void getSearchProject(String q, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Project>> call = lecetClient.getSearchService().getSearchProject(token,q, sfilter);
+        call.enqueue(callback);
+    }
+
+    public void getSearchCompany(String q, Callback<List<Company>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Company>> call = lecetClient.getSearchService().getSearchCompany(token,q, sfilter);
         call.enqueue(callback);
     }
    /* public SearchList copyToRealmTransaction(SearchList searchList) {
