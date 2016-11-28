@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.R;
+import com.lecet.app.content.TrackingListActivity;
+import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectCategory;
@@ -17,11 +19,11 @@ import java.util.Date;
 import com.lecet.app.BR;
 
 /**
- * File: ListItemProjectTrackingViewModel Created: 10/17/16 Author: domandtom
+ * File: ListItemTrackingViewModel Created: 10/17/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItemProjectTrackingViewModel extends BaseObservable {
+public class ListItemTrackingViewModel extends BaseObservable {
 
     private static final String TAG = "ListItemProjTrackingVM";
 
@@ -31,6 +33,7 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     public static final String EXPANDABLE_MODE_STAGE = "stage";
 
     private String expandableMode = EXPANDABLE_MODE_GONE;
+    private final String listType;
 
 
     private final String NEW_BID_PLACED = "A new bid has been placed";      // TODO - Externalize, which will require Context
@@ -40,8 +43,11 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14;            // ms * secs * mins * hrs * days
 
     private final Project project;
+    private final Company company;
     private final String mapsApiKey;
-    private String projectKeywords;
+
+    private String detail1;
+    private String detail2;
     private final boolean showUpdates;
     private boolean showExpandableView;
     private boolean expandableViewExpanded;
@@ -50,22 +56,63 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private String expandableViewTitle = "";
     private String expandableViewMessage = "";
 
-    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
+    /**
+     * Constructor for Project Tracking List
+     */
+    public ListItemTrackingViewModel(String listType, Project project, String mapsApiKey, boolean showUpdates) {
+        this.listType = listType;
         this.project = project;
         this.mapsApiKey = mapsApiKey;
         this.showUpdates = showUpdates;
+        this.company = null;
 
         setExpandableMode();
-        projectKeywords = generateProjectKeywords();
+
+        // detail TextView 1
+        StringBuilder sb = new StringBuilder();
+        if(project.getCity() != null) sb.append(project.getCity());
+        if(project.getCity() != null && project.getState() != null) sb.append(", ");
+        if(project.getState() != null) sb.append(project.getState());
+        setDetail1(sb.toString());
+
+        // detail TextView 2
+        setDetail2(generateProjectKeywords());
     }
 
-    public String getProjectName() {
+    /**
+     * Constructor for Company Tracking List
+     */
+    public ListItemTrackingViewModel(String listType, Company company, String mapsApiKey, boolean showUpdates) {
+        this.listType = listType;
+        this.company = company;
+        this.mapsApiKey = mapsApiKey;
+        this.showUpdates = showUpdates;
+        this.project = null;
 
-        return project.getTitle();
+        setExpandableMode();
+
+        // detail TextView 1
+        StringBuilder sb = new StringBuilder();
+        if(company.getAddress1() != null) sb.append(" " + company.getAddress1());
+        if(company.getAddress2() != null) sb.append(" " + company.getAddress2());
+        setDetail1(sb.toString());
+
+
+        // detail TextView 2
+        sb = new StringBuilder();
+        sb.append(" ");
+        if(company.getCity() != null) sb.append(company.getCity());
+        if(company.getCity() != null && company.getState() != null) sb.append(", ");
+        if(company.getState() != null) sb.append(company.getState());
+        if(company.getZip5() != null) sb.append(" " + company.getZip5());
+        setDetail2(sb.toString());
     }
 
-    public String getProjectKeywords() {
-        return this.projectKeywords;
+    public String getItemName() {
+
+        if(isProjectList()) return project.getTitle();
+        else if(isCompanyList()) return company.getName();
+        else return null;
     }
 
     /**
@@ -102,8 +149,9 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     }
 
     private void setExpandableMode() {
+
         // Bid mode
-        if(recentBid()) {
+        if(isProjectList() && recentBid()) {
             setExpandableMode(EXPANDABLE_MODE_BID);
             setExpandableViewIconId(R.drawable.ic_add);
             setExpandableViewTitle(NEW_BID_PLACED);
@@ -111,21 +159,35 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
             String formattedDate = sdf.format(project.getBidDate());
             setExpandableViewMessage(BID_PLACED_AT + " " + formattedDate);
         }
+
         // Note Mode
         else if(hasNote()) {
             setExpandableMode(EXPANDABLE_MODE_BID);
             setExpandableViewIconId(R.drawable.ic_add_note);
             setExpandableViewTitle(NEW_NOTE_ADDED);
-            setExpandableViewMessage(project.getProjectNotes());
+            if (isProjectList()) {
+                setExpandableViewMessage(project.getProjectNotes());
+            } else if (isCompanyList()) {
+                //TODO: fill in - D is working on details
+                setExpandableViewMessage("COMPANY PROJECT NOTES");
+            }
         }
+
         // Stage Update Mode
         else if(hasStageUpdate()) {
             setExpandableMode(EXPANDABLE_MODE_STAGE);
             setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'stage' icon, TBD
             setExpandableViewTitle(STAGE_UPDATED);
-            setExpandableViewMessage(project.getProjectStage().getName());
+            if(isProjectList()) {
+                setExpandableViewMessage(project.getProjectStage().getName());
+            }
+            else if(isCompanyList()) {
+                setExpandableViewMessage("COMPANY STAGE MESSAGE");
+                //TODO - fill in
+            }
         }
-        // Hide
+
+        // Hidden
         else {
             setExpandableMode(EXPANDABLE_MODE_GONE);
             setExpandableViewTitle("");
@@ -147,25 +209,74 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         return (isRecent);
     }
 
-    public String getClientLocation() {
+    /*public String getLocation() {
 
-        return project.getCity() + " , " + project.getState();
-    }
+        if(isProjectList()) return project.getCity() + " , " + project.getState();
+        else if(isCompanyList()) return company.getCity() + " , " + company.getState();
+        return null;
+    }*/
 
     public String getMapUrl() {
 
-        if (project.getGeocode() == null) return null;
+        String mapStr;
+        if(isProjectList())
+        {
+            if (project.getGeocode() == null) return null;
+            mapStr = String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=200x200&" +
+                            "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                            project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
+            return mapStr;
+        }
+        else if(isCompanyList()) {
+            //mapStr = "https://maps.googleapis.com/maps/api/staticmap?center=55+broadway,+new+york,+ny&zoom=16&size=400x400&markers=color:blue|city+hall,+new+york,+ny&key=AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";
+            /*mapStr = String.format("https://maps.googleapis.com/maps/api/staticmap?center=",
+                    company.getAddress1() + "," +
+                    company.getAddress2() + "," +
+                    company.getCity() + "," +
+                    company.getState() +
+                    "&zoom=16&size=400x400" +
+                    "&markers=color:blue|" +
+                    "&key=" + mapsApiKey);
+            Log.d(TAG, "getMapUrl: mapStr: " + mapStr);
+            */
 
-        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
-                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
-                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
+            //
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append("https://maps.googleapis.com/maps/api/staticmap");
+            sb2.append("?center=");
+            sb2.append(company.getAddress1() + ",");
+            sb2.append(company.getAddress2() + ",");
+            sb2.append(company.getCity() + ",");
+            sb2.append(company.getState());
+            sb2.append("&zoom=16");
+            sb2.append("&size=200x200");
+            sb2.append("&markers=color:blue|");
+            sb2.append("&key=" + mapsApiKey);
+            mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+            Log.d(TAG, "getMapUrl: mapStr: " + mapStr);
+
+            return mapStr;
+        }
+
+        return null;
     }
 
     private boolean hasNote() {
-        if (project.getProjectNotes() == null || project.getProjectNotes().length() == 0) {
-            return false;
+
+        // Project List
+        if(isProjectList())
+        {
+            if (project.getProjectNotes() == null || project.getProjectNotes().length() == 0) {
+                return false;
+            }
         }
-        else return true;
+
+        // Company List
+        else if(isCompanyList()) {
+            return false;   //TODO - check if we need to implement Company notes
+        }
+
+        return true;
     }
 
     private boolean hasStageUpdate() {
@@ -181,9 +292,40 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
         this.expandableMode = expandableMode;
     }
 
+    private boolean isProjectList() {
+        return listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_PROJECT);
+    }
+
+    private boolean isCompanyList() {
+        return listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_COMPANY);
+    }
+
 
     ///////////////////////////////
     // BINDINGS
+
+    @Bindable
+    public String getDetail1() {
+        return detail1;
+    }
+
+    public void setDetail1(String detail1) {
+        this.detail1 = detail1;
+    }
+
+    @Bindable
+    public String getDetail2() {
+        return detail2;
+    }
+
+    public void setDetail2(String detail2) {
+        this.detail2 = detail2;
+    }
+
+    @Bindable
+    public Boolean getShowDetail2Icon() {
+        return isProjectList();
+    }
 
     @Bindable
     public boolean getShowUpdates() {

@@ -57,7 +57,10 @@
     <string name="new_note_added">A new note has been added</string>
     <string name="show_updates">Show Updates</string>
     <string name="edit">EDIT</string>
+    <string name="project">Project</string>
     <string name="projects">Projects</string>
+    <string name="company">Company</string>
+    <string name="companies">Companies</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>

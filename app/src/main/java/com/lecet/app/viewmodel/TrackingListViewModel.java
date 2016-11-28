@@ -15,9 +15,12 @@ import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
+import com.lecet.app.adapters.TrackingListRecyclerViewAdapter;
+import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -31,29 +34,31 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * File: ProjectTrackingListViewModel
+ * File: TrackingListViewModel
  * Created: 11/2/16
  * Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ProjectTrackingListViewModel extends BaseObservable {
+public class TrackingListViewModel extends BaseObservable {
 
     private final static String TAG = "ProjectTrackingListVM";
 
     private final BidDomain bidDomain;
     private final ProjectDomain projectDomain;
+    private final TrackingListDomain trackingListDomain;
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
 
     private RecyclerView recyclerView;
-    private ProjectListRecyclerViewAdapter projectListAdapter;
-    private List<Project> adapterData;
+    private TrackingListRecyclerViewAdapter listAdapter;
+    private List<RealmObject> adapterData;
     private TextView titleTextView;
     private TextView subtitleTextView;
     private ImageView backButton;
@@ -64,7 +69,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     @Deprecated
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
 
-        Log.d(TAG, "Constructor");
+        Log.d(TAG, "Constructor for Project List");
 
         this.appCompatActivity = appCompatActivity;
         this.bidDomain = bidDomain;
@@ -72,7 +77,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.trackingListDomain = null;
 
         initShowUpdatesSwitch();
-        initializeAdapter(listItemId);
+        initAdapterWithProjectTrackingListId(listItemId);
     }
 
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain, TrackingListDomain trackingListDomain) {
@@ -87,6 +92,23 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         initializeEmptyAdapter();
         initShowUpdatesSwitch();
         getProjectTrackingListUpdates(listItemId);
+    }
+
+    /**
+     * Constructor for Company List
+     */
+    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, TrackingListDomain trackingListDomain) {
+
+        Log.d(TAG, "Constructor for Company List");
+
+        this.appCompatActivity = appCompatActivity;
+        this.trackingListDomain = trackingListDomain;
+        this.bidDomain = null;
+        this.projectDomain = null;
+
+
+        initShowUpdatesSwitch();
+        initAdapterWithCompanyTrackingListId(listItemId);
     }
 
     private void initShowUpdatesSwitch() {
@@ -121,28 +143,30 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
 
     /**
-     * Adapter Data Management
+     * Adapter Data Management: Project List
      **/
 
-    private void initializeAdapter(long listItemId) {
+    private void initAdapterWithProjectTrackingListId(long listItemId) {
 
         adapterData = new ArrayList<>();
 
-       ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
+        //TODO - add RealmChangeListener as last argument to resolve deprecation
+        final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance());
+        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
 
         if(projectList != null) {
             RealmList<Project> projects = projectList.getProjects();
             Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
 
             adapterData.addAll(Arrays.asList(data));
-            //projectListAdapter.notifyDataSetChanged();
+            //listAdapter.notifyDataSetChanged();
         }
-        else Log.w(TAG, "initializeAdapter: WARNING: projectList is null");
+        else Log.w(TAG, "initAdapterWithProjectTrackingListId: WARNING: projectList is null");
 
-        recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
+        recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
         setupRecyclerView(recyclerView);
-        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
-        recyclerView.setAdapter(projectListAdapter);
+        listAdapter = new TrackingListRecyclerViewAdapter(TrackingListActivity.TRACKING_LIST_TYPE_PROJECT, adapterData);
+        recyclerView.setAdapter(listAdapter);
     }
 
     private void initializeEmptyAdapter() {
@@ -156,6 +180,33 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     }
 
     /**
+     * Adapter Data Management: Company List
+     **/
+
+    private void initAdapterWithCompanyTrackingListId(long listItemId) {
+
+        adapterData = new ArrayList<>();
+
+        //TODO - add RealmChangeListener as last argument to resolve deprecation
+        final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance());
+        CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listItemId);
+
+        if(companyList != null) {
+            RealmList<Company> companies = companyList.getCompanies();
+            Company[] data = companies != null ? companies.toArray(new Company[companies.size()]) : new Company[0];
+
+            adapterData.addAll(Arrays.asList(data));
+            //listAdapter.notifyDataSetChanged();
+        }
+        else Log.w(TAG, "initAdapterWithCompanyTrackingListId: WARNING: companyList is null");
+
+        recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
+        setupRecyclerView(recyclerView);
+        listAdapter = new TrackingListRecyclerViewAdapter(TrackingListActivity.TRACKING_LIST_TYPE_COMPANY, adapterData);
+        recyclerView.setAdapter(listAdapter);
+    }
+
+    /**
      * RecyclerView Management
      **/
 
@@ -165,7 +216,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    private RecyclerView getProjectRecyclerView(@IdRes int recyclerView) {
+    private RecyclerView getRecyclerView(@IdRes int recyclerView) {
 
         return (RecyclerView) appCompatActivity.findViewById(recyclerView);
     }
@@ -255,8 +306,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     public void setShowUpdates(boolean showUpdates) {
         this.showUpdates = showUpdates;
         notifyPropertyChanged(BR.showUpdates);
-        projectListAdapter.setShowUpdates(this.showUpdates);
-        projectListAdapter.notifyDataSetChanged();
+        listAdapter.setShowUpdates(this.showUpdates);
+        listAdapter.notifyDataSetChanged();
     }
 
 

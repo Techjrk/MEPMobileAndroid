@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:bind="http://schemas.android.com/apk/res-auto"
-        tools:context="com.lecet.app.content.ProjectTrackingListActivity">
+        tools:context="com.lecet.app.content.TrackingListActivity">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemProjectTrackingViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemTrackingViewModel"/>
         <import type="android.view.View"/>
     </data>
 
@@ -30,7 +30,7 @@
 
             <!-- Map Image -->
             <ImageView
-                    android:id="@+id/project_locatation_image_view"
+                    android:id="@+id/map_image_view"
                     style="@style/ListItemProjectTrackingImage.DetailMap"
                     bind:imageUrl="@{viewModel.mapUrl}"/>
 
@@ -42,13 +42,13 @@
                     android:paddingLeft="12dp">
 
                 <TextView
-                        android:id="@+id/project_name"
+                        android:id="@+id/item_name"
                         tools:text="Parks Building"
                         style="@style/ListItemProjectTrackingTextView.Title"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.projectName}"/>
+                        android:text="@{viewModel.itemName}"/>
 
-                <!-- Location -->
+                <!-- Detail Line 1: Project Location or Company Address 1 -->
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="22dp"
@@ -63,11 +63,11 @@
                             tools:text="Tampa, FL"
                             style="@style/ListItemProjectTrackingTextView.Detail1"
                             bind:typeface="@{`Lato-Regular.ttf`}"
-                            android:text="@{viewModel.clientLocation}"/>
+                            android:text="@{viewModel.detail1}"/>
 
                 </LinearLayout>
 
-                <!-- Keywords / Tags -->
+                <!-- Detail Line 2: Project Keywords / Tags or Company Address 2 -->
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
@@ -75,14 +75,15 @@
 
                     <ImageView
                             style="@style/ListItemProjectTrackingImage.DetailIcon"
-                            android:src="@drawable/tag_icon"/>
+                            android:src="@drawable/tag_icon"
+                            android:visibility="@{viewModel.showDetail2Icon ? View.VISIBLE : View.INVISIBLE}"/>
 
                     <TextView
                         android:id="@+id/keywords"
                         tools:text="Vehicle Sales/Service"
                         style="@style/ListItemProjectTrackingTextView.Detail2"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.projectKeywords}"/>
+                        android:text="@{viewModel.detail2}"/>
 
                 </LinearLayout>
 
