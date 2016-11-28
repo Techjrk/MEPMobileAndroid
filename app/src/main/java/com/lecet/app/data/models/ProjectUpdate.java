@@ -1,5 +1,7 @@
 package com.lecet.app.data.models;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -25,11 +27,14 @@ public class ProjectUpdate extends RealmObject {
     private long companyId;
     private long contactId;
     private long projectId;
+    private Date createdAt;
+    private Date updatedAt;
 
     private Bid bidUpdate;
     private Contact contactUpdate;
     private ProjectStage stageUpdate;
     private Project projectUpdate;
+
 
     public ProjectUpdate() {
     }
@@ -162,45 +167,66 @@ public class ProjectUpdate extends RealmObject {
         this.projectUpdate = projectUpdate;
     }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ProjectUpdate)) return false;
 
-        ProjectUpdate that = (ProjectUpdate) o;
+        ProjectUpdate update = (ProjectUpdate) o;
 
-        if (modelId != that.modelId) return false;
-        if (id != that.id) return false;
-        if (companyId != that.companyId) return false;
-        if (contactId != that.contactId) return false;
-        if (projectId != that.projectId) return false;
-        if (changeIndicator != null ? !changeIndicator.equals(that.changeIndicator) : that.changeIndicator != null)
+        if (id != update.id) return false;
+        if (modelId != update.modelId) return false;
+        if (companyId != update.companyId) return false;
+        if (contactId != update.contactId) return false;
+        if (projectId != update.projectId) return false;
+        if (changeIndicator != null ? !changeIndicator.equals(update.changeIndicator) : update.changeIndicator != null)
             return false;
-        if (attributeName != null ? !attributeName.equals(that.attributeName) : that.attributeName != null)
+        if (attributeName != null ? !attributeName.equals(update.attributeName) : update.attributeName != null)
             return false;
-        if (attributeValue != null ? !attributeValue.equals(that.attributeValue) : that.attributeValue != null)
+        if (attributeValue != null ? !attributeValue.equals(update.attributeValue) : update.attributeValue != null)
             return false;
-        if (modelType != null ? !modelType.equals(that.modelType) : that.modelType != null)
+        if (modelType != null ? !modelType.equals(update.modelType) : update.modelType != null)
             return false;
-        if (modelTitle != null ? !modelTitle.equals(that.modelTitle) : that.modelTitle != null)
+        if (modelTitle != null ? !modelTitle.equals(update.modelTitle) : update.modelTitle != null)
             return false;
-        if (projectTitle != null ? !projectTitle.equals(that.projectTitle) : that.projectTitle != null)
+        if (projectTitle != null ? !projectTitle.equals(update.projectTitle) : update.projectTitle != null)
             return false;
-        if (summary != null ? !summary.equals(that.summary) : that.summary != null) return false;
-        if (bidUpdate != null ? !bidUpdate.equals(that.bidUpdate) : that.bidUpdate != null)
+        if (summary != null ? !summary.equals(update.summary) : update.summary != null)
             return false;
-        if (contactUpdate != null ? !contactUpdate.equals(that.contactUpdate) : that.contactUpdate != null)
+        if (createdAt != null ? !createdAt.equals(update.createdAt) : update.createdAt != null)
             return false;
-        if (stageUpdate != null ? !stageUpdate.equals(that.stageUpdate) : that.stageUpdate != null)
+        if (updatedAt != null ? !updatedAt.equals(update.updatedAt) : update.updatedAt != null)
             return false;
-        return projectUpdate != null ? projectUpdate.equals(that.projectUpdate) : that.projectUpdate == null;
+        if (bidUpdate != null ? !bidUpdate.equals(update.bidUpdate) : update.bidUpdate != null)
+            return false;
+        if (contactUpdate != null ? !contactUpdate.equals(update.contactUpdate) : update.contactUpdate != null)
+            return false;
+        if (stageUpdate != null ? !stageUpdate.equals(update.stageUpdate) : update.stageUpdate != null)
+            return false;
+        return projectUpdate != null ? projectUpdate.equals(update.projectUpdate) : update.projectUpdate == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = changeIndicator != null ? changeIndicator.hashCode() : 0;
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (changeIndicator != null ? changeIndicator.hashCode() : 0);
         result = 31 * result + (attributeName != null ? attributeName.hashCode() : 0);
         result = 31 * result + (attributeValue != null ? attributeValue.hashCode() : 0);
         result = 31 * result + (modelType != null ? modelType.hashCode() : 0);
@@ -208,10 +234,11 @@ public class ProjectUpdate extends RealmObject {
         result = 31 * result + (modelTitle != null ? modelTitle.hashCode() : 0);
         result = 31 * result + (projectTitle != null ? projectTitle.hashCode() : 0);
         result = 31 * result + (summary != null ? summary.hashCode() : 0);
-        result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (companyId ^ (companyId >>> 32));
         result = 31 * result + (int) (contactId ^ (contactId >>> 32));
         result = 31 * result + (int) (projectId ^ (projectId >>> 32));
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
         result = 31 * result + (bidUpdate != null ? bidUpdate.hashCode() : 0);
         result = 31 * result + (contactUpdate != null ? contactUpdate.hashCode() : 0);
         result = 31 * result + (stageUpdate != null ? stageUpdate.hashCode() : 0);
@@ -222,7 +249,8 @@ public class ProjectUpdate extends RealmObject {
     @Override
     public String toString() {
         return "ProjectUpdate{" +
-                "changeIndicator='" + changeIndicator + '\'' +
+                "id=" + id +
+                ", changeIndicator='" + changeIndicator + '\'' +
                 ", attributeName='" + attributeName + '\'' +
                 ", attributeValue='" + attributeValue + '\'' +
                 ", modelType='" + modelType + '\'' +
@@ -230,10 +258,11 @@ public class ProjectUpdate extends RealmObject {
                 ", modelTitle='" + modelTitle + '\'' +
                 ", projectTitle='" + projectTitle + '\'' +
                 ", summary='" + summary + '\'' +
-                ", id=" + id +
                 ", companyId=" + companyId +
                 ", contactId=" + contactId +
                 ", projectId=" + projectId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 ", bidUpdate=" + bidUpdate +
                 ", contactUpdate=" + contactUpdate +
                 ", stageUpdate=" + stageUpdate +
