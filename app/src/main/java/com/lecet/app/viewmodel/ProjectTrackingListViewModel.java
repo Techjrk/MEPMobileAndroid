@@ -17,6 +17,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectListRecyclerViewAdapter;
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -30,6 +31,9 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * File: ProjectTrackingListViewModel
@@ -45,6 +49,8 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private final BidDomain bidDomain;
     private final ProjectDomain projectDomain;
     private final AppCompatActivity appCompatActivity;
+    private final TrackingListDomain trackingListDomain;
+
     private RecyclerView recyclerView;
     private ProjectListRecyclerViewAdapter projectListAdapter;
     private List<Project> adapterData;
@@ -55,7 +61,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private Switch showUpdatesToggle;
     private boolean showUpdates = true;
 
-
+    @Deprecated
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
 
         Log.d(TAG, "Constructor");
@@ -63,9 +69,24 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         this.appCompatActivity = appCompatActivity;
         this.bidDomain = bidDomain;
         this.projectDomain = projectDomain;
+        this.trackingListDomain = null;
 
         initShowUpdatesSwitch();
         initializeAdapter(listItemId);
+    }
+
+    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain, TrackingListDomain trackingListDomain) {
+
+        Log.d(TAG, "Constructor");
+
+        this.appCompatActivity = appCompatActivity;
+        this.bidDomain = bidDomain;
+        this.projectDomain = projectDomain;
+        this.trackingListDomain = trackingListDomain;
+
+        initializeEmptyAdapter();
+        initShowUpdatesSwitch();
+        getProjectTrackingListUpdates(listItemId);
     }
 
     private void initShowUpdatesSwitch() {
@@ -107,8 +128,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
 
         adapterData = new ArrayList<>();
 
-        final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance());
-        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
+       ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(listItemId);
 
         if(projectList != null) {
             RealmList<Project> projects = projectList.getProjects();
@@ -118,6 +138,16 @@ public class ProjectTrackingListViewModel extends BaseObservable {
             //projectListAdapter.notifyDataSetChanged();
         }
         else Log.w(TAG, "initializeAdapter: WARNING: projectList is null");
+
+        recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
+        setupRecyclerView(recyclerView);
+        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
+        recyclerView.setAdapter(projectListAdapter);
+    }
+
+    private void initializeEmptyAdapter() {
+
+        adapterData = new ArrayList<>();
 
         recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
         setupRecyclerView(recyclerView);
@@ -154,6 +184,65 @@ public class ProjectTrackingListViewModel extends BaseObservable {
         Toast.makeText(appCompatActivity, "Sort button pressed", Toast.LENGTH_SHORT).show();
     }
 
+
+    /** DATA **/
+
+    public void getProjectTrackingListUpdates(final long projectTrackingListId) {
+
+        trackingListDomain.getProjectTrackingListDetails(projectTrackingListId, new Callback<List<ProjectTrackingListDetailResponse>>() {
+            @Override
+            public void onResponse(Call<List<ProjectTrackingListDetailResponse>> call, Response<List<ProjectTrackingListDetailResponse>> response) {
+
+                if (response.isSuccessful()) {
+
+                    List<ProjectTrackingListDetailResponse> data = response.body();
+
+                    for (ProjectTrackingListDetailResponse detailResponse : data) {
+
+                        trackingListDomain.asyncMapUpdatesToProjects(detailResponse.getProjectUpdates(), new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+
+                                Log.d(TAG, "Realm Async Success");
+                                getProjectTrackingList(projectTrackingListId);
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                Log.d(TAG, "Realm Async Failure = "  + error.toString());
+                            }
+                        });
+                    }
+
+                } else {
+
+                    Log.d(TAG, "Response Failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectTrackingListDetailResponse>> call, Throwable t) {
+
+                Log.d(TAG, t.toString());
+            }
+        });
+    }
+
+    private void getProjectTrackingList(long trackingListId) {
+
+        adapterData.clear();
+
+        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(trackingListId);
+
+        if(projectList != null) {
+            RealmList<Project> projects = projectList.getProjects();
+            Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
+
+            adapterData.addAll(Arrays.asList(data));
+            projectListAdapter.notifyDataSetChanged();
+        }
+    }
 
     ///////////////////////////////
     // BINDINGS
