@@ -1,11 +1,15 @@
 package com.lecet.app.data.api.service;
 
+import com.lecet.app.data.api.request.MoveCompanyFromListRequest;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
+import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
+import com.lecet.app.data.models.ProjectUpdate;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
@@ -38,6 +42,35 @@ public interface TrackingListService {
     @GET("LecetUsers/{userId}/companyTrackingLists")
     Call<List<CompanyTrackingList>> getUserCompanyTrackingList(@Header("Authorization") String token, @Path("userId") long userId, @Query("filter") String filter);
 
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("projectlists/{project_tracking_list_id}/projects")
+    Call<List<ProjectTrackingListDetailResponse>> getProjectTrackingListDetail(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("projectlists/{project_tracking_list_id}/projects")
+    Call<List<ProjectUpdate>> getProjectTrackingListUpdates(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("companylists/{company_tracking_list_id}/companies")
+    Call<CompanyTrackingList> getCompanyTrackingListDetail(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Query("filter") String filter);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("companylists/{company_tracking_list_id}/updates")
+    Call<CompanyTrackingList> getCompanyTrackingListUpdates(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Query("filter") String filter);
+
     @Headers({
             "Accept: application/json",
             "Content-Type: application/x-www-form-urlencoded"
@@ -45,4 +78,12 @@ public interface TrackingListService {
     @FormUrlEncoded
     @PUT("projectlists/{project_tracking_list_id}")
     Call<ProjectTrackingList> moveProjectsForProjectTrackingList(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Body MoveProjectFromListRequest body);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @FormUrlEncoded
+    @PUT("companylists/{company_tracking_list_id}")
+    Call<CompanyTrackingList> moveCompaniesForCompanyTrackingList(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Body MoveCompanyFromListRequest body);
 }

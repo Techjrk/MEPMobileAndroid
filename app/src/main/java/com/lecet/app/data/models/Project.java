@@ -169,6 +169,8 @@ public class Project extends RealmObject {
 
     private boolean hidden;
 
+    private RealmList<ProjectUpdate> updates;
+
     public Project() {
     }
 
@@ -381,6 +383,10 @@ public class Project extends RealmObject {
         this.hidden = hidden;
     }
 
+    public RealmList<ProjectUpdate> getUpdates() {
+        return updates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -478,7 +484,9 @@ public class Project extends RealmObject {
             return false;
         if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
             return false;
-        return contacts != null ? contacts.equals(project.contacts) : project.contacts == null;
+        if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
+            return false;
+        return updates != null ? updates.equals(project.updates) : project.updates == null;
 
     }
 
@@ -539,6 +547,7 @@ public class Project extends RealmObject {
         result = 31 * result + (ownerClass != null ? ownerClass.hashCode() : 0);
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (updates != null ? updates.hashCode() : 0);
         return result;
     }
 
@@ -596,6 +605,7 @@ public class Project extends RealmObject {
                 ", ownerClass='" + ownerClass + '\'' +
                 ", contacts=" + contacts +
                 ", hidden=" + hidden +
+                ", updates=" + updates +
                 '}';
     }
 }
