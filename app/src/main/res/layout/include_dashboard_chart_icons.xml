@@ -12,24 +12,14 @@
             android:layout_height="wrap_content">
 
         <ImageView
-                android:id="@+id/dashboard_icon_housing"
-                style="@style/DashboardChartCenterIcon"
-                android:src="@drawable/ic_housing" />
-
-        <ImageView
-                android:id="@+id/dashboard_icon_engineering"
+                android:id="@+id/dashboard_icon_h"
                 style="@style/DashboardChartCenterIcon"
                 android:src="@drawable/ic_engineering" />
 
         <ImageView
-                android:id="@+id/dashboard_icon_building"
+                android:id="@+id/dashboard_icon_b"
                 style="@style/DashboardChartCenterIcon"
                 android:src="@drawable/ic_building" />
-
-        <ImageView
-                android:id="@+id/dashboard_icon_utilities"
-                style="@style/DashboardChartCenterIcon"
-                android:src="@drawable/ic_utilities" />
 
     </FrameLayout>
 

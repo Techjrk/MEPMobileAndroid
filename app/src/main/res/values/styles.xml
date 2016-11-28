@@ -282,6 +282,21 @@
         <item name="android:layout_marginLeft">16sp</item>
     </style>
 
+    <style name="DashboardChartButtonImage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/strip_vertical_spacing</item>
+    </style>
+
+    <style name="DashboardChartButtonText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 
     <!-- Change Password -->
     <style name="ChangePasswordTextViewSmall">
