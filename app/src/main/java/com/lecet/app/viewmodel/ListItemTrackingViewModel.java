@@ -17,11 +17,11 @@ import java.util.Date;
 import com.lecet.app.BR;
 
 /**
- * File: ListItemProjectTrackingViewModel Created: 10/17/16 Author: domandtom
+ * File: ListItemTrackingViewModel Created: 10/17/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItemProjectTrackingViewModel extends BaseObservable {
+public class ListItemTrackingViewModel extends BaseObservable {
 
     private static final String TAG = "ListItemProjTrackingVM";
 
@@ -50,7 +50,7 @@ public class ListItemProjectTrackingViewModel extends BaseObservable {
     private String expandableViewTitle = "";
     private String expandableViewMessage = "";
 
-    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
+    public ListItemTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
         this.showUpdates = showUpdates;

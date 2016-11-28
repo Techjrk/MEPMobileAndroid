@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:bind="http://schemas.android.com/apk/res-auto"
-        tools:context="com.lecet.app.content.ProjectTrackingListActivity">
+        tools:context="com.lecet.app.content.TrackingListActivity">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemProjectTrackingViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemTrackingViewModel"/>
         <import type="android.view.View"/>
     </data>
 

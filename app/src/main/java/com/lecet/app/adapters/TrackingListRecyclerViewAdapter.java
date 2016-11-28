@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemProjectTrackingBinding;
-import com.lecet.app.viewmodel.ListItemProjectTrackingViewModel;
+import com.lecet.app.viewmodel.ListItemTrackingViewModel;
 
 import java.util.List;
 
 /**
- * File: ProjectListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
+ * File: TrackingListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<ProjectListRecyclerViewAdapter.ProjectListViewHolder> {
+public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<TrackingListRecyclerViewAdapter.ProjectListViewHolder> {
 
     public static int ADAPTER_TYPE_PROJECTS = 1;
 
@@ -29,7 +29,7 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     /**
      * Default Constructor
      */
-    public ProjectListRecyclerViewAdapter(List<Project> data) {
+    public TrackingListRecyclerViewAdapter(List<Project> data) {
 
         this.data = data;
         this.adapterType = ADAPTER_TYPE_PROJECTS;
@@ -38,7 +38,7 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     /**
      * Alternate Constructor for use with adapter types other than the default
      */
-    public ProjectListRecyclerViewAdapter(List<Project> data, int adapterType) {
+    public TrackingListRecyclerViewAdapter(List<Project> data, int adapterType) {
 
         this.data = data;
         this.adapterType = adapterType;
@@ -56,7 +56,7 @@ public class ProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Project
     @Override
     public void onBindViewHolder(ProjectListViewHolder holder, int position) {
 
-        holder.getBinding().setViewModel(new ListItemProjectTrackingViewModel(data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", showUpdates));
+        holder.getBinding().setViewModel(new ListItemTrackingViewModel(data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", showUpdates));
     }
 
 

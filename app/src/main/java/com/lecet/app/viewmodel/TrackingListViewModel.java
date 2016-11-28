@@ -32,13 +32,13 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 /**
- * File: ProjectTrackingListViewModel
+ * File: TrackingListViewModel
  * Created: 11/2/16
  * Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ProjectTrackingListViewModel extends BaseObservable {
+public class TrackingListViewModel extends BaseObservable {
 
     private final static String TAG = "ProjectTrackingListVM";
 
@@ -56,7 +56,7 @@ public class ProjectTrackingListViewModel extends BaseObservable {
     private boolean showUpdates = true;
 
 
-    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
+    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
 
         Log.d(TAG, "Constructor");
 

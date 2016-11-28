@@ -24,11 +24,11 @@ import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
 import io.realm.Realm;
 
 /**
- * ProjectTrackingListActivity
+ * TrackingListActivity
  * Created by jasonm on 11/2/16.
  */
 
-public class ProjectTrackingListActivity extends NavigationBaseActivity {
+public class TrackingListActivity extends NavigationBaseActivity {
 
     private final String TAG = "ProjectTrackingListAct";
 
