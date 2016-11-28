@@ -45,7 +45,9 @@ public class ListItemTrackingViewModel extends BaseObservable {
     private final Project project;
     private final Company company;
     private final String mapsApiKey;
-    private String keywords;
+
+    private String detail1;
+    private String detail2;
     private final boolean showUpdates;
     private boolean showExpandableView;
     private boolean expandableViewExpanded;
@@ -54,6 +56,9 @@ public class ListItemTrackingViewModel extends BaseObservable {
     private String expandableViewTitle = "";
     private String expandableViewMessage = "";
 
+    /**
+     * Constructor for Project Tracking List
+     */
     public ListItemTrackingViewModel(String listType, Project project, String mapsApiKey, boolean showUpdates) {
         this.listType = listType;
         this.project = project;
@@ -62,9 +67,21 @@ public class ListItemTrackingViewModel extends BaseObservable {
         this.company = null;
 
         setExpandableMode();
-        keywords = generateProjectKeywords();
+
+        // detail TextView 1
+        StringBuilder sb = new StringBuilder();
+        if(project.getCity() != null) sb.append(project.getCity());
+        if(project.getCity() != null && project.getState() != null) sb.append(", ");
+        if(project.getState() != null) sb.append(project.getState());
+        setDetail1(sb.toString());
+
+        // detail TextView 2
+        setDetail2(generateProjectKeywords());
     }
 
+    /**
+     * Constructor for Company Tracking List
+     */
     public ListItemTrackingViewModel(String listType, Company company, String mapsApiKey, boolean showUpdates) {
         this.listType = listType;
         this.company = company;
@@ -73,7 +90,22 @@ public class ListItemTrackingViewModel extends BaseObservable {
         this.project = null;
 
         setExpandableMode();
-        keywords = generateCompanyKeywords();
+
+        // detail TextView 1
+        StringBuilder sb = new StringBuilder();
+        if(company.getAddress1() != null) sb.append(" " + company.getAddress1());
+        if(company.getAddress2() != null) sb.append(" " + company.getAddress2());
+        setDetail1(sb.toString());
+
+
+        // detail TextView 2
+        sb = new StringBuilder();
+        sb.append(" ");
+        if(company.getCity() != null) sb.append(company.getCity());
+        if(company.getCity() != null && company.getState() != null) sb.append(", ");
+        if(company.getState() != null) sb.append(company.getState());
+        if(company.getZip5() != null) sb.append(" " + company.getZip5());
+        setDetail2(sb.toString());
     }
 
     public String getItemName() {
@@ -81,10 +113,6 @@ public class ListItemTrackingViewModel extends BaseObservable {
         if(isProjectList()) return project.getTitle();
         else if(isCompanyList()) return company.getName();
         else return null;
-    }
-
-    public String getKeywords() {
-        return this.keywords;
     }
 
     /**
@@ -118,11 +146,6 @@ public class ListItemTrackingViewModel extends BaseObservable {
         String str = sb.toString();
         if(str.length() == 0) return null;
         return str;
-    }
-
-    //TODO - update with Company keyword String assembly
-    public String generateCompanyKeywords() {
-        return "TEMP KEYWORDS";
     }
 
     private void setExpandableMode() {
@@ -186,12 +209,12 @@ public class ListItemTrackingViewModel extends BaseObservable {
         return (isRecent);
     }
 
-    public String getLocation() {
+    /*public String getLocation() {
 
         if(isProjectList()) return project.getCity() + " , " + project.getState();
         else if(isCompanyList()) return company.getCity() + " , " + company.getState();
         return null;
-    }
+    }*/
 
     public String getMapUrl() {
 
@@ -280,6 +303,29 @@ public class ListItemTrackingViewModel extends BaseObservable {
 
     ///////////////////////////////
     // BINDINGS
+
+    @Bindable
+    public String getDetail1() {
+        return detail1;
+    }
+
+    public void setDetail1(String detail1) {
+        this.detail1 = detail1;
+    }
+
+    @Bindable
+    public String getDetail2() {
+        return detail2;
+    }
+
+    public void setDetail2(String detail2) {
+        this.detail2 = detail2;
+    }
+
+    @Bindable
+    public Boolean getShowDetail2Icon() {
+        return isProjectList();
+    }
 
     @Bindable
     public boolean getShowUpdates() {
