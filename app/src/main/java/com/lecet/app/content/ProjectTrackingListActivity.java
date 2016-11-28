@@ -22,6 +22,7 @@ import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
  * ProjectTrackingListActivity
@@ -59,7 +60,14 @@ public class ProjectTrackingListActivity extends NavigationBaseActivity {
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        viewModel = new ProjectTrackingListViewModel(this, listItemId, bidDomain, projectDomain);
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
+            @Override
+            public void onChange(Object element) {
+
+            }
+        }, projectDomain);
+
+        viewModel = new ProjectTrackingListViewModel(this, listItemId, bidDomain, projectDomain, trackingListDomain);
         binding.setViewModel(viewModel);
     }
 
