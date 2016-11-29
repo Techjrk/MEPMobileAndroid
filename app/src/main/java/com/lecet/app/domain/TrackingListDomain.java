@@ -17,6 +17,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import okhttp3.ResponseBody;
@@ -189,6 +190,11 @@ public class TrackingListDomain {
         return realm.where(CompanyTrackingList.class).equalTo("id", id).findFirst();
     }
 
+    public void fetchProjectTrackingListAsync(long id, RealmChangeListener<RealmModel> listener) {
+
+        ProjectTrackingList result = realm.where(ProjectTrackingList.class).equalTo("id", id).findFirstAsync();
+        result.addChangeListener(listener);
+    }
 
     // Delete
 
@@ -255,6 +261,11 @@ public class TrackingListDomain {
                         }
 
                         projectUpdates.add(update);
+
+                        // Let's get the latest project update and assign it as most recent update for
+                        // project
+                        ProjectUpdate recentUpdate = projectUpdates.sort("updatedAt", Sort.DESCENDING).first();
+                        project.setRecentUpdate(recentUpdate);
                     }
                 }
             }

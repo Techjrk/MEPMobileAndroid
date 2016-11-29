@@ -171,6 +171,8 @@ public class Project extends RealmObject {
 
     private RealmList<ProjectUpdate> updates;
 
+    private ProjectUpdate recentUpdate;
+
     public Project() {
     }
 
@@ -387,6 +389,14 @@ public class Project extends RealmObject {
         return updates;
     }
 
+    public ProjectUpdate getRecentUpdate() {
+        return recentUpdate;
+    }
+
+    public void setRecentUpdate(ProjectUpdate recentUpdate) {
+        this.recentUpdate = recentUpdate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -486,7 +496,9 @@ public class Project extends RealmObject {
             return false;
         if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
             return false;
-        return updates != null ? updates.equals(project.updates) : project.updates == null;
+        if (updates != null ? !updates.equals(project.updates) : project.updates != null)
+            return false;
+        return recentUpdate != null ? recentUpdate.equals(project.recentUpdate) : project.recentUpdate == null;
 
     }
 
@@ -548,6 +560,7 @@ public class Project extends RealmObject {
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (updates != null ? updates.hashCode() : 0);
+        result = 31 * result + (recentUpdate != null ? recentUpdate.hashCode() : 0);
         return result;
     }
 
@@ -606,6 +619,7 @@ public class Project extends RealmObject {
                 ", contacts=" + contacts +
                 ", hidden=" + hidden +
                 ", updates=" + updates +
+                ", recentUpdate=" + recentUpdate +
                 '}';
     }
 }

@@ -18,6 +18,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.TrackingListRecyclerViewAdapter;
 import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
@@ -34,6 +35,9 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * File: TrackingListViewModel
@@ -48,8 +52,9 @@ public class TrackingListViewModel extends BaseObservable {
 
     private final BidDomain bidDomain;
     private final ProjectDomain projectDomain;
-    private final TrackingListDomain trackingListDomain;
     private final AppCompatActivity appCompatActivity;
+    private final TrackingListDomain trackingListDomain;
+
     private RecyclerView recyclerView;
     private TrackingListRecyclerViewAdapter listAdapter;
     private List<RealmObject> adapterData;
@@ -60,10 +65,7 @@ public class TrackingListViewModel extends BaseObservable {
     private Switch showUpdatesToggle;
     private boolean showUpdates = true;
 
-
-    /**
-     * Constructor for Project List
-     */
+    @Deprecated
     public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
 
         Log.d(TAG, "Constructor for Project List");
@@ -75,6 +77,20 @@ public class TrackingListViewModel extends BaseObservable {
 
         initShowUpdatesSwitch();
         initAdapterWithProjectTrackingListId(listItemId);
+    }
+
+    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain, TrackingListDomain trackingListDomain) {
+
+        Log.d(TAG, "Constructor");
+
+        this.appCompatActivity = appCompatActivity;
+        this.bidDomain = bidDomain;
+        this.projectDomain = projectDomain;
+        this.trackingListDomain = trackingListDomain;
+
+        initializeEmptyAdapter();
+        initShowUpdatesSwitch();
+        getProjectTrackingListUpdates(listItemId);
     }
 
     /**
@@ -152,6 +168,16 @@ public class TrackingListViewModel extends BaseObservable {
         recyclerView.setAdapter(listAdapter);
     }
 
+    private void initializeEmptyAdapter() {
+
+        adapterData = new ArrayList<>();
+
+        recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
+        setupRecyclerView(recyclerView);
+        listAdapter = new TrackingListRecyclerViewAdapter(adapterData);
+        recyclerView.setAdapter(listAdapter);
+    }
+
     /**
      * Adapter Data Management: Company List
      **/
@@ -208,6 +234,65 @@ public class TrackingListViewModel extends BaseObservable {
         Toast.makeText(appCompatActivity, "Sort button pressed", Toast.LENGTH_SHORT).show();
     }
 
+
+    /** DATA **/
+
+    public void getProjectTrackingListUpdates(final long projectTrackingListId) {
+
+        trackingListDomain.getProjectTrackingListDetails(projectTrackingListId, new Callback<List<ProjectTrackingListDetailResponse>>() {
+            @Override
+            public void onResponse(Call<List<ProjectTrackingListDetailResponse>> call, Response<List<ProjectTrackingListDetailResponse>> response) {
+
+                if (response.isSuccessful()) {
+
+                    List<ProjectTrackingListDetailResponse> data = response.body();
+
+                    for (ProjectTrackingListDetailResponse detailResponse : data) {
+
+                        trackingListDomain.asyncMapUpdatesToProjects(detailResponse.getProjectUpdates(), new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+
+                                Log.d(TAG, "Realm Async Success");
+                                getProjectTrackingList(projectTrackingListId);
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                Log.d(TAG, "Realm Async Failure = "  + error.toString());
+                            }
+                        });
+                    }
+
+                } else {
+
+                    Log.d(TAG, "Response Failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectTrackingListDetailResponse>> call, Throwable t) {
+
+                Log.d(TAG, t.toString());
+            }
+        });
+    }
+
+    private void getProjectTrackingList(long trackingListId) {
+
+        adapterData.clear();
+
+        ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(trackingListId);
+
+        if(projectList != null) {
+            RealmList<Project> projects = projectList.getProjects();
+            Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
+
+            adapterData.addAll(Arrays.asList(data));
+            listAdapter.notifyDataSetChanged();
+        }
+    }
 
     ///////////////////////////////
     // BINDINGS

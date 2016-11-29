@@ -13,13 +13,10 @@ import android.view.View;
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
-import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
-import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
@@ -34,8 +31,6 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -372,48 +367,6 @@ public class MainViewModel {
         });
     }
 
-    public void getProjectTrackingListUpdates(long projectTrackingListId) {
-
-        projectTrackingListDomain.getProjectTrackingListDetails(projectTrackingListId, new Callback<List<ProjectTrackingListDetailResponse>>() {
-            @Override
-            public void onResponse(Call<List<ProjectTrackingListDetailResponse>> call, Response<List<ProjectTrackingListDetailResponse>> response) {
-
-                if (response.isSuccessful()) {
-
-                    List<ProjectTrackingListDetailResponse> data = response.body();
-
-                    for (ProjectTrackingListDetailResponse detailResponse : data) {
-
-                        projectTrackingListDomain.asyncMapUpdatesToProjects(detailResponse.getProjectUpdates(), new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-
-                                Log.d(TAG, "Realm Async Success");
-                            }
-                        }, new Realm.Transaction.OnError() {
-                            @Override
-                            public void onError(Throwable error) {
-
-                                Log.d(TAG, "Realm Async Failure = "  + error.toString());
-                            }
-                        });
-                    }
-
-                } else {
-
-                    Log.d(TAG, "Response Failed: " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ProjectTrackingListDetailResponse>> call, Throwable t) {
-
-                Log.d(TAG, t.toString());
-            }
-        });
-    }
-
-
     /**
      * Persisted
      **/
@@ -447,7 +400,6 @@ public class MainViewModel {
         realmResultsMRU = projectDomain.fetchProjectsRecentlyUpdated(lastPublishDate, bidGroup);
         displayAdapter(dashboardPosition);
     }
-
 
 
     /**
