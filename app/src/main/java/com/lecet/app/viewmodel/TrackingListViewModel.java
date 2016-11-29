@@ -52,7 +52,6 @@ public class TrackingListViewModel extends BaseObservable {
 
     private final BidDomain bidDomain;
     private final ProjectDomain projectDomain;
-    private final TrackingListDomain trackingListDomain;
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
 
@@ -67,7 +66,7 @@ public class TrackingListViewModel extends BaseObservable {
     private boolean showUpdates = true;
 
     @Deprecated
-    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
+    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain) {
 
         Log.d(TAG, "Constructor for Project List");
 
@@ -80,7 +79,7 @@ public class TrackingListViewModel extends BaseObservable {
         initAdapterWithProjectTrackingListId(listItemId);
     }
 
-    public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain, TrackingListDomain trackingListDomain) {
+    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, BidDomain bidDomain, ProjectDomain projectDomain, TrackingListDomain trackingListDomain) {
 
         Log.d(TAG, "Constructor");
 
@@ -173,10 +172,10 @@ public class TrackingListViewModel extends BaseObservable {
 
         adapterData = new ArrayList<>();
 
-        recyclerView = getProjectRecyclerView(R.id.project_tracking_recycler_view);
+        recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
         setupRecyclerView(recyclerView);
-        projectListAdapter = new ProjectListRecyclerViewAdapter(adapterData);
-        recyclerView.setAdapter(projectListAdapter);
+        listAdapter = new TrackingListRecyclerViewAdapter(adapterData);
+        recyclerView.setAdapter(listAdapter);
     }
 
     /**
@@ -291,7 +290,7 @@ public class TrackingListViewModel extends BaseObservable {
             Project[] data = projects != null ? projects.toArray(new Project[projects.size()]) : new Project[0];
 
             adapterData.addAll(Arrays.asList(data));
-            projectListAdapter.notifyDataSetChanged();
+            listAdapter.notifyDataSetChanged();
         }
     }
 
