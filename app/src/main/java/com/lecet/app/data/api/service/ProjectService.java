@@ -3,6 +3,7 @@ package com.lecet.app.data.api.service;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 
+
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -11,6 +12,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -34,4 +36,7 @@ public interface ProjectService {
     })
     @GET("Projects/near")
     Call<ProjectsNearResponse> projectsNear(@Header("Authorization") String authorization, @Query("lat") double lat, @Query("lng") double lng, @Query("dist") int dist, @Query("filter") String filter);
+
+
+
 }

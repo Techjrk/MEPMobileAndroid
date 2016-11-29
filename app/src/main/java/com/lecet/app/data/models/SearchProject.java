@@ -12,9 +12,34 @@ import io.realm.RealmObject;
 public class SearchProject extends RealmObject {
     @SerializedName("total")
     private int total;
+    @SerializedName("returned")
     private int returned;
+    @SerializedName("page")
     private int page;
+    @SerializedName("pages")
     private int pages;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public int getReturned() {
+        return returned;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public RealmList<Project> getResults() {
+        return results;
+    }
+
+    @SerializedName("results")
     private RealmList<Project> results;
 
 }

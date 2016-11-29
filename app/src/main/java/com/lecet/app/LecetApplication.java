@@ -24,7 +24,12 @@ Realm realm;
   //Testing - Deleting existing database - Migration needed for new RealmObject created - Noel
 
 
-  /*    RealmConfiguration config = new RealmConfiguration
+
+
+/*
+
+
+      RealmConfiguration config = new RealmConfiguration
                 .Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -32,6 +37,11 @@ Realm realm;
         realm = Realm.getInstance(config);
 
 */
+
+
+
+
+
 
 
 

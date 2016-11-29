@@ -55,7 +55,26 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Projects/search")
+    Call<SearchProject> getSearchProjectInit(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+
+    //***Project SearchDetail
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("Projects/{pId}?")
+    Call<Project> getProjectDetail(@Header("Authorization") String token, @Path("pId") long pId);
+
+    //***Project Search
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("Projects/search")
     Call<List<Project>> getSearchProject(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+
+
+
 
     //***Company Search
     @Headers({
@@ -64,5 +83,7 @@ public interface SearchService {
     })
     @GET("Companies/search")
     Call<List<Company>> getSearchCompany(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+
+
 
 }
