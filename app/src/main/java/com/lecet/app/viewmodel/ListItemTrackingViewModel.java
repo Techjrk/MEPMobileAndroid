@@ -15,6 +15,7 @@ import com.lecet.app.data.models.ProjectGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.lecet.app.BR;
 
@@ -218,47 +219,32 @@ public class ListItemTrackingViewModel extends BaseObservable {
 
     public String getMapUrl() {
 
-        String mapStr;
+        String mapStr = null;
         if(isProjectList())
         {
             if (project.getGeocode() == null) return null;
-            mapStr = String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=200x200&" +
+            mapStr = String.format(Locale.getDefault(), "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=200x200&" +
                             "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
                             project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
-            return mapStr;
         }
         else if(isCompanyList()) {
-            //mapStr = "https://maps.googleapis.com/maps/api/staticmap?center=55+broadway,+new+york,+ny&zoom=16&size=400x400&markers=color:blue|city+hall,+new+york,+ny&key=AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";
-            /*mapStr = String.format("https://maps.googleapis.com/maps/api/staticmap?center=",
-                    company.getAddress1() + "," +
-                    company.getAddress2() + "," +
-                    company.getCity() + "," +
-                    company.getState() +
-                    "&zoom=16&size=400x400" +
-                    "&markers=color:blue|" +
-                    "&key=" + mapsApiKey);
-            Log.d(TAG, "getMapUrl: mapStr: " + mapStr);
-            */
-
-            //
-            StringBuilder sb2 = new StringBuilder();
-            sb2.append("https://maps.googleapis.com/maps/api/staticmap");
-            sb2.append("?center=");
-            sb2.append(company.getAddress1() + ",");
-            sb2.append(company.getAddress2() + ",");
-            sb2.append(company.getCity() + ",");
-            sb2.append(company.getState());
-            sb2.append("&zoom=16");
-            sb2.append("&size=200x200");
-            sb2.append("&markers=color:blue|");
-            sb2.append("&key=" + mapsApiKey);
-            mapStr = String.format((sb2.toString().replace(' ', '+')), null);
-            Log.d(TAG, "getMapUrl: mapStr: " + mapStr);
-
-            return mapStr;
+            StringBuilder sb = new StringBuilder();
+            sb.append("https://maps.googleapis.com/maps/api/staticmap");
+            sb.append("?zoom=16");
+            sb.append("&size=200x200");
+            sb.append("&markers=color:blue|");
+            if(company.getAddress1() != null) sb.append(company.getAddress1() + ",");
+            if(company.getAddress2() != null) sb.append(company.getAddress2() + ",");
+            if(company.getCity() != null)     sb.append(company.getCity() + ",");
+            if(company.getState() != null)    sb.append(company.getState());
+            sb.append("&key=" + mapsApiKey);
+            //mapStr = String.format((sb.toString().replace(" ", "+")), null);
+            mapStr = sb.toString().replace(" ", "+");
         }
 
-        return null;
+        Log.d(TAG, "getMapUrl: mapStr: " + mapStr);
+
+        return mapStr;
     }
 
     private boolean hasNote() {
