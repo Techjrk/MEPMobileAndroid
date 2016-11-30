@@ -10,6 +10,8 @@ import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemTrackingBinding;
+import com.lecet.app.viewmodel.ListItemCompanyTrackingViewModel;
+import com.lecet.app.viewmodel.ListItemProjectTrackingViewModel;
 import com.lecet.app.viewmodel.ListItemTrackingViewModel;
 
 import java.util.List;
@@ -62,12 +64,12 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
 
         // Project List
         if(this.listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_PROJECT)) {
-            holder.getBinding().setViewModel(new ListItemTrackingViewModel(this.listType, (Project) data.get(position), mapsApiKey, showUpdates));
+            holder.getBinding().setViewModel(new ListItemProjectTrackingViewModel((Project) data.get(position), mapsApiKey, showUpdates));
         }
 
         // Company List
         else if(this.listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_COMPANY)) {
-            holder.getBinding().setViewModel(new ListItemTrackingViewModel(this.listType, (Company) data.get(position), mapsApiKey, showUpdates));
+            holder.getBinding().setViewModel(new ListItemCompanyTrackingViewModel((Company) data.get(position), mapsApiKey, showUpdates));
         }
     }
 
@@ -115,24 +117,5 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
             return binding;
         }
     }
-
-/*
-    public class TrackingListViewHolder extends RecyclerView.ViewHolder {
-
-        private ListItemTrackingBinding binding;
-
-        public TrackingListViewHolder(ListItemTrackingBinding binding) {
-
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        public ListItemTrackingBinding getBinding() {
-            return binding;
-        }
-    }
-
-*/
 
 }
