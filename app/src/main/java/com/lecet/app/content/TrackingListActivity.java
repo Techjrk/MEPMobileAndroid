@@ -14,17 +14,16 @@ import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityTrackingListBinding;
-import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
 import com.lecet.app.viewmodel.TrackingListViewModel;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 
 /**
- * TrackingListActivity
- * Created by jasonm on 11/2/16.
+ * TrackingListActivity Created by jasonm on 11/2/16.
  */
 
 public class TrackingListActivity extends NavigationBaseActivity {
@@ -52,9 +51,9 @@ public class TrackingListActivity extends NavigationBaseActivity {
         Log.d(TAG, "onCreate");
 
         // get extras from Intent
-        listType             = getIntent().getStringExtra(TRACKING_LIST_TYPE);
-        long listItemId      = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
-        int listItemSize     = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
+        listType = getIntent().getStringExtra(TRACKING_LIST_TYPE);
+        long listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
+        int listItemSize = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
         String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
 
         setupBinding(listItemId);
@@ -65,8 +64,7 @@ public class TrackingListActivity extends NavigationBaseActivity {
         ActivityTrackingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_tracking_list);
 
         // Project List
-        if(listType.equals(TRACKING_LIST_TYPE_PROJECT)) {
-            BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        if (listType.equals(TRACKING_LIST_TYPE_PROJECT)) {
             ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
             TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
                 @Override
@@ -75,14 +73,14 @@ public class TrackingListActivity extends NavigationBaseActivity {
                 }
             }, projectDomain);
 
-            viewModel = new TrackingListViewModel(this, listItemId, bidDomain, projectDomain, trackingListDomain);
+            viewModel = new ProjectTrackingListViewModel(this, listItemId, projectDomain, trackingListDomain);
         }
 
         // Company List
-        else if(listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
-            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-            viewModel = new TrackingListViewModel(this, listItemId, trackingListDomain);
-        }
+//        else if(listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
+//            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+//            viewModel = new TrackingListViewModel(this, listItemId, trackingListDomain);
+//        }
 
         binding.setViewModel(viewModel);
     }
@@ -104,17 +102,14 @@ public class TrackingListActivity extends NavigationBaseActivity {
             StringBuilder subtitleSb = new StringBuilder();
             subtitleSb.append(listItemSize);
             subtitleSb.append(" ");
-            if(listType.equals(TRACKING_LIST_TYPE_PROJECT)) {
-                if(listItemSize != 1) {
+            if (listType.equals(TRACKING_LIST_TYPE_PROJECT)) {
+                if (listItemSize != 1) {
                     subtitleSb.append(getResources().getString(R.string.projects));
-                }
-                else subtitleSb.append(getResources().getString(R.string.project));
-            }
-            else if(listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
-                if(listItemSize != 1) {
+                } else subtitleSb.append(getResources().getString(R.string.project));
+            } else if (listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
+                if (listItemSize != 1) {
                     subtitleSb.append(getResources().getString(R.string.companies));
-                }
-                else subtitleSb.append(getResources().getString(R.string.company));
+                } else subtitleSb.append(getResources().getString(R.string.company));
             }
 
             viewModel.setToolbar(tb, title, subtitleSb.toString());

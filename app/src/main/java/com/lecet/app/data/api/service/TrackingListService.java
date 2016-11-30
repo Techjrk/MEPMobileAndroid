@@ -4,6 +4,7 @@ import com.lecet.app.data.api.request.MoveCompanyFromListRequest;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
 import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
 import com.lecet.app.data.models.CompanyTrackingList;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.ProjectUpdate;
 
@@ -48,7 +49,7 @@ public interface TrackingListService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("projectlists/{project_tracking_list_id}/projects")
-    Call<List<ProjectTrackingListDetailResponse>> getProjectTrackingListDetail(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
+    Call<List<Project>> getProjectTrackingListDetail(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
 
     @Headers({
             "Accept: application/json",

@@ -91,13 +91,13 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
-    public void getProjectTrackingListDetails(long projectTrackingListID, Callback<List<ProjectTrackingListDetailResponse>> callback) {
+    public void getProjectTrackingListDetails(long projectTrackingListID, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
         String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
 
-        Call<List<ProjectTrackingListDetailResponse>> call = lecetClient.getTrackingListService().getProjectTrackingListDetail(token, projectTrackingListID, filter);
+        Call<List<Project>> call = lecetClient.getTrackingListService().getProjectTrackingListDetail(token, projectTrackingListID, filter);
         call.enqueue(callback);
     }
 
