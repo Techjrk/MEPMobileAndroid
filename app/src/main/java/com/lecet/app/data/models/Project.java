@@ -169,6 +169,7 @@ public class Project extends RealmObject {
 
     private boolean hidden;
 
+    @SerializedName("updates")
     private RealmList<ProjectUpdate> updates;
 
     private ProjectUpdate recentUpdate;
