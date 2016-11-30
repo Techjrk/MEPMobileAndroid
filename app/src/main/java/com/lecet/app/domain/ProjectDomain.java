@@ -4,6 +4,7 @@ import android.support.annotation.IntDef;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
@@ -18,6 +19,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -270,6 +273,13 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+    public PrimaryProjectType fetchProjectTypeAsync(long primaryProjectTypeId, RealmChangeListener<RealmModel> listener) {
+
+        PrimaryProjectType type = realm.where(PrimaryProjectType.class).equalTo("id", primaryProjectTypeId).findFirstAsync();
+        type.addChangeListener(listener);
+
+        return type;
+    }
 
     public Project copyToRealmTransaction(Project project) {
 
