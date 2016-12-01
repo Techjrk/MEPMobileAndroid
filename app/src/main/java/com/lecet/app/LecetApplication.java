@@ -26,8 +26,9 @@ Realm realm;
 
 
 
-/*
 
+
+/*
 
       RealmConfiguration config = new RealmConfiguration
                 .Builder()
@@ -35,8 +36,9 @@ Realm realm;
                 .build();
 
         realm = Realm.getInstance(config);
-
 */
+
+
 
 
 

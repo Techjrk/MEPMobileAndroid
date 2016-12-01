@@ -5,13 +5,18 @@ import android.content.res.AssetManager;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Debug;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
+import com.lecet.app.adapters.Search1RecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Geocode;
@@ -28,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmList;
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -334,4 +340,27 @@ public void errorDisplayMsg(Throwable t) {
     Log.e("onFailure","onFailure: "+t.getMessage());
     builder.show();
 }
+//*** setting up the recylerview
+private Search1RecyclerViewAdapter dashboardAdapter;
+private List<RealmObject> adapterData;
+
+    private void initializeAdapter() {
+
+        adapterData = new ArrayList<>();
+
+        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
+        setupRecyclerView(recyclerView);
+        dashboardAdapter = new Search1RecyclerViewAdapter(adapterData);
+        recyclerView.setAdapter(dashboardAdapter);
+    }
+    private void setupRecyclerView(RecyclerView recyclerView) {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private RecyclerView getProjectRecyclerView(@IdRes int recyclerView) {
+
+        return (RecyclerView) activity.findViewById(recyclerView);
+    }
 }

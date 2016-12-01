@@ -32,6 +32,14 @@ public class SearchList extends RealmObject {
     @SerializedName("createdAt")
     private String createdAt;
 
+    @SerializedName("updatedAt")
+    private  String updatedAt;
+
+    @SerializedName("project")  //forgot to include this...
+    private Project project;
+
+
+
     public boolean isAction() {
         return action;
     }
@@ -60,8 +68,7 @@ public class SearchList extends RealmObject {
         return createdAt;
     }
 
-    @SerializedName("updatedAt")
-    private  String updatedAt;
+
 
 //    @SerializedName("robjects")
 //    private String [] robjects;
@@ -76,6 +83,9 @@ public class SearchList extends RealmObject {
         return updatedAt;
     }
 
+    public Project getProject() {
+        return project;
+    }
 
     public String getCode() {
         return code;

@@ -31,7 +31,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-//        getFilterFromAsset();
+
         setContentView(R.layout.activity_search);
 //        setContentView(R.layout.activity_search_1); //real UI coming from Sketch
   tvsearch = (TextView)findViewById(R.id.tvsearch);
