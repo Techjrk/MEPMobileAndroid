@@ -7,37 +7,43 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by getdevsinc on 11/21/16.
+ * Created by domandtom on 11/21/16.
  */
 
-public class SearchList extends RealmObject {
+public class SearchResult {
 
     @SerializedName("code")
     private String code;
+
     @SerializedName("action")
     private boolean action;
 
    @SerializedName("id")
     private int id;
+
     @SerializedName("userId")
     private int userId;
+
     @SerializedName("projectId")
     private int projectId;
+
     @SerializedName("companyId")
     private int companyId;
+
     @SerializedName("projectTrackingListId")
     private int projectTrackingListId;
+
     @SerializedName("companyTrackingListId")
     private int companyTrackingListId;
+
     @SerializedName("createdAt")
     private String createdAt;
 
     @SerializedName("updatedAt")
     private  String updatedAt;
 
-    @SerializedName("project")  //forgot to include this...
+    @SerializedName("project")
     private Project project;
-
 
 
     public boolean isAction() {
@@ -68,13 +74,6 @@ public class SearchList extends RealmObject {
         return createdAt;
     }
 
-
-
-//    @SerializedName("robjects")
-//    private String [] robjects;
-//    private RealmList<SearchObject> robjects;
-//    private SearchObject robjects;
-
     public int getId() {
         return id;
     }
@@ -90,17 +89,5 @@ public class SearchList extends RealmObject {
     public String getCode() {
         return code;
     }
-
-/*
-    public SearchObject getRobjects() {
-        return robjects;
-    }
-
-    @Override
-
-    public String toString() {
-        return ".. SearchList Result.. {" +robjects+ '}';
-    }
-*/
 
 }

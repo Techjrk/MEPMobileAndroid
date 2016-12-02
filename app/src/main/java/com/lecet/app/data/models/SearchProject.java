@@ -9,15 +9,21 @@ import io.realm.RealmObject;
  * Created by getdevsinc on 11/28/16.
  */
 
-public class SearchProject extends RealmObject {
+public class SearchProject {
     @SerializedName("total")
     private int total;
+
     @SerializedName("returned")
     private int returned;
+
     @SerializedName("page")
     private int page;
+
     @SerializedName("pages")
     private int pages;
+
+    @SerializedName("results")
+    private RealmList<Project> results;
 
     public int getTotal() {
         return total;
@@ -39,7 +45,5 @@ public class SearchProject extends RealmObject {
         return results;
     }
 
-    @SerializedName("results")
-    private RealmList<Project> results;
 
 }
