@@ -50,6 +50,8 @@ public class ListItemTrackingViewModel extends BaseObservable {
     private String detail1;
     private String detail2;
     private final boolean showUpdates;
+    private boolean showUnionStatusView;
+    private int unionStatusIconViewId;
     private boolean showExpandableView;
     private boolean expandableViewExpanded;
 
@@ -67,6 +69,7 @@ public class ListItemTrackingViewModel extends BaseObservable {
         this.showUpdates = showUpdates;
         this.company = null;
 
+        setShowUnionStatusMode();
         setExpandableMode();
 
         // detail TextView 1
@@ -147,6 +150,21 @@ public class ListItemTrackingViewModel extends BaseObservable {
         String str = sb.toString();
         if(str.length() == 0) return null;
         return str;
+    }
+
+    //TODO - determine behavior. seems like Union icon only shows up in a Project List in MCD, not MPL
+    private void setShowUnionStatusMode() {
+        if(isProjectList()) {
+            setShowUnionStatusView(true);
+            if (project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0) {
+                setUnionStatusIconViewId(R.drawable.ic_union);
+            }
+            else setUnionStatusIconViewId(R.drawable.ic_nonunion);
+
+        }
+        else if(isCompanyList()) {
+            setShowUnionStatusView(false);
+        }
     }
 
     private void setExpandableMode() {
@@ -316,6 +334,24 @@ public class ListItemTrackingViewModel extends BaseObservable {
     @Bindable
     public boolean getShowUpdates() {
         return showUpdates;
+    }
+
+    @Bindable
+    public boolean getShowUnionStatusView() {
+        return showUnionStatusView;
+    }
+
+    public void setShowUnionStatusView(boolean showUnionStatusView) {
+        this.showUnionStatusView = showUnionStatusView;
+    }
+
+    @Bindable
+    public int getUnionStatusIconViewId() {
+        return unionStatusIconViewId;
+    }
+
+    public void setUnionStatusIconViewId(int unionStatusIconViewId) {
+        this.unionStatusIconViewId = unionStatusIconViewId;
     }
 
     @Bindable
