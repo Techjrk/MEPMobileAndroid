@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchItemSavedSearchViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/textlinearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="@{viewModel.title}"
+
+                android:textSize="14sp"
+                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+            <TextView
+                android:id="@+id/last_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="Last checked yesterday"
+                android:textSize="10sp"
+                bind:typeface="@{`Lato-Regular.ttf`}" />
+
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
+        </LinearLayout>
+        <ImageButton
+            android:layout_height="20dp"
+            android:layout_width="10dp"
+            android:layout_margin="8dp"
+
+            android:layout_alignParentRight="true"
+            android:id="@+id/dashboard_page_right_button"
+            android:background="@mipmap/ic_arrow_right_dark"
+
+            />
+    </RelativeLayout>
+</layout>
+

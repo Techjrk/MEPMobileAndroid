@@ -6,91 +6,70 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.databinding.ListItemDashboardProjectBinding;
-import com.lecet.app.databinding.ListItemRecentViewBinding;
-import com.lecet.app.viewmodel.DashboardProjectItemViewModel;
-import com.lecet.app.viewmodel.MainViewModel;
-import com.lecet.app.viewmodel.RecentBidItemViewModel;
+import com.lecet.app.data.models.SearchResult;
+import com.lecet.app.data.models.SearchSaved;
+import com.lecet.app.databinding.ListItemSearchProjectSavedViewBinding;
+import com.lecet.app.databinding.ListItemSearchRecentViewBinding;
+
 import com.lecet.app.viewmodel.SearchItem1ViewModel;
+import com.lecet.app.viewmodel.SearchItemSavedSearchViewModel;
 
+import java.util.Collections;
 import java.util.List;
-
-import io.realm.RealmObject;
 
 /**
  * File: Search1RecyclerViewAdapter Created: 10/21/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
 public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    int adapterType;
 
-    @MainViewModel.DashboardPosition
-    private int adapterType;
+    private List data = Collections.emptyList();
 
-    private List<RealmObject> data;
-
-    public Search1RecyclerViewAdapter(List<RealmObject> data) {
+    public Search1RecyclerViewAdapter(List data) {
 
         this.data = data;
     }
-    public Search1RecyclerViewAdapter(List<RealmObject> data, @MainViewModel.DashboardPosition int adapterType) {
-
+    public void setData(List data){
         this.data = data;
-        this.adapterType = adapterType;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         RecyclerView.ViewHolder viewHolder = null;
 
-      /*  switch (viewType) {
-
-            case MainViewModel.DASHBOARD_POSITION_MBR:
-                com.lecet.app.databinding.ListItemRecentBidBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_recent_bid, parent, false);
-                viewHolder = new MBRViewHolder(binding);
+        switch (viewType) {
+            case 0: // 0 for recentview
+                ListItemSearchRecentViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_recent_view, parent, false);
+                viewHolder = new RecentViewHolder(binding);  //see this class below...
+                break;
+            case 1:
+                ListItemSearchProjectSavedViewBinding binding1 = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
+                viewHolder = new ProjectSavedViewHolder(binding1);  //see this class below...
                 break;
 
-            case MainViewModel.DASHBOARD_POSITION_MHS:
-                com.lecet.app.databinding.ListItemBidHappSoonBinding bindingMHS = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_bid_happ_soon, parent, false);
-                viewHolder = new MHSViewHolder(bindingMHS);
+           case 2:
+                ListItemSearchProjectSavedViewBinding binding2 = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
+                viewHolder = new ProjectSavedViewHolder(binding2);  //see this class below...
                 break;
-
-            case MainViewModel.DASHBOARD_POSITION_MRA:
-            case MainViewModel.DASHBOARD_POSITION_MRU:
-                ListItemDashboardProjectBinding bindingMRU = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_dashboard_project, parent, false);
-                viewHolder = new MRAViewHolder(bindingMRU);
-                break;
-        }*/
-
-         ListItemRecentViewBinding binding =  DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.list_item_recent_view,parent,false);
-         viewHolder = new RecentViewHolder(binding);
+        }
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RecentViewHolder viewHolder = (RecentViewHolder) holder;
-        viewHolder.getBinding().setViewModel(new SearchItem1ViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
- /*
-        if (holder instanceof MBRViewHolder) {
+        if (holder instanceof RecentViewHolder) {
+            RecentViewHolder viewHolder = (RecentViewHolder) holder;
+            viewHolder.getBinding().setViewModel(new SearchItem1ViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+        }
 
-            MBRViewHolder viewHolder = (MBRViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel((Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
-
-        } else if (holder instanceof MHSViewHolder) {
-
-            MHSViewHolder viewHolder = (MHSViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
-
-        } else if (holder instanceof MRAViewHolder) {
-
-            MRAViewHolder viewHolder = (MRAViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
-        }*/
+        if (holder instanceof ProjectSavedViewHolder) {
+            ProjectSavedViewHolder viewHolder = (ProjectSavedViewHolder) holder;
+            viewHolder.getBinding().setViewModel(new SearchItemSavedSearchViewModel((SearchSaved) data.get(position)));
+        }
     }
 
     @Override
@@ -101,11 +80,13 @@ public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return data.size();
     }
 
+
     @Override
     public int getItemViewType(int position) {
 
         return adapterType;
     }
+
 
     public void setAdapterType(int adapterType) {
         this.adapterType = adapterType;
@@ -114,68 +95,34 @@ public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     /**
      * View Holders
      **/
-  /*
-    class MBRViewHolder extends RecyclerView.ViewHolder {
 
-        private com.lecet.app.databinding.ListItemRecentBidBinding binding;
-
-        public MBRViewHolder(com.lecet.app.databinding.ListItemRecentBidBinding binding) {
-
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        public com.lecet.app.databinding.ListItemRecentBidBinding getBinding() {
-            return binding;
-        }
-    }
-
-
-    public class MHSViewHolder extends RecyclerView.ViewHolder {
-
-        private com.lecet.app.databinding.ListItemBidHappSoonBinding binding;
-
-        public MHSViewHolder(com.lecet.app.databinding.ListItemBidHappSoonBinding binding) {
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        public com.lecet.app.databinding.ListItemBidHappSoonBinding getBinding() {
-            return binding;
-        }
-    }
-
-
-    public class MRAViewHolder extends RecyclerView.ViewHolder {
-
-        private final ListItemDashboardProjectBinding binding;
-
-        public MRAViewHolder(ListItemDashboardProjectBinding binding) {
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-
-                        public ListItemDashboardProjectBinding getBinding() {
-                            return binding;
-                        }
-                    }
- */
     public class RecentViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemRecentViewBinding binding;
+        private final ListItemSearchRecentViewBinding binding;
 
-        public RecentViewHolder(ListItemRecentViewBinding binding) {
+        public RecentViewHolder(ListItemSearchRecentViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
 
-        public ListItemRecentViewBinding getBinding() {
+        public ListItemSearchRecentViewBinding getBinding() {
+            return binding;
+        }
+    }
+
+    public class ProjectSavedViewHolder extends RecyclerView.ViewHolder {
+
+        private final ListItemSearchProjectSavedViewBinding binding;
+
+        public ProjectSavedViewHolder(ListItemSearchProjectSavedViewBinding binding) {
+            super(binding.getRoot());
+
+            this.binding = binding;
+        }
+
+        public ListItemSearchProjectSavedViewBinding getBinding() {
             return binding;
         }
     }

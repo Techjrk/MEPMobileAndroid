@@ -21,10 +21,10 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.SearchDomain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.RealmList;
-import io.realm.RealmObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,9 +37,9 @@ public class SearchViewModel extends BaseObservable {
 
     private final AppCompatActivity activity;
     private final SearchDomain searchDomain;
-
+    private final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";
     private static final String TAG = "SearchViewModel";
-
+    private Project project;
     private String query;
 
     @Bindable
@@ -52,14 +52,26 @@ public class SearchViewModel extends BaseObservable {
         this.query = query;
     }
 
+/*    public SearchViewModel(Project project, String mapsApiKey) {
+        this.project = project;
+        this.mapsApiKey = mapsApiKey;
+    }*/
 
     //1 **constructor without input query - For RecentlyViewed and SavedSearch API
     public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
         this.activity = activity;
         this.searchDomain = sd;
         //TODO: 1 ***TESTING THE SEARCH FUNCTIONALITY FOR THIS CONSTRUCTOR ***
-        getUserSavedSearches(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());   //testing for getting savedsearches result data
+        //    getUserSavedSearches(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());   //testing for getting savedsearches result data
+        initializeAdapter();
+        getUserRecentlyViewed(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());   //testing for getting savedsearches result data
+
+        initializeAdapterSavedProject();
+        initializeAdapterSavedCompany();
+        getUserSavedSearches(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());
+
     }
+
 
     //function to get the list of recently viewed by the user
     public void getUserRecentlyViewed(long userId) {
@@ -70,14 +82,24 @@ public class SearchViewModel extends BaseObservable {
                 List<SearchResult> slist;
                 if (response.isSuccessful()) {
                     slist = response.body();
-                    sb += ("getUserRecentlyViewed\r\n");
+                    adapterData.clear();
+
+ //                   sb += ("getUserRecentlyViewed\r\n");
                     int ctr = 0;
                     for (SearchResult s : slist) {
                         //TODO: testing for getting the result of  RecentlyViewed search
-                        ctr++;
-                        sb += ("\r\n" + ctr + " code1:" + s.getCode() + " id:" + s.getId() + " pid:" + s.getProjectId() + " cid:" + s.getCompanyId() + " createdAt:" + s.getCreatedAt() + "\r\n");
+
+                        try {
+ //                           sb += ("\r\n" + ctr + " code1:" + s.getCode() + " id:" + s.getId() + " pid:" + s.getProjectId() + " cid:" + s.getCompanyId() + " createdAt:" + s.getCreatedAt() +
+ //                                   " Lat: " + s.getProject().getGeocode().getLat() + " long: " + s.getProject().getGeocode().getLng() + "\r\n");
+                            ctr++;
+                            if (ctr <= 10 && s.getProject() !=null) adapterData.add(s);
+                        } catch (Exception e) {
+                        }
                     }
-                    notifyPropertyChanged(BR.sb);
+
+ //                   notifyPropertyChanged(BR.sb);
+                    searchAdapter.notifyDataSetChanged();
 
                 } else {
                     errorDisplayMsg(response.message());
@@ -98,16 +120,34 @@ public class SearchViewModel extends BaseObservable {
             @Override
             public void onResponse(Call<List<SearchSaved>> call, Response<List<SearchSaved>> response) {
                 List<SearchSaved> slist;
+                sb="";
                 if (response.isSuccessful()) {
                     slist = response.body();
-                    int ctr = 0;
+                    if (adapterDataProjectSearchSaved == null) new ArrayList<SearchSaved>();
+                    adapterDataProjectSearchSaved.clear();
+                    adapterDataCompanySearchSaved.clear();
+                    int ctr = 0, ctrc = 0;
                     for (SearchSaved s : slist) {
-                        //TODO: testing for getting the result of  RecentlyViewed search
-                        ctr++;
-                        sb += ("\r\n" + ctr + " title:" + s.getTitle() + " modelName:" + s.getModelName() + " id:" + s.getId() + " userid:" + s.getUserId() + " query:" + s.getQuery() + "\r\n");
+                        //TODO: testing for getting the result of  UserSaved search
+                        //ctr++;
+                        if (s !=null){
+                            if (s.getModelName().equalsIgnoreCase("Project")) {
+                                adapterDataProjectSearchSaved.add(s);
+                           /*     sb += "\r\n"+((SearchSaved)adapterDataProjectSearchSaved.get(ctr)).getTitle();
+                                ctr++;*/
+                            } else
+                            if (s.getModelName().equalsIgnoreCase("Company")) {
+                                adapterDataCompanySearchSaved.add(s);
+                              /*  sb += "\r\n"+((SearchSaved)adapterDataCompanySearchSaved.get(ctrc)).getTitle();
+                                ctrc++;*/
+                            }
+
+                        }
+                        //sb += ("\r\n" + ctr + " title:" + s.getTitle() + " modelName:" + s.getModelName() + " id:" + s.getId() + " userid:" + s.getUserId() + " query:" + s.getQuery() + "\r\n");
                     }
                     notifyPropertyChanged(BR.sb);
-
+                    searchAdapterProject.notifyDataSetChanged();
+                    searchAdapterCompany.notifyDataSetChanged();
                 } else {
                     errorDisplayMsg(response.message());
                 }
@@ -150,6 +190,7 @@ public class SearchViewModel extends BaseObservable {
             }
         });
     }
+
     //***==========
     //function to search the project based on query string
     public void getProject(String q) {
@@ -196,6 +237,7 @@ public class SearchViewModel extends BaseObservable {
                         sb += ("\r\n" + ctr + " id:" + cs.getId() + " Name:" + cs.getName() + " Address:" + cs.getAddress1() + " City:" + cs.getCity() + " Country:" + cs.getCountry() + "\r\n");
                     }
                     notifyPropertyChanged(BR.sb);
+                    searchAdapter.notifyDataSetChanged();
                 } else {
                     errorDisplayMsg(response.message());
                 }
@@ -212,31 +254,71 @@ public class SearchViewModel extends BaseObservable {
     //***=============
     public void errorDisplayMsg(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + message);
+        builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + message+"\r\n");
+        Log.e("Error:","Error "+message);
         builder.setMessage(activity.getString(R.string.error_network_message));
         builder.setNegativeButton(activity.getString(R.string.ok), null);
         Log.e("onFailure", "onFailure: " + message);
         builder.show();
     }
 
+    private List<SearchResult> adapterData= Collections.EMPTY_LIST;
+    private List<SearchSaved> adapterDataProjectSearchSaved= Collections.EMPTY_LIST;
+    private List<SearchSaved> adapterDataCompanySearchSaved= Collections.EMPTY_LIST;
+    //*** setting up the recylerview recent adapter
+    private Search1RecyclerViewAdapter searchAdapter;
+    private Search1RecyclerViewAdapter searchAdapterProject;
+    private Search1RecyclerViewAdapter searchAdapterCompany;
 
-    //*** setting up the recylerview
-    private Search1RecyclerViewAdapter dashboardAdapter;
-    private List<RealmObject> adapterData;
+//    private List adapterData;
 
     private void initializeAdapter() {
 
-        adapterData = new ArrayList<>();
+        adapterData = new ArrayList<SearchResult>();
+//TODO: List testing
+//        SearchResult sr1 = new SearchResult();
+//        sr1.setCode("code123");
+//        SearchResult sr2 = new SearchResult();
+       // adapterData.add(sr1);
+       // adapterData.add(sr2);
+//** 0: For recent adapter
+        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view1);
+        setupRecyclerView(recyclerView,LinearLayoutManager.HORIZONTAL);
+        searchAdapter = new Search1RecyclerViewAdapter(adapterData);
+        //searchAdapterProject.setAdapterType(0);
+        recyclerView.setAdapter(searchAdapter);
 
-        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
-        setupRecyclerView(recyclerView);
-        dashboardAdapter = new Search1RecyclerViewAdapter(adapterData);
-        recyclerView.setAdapter(dashboardAdapter);
+
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+private void initializeAdapterSavedProject(){
+    //*** 1: for project saved adapter
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+    adapterDataProjectSearchSaved = new ArrayList<SearchSaved>();
+    RecyclerView recyclerViewProject = getProjectRecyclerView(R.id.recycler_view_project);
+    setupRecyclerView(recyclerViewProject,LinearLayoutManager.VERTICAL);
+    searchAdapterProject = new Search1RecyclerViewAdapter(adapterDataProjectSearchSaved);
+    searchAdapterProject.setAdapterType(1);
+    recyclerViewProject.setAdapter(searchAdapterProject);
+
+}
+
+    private void initializeAdapterSavedCompany(){
+        //*** 2: for company saved adapter
+
+        adapterDataCompanySearchSaved = new ArrayList<SearchSaved>();
+        RecyclerView recyclerViewCompany = getProjectRecyclerView(R.id.recycler_view_company);
+        setupRecyclerView(recyclerViewCompany,LinearLayoutManager.VERTICAL);
+        searchAdapterCompany = new Search1RecyclerViewAdapter(adapterDataCompanySearchSaved);
+        //  searchAdapterProject.setData(adapterDataCompanySearchSaved);
+        searchAdapterCompany.setAdapterType(2);
+        recyclerViewCompany.setAdapter(searchAdapterCompany);
+
+    }
+
+    private void setupRecyclerView(RecyclerView recyclerView,int orientation) {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, orientation, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
@@ -245,8 +327,18 @@ public class SearchViewModel extends BaseObservable {
         return (RecyclerView) activity.findViewById(recyclerView);
     }
 
+    public String getMapUrl(Project project) {
+
+        if (project.getGeocode() == null) return null;
+
+        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
+                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
+    }
+
     //TODO: For checking the response result of the MSE APIs call using sb variable.
     private String sb = "";
+
     @Bindable
     public String getSb() {
         return sb;
