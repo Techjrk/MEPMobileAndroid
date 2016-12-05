@@ -8,13 +8,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ProjectStage;
-import com.lecet.app.data.models.ProjectUpdate;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,12 +24,12 @@ import java.util.Date;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectUpdateDeserializer implements JsonDeserializer<ProjectUpdate> {
+public class ActivityUpdateDeserializer implements JsonDeserializer<ActivityUpdate> {
 
     @Override
-    public ProjectUpdate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public ActivityUpdate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-        final ProjectUpdate projectUpdate = new ProjectUpdate();
+        final ActivityUpdate projectUpdate = new ActivityUpdate();
 
         final Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -78,6 +77,8 @@ public class ProjectUpdateDeserializer implements JsonDeserializer<ProjectUpdate
                     case "ProjectContact":
                         projectUpdate.setContactUpdate(gson.fromJson(jsonModelObject, Contact.class));
                         break;
+                    case "WorkType":
+                    case "ProjectType":
                     default:
                         break;
                 }

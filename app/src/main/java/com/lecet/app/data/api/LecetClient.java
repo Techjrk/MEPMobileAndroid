@@ -3,12 +3,12 @@ package com.lecet.app.data.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import com.lecet.app.data.api.deserializer.ProjectUpdateDeserializer;
+import com.lecet.app.data.api.deserializer.ActivityUpdateDeserializer;
 import com.lecet.app.data.api.service.BidService;
 import com.lecet.app.data.api.service.ProjectService;
 import com.lecet.app.data.api.service.TrackingListService;
 import com.lecet.app.data.api.service.UserService;
-import com.lecet.app.data.models.ProjectUpdate;
+import com.lecet.app.data.models.ActivityUpdate;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -54,7 +54,7 @@ public class LecetClient {
 
         // Custom GSON for date conversion
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(ProjectUpdate.class, new ProjectUpdateDeserializer())
+                .registerTypeAdapter(ActivityUpdate.class, new ActivityUpdateDeserializer())
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create();
 

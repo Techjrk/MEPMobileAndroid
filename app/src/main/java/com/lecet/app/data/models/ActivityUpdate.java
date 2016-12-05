@@ -11,7 +11,7 @@ import io.realm.annotations.PrimaryKey;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectUpdate extends RealmObject {
+public class ActivityUpdate extends RealmObject {
 
     @PrimaryKey
     private long id;
@@ -36,7 +36,7 @@ public class ProjectUpdate extends RealmObject {
     private Project projectUpdate;
 
 
-    public ProjectUpdate() {
+    public ActivityUpdate() {
     }
 
     public String getChangeIndicator() {
@@ -186,9 +186,9 @@ public class ProjectUpdate extends RealmObject {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ProjectUpdate)) return false;
+        if (!(o instanceof ActivityUpdate)) return false;
 
-        ProjectUpdate update = (ProjectUpdate) o;
+        ActivityUpdate update = (ActivityUpdate) o;
 
         if (id != update.id) return false;
         if (modelId != update.modelId) return false;
@@ -248,7 +248,7 @@ public class ProjectUpdate extends RealmObject {
 
     @Override
     public String toString() {
-        return "ProjectUpdate{" +
+        return "ActivityUpdate{" +
                 "id=" + id +
                 ", changeIndicator='" + changeIndicator + '\'' +
                 ", attributeName='" + attributeName + '\'' +

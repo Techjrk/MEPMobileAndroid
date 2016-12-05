@@ -5,19 +5,11 @@ import android.databinding.Bindable;
 import android.util.Log;
 import android.view.View;
 
+import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.content.TrackingListActivity;
-import com.lecet.app.data.models.Company;
-import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectCategory;
-import com.lecet.app.data.models.ProjectGroup;
+import com.lecet.app.data.models.ActivityUpdate;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.lecet.app.BR;
-import com.lecet.app.data.models.ProjectUpdate;
 
 /**
  * File: ListItemTrackingViewModel Created: 10/17/16 Author: domandtom
@@ -38,12 +30,12 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
 
     private final String NEW_BID_PLACED = "A new bid has been placed";      // TODO - Externalize, which will require Context
     private final String NEW_NOTE_ADDED = "A new note has been added";
-    private final String BID_PLACED_AT  = "A bid was placed at";
-    private final String STAGE_UPDATED  = "The project stage is now";
+    private final String BID_PLACED_AT = "A bid was placed at";
+    private final String STAGE_UPDATED = "The project stage is now";
     private final long RECENT_BID_MS = 1000 * 60 * 60 * 24 * 14;            // ms * secs * mins * hrs * days
 
     private final String mapsApiKey;
-    private final ProjectUpdate update;
+    private final ActivityUpdate update;
 
     private String detail1;
     private String detail2;
@@ -56,7 +48,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
     private String expandableViewMessage = "";
 
 
-    public ListItemTrackingViewModel(String mapsApiKey, boolean showUpdates, ProjectUpdate update) {
+    public ListItemTrackingViewModel(String mapsApiKey, boolean showUpdates, ActivityUpdate update) {
 
         this.mapsApiKey = mapsApiKey;
         this.showUpdates = showUpdates;
@@ -73,7 +65,9 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
 
     public abstract boolean displaySecondaryDetail();
 
-    /** Init **/
+    /**
+     * Init
+     **/
     public void init() {
 
         setExpandableMode();
@@ -81,7 +75,9 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
         setDetail2(generateDetailSecondary());
     }
 
-    /** Getters **/
+    /**
+     * Getters
+     **/
     public String getMapsApiKey() {
         return mapsApiKey;
     }
@@ -91,7 +87,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
         if (update != null && update.getModelType() != null) {
 
             // Bid mode
-            if(update.getModelType().matches(EXPANDABLE_MODE_BID)) {
+            if (update.getModelType().matches(EXPANDABLE_MODE_BID)) {
                 setExpandableMode(EXPANDABLE_MODE_BID);
                 setExpandableViewIconId(R.drawable.ic_add);
                 setExpandableViewTitle(NEW_BID_PLACED);
@@ -101,7 +97,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
             }
 
             // Note Mode
-            else if(update.getModelType().matches(EXPANDABLE_MODE_NOTE)) {
+            else if (update.getModelType().matches(EXPANDABLE_MODE_NOTE)) {
                 setExpandableMode(EXPANDABLE_MODE_BID);
                 setExpandableViewIconId(R.drawable.ic_add_note);
                 setExpandableViewTitle(NEW_NOTE_ADDED);
@@ -109,7 +105,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
             }
 
             // Stage Update Mode
-            else if(update.getModelType().matches(EXPANDABLE_MODE_STAGE)) {
+            else if (update.getModelType().matches(EXPANDABLE_MODE_STAGE)) {
                 setExpandableMode(EXPANDABLE_MODE_STAGE);
                 setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'stage' icon, TBD
                 setExpandableViewTitle(STAGE_UPDATED);
@@ -117,7 +113,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
             }
 
             // Stage Contact Mode
-            else if(update.getModelType().matches(EXPANDABLE_MODE_CONTACT)) {
+            else if (update.getModelType().matches(EXPANDABLE_MODE_CONTACT)) {
                 setExpandableMode(EXPANDABLE_MODE_CONTACT);
                 setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'contact' icon, TBD
                 setExpandableViewTitle(update.getSummary());
@@ -132,9 +128,10 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
         }
 
         // set the showExpandableView to true if this item is in a mode such as Bid, Note, or Stage
-        setShowExpandableView(expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE|| expandableMode == EXPANDABLE_MODE_STAGE);
+        setShowExpandableView(expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE || expandableMode == EXPANDABLE_MODE_STAGE);
     }
 
+    @Bindable
     public String getExpandableMode() {
         return expandableMode;
     }
@@ -153,6 +150,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
 
     public void setDetail1(String detail1) {
         this.detail1 = detail1;
+        notifyPropertyChanged(BR.detail1);
     }
 
     @Bindable
@@ -162,6 +160,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
 
     public void setDetail2(String detail2) {
         this.detail2 = detail2;
+        notifyPropertyChanged(BR.detail2);
     }
 
     @Bindable
@@ -181,6 +180,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
 
     public void setShowExpandableView(boolean showExpandableView) {
         this.showExpandableView = showExpandableView;
+        notifyPropertyChanged(BR.showExpandableView);
     }
 
     @Bindable
@@ -200,7 +200,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
 
     public void setExpandableViewIconId(int expandableViewIconId) {
         this.expandableViewIconId = expandableViewIconId;
-        //notifyPropertyChanged(BR.expandableViewIconId);
+        notifyPropertyChanged(BR.expandableViewIconId);
     }
 
     @Bindable

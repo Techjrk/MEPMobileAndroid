@@ -3,7 +3,7 @@ package com.lecet.app.data.api.response;
 import com.google.gson.annotations.SerializedName;
 
 import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.ProjectUpdate;
+import com.lecet.app.data.models.ActivityUpdate;
 
 import java.util.List;
 
@@ -19,13 +19,13 @@ public class ProjectTrackingListDetailResponse {
     private PrimaryProjectType primaryProjectType;
 
     @SerializedName("updates")
-    private List<ProjectUpdate> projectUpdates;
+    private List<ActivityUpdate> projectUpdates;
 
     public PrimaryProjectType getPrimaryProjectType() {
         return primaryProjectType;
     }
 
-    public List<ProjectUpdate> getProjectUpdates() {
+    public List<ActivityUpdate> getProjectUpdates() {
         return projectUpdates;
     }
 

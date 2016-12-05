@@ -5,7 +5,7 @@
         tools:context="com.lecet.app.content.TrackingListActivity">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemTrackingViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.TrackingListItem"/>
         <import type="android.view.View"/>
     </data>
 
@@ -25,14 +25,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="-4dp"
                 android:layout_marginRight="8dp"
-                android:gravity="center_vertical"
-                android:onClick="@{viewModel.onClick}">
+                android:gravity="center_vertical">
 
             <!-- Map Image -->
             <ImageView
                     android:id="@+id/map_image_view"
                     style="@style/ListItemProjectTrackingImage.DetailMap"
-                    bind:imageUrl="@{viewModel.mapUrl}"/>
+                    bind:imageUrl="@{viewModel.mapUrlString}"/>
 
             <!-- Details -->
             <LinearLayout
@@ -46,7 +45,7 @@
                         tools:text="Parks Building"
                         style="@style/ListItemProjectTrackingTextView.Title"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.itemName}"/>
+                        android:text="@{viewModel.title}"/>
 
                 <!-- Detail Line 1: Project Location or Company Address 1 -->
                 <LinearLayout
@@ -63,7 +62,7 @@
                             tools:text="Tampa, FL"
                             style="@style/ListItemProjectTrackingTextView.Detail1"
                             bind:typeface="@{`Lato-Regular.ttf`}"
-                            android:text="@{viewModel.detail1}"/>
+                            android:text="@{viewModel.primaryDetail}"/>
 
                 </LinearLayout>
 
@@ -76,14 +75,14 @@
                     <ImageView
                             style="@style/ListItemProjectTrackingImage.DetailIcon"
                             android:src="@drawable/tag_icon"
-                            android:visibility="@{viewModel.showDetail2Icon ? View.VISIBLE : View.INVISIBLE}"/>
+                            android:visibility="@{viewModel.displaySecondaryDetailIcon ? View.VISIBLE : View.INVISIBLE}"/>
 
                     <TextView
-                        android:id="@+id/keywords"
-                        tools:text="Vehicle Sales/Service"
-                        style="@style/ListItemProjectTrackingTextView.Detail2"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.detail2}"/>
+                            android:id="@+id/keywords"
+                            tools:text="Vehicle Sales/Service"
+                            style="@style/ListItemProjectTrackingTextView.Detail2"
+                            bind:typeface="@{`Lato-Regular.ttf`}"
+                            android:text="@{viewModel.secondaryDetail}"/>
 
                 </LinearLayout>
 
@@ -110,13 +109,13 @@
                     android:paddingLeft="8dp"
                     android:orientation="horizontal"
                     android:background="@drawable/shape_rect_list_item_expand_1"
-                    android:visibility="@{(viewModel.showUpdates &amp;&amp; viewModel.showExpandableView) ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{(viewModel.displayActivityUpdate &amp;&amp; viewModel.activityUpdateAvailable) ? View.VISIBLE : View.GONE}"
                     android:onClick="@{viewModel.onExpandableViewClick}">
 
                 <ImageView
                         android:id="@+id/expandable_icon"
                         style="@style/ListItemProjectTrackingImage.ExpandableIcon"
-                        android:src="@{viewModel.expandableViewIconId}"/>
+                        android:src="@{viewModel.activityUpdateIconResourceID}"/>
 
                 <TextView
                         android:id="@+id/expandable_title"
@@ -124,12 +123,12 @@
                         style="@style/ListItemProjectTrackingTextView.Expandable"
                         android:layout_toRightOf="@id/expandable_icon"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.expandableViewTitle}"/>
+                        android:text="@{viewModel.activityUpdateTitle}"/>
 
                 <ImageView
                         android:id="@+id/expandable_caret"
                         style="@style/ListItemProjectTrackingImage.ExpandableCaret"
-                        android:rotation="@{viewModel.expandableViewExpanded ? 0 : 180}"
+                        android:rotation="@{viewModel.activityUpdateLayoutExpanded ? 0 : 180}"
                         android:src="@mipmap/ic_caret_down"/>
 
             </RelativeLayout>
@@ -142,14 +141,14 @@
                     android:paddingLeft="8dp"
                     android:orientation="horizontal"
                     android:background="@drawable/shape_rect_list_item_expand_1"
-                    android:visibility="@{viewModel.expandableViewExpanded ? View.VISIBLE : View.GONE}">
+                    android:visibility="@{viewModel.activityUpdateLayoutExpanded ? View.VISIBLE : View.GONE}">
 
                 <TextView
                         android:id="@+id/expanded_message"
                         tools:text="Message\nbody"
                         style="@style/ListItemProjectTrackingTextView.ExpandableBody"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="@{viewModel.expandableViewMessage}"/>
+                        android:text="@{viewModel.activityUpdateMessage}"/>
 
             </RelativeLayout>
 

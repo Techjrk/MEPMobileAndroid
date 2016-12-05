@@ -2,16 +2,14 @@ package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
-import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
-import com.lecet.app.data.models.ProjectUpdate;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -20,7 +18,6 @@ import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -101,7 +98,7 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
-    private Call<ProjectTrackingList> moveProjectsFromProjectTrackingList(long projectTrackingListId, List<Long> projectIds , Callback<ProjectTrackingList> callback) {
+    private Call<ProjectTrackingList> moveProjectsFromProjectTrackingList(long projectTrackingListId, List<Long> projectIds, Callback<ProjectTrackingList> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         MoveProjectFromListRequest body = new MoveProjectFromListRequest(projectIds);
@@ -114,7 +111,7 @@ public class TrackingListDomain {
 
     public Call<ProjectTrackingList> removeProjectsFromProjectTrackingList(long trackingListID, List<Long> removedProjectIds, Callback<ProjectTrackingList> callback) {
 
-       return moveProjectsFromProjectTrackingList(trackingListID, removedProjectIds, callback);
+        return moveProjectsFromProjectTrackingList(trackingListID, removedProjectIds, callback);
     }
 
     public void moveProjectsToDestinationTrackingList(long sourceProjectTrackingListId, final long destinationTrackingListId, final List<Long> movedProjectIds, final LecetCallback callback) {
@@ -156,15 +153,16 @@ public class TrackingListDomain {
             @Override
             public void onFailure(Call<ProjectTrackingList> call, Throwable t) {
 
-                    callback.onFailure(-1, "Network Failure");
+                callback.onFailure(-1, "Network Failure");
             }
         });
     }
 
-    /** Persisted **/
+    /**
+     * Persisted
+     **/
 
     // Fetch
-
     public RealmResults<ProjectTrackingList> fetchUserProjectTrackingList() {
 
         RealmResults<ProjectTrackingList> results = realm.where(ProjectTrackingList.class).findAll();
@@ -227,7 +225,7 @@ public class TrackingListDomain {
 
     // Project Update Mapping
 
-    public void asyncMapUpdatesToProjects(final List<ProjectUpdate> updates, Realm.Transaction.OnSuccess successCallback,
+    public void asyncMapUpdatesToProjects(final List<ActivityUpdate> updates, Realm.Transaction.OnSuccess successCallback,
                                           final Realm.Transaction.OnError errorCallback) {
 
         final WeakReference<ProjectDomain> domainWeakReference = new WeakReference<>(projectDomain);
@@ -237,25 +235,26 @@ public class TrackingListDomain {
             public void execute(Realm realm) {
 
                 // First we need add the updates to Realm
-                List<ProjectUpdate> insertedUpdates = realm.copyToRealmOrUpdate(updates);
+                List<ActivityUpdate> insertedUpdates = realm.copyToRealmOrUpdate(updates);
 
                 // If we don't have a ProjectDomain then we exit.
                 ProjectDomain domain = domainWeakReference.get();
                 if (domain == null) {
 
                     // Notify error callback if its not null and cancel execution
-                    if (errorCallback != null) errorCallback.onError(new Throwable("ProjectDomain is null!"));
+                    if (errorCallback != null)
+                        errorCallback.onError(new Throwable("ProjectDomain is null!"));
 
                     return;
                 }
 
                 // Now let's cycle through the updates and associate with their respective Project
-                for (ProjectUpdate update : insertedUpdates) {
+                for (ActivityUpdate update : insertedUpdates) {
 
                     Project project = domain.fetchProjectById(realm, update.getProjectId());
                     if (project != null) {
 
-                        RealmList<ProjectUpdate> projectUpdates = project.getUpdates();
+                        RealmList<ActivityUpdate> projectUpdates = project.getUpdates();
                         if (projectUpdates == null) {
                             projectUpdates = new RealmList<>();
                         }
@@ -264,7 +263,7 @@ public class TrackingListDomain {
 
                         // Let's get the latest project update and assign it as most recent update for
                         // project
-                        ProjectUpdate recentUpdate = projectUpdates.sort("updatedAt", Sort.DESCENDING).first();
+                        ActivityUpdate recentUpdate = projectUpdates.sort("updatedAt", Sort.DESCENDING).first();
                         project.setRecentUpdate(recentUpdate);
                     }
                 }

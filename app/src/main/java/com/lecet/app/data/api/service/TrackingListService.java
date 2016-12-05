@@ -2,15 +2,13 @@ package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.api.request.MoveCompanyFromListRequest;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
-import com.lecet.app.data.api.response.ProjectTrackingListDetailResponse;
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
-import com.lecet.app.data.models.ProjectUpdate;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
@@ -56,7 +54,7 @@ public interface TrackingListService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("projectlists/{project_tracking_list_id}/projects")
-    Call<List<ProjectUpdate>> getProjectTrackingListUpdates(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
+    Call<List<ActivityUpdate>> getProjectTrackingListUpdates(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
 
     @Headers({
             "Accept: application/json",

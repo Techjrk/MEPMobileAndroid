@@ -170,9 +170,9 @@ public class Project extends RealmObject {
     private boolean hidden;
 
     @SerializedName("updates")
-    private RealmList<ProjectUpdate> updates;
+    private RealmList<ActivityUpdate> updates;
 
-    private ProjectUpdate recentUpdate;
+    private ActivityUpdate recentUpdate;
 
     public Project() {
     }
@@ -386,15 +386,15 @@ public class Project extends RealmObject {
         this.hidden = hidden;
     }
 
-    public RealmList<ProjectUpdate> getUpdates() {
+    public RealmList<ActivityUpdate> getUpdates() {
         return updates;
     }
 
-    public ProjectUpdate getRecentUpdate() {
+    public ActivityUpdate getRecentUpdate() {
         return recentUpdate;
     }
 
-    public void setRecentUpdate(ProjectUpdate recentUpdate) {
+    public void setRecentUpdate(ActivityUpdate recentUpdate) {
         this.recentUpdate = recentUpdate;
     }
 

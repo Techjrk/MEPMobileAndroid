@@ -6,6 +6,9 @@ import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectGroup;
 import com.lecet.app.domain.ProjectDomain;
 
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+
 /**
  * File: ListItemProjectTrackingViewModel Created: 11/29/16 Author: domandtom
  *
@@ -47,6 +50,7 @@ public class ListItemProjectTrackingViewModel extends ListItemTrackingViewModel 
 
     @Override
     public String generateDetailSecondary() {
+
         return generateProjectKeywords();
     }
 
