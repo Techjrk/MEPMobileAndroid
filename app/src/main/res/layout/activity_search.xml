@@ -8,9 +8,9 @@
             type="com.lecet.app.viewmodel.SearchViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.lecet.app.content.SearchActivity">
@@ -49,7 +49,6 @@
 
                         <EditText
                             android:id="@+id/editText"
-
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
@@ -57,7 +56,6 @@
                             android:layout_weight="1"
                             android:background="@color/lecetLightBlue"
                             android:drawableStart="@drawable/ic_action_search"
-
                             android:hint="Search"
                             android:inputType="textPersonName"
                             android:text=""
@@ -69,13 +67,13 @@
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
                             android:layout_margin="5dp"
-
                             android:background="@null"
                             android:paddingLeft="1dp"
                             android:scaleType="fitXY"
-
                             android:src="@drawable/filter" />
+
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView
@@ -91,7 +89,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/projectsearch"
@@ -106,8 +104,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_project"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:layout_marginTop="8dp"
@@ -123,7 +120,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_company"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -137,10 +134,13 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
                         android:text="@{viewModel.sb}" />
+
                 </LinearLayout>
 
             </LinearLayout>
+
         </ScrollView>
+
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>
