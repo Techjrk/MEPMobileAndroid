@@ -16,6 +16,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityTrackingListBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.viewmodel.CompanyTrackingListViewModel;
 import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
 import com.lecet.app.viewmodel.TrackingListViewModel;
 
@@ -77,10 +78,17 @@ public class TrackingListActivity extends NavigationBaseActivity {
         }
 
         // Company List
-//        else if(listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
-//            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-//            viewModel = new TrackingListViewModel(this, listItemId, trackingListDomain);
-//        }
+        else if(listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
+
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
+                @Override
+                public void onChange(Object element) {
+
+                }
+            }, null);
+
+            viewModel = new CompanyTrackingListViewModel(this, listItemId, trackingListDomain, null);
+        }
 
         binding.setViewModel(viewModel);
     }

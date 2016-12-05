@@ -296,6 +296,14 @@ public class ProjectDomain {
         return result;
     }
 
+    public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
+
     public Project copyToRealmTransaction(Project project) {
 
         realm.beginTransaction();

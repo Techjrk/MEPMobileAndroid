@@ -10,6 +10,8 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -85,6 +87,17 @@ public class TrackingListDomain {
         String filter = "{\"include\":[\"companies\"]}";
 
         Call<List<CompanyTrackingList>> call = lecetClient.getTrackingListService().getUserCompanyTrackingList(token, userID, filter);
+        call.enqueue(callback);
+    }
+
+    public void getCompanyTrackingListUpdates(long companyTrackingListId, Date updateCutoffDate, Callback<List<ActivityUpdate>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String formattedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(updateCutoffDate);
+        String filter = String.format("{\"where\":{\"createdAt\":{\"gte\":\"%s\"}}}", formattedDate);
+
+        Call<List<ActivityUpdate>> call = lecetClient.getTrackingListService().getCompanyTrackingListUpdates(token, companyTrackingListId, filter);
         call.enqueue(callback);
     }
 
@@ -331,5 +344,13 @@ public class TrackingListDomain {
         List<ProjectTrackingList> persistedTrackingLists = realm.copyToRealmOrUpdate(trackingLists);
         realm.commitTransaction();
         return persistedTrackingLists;
+    }
+
+    public List<ActivityUpdate> copyActivityUpdatesToRealmTransaction(List<ActivityUpdate> updates) {
+
+        realm.beginTransaction();
+        List<ActivityUpdate> persisted = realm.copyToRealmOrUpdate(updates);
+        realm.commitTransaction();
+        return persisted;
     }
 }

@@ -56,19 +56,13 @@ public interface TrackingListService {
     @GET("projectlists/{project_tracking_list_id}/projects")
     Call<List<ActivityUpdate>> getProjectTrackingListUpdates(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Query("filter") String filter);
 
-    @Headers({
-            "Accept: application/json",
-            "Content-Type: application/x-www-form-urlencoded"
-    })
-    @GET("companylists/{company_tracking_list_id}/companies")
-    Call<CompanyTrackingList> getCompanyTrackingListDetail(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Query("filter") String filter);
 
     @Headers({
             "Accept: application/json",
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("companylists/{company_tracking_list_id}/updates")
-    Call<CompanyTrackingList> getCompanyTrackingListUpdates(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Query("filter") String filter);
+    Call<List<ActivityUpdate>> getCompanyTrackingListUpdates(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Query("filter") String filter);
 
     @Headers({
             "Accept: application/json",

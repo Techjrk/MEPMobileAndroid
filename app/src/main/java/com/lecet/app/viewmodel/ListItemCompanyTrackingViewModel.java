@@ -57,7 +57,7 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
         } else {
 
             // Run an async fetch to see if there are any updates that might be available
-            projectDomain.fetchProjectActivityUpdates(object.getId(), DateUtility.addDays(-1), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
+            projectDomain.fetchCompanyActivityUpdates(object.getId(), DateUtility.addDays(-1), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
                 @Override
                 public void onChange(RealmResults<ActivityUpdate> element) {
 

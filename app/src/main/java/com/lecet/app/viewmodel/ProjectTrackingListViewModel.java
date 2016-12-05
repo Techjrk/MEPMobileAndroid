@@ -30,7 +30,7 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
     private final ProjectDomain projectDomain;
 
     public ProjectTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, ProjectDomain projectDomain, TrackingListDomain trackingListDomain) {
-        super(appCompatActivity, listItemId);
+        super(appCompatActivity, listItemId, LIST_TYPE_PROJECT);
 
         this.projectDomain = projectDomain;
         this.trackingListDomain = trackingListDomain;

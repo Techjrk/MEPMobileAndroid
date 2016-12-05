@@ -1,14 +1,13 @@
 package com.lecet.app.adapters;
 
-import android.app.LauncherActivity;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.IntDef;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
@@ -17,14 +16,15 @@ import com.lecet.app.databinding.ListItemTrackingBinding;
 import com.lecet.app.databinding.ListItemTrackingTestBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ListItemCompanyTrackingViewModel;
-import com.lecet.app.viewmodel.ListItemProjectTrackingViewModel;
-import com.lecet.app.viewmodel.ListItemTrackingViewModel;
 import com.lecet.app.viewmodel.NewListItemProjectTrackingViewModel;
 
+import java.lang.annotation.Retention;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * File: TrackingListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -34,35 +34,28 @@ import io.realm.RealmObject;
 
 public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<TrackingListRecyclerViewAdapter.TrackingListViewHolderNew> {
 
-    private String listType;
+    @Retention(SOURCE)
+    @IntDef({LIST_TYPE_COMPANY, LIST_TYPE_PROJECT})
+    public @interface TrackingAdapterType {}
+
+    public static final int LIST_TYPE_COMPANY = 0;
+    public static final int LIST_TYPE_PROJECT = 1;
+
+    @TrackingAdapterType
+    private int listType;
+
     private List<RealmObject> data;
     private boolean showUpdates;
     private AppCompatActivity appCompatActivity;
 
-    /**
-     * Default Constructor
-     */
-    public TrackingListRecyclerViewAdapter(List<RealmObject> data) {
+
+    public TrackingListRecyclerViewAdapter(List<RealmObject> data, AppCompatActivity appCompatActivity, @TrackingAdapterType int listType) {
 
         this.data = data;
-        this.listType = TrackingListActivity.TRACKING_LIST_TYPE_PROJECT;
-    }
-
-    public TrackingListRecyclerViewAdapter(List<RealmObject> data, AppCompatActivity appCompatActivity) {
-
-        this.data = data;
-        this.listType = TrackingListActivity.TRACKING_LIST_TYPE_PROJECT;
+        this.listType = listType;
         this.appCompatActivity = appCompatActivity;
     }
 
-    /**
-     * Alternate Constructor for use with adapter types other than the default
-     */
-    public TrackingListRecyclerViewAdapter(String listType, List<RealmObject> data) {
-
-        this.listType = listType;
-        this.data = data;
-    }
 
     @Override
     public TrackingListViewHolderNew onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -82,7 +75,7 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
         final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";    //TODO - externalize?
 
         // Project List
-        if(this.listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_PROJECT)) {
+        if(listType == LIST_TYPE_PROJECT) {
 
             NewListItemProjectTrackingViewModel viewModel = new NewListItemProjectTrackingViewModel(new ProjectDomain(LecetClient.getInstance(),
                     LecetSharedPreferenceUtil.getInstance(appCompatActivity),
@@ -92,7 +85,7 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
         }
 
         // Company List
-        else if(this.listType.equals(TrackingListActivity.TRACKING_LIST_TYPE_COMPANY)) {
+        else if(listType == LIST_TYPE_COMPANY) {
 
             holder.getBinding().setViewModel(new ListItemCompanyTrackingViewModel(new ProjectDomain(LecetClient.getInstance(),
                     LecetSharedPreferenceUtil.getInstance(appCompatActivity),
@@ -114,10 +107,6 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
 
         //return listType;
         return 1;   //TODO - check
-    }
-
-    public void setListType(String listType) {
-        this.listType = listType;
     }
 
     public void setShowUpdates(boolean showUpdates) {

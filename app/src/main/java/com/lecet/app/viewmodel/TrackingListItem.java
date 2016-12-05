@@ -37,7 +37,6 @@ public abstract class TrackingListItem<T extends RealmObject> {
     public final ObservableBoolean activityUpdateLayoutExpanded = new ObservableBoolean();
     public final ObservableInt activityUpdateIconResourceID = new ObservableInt();
 
-
     private final T object;
 
     public TrackingListItem(T object, boolean displayUpdate) {
