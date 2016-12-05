@@ -486,6 +486,7 @@
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/lecetButtonDarkBlue</item>
     </style>
 
 </resources>
