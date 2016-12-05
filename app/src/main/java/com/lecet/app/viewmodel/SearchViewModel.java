@@ -305,7 +305,7 @@ private void initializeAdapterSavedProject(){
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
-    //TODO: For checking the response result of the MSE APIs call using sb variable.
+    //TODO: Just for personal testing/checking of the response result of the MSE APIs call using sb variable (sb - String Binding :).
     private String sb = "";
 
     @Bindable
