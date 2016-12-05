@@ -162,37 +162,6 @@ public class SearchViewModel extends BaseObservable {
 
     //***==========
     //function to search the project based on query string
-    public void getProjectInit(String q) {
-        //Using the searchDomain to call the method to start retrofitting...
-        searchDomain.getSearchProjectInit(q, new Callback<SearchProject>() {
-            @Override
-            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
-                SearchProject slist;
-                if (response.isSuccessful()) {
-                    slist = response.body();
-                    //searchDomain.copyToRealmTransaction(slist);
-                    sb += ("\r\n page:" + slist.getPage() + " pages:" + slist.getPages() + " total:" + slist.getTotal() + " returned:" + slist.getReturned() + " results:" + slist.getResults().toString() + "\r\n");
-                    RealmList<Project> projects = slist.getResults();
-                    int ctr = 0;
-                    for (Project ps : projects) {
-                        ctr++;
-                        sb += ("\r\n" + ctr + " id:" + ps.getId() + " Title:" + ps.getTitle() + " Address:" + ps.getAddress1() + " GeoCode lat:" + ps.getGeocode().getLat() + " long:" + ps.getGeocode().getLng() + " BidDate:" + ps.getBidDate() + "\r\n");
-                    }
-                    notifyPropertyChanged(BR.sb);
-                } else {
-                    errorDisplayMsg(response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SearchProject> call, Throwable t) {
-                errorDisplayMsg(t.getLocalizedMessage());
-            }
-        });
-    }
-
-    //***==========
-    //function to search the project based on query string
     public void getProject(String q) {
         //Using the searchDomain to call the method to start retrofitting...
         searchDomain.getSearchProject(q, new Callback<List<Project>>() {
