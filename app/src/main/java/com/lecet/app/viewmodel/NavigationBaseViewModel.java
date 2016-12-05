@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.lecet.app.R;
 import com.lecet.app.content.CompanyDetailProjectBidsActivity;
-import com.lecet.app.content.ProjectTrackingListActivity;
+import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.SettingsActivity;
 import com.lecet.app.contentbase.NavigationBaseActivity;
@@ -67,7 +67,7 @@ public class NavigationBaseViewModel extends BaseObservable {
                 break;
 
             case R.id.menu_item_list2:
-                launchClass = ProjectTrackingListActivity.class;
+                launchClass = TrackingListActivity.class;
                 break;
 
             case R.id.menu_item_settings:

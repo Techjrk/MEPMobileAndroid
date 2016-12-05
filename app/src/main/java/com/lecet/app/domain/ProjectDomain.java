@@ -4,6 +4,8 @@ import android.support.annotation.IntDef;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
@@ -18,6 +20,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -193,6 +198,21 @@ public class ProjectDomain {
      * Persisted
      **/
 
+    public void removeChangeListeners(RealmChangeListener listener) {
+
+        realm.removeChangeListener(listener);
+    }
+
+    public Project fetchProjectById(Realm realm, long id) {
+
+        return realm.where(Project.class).equalTo("id", id).findFirst();
+    }
+
+    public Project fetchProjectById(long id) {
+
+        return fetchProjectById(realm, id);
+    }
+
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
@@ -260,6 +280,29 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+    public RealmResults<PrimaryProjectType> fetchProjectTypeAsync(long primaryProjectTypeId, RealmChangeListener<RealmResults<PrimaryProjectType>> listener) {
+
+        RealmResults<PrimaryProjectType> result = realm.where(PrimaryProjectType.class).equalTo("id", primaryProjectTypeId).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
+
+    public RealmResults<ActivityUpdate> fetchProjectActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("projectId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
+
+    public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
 
     public Project copyToRealmTransaction(Project project) {
 

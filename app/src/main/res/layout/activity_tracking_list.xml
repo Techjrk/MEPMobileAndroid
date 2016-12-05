@@ -5,7 +5,7 @@
 
         <variable
                 name="viewModel"
-                type="com.lecet.app.viewmodel.ProjectTrackingListViewModel" />
+                type="com.lecet.app.viewmodel.TrackingListViewModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -14,7 +14,7 @@
             style="@style/FullScreenImageBackground.Gradient1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.lecet.app.content.ProjectTrackingListActivity">
+            tools:context="com.lecet.app.content.TrackingListActivity">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -27,7 +27,7 @@
 
             <!-- Content -->
             <include
-                    layout="@layout/content_project_tracking_list"
+                    layout="@layout/content_tracking_list"
                     bind:viewModel="@{viewModel}" />
 
         </LinearLayout>

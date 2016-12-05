@@ -2,17 +2,22 @@ package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
 
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -30,6 +35,7 @@ public class TrackingListDomain {
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
+    private ProjectDomain projectDomain;
 
     @Deprecated
     public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
@@ -38,11 +44,20 @@ public class TrackingListDomain {
         this.realm = realm;
     }
 
+
     public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm, RealmChangeListener listener) {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
         this.realm.addChangeListener(listener);
+    }
+
+    public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm, RealmChangeListener listener, ProjectDomain projectDomain) {
+        this.lecetClient = lecetClient;
+        this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
+        this.realm.addChangeListener(listener);
+        this.projectDomain = projectDomain;
     }
 
     // Realm Management
@@ -75,14 +90,28 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
-//    public void getProjectTrackingListDetails(long projectTrackingListID) {
-//
-//        String token = sharedPreferenceUtil.getAccessToken();
-//
-//        String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
-//    }
+    public void getCompanyTrackingListUpdates(long companyTrackingListId, Date updateCutoffDate, Callback<List<ActivityUpdate>> callback) {
 
-    private Call<ProjectTrackingList> moveProjectsFromProjectTrackingList(long projectTrackingListId, List<Long> projectIds , Callback<ProjectTrackingList> callback) {
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String formattedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(updateCutoffDate);
+        String filter = String.format("{\"where\":{\"createdAt\":{\"gte\":\"%s\"}}}", formattedDate);
+
+        Call<List<ActivityUpdate>> call = lecetClient.getTrackingListService().getCompanyTrackingListUpdates(token, companyTrackingListId, filter);
+        call.enqueue(callback);
+    }
+
+    public void getProjectTrackingListDetails(long projectTrackingListID, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
+
+        Call<List<Project>> call = lecetClient.getTrackingListService().getProjectTrackingListDetail(token, projectTrackingListID, filter);
+        call.enqueue(callback);
+    }
+
+    private Call<ProjectTrackingList> moveProjectsFromProjectTrackingList(long projectTrackingListId, List<Long> projectIds, Callback<ProjectTrackingList> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         MoveProjectFromListRequest body = new MoveProjectFromListRequest(projectIds);
@@ -95,7 +124,7 @@ public class TrackingListDomain {
 
     public Call<ProjectTrackingList> removeProjectsFromProjectTrackingList(long trackingListID, List<Long> removedProjectIds, Callback<ProjectTrackingList> callback) {
 
-       return moveProjectsFromProjectTrackingList(trackingListID, removedProjectIds, callback);
+        return moveProjectsFromProjectTrackingList(trackingListID, removedProjectIds, callback);
     }
 
     public void moveProjectsToDestinationTrackingList(long sourceProjectTrackingListId, final long destinationTrackingListId, final List<Long> movedProjectIds, final LecetCallback callback) {
@@ -137,15 +166,16 @@ public class TrackingListDomain {
             @Override
             public void onFailure(Call<ProjectTrackingList> call, Throwable t) {
 
-                    callback.onFailure(-1, "Network Failure");
+                callback.onFailure(-1, "Network Failure");
             }
         });
     }
 
-    /** Persisted **/
+    /**
+     * Persisted
+     **/
 
     // Fetch
-
     public RealmResults<ProjectTrackingList> fetchUserProjectTrackingList() {
 
         RealmResults<ProjectTrackingList> results = realm.where(ProjectTrackingList.class).findAll();
@@ -171,6 +201,11 @@ public class TrackingListDomain {
         return realm.where(CompanyTrackingList.class).equalTo("id", id).findFirst();
     }
 
+    public void fetchProjectTrackingListAsync(long id, RealmChangeListener<RealmModel> listener) {
+
+        ProjectTrackingList result = realm.where(ProjectTrackingList.class).equalTo("id", id).findFirstAsync();
+        result.addChangeListener(listener);
+    }
 
     // Delete
 
@@ -199,6 +234,55 @@ public class TrackingListDomain {
                 results.deleteAllFromRealm();
             }
         });
+    }
+
+    // Project Update Mapping
+
+    public void asyncMapUpdatesToProjects(final List<ActivityUpdate> updates, Realm.Transaction.OnSuccess successCallback,
+                                          final Realm.Transaction.OnError errorCallback) {
+
+        final WeakReference<ProjectDomain> domainWeakReference = new WeakReference<>(projectDomain);
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                // First we need add the updates to Realm
+                List<ActivityUpdate> insertedUpdates = realm.copyToRealmOrUpdate(updates);
+
+                // If we don't have a ProjectDomain then we exit.
+                ProjectDomain domain = domainWeakReference.get();
+                if (domain == null) {
+
+                    // Notify error callback if its not null and cancel execution
+                    if (errorCallback != null)
+                        errorCallback.onError(new Throwable("ProjectDomain is null!"));
+
+                    return;
+                }
+
+                // Now let's cycle through the updates and associate with their respective Project
+                for (ActivityUpdate update : insertedUpdates) {
+
+                    Project project = domain.fetchProjectById(realm, update.getProjectId());
+                    if (project != null) {
+
+                        RealmList<ActivityUpdate> projectUpdates = project.getUpdates();
+                        if (projectUpdates == null) {
+                            projectUpdates = new RealmList<>();
+                        }
+
+                        projectUpdates.add(update);
+
+                        // Let's get the latest project update and assign it as most recent update for
+                        // project
+                        ActivityUpdate recentUpdate = projectUpdates.sort("updatedAt", Sort.DESCENDING).first();
+                        project.setRecentUpdate(recentUpdate);
+                    }
+                }
+            }
+
+        }, successCallback, errorCallback);
     }
 
     // Sorting
@@ -260,5 +344,13 @@ public class TrackingListDomain {
         List<ProjectTrackingList> persistedTrackingLists = realm.copyToRealmOrUpdate(trackingLists);
         realm.commitTransaction();
         return persistedTrackingLists;
+    }
+
+    public List<ActivityUpdate> copyActivityUpdatesToRealmTransaction(List<ActivityUpdate> updates) {
+
+        realm.beginTransaction();
+        List<ActivityUpdate> persisted = realm.copyToRealmOrUpdate(updates);
+        realm.commitTransaction();
+        return persisted;
     }
 }
