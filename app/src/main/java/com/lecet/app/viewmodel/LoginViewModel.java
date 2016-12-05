@@ -141,12 +141,6 @@ public class LoginViewModel extends BaseObservable {
         return activity.getString(R.string.error_invalid_email);
     }
 
-    public void onSignUpClicked(View view) {
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.lecet_signup_url)));
-        activity.startActivity(intent);
-    }
-
     public void getUser(long userId) {
 
         userDomain.getUser(userId, new Callback<User>() {

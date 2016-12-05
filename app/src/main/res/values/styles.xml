@@ -411,7 +411,7 @@
     </style>
 
     <style name="ListItemProjectTrackingTextView.Title">
-        <item name="android:paddingTop">14sp</item>
+        <item name="android:paddingTop">4sp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
