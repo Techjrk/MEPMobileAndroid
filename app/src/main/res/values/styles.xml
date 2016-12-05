@@ -479,5 +479,13 @@
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
+    <!-- MSE: Search Page -->
+    <style name="SearchPageSectionTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

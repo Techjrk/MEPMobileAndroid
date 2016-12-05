@@ -59,6 +59,11 @@
     <string name="edit">EDIT</string>
     <string name="projects">Projects</string>
 
+    <!-- MSE: Search Page -->
+    <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
+    <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
+    <string name="recent">RECENT</string>
+
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
     <string name="geofence_not_available">Geofence is not available</string>

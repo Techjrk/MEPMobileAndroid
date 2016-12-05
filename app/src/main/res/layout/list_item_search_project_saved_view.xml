@@ -62,7 +62,7 @@
             android:layout_margin="8dp"
 
             android:layout_alignParentRight="true"
-            android:id="@+id/dashboard_page_right_button"
+            android:id="@+id/right_caret_building"
             android:background="@mipmap/ic_arrow_right_dark"
 
             />

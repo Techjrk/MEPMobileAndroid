@@ -2,7 +2,6 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.SearchViewModel" />
@@ -30,6 +29,7 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="0dp">
 
+                <!-- SEARCH FIELD -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,12 +43,12 @@
                         android:paddingTop="8dp">
 
                         <ImageButton
-                            android:id="@+id/dashboard_page_left_button"
+                            android:id="@+id/search_back_button"
                             style="@style/ViewPagerArrowButton.Left"
                             android:paddingLeft="-1dp" />
 
                         <EditText
-                            android:id="@+id/editText"
+                            android:id="@+id/search_edit_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
@@ -62,7 +62,7 @@
                             android:textSize="12sp" />
 
                         <ImageButton
-                            android:id="@+id/filter"
+                            android:id="@+id/filter_image_button"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
@@ -70,35 +70,27 @@
                             android:background="@null"
                             android:paddingLeft="1dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/filter" />
+                            android:src="@mipmap/ic_filter" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
+                <!-- RECENT -->
                 <TextView
-                    android:id="@+id/recentsearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:text="RECENT"
-                    android:textSize="16sp"
+                    style="@style/SearchPageSectionTextView"
+                    android:text="@string/recent"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view1"
+                    android:id="@+id/recycler_view_recent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+                <!-- PROJECT SAVED SEARCHES -->
                 <TextView
-                    android:id="@+id/projectsearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:text="PROJECT SAVED SEARCHES"
-                    android:textSize="16sp"
+                    style="@style/SearchPageSectionTextView"
+                    android:text="@string/project_saved_searches"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <android.support.v7.widget.RecyclerView
@@ -106,15 +98,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+                <!-- COMPANY SAVED SEARCHES -->
                 <TextView
+                    style="@style/SearchPageSectionTextView"
                     android:layout_marginTop="8dp"
-                    android:id="@+id/companysearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:text="COMPANY SAVED SEARCHES"
-                    android:textSize="16sp"
+                    android:text="@string/company_saved_searches"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <android.support.v7.widget.RecyclerView
@@ -127,13 +115,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvsearch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:text="@{viewModel.sb}" />
+                <!-- USED?  -->
+                <TextView
+                    android:id="@+id/search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@{viewModel.sb}" />
 
                 </LinearLayout>
 

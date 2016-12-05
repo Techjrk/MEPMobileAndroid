@@ -14,7 +14,6 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.Search1RecyclerViewAdapter;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -251,7 +249,7 @@ public class SearchViewModel extends BaseObservable {
        // adapterData.add(sr1);
        // adapterData.add(sr2);
 //** 0: For recent adapter
-        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view1);
+        RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view_recent);
         setupRecyclerView(recyclerView,LinearLayoutManager.HORIZONTAL);
         searchAdapter = new Search1RecyclerViewAdapter(adapterData);
         //searchAdapterProject.setAdapterType(0);
