@@ -55,17 +55,6 @@
                             bind:typeface="@{`Lato-Regular.ttf`}"
                             android:text="@{viewModel.itemName}"/>
 
-                    <!-- Union / Nonunion Icon -->
-                    <ImageView
-                            android:id="@+id/image_union_status_icon"
-                            android:layout_width="20dp"
-                            android:layout_height="32dp"
-                            android:paddingTop="6dp"
-                            android:layout_marginRight="0dp"
-                            android:layout_alignParentRight="true"
-                            android:src="@{viewModel.unionStatusIconViewId}"
-                            android:visibility="@{viewModel.showUnionStatusView ? View.VISIBLE : View.GONE}"/>
-
                 </RelativeLayout>
 
 
