@@ -25,9 +25,11 @@ import java.util.List;
  */
 
 public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     int adapterType;
 
     private List data = Collections.emptyList();
+
 
     public Search1RecyclerViewAdapter(List data) {
 
