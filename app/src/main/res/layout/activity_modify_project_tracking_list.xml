@@ -13,7 +13,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ModifyProjectTrackingListActivity">
+        tools:context="com.lecet.app.content.ModifyTrackingListActivity">
 
         <!-- App Bar -->
         <include

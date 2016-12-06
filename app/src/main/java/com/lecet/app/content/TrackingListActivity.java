@@ -27,7 +27,7 @@ import io.realm.RealmChangeListener;
  * TrackingListActivity Created by jasonm on 11/2/16.
  */
 
-public class TrackingListActivity extends NavigationBaseActivity {
+public abstract class TrackingListActivity extends NavigationBaseActivity {
 
     private final String TAG = "ProjectTrackingListAct";
 
@@ -42,8 +42,9 @@ public class TrackingListActivity extends NavigationBaseActivity {
     public static final String TRACKING_LIST_TYPE_COMPANY = "company";
 
     private TrackingListViewModel viewModel;
-    private String listType;
+    private String listType; // TODO: Find better solution.
 
+    public abstract TrackingListViewModel buildViewModel(long listItemId);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,31 +65,7 @@ public class TrackingListActivity extends NavigationBaseActivity {
     private void setupBinding(long listItemId) {
         ActivityTrackingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_tracking_list);
 
-        // Project List
-        if (listType.equals(TRACKING_LIST_TYPE_PROJECT)) {
-            ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
-                @Override
-                public void onChange(Object element) {
-
-                }
-            }, projectDomain);
-
-            viewModel = new ProjectTrackingListViewModel(this, listItemId, projectDomain, trackingListDomain);
-        }
-
-        // Company List
-        else if(listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
-
-            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
-                @Override
-                public void onChange(Object element) {
-
-                }
-            }, null);
-
-            viewModel = new CompanyTrackingListViewModel(this, listItemId, trackingListDomain, null);
-        }
+        viewModel = buildViewModel(listItemId);
 
         binding.setViewModel(viewModel);
     }

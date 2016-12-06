@@ -81,7 +81,6 @@ public class ModifyProjectTrackingListViewModel extends BaseObservable implement
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         listView.setOnItemClickListener(this);
         populateList(projectTrackingList.getProjects(), sortBy);
-
     }
 
     private void populateList(RealmList<Project> projects, SortBy sortBy) {

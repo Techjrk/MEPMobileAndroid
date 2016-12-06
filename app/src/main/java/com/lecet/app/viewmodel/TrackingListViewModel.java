@@ -2,79 +2,68 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.Point;
 import android.support.annotation.IdRes;
-import android.support.annotation.IntDef;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.adapters.TrackingListRecyclerViewAdapter;
-import com.lecet.app.content.TrackingListActivity;
-import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.Company;
-import com.lecet.app.data.models.CompanyTrackingList;
-import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.adapters.MenuTitleListAdapter;
+import com.lecet.app.adapters.TrackingListAdapter;
 
-import java.lang.annotation.Retention;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import io.realm.RealmResults;
 
 /**
  * File: TrackingListViewModel Created: 11/2/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public abstract class TrackingListViewModel extends BaseObservable {
-
-    @Retention(SOURCE)
-    @IntDef({LIST_TYPE_COMPANY, LIST_TYPE_PROJECT})
-    public @interface TrackingListType {}
-
-    public static final int LIST_TYPE_COMPANY = 0;
-    public static final int LIST_TYPE_PROJECT = 1;
-
-    @TrackingListType
-    private int listType;
+public abstract class TrackingListViewModel<T extends RealmResults> extends BaseObservable {
 
     private final static String TAG = "ProjectTrackingListVM";
 
     private AppCompatActivity appCompatActivity;
     private RecyclerView recyclerView;
-    private TrackingListRecyclerViewAdapter listAdapter;
+    private TrackingListAdapter listAdapter;
     private TextView titleTextView;
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
     private Switch showUpdatesToggle;
 
+    private ListPopupWindow mtmSortMenu;
+    private MenuTitleListAdapter mtmSortAdapter;
 
-    private List<RealmObject> adapterData;
+
+    private T adapterData;
     private long listItemId;
     private boolean showUpdates = true;
 
-    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, @TrackingListType int trackingListType) {
+    public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId) {
 
         this.appCompatActivity = appCompatActivity;
         this.listItemId = listItemId;
-        this.listType = trackingListType;
-        init(listType);
+        init();
     }
+
+    public abstract String[] sortMenuOptions();
+
+    public abstract void handleSortSelection(int position);
+
+    public abstract TrackingListAdapter recyclerViewAdapter();
+
+    public abstract void onEditClicked(View view);
 
     /**
      * Getters && Setters
@@ -88,15 +77,31 @@ public abstract class TrackingListViewModel extends BaseObservable {
         return appCompatActivity;
     }
 
-    public List<RealmObject> getAdapterData() {
+    public T getAdapterData() {
         return adapterData;
+    }
+
+    public void setAdapterData(T adapterData) {
+
+        if (this.adapterData == null) {
+
+            this.adapterData = adapterData;
+
+            //TODO: Need better solution
+            // Reinitialize adapter
+            initializeAdapter();
+
+        } else {
+
+            this.adapterData = adapterData;
+        }
     }
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
     }
 
-    public TrackingListRecyclerViewAdapter getListAdapter() {
+    public TrackingListAdapter getListAdapter() {
         return listAdapter;
     }
 
@@ -104,19 +109,19 @@ public abstract class TrackingListViewModel extends BaseObservable {
      * Initializers
      **/
 
-    private void init(@TrackingListType int listType) {
+    private void init() {
 
-        initRecyclerView(listType);
+        initRecyclerView();
         initShowUpdatesSwitch();
     }
 
-    private void initRecyclerView(@TrackingListType int listType) {
+    private void initRecyclerView() {
 
         recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        initializeEmptyAdapter(listType);
+        initializeAdapter();
     }
 
     private void initShowUpdatesSwitch() {
@@ -154,42 +159,13 @@ public abstract class TrackingListViewModel extends BaseObservable {
      * Adapter Data Management: Project List
      **/
 
-    private void initializeEmptyAdapter(@TrackingListType int listType) {
-
-        @TrackingListRecyclerViewAdapter.TrackingAdapterType int adapterType = listType == LIST_TYPE_COMPANY ? TrackingListRecyclerViewAdapter.LIST_TYPE_COMPANY : TrackingListRecyclerViewAdapter.LIST_TYPE_PROJECT;
-
-        adapterData = new ArrayList<>();
+    private void initializeAdapter() {
 
         recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
         setupRecyclerView(recyclerView);
-        listAdapter = new TrackingListRecyclerViewAdapter(adapterData, appCompatActivity, adapterType);
+        listAdapter = recyclerViewAdapter();
         recyclerView.setAdapter(listAdapter);
     }
-
-    /**
-     * Adapter Data Management: Company List
-     **/
-
-//    private void initAdapterWithCompanyTrackingListId(long listItemId) {
-//
-//        adapterData = new ArrayList<>();
-//
-//        //TODO - add RealmChangeListener as last argument to resolve deprecation
-//        final TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance());
-//        CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listItemId);
-//
-//        if (companyList != null) {
-//            RealmList<Company> companies = companyList.getCompanies();
-//            Company[] data = companies != null ? companies.toArray(new Company[companies.size()]) : new Company[0];
-//
-//            adapterData.addAll(Arrays.asList(data));
-//        } else Log.w(TAG, "initAdapterWithCompanyTrackingListId: WARNING: companyList is null");
-//
-//        recyclerView = getRecyclerView(R.id.tracking_list_recycler_view);
-//        setupRecyclerView(recyclerView);
-//        listAdapter = new TrackingListRecyclerViewAdapter(TrackingListActivity.TRACKING_LIST_TYPE_COMPANY, adapterData);
-//        recyclerView.setAdapter(listAdapter);
-//    }
 
     /**
      * RecyclerView Management
@@ -215,9 +191,48 @@ public abstract class TrackingListViewModel extends BaseObservable {
         appCompatActivity.onBackPressed();
     }
 
-    public void onSortButtonClick(View view) {
-        Log.d(TAG, "onSortButtonClick");
-        Toast.makeText(appCompatActivity, "Sort button pressed", Toast.LENGTH_SHORT).show();
+    private void toogleMTMSortMenu() {
+        if (mtmSortMenu == null) {
+            createMTMSortMenu(appCompatActivity.findViewById(R.id.sort_menu_button));
+        }
+        mtmSortMenu.show();
+    }
+
+    private void createMTMSortMenu(View anchor) {
+        if (mtmSortMenu == null) {
+            mtmSortMenu = new ListPopupWindow(appCompatActivity);
+
+            mtmSortAdapter
+                    = new MenuTitleListAdapter(appCompatActivity
+                    , appCompatActivity.getResources().getString(R.string.mtm_sort_menu_title)
+                    , sortMenuOptions());
+
+            Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0]
+                    - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
+            mtmSortMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.overflow_menu_background));
+            mtmSortMenu.setAnchorView(anchor);
+            mtmSortMenu.setModal(true);
+            mtmSortMenu.setWidth(width);
+            mtmSortMenu.setHorizontalOffset(-offset);
+            mtmSortMenu.setVerticalOffset(anchor.getHeight());
+            mtmSortMenu.setAdapter(mtmSortAdapter);
+            mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position > 0) {
+                        mtmSortMenu.dismiss();
+
+                        handleSortSelection(position - 1); // removing title
+                    }
+                }
+            }); // the callback for when a list item is selected
+        }
     }
 
 
@@ -236,5 +251,7 @@ public abstract class TrackingListViewModel extends BaseObservable {
         listAdapter.notifyDataSetChanged();
     }
 
-
+    public void onSortButtonClick(View view) {
+        toogleMTMSortMenu();
+    }
 }

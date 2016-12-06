@@ -18,4 +18,9 @@
         <item>Value: High to Low</item>
         <item>Value: Low to High</item>
     </string-array>
+
+    <string-array name="mobile_company_tracking_list_sort_menu">
+        <item>Last Updated</item>
+        <item>Alphabetical</item>
+    </string-array>
 </resources>

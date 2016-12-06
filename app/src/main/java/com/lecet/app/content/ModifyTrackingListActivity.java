@@ -28,7 +28,7 @@ import io.realm.Realm;
  * Created by Josué Rodríguez on 12/11/2016.
  */
 
-public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
+public class ModifyTrackingListActivity extends LecetBaseActivity {
 
     public static final String EXTRA_PROJECT_LIST_ITEM_ID = "listItemId";
     public static final String EXTRA_PROJECT_LIST_ITEM_TITLE = "listItemTitle";
@@ -40,8 +40,8 @@ public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
 
     private long listItemId;
 
-    public static void startActivityForResult(Activity activity, long listItemId, String listItemTitle, int listItemSize, SortBy sort) {
-        Intent intent = new Intent(activity, ModifyProjectTrackingListActivity.class);
+    public static void startActivityForResult(Activity activity, long listItemId, String listItemTitle, int listItemSize, String sort) {
+        Intent intent = new Intent(activity, ModifyTrackingListActivity.class);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_ID, listItemId);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_TITLE, listItemTitle);
         intent.putExtra(EXTRA_PROJECT_LIST_ITEM_SIZE, listItemSize);
@@ -83,7 +83,7 @@ public class ModifyProjectTrackingListActivity extends LecetBaseActivity {
             actionBar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.activity_bar_background));
             LayoutInflater inflater = getLayoutInflater();
 
-            View tb = inflater.inflate(R.layout.include_app_bar_layout_projects_list, null);
+            View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);
             viewModel.setToolbar(tb, title, subtitle);
 
             actionBar.setCustomView(tb);

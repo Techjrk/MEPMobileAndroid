@@ -17,12 +17,14 @@ import com.lecet.app.databinding.ListItemTrackingTestBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ListItemCompanyTrackingViewModel;
 import com.lecet.app.viewmodel.NewListItemProjectTrackingViewModel;
+import com.lecet.app.viewmodel.TrackingListItem;
+import com.lecet.app.viewmodel.TrackingListViewModel;
 
 import java.lang.annotation.Retention;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
@@ -32,36 +34,32 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<TrackingListRecyclerViewAdapter.TrackingListViewHolderNew> {
+public abstract class TrackingListAdapter<T extends RealmResults> extends RecyclerView.Adapter<TrackingListAdapter<T>.TrackingListViewHolderNew> {
 
-    @Retention(SOURCE)
-    @IntDef({LIST_TYPE_COMPANY, LIST_TYPE_PROJECT})
-    public @interface TrackingAdapterType {}
-
-    public static final int LIST_TYPE_COMPANY = 0;
-    public static final int LIST_TYPE_PROJECT = 1;
-
-    @TrackingAdapterType
-    private int listType;
-
-    private List<RealmObject> data;
+    private T data;
     private boolean showUpdates;
     private AppCompatActivity appCompatActivity;
 
 
-    public TrackingListRecyclerViewAdapter(List<RealmObject> data, AppCompatActivity appCompatActivity, @TrackingAdapterType int listType) {
+    public TrackingListAdapter(T data, AppCompatActivity appCompatActivity) {
 
         this.data = data;
-        this.listType = listType;
         this.appCompatActivity = appCompatActivity;
+    }
+
+    public abstract TrackingListItem viewModelForPosition(String apiKey, int position, boolean showUpdates);
+
+    public AppCompatActivity getAppCompatActivity() {
+        return appCompatActivity;
+    }
+
+    public T getData() {
+        return data;
     }
 
 
     @Override
     public TrackingListViewHolderNew onCreateViewHolder(ViewGroup parent, int viewType) {
-
-//        ListItemTrackingBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_tracking, parent, false);
-//        TrackingListViewHolder viewHolder = new TrackingListViewHolder(projectBinding);
 
         ListItemTrackingTestBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_tracking_test, parent, false);
         TrackingListViewHolderNew viewHolder = new TrackingListViewHolderNew(projectBinding);
@@ -74,23 +72,7 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
 
         final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";    //TODO - externalize?
 
-        // Project List
-        if(listType == LIST_TYPE_PROJECT) {
-
-            NewListItemProjectTrackingViewModel viewModel = new NewListItemProjectTrackingViewModel(new ProjectDomain(LecetClient.getInstance(),
-                    LecetSharedPreferenceUtil.getInstance(appCompatActivity),
-                    Realm.getDefaultInstance()), (Project) data.get(position), mapsApiKey, showUpdates);
-
-            holder.getBinding().setViewModel(viewModel);
-        }
-
-        // Company List
-        else if(listType == LIST_TYPE_COMPANY) {
-
-            holder.getBinding().setViewModel(new ListItemCompanyTrackingViewModel(new ProjectDomain(LecetClient.getInstance(),
-                    LecetSharedPreferenceUtil.getInstance(appCompatActivity),
-                    Realm.getDefaultInstance()), (Company) data.get(position), mapsApiKey, showUpdates));
-        }
+        holder.getBinding().setViewModel(viewModelForPosition(mapsApiKey, position, showUpdates));
     }
 
 
@@ -102,12 +84,6 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
         return data.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-
-        //return listType;
-        return 1;   //TODO - check
-    }
 
     public void setShowUpdates(boolean showUpdates) {
         this.showUpdates = showUpdates;
@@ -117,22 +93,6 @@ public class TrackingListRecyclerViewAdapter extends RecyclerView.Adapter<Tracki
     /**
      * View Holders
      **/
-
-    public class TrackingListViewHolder extends RecyclerView.ViewHolder {
-
-        private ListItemTrackingBinding binding;
-
-        public TrackingListViewHolder(ListItemTrackingBinding binding) {
-
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        public ListItemTrackingBinding getBinding() {
-            return binding;
-        }
-    }
 
     public class TrackingListViewHolderNew extends RecyclerView.ViewHolder {
 

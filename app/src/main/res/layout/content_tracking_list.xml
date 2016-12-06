@@ -55,7 +55,8 @@
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}"
-                    android:text="@string/edit"/>
+                    android:text="@string/edit"
+                    android:onClick="@{viewModel.onEditClicked}"/>
 
         </RelativeLayout>
 
