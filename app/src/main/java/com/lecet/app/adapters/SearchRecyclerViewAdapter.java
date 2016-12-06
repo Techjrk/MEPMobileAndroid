@@ -6,35 +6,35 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.databinding.ListItemSearchProjectSavedViewBinding;
-import com.lecet.app.databinding.ListItemSearchRecentViewBinding;
 
+import com.lecet.app.databinding.ListItemSearchRecentViewBinding;
 import com.lecet.app.viewmodel.SearchItem1ViewModel;
 import com.lecet.app.viewmodel.SearchItemSavedSearchViewModel;
+import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
- * File: Search1RecyclerViewAdapter Created: 10/21/16 Author: domandtom
+ * File: SearchRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    int adapterType;
-
+    private int adapterType;
     private List data = Collections.emptyList();
 
 
-    public Search1RecyclerViewAdapter(List data) {
+    public SearchRecyclerViewAdapter(List data) {
 
         this.data = data;
     }
+
     public void setData(List data){
         this.data = data;
     }
@@ -44,18 +44,19 @@ public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         RecyclerView.ViewHolder viewHolder = null;
 
         switch (viewType) {
-            case 0: // 0 for recentview
-                ListItemSearchRecentViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_recent_view, parent, false);
-                viewHolder = new RecentViewHolder(binding);  //see this class below...
-                break;
-            case 1:
-                ListItemSearchProjectSavedViewBinding binding1 = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
-                viewHolder = new ProjectSavedViewHolder(binding1);  //see this class below...
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_RECENT:
+                com.lecet.app.databinding.ListItemSearchRecentViewBinding recentItemsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_recent_view, parent, false);
+                viewHolder = new RecentViewHolder(recentItemsBinding);
                 break;
 
-           case 2:
-                ListItemSearchProjectSavedViewBinding binding2 = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
-                viewHolder = new ProjectSavedViewHolder(binding2);  //see this class below...
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECTS:
+                ListItemSearchProjectSavedViewBinding projectsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
+                viewHolder = new ProjectSavedViewHolder(projectsBinding);
+                break;
+
+           case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
+                ListItemSearchProjectSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
+                viewHolder = new CompanySavedViewHolder(companiesBinding);
                 break;
         }
         return viewHolder;
@@ -95,21 +96,21 @@ public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     /**
-     * View Holders
+     * View Holders - Recent Items, Project, and Company
+     * TODO - consolidate into one?
      **/
 
     public class RecentViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemSearchRecentViewBinding binding;
+        private final com.lecet.app.databinding.ListItemSearchRecentViewBinding binding;
 
-        public RecentViewHolder(ListItemSearchRecentViewBinding binding) {
+        public RecentViewHolder(com.lecet.app.databinding.ListItemSearchRecentViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-
-        public ListItemSearchRecentViewBinding getBinding() {
+        public com.lecet.app.databinding.ListItemSearchRecentViewBinding getBinding() {
             return binding;
         }
     }
@@ -119,6 +120,21 @@ public class Search1RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         private final ListItemSearchProjectSavedViewBinding binding;
 
         public ProjectSavedViewHolder(ListItemSearchProjectSavedViewBinding binding) {
+            super(binding.getRoot());
+
+            this.binding = binding;
+        }
+
+        public ListItemSearchProjectSavedViewBinding getBinding() {
+            return binding;
+        }
+    }
+
+    public class CompanySavedViewHolder extends RecyclerView.ViewHolder {
+
+        private final ListItemSearchProjectSavedViewBinding binding;
+
+        public CompanySavedViewHolder(ListItemSearchProjectSavedViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
