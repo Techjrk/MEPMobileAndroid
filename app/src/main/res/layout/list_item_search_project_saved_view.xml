@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.SearchItemSavedSearchViewModel" />
@@ -15,14 +14,13 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/textlinearlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
 
+            <!-- TITLE -->
             <TextView
-                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -30,10 +28,10 @@
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
                 android:text="@{viewModel.title}"
-
                 android:textSize="14sp"
                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
+            <!-- LAST CHECKED -->
             <TextView
                 android:id="@+id/last_checked"
                 android:layout_width="wrap_content"
@@ -41,30 +39,29 @@
                 android:layout_marginLeft="10dp"
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
-                android:text="Last checked yesterday"
+                android:text="@string/last_checked"
                 android:textSize="10sp"
                 bind:typeface="@{`Lato-Regular.ttf`}" />
 
-
-
             <ImageView
-                android:id="@+id/horizontal_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:scaleType="fitXY"
                 bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
+
         </LinearLayout>
+
+        <!-- RIGHT CARET -->
         <ImageButton
+            android:id="@+id/right_caret"
             android:layout_height="20dp"
             android:layout_width="10dp"
             android:layout_margin="8dp"
-
             android:layout_alignParentRight="true"
-            android:id="@+id/right_caret_building"
-            android:background="@mipmap/ic_arrow_right_dark"
+            android:background="@mipmap/ic_arrow_right_dark"/>
 
-            />
     </RelativeLayout>
+
 </layout>
 

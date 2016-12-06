@@ -63,6 +63,7 @@
     <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
     <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
     <string name="recent">RECENT</string>
+    <string name="last_checked">Last checked </string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>

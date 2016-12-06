@@ -1,6 +1,9 @@
 package com.lecet.app.viewmodel;
 
-import com.lecet.app.data.models.Project;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.lecet.app.BR;
 import com.lecet.app.data.models.SearchSaved;
 
 /**
@@ -9,21 +12,32 @@ import com.lecet.app.data.models.SearchSaved;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class SearchItemSavedSearchViewModel {
+public class SearchItemSavedSearchViewModel extends BaseObservable {
 
-    private final SearchSaved saved;
+    private final SearchSaved searchSaved;
+    private String title;
 //    private final String mapsApiKey;
  //   private final String code ="this123code";
 
-    public String getTitle(){
-         return saved.getTitle();
-    }
-    public SearchItemSavedSearchViewModel(SearchSaved saved) {
+    public SearchItemSavedSearchViewModel(SearchSaved searchSaved) {
 //        this.project = project;
 //        this.mapsApiKey = mapsApiKey;
-        this.saved = saved;
+        this.searchSaved = searchSaved;
+        this.setTitle(searchSaved.getTitle());
     }
 
+    /////////////////////////
+    // BINDABLE
+
+    @Bindable
+    public String getTitle(){
+        return title;
+    }
+
+    public void setTitle(String title){
+        this.title = title;
+        notifyPropertyChanged(BR.title);
+    }
 
 
 
