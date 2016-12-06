@@ -7,7 +7,7 @@ import com.lecet.app.BR;
 import com.lecet.app.data.models.SearchSaved;
 
 /**
- * File: SearchItem1ViewModel Created: 10/17/16 Author: domandtom
+ * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */

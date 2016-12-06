@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import com.lecet.app.R;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
-import com.lecet.app.databinding.ListItemSearchProjectSavedViewBinding;
+import com.lecet.app.databinding.ListItemSearchSavedViewBinding;
 
-import com.lecet.app.databinding.ListItemSearchRecentViewBinding;
-import com.lecet.app.viewmodel.SearchItem1ViewModel;
+import com.lecet.app.viewmodel.SearchItemRecentViewModel;
 import com.lecet.app.viewmodel.SearchItemSavedSearchViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
@@ -50,12 +49,12 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 break;
 
             case SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECTS:
-                ListItemSearchProjectSavedViewBinding projectsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
+                ListItemSearchSavedViewBinding projectsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new ProjectSavedViewHolder(projectsBinding);
                 break;
 
            case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
-                ListItemSearchProjectSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_project_saved_view, parent, false);
+                ListItemSearchSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new CompanySavedViewHolder(companiesBinding);
                 break;
         }
@@ -64,13 +63,22 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        // Recent item
         if (holder instanceof RecentViewHolder) {
             RecentViewHolder viewHolder = (RecentViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new SearchItem1ViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
         }
 
-        if (holder instanceof ProjectSavedViewHolder) {
+        // Project
+        else if (holder instanceof ProjectSavedViewHolder) {
             ProjectSavedViewHolder viewHolder = (ProjectSavedViewHolder) holder;
+            viewHolder.getBinding().setViewModel(new SearchItemSavedSearchViewModel((SearchSaved) data.get(position)));
+        }
+
+        // Company
+        else if (holder instanceof CompanySavedViewHolder) {
+            CompanySavedViewHolder viewHolder = (CompanySavedViewHolder) holder;
             viewHolder.getBinding().setViewModel(new SearchItemSavedSearchViewModel((SearchSaved) data.get(position)));
         }
     }
@@ -117,30 +125,30 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     public class ProjectSavedViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemSearchProjectSavedViewBinding binding;
+        private final ListItemSearchSavedViewBinding binding;
 
-        public ProjectSavedViewHolder(ListItemSearchProjectSavedViewBinding binding) {
+        public ProjectSavedViewHolder(ListItemSearchSavedViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemSearchProjectSavedViewBinding getBinding() {
+        public ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
     }
 
     public class CompanySavedViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemSearchProjectSavedViewBinding binding;
+        private final ListItemSearchSavedViewBinding binding;
 
-        public CompanySavedViewHolder(ListItemSearchProjectSavedViewBinding binding) {
+        public CompanySavedViewHolder(ListItemSearchSavedViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemSearchProjectSavedViewBinding getBinding() {
+        public ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
     }

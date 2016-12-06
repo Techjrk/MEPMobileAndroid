@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchItem1ViewModel" />
-
+            type="com.lecet.app.viewmodel.SearchItemRecentViewModel" />
         <import type="android.view.View" />
     </data>
 
@@ -42,7 +40,6 @@
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
             android:text="@{viewModel.title}"
-
             android:textSize="14sp"
             bind:typeface="@{`Lato-Bold.ttf`}" />
     </LinearLayout>

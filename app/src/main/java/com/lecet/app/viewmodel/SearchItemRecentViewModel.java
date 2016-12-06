@@ -5,13 +5,14 @@ import com.lecet.app.data.models.Project;
 import java.text.SimpleDateFormat;
 
 /**
- * File: SearchItem1ViewModel Created: 10/17/16 Author: domandtom
+ * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class SearchItem1ViewModel {
+public class SearchItemRecentViewModel {
 
+    //TODO - support either Project or Company data
     private final Project project;
     private final String mapsApiKey;
     private final String code ="this123code";
@@ -29,7 +30,7 @@ public class SearchItem1ViewModel {
         return code;
     }
 
-    public SearchItem1ViewModel(Project project, String mapsApiKey) {
+    public SearchItemRecentViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
     }
