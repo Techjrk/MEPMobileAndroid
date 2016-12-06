@@ -8,8 +8,6 @@
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.SearchItemSavedSearchViewModel" />
-
-        <import type="android.view.View" />
     </data>
 
     <RelativeLayout
@@ -53,6 +51,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:scaleType="fitXY"
                 bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
         </LinearLayout>
