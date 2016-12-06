@@ -33,8 +33,8 @@ import retrofit2.Response;
 
 public class SearchViewModel extends BaseObservable {
 
-    public final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
-    public final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
+    public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
+    public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
 
     private final AppCompatActivity activity;
     private final SearchDomain searchDomain;
@@ -82,17 +82,17 @@ public class SearchViewModel extends BaseObservable {
             @Override
             public void onResponse(Call<List<SearchResult>> call, Response<List<SearchResult>> response) {
                 List<SearchResult> slist;
+                String cs = getCustomString();
                 if (response.isSuccessful()) {
                     slist = response.body();
                     adapterData.clear();
-
-                    //                   customString += ("getUserRecentlyViewed\r\n");
+                    cs += "getUserRecentlyViewed\r\n";
                     int ctr = 0;
                     for (SearchResult s : slist) {
                         //TODO: testing for getting the result of  RecentlyViewed search
 
                         try {
-                            //                           customString += ("\r\n" + ctr + " code1:" + s.getCode() + " id:" + s.getId() + " pid:" + s.getProjectId() + " cid:" + s.getCompanyId() + " createdAt:" + s.getCreatedAt() +
+                            //                           cs += ("\r\n" + ctr + " code1:" + s.getCode() + " id:" + s.getId() + " pid:" + s.getProjectId() + " cid:" + s.getCompanyId() + " createdAt:" + s.getCreatedAt() +
                             //                                   " Lat: " + s.getProject().getGeocode().getLat() + " long: " + s.getProject().getGeocode().getLng() + "\r\n");
                             ctr++;
                             if (ctr <= 10 && s.getProject() != null) adapterData.add(s);
@@ -100,7 +100,7 @@ public class SearchViewModel extends BaseObservable {
                         }
                     }
 
-                    //                   notifyPropertyChanged(BR.customString);
+                    setCustomString(cs);
                     searchAdapter.notifyDataSetChanged();
 
                 } else {
@@ -124,31 +124,31 @@ public class SearchViewModel extends BaseObservable {
             @Override
             public void onResponse(Call<List<SearchSaved>> call, Response<List<SearchSaved>> response) {
                 List<SearchSaved> slist;
-                customString = "";
+                String cs = getCustomString();
                 if (response.isSuccessful()) {
                     slist = response.body();
                     if (adapterDataProjectSearchSaved == null) new ArrayList<SearchSaved>();
                     adapterDataProjectSearchSaved.clear();
                     adapterDataCompanySearchSaved.clear();
-                    int ctr = 0, ctrc = 0;
+                    int ctr = 0, ctrc = 0;  //TODO - rename variables for more clarity
+
                     for (SearchSaved s : slist) {
                         //TODO: testing for getting the result of  UserSaved search
                         //ctr++;
                         if (s != null) {
                             if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
-                           /*     customString += "\r\n"+((SearchSaved)adapterDataProjectSearchSaved.get(ctr)).getTitle();
-                                ctr++;*/
+                                cs += "\r\n"+((SearchSaved)adapterDataProjectSearchSaved.get(ctr)).getTitle();
+                                ctr++;
                             } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
-                              /*  customString += "\r\n"+((SearchSaved)adapterDataCompanySearchSaved.get(ctrc)).getTitle();
-                                ctrc++;*/
+                                cs += "\r\n"+((SearchSaved)adapterDataCompanySearchSaved.get(ctrc)).getTitle();
+                                ctrc++;
                             }
-
                         }
-                        //customString += ("\r\n" + ctr + " title:" + s.getTitle() + " modelName:" + s.getModelName() + " id:" + s.getId() + " userid:" + s.getUserId() + " query:" + s.getQuery() + "\r\n");
+                        //cs += getCustomString() + ("\r\n" + ctr + " title:" + s.getTitle() + " modelName:" + s.getModelName() + " id:" + s.getId() + " userid:" + s.getUserId() + " query:" + s.getQuery() + "\r\n");
+                        setCustomString(cs);
                     }
-                    notifyPropertyChanged(BR.customString);
                     searchAdapterProject.notifyDataSetChanged();
                     searchAdapterCompany.notifyDataSetChanged();
                 } else {
@@ -173,6 +173,7 @@ public class SearchViewModel extends BaseObservable {
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
                 List<Project> slist;
+                String cs = getCustomString();
                 if (response.isSuccessful()) {
                     slist = response.body();
                     //searchDomain.copyToRealmTransaction(slist);
@@ -180,9 +181,9 @@ public class SearchViewModel extends BaseObservable {
                     for (Project ps : slist) {
                         ctr++;
                         //   Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
-                        customString += ("\r\n" + ctr + " id:" + ps.getId() + " Title:" + ps.getTitle() + " Address:" + ps.getAddress1() + " GeoCode:" + ps.getGeocode() + " BidDate:" + ps.getBidDate() + "\r\n");
+                        cs += ("\r\n" + ctr + " id:" + ps.getId() + " Title:" + ps.getTitle() + " Address:" + ps.getAddress1() + " GeoCode:" + ps.getGeocode() + " BidDate:" + ps.getBidDate() + "\r\n");
                     }
-                    notifyPropertyChanged(BR.customString);
+                    setCustomString(cs);
                 } else {
                     errorDisplayMsg(response.message());
                 }
@@ -205,14 +206,15 @@ public class SearchViewModel extends BaseObservable {
             @Override
             public void onResponse(Call<List<Company>> call, Response<List<Company>> response) {
                 List<Company> slist;
+                String cs = getCustomString();
                 if (response.isSuccessful()) {
                     slist = response.body();
                     int ctr = 0;
-                    for (Company cs : slist) {
+                    for (Company c : slist) {
                         ctr++;
-                        customString += ("\r\n" + ctr + " id:" + cs.getId() + " Name:" + cs.getName() + " Address:" + cs.getAddress1() + " City:" + cs.getCity() + " Country:" + cs.getCountry() + "\r\n");
+                        cs += ("\r\n" + ctr + " id:" + c.getId() + " Name:" + c.getName() + " Address:" + c.getAddress1() + " City:" + c.getCity() + " Country:" + c.getCountry() + "\r\n");
                     }
-                    notifyPropertyChanged(BR.customString);
+                    setCustomString(cs);
                     searchAdapter.notifyDataSetChanged();
                 } else {
                     errorDisplayMsg(response.message());
@@ -317,6 +319,7 @@ public class SearchViewModel extends BaseObservable {
     @Bindable
     public void setQuery(String query) {
         this.query = query;
+        notifyPropertyChanged(BR.query);
     }
 
     @Bindable
@@ -326,6 +329,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setCustomString(String customString) {
         this.customString = customString;
+        notifyPropertyChanged(BR.customString);
     }
 
 }
