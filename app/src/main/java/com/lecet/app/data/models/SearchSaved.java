@@ -91,12 +91,12 @@ public class SearchSaved{
     @Override
     public String toString() {
         return "SearchSaved{" +
-                "title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", modelName='" + modelName + '\'' +
                 ", query='" + query + '\'' +
                 ", filter=" + filter +
                 ", optIn='" + optIn + '\'' +
-                ", id=" + id +
                 ", userId=" + userId +
                 '}';
     }

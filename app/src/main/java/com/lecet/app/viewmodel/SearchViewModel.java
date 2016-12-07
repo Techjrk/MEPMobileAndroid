@@ -40,8 +40,8 @@ public class SearchViewModel extends BaseObservable {
     private final SearchDomain searchDomain;
     //private final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";  //TODO - unused
     private static final String TAG = "SearchViewModel";
-    private Project project;    //TODO - unused
-    private String query;
+    //private Project project;    //TODO - unused
+    //private String query;
     private String customString = ""; //TODO: Just for personal testing/checking of the response result of the MSE APIs call using customString variable (customString - String Binding :).
 
     private List<SearchResult> adapterDataRecentlyViewed;
@@ -50,8 +50,6 @@ public class SearchViewModel extends BaseObservable {
     private SearchRecyclerViewAdapter searchAdapterRecentlyViewed;
     private SearchRecyclerViewAdapter searchAdapterProject;
     private SearchRecyclerViewAdapter searchAdapterCompany;
-
-    private final int MAX_SAVED_SEARCHES_TO_DISPLAY = 4;
 
 
     /**
@@ -88,13 +86,16 @@ public class SearchViewModel extends BaseObservable {
                     cs += "getUserRecentlyViewed\r\n";
                     int ctr = 0;
                     for (SearchResult s : slist) {
+                        Log.d(TAG, "getUserRecentlyViewed: onResponse: " + s);
                         //TODO: testing for getting the result of  RecentlyViewed search
 
                         try {
                             //                           cs += ("\r\n" + ctr + " code1:" + s.getCode() + " id:" + s.getId() + " pid:" + s.getProjectId() + " cid:" + s.getCompanyId() + " createdAt:" + s.getCreatedAt() +
                             //                                   " Lat: " + s.getProject().getGeocode().getLat() + " long: " + s.getProject().getGeocode().getLng() + "\r\n");
                             ctr++;
-                            if (ctr <= MAX_SAVED_SEARCHES_TO_DISPLAY && s.getProject() != null) adapterDataRecentlyViewed.add(s);
+                            if (s.getProject() != null) {
+                                adapterDataRecentlyViewed.add(s);
+                            }
                         } catch (Exception e) {
                             //TODO - handle exception
                         }
@@ -133,14 +134,15 @@ public class SearchViewModel extends BaseObservable {
                     int ctr = 0, ctrc = 0;  //TODO - rename variables for more clarity
 
                     for (SearchSaved s : slist) {
+                        Log.d(TAG, "getUserSavedSearches: onResponse: " + s);
                         //TODO: testing for getting the result of  UserSaved search
                         //ctr++;
                         if (s != null) {
-                            if (ctr <= MAX_SAVED_SEARCHES_TO_DISPLAY && s.getModelName().equalsIgnoreCase("Project")) {
+                            if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
                                 cs += "\r\n"+((SearchSaved)adapterDataProjectSearchSaved.get(ctr)).getTitle();
                                 ctr++;
-                            } else if (ctrc <= MAX_SAVED_SEARCHES_TO_DISPLAY && s.getModelName().equalsIgnoreCase("Company")) {
+                            } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
                                 cs += "\r\n"+((SearchSaved)adapterDataCompanySearchSaved.get(ctrc)).getTitle();
                                 ctrc++;
@@ -167,7 +169,7 @@ public class SearchViewModel extends BaseObservable {
      * Search the project based on query string
      * TODO: UNUSED
      */
-    public void getProject(String q) {
+    /*public void getProject(String q) {
         //Using the searchDomain to call the method to start retrofitting...
         searchDomain.getSearchProject(q, new Callback<List<Project>>() {
             @Override
@@ -194,13 +196,13 @@ public class SearchViewModel extends BaseObservable {
                 errorDisplayMsg(t.getLocalizedMessage());
             }
         });
-    }
+    }*/
 
     /**
      * Search the company based on query string
      * TODO: UNUSED
      */
-    public void getCompany(String q) {
+    /*public void getCompany(String q) {
         //Using the searchDomain to call the method to start retrofitting...
         searchDomain.getSearchCompany(q, new Callback<List<Company>>() {
             @Override
@@ -226,7 +228,7 @@ public class SearchViewModel extends BaseObservable {
                 errorDisplayMsg(t.getLocalizedMessage());
             }
         });
-    }
+    }*/
 
     /**
      * Display error message
@@ -280,7 +282,6 @@ public class SearchViewModel extends BaseObservable {
         RecyclerView recyclerViewCompany = getRecyclerViewById(R.id.recycler_view_company);
         setupRecyclerView(recyclerViewCompany, LinearLayoutManager.VERTICAL);
         searchAdapterCompany = new SearchRecyclerViewAdapter(adapterDataCompanySearchSaved);
-        //  searchAdapterProject.setData(adapterDataCompanySearchSaved);
         searchAdapterCompany.setAdapterType(SEARCH_ADAPTER_TYPE_COMPANIES);
         recyclerViewCompany.setAdapter(searchAdapterCompany);
     }
@@ -313,7 +314,7 @@ public class SearchViewModel extends BaseObservable {
     /////////////////////////////////////
     // BINDABLE
 
-    @Bindable
+    /*@Bindable
     public String getQuery() {
         return query;
     }
@@ -322,7 +323,7 @@ public class SearchViewModel extends BaseObservable {
     public void setQuery(String query) {
         this.query = query;
         notifyPropertyChanged(BR.query);
-    }
+    }*/
 
     @Bindable
     public String getCustomString() {
