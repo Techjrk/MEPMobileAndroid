@@ -8,7 +8,8 @@
             type="com.lecet.app.viewmodel.SearchViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -66,6 +67,7 @@
                                 android:inputType="textPersonName"
                                 android:text=""
                                 android:textSize="18sp" />
+
                         </LinearLayout>
 
                         <ImageButton
@@ -92,7 +94,9 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_recent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="124dp"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/list_item_search_recent_view" />
 
                 <!-- PROJECT SAVED SEARCHES -->
                 <TextView
@@ -103,7 +107,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_project"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="130dp"
+                    tools:listitem="@layout/list_item_search_saved_view"/>
 
                 <!-- COMPANY SAVED SEARCHES -->
                 <TextView
@@ -115,14 +120,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_company"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                </LinearLayout>
+                    android:layout_height="130dp"
+                    tools:listitem="@layout/list_item_search_saved_view"/>
 
             </LinearLayout>
 

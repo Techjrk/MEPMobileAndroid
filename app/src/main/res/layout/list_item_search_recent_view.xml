@@ -13,9 +13,8 @@
     </data>
 
     <LinearLayout
-        android:layout_width="145dp"
-        android:layout_height="210dp"
-        android:layout_margin="5dp"
+        android:layout_width="108dp"
+        android:layout_height="124dp"
         android:baselineAligned="false"
         android:orientation="vertical"
         android:weightSum="100">
@@ -29,33 +28,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/location_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="6dp"
-                    bind:imageUrl="@{viewModel.mapUrl}" />
+                <!-- CIRCLE MAP VIEW -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/search_item_recent_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    bind:imageUrl="@{viewModel.mapUrl}"/>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="20dp"
-                    android:src="@drawable/framecircle" />
             </FrameLayout>
+
         </RelativeLayout>
 
+        <!-- TITLE -->
         <TextView
-            android:id="@+id/title2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="31"
+            android:layout_marginTop="0dp"
             android:maxLines="2"
             android:paddingLeft="8dp"
-            android:paddingRight="1dp"
+            android:paddingRight="8dp"
             android:text="@{viewModel.title}"
-            android:textSize="14sp"
+            android:textSize="11sp"
+            android:textAlignment="center"
+            android:textColor="@color/lecetTextDarkGray"
+            tools:text="Fulton Center Metro Station"
             bind:typeface="@{`Lato-Bold.ttf`}" />
+
     </LinearLayout>
+
 </layout>
 

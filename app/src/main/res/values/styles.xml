@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/lecetMediumBlue</item>
         <item name="colorPrimaryDark">@color/lecetButtonDarkBlue</item>
         <item name="colorAccent">@color/lecetLightBlue</item>
-        <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowBackground">@color/pureWhite</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back_button</item>
     </style>
 
@@ -486,8 +486,9 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_alignParentTop">true</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/lecetButtonDarkBlue</item>
 
     </style>
