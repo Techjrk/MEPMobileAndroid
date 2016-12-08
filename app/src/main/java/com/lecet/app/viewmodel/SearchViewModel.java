@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -140,11 +141,11 @@ public class SearchViewModel extends BaseObservable {
                         if (s != null) {
                             if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
-                                cs += "\r\n"+((SearchSaved)adapterDataProjectSearchSaved.get(ctr)).getTitle();
+                                cs += "\r\n"+ adapterDataProjectSearchSaved.get(ctr).getTitle();
                                 ctr++;
                             } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
-                                cs += "\r\n"+((SearchSaved)adapterDataCompanySearchSaved.get(ctrc)).getTitle();
+                                cs += "\r\n"+ adapterDataCompanySearchSaved.get(ctrc).getTitle();
                                 ctrc++;
                             }
                         }
@@ -334,5 +335,7 @@ public class SearchViewModel extends BaseObservable {
         this.customString = customString;
         notifyPropertyChanged(BR.customString);
     }
-
+    public void onBackClicked(View view) {
+        activity.finish();
+    }
 }

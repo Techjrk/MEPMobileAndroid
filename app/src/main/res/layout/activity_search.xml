@@ -13,6 +13,67 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.lecet.app.content.SearchActivity">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <!-- SEARCH FIELD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/search_field_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lecetDarkestBlue"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
+
+                    <ImageButton
+                        android:id="@+id/search_back_button"
+                        style="@style/ViewPagerArrowButton.Left"
+                        android:layout_marginTop="15dp"
+                        android:paddingLeft="-1dp"
+                        android:onClick="@{viewModel.onBackClicked}"/>
+                        />
+
+                    <EditText
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="10dp"
+
+                        android:background="@drawable/rounded_edittext"
+                        android:drawableLeft="@drawable/ic_action_search"
+                        android:hint="Search"
+
+                        android:inputType="textPersonName"
+                        android:text=""
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/filter_image_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="25dp"
+                    android:background="@null"
+                    android:paddingLeft="1dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_filter" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -28,62 +89,6 @@
                 android:orientation="vertical"
                 android:paddingBottom="4dp"
                 android:paddingTop="0dp">
-
-                <!-- SEARCH FIELD -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:id="@+id/search_field_section"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/lecetDarkestBlue"
-                            android:orientation="horizontal"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp">
-
-                            <ImageButton
-                                android:id="@+id/search_back_button"
-                                style="@style/ViewPagerArrowButton.Left"
-                                android:layout_marginTop="15dp"
-                                android:paddingLeft="-1dp" />
-
-                            <EditText
-                                android:id="@+id/search_edit_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_margin="10dp"
-
-                                android:background="@drawable/rounded_edittext"
-                                android:drawableLeft="@drawable/ic_action_search"
-                                android:hint="Search"
-
-                                android:inputType="textPersonName"
-                                android:text=""
-                                android:textSize="18sp" />
-
-                        </LinearLayout>
-
-                        <ImageButton
-                            android:id="@+id/filter_image_button"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="25dp"
-                            android:background="@null"
-                            android:paddingLeft="1dp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/ic_filter" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
 
                 <!-- RECENT -->
                 <TextView
@@ -126,7 +131,7 @@
             </LinearLayout>
 
         </ScrollView>
-
+</LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>
