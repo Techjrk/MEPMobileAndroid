@@ -1,9 +1,15 @@
 package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.SearchResult;
@@ -27,14 +33,34 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     private int adapterType;
     private List data = Collections.emptyList();
+    private AppCompatActivity activity;
+    public static boolean isMSE2SectionVisible;
 
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Object item);
+    }
 
     public SearchRecyclerViewAdapter(List data) {
 
         this.data = data;
     }
 
-    public void setData(List data){
+    /**
+     * Old code - for reference
+     * public SearchRecyclerViewAdapter(AppCompatActivity activity, List data) {
+     * this.activity = activity;
+     * this.data = data;
+     * }
+     */
+    public SearchRecyclerViewAdapter(AppCompatActivity activity, List data, OnItemClickListener listener) {
+        this.data = data;
+        this.listener = listener;
+        this.activity = activity;
+    }
+
+    public void setData(List data) {
         this.data = data;
     }
 
@@ -53,7 +79,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 viewHolder = new ProjectSavedViewHolder(projectsBinding);
                 break;
 
-           case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
                 ListItemSearchSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new CompanySavedViewHolder(companiesBinding);
                 break;
@@ -67,13 +93,16 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         // Recent item
         if (holder instanceof RecentViewHolder) {
             RecentViewHolder viewHolder = (RecentViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+//  old code - viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(activity, ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.setItemClickListener((SearchResult) data.get(position), listener);
         }
 
         // Project
         else if (holder instanceof ProjectSavedViewHolder) {
             ProjectSavedViewHolder viewHolder = (ProjectSavedViewHolder) holder;
             viewHolder.getBinding().setViewModel(new SearchItemSavedSearchViewModel((SearchSaved) data.get(position)));
+
         }
 
         // Company
@@ -120,6 +149,31 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         public com.lecet.app.databinding.ListItemSearchRecentViewBinding getBinding() {
             return binding;
+        }
+
+        /**
+         * setItemClickListener - used to display the MSE 2.0 layout
+         */
+        public void setItemClickListener(final SearchResult item, final OnItemClickListener listener) {
+            final LinearLayout mapviewsection = (LinearLayout) itemView.findViewById(R.id.mapsectionview);
+            final ScrollView mse1section = binding.getViewModel().getMSE1SectionView();
+            final ScrollView mse2section = binding.getViewModel().getMSE2SectionView();
+
+            mapviewsection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    isMSE2SectionVisible = !isMSE2SectionVisible;
+                    if (isMSE2SectionVisible) {
+                        mse1section.setVisibility(View.GONE);
+                        mse2section.setVisibility(View.VISIBLE);
+                    } else {
+                        mse1section.setVisibility(View.VISIBLE);
+                        mse2section.setVisibility(View.GONE);
+                        listener.onItemClick(item.getProject());
+                    }
+                }
+            });
         }
     }
 

@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -36,7 +37,7 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
-
+    public boolean switchSection = false;
     private final AppCompatActivity activity;
     private final SearchDomain searchDomain;
     //private final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";  //TODO - unused
@@ -141,11 +142,11 @@ public class SearchViewModel extends BaseObservable {
                         if (s != null) {
                             if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
-                                cs += "\r\n"+ adapterDataProjectSearchSaved.get(ctr).getTitle();
+                                cs += "\r\n" + adapterDataProjectSearchSaved.get(ctr).getTitle();
                                 ctr++;
                             } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
-                                cs += "\r\n"+ adapterDataCompanySearchSaved.get(ctrc).getTitle();
+                                cs += "\r\n" + adapterDataCompanySearchSaved.get(ctrc).getTitle();
                                 ctrc++;
                             }
                         }
@@ -258,10 +259,22 @@ public class SearchViewModel extends BaseObservable {
         // adapterDataRecentlyViewed.add(sr2);
         RecyclerView recyclerViewRecentlyViewed = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerViewRecentlyViewed, LinearLayoutManager.HORIZONTAL);
-        searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(adapterDataRecentlyViewed);
+        //      searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(activity,adapterDataRecentlyViewed);
+        Log.d("Enter init", "Enter initnoel");
+        searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(activity, adapterDataRecentlyViewed, new SearchRecyclerViewAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(Object item) {
+                switchSection = true;
+
+                Log.d("onitemclick2", "switching...");
+            }
+        });
+
         searchAdapterRecentlyViewed.setAdapterType(SEARCH_ADAPTER_TYPE_RECENT);
         recyclerViewRecentlyViewed.setAdapter(searchAdapterRecentlyViewed);
     }
+
 
     /**
      * Initialize Saved Projects Adapter
@@ -298,19 +311,6 @@ public class SearchViewModel extends BaseObservable {
         return (RecyclerView) activity.findViewById(recyclerView);
     }
 
-    /**
-     * TODO - UNUSED. Move to list item class.
-     */
-    /*public String getMapUrl(Project project) {
-
-        if (project.getGeocode() == null) return null;
-
-        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
-                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
-                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
-    }*/
-
-
 
     /////////////////////////////////////
     // BINDABLE
@@ -335,7 +335,14 @@ public class SearchViewModel extends BaseObservable {
         this.customString = customString;
         notifyPropertyChanged(BR.customString);
     }
+
     public void onBackClicked(View view) {
-        activity.finish();
+        //       if (switchSection) {
+        if (SearchRecyclerViewAdapter.isMSE2SectionVisible) {
+            activity.findViewById(R.id.mse1section).setVisibility(View.VISIBLE);
+            activity.findViewById(R.id.mse2section).setVisibility(View.GONE);
+            switchSection = !switchSection;
+            SearchRecyclerViewAdapter.isMSE2SectionVisible = false;
+        } else activity.finish();
     }
 }

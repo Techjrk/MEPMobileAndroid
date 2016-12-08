@@ -144,6 +144,7 @@
     <!-- MTM Menu -->
     <string name="mtm_menu_number_company">%s Companies</string>
     <string name="mtm_menu_number_projects">%s Projects</string>
+    <string name="mse_2_0">MSE 2.0</string>
 
 
 </resources>

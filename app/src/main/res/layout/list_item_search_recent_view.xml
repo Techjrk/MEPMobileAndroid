@@ -13,6 +13,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/mapsectionview"
         android:layout_width="108dp"
         android:layout_height="124dp"
         android:baselineAligned="false"
@@ -34,7 +35,8 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_horizontal"
-                    bind:imageUrl="@{viewModel.mapUrl}"/>
+
+                    bind:imageUrl="@{viewModel.mapUrl}" />
 
             </FrameLayout>
 
@@ -44,17 +46,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="31"
             android:layout_marginTop="0dp"
+            android:layout_weight="31"
             android:maxLines="2"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="@{viewModel.title}"
-            android:textSize="11sp"
             android:textAlignment="center"
             android:textColor="@color/lecetTextDarkGray"
-            tools:text="Fulton Center Metro Station"
-            bind:typeface="@{`Lato-Bold.ttf`}" />
+            android:textSize="11sp"
+            bind:typeface="@{`Lato-Bold.ttf`}"
+            tools:text="Fulton Center Metro Station" />
 
     </LinearLayout>
 
