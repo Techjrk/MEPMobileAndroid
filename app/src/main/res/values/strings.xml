@@ -140,8 +140,8 @@
     <string name="confirm_cancel">CANCEL</string>
 
     <!-- MTM Menu -->
-    <string name="mtm_menu_number_company">%s Companies</string>
-    <string name="mtm_menu_number_projects">%s Projects</string>
+    <string name="mtm_menu_number_company">%d Companies</string>
+    <string name="mtm_menu_number_projects">%d Projects</string>
 
 
     <!-- MTM SortBy Menu -->

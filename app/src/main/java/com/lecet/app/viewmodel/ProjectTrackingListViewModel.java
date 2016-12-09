@@ -141,11 +141,11 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
     }
 
     @Override
-    public void onEditClicked(View view) {
+    public void handleEditMode() {
 
         long listItemId = getAppCompatActivity().getIntent().getLongExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, -1);
         String listItemTitle = getAppCompatActivity().getIntent().getStringExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE);
         int listItemSize = getAppCompatActivity().getIntent().getIntExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, 0);
-        ModifyTrackingListActivity.startActivityForResult(getAppCompatActivity(), listItemId, listItemTitle, listItemSize, filter);
+        //ModifyTrackingListActivity.startActivityForResult(getAppCompatActivity(), listItemId, listItemTitle, listItemSize, filter);
     }
 }

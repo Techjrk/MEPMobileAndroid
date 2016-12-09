@@ -1,12 +1,17 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyTrackingListAdapter;
+import com.lecet.app.adapters.ModifyCompanyListAdapter;
 import com.lecet.app.adapters.TrackingListAdapter;
+import com.lecet.app.content.ModifyCompanyTrackingListActivity;
+import com.lecet.app.content.ModifyTrackingListActivity;
+import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.CompanyTrackingList;
@@ -37,6 +42,8 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
     private final CompanyDomain companyDomain;
     private final TrackingListDomain trackingListDomain;
+
+    private int selectedSort;
 
     public CompanyTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, TrackingListDomain trackingListDomain, CompanyDomain companyDomain) {
         super(appCompatActivity, listItemId);
@@ -96,9 +103,11 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
         switch (position) {
             case SORT_ALPHABETICAL:
+                selectedSort = SORT_ALPHABETICAL;
                 filter = "name";
                 break;
             case SORT_LAST_UPDATE:
+                selectedSort = SORT_LAST_UPDATE;
                 filter = "updatedAt";
                 break;
             default:
@@ -117,7 +126,26 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
     }
 
     @Override
-    public void onEditClicked(View view) {
+    public void handleEditMode() {
 
+        long listItemId = getAppCompatActivity().getIntent().getLongExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, -1);
+        String listItemTitle = getAppCompatActivity().getIntent().getStringExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE);
+        int listItemSize = getAppCompatActivity().getIntent().getIntExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, 0);
+        @ModifyTrackingListViewModel.TrackingSort int sort = getSortType(selectedSort);
+
+        Intent intent = ModifyTrackingListActivity.intentForResult(getAppCompatActivity(), ModifyCompanyTrackingListActivity.class, listItemId, listItemTitle, listItemSize, sort);
+        getAppCompatActivity().startActivity(intent);
+    }
+
+    private @ModifyTrackingListViewModel.TrackingSort int getSortType(int type) {
+
+        switch (type) {
+            case SORT_ALPHABETICAL:
+                return ModifyTrackingListViewModel.SORT_COMPANY_NAME;
+            case SORT_LAST_UPDATE:
+                return ModifyTrackingListViewModel.SORT_COMPANY_UPDATED;
+            default:
+                return ModifyTrackingListViewModel.SORT_COMPANY_NAME;
+        }
     }
 }

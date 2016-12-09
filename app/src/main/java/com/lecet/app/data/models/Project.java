@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.lecet.app.interfaces.TrackedObject;
+
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -14,7 +16,7 @@ import io.realm.annotations.PrimaryKey;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class Project extends RealmObject {
+public class Project extends RealmObject implements TrackedObject {
 
     @SerializedName("bidSubmitTo")
     private String bidSubmitTo;

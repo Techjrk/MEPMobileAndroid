@@ -484,7 +484,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
         Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
-        intent.putExtra(TrackingListActivity.TRACKING_LIST_TYPE, TrackingListActivity.TRACKING_LIST_TYPE_PROJECT);
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
@@ -494,7 +493,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
         Intent intent = new Intent(getBaseContext(), CompanyTrackingListActivity.class);
-        intent.putExtra(TrackingListActivity.TRACKING_LIST_TYPE, TrackingListActivity.TRACKING_LIST_TYPE_COMPANY);
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, companyTrackingList.getId());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, companyTrackingList.getCompanies().size());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, companyTrackingList.getName());

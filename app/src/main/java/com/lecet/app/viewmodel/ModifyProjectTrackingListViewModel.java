@@ -19,8 +19,10 @@ import android.widget.Toast;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
+import com.lecet.app.adapters.ModifyListAdapter;
 import com.lecet.app.adapters.ModifyProjectListAdapter;
 import com.lecet.app.adapters.MoveToAdapter;
+import com.lecet.app.adapters.MoveToProjectListAdapter;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -32,239 +34,65 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import io.realm.Sort;
 
 /**
  * Created by Josué Rodríguez on 12/11/2016.
  */
 
-public class ModifyProjectTrackingListViewModel extends BaseObservable implements MTMMenuCallback, AdapterView.OnItemClickListener {
+public class ModifyProjectTrackingListViewModel extends ModifyTrackingListViewModel<ProjectTrackingList, Project> {
 
-    private final AppCompatActivity appCompatActivity;
-    private final TrackingListDomain trackingListDomain;
+    private static final int TYPE_BID_DATE = 0;
+    private static final int TYPE_LAST_UPDATE = 1;
+    private static final int TYPE_DATE_ADDED = 2;
+    private static final int TYPE_VALUE_HIGH = 3;
+    private static final int TYPE_VALUE_LOW = 4;
 
-    private ListPopupWindow moveMenu;
-    private MoveToAdapter moveToAdapter;
-    private ListPopupWindow mtmSortMenu;
-    private MenuTitleListAdapter mtmSortAdapter;
-    private TextView titleTextView;
-    private TextView subtitleTextView;
-    private ImageView backButton;
-    private ImageView sortButton;
-    private ListView listView;
+    private TrackingListDomain trackingListDomain;
 
-    private String projectsSelected;
-    private ProjectTrackingList projectTrackingList;
-    private SortBy sortBy;
+    public ModifyProjectTrackingListViewModel(AppCompatActivity appCompatActivity, ProjectTrackingList trackingList, @TrackingSort int sortBy, TrackingListDomain trackingListDomain) {
+        super(appCompatActivity, trackingList, sortBy);
 
-
-    public ModifyProjectTrackingListViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, ProjectTrackingList projectTrackingList, SortBy sortBy) {
-        this.appCompatActivity = appCompatActivity;
         this.trackingListDomain = trackingListDomain;
-        this.projectTrackingList = projectTrackingList;
-        this.sortBy = sortBy;
-        setupAdapter(projectTrackingList);
-    }
-
-    @Bindable
-    public String getProjectsSelected() {
-        return projectsSelected;
-    }
-
-    public void setProjectsSelected(String projectsSelected) {
-        this.projectsSelected = projectsSelected;
-        notifyPropertyChanged(BR.projectsSelected);
-    }
-
-    private void setupAdapter(ProjectTrackingList projectTrackingList) {
-        listView = (ListView) appCompatActivity.findViewById(R.id.projects_sorted_list);
-        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-        listView.setOnItemClickListener(this);
-        populateList(projectTrackingList.getProjects(), sortBy);
-    }
-
-    private void populateList(RealmList<Project> projects, SortBy sortBy) {
-        List<Project> sortedList = null;
-        switch (sortBy) {
-            case BID_DATE:
-                sortedList = trackingListDomain.sortProjectListByBidDate(projects);
-                break;
-            case LAST_UPDATED:
-                sortedList = trackingListDomain.sortProjectListByLastUpdated(projects);
-                break;
-            case DATE_ADDED:
-                sortedList = trackingListDomain.sortProjectListByDateAdded(projects);
-                break;
-            case VALUE_HIGH_TO_LOW:
-                sortedList = trackingListDomain.sortProjectListByValue(projects, Sort.DESCENDING);
-                break;
-            case VALUE_LOW_TO_HIGH:
-                sortedList = trackingListDomain.sortProjectListByValue(projects, Sort.ASCENDING);
-                break;
-        }
-        ModifyProjectListAdapter adapter = new ModifyProjectListAdapter(appCompatActivity, sortedList);
-        listView.setAdapter(adapter);
-    }
-
-    private void toogleMoveMenu(View view) {
-        if (moveMenu == null) {
-            createMoveMenu(view);
-        } else {
-            moveToAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
-        }
-        moveMenu.show();
-    }
-
-    private void createMoveMenu(View anchor) {
-        if (moveMenu == null) {
-            moveMenu = new ListPopupWindow(appCompatActivity);
-
-            List<ProjectTrackingList> projectTrackingLists = trackingListDomain.fetchUserProjectTrackingList();
-            moveToAdapter
-                    = new MoveToAdapter(appCompatActivity
-                    , appCompatActivity.getResources().getString(R.string.move_to)
-                    , projectTrackingLists, this);
-
-            Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x - appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space);
-            int[] coordinates = new int[2];
-            anchor.getLocationOnScreen(coordinates);
-            int offset = (int) (coordinates[0]
-                    - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
-            moveMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.more_menu_upsidedown_background));
-            moveMenu.setAnchorView(anchor);
-            moveMenu.setModal(true);
-            moveMenu.setWidth(width);
-            moveMenu.setHorizontalOffset(-offset);
-            moveMenu.setAdapter(moveToAdapter);
-        }
-    }
-
-    private void toogleMTMSortMenu(View view) {
-        if (mtmSortMenu == null) {
-            createMTMSortMenu(view);
-        }
-        mtmSortMenu.show();
-    }
-
-    private void createMTMSortMenu(View anchor) {
-        if (mtmSortMenu == null) {
-            mtmSortMenu = new ListPopupWindow(appCompatActivity);
-
-            mtmSortAdapter
-                    = new MenuTitleListAdapter(appCompatActivity
-                    , appCompatActivity.getResources().getString(R.string.mtm_sort_menu_title)
-                    , appCompatActivity.getResources().getStringArray(R.array.mobile_tracking_list_sort_menu));
-
-            Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x - appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space);
-            int[] coordinates = new int[2];
-            anchor.getLocationOnScreen(coordinates);
-            int offset = (int) (coordinates[0]
-                    - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
-            mtmSortMenu.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.overflow_menu_background));
-            mtmSortMenu.setAnchorView(anchor);
-            mtmSortMenu.setModal(true);
-            mtmSortMenu.setWidth(width);
-            mtmSortMenu.setHorizontalOffset(-offset);
-            mtmSortMenu.setVerticalOffset(anchor.getHeight());
-            mtmSortMenu.setAdapter(mtmSortAdapter);
-            mtmSortMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (position > 0) {
-                        mtmSortMenu.dismiss();
-                        listView.clearChoices();
-                        setProjectsSelected(null);
-                        populateList(projectTrackingList.getProjects(), SortBy.values()[position - 1]);
-                    }
-                }
-            }); // the callback for when a list item is selected
-        }
-    }
-
-    public void setToolbar(View toolbar, String title, String subtitle) {
-        titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
-        subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
-        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
-        sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClick(v);
-            }
-        });
-
-        sortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSortButtonClick(v);
-            }
-        });
-        titleTextView.setText(title);
-        subtitleTextView.setText(subtitle);
     }
 
     @Override
-    public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
-        //TODO call the things to change the project of list
+    public RealmResults<Project> getData(ProjectTrackingList trackingList, @TrackingSort int sortBy) {
+        return filterRealmOrderedCollection(trackingList.getProjects(), sortBy);
     }
 
     @Override
-    public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
-        //DO NOTHING
-    }
+    public int getSortBySelectedPosition(int position) {
 
-    public void onMoveButtonClicked(View view) {
-        toogleMoveMenu(view);
+        switch (position) {
+            case TYPE_BID_DATE:
+                return SORT_BID_DATE;
+            case TYPE_LAST_UPDATE:
+                return SORT_LAST_UPDATE;
+            case TYPE_DATE_ADDED:
+                return SORT_DATE_ADDED;
+            case TYPE_VALUE_HIGH:
+                return SORT_VALUE_HIGH;
+            case TYPE_VALUE_LOW:
+                return SORT_VALUE_LOW;
+            default:
+                return SORT_BID_DATE;
+        }
     }
-
-    public void onRemoveButtonClicked(View view) {
-        Toast.makeText(appCompatActivity, "Remove button clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    public void onCancelButtonClicked(View view) {
-        listView.clearChoices();
-        setProjectsSelected(null);
-    }
-
-    public void onDoneButtonClicked(View view) {
-        Toast.makeText(appCompatActivity, "Done button clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    public void onBackButtonClick(View view) {
-        appCompatActivity.onBackPressed();
-    }
-
-    public void onSortButtonClick(View view) {
-        toogleMTMSortMenu(view);
-    }
-
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int selectedProjectsCount = listView.getCheckedItemCount();
-        if (selectedProjectsCount == 0) {
-            setProjectsSelected(null);
-        } else {
-            setProjectsSelected(appCompatActivity.getString(R.string.x_selected, Integer.toString(selectedProjectsCount)));
-        }
+    public ModifyListAdapter getListAdapter(AppCompatActivity appCompatActivity, RealmResults<Project> dataItems) {
+        return new ModifyProjectListAdapter(appCompatActivity, dataItems);
     }
 
-    private List<Project> getSelectedProjects() {
-        SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-        List<Project> projects = new ArrayList<>();
-        ModifyProjectListAdapter adapter = (ModifyProjectListAdapter) listView.getAdapter();
-        for (int i = 0; i < checkedItems.size(); i++) {
-            if (checkedItems.valueAt(i)) {
-                projects.add(adapter.getItem(i));
-            }
-        }
-        return projects;
+    @Override
+    public MoveToAdapter getMoveToListAdapter(AppCompatActivity appCompatActivity, String title, MTMMenuCallback callback, RealmResults<ProjectTrackingList> lists) {
+        return new MoveToProjectListAdapter(appCompatActivity, title, lists, callback);
+    }
+
+    @Override
+    public RealmResults<ProjectTrackingList> getUserTrackingListsExcludingCurrentList(ProjectTrackingList currentTrackingList) {
+        return trackingListDomain.fetchProjectTrackingListsExcludingCurrentList(currentTrackingList.getId());
     }
 }

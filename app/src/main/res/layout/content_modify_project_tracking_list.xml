@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.ModifyProjectTrackingListViewModel" />
+            type="com.lecet.app.viewmodel.ModifyTrackingListViewModel" />
     </data>
 
     <LinearLayout
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:drawablePadding="5dp"
-                android:text="@={viewModel.projectsSelected}"
+                android:text="@={viewModel.objectsSelected}"
                 android:textColor="@color/lecetTextWhite"
                 android:textSize="12sp"
                 bind:typeface="@{`Lato-Regular.ttf`}" />

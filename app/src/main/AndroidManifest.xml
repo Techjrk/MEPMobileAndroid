@@ -54,9 +54,13 @@
             android:label="@string/title_activity_company_detail_project_bids"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.ModifyTrackingListActivity"
+            android:name=".content.ModifyProjectTrackingListActivity"
             android:label="@string/title_activity_project_tracking_list"
             android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ModifyCompanyTrackingListActivity"
+                android:label="@string/title_activity_project_tracking_list"
+                android:theme="@style/AppTheme"/>
         <activity
             android:name=".content.CreatePasswordActivity"
             android:label="@string/title_activity_create_password"

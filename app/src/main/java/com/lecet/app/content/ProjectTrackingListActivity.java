@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
@@ -30,5 +31,20 @@ public class ProjectTrackingListActivity extends TrackingListActivity {
         }, projectDomain);
 
         return new ProjectTrackingListViewModel(this, listItemId, projectDomain, trackingListDomain);
+    }
+
+    @Override
+    public String getActionBarSubtitle(int dataSize) {
+
+        // subtitle, handle plural or singular
+        StringBuilder subtitleSb = new StringBuilder();
+        subtitleSb.append(dataSize);
+        subtitleSb.append(" ");
+
+        if (dataSize != 1) {
+            subtitleSb.append(getResources().getString(R.string.projects));
+        } else subtitleSb.append(getResources().getString(R.string.project));
+
+        return subtitleSb.toString();
     }
 }

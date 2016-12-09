@@ -189,6 +189,17 @@ public class TrackingListDomain {
         return results;
     }
 
+    public RealmResults<ProjectTrackingList> fetchProjectTrackingListsExcludingCurrentList(long trackingListId) {
+
+        RealmResults<ProjectTrackingList> results = realm.where(ProjectTrackingList.class).notEqualTo("id", trackingListId).findAll();
+        return results;
+    }
+
+    public RealmResults<CompanyTrackingList> fetchCompanyTrackingListsExcludingCurrentList(long trackingListId) {
+
+        RealmResults<CompanyTrackingList> results = realm.where(CompanyTrackingList.class).notEqualTo("id", trackingListId).findAll();
+        return results;
+    }
 
     public ProjectTrackingList fetchProjectTrackingList(long id) {
 

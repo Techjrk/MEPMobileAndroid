@@ -63,7 +63,7 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
 
     public abstract TrackingListAdapter recyclerViewAdapter();
 
-    public abstract void onEditClicked(View view);
+    public abstract void handleEditMode();
 
     /**
      * Getters && Setters
@@ -185,6 +185,11 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     /**
      * Click handling
      **/
+
+    public void onEditClicked(View view) {
+
+        handleEditMode();
+    }
 
     public void onBackButtonClick(View view) {
         Log.d(TAG, "onBackButtonClick");

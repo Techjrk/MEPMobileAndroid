@@ -14,26 +14,34 @@ import com.lecet.app.interfaces.MTMMenuCallback;
 
 import java.util.List;
 
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+
 /**
  * Created by Josué Rodríguez on 14/11/2016.
  */
 
-public class MoveToAdapter extends BaseAdapter {
+public abstract class MoveToAdapter<T extends RealmObject> extends BaseAdapter {
 
     private Context context;
     private String title;
-    private List<ProjectTrackingList> projectTrackingList;
+    private RealmResults<T> trackingLists;
     private int size;
-    private String projectFormat;
     private MTMMenuCallback callback;
 
-    public MoveToAdapter(Context context, String title, List<ProjectTrackingList> items, MTMMenuCallback callback) {
+    public MoveToAdapter(Context context, String title, RealmResults<T> trackingLists, MTMMenuCallback callback) {
         this.context = context;
         this.title = title;
-        this.projectTrackingList = items;
-        this.size = items.size() + 1;// + 1 title header
-        this.projectFormat = context.getString(R.string.mtm_menu_number_projects);
+        this.trackingLists = trackingLists;
+        this.size = trackingLists.size() + 1;// + 1 title header
         this.callback = callback;
+    }
+
+    public abstract String itemPrimaryDetail(T object);
+    public abstract String itemSecondaryDetail(T object);
+
+    public Context getContext() {
+        return context;
     }
 
     @Override
@@ -46,7 +54,7 @@ public class MoveToAdapter extends BaseAdapter {
         if (position == 0) {
             return title;
         } else {
-            return projectTrackingList.get(position - 1);
+            return trackingLists.get(position - 1);
         }
     }
 
@@ -77,10 +85,15 @@ public class MoveToAdapter extends BaseAdapter {
 
 
     protected void populateView(Holder holder, Object item) {
-        if (item instanceof ProjectTrackingList) {
-            final ProjectTrackingList projectTracking = (ProjectTrackingList) item;
-            holder.text1.setText(projectTracking.getName());
-            holder.text2.setText(String.format(projectFormat, projectTracking.getProjects().size()));
+        if (item instanceof String) {
+
+            holder.text1.setText(item.toString());
+
+        } else {
+
+            final T trackingList = (T)item;
+            holder.text1.setText(itemPrimaryDetail(trackingList));
+            holder.text2.setText(itemSecondaryDetail(trackingList));
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,14 +103,12 @@ public class MoveToAdapter extends BaseAdapter {
 //                    }
                 }
             });
-        } else {
-            holder.text1.setText(item.toString());
         }
     }
 
-    public void setProjectTrackingList(List<ProjectTrackingList> projectTrackingList) {
-        this.projectTrackingList = projectTrackingList;
-        this.size = this.projectTrackingList.size();
+    public void setTrackingLists(RealmResults<T> trackingLists) {
+        this.trackingLists = trackingLists;
+        this.size = this.trackingLists.size();
         notifyDataSetInvalidated();
     }
 

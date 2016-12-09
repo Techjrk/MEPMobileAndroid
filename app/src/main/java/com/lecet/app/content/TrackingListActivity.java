@@ -32,19 +32,15 @@ public abstract class TrackingListActivity extends NavigationBaseActivity {
     private final String TAG = "ProjectTrackingListAct";
 
     // Intent extra names
-    public static final String TRACKING_LIST_TYPE = "listType";
     public static final String PROJECT_LIST_ITEM_ID = "listItemId";
     public static final String PROJECT_LIST_ITEM_SIZE = "listItemSize";
     public static final String PROJECT_LIST_ITEM_TITLE = "listItemTitle";
 
-    // List types
-    public static final String TRACKING_LIST_TYPE_PROJECT = "project";
-    public static final String TRACKING_LIST_TYPE_COMPANY = "company";
-
     private TrackingListViewModel viewModel;
-    private String listType; // TODO: Find better solution.
+
 
     public abstract TrackingListViewModel buildViewModel(long listItemId);
+    public abstract String getActionBarSubtitle(int dataSize);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +49,6 @@ public abstract class TrackingListActivity extends NavigationBaseActivity {
         Log.d(TAG, "onCreate");
 
         // get extras from Intent
-        listType = getIntent().getStringExtra(TRACKING_LIST_TYPE);
         long listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
         int listItemSize = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
         String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
@@ -84,20 +79,9 @@ public abstract class TrackingListActivity extends NavigationBaseActivity {
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);
 
             // subtitle, handle plural or singular
-            StringBuilder subtitleSb = new StringBuilder();
-            subtitleSb.append(listItemSize);
-            subtitleSb.append(" ");
-            if (listType.equals(TRACKING_LIST_TYPE_PROJECT)) {
-                if (listItemSize != 1) {
-                    subtitleSb.append(getResources().getString(R.string.projects));
-                } else subtitleSb.append(getResources().getString(R.string.project));
-            } else if (listType.equals(TRACKING_LIST_TYPE_COMPANY)) {
-                if (listItemSize != 1) {
-                    subtitleSb.append(getResources().getString(R.string.companies));
-                } else subtitleSb.append(getResources().getString(R.string.company));
-            }
+            String subTitle = getActionBarSubtitle(listItemSize);
 
-            viewModel.setToolbar(tb, title, subtitleSb.toString());
+            viewModel.setToolbar(tb, title, subTitle);
 
             actionBar.setCustomView(tb);
             actionBar.setDisplayShowCustomEnabled(true);

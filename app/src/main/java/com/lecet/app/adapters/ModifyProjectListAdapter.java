@@ -13,67 +13,31 @@ import com.lecet.app.databinding.ModifyListItemProjectBinding;
 
 import java.util.List;
 
+import io.realm.RealmResults;
+
 /**
  * Created by Josué Rodríguez on 16/11/2016.
  */
 
-public class ModifyProjectListAdapter extends BaseAdapter {
+public class ModifyProjectListAdapter extends ModifyListAdapter<RealmResults<Project>, Project> {
 
-    Context context;
-    List<Project> projects;
 
-    public ModifyProjectListAdapter(Context context, List<Project> projects) {
-        this.context = context;
-        this.projects = projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-        notifyDataSetInvalidated();
+    public ModifyProjectListAdapter(Context context, RealmResults<Project> projects) {
+        super(context, projects);
     }
 
     @Override
-    public int getCount() {
-        return projects.size();
+    public long getObjectId(Project object) {
+        return object.getId();
     }
 
     @Override
-    public Project getItem(int position) {
-        return projects.get(position);
+    public String getPrimaryDetail(Project object) {
+        return object.getTitle();
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        Holder holder;
-
-        if (convertView == null) {
-            ModifyListItemProjectBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.modify_list_item_project, parent, false);
-            holder = new Holder(binding);
-            convertView = binding.getRoot();
-            convertView.setTag(holder);
-        } else {
-            holder = (Holder) convertView.getTag();
-        }
-
-        Project project = getItem(position);
-
-        holder.binding.projectName.setText(project.getTitle());
-        holder.binding.location.setText(String.format("%s, %s", project.getCity(), project.getState()));
-
-        return convertView;
-    }
-
-    private class Holder {
-        ModifyListItemProjectBinding binding;
-
-        public Holder(ModifyListItemProjectBinding binding) {
-            this.binding = binding;
-        }
+    public String getSecondaryDetail(Project object) {
+        return String.format("%s, %s", object.getCity(), object.getState());
     }
 }
