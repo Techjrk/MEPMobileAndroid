@@ -47,10 +47,23 @@ public class SearchDomain {
         call.enqueue(callback);
     }
 
-    public void getSearchProject(String q, Callback<List<Project>> callback) {
-    String filter="{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}";
+
+    public void getSearchProjectQuery(String q, Callback<SearchProject> callback) {
+        String filter="{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<List<Project>> call = lecetClient.getSearchService().getSearchProject(token,q,filter );
+        Call<SearchProject> call = lecetClient.getSearchService().getSearchProjectQuery(token,q,filter );
+        call.enqueue(callback);
+    }
+    public void getSearchCompanyQuery(String q, Callback<SearchProject> callback) {
+        String filter="{}";
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<SearchProject> call = lecetClient.getSearchService().getSearchCompanyQuery(token,q, filter);
+        call.enqueue(callback);
+    }
+    public void getSearchContactQuery(String q, Callback<SearchProject> callback) {
+        String filter="{}";
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<SearchProject> call = lecetClient.getSearchService().getSearchContactQuery(token,q, filter);
         call.enqueue(callback);
     }
 
@@ -62,10 +75,5 @@ public class SearchDomain {
         call.enqueue(callback);
     }
 
-    public void getSearchCompany(String q, Callback<List<Company>> callback) {
-        String filter="";
-        String token = sharedPreferenceUtil.getAccessToken();
-        Call<List<Company>> call = lecetClient.getSearchService().getSearchCompany(token,q, filter);
-        call.enqueue(callback);
-    }
+
 }

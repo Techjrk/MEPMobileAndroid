@@ -2,28 +2,35 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.ScrollView;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchRecyclerViewAdapter;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.databinding.ListItemSearchQuerySummaryBinding;
 import com.lecet.app.domain.SearchDomain;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,22 +44,57 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
-    public boolean switchSection = false;
+    public static final int SEARCH_ADAPTER_TYPE_PQS = 3;   //PQS - Project Query Summary
     private final AppCompatActivity activity;
     private final SearchDomain searchDomain;
-    //private final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";  //TODO - unused
     private static final String TAG = "SearchViewModel";
     //private Project project;    //TODO - unused
     //private String query;
     private String customString = ""; //TODO: Just for personal testing/checking of the response result of the MSE APIs call using customString variable (customString - String Binding :).
-
     private List<SearchResult> adapterDataRecentlyViewed;
     private List<SearchSaved> adapterDataProjectSearchSaved;
     private List<SearchSaved> adapterDataCompanySearchSaved;
     private SearchRecyclerViewAdapter searchAdapterRecentlyViewed;
     private SearchRecyclerViewAdapter searchAdapterProject;
     private SearchRecyclerViewAdapter searchAdapterCompany;
+    public static boolean isMSE2SectionVisible=false;
+    //For MSE 2.0
+    private TextView viewProjQueryString;
+    private TextView viewProjQueryTotal;
+    private TextView viewCompanyQueryString;
+    private TextView viewCompanyQueryTotal;
+    private TextView viewContactQueryString;
+    private TextView viewContactQueryTotal;
+    private EditText searchfield;
+    private List<Project> adapterDataProjectQuerySummary;
+    private SearchRecyclerViewAdapter searchAdapterPQS;  //PQS - Project Query Summary
 
+    public EditText getSearchfield() {
+        return searchfield;
+    }
+
+    public void setSearchfield(String query) {
+       if (query !=null) this.searchfield.setText(query.trim());
+    }
+
+    private int queryProjTotal;
+    private int queryCompanyTotal;
+    private int queryContactTotal;
+
+    @Bindable
+    public String getQueryProjTotal() {
+        return queryProjTotal + ((queryProjTotal > 0) ? " Projects" : " Project");
+    }
+
+    @Bindable
+    public String getQueryCompanyTotal() {
+        return queryCompanyTotal + ((queryCompanyTotal > 0) ? " Companies" : " Company");
+    }
+
+    @Bindable
+    public String getQueryContactTotal() {
+        return queryContactTotal + ((queryContactTotal > 0) ? " Contacts" : " Contact");
+    }
 
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
@@ -70,8 +112,95 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterSavedProject();
         initializeAdapterSavedCompany();
         getUserSavedSearches(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());
+
+        //Init the search query
+        initializeAdapterProjectQuerySummary();
+        initQuery();
     }
 
+    public void initQuery() {
+        searchfield = (EditText) activity.findViewById(R.id.search_edit_text);
+        viewProjQueryString = (TextView) activity.findViewById(R.id.queryproject_title);
+        viewCompanyQueryString = (TextView) activity.findViewById(R.id.querycompany_title);
+        viewContactQueryString = (TextView) activity.findViewById(R.id.querycontact_title);
+
+        searchfield.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable !=null)  updateViewQuery(editable.toString());
+            }
+        });
+    }
+
+    public void updateViewQuery(String query) {
+
+        if (query == null || query.trim().equals("") ) {
+            isMSE2SectionVisible = false;
+            displayMSESectionVisible();
+            return;
+        }
+        isMSE2SectionVisible = true;
+        displayMSESectionVisible();
+     if (viewProjQueryString == null ) return;
+        viewProjQueryString.setText(query + " in Projects");
+        viewCompanyQueryString.setText(query + " in Companies");
+        viewContactQueryString.setText(query + " in Contacts");
+
+        query= searchfield.getText().toString().trim();
+    /** For Project query total view
+     */
+  //      viewProjQueryTotal.setText("? Projects ");
+        getQueryProjTotal();
+        getProjectQuery(query);
+
+    /**
+     * For Company query total view
+     */
+//        viewCompanyQueryTotal.setText("? Companies ");
+        getQueryCompanyTotal();
+        getCompanyQuery(query);
+
+    /**
+     * For Contact query total view
+     */
+//        viewContactQueryTotal.setText("? Contacts ");
+        getQueryContactTotal();
+        getContactQuery(query);
+
+    }
+
+    /* Get the list of Project in Query Search Summary*/
+    public void getProjectQueryListSummary(SearchProject sp){
+        RealmList<Project> slist = sp.getResults();
+        final int CONTENT_MAX_SIZE = 4;
+        adapterDataProjectQuerySummary.clear();
+            int ctr = 0;
+        Log.d("PROJECTS NOEL ","PROJECT NOEL SIZE "+slist.size());
+            for (Project s : slist) {
+                try {
+
+                    if (s != null) {
+                        Log.d("PROJECTS NOEL ","PROJECT NOEL SIZE "+s.getTitle());
+                        if (ctr < CONTENT_MAX_SIZE) adapterDataProjectQuerySummary.add(s);
+                        ctr++;
+
+                    }
+                } catch (Exception e) {
+                    //TODO - handle exception
+                    Log.d("No project","No project in the list");
+                }
+            }
+
+            searchAdapterPQS.notifyDataSetChanged();
+
+    }
     /**
      * Get the list of recently viewed by the user
      */
@@ -90,7 +219,6 @@ public class SearchViewModel extends BaseObservable {
                     for (SearchResult s : slist) {
                         Log.d(TAG, "getUserRecentlyViewed: onResponse: " + s);
                         //TODO: testing for getting the result of  RecentlyViewed search
-
                         try {
                             //                           cs += ("\r\n" + ctr + " code1:" + s.getCode() + " id:" + s.getId() + " pid:" + s.getProjectId() + " cid:" + s.getCompanyId() + " createdAt:" + s.getCreatedAt() +
                             //                                   " Lat: " + s.getProject().getGeocode().getLat() + " long: " + s.getProject().getGeocode().getLng() + "\r\n");
@@ -133,24 +261,24 @@ public class SearchViewModel extends BaseObservable {
                     if (adapterDataProjectSearchSaved == null) new ArrayList<SearchSaved>();
                     adapterDataProjectSearchSaved.clear();
                     adapterDataCompanySearchSaved.clear();
-                    int ctr = 0, ctrc = 0;  //TODO - rename variables for more clarity
+                    int projectcounter = 0, companycounter = 0;  //TODO - rename variables for more clarity
 
                     for (SearchSaved s : slist) {
                         Log.d(TAG, "getUserSavedSearches: onResponse: " + s);
                         //TODO: testing for getting the result of  UserSaved search
-                        //ctr++;
+                        //projectcounter++;
                         if (s != null) {
                             if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
-                                cs += "\r\n" + adapterDataProjectSearchSaved.get(ctr).getTitle();
-                                ctr++;
+                                cs += "\r\n" + adapterDataProjectSearchSaved.get(projectcounter).getTitle();
+                                projectcounter++;
                             } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
-                                cs += "\r\n" + adapterDataCompanySearchSaved.get(ctrc).getTitle();
-                                ctrc++;
+                                cs += "\r\n" + adapterDataCompanySearchSaved.get(companycounter).getTitle();
+                                companycounter++;
                             }
                         }
-                        //cs += getCustomString() + ("\r\n" + ctr + " title:" + s.getTitle() + " modelName:" + s.getModelName() + " id:" + s.getId() + " userid:" + s.getUserId() + " query:" + s.getQuery() + "\r\n");
+                        //cs += getCustomString() + ("\r\n" + projectcounter + " title:" + s.getTitle() + " modelName:" + s.getModelName() + " id:" + s.getId() + " userid:" + s.getUserId() + " query:" + s.getQuery() + "\r\n");
                         setCustomString(cs);
                     }
                     searchAdapterProject.notifyDataSetChanged();
@@ -167,70 +295,69 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
-    /**
-     * Search the project based on query string
-     * TODO: UNUSED
-     */
-    /*public void getProject(String q) {
-        //Using the searchDomain to call the method to start retrofitting...
-        searchDomain.getSearchProject(q, new Callback<List<Project>>() {
+    public void getProjectQuery(String q) {
+        searchDomain.getSearchProjectQuery(q, new Callback<SearchProject>() {
             @Override
-            public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
-                List<Project> slist;
-                String cs = getCustomString();
+            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
                 if (response.isSuccessful()) {
-                    slist = response.body();
-                    //searchDomain.copyToRealmTransaction(slist);
-                    int ctr = 0;
-                    for (Project ps : slist) {
-                        ctr++;
-                        //   Log.d("Search ListCode: "+ctr,"search code:"+s.getCode()+ " id:"+s.getId()+" pid:"+s.getProjectId()+" cid:"+s.getCompanyId());
-                        cs += ("\r\n" + ctr + " id:" + ps.getId() + " Title:" + ps.getTitle() + " Address:" + ps.getAddress1() + " GeoCode:" + ps.getGeocode() + " BidDate:" + ps.getBidDate() + "\r\n");
-                    }
-                    setCustomString(cs);
+                    SearchProject searchproject = response.body();
+                    queryProjTotal = searchproject.getTotal();
+                    notifyPropertyChanged(BR.queryProjTotal);
+                    getProjectQueryListSummary(searchproject);
+                  //  Log.d("TotalProject", "Total: " + queryProjTotal);
                 } else {
-                    errorDisplayMsg(response.message());
+                    errorDisplayMsg("Unsuccessful Query. " + response.message());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Project>> call, Throwable t) {
-                errorDisplayMsg(t.getLocalizedMessage());
+            public void onFailure(Call<SearchProject> call, Throwable t) {
+                errorDisplayMsg("Network is busy. Pls. try again. ");
             }
         });
-    }*/
+    }
 
-    /**
-     * Search the company based on query string
-     * TODO: UNUSED
-     */
-    /*public void getCompany(String q) {
-        //Using the searchDomain to call the method to start retrofitting...
-        searchDomain.getSearchCompany(q, new Callback<List<Company>>() {
+    public void getCompanyQuery(String q) {
+        searchDomain.getSearchCompanyQuery(q, new Callback<SearchProject>() {
             @Override
-            public void onResponse(Call<List<Company>> call, Response<List<Company>> response) {
-                List<Company> slist;
-                String cs = getCustomString();
+            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
                 if (response.isSuccessful()) {
-                    slist = response.body();
-                    int ctr = 0;
-                    for (Company c : slist) {
-                        ctr++;
-                        cs += ("\r\n" + ctr + " id:" + c.getId() + " Name:" + c.getName() + " Address:" + c.getAddress1() + " City:" + c.getCity() + " Country:" + c.getCountry() + "\r\n");
-                    }
-                    setCustomString(cs);
-                    searchAdapterRecentlyViewed.notifyDataSetChanged();
+                    SearchProject searchproject = response.body();
+                    queryCompanyTotal = searchproject.getTotal();
+                    notifyPropertyChanged(BR.queryCompanyTotal);
+               //     Log.d("TotalProject", "Total: " + queryCompanyTotal);
                 } else {
-                    errorDisplayMsg(response.message());
+                    errorDisplayMsg("Unsuccessful Query. " + response.message());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Company>> call, Throwable t) {
-                errorDisplayMsg(t.getLocalizedMessage());
+            public void onFailure(Call<SearchProject> call, Throwable t) {
+                errorDisplayMsg("Network is busy. Pls. try again. ");
             }
         });
-    }*/
+    }
+
+    public void getContactQuery(String q) {
+        searchDomain.getSearchContactQuery(q, new Callback<SearchProject>() {
+            @Override
+            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
+                if (response.isSuccessful()) {
+                    SearchProject searchproject = response.body();
+                    queryContactTotal = searchproject.getTotal();
+                    notifyPropertyChanged(BR.queryContactTotal);
+                //    Log.d("TotalProject", "Total: " + queryContactTotal);
+                } else {
+                    errorDisplayMsg("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchProject> call, Throwable t) {
+                errorDisplayMsg("Network is busy. Pls. try again. ");
+            }
+        });
+    }
 
     /**
      * Display error message
@@ -239,11 +366,28 @@ public class SearchViewModel extends BaseObservable {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + message + "\r\n");
         Log.e("Error:", "Error " + message);
-        builder.setMessage(activity.getString(R.string.error_network_message));
+        builder.setMessage(message);
+//        builder.setMessage(activity.getString(R.string.error_network_message));
         builder.setNegativeButton(activity.getString(R.string.ok), null);
         Log.e("onFailure", "onFailure: " + message);
         builder.show();
     }
+    /**
+     * Initialize Project Items Adapter Search Query
+     */
+    private void initializeAdapterProjectQuerySummary() {
+
+        adapterDataProjectQuerySummary = new ArrayList<Project>();
+
+        RecyclerView recyclerViewPQS = getRecyclerViewById(R.id.recycler_view_project_query_summary);
+        setupRecyclerView(recyclerViewPQS, LinearLayoutManager.VERTICAL);
+
+        searchAdapterPQS = new SearchRecyclerViewAdapter(this, adapterDataProjectQuerySummary);
+
+        searchAdapterPQS.setAdapterType(SEARCH_ADAPTER_TYPE_PQS);
+        recyclerViewPQS.setAdapter(searchAdapterPQS);
+    }
+
 
     /**
      * Initialize Recent Items Adapter
@@ -259,17 +403,8 @@ public class SearchViewModel extends BaseObservable {
         // adapterDataRecentlyViewed.add(sr2);
         RecyclerView recyclerViewRecentlyViewed = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerViewRecentlyViewed, LinearLayoutManager.HORIZONTAL);
-        //      searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(activity,adapterDataRecentlyViewed);
-        Log.d("Enter init", "Enter initnoel");
-        searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(activity, adapterDataRecentlyViewed, new SearchRecyclerViewAdapter.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(Object item) {
-                switchSection = true;
-
-                Log.d("onitemclick2", "switching...");
-            }
-        });
+        searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(this, adapterDataRecentlyViewed);
 
         searchAdapterRecentlyViewed.setAdapterType(SEARCH_ADAPTER_TYPE_RECENT);
         recyclerViewRecentlyViewed.setAdapter(searchAdapterRecentlyViewed);
@@ -283,7 +418,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectSearchSaved = new ArrayList<SearchSaved>();
         RecyclerView recyclerViewProject = getRecyclerViewById(R.id.recycler_view_project);
         setupRecyclerView(recyclerViewProject, LinearLayoutManager.VERTICAL);
-        searchAdapterProject = new SearchRecyclerViewAdapter(adapterDataProjectSearchSaved);
+        searchAdapterProject = new SearchRecyclerViewAdapter(this, adapterDataProjectSearchSaved);
         searchAdapterProject.setAdapterType(SEARCH_ADAPTER_TYPE_PROJECTS);
         recyclerViewProject.setAdapter(searchAdapterProject);
     }
@@ -295,7 +430,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanySearchSaved = new ArrayList<SearchSaved>();
         RecyclerView recyclerViewCompany = getRecyclerViewById(R.id.recycler_view_company);
         setupRecyclerView(recyclerViewCompany, LinearLayoutManager.VERTICAL);
-        searchAdapterCompany = new SearchRecyclerViewAdapter(adapterDataCompanySearchSaved);
+        searchAdapterCompany = new SearchRecyclerViewAdapter(this, adapterDataCompanySearchSaved);
         searchAdapterCompany.setAdapterType(SEARCH_ADAPTER_TYPE_COMPANIES);
         recyclerViewCompany.setAdapter(searchAdapterCompany);
     }
@@ -310,21 +445,7 @@ public class SearchViewModel extends BaseObservable {
 
         return (RecyclerView) activity.findViewById(recyclerView);
     }
-
-
-    /////////////////////////////////////
-    // BINDABLE
-
-    /*@Bindable
-    public String getQuery() {
-        return query;
-    }
-
-    @Bindable
-    public void setQuery(String query) {
-        this.query = query;
-        notifyPropertyChanged(BR.query);
-    }*/
+    
 
     @Bindable
     public String getCustomString() {
@@ -337,12 +458,31 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void onBackClicked(View view) {
-        //       if (switchSection) {
-        if (SearchRecyclerViewAdapter.isMSE2SectionVisible) {
+        checkDisplayMSESectionOrMain();
+    }
+
+    private void checkDisplayMSESectionOrMain() {
+
+        if (isMSE2SectionVisible) {
+            isMSE2SectionVisible = false;
+            displayMSESectionVisible();
+            if (searchfield != null) searchfield.setText("");
+        } else {
+            activity.finish();
+        }
+    }
+
+    public void displayMSESectionVisible() {
+        if (isMSE2SectionVisible) {
+            activity.findViewById(R.id.mse1section).setVisibility(View.GONE);
+            activity.findViewById(R.id.mse2section).setVisibility(View.VISIBLE);
+        } else {
             activity.findViewById(R.id.mse1section).setVisibility(View.VISIBLE);
             activity.findViewById(R.id.mse2section).setVisibility(View.GONE);
-            switchSection = !switchSection;
-            SearchRecyclerViewAdapter.isMSE2SectionVisible = false;
-        } else activity.finish();
+        }
+    }
+
+    public AppCompatActivity getActivity() {
+        return activity;
     }
 }

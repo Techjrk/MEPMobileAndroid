@@ -145,6 +145,10 @@
     <string name="mtm_menu_number_company">%s Companies</string>
     <string name="mtm_menu_number_projects">%s Projects</string>
     <string name="mse_2_0">MSE 2.0</string>
+    <string name="project_query_searches">PROJECTS</string>
+    <string name="company_query_searches">COMPANIES</string>
+    <string name="title_contacts">CONTACTS</string>
+    <string name="see_all">See all</string>
 
 
 </resources>

@@ -2,8 +2,10 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-
+import android.view.View;
+import android.widget.RelativeLayout;
 import com.lecet.app.BR;
+import com.lecet.app.R;
 import com.lecet.app.data.models.SearchSaved;
 
 /**
@@ -14,14 +16,12 @@ import com.lecet.app.data.models.SearchSaved;
 
 public class SearchItemSavedSearchViewModel extends BaseObservable {
 
-    private final SearchSaved searchSaved;
+    private SearchSaved searchSaved;
     private String title;
-//    private final String mapsApiKey;
- //   private final String code ="this123code";
+    private SearchViewModel viewModel;
 
-    public SearchItemSavedSearchViewModel(SearchSaved searchSaved) {
-//        this.project = project;
-//        this.mapsApiKey = mapsApiKey;
+    public SearchItemSavedSearchViewModel(SearchViewModel viewModel, SearchSaved searchSaved) {
+        this.viewModel = viewModel;
         this.searchSaved = searchSaved;
         this.setTitle(searchSaved.getTitle());
     }
@@ -39,6 +39,19 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.title);
     }
 
+    /**
+     * setItemClickListener - used to display the MSE 2.0 layout
+     */
 
+    public void setItemClickListener(final SearchSaved item, View view) {
+        final RelativeLayout viewsavedsection = (RelativeLayout) view.findViewById(R.id.item_saved_searches);
 
+        viewsavedsection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.setSearchfield(item.getQuery().trim());
+            }
+        });
+
+    }
 }

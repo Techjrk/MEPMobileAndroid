@@ -41,14 +41,14 @@ public interface SearchService {
     @GET("LecetUsers/{userId}/searches")
     Call<List<SearchSaved>> getSearchSaved(@Header("Authorization") String token, @Path("userId") long userId);
 
-    //***Project Search
+  /*  /*//***Project Search
     @Headers({
             "Accept: application/json",
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Projects/search")
     Call<SearchProject> getSearchProjectInit(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
-
+*/
     //***Project SearchDetail
     @Headers({
             "Accept: application/json",
@@ -63,7 +63,7 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Projects/search")
-    Call<List<Project>> getSearchProject(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+    Call<SearchProject> getSearchProjectQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
 
 
     //***Company Search
@@ -72,6 +72,14 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Companies/search")
-    Call<List<Company>> getSearchCompany(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+    Call<SearchProject> getSearchCompanyQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+
+    //***Contacts Search
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("Contacts/search")
+    Call<SearchProject> getSearchContactQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
 
 }

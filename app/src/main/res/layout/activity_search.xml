@@ -2,7 +2,6 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.SearchViewModel" />
@@ -74,7 +73,7 @@
                 </RelativeLayout>
 
             </LinearLayout>
-            <!-- MSE 1 -->
+            <!-- MSE 1 SECTION -->
             <ScrollView
                 android:id="@+id/mse1section"
                 android:layout_width="match_parent"
@@ -131,7 +130,7 @@
                 </LinearLayout>
 
             </ScrollView>
-            <!-- MSE 2.0 -->
+            <!-- MSE 2.0 SECTION -->
             <ScrollView
                 android:id="@+id/mse2section"
                 android:layout_width="match_parent"
@@ -150,7 +149,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/mse_2_0" />
+                        android:text="" />
+                    <!-- INCLUDE - List Item Search Query Summary -->
+                    <include
+                        layout="@layout/list_item_search_query_summary"
+                        bind:viewModel="@{viewModel}"
+                        />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>

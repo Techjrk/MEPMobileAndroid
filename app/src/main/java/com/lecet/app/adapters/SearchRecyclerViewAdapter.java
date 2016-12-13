@@ -1,27 +1,24 @@
 package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
+import com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding;
 import com.lecet.app.databinding.ListItemSearchSavedViewBinding;
-
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
 import com.lecet.app.viewmodel.SearchItemSavedSearchViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.Collections;
 import java.util.List;
+
+//import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * File: SearchRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -33,32 +30,13 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     private int adapterType;
     private List data = Collections.emptyList();
-    private AppCompatActivity activity;
-    public static boolean isMSE2SectionVisible;
+    private SearchViewModel viewModel;
 
-    private OnItemClickListener listener;
-
-    public interface OnItemClickListener {
-        void onItemClick(Object item);
-    }
-
-    public SearchRecyclerViewAdapter(List data) {
-
+    public SearchRecyclerViewAdapter(SearchViewModel viewModel, List data) {
+        this.viewModel = viewModel;
         this.data = data;
     }
 
-    /**
-     * Old code - for reference
-     * public SearchRecyclerViewAdapter(AppCompatActivity activity, List data) {
-     * this.activity = activity;
-     * this.data = data;
-     * }
-     */
-    public SearchRecyclerViewAdapter(AppCompatActivity activity, List data, OnItemClickListener listener) {
-        this.data = data;
-        this.listener = listener;
-        this.activity = activity;
-    }
 
     public void setData(List data) {
         this.data = data;
@@ -83,6 +61,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 ListItemSearchSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new CompanySavedViewHolder(companiesBinding);
                 break;
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_PQS:
+                ListItemSearchQuerySummaryProjectBinding PQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_project,parent, false);
+                viewHolder = new PQSViewHolder(PQSBinding);
+                break;
         }
         return viewHolder;
     }
@@ -94,21 +76,35 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         if (holder instanceof RecentViewHolder) {
             RecentViewHolder viewHolder = (RecentViewHolder) holder;
 //  old code - viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
-            viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(activity, ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
-            viewHolder.setItemClickListener((SearchResult) data.get(position), listener);
+            SearchItemRecentViewModel searchrecent = new SearchItemRecentViewModel(viewModel, ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+            viewHolder.getBinding().setViewModel(searchrecent);
+            searchrecent.setItemClickListener((SearchResult) data.get(position), viewHolder.itemView);
         }
 
         // Project
-        else if (holder instanceof ProjectSavedViewHolder) {
+        if (holder instanceof ProjectSavedViewHolder) {
             ProjectSavedViewHolder viewHolder = (ProjectSavedViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new SearchItemSavedSearchViewModel((SearchSaved) data.get(position)));
+            SearchItemSavedSearchViewModel searchsaved = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
+            viewHolder.getBinding().setViewModel(searchsaved);
+            searchsaved.setItemClickListener((SearchSaved) data.get(position), viewHolder.itemView);
+
 
         }
 
         // Company
-        else if (holder instanceof CompanySavedViewHolder) {
+        if (holder instanceof CompanySavedViewHolder) {
             CompanySavedViewHolder viewHolder = (CompanySavedViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new SearchItemSavedSearchViewModel((SearchSaved) data.get(position)));
+            SearchItemSavedSearchViewModel searchsaved = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
+            viewHolder.getBinding().setViewModel(searchsaved);
+            searchsaved.setItemClickListener((SearchSaved) data.get(position), viewHolder.itemView);
+        }
+
+        //PQS
+        if (holder instanceof PQSViewHolder) {
+            PQSViewHolder viewHolder = (PQSViewHolder) holder;
+            SearchItemRecentViewModel searchPQS = new SearchItemRecentViewModel(viewModel, (Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+            viewHolder.getBinding().setViewModel(searchPQS);
+            searchPQS.setItemClickListener((Project) data.get(position), viewHolder.itemView);
         }
     }
 
@@ -120,13 +116,11 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         return data.size();
     }
 
-
     @Override
     public int getItemViewType(int position) {
 
         return adapterType;
     }
-
 
     public void setAdapterType(int adapterType) {
         this.adapterType = adapterType;
@@ -136,6 +130,23 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
      * View Holders - Recent Items, Project, and Company
      * TODO - consolidate into one?
      **/
+
+    /* For Project Query Search Summary */
+    public class PQSViewHolder extends RecyclerView.ViewHolder {
+
+        private final com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding binding;
+
+        public PQSViewHolder(com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding getBinding() {
+            return binding;
+        }
+
+    }
+
 
     public class RecentViewHolder extends RecyclerView.ViewHolder {
 
@@ -151,30 +162,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             return binding;
         }
 
-        /**
-         * setItemClickListener - used to display the MSE 2.0 layout
-         */
-        public void setItemClickListener(final SearchResult item, final OnItemClickListener listener) {
-            final LinearLayout mapviewsection = (LinearLayout) itemView.findViewById(R.id.mapsectionview);
-            final ScrollView mse1section = binding.getViewModel().getMSE1SectionView();
-            final ScrollView mse2section = binding.getViewModel().getMSE2SectionView();
-
-            mapviewsection.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    isMSE2SectionVisible = !isMSE2SectionVisible;
-                    if (isMSE2SectionVisible) {
-                        mse1section.setVisibility(View.GONE);
-                        mse2section.setVisibility(View.VISIBLE);
-                    } else {
-                        mse1section.setVisibility(View.VISIBLE);
-                        mse2section.setVisibility(View.GONE);
-                        listener.onItemClick(item.getProject());
-                    }
-                }
-            });
-        }
     }
 
     public class ProjectSavedViewHolder extends RecyclerView.ViewHolder {

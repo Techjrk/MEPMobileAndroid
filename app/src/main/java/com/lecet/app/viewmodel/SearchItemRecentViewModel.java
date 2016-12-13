@@ -2,15 +2,18 @@ package com.lecet.app.viewmodel;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.SearchResult;
 
 import org.w3c.dom.Text;
 
@@ -18,7 +21,6 @@ import java.text.SimpleDateFormat;
 
 /**
  * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
- * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -28,8 +30,8 @@ public class SearchItemRecentViewModel {
     private final Project project;
     private final String mapsApiKey;
     private final String code = "this123code";
-    private AppCompatActivity activity;
 
+    private SearchViewModel viewModel;
     public String getTitle() {
         if (project == null) return "--";
         return project.getTitle();
@@ -37,7 +39,6 @@ public class SearchItemRecentViewModel {
 
     public String getAddress() {
         if (project == null) return "--";
-
         return project.getAddress1();
     }
 
@@ -45,38 +46,27 @@ public class SearchItemRecentViewModel {
         return code;
     }
 
-    /** old code - for reference
-        public SearchItemRecentViewModel(Project project, String mapsApiKey) {
-            this.project = project;
-            this.mapsApiKey = mapsApiKey;
-
-
-        } */
-    public SearchItemRecentViewModel(AppCompatActivity activity, Project project, String mapsApiKey) {
+    /**
+     * old code - for reference
+     * public SearchItemRecentViewModel(Project project, String mapsApiKey) {
+     * this.project = project;
+     * this.mapsApiKey = mapsApiKey;
+     * }
+     */
+    public SearchItemRecentViewModel(SearchViewModel viewModel, Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
-        this.activity = activity;
-
+        this.viewModel = viewModel;
     }
-
-/*
-    public SearchItemRecentViewModel(Project project, String mapsApiKey, SearchRecyclerViewAdapter.OnItemClickListener listener) {
-        this.project = project;
-        this.mapsApiKey = mapsApiKey;
-    }
-*/
 
 
     public String getProjectName() {
-
         return project.getTitle();
     }
 
     public String getClientLocation() {
-
         return project.getCity() + " , " + project.getState();
     }
-
 
     public String getMapUrl() {
 
@@ -87,12 +77,27 @@ public class SearchItemRecentViewModel {
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
+    public void setItemClickListener(final SearchResult item, View view) {
+        final LinearLayout mapviewsection = (LinearLayout) view.findViewById(R.id.mapsectionview);
 
-    public ScrollView getMSE1SectionView() {
-        return (ScrollView) this.activity.findViewById(R.id.mse1section);
+        mapviewsection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(viewModel.getActivity(), "Is this section already implemented?",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public ScrollView getMSE2SectionView() {
-        return (ScrollView) this.activity.findViewById(R.id.mse2section);
+    public void setItemClickListener(final Project item, View view) {
+        final LinearLayout mapviewsection = (LinearLayout) view.findViewById(R.id.query_mapsectionview);
+
+        mapviewsection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(viewModel.getActivity(), "Already Implemented?",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }
+
