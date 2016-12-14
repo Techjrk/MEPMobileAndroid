@@ -8,6 +8,7 @@
     <color name="lecetTextDarkGray">#222222</color>
 
     <color name="lecetLightBlue">#A8C3E6</color>
+    <color name="lecetLightBlueTransp">#88A8C3E6</color>
     <color name="lecetMediumBlue">#4C91D1</color>
     <color name="lecetButtonDarkBlue">#08497C</color>
     <color name="lecetButtonDarkerBlue">#08497C</color>

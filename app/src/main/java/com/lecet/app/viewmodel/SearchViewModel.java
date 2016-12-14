@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -45,7 +46,7 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
     public static final int SEARCH_ADAPTER_TYPE_PQS = 3;   //PQS - Project Query Summary
-    private final AppCompatActivity activity;
+    private static AppCompatActivity activity;
     private final SearchDomain searchDomain;
     private static final String TAG = "SearchViewModel";
     //private Project project;    //TODO - unused
@@ -65,7 +66,7 @@ public class SearchViewModel extends BaseObservable {
     private TextView viewCompanyQueryTotal;
     private TextView viewContactQueryString;
     private TextView viewContactQueryTotal;
-    private EditText searchfield;
+    private static EditText searchfield;
     private List<Project> adapterDataProjectQuerySummary;
     private SearchRecyclerViewAdapter searchAdapterPQS;  //PQS - Project Query Summary
 
@@ -74,7 +75,7 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void setSearchfield(String query) {
-       if (query !=null) this.searchfield.setText(query.trim());
+       if (query !=null) searchfield.setText(query.trim());
     }
 
     private int queryProjTotal;
@@ -100,7 +101,7 @@ public class SearchViewModel extends BaseObservable {
      * Constructor without input query - For RecentlyViewed and SavedSearch API
      */
     public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
-        this.activity = activity;
+        SearchViewModel.activity = activity;
         this.searchDomain = sd;
         //TODO: 1 ***TESTING THE SEARCH FUNCTIONALITY FOR THIS CONSTRUCTOR ***
 
@@ -182,12 +183,10 @@ public class SearchViewModel extends BaseObservable {
         final int CONTENT_MAX_SIZE = 4;
         adapterDataProjectQuerySummary.clear();
             int ctr = 0;
-        Log.d("PROJECTS NOEL ","PROJECT NOEL SIZE "+slist.size());
             for (Project s : slist) {
                 try {
 
                     if (s != null) {
-                        Log.d("PROJECTS NOEL ","PROJECT NOEL SIZE "+s.getTitle());
                         if (ctr < CONTENT_MAX_SIZE) adapterDataProjectQuerySummary.add(s);
                         ctr++;
 
@@ -395,12 +394,6 @@ public class SearchViewModel extends BaseObservable {
     private void initializeAdapterRecentlyViewed() {
 
         adapterDataRecentlyViewed = new ArrayList<SearchResult>();
-        //TODO: List testing
-        // SearchResult sr1 = new SearchResult();
-        // sr1.setCode("code123");
-        // SearchResult sr2 = new SearchResult();
-        // adapterDataRecentlyViewed.add(sr1);
-        // adapterDataRecentlyViewed.add(sr2);
         RecyclerView recyclerViewRecentlyViewed = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerViewRecentlyViewed, LinearLayoutManager.HORIZONTAL);
 
@@ -461,7 +454,7 @@ public class SearchViewModel extends BaseObservable {
         checkDisplayMSESectionOrMain();
     }
 
-    private void checkDisplayMSESectionOrMain() {
+    public static void checkDisplayMSESectionOrMain() {
 
         if (isMSE2SectionVisible) {
             isMSE2SectionVisible = false;
@@ -472,7 +465,7 @@ public class SearchViewModel extends BaseObservable {
         }
     }
 
-    public void displayMSESectionVisible() {
+    public static void displayMSESectionVisible() {
         if (isMSE2SectionVisible) {
             activity.findViewById(R.id.mse1section).setVisibility(View.GONE);
             activity.findViewById(R.id.mse2section).setVisibility(View.VISIBLE);
@@ -484,5 +477,16 @@ public class SearchViewModel extends BaseObservable {
 
     public AppCompatActivity getActivity() {
         return activity;
+    }
+    /**
+     * OnClick handlers
+     **/
+
+    public void onClearClicked(View view) {
+        searchfield.setText("");
+    }
+
+    public void onFilterClicked(View view) {
+        Toast.makeText(activity,"Filter clicked.",Toast.LENGTH_SHORT).show();
     }
 }
