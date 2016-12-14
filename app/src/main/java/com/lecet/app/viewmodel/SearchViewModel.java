@@ -61,15 +61,17 @@ public class SearchViewModel extends BaseObservable {
     private final int CONTENT_MAX_SIZE = 4;
 
     //For MSE 2.0
-    private static EditText searchfield;
+    //private static EditText searchfield;
     private List<Project> adapterDataProjectQuerySummary;
     private SearchRecyclerViewAdapter searchAdapterPQS;  //PQS - Project Query Summary
+    private String query;
     private String queryProjectTitle;
     private String queryCompanyTitle;
     private String queryContactTitle;
     private int queryProjTotal;
     private int queryCompanyTotal;
     private int queryContactTotal;
+
 
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
@@ -90,14 +92,11 @@ public class SearchViewModel extends BaseObservable {
 
         //Init the search query
         initializeAdapterProjectQuerySummary();
-        initQuery();
+        //initQuery();
     }
 
-    public void initQuery() {
+    /*public void initQuery() {
         searchfield = (EditText) activity.findViewById(R.id.search_edit_text);
-/*        viewProjQueryString = (TextView) activity.findViewById(R.id.queryproject_title);
-        viewCompanyQueryString = (TextView) activity.findViewById(R.id.querycompany_title);
-        viewContactQueryString = (TextView) activity.findViewById(R.id.querycontact_title);*/
 
         searchfield.addTextChangedListener(new TextWatcher() {
 
@@ -114,9 +113,9 @@ public class SearchViewModel extends BaseObservable {
                 if (editable != null) updateViewQuery(editable.toString());
             }
         });
-    }
+    }*/
 
-    public void updateViewQuery(String query) {
+    public void updateViewQuery(/*String query*/) {
 
         if (query == null || query.trim().equals("")) {
             setIsMSE2SectionVisible(false);
@@ -132,7 +131,7 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.queryCompanyTitle);
         notifyPropertyChanged(BR.queryContactTitle);
 
-        query = searchfield.getText().toString().trim();
+        //query = searchfield.getText().toString().trim();
         /** For Project query total view
          */
         //      viewProjQueryTotal.setText("? Projects ");
@@ -415,6 +414,17 @@ public class SearchViewModel extends BaseObservable {
     // BINDABLE
 
     @Bindable
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+        notifyPropertyChanged(BR.query);
+        updateViewQuery();
+    }
+
+    @Bindable
     public  boolean getIsMSE2SectionVisible() {
         return isMSE2SectionVisible;
     }
@@ -439,14 +449,14 @@ public class SearchViewModel extends BaseObservable {
         return queryContactTitle;
     }
 
-    public EditText getSearchfield() {
+    /*public EditText getSearchfield() {
         return searchfield;
-    }
+    }*//*
 
     public void setSearchfield(String query) {
         // query = querysearch;
         if (query != null) searchfield.setText(query.trim());
-    }
+    }*/
 
     @Bindable
     public String getQueryProjTotal() {
@@ -469,7 +479,7 @@ public class SearchViewModel extends BaseObservable {
      **/
 
     public void onClearClicked(View view) {
-        searchfield.setText("");
+        setQuery(null);
     }
 
     public void onFilterClicked(View view) {

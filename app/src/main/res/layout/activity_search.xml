@@ -82,10 +82,10 @@
                         android:hint="@string/search"
                         android:textColor="@color/lecetTextWhite"
                         android:inputType="textPersonName"
-                        android:text=""
                         android:layout_toStartOf="@id/close_image_button"
                         android:textSize="15sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+                        bind:typeface="@{`Lato-Bold.ttf`}"
+                        android:text="@={viewModel.query}"/>
 
                 </RelativeLayout>
 
