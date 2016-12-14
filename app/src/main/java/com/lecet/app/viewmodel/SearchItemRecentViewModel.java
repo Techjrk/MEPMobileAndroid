@@ -1,23 +1,13 @@
 package com.lecet.app.viewmodel;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.SearchRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchResult;
-
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 
 /**
  * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
@@ -77,6 +67,13 @@ public class SearchItemRecentViewModel {
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
+    ////////////////////////////////////
+    // CLICK HANDLERS
+
+    public void onClick(View view) {
+        Toast.makeText(viewModel.getActivity(), "onClick",Toast.LENGTH_SHORT).show();
+    }
+
     public void setItemClickListener(final SearchResult item, View view) {
         final LinearLayout mapviewsection = (LinearLayout) view.findViewById(R.id.mapsectionview);
 
@@ -89,7 +86,7 @@ public class SearchItemRecentViewModel {
     }
 
     public void setItemClickListener(final Project item, View view) {
-        final LinearLayout mapviewsection = (LinearLayout) view.findViewById(R.id.query_mapsectionview);
+        final ImageView mapviewsection = (ImageView) view.findViewById(R.id.query_map_section_view);
 
         mapviewsection.setOnClickListener(new View.OnClickListener() {
             @Override
