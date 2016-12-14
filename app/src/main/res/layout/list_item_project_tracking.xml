@@ -30,7 +30,7 @@
 
             <!-- Map Image -->
             <ImageView
-                    android:id="@+id/project_locatation_image_view"
+                    android:id="@+id/project_location_image_view"
                     style="@style/ListItemProjectTrackingImage.DetailMap"
                     bind:imageUrl="@{viewModel.mapUrl}"/>
 
