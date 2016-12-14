@@ -71,7 +71,7 @@ public class SearchItemRecentViewModel {
     // CLICK HANDLERS
 
     public void onClick(View view) {
-        Toast.makeText(viewModel.getActivity(), "onClick",Toast.LENGTH_SHORT).show();
+        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
     }
 
     public void setItemClickListener(final SearchResult item, View view) {
