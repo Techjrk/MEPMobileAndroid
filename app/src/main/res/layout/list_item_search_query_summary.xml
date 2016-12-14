@@ -30,7 +30,7 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
-                android:text=" in Projects"
+                android:text="@{viewModel.queryProjectTitle}"
                 android:textSize="14sp"
                 bind:typeface="@{`Lato-Bold.ttf`}"
                 tools:text="Jane Dee in Projects" />
@@ -64,7 +64,7 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
-                android:text=" in Companies"
+                android:text="@{viewModel.queryCompanyTitle}"
                 android:textSize="14sp"
                 bind:typeface="@{`Lato-Bold.ttf`}"
                 tools:text="Jane Doe in Companies" />
@@ -100,7 +100,7 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
-                android:text=" in Contacts"
+                android:text="@{viewModel.queryContactTitle}"
                 android:textSize="14sp"
                 bind:typeface="@{`Lato-Bold.ttf`}"
                 tools:text="Jane Doe in Contacts" />
