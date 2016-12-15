@@ -211,7 +211,7 @@ public class SearchViewModel extends BaseObservable {
             try {
 
                 if (s != null) {
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataProjectQuerySummary.add(s);
+                    if (ctr < CONTENT_MAX_SIZE) adapterDataProjectQuerySummary.add(s); else break;
                     ctr++;
 
                 }
