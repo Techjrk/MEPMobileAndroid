@@ -8,7 +8,8 @@
         <import type="android.view.View"/>
     </data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <!-- SEARCH FIELD -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -26,11 +28,11 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/lecetDarkestBlue"
-                    >
+                    android:layout_height="60dp"
+                    android:background="@color/lecetDarkestBlue" >
 
-                    <LinearLayout
+                    <!-- UNUSED? -->
+                    <!--LinearLayout
                         android:id="@+id/search_field_section"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -38,64 +40,68 @@
                         android:orientation="horizontal"
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp">
-                    </LinearLayout>
+                    </LinearLayout-->
 
                     <ImageButton
                         android:id="@+id/filter_image_button"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="23dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="15dp"
                         android:background="@null"
-                        android:paddingLeft="1dp"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="0dp"
                         android:scaleType="fitXY"
-                        android:onClick="@{viewModel.onFilterClicked}"
-                        android:src="@mipmap/ic_filter" />
+                        android:src="@mipmap/ic_filter"
+                        android:onClick="@{viewModel.onFilterClicked}"/>
+
                     <ImageButton
                         android:id="@+id/close_image_button"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:onClick="@{viewModel.onClearClicked}"
-                        android:layout_toLeftOf="@id/filter_image_button"
-                        android:layout_marginTop="29dp"
+                        android:layout_toStartOf="@id/filter_image_button"
+                        android:layout_centerVertical="true"
                         android:background="@null"
-                        android:paddingLeft="1dp"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/ic_clear_text" />
+                        android:src="@mipmap/ic_clear_text"
+                        android:onClick="@{viewModel.onClearClicked}"/>
 
                     <EditText
                         android:id="@+id/search_edit_text"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_margin="10dp"
-                        android:layout_weight="2"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_centerVertical="true"
                         android:background="@drawable/rounded_edittext"
-                        android:drawableLeft="@drawable/ic_action_search"
-                        android:hint="Search"
+                        android:drawableStart="@drawable/ic_action_search"
+                        android:hint="@string/search"
                         android:textColor="@color/lecetTextWhite"
                         android:inputType="textPersonName"
-                        android:text=""
-                        android:layout_toLeftOf="@id/close_image_button"
-                        android:textSize="15sp" />
+                        android:layout_toStartOf="@id/close_image_button"
+                        android:textSize="15sp"
+                        bind:typeface="@{`Lato-Bold.ttf`}"
+                        android:text="@={viewModel.query}"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
             <!-- MSE 1 SECTION -->
             <ScrollView
                 android:id="@+id/mse1section"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:visibility="@{viewModel.isMSE2SectionVisible ? View.GONE : View.VISIBLE }"
                 android:layout_marginTop="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="4dp"
                     android:paddingTop="0dp">
@@ -141,19 +147,18 @@
                 </LinearLayout>
 
             </ScrollView>
+
             <!-- MSE 2.0 SECTION -->
             <ScrollView
                 android:id="@+id/mse2section"
-                android:visibility="@{viewModel.isMSE2SectionVisible ? View.VISIBLE : View.GONE }"
+                android:visibility="@{viewModel.isMSE2SectionVisible ? View.VISIBLE : View.GONE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:layout_marginTop="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="4dp"
                     android:paddingTop="0dp">
@@ -162,14 +167,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="" />
+
                     <!-- INCLUDE - List Item Search Query Summary -->
                     <include
                         layout="@layout/list_item_search_query_summary"
-                        bind:viewModel="@{viewModel}"
-                        />
+                        bind:viewModel="@{viewModel}" />
+
                 </LinearLayout>
+
             </ScrollView>
+
         </LinearLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>

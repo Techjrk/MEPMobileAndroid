@@ -42,84 +42,42 @@ import retrofit2.Response;
 
 public class SearchViewModel extends BaseObservable {
 
+    private static final String TAG = "SearchViewModel";
+
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
     public static final int SEARCH_ADAPTER_TYPE_PQS = 3;   //PQS - Project Query Summary
-    private static AppCompatActivity activity;
+
+    private AppCompatActivity activity;
     private final SearchDomain searchDomain;
-    private static final String TAG = "SearchViewModel";
     private List<SearchResult> adapterDataRecentlyViewed;
     private List<SearchSaved> adapterDataProjectSearchSaved;
     private List<SearchSaved> adapterDataCompanySearchSaved;
     private SearchRecyclerViewAdapter searchAdapterRecentlyViewed;
     private SearchRecyclerViewAdapter searchAdapterProject;
     private SearchRecyclerViewAdapter searchAdapterCompany;
-    public  boolean isMSE2SectionVisible = false;
-    static final int CONTENT_MAX_SIZE = 4;
-
-    @Bindable
-    public  boolean getIsMSE2SectionVisible() {
-        return isMSE2SectionVisible;
-    }
-    @Bindable
-    public  void setIsMSE2SectionVisible(boolean isMSE2SectionVisible) {
-        this.isMSE2SectionVisible = isMSE2SectionVisible;
-    }
+    private boolean isMSE2SectionVisible = false;
+    private final int CONTENT_MAX_SIZE = 4;
 
     //For MSE 2.0
-    private static EditText searchfield;
+    //private static EditText searchfield;
     private List<Project> adapterDataProjectQuerySummary;
     private SearchRecyclerViewAdapter searchAdapterPQS;  //PQS - Project Query Summary
+    private String query;
     private String queryProjectTitle;
     private String queryCompanyTitle;
     private String queryContactTitle;
-    @Bindable
-    public String getQueryProjectTitle() {
-        return queryProjectTitle;
-    }
-    @Bindable
-    public String getQueryCompanyTitle() {
-        return queryCompanyTitle;
-    }
-    @Bindable
-    public String getQueryContactTitle() {
-        return queryContactTitle;
-    }
-
-    public EditText getSearchfield() {
-        return searchfield;
-    }
-
-    public void setSearchfield(String query) {
-       // query = querysearch;
-        if (query != null) searchfield.setText(query.trim());
-    }
-
     private int queryProjTotal;
     private int queryCompanyTotal;
     private int queryContactTotal;
 
-    @Bindable
-    public String getQueryProjTotal() {
-        return queryProjTotal + ((queryProjTotal > 0) ? " Projects" : " Project");
-    }
-
-    @Bindable
-    public String getQueryCompanyTotal() {
-        return queryCompanyTotal + ((queryCompanyTotal > 0) ? " Companies" : " Company");
-    }
-
-    @Bindable
-    public String getQueryContactTotal() {
-        return queryContactTotal + ((queryContactTotal > 0) ? " Contacts" : " Contact");
-    }
 
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
      */
     public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
-        SearchViewModel.activity = activity;
+        this.activity = activity;
         this.searchDomain = sd;
         //TODO: 1 ***TESTING THE SEARCH FUNCTIONALITY FOR THIS CONSTRUCTOR ***
 
@@ -134,14 +92,11 @@ public class SearchViewModel extends BaseObservable {
 
         //Init the search query
         initializeAdapterProjectQuerySummary();
-        initQuery();
+        //initQuery();
     }
 
-    public void initQuery() {
+    /*public void initQuery() {
         searchfield = (EditText) activity.findViewById(R.id.search_edit_text);
-/*        viewProjQueryString = (TextView) activity.findViewById(R.id.queryproject_title);
-        viewCompanyQueryString = (TextView) activity.findViewById(R.id.querycompany_title);
-        viewContactQueryString = (TextView) activity.findViewById(R.id.querycontact_title);*/
 
         searchfield.addTextChangedListener(new TextWatcher() {
 
@@ -158,27 +113,25 @@ public class SearchViewModel extends BaseObservable {
                 if (editable != null) updateViewQuery(editable.toString());
             }
         });
-    }
+    }*/
 
-    public void updateViewQuery(String query) {
+    public void updateViewQuery(/*String query*/) {
 
         if (query == null || query.trim().equals("")) {
-            isMSE2SectionVisible = false;
-            displayMSESectionVisible();
+            setIsMSE2SectionVisible(false);
             return;
         }
-        isMSE2SectionVisible = true;
-        displayMSESectionVisible();
+        setIsMSE2SectionVisible(true);
 
         queryProjectTitle = query + " in Projects";
-        queryCompanyTitle= query + " in Companies";
+        queryCompanyTitle = query + " in Companies";
         queryContactTitle = query + " in Contacts";
 
         notifyPropertyChanged(BR.queryProjectTitle);
         notifyPropertyChanged(BR.queryCompanyTitle);
         notifyPropertyChanged(BR.queryContactTitle);
 
-        query = searchfield.getText().toString().trim();
+        //query = searchfield.getText().toString().trim();
         /** For Project query total view
          */
         //      viewProjQueryTotal.setText("? Projects ");
@@ -201,7 +154,9 @@ public class SearchViewModel extends BaseObservable {
 
     }
 
-    /* Get the list of Project in Query Search Summary*/
+    /**
+    * Get the list of Project in Query Search Summary
+    */
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -217,7 +172,7 @@ public class SearchViewModel extends BaseObservable {
                 }
             } catch (Exception e) {
                 //TODO - handle exception
-                Log.d("No project", "No project in the list");
+                Log.w("No project", "No project in the list");
             }
         }
 
@@ -393,18 +348,13 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Project Items Adapter Search Query
      */
     private void initializeAdapterProjectQuerySummary() {
-
         adapterDataProjectQuerySummary = new ArrayList<Project>();
-
         RecyclerView recyclerViewPQS = getRecyclerViewById(R.id.recycler_view_project_query_summary);
         setupRecyclerView(recyclerViewPQS, LinearLayoutManager.VERTICAL);
-
         searchAdapterPQS = new SearchRecyclerViewAdapter(this, adapterDataProjectQuerySummary);
-
         searchAdapterPQS.setAdapterType(SEARCH_ADAPTER_TYPE_PQS);
         recyclerViewPQS.setAdapter(searchAdapterPQS);
     }
-
 
     /**
      * Initialize Recent Items Adapter
@@ -414,13 +364,10 @@ public class SearchViewModel extends BaseObservable {
         adapterDataRecentlyViewed = new ArrayList<SearchResult>();
         RecyclerView recyclerViewRecentlyViewed = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerViewRecentlyViewed, LinearLayoutManager.HORIZONTAL);
-
         searchAdapterRecentlyViewed = new SearchRecyclerViewAdapter(this, adapterDataRecentlyViewed);
-
         searchAdapterRecentlyViewed.setAdapterType(SEARCH_ADAPTER_TYPE_RECENT);
         recyclerViewRecentlyViewed.setAdapter(searchAdapterRecentlyViewed);
     }
-
 
     /**
      * Initialize Saved Projects Adapter
@@ -458,32 +405,81 @@ public class SearchViewModel extends BaseObservable {
     }
 
 
-    public void displayMSESectionVisible() { notifyPropertyChanged(BR.isMSE2SectionVisible);}
-  /*  public void onBackClicked(View view) {
-        checkDisplayMSESectionOrMain();
-    }*/
-
-   public void checkDisplayMSESectionOrMain() {
-
-        if (isMSE2SectionVisible) {
-            isMSE2SectionVisible = false;
-            displayMSESectionVisible();
-            if (searchfield != null) searchfield.setText("");
-        } else {
-            activity.finish();
-        }
-    }
-
     public AppCompatActivity getActivity() {
         return activity;
     }
+
+
+    ///////////////////////////////////
+    // BINDABLE
+
+    @Bindable
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+        notifyPropertyChanged(BR.query);
+        updateViewQuery();
+    }
+
+    @Bindable
+    public  boolean getIsMSE2SectionVisible() {
+        return isMSE2SectionVisible;
+    }
+
+    public  void setIsMSE2SectionVisible(boolean isMSE2SectionVisible) {
+        this.isMSE2SectionVisible = isMSE2SectionVisible;
+        notifyPropertyChanged(BR.isMSE2SectionVisible);
+    }
+
+    @Bindable
+    public String getQueryProjectTitle() {
+        return queryProjectTitle;
+    }
+
+    @Bindable
+    public String getQueryCompanyTitle() {
+        return queryCompanyTitle;
+    }
+
+    @Bindable
+    public String getQueryContactTitle() {
+        return queryContactTitle;
+    }
+
+    /*public EditText getSearchfield() {
+        return searchfield;
+    }*//*
+
+    public void setSearchfield(String query) {
+        // query = querysearch;
+        if (query != null) searchfield.setText(query.trim());
+    }*/
+
+    @Bindable
+    public String getQueryProjTotal() {
+        return queryProjTotal + ((queryProjTotal > 0) ? " Projects" : " Project");
+    }
+
+    @Bindable
+    public String getQueryCompanyTotal() {
+        return queryCompanyTotal + ((queryCompanyTotal > 0) ? " Companies" : " Company");
+    }
+
+    @Bindable
+    public String getQueryContactTotal() {
+        return queryContactTotal + ((queryContactTotal > 0) ? " Contacts" : " Contact");
+    }
+
 
     /**
      * OnClick handlers
      **/
 
     public void onClearClicked(View view) {
-        searchfield.setText("");
+        setQuery(null);
     }
 
     public void onFilterClicked(View view) {
