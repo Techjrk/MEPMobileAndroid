@@ -32,6 +32,27 @@ public class Contact extends RealmObject {
     @SerializedName("company")
     private Company company;
 
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("fipsCounty")
+    private String fipsCounty;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getFipsCounty() {
+        return fipsCounty;
+    }
+
     public Contact() {}
 
     public long getId() {

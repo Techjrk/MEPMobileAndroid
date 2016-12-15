@@ -3,6 +3,7 @@ package com.lecet.app.data.api.service;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
+import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -73,6 +74,6 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Contacts/search")
-    Call<SearchProject> getSearchContactQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+    Call<SearchContact> getSearchContactQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
 
 }

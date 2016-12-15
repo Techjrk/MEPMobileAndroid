@@ -195,7 +195,7 @@
                                     android:id="@+id/recycler_view_company_query_summary"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    tools:listitem="@layout/list_item_search_query_summary_project" />
+                                    tools:listitem="@layout/list_item_search_query_summary_company" />
 
                 <!-- SEE ALL COMPANIES-->
                 <RelativeLayout
@@ -227,13 +227,13 @@
                     android:layout_marginTop="14dp"
                     android:text="@string/title_contacts"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
-                <!--  TODO: contact list
+
                                 <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/recycler_view_contacts"
+                                    android:id="@+id/recycler_view_contact_query_summary"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     tools:listitem="@layout/list_item_search_query_summary_contact" />
-                -->
+
                 <!-- SEE ALL CONTACTS-->
                 <RelativeLayout
                     android:layout_width="wrap_content"

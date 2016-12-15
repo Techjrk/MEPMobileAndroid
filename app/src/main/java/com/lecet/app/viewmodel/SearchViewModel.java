@@ -20,8 +20,10 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchRecyclerViewAdapter;
 import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
+import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -50,6 +52,7 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
     public static final int SEARCH_ADAPTER_TYPE_PQS = 3;   //PQS - Project Query Summary
     public static final int SEARCH_ADAPTER_TYPE_CQS = 4;   //CQS - Company Query Summary
+    public static final int SEARCH_ADAPTER_TYPE_ContactQS = 5;
 
     private AppCompatActivity activity;
     private final SearchDomain searchDomain;
@@ -66,8 +69,10 @@ public class SearchViewModel extends BaseObservable {
     //private static EditText searchfield;
     private List<Project> adapterDataProjectQuerySummary;
     private List<Company> adapterDataCompanyQuerySummary;
+    private List<Contact> adapterDataContactQuerySummary;
     private SearchRecyclerViewAdapter searchAdapterPQS;  //PQS - Project Query Summary
     private SearchRecyclerViewAdapter searchAdapterCQS;  //CQS - Company Query Summary
+    private SearchRecyclerViewAdapter searchAdapterContactQS;
     private String query;
     private String queryProjectTitle;
     private String queryCompanyTitle;
@@ -96,9 +101,9 @@ public class SearchViewModel extends BaseObservable {
 
         //Init the search query
         initializeAdapterProjectQuerySummary();
-
         initializeAdapterCompanyQuerySummary();
-        //initQuery();
+        initializeAdapterContactQuerySummary();
+
     }
 
 
@@ -190,6 +195,31 @@ public class SearchViewModel extends BaseObservable {
         searchAdapterCQS.notifyDataSetChanged();
     }
 
+    /**
+     * Get the list of Contacts in Query Search Summary
+     */
+    public void getContactQueryListSummary(SearchContact sp) {
+        RealmList<Contact> slist = sp.getResults();
+
+        adapterDataContactQuerySummary.clear();
+        int ctr = 0;
+        for (Contact s : slist) {
+            try {
+
+                if (s != null) {
+                    if (ctr < CONTENT_MAX_SIZE) adapterDataContactQuerySummary.add(s);
+                    else break;
+                    ctr++;
+
+                }
+            } catch (Exception e) {
+                //TODO - handle exception
+                Log.w("No contact", "No contact in the list");
+            }
+        }
+
+        searchAdapterContactQS.notifyDataSetChanged();
+    }
     /**
      * Get the list of recently viewed by the user
      */
@@ -319,13 +349,14 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void getContactQuery(String q) {
-        searchDomain.getSearchContactQuery(q, new Callback<SearchProject>() {
+        searchDomain.getSearchContactQuery(q, new Callback<SearchContact>() {
             @Override
-            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
+            public void onResponse(Call<SearchContact> call, Response<SearchContact> response) {
                 if (response.isSuccessful()) {
-                    SearchProject searchproject = response.body();
-                    queryContactTotal = searchproject.getTotal();
+                    SearchContact searchcontact = response.body();
+                    queryContactTotal = searchcontact.getTotal();
                     notifyPropertyChanged(BR.queryContactTotal);
+                    getContactQueryListSummary(searchcontact);
                     //    Log.d("TotalProject", "Total: " + queryContactTotal);
                 } else {
                     errorDisplayMsg("Unsuccessful Query. " + response.message());
@@ -333,7 +364,7 @@ public class SearchViewModel extends BaseObservable {
             }
 
             @Override
-            public void onFailure(Call<SearchProject> call, Throwable t) {
+            public void onFailure(Call<SearchContact> call, Throwable t) {
                 errorDisplayMsg("Network is busy. Pls. try again. ");
             }
         });
@@ -377,7 +408,17 @@ public class SearchViewModel extends BaseObservable {
         recyclerViewCQS.setAdapter(searchAdapterCQS);
     }
 
-
+    /**
+     * Initialize Project Items Adapter Search Query
+     */
+    private void initializeAdapterContactQuerySummary() {
+        adapterDataContactQuerySummary = new ArrayList<Contact>();
+        RecyclerView recyclerViewContactQS = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
+        setupRecyclerView(recyclerViewContactQS, LinearLayoutManager.VERTICAL);
+        searchAdapterContactQS = new SearchRecyclerViewAdapter(this, adapterDataContactQuerySummary);
+        searchAdapterContactQS.setAdapterType(SEARCH_ADAPTER_TYPE_ContactQS);
+        recyclerViewContactQS.setAdapter(searchAdapterContactQS);
+    }
     /**
      * Initialize Recent Items Adapter
      */

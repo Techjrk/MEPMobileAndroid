@@ -4,6 +4,7 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
+import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -61,10 +62,10 @@ public class SearchDomain {
         Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token,q, filter);
         call.enqueue(callback);
     }
-    public void getSearchContactQuery(String q, Callback<SearchProject> callback) {
+    public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
         String filter="{}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<SearchProject> call = lecetClient.getSearchService().getSearchContactQuery(token,q, filter);
+        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token,q, filter);
         call.enqueue(callback);
     }
 
