@@ -23,7 +23,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="69">
+            android:layout_weight="69"
+            android:onClick="@{viewModel.onProjectSavedClick}">
 
             <FrameLayout
                 android:layout_width="match_parent"

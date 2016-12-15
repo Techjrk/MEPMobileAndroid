@@ -38,7 +38,6 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         viewModel.checkDisplayMSESectionOrMain();
-//        notifyPropertyChanged(BR);
     }
 
 }

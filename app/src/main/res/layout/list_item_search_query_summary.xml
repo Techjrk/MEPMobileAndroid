@@ -190,13 +190,12 @@
                     android:layout_marginTop="14dp"
                     android:text="@string/company_query_searches"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
-                <!-- TODO: company list
+
                                 <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/recycler_view_company"
+                                    android:id="@+id/recycler_view_company_query_summary"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    tools:listitem="@layout/list_item_search_query_summary_company" />
-                -->
+                                    tools:listitem="@layout/list_item_search_query_summary_project" />
 
                 <!-- SEE ALL COMPANIES-->
                 <RelativeLayout

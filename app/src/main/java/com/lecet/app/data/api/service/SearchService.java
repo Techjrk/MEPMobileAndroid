@@ -2,6 +2,7 @@ package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -41,14 +42,6 @@ public interface SearchService {
     @GET("LecetUsers/{userId}/searches")
     Call<List<SearchSaved>> getSearchSaved(@Header("Authorization") String token, @Path("userId") long userId);
 
-  /*  /*//***Project Search
-    @Headers({
-            "Accept: application/json",
-            "Content-Type: application/x-www-form-urlencoded"
-    })
-    @GET("Projects/search")
-    Call<SearchProject> getSearchProjectInit(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
-*/
     //***Project SearchDetail
     @Headers({
             "Accept: application/json",
@@ -72,7 +65,7 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Companies/search")
-    Call<SearchProject> getSearchCompanyQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
+    Call<SearchCompany> getSearchCompanyQuery(@Header("Authorization") String token, @Query("q") String vq, @Query("filter") String filter);
 
     //***Contacts Search
     @Headers({

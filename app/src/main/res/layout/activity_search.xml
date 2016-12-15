@@ -106,7 +106,7 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="0dp">
 
-                    <!-- RECENT -->
+                    <!-- RECENT with MAP -->
                     <TextView
                         style="@style/SearchPageSectionTextView"
                         android:text="@string/recent"

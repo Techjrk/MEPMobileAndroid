@@ -4,6 +4,8 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.data.models.SearchSaved;
@@ -39,21 +41,12 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.title);
     }
 
-    /**
-     * setItemClickListener - used to display the MSE 2.0 layout
-     */
+    ////////////////////////////////////
+    // CLICK HANDLERS
 
-    public void setItemClickListener(final SearchSaved item, View view) {
-        final RelativeLayout viewsavedsection = (RelativeLayout) view.findViewById(R.id.item_saved_searches);
-
-        viewsavedsection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //viewModel.setSearchfield(item.getQuery().trim());
-                viewModel.setQuery(item.getQuery().trim());
-                notifyPropertyChanged(BR.query);
-            }
-        });
-
+    public void onClick(View view) {
+        viewModel.setQuery(searchSaved.getQuery().trim());
+        notifyPropertyChanged(BR.query);
     }
+
 }

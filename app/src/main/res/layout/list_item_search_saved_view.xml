@@ -13,7 +13,9 @@
     <RelativeLayout
         android:id="@+id/item_saved_searches"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{viewModel.onClick}"
+        >
 
         <LinearLayout
 

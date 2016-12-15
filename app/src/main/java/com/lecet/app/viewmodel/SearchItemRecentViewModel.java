@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchResult;
 
@@ -17,11 +18,13 @@ import com.lecet.app.data.models.SearchResult;
 public class SearchItemRecentViewModel {
 
     //TODO - support either Project or Company data
-    private final Project project;
     private final String mapsApiKey;
     private final String code = "this123code";
+    private  Project project;
+    private  Company company;
 
     private SearchViewModel viewModel;
+
     public String getTitle() {
         if (project == null) return "--";
         return project.getTitle();
@@ -48,6 +51,11 @@ public class SearchItemRecentViewModel {
         this.mapsApiKey = mapsApiKey;
         this.viewModel = viewModel;
     }
+    public SearchItemRecentViewModel(SearchViewModel viewModel, Company company, String mapsApiKey) {
+        this.company = company;
+        this.mapsApiKey = mapsApiKey;
+        this.viewModel = viewModel;
+    }
 
 
     public String getProjectName() {
@@ -70,30 +78,30 @@ public class SearchItemRecentViewModel {
     ////////////////////////////////////
     // CLICK HANDLERS
 
+    public void onProjectSavedClick(View view) {
+        Toast.makeText(viewModel.getActivity(), "onClick: Project saved detail section", Toast.LENGTH_SHORT).show();
+
+    }
     public void onClick(View view) {
-        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
+        //TODO - connect to the project detail section
+        Toast.makeText(viewModel.getActivity(), "onClick: Project detail section",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
+    }
+    public void onCompanyClick(View view) {
+        //TODO - connect to the company detail section
+        Toast.makeText(viewModel.getActivity(), "onClick: Company detail section",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
     }
 
-    public void setItemClickListener(final SearchResult item, View view) {
-        final LinearLayout mapviewsection = (LinearLayout) view.findViewById(R.id.mapsectionview);
-
-        mapviewsection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(viewModel.getActivity(), "Is this section already implemented?",Toast.LENGTH_SHORT).show();
-            }
-        });
+    //For Company
+    public String getCompanyTitle() {
+        if (company == null) return "--";
+        return company.getName();
     }
 
-    public void setItemClickListener(final Project item, View view) {
-        final ImageView mapviewsection = (ImageView) view.findViewById(R.id.query_map_section_view);
-
-        mapviewsection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(viewModel.getActivity(), "Already Implemented?",Toast.LENGTH_SHORT).show();
-            }
-        });
+    public String getCompanyAddress() {
+        if (company == null) return "--";
+        return company.getAddress1();
     }
 
 }
