@@ -50,7 +50,8 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 //viewModel.setSearchfield(item.getQuery().trim());
-                viewModel.setQuery("");
+                viewModel.setQuery(item.getQuery().trim());
+                notifyPropertyChanged(BR.query);
             }
         });
 

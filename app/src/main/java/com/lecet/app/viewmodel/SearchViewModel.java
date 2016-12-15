@@ -409,6 +409,14 @@ public class SearchViewModel extends BaseObservable {
         return activity;
     }
 
+    public void checkDisplayMSESectionOrMain() {
+        if (isMSE2SectionVisible) {
+            setQuery("");
+            setIsMSE2SectionVisible(false);
+            notifyPropertyChanged(BR.isMSE2SectionVisible);
+            notifyPropertyChanged(BR.query);
+        } else activity.finish();
+    }
 
     ///////////////////////////////////
     // BINDABLE
@@ -485,4 +493,6 @@ public class SearchViewModel extends BaseObservable {
     public void onFilterClicked(View view) {
         Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
     }
+
+
 }
