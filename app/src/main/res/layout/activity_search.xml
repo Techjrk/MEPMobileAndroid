@@ -2,14 +2,15 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.SearchViewModel" />
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +30,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
-                    android:background="@color/lecetDarkestBlue" >
+                    android:background="@color/lecetDarkestBlue">
 
                     <!-- UNUSED? -->
                     <!--LinearLayout
@@ -48,44 +49,44 @@
                         android:layout_height="24dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="8dp"
                         android:layout_marginEnd="15dp"
+                        android:layout_marginStart="8dp"
                         android:background="@null"
-                        android:paddingStart="1dp"
+                        android:onClick="@{viewModel.onFilterClicked}"
                         android:paddingEnd="0dp"
+                        android:paddingStart="1dp"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/ic_filter"
-                        android:onClick="@{viewModel.onFilterClicked}"/>
+                        android:src="@mipmap/ic_filter" />
 
                     <ImageButton
                         android:id="@+id/close_image_button"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:layout_toStartOf="@id/filter_image_button"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/filter_image_button"
                         android:background="@null"
-                        android:paddingStart="1dp"
+                        android:onClick="@{viewModel.onClearClicked}"
                         android:paddingEnd="1dp"
+                        android:paddingStart="1dp"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/ic_clear_text"
-                        android:onClick="@{viewModel.onClearClicked}"/>
+                        android:src="@mipmap/ic_clear_text" />
 
                     <EditText
                         android:id="@+id/search_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_toStartOf="@id/close_image_button"
                         android:background="@drawable/rounded_edittext"
                         android:drawableStart="@drawable/ic_action_search"
                         android:hint="@string/search"
-                        android:textColor="@color/lecetTextWhite"
                         android:inputType="textPersonName"
-                        android:layout_toStartOf="@id/close_image_button"
+                        android:text="@={viewModel.query}"
+                        android:textColor="@color/lecetTextWhite"
                         android:textSize="15sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}"
-                        android:text="@={viewModel.query}"/>
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>
 
@@ -96,8 +97,8 @@
                 android:id="@+id/mse1section"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{viewModel.isMSE2SectionVisible ? View.GONE : View.VISIBLE }"
-                android:layout_marginTop="0dp">
+                android:layout_marginTop="0dp"
+                android:visibility="@{viewModel.isMSE1SectionVisible ? View.VISIBLE : View.GONE }">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -145,16 +146,15 @@
                         tools:listitem="@layout/list_item_search_saved_view" />
 
                 </LinearLayout>
-
             </ScrollView>
 
             <!-- MSE 2.0 SECTION -->
             <ScrollView
                 android:id="@+id/mse2section"
-                android:visibility="@{viewModel.isMSE2SectionVisible ? View.VISIBLE : View.GONE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="0dp">
+                android:layout_marginTop="0dp"
+                android:visibility="@{viewModel.isMSE2SectionVisible ? View.VISIBLE : View.GONE}">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,13 +172,54 @@
                     <include
                         layout="@layout/list_item_search_query_summary"
                         bind:viewModel="@{viewModel}" />
-
                 </LinearLayout>
-
             </ScrollView>
 
+            <!-- MSR 1.1 SECTION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lecetDarkestBlue"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.isMSR11Visible ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lecetDarkestBlue"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="@{viewModel.queryProjectTotal}"
+                    android:textColor="@color/pureWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <ScrollView
+                    android:id="@+id/msr1section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lecetDarkestBlue">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/lecetDarkestBlue"
+                        android:orientation="vertical"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="0dp">
+
+                        <!-- PROJECT All SEARCHES -->
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view_project_query_all"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:listitem="@layout/list_item_search_query_all_project" />
+                    </LinearLayout>
+
+                </ScrollView>
+            </LinearLayout>
         </LinearLayout>
-
     </android.support.design.widget.CoordinatorLayout>
-
 </layout>

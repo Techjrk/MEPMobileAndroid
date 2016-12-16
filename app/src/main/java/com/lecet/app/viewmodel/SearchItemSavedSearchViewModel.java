@@ -46,7 +46,9 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
 
     public void onClick(View view) {
         viewModel.setQuery(searchSaved.getQuery().trim());
-        notifyPropertyChanged(BR.query);
+        viewModel.setIsMSE1SectionVisible(false);
+        viewModel.setIsMSE2SectionVisible(true);
+//        Toast.makeText(viewModel.getActivity(), "onClick: \nProject MSE1 detail section", Toast.LENGTH_SHORT).show();
     }
 
 }

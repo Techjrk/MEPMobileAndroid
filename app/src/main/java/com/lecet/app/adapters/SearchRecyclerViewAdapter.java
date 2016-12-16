@@ -11,6 +11,7 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
+import com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding;
@@ -73,10 +74,16 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 ListItemSearchQuerySummaryCompanyBinding CQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_company,parent, false);
                 viewHolder = new CQSViewHolder(CQSBinding);
                 break;
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_ContactQS:
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACTQS:
                 ListItemSearchQuerySummaryContactBinding ContactQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_contact,parent, false);
                 viewHolder = new ContactQSViewHolder(ContactQSBinding);
-                break;        }
+                break;
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_PQS_ALL:
+                ListItemSearchQueryAllProjectBinding PQSAllBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_all_project,parent, false);
+                viewHolder = new PQSAllViewHolder(PQSAllBinding);
+                break;
+
+        }
         return viewHolder;
     }
 
@@ -132,6 +139,13 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             viewHolder.getBinding().setViewModel(searchContactQS);
             ///        searchCQS.setItemClickListener((Company) data.get(position), viewHolder.itemView);
         }
+        //PQS All
+        if (holder instanceof PQSAllViewHolder) {
+            PQSAllViewHolder viewHolder = (PQSAllViewHolder) holder;
+            SearchItemRecentViewModel searchPQSAll = new SearchItemRecentViewModel(viewModel, (Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+            viewHolder.getBinding().setViewModel(searchPQSAll);
+            ///         searchPQS.setItemClickListener((Project) data.get(position), viewHolder.itemView);
+        }
     }
 
     @Override
@@ -157,6 +171,21 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
      * TODO - consolidate into one?
      **/
 
+   /* For Project Query Search All */
+    public class PQSAllViewHolder extends RecyclerView.ViewHolder {
+
+        private final com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding binding;
+
+        public PQSAllViewHolder(com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding getBinding() {
+            return binding;
+        }
+
+    }
     /* For Project Query Search Summary */
     public class PQSViewHolder extends RecyclerView.ViewHolder {
 

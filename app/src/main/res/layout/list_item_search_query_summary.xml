@@ -22,6 +22,11 @@
             android:orientation="vertical">
 
             <!-- TITLE -  PROJECT QUERY-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:onClick="@{viewModel.onClickSeeAllProject}">
             <TextView
                 android:id="@+id/queryproject_title"
                 android:layout_width="wrap_content"
@@ -43,10 +48,11 @@
                 android:layout_marginLeft="10dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
-                android:text="@{viewModel.queryProjTotal}"
+                android:text="@{viewModel.queryProjectTotal}"
                 android:textSize="11sp"
-                bind:typeface="@{`Lato-Regular.ttf`}" />
 
+                bind:typeface="@{`Lato-Regular.ttf`}" />
+            </LinearLayout>
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,7 +169,8 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="@{viewModel.onClickSeeAllProject}">
 
                     <TextView
                         android:id="@+id/seeall"
@@ -178,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/seeall"
                         android:layout_marginLeft="5dp"
-                        android:text="@{viewModel.queryProjTotal}"
+                        android:text="@{viewModel.queryProjectTotal}"
                         android:textSize="14sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
