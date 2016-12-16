@@ -115,19 +115,19 @@ public class SearchItemRecentViewModel {
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
-        Toast.makeText(viewModel.getActivity(), "onClick: Project saved detail section", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(viewModel.getActivity(), "onClick: \nProject saved detail section", Toast.LENGTH_SHORT).show();
     }
 
     public void onClick(View view) {
         //TODO - connect to the project detail section
         Toast.makeText(viewModel.getActivity(), "onClick: Project detail section", Toast.LENGTH_SHORT).show();
-//        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
+
     }
 
     public void onCompanyClick(View view) {
         //TODO - connect to the company detail section
-        Toast.makeText(viewModel.getActivity(), "onClick: Company detail section", Toast.LENGTH_SHORT).show();
+        Toast.makeText(viewModel.getActivity(), "onClick: \nCompany detail section", Toast.LENGTH_SHORT).show();
+
 //        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
     }
 

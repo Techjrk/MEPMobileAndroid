@@ -25,17 +25,17 @@
         <!-- Details Map and Text Layout -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="-4dp"
+            android:layout_marginTop="4dp"
             android:gravity="center_vertical"
             android:onClick="@{viewModel.onClick}"
             android:orientation="horizontal">
 
             <!-- Map Image -->
             <ImageView
-                android:id="@+id/query_map_section_view"
+
                 style="@style/ListItemProjectTrackingImage.DetailMap"
                 bind:imageUrl="@{viewModel.mapUrl}" />
 
@@ -47,7 +47,7 @@
                 android:paddingLeft="12dp">
 
                 <TextView
-                    android:id="@+id/project_name"
+
                     style="@style/ListItemProjectTrackingTextView.Title"
                     android:text="@{viewModel.title}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
@@ -64,20 +64,32 @@
                         android:src="@mipmap/ic_bid_location" />
 
                     <TextView
-                        android:id="@+id/location"
+
                         style="@style/ListItemProjectTrackingTextView.Detail1"
                         android:text="@{viewModel.clientLocation}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="Tampa, FL" />
 
                 </LinearLayout>
+                <!-- Address -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        style="@style/ListItemProjectTrackingImage.DetailIcon"
+                        android:src="@mipmap/ic_bid_type" />
+
+                    <TextView
+                        style="@style/ListItemProjectTrackingTextView.Detail1"
+                        android:text="@{viewModel.address}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Tampa, FL" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
-
-        <!-- Horizontal Separator -->
-        <include layout="@layout/rule_horiz_light" />
 
     </LinearLayout>
 
