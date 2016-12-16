@@ -162,10 +162,21 @@ public class SearchItemRecentViewModel {
                 return null;
             }
 
-            //TODO - implement
-            /*else return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
-                            "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
-                        project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);*/
+            //TODO - external
+            String mapStr = null;
+            StringBuilder sb = new StringBuilder();
+            sb.append("https://maps.googleapis.com/maps/api/staticmap");
+            sb.append("?zoom=16");
+            sb.append("&size=200x200");
+            sb.append("&markers=color:blue|");
+            if(company.getAddress1() != null) sb.append(company.getAddress1() + ",");
+            if(company.getAddress2() != null) sb.append(company.getAddress2() + ",");
+            if(company.getCity() != null)     sb.append(company.getCity() + ",");
+            if(company.getState() != null)    sb.append(company.getState());
+            sb.append("&key=" + mapsApiKey);
+            //mapStr = String.format((sb.toString().replace(" ", "+")), null);
+            mapStr = sb.toString().replace(" ", "+");
+            return mapStr;
         }
 
         return null;
