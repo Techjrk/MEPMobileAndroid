@@ -73,7 +73,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 ListItemSearchQuerySummaryCompanyBinding CQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_company,parent, false);
                 viewHolder = new CQSViewHolder(CQSBinding);
                 break;
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_ContactQS:
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACTQS:
                 ListItemSearchQuerySummaryContactBinding ContactQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_contact,parent, false);
                 viewHolder = new ContactQSViewHolder(ContactQSBinding);
                 break;        }

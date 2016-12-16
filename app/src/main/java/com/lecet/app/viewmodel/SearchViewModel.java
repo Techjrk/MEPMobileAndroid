@@ -52,7 +52,7 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
     public static final int SEARCH_ADAPTER_TYPE_PQS = 3;   //PQS - Project Query Summary
     public static final int SEARCH_ADAPTER_TYPE_CQS = 4;   //CQS - Company Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_ContactQS = 5;
+    public static final int SEARCH_ADAPTER_TYPE_CONTACTQS = 5;
 
     private AppCompatActivity activity;
     private final SearchDomain searchDomain;
@@ -77,10 +77,39 @@ public class SearchViewModel extends BaseObservable {
     private String queryProjectTitle;
     private String queryCompanyTitle;
     private String queryContactTitle;
-    private int queryProjTotal;
+    private int queryProjectTotal;
     private int queryCompanyTotal;
     private int queryContactTotal;
 
+    public void setQueryProjectTotal(int queryProjectTotal) {
+        this.queryProjectTotal = queryProjectTotal;
+        notifyPropertyChanged(BR.queryProjectTotal);
+    }
+
+    public void setQueryCompanyTotal(int queryCompanyTotal) {
+        this.queryCompanyTotal = queryCompanyTotal;
+        notifyPropertyChanged(BR.queryCompanyTotal);
+    }
+
+    public void setQueryContactTotal(int queryContactTotal) {
+        this.queryContactTotal = queryContactTotal;
+        notifyPropertyChanged(BR.queryContactTotal);
+    }
+
+    public void setQueryProjectTitle(String queryProjectTitle) {
+        this.queryProjectTitle = queryProjectTitle;
+        notifyPropertyChanged(BR.queryProjectTitle);
+    }
+
+    public void setQueryCompanyTitle(String queryCompanyTitle) {
+        this.queryCompanyTitle = queryCompanyTitle;
+        notifyPropertyChanged(BR.queryCompanyTitle);
+    }
+
+    public void setQueryContactTitle(String queryContactTitle) {
+        this.queryContactTitle = queryContactTitle;
+        notifyPropertyChanged(BR.queryContactTitle);
+    }
 
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
@@ -115,18 +144,15 @@ public class SearchViewModel extends BaseObservable {
         }
         setIsMSE2SectionVisible(true);
 
-        queryProjectTitle = query + " in Projects";
-        queryCompanyTitle = query + " in Companies";
-        queryContactTitle = query + " in Contacts";
+        setQueryProjectTitle(query + " in Projects");
+        setQueryCompanyTitle(query + " in Companies");
+        setQueryContactTitle(query + " in Contacts");
 
-        notifyPropertyChanged(BR.queryProjectTitle);
-        notifyPropertyChanged(BR.queryCompanyTitle);
-        notifyPropertyChanged(BR.queryContactTitle);
 
         //query = searchfield.getText().toString().trim();
         /** For Project query total view
          */
-        getQueryProjTotal();
+        getQueryProjectTotal();
         getProjectQuery(query);
 
         /**
@@ -310,8 +336,7 @@ public class SearchViewModel extends BaseObservable {
             public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
                 if (response.isSuccessful()) {
                     SearchProject searchproject = response.body();
-                    queryProjTotal = searchproject.getTotal();
-                    notifyPropertyChanged(BR.queryProjTotal);
+                    setQueryProjectTotal(searchproject.getTotal());
                     getProjectQueryListSummary(searchproject);
 
                 } else {
@@ -332,8 +357,7 @@ public class SearchViewModel extends BaseObservable {
             public void onResponse(Call<SearchCompany> call, Response<SearchCompany> response) {
                 if (response.isSuccessful()) {
                     SearchCompany searchcompany = response.body();
-                    queryCompanyTotal = searchcompany.getTotal();
-                    notifyPropertyChanged(BR.queryCompanyTotal);
+                    setQueryCompanyTotal(searchcompany.getTotal());
                     getCompanyQueryListSummary(searchcompany);
 
                 } else {
@@ -354,10 +378,8 @@ public class SearchViewModel extends BaseObservable {
             public void onResponse(Call<SearchContact> call, Response<SearchContact> response) {
                 if (response.isSuccessful()) {
                     SearchContact searchcontact = response.body();
-                    queryContactTotal = searchcontact.getTotal();
-                    notifyPropertyChanged(BR.queryContactTotal);
+                    setQueryContactTotal(searchcontact.getTotal());
                     getContactQueryListSummary(searchcontact);
-                    //    Log.d("TotalProject", "Total: " + queryContactTotal);
                 } else {
                     errorDisplayMsg("Unsuccessful Query. " + response.message());
                 }
@@ -416,7 +438,7 @@ public class SearchViewModel extends BaseObservable {
         RecyclerView recyclerViewContactQS = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
         setupRecyclerView(recyclerViewContactQS, LinearLayoutManager.VERTICAL);
         searchAdapterContactQS = new SearchRecyclerViewAdapter(this, adapterDataContactQuerySummary);
-        searchAdapterContactQS.setAdapterType(SEARCH_ADAPTER_TYPE_ContactQS);
+        searchAdapterContactQS.setAdapterType(SEARCH_ADAPTER_TYPE_CONTACTQS);
         recyclerViewContactQS.setAdapter(searchAdapterContactQS);
     }
     /**
@@ -474,10 +496,8 @@ public class SearchViewModel extends BaseObservable {
 
     public void checkDisplayMSESectionOrMain() {
         if (isMSE2SectionVisible) {
-            setQuery("");
             setIsMSE2SectionVisible(false);
-            notifyPropertyChanged(BR.isMSE2SectionVisible);
-            notifyPropertyChanged(BR.query);
+            setQuery("");
         } else activity.finish();
     }
 
@@ -521,8 +541,8 @@ public class SearchViewModel extends BaseObservable {
     }
 
     @Bindable
-    public String getQueryProjTotal() {
-        return queryProjTotal + ((queryProjTotal > 0) ? " Projects" : " Project");
+    public String getQueryProjectTotal() {
+        return queryProjectTotal + ((queryProjectTotal > 0) ? " Projects" : " Project");
     }
 
     @Bindable

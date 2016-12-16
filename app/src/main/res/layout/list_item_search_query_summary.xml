@@ -43,7 +43,7 @@
                 android:layout_marginLeft="10dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
-                android:text="@{viewModel.queryProjTotal}"
+                android:text="@{viewModel.queryProjectTotal}"
                 android:textSize="11sp"
                 bind:typeface="@{`Lato-Regular.ttf`}" />
 
@@ -178,7 +178,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/seeall"
                         android:layout_marginLeft="5dp"
-                        android:text="@{viewModel.queryProjTotal}"
+                        android:text="@{viewModel.queryProjectTotal}"
                         android:textSize="14sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
