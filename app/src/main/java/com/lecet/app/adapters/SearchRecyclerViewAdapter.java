@@ -58,24 +58,24 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 break;
 
             case SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECTS:
-                ListItemSearchSavedViewBinding projectsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
+                com.lecet.app.databinding.ListItemSearchSavedViewBinding projectsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new ProjectSavedViewHolder(projectsBinding);
                 break;
 
             case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
-                ListItemSearchSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
+                com.lecet.app.databinding.ListItemSearchSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new CompanySavedViewHolder(companiesBinding);
                 break;
             case SearchViewModel.SEARCH_ADAPTER_TYPE_PQS:
-                ListItemSearchQuerySummaryProjectBinding PQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_project,parent, false);
+                com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding PQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_project,parent, false);
                 viewHolder = new PQSViewHolder(PQSBinding);
                 break;
             case SearchViewModel.SEARCH_ADAPTER_TYPE_CQS:
-                ListItemSearchQuerySummaryCompanyBinding CQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_company,parent, false);
+                com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding CQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_company,parent, false);
                 viewHolder = new CQSViewHolder(CQSBinding);
                 break;
             case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACTQS:
-                ListItemSearchQuerySummaryContactBinding ContactQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_contact,parent, false);
+                com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding ContactQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_contact,parent, false);
                 viewHolder = new ContactQSViewHolder(ContactQSBinding);
                 break;
             case SearchViewModel.SEARCH_ADAPTER_TYPE_PQS_ALL:
@@ -250,30 +250,30 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     public class ProjectSavedViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemSearchSavedViewBinding binding;
+        private final com.lecet.app.databinding.ListItemSearchSavedViewBinding binding;
 
-        public ProjectSavedViewHolder(ListItemSearchSavedViewBinding binding) {
+        public ProjectSavedViewHolder(com.lecet.app.databinding.ListItemSearchSavedViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemSearchSavedViewBinding getBinding() {
+        public com.lecet.app.databinding.ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
     }
 
     public class CompanySavedViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemSearchSavedViewBinding binding;
+        private final com.lecet.app.databinding.ListItemSearchSavedViewBinding binding;
 
-        public CompanySavedViewHolder(ListItemSearchSavedViewBinding binding) {
+        public CompanySavedViewHolder(com.lecet.app.databinding.ListItemSearchSavedViewBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemSearchSavedViewBinding getBinding() {
+        public com.lecet.app.databinding.ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
     }

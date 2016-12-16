@@ -29,7 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setupBinding() {
-        ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
+        com.lecet.app.databinding.ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
         viewModel = new SearchViewModel(this,
                 new SearchDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
         binding.setViewModel(viewModel);
