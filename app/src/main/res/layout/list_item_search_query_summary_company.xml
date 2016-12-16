@@ -32,12 +32,11 @@
                 android:onClick="@{viewModel.onCompanyClick}">
 
             <!-- Map Image -->
-<!-- TODO: COMPANY MAP
+            <!-- TODO: COMPANY MAP -->
             <ImageView
                     android:id="@+id/query_map_section_view"
                     style="@style/ListItemProjectTrackingImage.DetailMap"
                     bind:imageUrl="@{viewModel.mapUrl}"/>
--->
 
             <!-- Details -->
             <LinearLayout
@@ -47,13 +46,13 @@
                     android:paddingLeft="12dp">
 
                 <TextView
-                        android:id="@+id/project_name"
-                        tools:text="Parks Building"
+                        android:id="@+id/company_name"
                         style="@style/ListItemProjectTrackingTextView.Title"
+                        tools:text="ERS Industrial Services Inc"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         android:text="@{viewModel.companyTitle}"/>
 
-                <!-- Location -->
+                <!-- Address Line 1 (Street address) -->
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="22dp"
@@ -64,11 +63,27 @@
                             android:src="@mipmap/ic_bid_location"/>
 
                     <TextView
-                            android:id="@+id/location"
-                            tools:text="Tampa, FL"
+                            android:id="@+id/address1"
                             style="@style/ListItemProjectTrackingTextView.Detail1"
+                            tools:text="7215 NW 7th St"
                             bind:typeface="@{`Lato-Regular.ttf`}"
-                            android:text="@{viewModel.companyAddress}"/>
+                            android:text="@{viewModel.companyAddress1}"/>
+
+                </LinearLayout>
+
+                <!-- Address Line 2 (City, State, Zip+4) -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/address2"
+                            style="@style/ListItemProjectTrackingTextView.Detail1"
+                            android:layout_marginStart="10dp"
+                            tools:text="Freemont, CA 10054"
+                            bind:typeface="@{`Lato-Regular.ttf`}"
+                            android:text="@{viewModel.companyAddress2}"/>
 
                 </LinearLayout>
 

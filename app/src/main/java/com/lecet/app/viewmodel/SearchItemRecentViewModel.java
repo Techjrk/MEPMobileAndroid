@@ -14,33 +14,16 @@ import com.lecet.app.data.models.SearchResult;
 /**
  * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
  * This code is copyright (c) 2016 Dom & Tom Inc.
+ * This View Model is used
  */
 
 public class SearchItemRecentViewModel {
 
-    //TODO - support either Project or Company data
-
-    private final String code = "this123code";
     private Project project;
-    private String mapsApiKey;
     private Company company;
     private Contact contact;
-
+    private String mapsApiKey;
     private SearchViewModel viewModel;
-
-    public String getTitle() {
-        if (project == null) return "Unknown";
-        return project.getTitle();
-    }
-
-    public String getAddress() {
-        if (project == null) return "Unknown";
-        return project.getAddress1();
-    }
-
-    public String getCode() {
-        return code;
-    }
 
     /**
      * old code - for reference
@@ -63,8 +46,18 @@ public class SearchItemRecentViewModel {
 
     public SearchItemRecentViewModel(SearchViewModel viewModel, Contact contact) {
         this.contact = contact;
-        this.mapsApiKey = mapsApiKey;
         this.viewModel = viewModel;
+    }
+
+
+
+    ////////////////////////////////////
+    // PROJECT
+
+
+    public String getTitle() {
+        if (project == null) return "Unknown";
+        return project.getTitle();
     }
 
     public String getProjectName() {
@@ -75,27 +68,61 @@ public class SearchItemRecentViewModel {
         return project.getCity() + " , " + project.getState();
     }
 
-    public String getMapUrl() {
 
-        if (project == null || project.getGeocode() == null) return null;
+    ////////////////////////////////////
+    // COMPANY
 
-        return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
-                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
-                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
-    }
-
-    //For Company
     public String getCompanyTitle() {
         if (company == null) return "--";
         return company.getName();
     }
 
-    public String getCompanyAddress() {
+    /**
+     * Return 1st line street address e.g. 7215 NW 7th St
+     */
+    public String getCompanyAddress1() {
         if (company == null) return "--";
         return company.getAddress1();
     }
 
-    //For Contact
+    /**
+     * Return 2nd line city, state & zip+4 address e.g. Freemont, CA 10054-1234
+     */
+    public String getCompanyAddress2() {
+        if (company == null) return "--";
+
+        StringBuilder sb = new StringBuilder();
+
+        // city
+        if (company.getCity() != null) {
+            sb.append(company.getCity());
+        }
+
+        // state
+        if (company.getState() != null) {
+            sb.append(", ");
+            sb.append(company.getState());
+        }
+
+        // zip + 4
+        if (company.getZipPlus4() != null) {
+            sb.append(" ");
+            String zip = company.getZipPlus4();
+            if(zip.length() > 5) {
+                sb.append(zip.substring(0, 5));
+                sb.append("-");
+                sb.append(zip.substring(5, 9));
+            }
+            else sb.append(company.getZipPlus4());
+        }
+
+        return sb.toString();
+    }
+
+
+    ////////////////////////////////////
+    // CONTACT
+
     public String getContactName() {
         if (contact == null) return "Unknown";
         if (contact.getName() == null) return "Unknown";
@@ -111,6 +138,40 @@ public class SearchItemRecentViewModel {
         if (contact.getFipsCounty().equals("null")) return "";
         return contact.getTitle() + ", " + contact.getFipsCounty();
     }
+
+
+    ////////////////////////////////////
+    // MAP IMAGE URL - UNIVERSAL
+
+    public String getMapUrl() {
+
+        // project map
+        if (project != null) {
+            if (project.getGeocode() == null) {
+                return null;
+            }
+
+            else return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
+                            "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                        project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
+        }
+
+        // company map
+        if (company != null) {
+            if (company.getCity() == null || company.getState() == null) {
+                return null;
+            }
+
+            //TODO - implement
+            /*else return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
+                            "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                        project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);*/
+        }
+
+        return null;
+    }
+
+
     ////////////////////////////////////
     // CLICK HANDLERS
 
@@ -119,7 +180,7 @@ public class SearchItemRecentViewModel {
 
     }
 
-    public void onClick(View view) {
+    public void onProjectClick(View view) {
         //TODO - connect to the project detail section
         Toast.makeText(viewModel.getActivity(), "onClick: Project detail section", Toast.LENGTH_SHORT).show();
 //        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
