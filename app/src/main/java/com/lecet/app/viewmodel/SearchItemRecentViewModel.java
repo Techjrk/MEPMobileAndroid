@@ -181,7 +181,7 @@ public class SearchItemRecentViewModel {
 
     public void onProjectClick(View view) {
         //TODO - connect to the project detail section
-        Toast.makeText(viewModel.getActivity(), "onClick: Project detail section", Toast.LENGTH_SHORT).show();
+        Toast.makeText(viewModel.getActivity(), "onClick: \nProject detail section", Toast.LENGTH_SHORT).show();
 
     }
 

@@ -30,7 +30,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
             android:gravity="center_vertical"
-            android:onClick="@{viewModel.onClick}"
+            android:onClick="@{viewModel.onProjectClick}"
             android:orientation="horizontal">
 
             <!-- Map Image -->
@@ -51,7 +51,7 @@
                     style="@style/ListItemProjectTrackingTextView.Title"
                     android:text="@{viewModel.title}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="Parks Building" />
+                    tools:text="Sims Bayou Line Work" />
 
                 <!-- Location -->
                 <LinearLayout
@@ -68,11 +68,12 @@
                         style="@style/ListItemProjectTrackingTextView.Detail1"
                         android:text="@{viewModel.clientLocation}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Tampa, FL" />
+                        tools:text="Houston, TX" />
 
                 </LinearLayout>
+
                 <!-- Address -->
-                <LinearLayout
+                <!--LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="22dp"
                     android:orientation="horizontal">
@@ -86,7 +87,8 @@
                         android:text="@{viewModel.address}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="Tampa, FL" />
-                </LinearLayout>
+                </LinearLayout-->
+
             </LinearLayout>
 
         </LinearLayout>
