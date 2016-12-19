@@ -9,22 +9,13 @@ import com.lecet.app.R;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.SearchResult;
-import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.databinding.ListItemSearchQueryAllCompanyBinding;
 import com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding;
-import com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding;
-import com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding;
-import com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding;
-import com.lecet.app.databinding.ListItemSearchSavedViewBinding;
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
-import com.lecet.app.viewmodel.SearchItemSavedSearchViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.Collections;
 import java.util.List;
-
-//import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * File: SearchRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -53,32 +44,36 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         RecyclerView.ViewHolder viewHolder = null;
 
         switch (viewType) {
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_RECENT:
+            /*case SearchViewModel.SEARCH_ADAPTER_TYPE_RECENT:
                 com.lecet.app.databinding.ListItemSearchRecentViewBinding recentItemsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_recent_view, parent, false);
                 viewHolder = new RecentViewHolder(recentItemsBinding);
-                break;
+                break;*/
 
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECTS:
+            /*case SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECTS:
                 com.lecet.app.databinding.ListItemSearchSavedViewBinding projectsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new ProjectSavedViewHolder(projectsBinding);
-                break;
+                break;*/
 
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
+            /*case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES:
                 com.lecet.app.databinding.ListItemSearchSavedViewBinding companiesBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
                 viewHolder = new CompanySavedViewHolder(companiesBinding);
-                break;
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_PQS:
+                break;*/
+
+            /*case SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY:
                 com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding PQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_project,parent, false);
-                viewHolder = new PQSViewHolder(PQSBinding);
-                break;
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_CQS:
+                viewHolder = new ProjectQuerySearchViewHolder(PQSBinding);
+                break;*/
+
+            /*case SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY:
                 com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding CQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_company,parent, false);
                 viewHolder = new CQSViewHolder(CQSBinding);
-                break;
-            case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACTQS:
+                break;*/
+
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACT_QS:
                 com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding ContactQSBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_contact,parent, false);
                 viewHolder = new ContactQSViewHolder(ContactQSBinding);
                 break;
+
             case SearchViewModel.SEARCH_ADAPTER_TYPE_PQS_ALL:
                 ListItemSearchQueryAllProjectBinding PQSAllBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_all_project,parent, false);
                 viewHolder = new PQSAllViewHolder(PQSAllBinding);
@@ -88,6 +83,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 ListItemSearchQueryAllCompanyBinding CQSAllBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_all_company,parent, false);
                 viewHolder = new CQSAllViewHolder(CQSAllBinding);
                 break;
+
             case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACT_ALL:
                 com.lecet.app.databinding.ListItemSearchQueryAllContactBinding ContactAllBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_all_contact,parent, false);
                 viewHolder = new ContactAllViewHolder(ContactAllBinding);
@@ -100,46 +96,46 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         // Recent item
-        if (holder instanceof RecentViewHolder) {
+       /* if (holder instanceof RecentViewHolder) {
             RecentViewHolder viewHolder = (RecentViewHolder) holder;
 //  old code - viewHolder.getBinding().setViewModel(new SearchItemRecentViewModel(((SearchResult)data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
             SearchItemRecentViewModel searchrecent = new SearchItemRecentViewModel(viewModel, ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
             viewHolder.getBinding().setViewModel(searchrecent);
          //   searchrecent.setItemClickListener((SearchResult) data.get(position), viewHolder.itemView);
-        }
+        }*/
 
         // Project
-        if (holder instanceof ProjectSavedViewHolder) {
+        /*if (holder instanceof ProjectSavedViewHolder) {
             ProjectSavedViewHolder viewHolder = (ProjectSavedViewHolder) holder;
             SearchItemSavedSearchViewModel searchsaved = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
             viewHolder.getBinding().setViewModel(searchsaved);
            // searchsaved.setItemClickListener((SearchSaved) data.get(position), viewHolder.itemView);
 
 
-        }
+        }*/
 
         // Company
-        if (holder instanceof CompanySavedViewHolder) {
+        /*if (holder instanceof CompanySavedViewHolder) {
             CompanySavedViewHolder viewHolder = (CompanySavedViewHolder) holder;
             SearchItemSavedSearchViewModel searchsaved = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
             viewHolder.getBinding().setViewModel(searchsaved);
             //searchsaved.setItemClickListener((SearchSaved) data.get(position), viewHolder.itemView);
-        }
+        }*/
 
         //PQS
-        if (holder instanceof PQSViewHolder) {
+        /*if (holder instanceof PQSViewHolder) {
             PQSViewHolder viewHolder = (PQSViewHolder) holder;
             SearchItemRecentViewModel searchPQS = new SearchItemRecentViewModel(viewModel, (Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
             viewHolder.getBinding().setViewModel(searchPQS);
    ///         searchPQS.setItemClickListener((Project) data.get(position), viewHolder.itemView);
-        }
+        }*/
         //CQS
-        if (holder instanceof CQSViewHolder) {
+        /*if (holder instanceof CQSViewHolder) {
             CQSViewHolder viewHolder = (CQSViewHolder) holder;
             SearchItemRecentViewModel searchCQS = new SearchItemRecentViewModel(viewModel, (Company) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
             viewHolder.getBinding().setViewModel(searchCQS);
     ///        searchCQS.setItemClickListener((Company) data.get(position), viewHolder.itemView);
-        }
+        }*/
 
         //ContactQS
         if (holder instanceof ContactQSViewHolder) {
@@ -239,7 +235,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
     /* For Project Query Search Summary */
-    public class PQSViewHolder extends RecyclerView.ViewHolder {
+    /*public class PQSViewHolder extends RecyclerView.ViewHolder {
 
         private final com.lecet.app.databinding.ListItemSearchQuerySummaryProjectBinding binding;
 
@@ -252,10 +248,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             return binding;
         }
 
-    }
+    }*/
 
     /* For Company Query Search Summary */
-    public class CQSViewHolder extends RecyclerView.ViewHolder {
+    /*public class CQSViewHolder extends RecyclerView.ViewHolder {
 
         private final com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding binding;
 
@@ -267,7 +263,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         public com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding getBinding() {
             return binding;
         }
-    }
+    }*/
 
     /* For Contact Query Search Summary */
     public class ContactQSViewHolder extends RecyclerView.ViewHolder {
@@ -284,7 +280,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public class RecentViewHolder extends RecyclerView.ViewHolder {
+    /*public class RecentViewHolder extends RecyclerView.ViewHolder {
 
         private final com.lecet.app.databinding.ListItemSearchRecentViewBinding binding;
 
@@ -298,9 +294,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             return binding;
         }
 
-    }
+    }*/
 
-    public class ProjectSavedViewHolder extends RecyclerView.ViewHolder {
+    /*public class ProjectSavedViewHolder extends RecyclerView.ViewHolder {
 
         private final com.lecet.app.databinding.ListItemSearchSavedViewBinding binding;
 
@@ -313,9 +309,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         public com.lecet.app.databinding.ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
-    }
+    }*/
 
-    public class CompanySavedViewHolder extends RecyclerView.ViewHolder {
+    /*public class CompanySavedViewHolder extends RecyclerView.ViewHolder {
 
         private final com.lecet.app.databinding.ListItemSearchSavedViewBinding binding;
 
@@ -328,5 +324,5 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         public com.lecet.app.databinding.ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
-    }
+    }*/
 }

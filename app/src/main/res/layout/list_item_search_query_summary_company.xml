@@ -31,7 +31,6 @@
                 android:onClick="@{viewModel.onCompanyClick}">
 
             <!-- Map Image -->
-            <!-- TODO: COMPANY MAP -->
             <ImageView
                     android:id="@+id/query_map_section_view"
                     style="@style/ListItemProjectTrackingImage.DetailMap"
