@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchItemRecentViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shape_rect_list_item_bg_1"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="-4dp"
+            android:gravity="center_vertical"
+            android:onClick="@{viewModel.onContactClick}"
+            android:orientation="horizontal">
+
+
+            <!-- Details -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
+
+                <ImageView
+                    android:id="@+id/imgholder"
+                    style="@style/SearchPageSectionImageContactQuery"
+                    android:layout_alignParentLeft="true"
+                    android:src="@mipmap/ic_image_placeholder" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/imgholder"
+                    android:orientation="vertical"
+                    android:paddingLeft="12dp">
+
+                    <TextView
+                        android:id="@+id/contact_name"
+                        style="@style/ListItemProjectTrackingTextView.Title"
+                        android:text="@{viewModel.contactName}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Paz" />
+
+                    <TextView
+                        android:id="@+id/contact_detail"
+                        style="@style/ListItemProjectTrackingTextView.Detail2"
+                        android:text="@{viewModel.contactDetail}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Tampa, FL" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</layout>
+

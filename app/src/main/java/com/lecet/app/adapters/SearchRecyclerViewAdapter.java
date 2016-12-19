@@ -11,6 +11,7 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
+import com.lecet.app.databinding.ListItemSearchQueryAllCompanyBinding;
 import com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding;
@@ -83,6 +84,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 viewHolder = new PQSAllViewHolder(PQSAllBinding);
                 break;
 
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_CQS_ALL:
+                ListItemSearchQueryAllCompanyBinding CQSAllBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_all_company,parent, false);
+                viewHolder = new CQSAllViewHolder(CQSAllBinding);
+                break;
+            case SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACT_ALL:
+                com.lecet.app.databinding.ListItemSearchQueryAllContactBinding ContactAllBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_all_contact,parent, false);
+                viewHolder = new ContactAllViewHolder(ContactAllBinding);
+                break;
         }
         return viewHolder;
     }
@@ -146,6 +155,21 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             viewHolder.getBinding().setViewModel(searchPQSAll);
             ///         searchPQS.setItemClickListener((Project) data.get(position), viewHolder.itemView);
         }
+        //CQS All
+        if (holder instanceof CQSAllViewHolder) {
+            CQSAllViewHolder viewHolder = (CQSAllViewHolder) holder;
+            SearchItemRecentViewModel searchCQSAll = new SearchItemRecentViewModel(viewModel, (Company) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+            viewHolder.getBinding().setViewModel(searchCQSAll);
+            ///         searchPQS.setItemClickListener((Project) data.get(position), viewHolder.itemView);
+        }
+        //Contact All
+        if (holder instanceof ContactAllViewHolder) {
+            ContactAllViewHolder viewHolder = (ContactAllViewHolder) holder;
+            SearchItemRecentViewModel searchContactAll = new SearchItemRecentViewModel(viewModel, (Contact) data.get(position));
+            viewHolder.getBinding().setViewModel(searchContactAll);
+            ///        searchCQS.setItemClickListener((Company) data.get(position), viewHolder.itemView);
+        }
+
     }
 
     @Override
@@ -185,6 +209,34 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             return binding;
         }
 
+    }
+    /* For Company Query Search All */
+    public class CQSAllViewHolder extends RecyclerView.ViewHolder {
+
+        private final com.lecet.app.databinding.ListItemSearchQueryAllCompanyBinding binding;
+
+        public CQSAllViewHolder(com.lecet.app.databinding.ListItemSearchQueryAllCompanyBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public com.lecet.app.databinding.ListItemSearchQueryAllCompanyBinding getBinding() {
+            return binding;
+        }
+    }
+    /* For Contact Query Search All */
+    public class ContactAllViewHolder extends RecyclerView.ViewHolder {
+
+        private final com.lecet.app.databinding.ListItemSearchQueryAllContactBinding binding;
+
+        public ContactAllViewHolder(com.lecet.app.databinding.ListItemSearchQueryAllContactBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public com.lecet.app.databinding.ListItemSearchQueryAllContactBinding getBinding() {
+            return binding;
+        }
     }
     /* For Project Query Search Summary */
     public class PQSViewHolder extends RecyclerView.ViewHolder {

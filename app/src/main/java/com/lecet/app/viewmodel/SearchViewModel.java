@@ -53,7 +53,9 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_PQS = 3;   //PQS - Project Query Summary
     public static final int SEARCH_ADAPTER_TYPE_CQS = 4;   //CQS - Company Query Summary
     public static final int SEARCH_ADAPTER_TYPE_CONTACTQS = 5; // - Contact Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_PQS_ALL = 6;   //PQS - Project Query Summary
+    public static final int SEARCH_ADAPTER_TYPE_PQS_ALL = 6;   //PQSAll - Project Query All
+    public static final int SEARCH_ADAPTER_TYPE_CQS_ALL = 7;   //CQSAll - Company Query All
+    public static final int SEARCH_ADAPTER_TYPE_CONTACT_ALL = 8;
 
     private AppCompatActivity activity;
     private final SearchDomain searchDomain;
@@ -66,18 +68,25 @@ public class SearchViewModel extends BaseObservable {
     private boolean isMSE1SectionVisible = true;
     private boolean isMSE2SectionVisible = false;
     private boolean isMSR11Visible = false;
+    private boolean isMSR12Visible = false;
+    private boolean isMSR13Visible = false;
     private final int CONTENT_MAX_SIZE = 4;
 
     //For MSE 2.0
     //private static EditText searchfield;
-    private List<Project> adapterDataProjectQuerySummary;
     private List<Project> adapterDataProjectQueryAll;
+    private List<Company> adapterDataCompanyQueryAll;
+    private List<Contact> adapterDataContactQueryAll;
+
+    private List<Project> adapterDataProjectQuerySummary;
     private List<Company> adapterDataCompanyQuerySummary;
     private List<Contact> adapterDataContactQuerySummary;
     private SearchRecyclerViewAdapter searchAdapterPQS;  //PQS - Project Query Summary
     private SearchRecyclerViewAdapter searchAdapterCQS;  //CQS - Company Query Summary
     private SearchRecyclerViewAdapter searchAdapterContactQS;
-    private SearchRecyclerViewAdapter searchAdapterPQSAll;  //PQS - Project Query All
+    private SearchRecyclerViewAdapter searchAdapterPQSAll;  //PQSAll - Project Query All
+    private SearchRecyclerViewAdapter searchAdapterCQSAll; //CQSAll - Company Query All
+    private SearchRecyclerViewAdapter searchAdapterContactAll;
     private String query;
     private String queryProjectTitle;
     private String queryCompanyTitle;
@@ -117,13 +126,17 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.queryContactTitle);
     }
 
+  //  SearchProjectViewModel projectmodel;
+
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
      */
     public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
         this.activity = activity;
         this.searchDomain = sd;
-        //TODO: 1 ***TESTING THE SEARCH FUNCTIONALITY FOR THIS CONSTRUCTOR ***
+
+      //  projectmodel = new SearchProjectViewModel(this,activity,sd);
+
 
         // Init the Recently Viewed Items adapter and fetch its data
         initializeAdapterRecentlyViewed();
@@ -139,14 +152,18 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterCompanyQuerySummary();
         initializeAdapterContactQuerySummary();
         initializeAdapterProjectQueryAll();
+        initializeAdapterCompanyQueryAll();
+        initializeAdapterContactQueryAll();
     }
 
     public void updateViewQuery(/*String query*/) {
 
         if (query == null || query.trim().equals("")) {
+            setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
             setIsMSR11Visible(false);
-            setIsMSE1SectionVisible(true);
+            setIsMSR12Visible(false);
+            setIsMSR13Visible(false);
             return;
         }
         setIsMSE2SectionVisible(true);
@@ -198,7 +215,7 @@ public class SearchViewModel extends BaseObservable {
                 Log.w("No project", "No project in the list");
             }
         }
-
+        Log.d("Project adapter size","ProjectAdapter size: "+ adapterDataProjectQueryAll.size());
         searchAdapterPQS.notifyDataSetChanged();
         searchAdapterPQSAll.notifyDataSetChanged();
     }
@@ -210,13 +227,15 @@ public class SearchViewModel extends BaseObservable {
         RealmList<Company> slist = sp.getResults();
 
         adapterDataCompanyQuerySummary.clear();
+        adapterDataCompanyQueryAll.clear();
         int ctr = 0;
         for (Company s : slist) {
             try {
 
                 if (s != null) {
+                    adapterDataCompanyQueryAll.add(s);
                     if (ctr < CONTENT_MAX_SIZE) adapterDataCompanyQuerySummary.add(s);
-                    else break;
+                    //else break;
                     ctr++;
 
                 }
@@ -227,6 +246,7 @@ public class SearchViewModel extends BaseObservable {
         }
 
         searchAdapterCQS.notifyDataSetChanged();
+        searchAdapterCQSAll.notifyDataSetChanged();
     }
 
     /**
@@ -236,13 +256,15 @@ public class SearchViewModel extends BaseObservable {
         RealmList<Contact> slist = sp.getResults();
 
         adapterDataContactQuerySummary.clear();
+        adapterDataContactQueryAll.clear();
         int ctr = 0;
         for (Contact s : slist) {
             try {
 
                 if (s != null) {
+                    adapterDataContactQueryAll.add(s);
                     if (ctr < CONTENT_MAX_SIZE) adapterDataContactQuerySummary.add(s);
-                    else break;
+                    //else break;
                     ctr++;
 
                 }
@@ -253,6 +275,7 @@ public class SearchViewModel extends BaseObservable {
         }
 
         searchAdapterContactQS.notifyDataSetChanged();
+        searchAdapterContactAll.notifyDataSetChanged();
     }
 
     /**
@@ -414,6 +437,29 @@ public class SearchViewModel extends BaseObservable {
         Log.e("onFailure", "onFailure: " + message);
         builder.show();
     }
+    /**
+     * Initialize Contact Items Adapter Search Query All
+     */
+    private void initializeAdapterContactQueryAll() {
+        adapterDataContactQueryAll  = new ArrayList<Contact>();
+        RecyclerView recyclerViewContactAll = getRecyclerViewById(R.id.recycler_view_contact_query_all);
+        setupRecyclerView(recyclerViewContactAll, LinearLayoutManager.VERTICAL);
+        searchAdapterContactAll = new SearchRecyclerViewAdapter(this, adapterDataContactQueryAll);
+        searchAdapterContactAll.setAdapterType(SEARCH_ADAPTER_TYPE_CONTACT_ALL);
+        recyclerViewContactAll.setAdapter(searchAdapterContactAll);
+    }
+
+    /**
+     * Initialize Company Items Adapter Search Query All
+     */
+    private void initializeAdapterCompanyQueryAll() {
+         adapterDataCompanyQueryAll = new ArrayList<Company>();
+        RecyclerView recyclerViewCQSAll = getRecyclerViewById(R.id.recycler_view_company_query_all);
+        setupRecyclerView(recyclerViewCQSAll, LinearLayoutManager.VERTICAL);
+        searchAdapterCQSAll = new SearchRecyclerViewAdapter(this, adapterDataCompanyQueryAll);
+        searchAdapterCQSAll.setAdapterType(SEARCH_ADAPTER_TYPE_CQS_ALL);
+        recyclerViewCQSAll.setAdapter(searchAdapterCQSAll);
+    }
 
     /**
      * Initialize Project Items Adapter Search Query All
@@ -476,9 +522,11 @@ public class SearchViewModel extends BaseObservable {
         recyclerViewRecentlyViewed.setAdapter(searchAdapterRecentlyViewed);
     }
 
-    /**
-     * Initialize Saved Projects Adapter
+
+
+     /* Initialize Saved Projects Adapter
      */
+
     private void initializeAdapterSavedProject() {
         adapterDataProjectSearchSaved = new ArrayList<SearchSaved>();
         RecyclerView recyclerViewProject = getRecyclerViewById(R.id.recycler_view_project);
@@ -487,6 +535,7 @@ public class SearchViewModel extends BaseObservable {
         searchAdapterProject.setAdapterType(SEARCH_ADAPTER_TYPE_PROJECTS);
         recyclerViewProject.setAdapter(searchAdapterProject);
     }
+
 
     /**
      * Initialize Saved Company Adapter
@@ -517,7 +566,15 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-        if (isMSR11Visible) {
+        if (isMSR13Visible) {
+            setIsMSR13Visible(false);
+            setIsMSE2SectionVisible(true);
+            setIsMSE1SectionVisible(false);
+        } else if (isMSR12Visible) {
+            setIsMSR12Visible(false);
+            setIsMSE2SectionVisible(true);
+            setIsMSE1SectionVisible(false);
+        } else if (isMSR11Visible) {
             setIsMSR11Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
@@ -552,6 +609,9 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isMSE1SectionVisible);
         notifyPropertyChanged(BR.isMSE2SectionVisible);
         notifyPropertyChanged(BR.isMSR11Visible);
+        notifyPropertyChanged(BR.isMSR12Visible);
+        notifyPropertyChanged(BR.isMSR13Visible);
+
     }
 
     @Bindable
@@ -564,6 +624,8 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isMSE1SectionVisible);
         notifyPropertyChanged(BR.isMSE2SectionVisible);
         notifyPropertyChanged(BR.isMSR11Visible);
+        notifyPropertyChanged(BR.isMSR12Visible);
+        notifyPropertyChanged(BR.isMSR13Visible);
     }
 
     @Bindable
@@ -579,7 +641,31 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isMSR11Visible);
     }
 
+    @Bindable
+    public boolean getIsMSR12Visible() {
+        return isMSR12Visible;
+    }
 
+    @Bindable
+    public void setIsMSR12Visible(boolean MSR12Visible) {
+        isMSR12Visible = MSR12Visible;
+        notifyPropertyChanged(BR.isMSE1SectionVisible);
+        notifyPropertyChanged(BR.isMSE2SectionVisible);
+        notifyPropertyChanged(BR.isMSR12Visible);
+    }
+
+    @Bindable
+    public boolean getIsMSR13Visible() {
+        return isMSR13Visible;
+    }
+
+    @Bindable
+    public void setIsMSR13Visible(boolean MSR13Visible) {
+        isMSR13Visible = MSR13Visible;
+        notifyPropertyChanged(BR.isMSE1SectionVisible);
+        notifyPropertyChanged(BR.isMSE2SectionVisible);
+        notifyPropertyChanged(BR.isMSR13Visible);
+    }
     @Bindable
     public String getQueryProjectTitle() {
         return queryProjectTitle;
@@ -624,6 +710,14 @@ public class SearchViewModel extends BaseObservable {
 
     public void onClickSeeAllProject(View view) {
         setIsMSR11Visible(true);
+        setIsMSE2SectionVisible(false);
+    }
+    public void onClickSeeAllCompany(View view) {
+        setIsMSR12Visible(true);
+        setIsMSE2SectionVisible(false);
+    }
+    public void onClickSeeAllContact(View view) {
+        setIsMSR13Visible(true);
         setIsMSE2SectionVisible(false);
     }
 }

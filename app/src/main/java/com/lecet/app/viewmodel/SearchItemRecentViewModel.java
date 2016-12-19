@@ -1,5 +1,7 @@
 package com.lecet.app.viewmodel;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,14 +19,14 @@ import com.lecet.app.data.models.SearchResult;
  * This View Model is used
  */
 
-public class SearchItemRecentViewModel {
+public class SearchItemRecentViewModel extends BaseObservable{
 
     private Project project;
     private Company company;
     private Contact contact;
     private String mapsApiKey;
     private SearchViewModel viewModel;
-
+    private boolean isClientLocation2;
     /**
      * old code - for reference
      * public SearchItemRecentViewModel(Project project, String mapsApiKey) {
@@ -36,12 +38,14 @@ public class SearchItemRecentViewModel {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
         this.viewModel = viewModel;
+       // this.company=null;
     }
 
     public SearchItemRecentViewModel(SearchViewModel viewModel, Company company, String mapsApiKey) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
         this.viewModel = viewModel;
+     //   this.project =null;
     }
 
     public SearchItemRecentViewModel(SearchViewModel viewModel, Contact contact) {
@@ -56,8 +60,8 @@ public class SearchItemRecentViewModel {
 
 
     public String getTitle() {
-        if (project == null) return "Unknown";
-        return project.getTitle();
+    //    if (project == null) return "Unknown";
+        return project != null ? project.getTitle() : company !=null ? company.getName() : "Unknown";
     }
 
     public String getProjectName() {
@@ -65,11 +69,24 @@ public class SearchItemRecentViewModel {
     }
 
     public String getClientLocation() {
-        return project.getCity() + " , " + project.getState();
+        return project !=null ? project.getCity() + " , " + project.getState() : company !=null ? company.getAddress1() : "";
     }
 
+    public String getClientLocation2() {
+        if (project !=null && project.getAddress2() !=null && !project.getAddress2().trim().equals("")) setIsClientLocation2(true); else setIsClientLocation2(false);
+        return project !=null ? project.getAddress2()  : "";
+    }
+@Bindable
+    public boolean getIsClientLocation2() {
+        return isClientLocation2;
+    }
+@Bindable
+    public void setIsClientLocation2(boolean clientLocation2) {
+        isClientLocation2 = clientLocation2;
+//    notifyPropertyChanged(isClientLocation2);
 
-    ////////////////////////////////////
+    }
+////////////////////////////////////
     // COMPANY
 
     public String getCompanyTitle() {
@@ -111,7 +128,7 @@ public class SearchItemRecentViewModel {
             if(zip.length() > 5) {
                 sb.append(zip.substring(0, 5));
                 sb.append("-");
-                sb.append(zip.substring(5, 9));
+                sb.append(zip.substring(5, zip.length()-1)); //to remove the out-of-bounds exception, the value of 9 is changed to zip.length() - 1;
             }
             else sb.append(company.getZipPlus4());
         }
@@ -131,12 +148,15 @@ public class SearchItemRecentViewModel {
     }
 
     public String getContactDetail() {
+        String title="", fipcounty ="";
         if (contact == null) return "Unknown";
-        if (contact.getTitle() == null) return "";
-        if (contact.getFipsCounty() == null) return "";
-        if (contact.getTitle().equals("null")) return "";
-        if (contact.getFipsCounty().equals("null")) return "";
-        return contact.getTitle() + ", " + contact.getFipsCounty();
+        if (contact.getTitle() !=null) title = contact.getTitle();
+        //    if (contact.getTitle() == null) return "-";
+        //    if (contact.getTitle().equals("null")) return "-";
+        if (contact.getFipsCounty() != null) fipcounty= contact.getFipsCounty();
+        //   if (contact.getFipsCounty() == null) return "-";
+        //    if (contact.getFipsCounty().equals("null")) return "-";
+        return title + ((title !="" && fipcounty !="") ? "," : " ")+fipcounty;
     }
 
 

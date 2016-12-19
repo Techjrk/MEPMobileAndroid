@@ -73,22 +73,21 @@
                 </LinearLayout>
 
                 <!-- Address -->
-                <LinearLayout
+                <!--LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="22dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         style="@style/ListItemProjectTrackingImage.DetailIcon"
-                        android:src="@mipmap/ic_bid_type"
-                        android:visibility="@{viewModel.isClientLocation2  ? View.VISIBLE : View.GONE }"/>
+                        android:src="@mipmap/ic_bid_type" />
 
                     <TextView
                         style="@style/ListItemProjectTrackingTextView.Detail1"
-                        android:text="@{viewModel.clientLocation2}"
+                        android:text="@{viewModel.address}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="Tampa, FL" />
-                </LinearLayout>
+                </LinearLayout-->
 
             </LinearLayout>
 
