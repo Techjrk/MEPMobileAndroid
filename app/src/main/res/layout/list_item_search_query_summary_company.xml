@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <variable
             name="viewModel"
@@ -86,14 +85,11 @@
                             android:text="@{viewModel.companyAddress2}"/>
 
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
 
         <!-- Horizontal Separator -->
         <include layout="@layout/rule_horiz_light"/>
-
     </LinearLayout>
 
 </layout>

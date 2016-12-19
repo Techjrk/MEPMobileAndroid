@@ -30,7 +30,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
             android:gravity="center_vertical"
-            android:onClick="@{viewModel.onProjectClick}"
+            android:onClick="@{viewModel.onCompanyClick}"
             android:orientation="horizontal">
 
             <!-- Map Image -->

@@ -75,7 +75,6 @@
 
             </RelativeLayout>
 
-
             <!-- MSE 1 SECTION -->
             <ScrollView
                 android:id="@+id/mse1section"
@@ -166,13 +165,14 @@
                 android:background="@color/lecetDarkestBlue"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.isMSE2SectionVisible ? View.GONE : View.VISIBLE}">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/lecetDarkestBlue"
                     android:gravity="center_horizontal"
                     android:padding="10dp"
-                    android:text="@{viewModel.isMSR11Visible ? viewModel.queryProjectTotal : viewModel.isMSR12Visible ? viewModel.queryCompanyTotal : null}"
+                    android:text="@{viewModel.isMSR11Visible ? viewModel.queryProjectTotal : viewModel.isMSR12Visible ? viewModel.queryCompanyTotal : viewModel.isMSR13Visible ? viewModel.queryContactTotal : null}"
                     android:textColor="@color/pureWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -191,31 +191,33 @@
                         android:orientation="vertical"
                         android:paddingBottom="4dp"
                         android:paddingTop="0dp">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:visibility="@{viewModel.isMSR11Visible ? View.VISIBLE : View.GONE}">
-                    <!-- PROJECT All SEARCHES -->
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recycler_view_project_query_all"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            tools:listitem="@layout/list_item_search_query_all_project" />
-                    </LinearLayout>
+                            <!-- PROJECT All SEARCHES -->
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view_project_query_all"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:listitem="@layout/list_item_search_query_all_project" />
+                        </LinearLayout>
 
-                    <!-- COMPANY All SEARCHES -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="@{viewModel.isMSR12Visible ? View.VISIBLE : View.GONE}">
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recycler_view_company_query_all"
+                        <!-- COMPANY All SEARCHES -->
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:listitem="@layout/list_item_search_query_all_company" />
-                    </LinearLayout>
+                            android:orientation="vertical"
+                            android:visibility="@{viewModel.isMSR12Visible ? View.VISIBLE : View.GONE}">
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view_company_query_all"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:listitem="@layout/list_item_search_query_all_company" />
+                        </LinearLayout>
 
                         <!-- CONTACT All SEARCHES -->
                         <LinearLayout
@@ -223,13 +225,14 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:visibility="@{viewModel.isMSR13Visible ? View.VISIBLE : View.GONE}">
+
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/recycler_view_contact_query_all"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 tools:listitem="@layout/list_item_search_query_summary_contact" />
                         </LinearLayout>
-            </LinearLayout>
+                    </LinearLayout>
                 </ScrollView>
             </LinearLayout>
         </LinearLayout>

@@ -126,7 +126,7 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.queryContactTitle);
     }
 
-  //  SearchProjectViewModel projectmodel;
+    //  SearchProjectViewModel projectmodel;
 
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
@@ -135,7 +135,7 @@ public class SearchViewModel extends BaseObservable {
         this.activity = activity;
         this.searchDomain = sd;
 
-      //  projectmodel = new SearchProjectViewModel(this,activity,sd);
+        //  projectmodel = new SearchProjectViewModel(this,activity,sd);
 
 
         // Init the Recently Viewed Items adapter and fetch its data
@@ -215,7 +215,7 @@ public class SearchViewModel extends BaseObservable {
                 Log.w("No project", "No project in the list");
             }
         }
-        Log.d("Project adapter size","ProjectAdapter size: "+ adapterDataProjectQueryAll.size());
+        Log.d("Project adapter size", "ProjectAdapter size: " + adapterDataProjectQueryAll.size());
         searchAdapterPQS.notifyDataSetChanged();
         searchAdapterPQSAll.notifyDataSetChanged();
     }
@@ -437,11 +437,12 @@ public class SearchViewModel extends BaseObservable {
         Log.e("onFailure", "onFailure: " + message);
         builder.show();
     }
+
     /**
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
-        adapterDataContactQueryAll  = new ArrayList<Contact>();
+        adapterDataContactQueryAll = new ArrayList<Contact>();
         RecyclerView recyclerViewContactAll = getRecyclerViewById(R.id.recycler_view_contact_query_all);
         setupRecyclerView(recyclerViewContactAll, LinearLayoutManager.VERTICAL);
         searchAdapterContactAll = new SearchRecyclerViewAdapter(this, adapterDataContactQueryAll);
@@ -453,7 +454,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Company Items Adapter Search Query All
      */
     private void initializeAdapterCompanyQueryAll() {
-         adapterDataCompanyQueryAll = new ArrayList<Company>();
+        adapterDataCompanyQueryAll = new ArrayList<Company>();
         RecyclerView recyclerViewCQSAll = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerViewCQSAll, LinearLayoutManager.VERTICAL);
         searchAdapterCQSAll = new SearchRecyclerViewAdapter(this, adapterDataCompanyQueryAll);
@@ -666,6 +667,7 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isMSE2SectionVisible);
         notifyPropertyChanged(BR.isMSR13Visible);
     }
+
     @Bindable
     public String getQueryProjectTitle() {
         return queryProjectTitle;
@@ -712,10 +714,12 @@ public class SearchViewModel extends BaseObservable {
         setIsMSR11Visible(true);
         setIsMSE2SectionVisible(false);
     }
+
     public void onClickSeeAllCompany(View view) {
         setIsMSR12Visible(true);
         setIsMSE2SectionVisible(false);
     }
+
     public void onClickSeeAllContact(View view) {
         setIsMSR13Visible(true);
         setIsMSE2SectionVisible(false);
