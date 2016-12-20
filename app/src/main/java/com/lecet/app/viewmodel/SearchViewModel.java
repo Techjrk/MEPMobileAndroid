@@ -13,11 +13,14 @@ import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.adapters.SearchCompanyQuerySummaryRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchAllCompanyRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchSummaryCompanyRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchCompanyRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchProjectQuerySummaryRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchAllContactRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchSummaryContactRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchAllProjectRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchRecentRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchProjectRecyclerViewAdapter;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
@@ -49,12 +52,12 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
-    public static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY = 3;   //PQS - Project Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY = 4;   //CQS - Company Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_CONTACT_QS = 5; // - Contact Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_PQS_ALL = 6;   //PQSAll - Project Query All
-    public static final int SEARCH_ADAPTER_TYPE_CQS_ALL = 7;   //CQSAll - Company Query All
-    public static final int SEARCH_ADAPTER_TYPE_CONTACT_ALL = 8;
+    public static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY = 3;  // Project Query Summary
+    public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY = 4;  // Company Query Summary
+    public static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY = 5;  // Contact Query Summary
+    public static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL = 6;      // Project Query All
+    public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL = 7;      // Company Query All
+    public static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL = 8;      // Contact Query All
 
     private AppCompatActivity activity;
     private final SearchDomain searchDomain;
@@ -73,19 +76,19 @@ public class SearchViewModel extends BaseObservable {
 
     //For MSE 2.0
     //private static EditText searchfield;
-    private List<Project> adapterDataProjectQueryAll;
-    private List<Company> adapterDataCompanyQueryAll;
-    private List<Contact> adapterDataContactQueryAll;
+    private List<Project> adapterDataProjectAll;
+    private List<Company> adapterDataCompanyAll;
+    private List<Contact> adapterDataContactAll;
 
-    private List<Project> adapterDataProjectQuerySummary;
-    private List<Company> adapterDataCompanyQuerySummary;
-    private List<Contact> adapterDataContactQuerySummary;
-    private SearchProjectQuerySummaryRecyclerViewAdapter searchAdapterProjectQuerySummary;  // adapter for Project Summary
-    private SearchCompanyQuerySummaryRecyclerViewAdapter searchAdapterCompanyQuerySummary;  // adapter for Company Summary
-    private SearchRecyclerViewAdapter searchAdapterContactQS;
-    private SearchRecyclerViewAdapter searchAdapterPQSAll;  //PQSAll - Project Query All
-    private SearchRecyclerViewAdapter searchAdapterCQSAll; //CQSAll - Company Query All
-    private SearchRecyclerViewAdapter searchAdapterContactAll;
+    private List<Project> adapterDataProjectSummary;
+    private List<Company> adapterDataCompanySummary;
+    private List<Contact> adapterDataContactSummary;
+    private SearchSummaryProjectRecyclerViewAdapter searchAdapterProjectSummary;  // adapter for Project Summary Results
+    private SearchSummaryCompanyRecyclerViewAdapter searchAdapterCompanySummary;  // adapter for Company Summary Results
+    private SearchSummaryContactRecyclerViewAdapter searchAdapterContactSummary;  // adapter for Contact Summary Results
+    private SearchAllProjectRecyclerViewAdapter searchAdapterProjectAll;          // adapter for Project Query All Results
+    private SearchAllCompanyRecyclerViewAdapter searchAdapterCompanyAll;          // adapter for Company Query All Results
+    private SearchAllContactRecyclerViewAdapter searchAdapterContactAll;          // adapter for Contact Query All Results
     private String query;
     private String queryProjectTitle;
     private String queryCompanyTitle;
@@ -195,14 +198,14 @@ public class SearchViewModel extends BaseObservable {
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
-        adapterDataProjectQuerySummary.clear();
-        adapterDataProjectQueryAll.clear();
+        adapterDataProjectSummary.clear();
+        adapterDataProjectAll.clear();
         int ctr = 0;
         for (Project s : slist) {
             try {
                 if (s != null) {
-                    adapterDataProjectQueryAll.add(s);
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataProjectQuerySummary.add(s);
+                    adapterDataProjectAll.add(s);
+                    if (ctr < CONTENT_MAX_SIZE) adapterDataProjectSummary.add(s);
                     //else break;
                     ctr++;
 
@@ -212,9 +215,9 @@ public class SearchViewModel extends BaseObservable {
                 Log.w("No project", "No project in the list");
             }
         }
-        Log.d("Project adapter size", "ProjectAdapter size: " + adapterDataProjectQueryAll.size());
-        searchAdapterProjectQuerySummary.notifyDataSetChanged();
-        searchAdapterPQSAll.notifyDataSetChanged();
+        Log.d("Project adapter size", "ProjectAdapter size: " + adapterDataProjectAll.size());
+        searchAdapterProjectSummary.notifyDataSetChanged();
+        searchAdapterProjectAll.notifyDataSetChanged();
     }
 
     /**
@@ -223,15 +226,15 @@ public class SearchViewModel extends BaseObservable {
     public void getCompanyQueryListSummary(SearchCompany sp) {
         RealmList<Company> slist = sp.getResults();
 
-        adapterDataCompanyQuerySummary.clear();
-        adapterDataCompanyQueryAll.clear();
+        adapterDataCompanySummary.clear();
+        adapterDataCompanyAll.clear();
         int ctr = 0;
         for (Company s : slist) {
             try {
 
                 if (s != null) {
-                    adapterDataCompanyQueryAll.add(s);
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataCompanyQuerySummary.add(s);
+                    adapterDataCompanyAll.add(s);
+                    if (ctr < CONTENT_MAX_SIZE) adapterDataCompanySummary.add(s);
                     //else break;
                     ctr++;
 
@@ -242,8 +245,8 @@ public class SearchViewModel extends BaseObservable {
             }
         }
 
-        searchAdapterCompanyQuerySummary.notifyDataSetChanged();
-        searchAdapterCQSAll.notifyDataSetChanged();
+        searchAdapterCompanySummary.notifyDataSetChanged();
+        searchAdapterCompanyAll.notifyDataSetChanged();
     }
 
     /**
@@ -252,15 +255,15 @@ public class SearchViewModel extends BaseObservable {
     public void getContactQueryListSummary(SearchContact sp) {
         RealmList<Contact> slist = sp.getResults();
 
-        adapterDataContactQuerySummary.clear();
-        adapterDataContactQueryAll.clear();
+        adapterDataContactSummary.clear();
+        adapterDataContactAll.clear();
         int ctr = 0;
         for (Contact s : slist) {
             try {
 
                 if (s != null) {
-                    adapterDataContactQueryAll.add(s);
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataContactQuerySummary.add(s);
+                    adapterDataContactAll.add(s);
+                    if (ctr < CONTENT_MAX_SIZE) adapterDataContactSummary.add(s);
                     //else break;
                     ctr++;
 
@@ -271,7 +274,7 @@ public class SearchViewModel extends BaseObservable {
             }
         }
 
-        searchAdapterContactQS.notifyDataSetChanged();
+        searchAdapterContactSummary.notifyDataSetChanged();
         searchAdapterContactAll.notifyDataSetChanged();
     }
 
@@ -439,103 +442,99 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
-        adapterDataContactQueryAll = new ArrayList<Contact>();
-        RecyclerView recyclerViewContactAll = getRecyclerViewById(R.id.recycler_view_contact_query_all);
-        setupRecyclerView(recyclerViewContactAll, LinearLayoutManager.VERTICAL);
-        searchAdapterContactAll = new SearchRecyclerViewAdapter(this, adapterDataContactQueryAll);
-        searchAdapterContactAll.setAdapterType(SEARCH_ADAPTER_TYPE_CONTACT_ALL);
-        recyclerViewContactAll.setAdapter(searchAdapterContactAll);
+        adapterDataContactAll = new ArrayList<Contact>();
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(this, adapterDataContactAll);
+        recyclerView.setAdapter(searchAdapterContactAll);
     }
 
     /**
      * Initialize Company Items Adapter Search Query All
      */
     private void initializeAdapterCompanyQueryAll() {
-        adapterDataCompanyQueryAll = new ArrayList<Company>();
-        RecyclerView recyclerViewCQSAll = getRecyclerViewById(R.id.recycler_view_company_query_all);
-        setupRecyclerView(recyclerViewCQSAll, LinearLayoutManager.VERTICAL);
-        searchAdapterCQSAll = new SearchRecyclerViewAdapter(this, adapterDataCompanyQueryAll);
-        searchAdapterCQSAll.setAdapterType(SEARCH_ADAPTER_TYPE_CQS_ALL);
-        recyclerViewCQSAll.setAdapter(searchAdapterCQSAll);
+        adapterDataCompanyAll = new ArrayList<Company>();
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(this, adapterDataCompanyAll);
+        recyclerView.setAdapter(searchAdapterCompanyAll);
     }
 
     /**
      * Initialize Project Items Adapter Search Query All
      */
     private void initializeAdapterProjectQueryAll() {
-        adapterDataProjectQueryAll = new ArrayList<Project>();
-        RecyclerView recyclerViewPQSAll = getRecyclerViewById(R.id.recycler_view_project_query_all);
-        setupRecyclerView(recyclerViewPQSAll, LinearLayoutManager.VERTICAL);
-        searchAdapterPQSAll = new SearchRecyclerViewAdapter(this, adapterDataProjectQueryAll);
-        searchAdapterPQSAll.setAdapterType(SEARCH_ADAPTER_TYPE_PQS_ALL);
-        recyclerViewPQSAll.setAdapter(searchAdapterPQSAll);
+        adapterDataProjectAll = new ArrayList<Project>();
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(this, adapterDataProjectAll);
+        recyclerView.setAdapter(searchAdapterProjectAll);
     }
 
     /**
-     * Initialize Project Items Adapter Search Query Summary - REFACTORED
+     * Initialize Project Items Adapter Search Query Summary
      */
     private void initializeAdapterProjectQuerySummary() {
-        adapterDataProjectQuerySummary = new ArrayList<Project>();
-        RecyclerView recyclerViewPQS = getRecyclerViewById(R.id.recycler_view_project_query_summary);
-        setupRecyclerView(recyclerViewPQS, LinearLayoutManager.VERTICAL);
-        searchAdapterProjectQuerySummary = new SearchProjectQuerySummaryRecyclerViewAdapter(this, adapterDataProjectQuerySummary);
-        recyclerViewPQS.setAdapter(searchAdapterProjectQuerySummary);
+        adapterDataProjectSummary = new ArrayList<Project>();
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_summary);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        searchAdapterProjectSummary = new SearchSummaryProjectRecyclerViewAdapter(this, adapterDataProjectSummary);
+        recyclerView.setAdapter(searchAdapterProjectSummary);
     }
 
     /**
-     * Initialize Company Items Adapter Search Query - REFACTORED
+     * Initialize Company Items Adapter Search Query
      */
     private void initializeAdapterCompanyQuerySummary() {
-        adapterDataCompanyQuerySummary = new ArrayList<Company>();
-        RecyclerView recyclerViewCQS = getRecyclerViewById(R.id.recycler_view_company_query_summary);
-        setupRecyclerView(recyclerViewCQS, LinearLayoutManager.VERTICAL);
-        searchAdapterCompanyQuerySummary = new SearchCompanyQuerySummaryRecyclerViewAdapter(this, adapterDataCompanyQuerySummary);
-        recyclerViewCQS.setAdapter(searchAdapterCompanyQuerySummary);
+        adapterDataCompanySummary = new ArrayList<Company>();
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_summary);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        searchAdapterCompanySummary = new SearchSummaryCompanyRecyclerViewAdapter(this, adapterDataCompanySummary);
+        recyclerView.setAdapter(searchAdapterCompanySummary);
     }
 
     /**
      * Initialize Project Items Adapter Search Query
      */
     private void initializeAdapterContactQuerySummary() {
-        adapterDataContactQuerySummary = new ArrayList<Contact>();
-        RecyclerView recyclerViewContactQS = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
-        setupRecyclerView(recyclerViewContactQS, LinearLayoutManager.VERTICAL);
-        searchAdapterContactQS = new SearchRecyclerViewAdapter(this, adapterDataContactQuerySummary);
-        searchAdapterContactQS.setAdapterType(SEARCH_ADAPTER_TYPE_CONTACT_QS);
-        recyclerViewContactQS.setAdapter(searchAdapterContactQS);
+        adapterDataContactSummary = new ArrayList<Contact>();
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(this, adapterDataContactSummary);
+        recyclerView.setAdapter(searchAdapterContactSummary);
     }
 
     /**
-     * Initialize Recent Items Adapter - REFACTORED
+     * Initialize Recent Items Adapter
      */
     private void initializeAdapterRecentlyViewed() {
         adapterDataRecentlyViewed = new ArrayList<SearchResult>();
-        RecyclerView recyclerViewRecentlyViewed = getRecyclerViewById(R.id.recycler_view_recent);
-        setupRecyclerView(recyclerViewRecentlyViewed, LinearLayoutManager.HORIZONTAL);
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_recent);
+        setupRecyclerView(recyclerView, LinearLayoutManager.HORIZONTAL);
         searchAdapterRecentlyViewed = new SearchRecentRecyclerViewAdapter(this, adapterDataRecentlyViewed);
-        recyclerViewRecentlyViewed.setAdapter(searchAdapterRecentlyViewed);
+        recyclerView.setAdapter(searchAdapterRecentlyViewed);
     }
 
      /**
-     * Initialize Saved Projects Adapter - REFACTORED
+     * Initialize Saved Projects Adapter
      */
     private void initializeAdapterSavedProject() {
         adapterDataProjectSearchSaved = new ArrayList<SearchSaved>();
-        RecyclerView recyclerViewProject = getRecyclerViewById(R.id.recycler_view_project);
-        setupRecyclerView(recyclerViewProject, LinearLayoutManager.VERTICAL);
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterProject = new SearchProjectRecyclerViewAdapter(this, adapterDataProjectSearchSaved);
-        recyclerViewProject.setAdapter(searchAdapterProject);
+        recyclerView.setAdapter(searchAdapterProject);
     }
 
     /**
-     * Initialize Saved Company Adapter - REFACTORED
+     * Initialize Saved Company Adapter
      */
     private void initializeAdapterSavedCompany() {
         adapterDataCompanySearchSaved = new ArrayList<SearchSaved>();
-        RecyclerView recyclerViewCompany = getRecyclerViewById(R.id.recycler_view_company);
-        setupRecyclerView(recyclerViewCompany, LinearLayoutManager.VERTICAL);
+        RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company);
+        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterCompany = new SearchCompanyRecyclerViewAdapter(this, adapterDataCompanySearchSaved);
-        recyclerViewCompany.setAdapter(searchAdapterCompany);
+        recyclerView.setAdapter(searchAdapterCompany);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, int orientation) {

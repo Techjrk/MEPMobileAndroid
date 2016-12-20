@@ -50,8 +50,8 @@ public class SearchCompanyRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         CompanySavedViewHolder viewHolder = (CompanySavedViewHolder) holder;
-        SearchItemSavedSearchViewModel searchsaved = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
-        viewHolder.getBinding().setViewModel(searchsaved);
+        SearchItemSavedSearchViewModel vm = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
+        viewHolder.getBinding().setViewModel(vm);
     }
 
     @Override
@@ -71,17 +71,16 @@ public class SearchCompanyRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     /**
      * View Holder class
      **/
-    public class CompanySavedViewHolder extends RecyclerView.ViewHolder {
+    private class CompanySavedViewHolder extends RecyclerView.ViewHolder {
 
-        private final com.lecet.app.databinding.ListItemSearchSavedViewBinding binding;
+        private final ListItemSearchSavedViewBinding binding;
 
-        public CompanySavedViewHolder(com.lecet.app.databinding.ListItemSearchSavedViewBinding binding) {
+        private CompanySavedViewHolder(ListItemSearchSavedViewBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
-        public com.lecet.app.databinding.ListItemSearchSavedViewBinding getBinding() {
+        public ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
     }

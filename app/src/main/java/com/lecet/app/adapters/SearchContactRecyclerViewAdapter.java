@@ -21,9 +21,10 @@ import java.util.List;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
+@Deprecated
 public class SearchContactRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int adapterType = SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES;
+    private final int adapterType = SearchViewModel.SEARCH_ADAPTER_TYPE_COMPANIES;  //TODO - CHANGE
     private List data = Collections.emptyList();
     private SearchViewModel viewModel;
 
@@ -50,8 +51,8 @@ public class SearchContactRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         ContactSavedViewHolder viewHolder = (ContactSavedViewHolder) holder;
-        SearchItemSavedSearchViewModel searchsaved = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
-        viewHolder.getBinding().setViewModel(searchsaved);
+        SearchItemSavedSearchViewModel vm = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
+        viewHolder.getBinding().setViewModel(vm);
     }
 
     @Override
@@ -71,17 +72,16 @@ public class SearchContactRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     /**
      * View Holder class
      **/
-    public class ContactSavedViewHolder extends RecyclerView.ViewHolder {
+    private class ContactSavedViewHolder extends RecyclerView.ViewHolder {
 
-        private final com.lecet.app.databinding.ListItemSearchSavedViewBinding binding;
+        private final ListItemSearchSavedViewBinding binding;
 
-        public ContactSavedViewHolder(com.lecet.app.databinding.ListItemSearchSavedViewBinding binding) {
+        private ContactSavedViewHolder(ListItemSearchSavedViewBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
-        public com.lecet.app.databinding.ListItemSearchSavedViewBinding getBinding() {
+        public ListItemSearchSavedViewBinding getBinding() {
             return binding;
         }
     }

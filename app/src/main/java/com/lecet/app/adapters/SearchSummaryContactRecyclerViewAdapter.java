@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.SearchSaved;
-import com.lecet.app.databinding.ListItemSearchSavedViewBinding;
-import com.lecet.app.viewmodel.SearchItemSavedSearchViewModel;
+import com.lecet.app.data.models.Contact;
+import com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding;
+import com.lecet.app.viewmodel.SearchItemRecentViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.Collections;
@@ -16,18 +16,18 @@ import java.util.List;
 
 
 /**
- * File: SearchProjectRecyclerViewAdapter Created: 10/21/16 Author: domandtom
+ * File: SearchSummaryContactRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class SearchProjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SearchSummaryContactRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int adapterType = SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECTS;
+    private final int adapterType = SearchViewModel.SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY;
     private List data = Collections.emptyList();
     private SearchViewModel viewModel;
 
-    public SearchProjectRecyclerViewAdapter(SearchViewModel viewModel, List data) {
+    public SearchSummaryContactRecyclerViewAdapter(SearchViewModel viewModel, List data) {
         this.viewModel = viewModel;
         this.data = data;
     }
@@ -41,16 +41,16 @@ public class SearchProjectRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
 
-        ListItemSearchSavedViewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_saved_view, parent, false);
-        viewHolder = new ProjectSavedViewHolder(binding);
+        ListItemSearchQuerySummaryContactBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_search_query_summary_contact,parent, false);
+        viewHolder = new ContactQuerySearchViewHolder(binding);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        ProjectSavedViewHolder viewHolder = (ProjectSavedViewHolder) holder;
-        SearchItemSavedSearchViewModel vm = new SearchItemSavedSearchViewModel(viewModel, ((SearchSaved) data.get(position)));
+        ContactQuerySearchViewHolder viewHolder = (ContactQuerySearchViewHolder) holder;
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel(viewModel, (Contact) data.get(position));
         viewHolder.getBinding().setViewModel(vm);
     }
 
@@ -71,17 +71,18 @@ public class SearchProjectRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     /**
      * View Holder class
      **/
-    private class ProjectSavedViewHolder extends RecyclerView.ViewHolder {
+    private class ContactQuerySearchViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemSearchSavedViewBinding binding;
+        private final ListItemSearchQuerySummaryContactBinding binding;
 
-        private ProjectSavedViewHolder(ListItemSearchSavedViewBinding binding) {
+        private ContactQuerySearchViewHolder(ListItemSearchQuerySummaryContactBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ListItemSearchSavedViewBinding getBinding() {
+        public ListItemSearchQuerySummaryContactBinding getBinding() {
             return binding;
         }
+
     }
 }
