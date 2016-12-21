@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.interfaces.MTMMenuCallback;
+import com.lecet.app.interfaces.MoveToListCallback;
 
 import java.util.List;
 
@@ -27,9 +28,9 @@ public abstract class MoveToAdapter<T extends RealmObject> extends BaseAdapter {
     private String title;
     private RealmResults<T> trackingLists;
     private int size;
-    private MTMMenuCallback callback;
+    private MoveToListCallback callback;
 
-    public MoveToAdapter(Context context, String title, RealmResults<T> trackingLists, MTMMenuCallback callback) {
+    public MoveToAdapter(Context context, String title, RealmResults<T> trackingLists, MoveToListCallback callback) {
         this.context = context;
         this.title = title;
         this.trackingLists = trackingLists;
@@ -97,10 +98,9 @@ public abstract class MoveToAdapter<T extends RealmObject> extends BaseAdapter {
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO
-//                    if (callback != null) {
-//                        callback.onProjectTrackingListClicked(projectTracking);
-//                    }
+                    if (callback != null) {
+                        callback.onTrackingListClicked(trackingList);
+                    }
                 }
             });
         }

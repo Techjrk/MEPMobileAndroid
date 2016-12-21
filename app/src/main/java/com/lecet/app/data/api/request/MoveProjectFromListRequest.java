@@ -14,16 +14,16 @@ import java.util.List;
 
 public class MoveProjectFromListRequest {
 
-    @SerializedName("projectIds")
-    private List<Long> projectIds;
+    @SerializedName("itemIds")
+    private List<Long> itemIds;
 
-    public MoveProjectFromListRequest(@NonNull List<Long> projectIds) {
+    public MoveProjectFromListRequest(@NonNull List<Long> itemIds) {
 
-        this.projectIds = projectIds;
+        this.itemIds = itemIds;
     }
 
-    public List<Long> getProjectIds() {
-        return projectIds;
+    public List<Long> getItemIds() {
+        return itemIds;
     }
 
     @Override
@@ -33,19 +33,19 @@ public class MoveProjectFromListRequest {
 
         MoveProjectFromListRequest that = (MoveProjectFromListRequest) o;
 
-        return projectIds.equals(that.projectIds);
+        return itemIds.equals(that.itemIds);
 
     }
 
     @Override
     public int hashCode() {
-        return projectIds.hashCode();
+        return itemIds.hashCode();
     }
 
     @Override
     public String toString() {
         return "MoveProjectFromListRequest{" +
-                "projectIds=" + projectIds +
+                "itemIds=" + itemIds +
                 '}';
     }
 }

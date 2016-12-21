@@ -150,9 +150,8 @@ public class Bid extends RealmObject {
         if (fipsCounty != null ? !fipsCounty.equals(bid.fipsCounty) : bid.fipsCounty != null)
             return false;
         if (zip5 != null ? !zip5.equals(bid.zip5) : bid.zip5 != null) return false;
-        if (project != null ? !project.equals(bid.project) : bid.project != null) return false;
-        return contact != null ? contact.equals(bid.contact) : bid.contact == null;
-
+        if (project != null ? project.getId() != bid.project.getId() : bid.project != null) return false;
+        return contact != null ? contact.getId() != bid.contact.getId() : bid.contact == null;
     }
 
     @Override

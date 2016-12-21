@@ -10,6 +10,7 @@
     <string name="phone">Phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
+    <string name="updating">Updating..</string>
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
@@ -143,7 +144,6 @@
     <string name="mtm_menu_number_company">%d Companies</string>
     <string name="mtm_menu_number_projects">%d Projects</string>
 
-
     <!-- MTM SortBy Menu -->
     <string name="mtm_sort_menu_title">Sort by</string>
 
@@ -152,5 +152,9 @@
     <string name="move">MOVE</string>
     <string name="x_selected">%s Selected</string>
     <string name="move_to">Move to</string>
+
+    <!-- MTM Confirmation -->
+    <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s</string>
+    <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s</string>
 
 </resources>

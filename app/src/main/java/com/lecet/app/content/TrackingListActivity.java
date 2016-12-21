@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -55,6 +56,13 @@ public abstract class TrackingListActivity extends NavigationBaseActivity {
 
         setupBinding(listItemId);
         setupToolbar(listItemTitle, listItemSize);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        viewModel.handleOnActivityResult(requestCode, resultCode, data);
     }
 
     private void setupBinding(long listItemId) {

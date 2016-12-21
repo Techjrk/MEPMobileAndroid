@@ -1,10 +1,16 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Point;
 import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.SparseBooleanArray;
@@ -15,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -25,6 +30,7 @@ import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.interfaces.MTMMenuCallback;
+import com.lecet.app.interfaces.MoveToListCallback;
 import com.lecet.app.interfaces.TrackedObject;
 import com.lecet.app.interfaces.TrackingListObject;
 
@@ -44,7 +50,7 @@ import io.realm.Sort;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public abstract class ModifyTrackingListViewModel<T extends RealmObject & TrackingListObject, U extends RealmObject & TrackedObject> extends BaseObservable implements MTMMenuCallback, AdapterView.OnItemClickListener {
+public abstract class ModifyTrackingListViewModel<T extends RealmObject & TrackingListObject, U extends RealmObject & TrackedObject> extends BaseObservable implements MoveToListCallback<T>, AdapterView.OnItemClickListener {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SORT_BID_DATE, SORT_LAST_UPDATE, SORT_DATE_ADDED, SORT_VALUE_HIGH, SORT_VALUE_LOW, SORT_COMPANY_NAME, SORT_COMPANY_UPDATED, SORT_NONE})
@@ -62,6 +68,7 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
     private final AppCompatActivity appCompatActivity;
 
+    private Dialog dialog;
     private ListPopupWindow moveMenu;
     private MoveToAdapter moveToAdapter;
     private ListPopupWindow mtmSortMenu;
@@ -71,6 +78,9 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     private ImageView backButton;
     private ImageView sortButton;
     private ListView listView;
+    private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
+
 
     private T trackingList;
     private RealmResults<U> dataItems;
@@ -88,6 +98,14 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         setupAdapter(dataItems);
     }
 
+    public int getSelectedSort() {
+        return selectedSort;
+    }
+
+    public void setTrackingList(T trackingList) {
+        this.trackingList = trackingList;
+    }
+
     public abstract RealmResults<U> getData(T trackingList, @TrackingSort int sortBy);
 
     @TrackingSort
@@ -95,9 +113,23 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
     public abstract ModifyListAdapter getListAdapter(AppCompatActivity appCompatActivity, RealmResults<U> dataItems);
 
-    public abstract MoveToAdapter getMoveToListAdapter(AppCompatActivity appCompatActivity, String title, MTMMenuCallback callback, RealmResults<T> lists);
+    public abstract MoveToAdapter getMoveToListAdapter(AppCompatActivity appCompatActivity, String title, MoveToListCallback callback, RealmResults<T> lists);
 
     public abstract RealmResults<T> getUserTrackingListsExcludingCurrentList(T currentTrackingList);
+
+    public abstract void handleDoneClicked(List<U> selectedItems);
+
+    public abstract void handleMoveItemsClicked(List<U> selectedItems, T trackingList);
+
+    public abstract void handleRemoveItemsClicked(List<U> selectedItems);
+
+    public AppCompatActivity getAppCompatActivity() {
+        return appCompatActivity;
+    }
+
+    public T getTrackingList() {
+        return trackingList;
+    }
 
     @Bindable
     public String getObjectsSelected() {
@@ -107,6 +139,11 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     public void setObjectsSelected(String objectsSelected) {
         this.objectsSelected = objectsSelected;
         notifyPropertyChanged(BR.objectsSelected);
+    }
+
+    public void updateDataItems(RealmResults<U> dataItems) {
+
+        listView.setAdapter(getListAdapter(appCompatActivity, dataItems));
     }
 
     private void setupAdapter(RealmResults<U> dataItems) {
@@ -216,7 +253,8 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
                         mtmSortMenu.dismiss();
                         listView.clearChoices();
                         setObjectsSelected(null);
-                        populateList(dataItems, getSortBySelectedPosition(position - 1));// Excluding title
+                        selectedSort = getSortBySelectedPosition(position - 1); // Excluding title
+                        populateList(dataItems, selectedSort);
                     }
                 }
             }); // the callback for when a list item is selected
@@ -247,13 +285,10 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     }
 
     @Override
-    public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
-        //TODO call the things to change the project of list
-    }
+    public void onTrackingListClicked(T trackingList) {
 
-    @Override
-    public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
-        //DO NOTHING
+        moveMenu.dismiss();
+        handleMoveItemsClicked(getSelectedItems(), trackingList);
     }
 
     public void onMoveButtonClicked(View view) {
@@ -261,16 +296,17 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     }
 
     public void onRemoveButtonClicked(View view) {
-        Toast.makeText(appCompatActivity, "Remove button clicked", Toast.LENGTH_SHORT).show();
+        handleRemoveItemsClicked(getSelectedItems());
     }
 
     public void onCancelButtonClicked(View view) {
         listView.clearChoices();
         setObjectsSelected(null);
+        finishWithResultCanceled();
     }
 
     public void onDoneButtonClicked(View view) {
-        Toast.makeText(appCompatActivity, "Done button clicked", Toast.LENGTH_SHORT).show();
+        handleDoneClicked(getSelectedItems());
     }
 
     public void onBackButtonClick(View view) {
@@ -294,14 +330,87 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
     public List<U> getSelectedItems() {
         SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-        List<U> projects = new ArrayList<>();
+        List<U> items = new ArrayList<>();
         ModifyListAdapter<RealmResults<U>, U> adapter = (ModifyListAdapter) listView.getAdapter();
         for (int i = 0; i < checkedItems.size(); i++) {
             if (checkedItems.valueAt(i)) {
-                projects.add(adapter.getItem(i));
+                items.add(adapter.getItem(i));
             }
         }
-        return projects;
+        return items;
     }
 
+    public void showConfirmationDialog(String message, DialogInterface.OnClickListener positive, DialogInterface.OnClickListener negative) {
+
+        if (dialog == null) {
+            dialog = getConfirmationDialog(message, positive, negative);
+            dialog.show();
+        } else {
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            dialog = getConfirmationDialog(message, positive, negative);
+            dialog.show();
+        }
+    }
+
+    private Dialog getConfirmationDialog(String message, DialogInterface.OnClickListener positive, DialogInterface.OnClickListener negative) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(appCompatActivity);
+        builder.setTitle(appCompatActivity.getString(R.string.app_name));
+        builder.setMessage(message);
+        builder.setPositiveButton(appCompatActivity.getString(R.string.ok), positive);
+        builder.setNegativeButton(appCompatActivity.getString(R.string.cancel), negative);
+
+        return builder.create();
+    }
+
+    // Activity Results
+    public void finishWithResultCanceled() {
+
+        getAppCompatActivity().setResult(Activity.RESULT_CANCELED);
+        getAppCompatActivity().finish();
+    }
+
+    public void finishWithEditedResult() {
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(TrackingListViewModel.RESULT_EXTRA_ITEMS_EDITED, true);
+        resultIntent.putExtra(TrackingListViewModel.RESULT_EXTRA_SELECTED_SORT, selectedSort);
+
+        getAppCompatActivity().setResult(Activity.RESULT_OK, resultIntent);
+        getAppCompatActivity().finish();
+    }
+
+    // Dialogs
+    public void showProgressDialog(String title, String message) {
+
+        dismissProgressDialog();
+
+        progressDialog = ProgressDialog.show(getAppCompatActivity(), title, message, true, false);
+    }
+
+    public void dismissProgressDialog() {
+
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+    }
+
+    public void dismissAlertDialog() {
+
+        if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+    }
+
+    public void showAlertDialog(String title, String message) {
+
+        dismissAlertDialog();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getAppCompatActivity());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(getAppCompatActivity().getString(R.string.ok), null);
+
+        alertDialog = builder.show();
+    }
 }

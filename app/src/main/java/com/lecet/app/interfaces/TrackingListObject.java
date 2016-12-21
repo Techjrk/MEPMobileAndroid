@@ -7,4 +7,5 @@ package com.lecet.app.interfaces;
  */
 
 public interface TrackingListObject {
+
 }

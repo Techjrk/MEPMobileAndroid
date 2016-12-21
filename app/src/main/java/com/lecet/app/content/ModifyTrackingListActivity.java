@@ -69,12 +69,7 @@ public abstract class ModifyTrackingListActivity<T extends RealmObject & Trackin
     private void setupBinding() {
         ActivityModifyProjectTrackingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_project_tracking_list);
 
-        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
-            @Override
-            public void onChange(Object element) {
-
-            }
-        });
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
 
         @ModifyTrackingListViewModel.TrackingSort int sort = getIntent().getIntExtra(EXTRA_SORT_BY, ModifyTrackingListViewModel.SORT_VALUE_HIGH);
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.lecet.app.R;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.interfaces.MTMMenuCallback;
+import com.lecet.app.interfaces.MoveToListCallback;
 
 import io.realm.RealmResults;
 
@@ -17,7 +18,7 @@ import io.realm.RealmResults;
 public class MoveToProjectListAdapter extends MoveToAdapter<ProjectTrackingList> {
 
 
-    public MoveToProjectListAdapter(Context context, String title, RealmResults<ProjectTrackingList> trackingLists, MTMMenuCallback callback) {
+    public MoveToProjectListAdapter(Context context, String title, RealmResults<ProjectTrackingList> trackingLists, MoveToListCallback<ProjectTrackingList> callback) {
         super(context, title, trackingLists, callback);
     }
 

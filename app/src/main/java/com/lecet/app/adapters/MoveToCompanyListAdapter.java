@@ -5,6 +5,7 @@ import android.content.Context;
 import com.lecet.app.R;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.interfaces.MTMMenuCallback;
+import com.lecet.app.interfaces.MoveToListCallback;
 
 import io.realm.RealmResults;
 
@@ -17,7 +18,7 @@ import io.realm.RealmResults;
 public class MoveToCompanyListAdapter extends MoveToAdapter<CompanyTrackingList> {
 
 
-    public MoveToCompanyListAdapter(Context context, String title, RealmResults<CompanyTrackingList> trackingLists, MTMMenuCallback callback) {
+    public MoveToCompanyListAdapter(Context context, String title, RealmResults<CompanyTrackingList> trackingLists, MoveToListCallback<CompanyTrackingList> callback) {
         super(context, title, trackingLists, callback);
     }
 

@@ -7,10 +7,13 @@ import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -66,17 +69,16 @@ public interface TrackingListService {
 
     @Headers({
             "Accept: application/json",
-            "Content-Type: application/x-www-form-urlencoded"
+            "Content-Type: application/json"
     })
-    @FormUrlEncoded
-    @PUT("projectlists/{project_tracking_list_id}")
-    Call<ProjectTrackingList> moveProjectsForProjectTrackingList(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Body MoveProjectFromListRequest body);
+    @PUT("companylists/{company_tracking_list_id}/syncItems")
+    Call<CompanyTrackingList> syncCompanyTrackingList(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Body MoveCompanyFromListRequest body);
 
     @Headers({
             "Accept: application/json",
-            "Content-Type: application/x-www-form-urlencoded"
+            "Content-Type: application/json"
     })
-    @FormUrlEncoded
-    @PUT("companylists/{company_tracking_list_id}")
-    Call<CompanyTrackingList> moveCompaniesForCompanyTrackingList(@Header("Authorization") String token, @Path("company_tracking_list_id") long company_tracking_list_id, @Body MoveCompanyFromListRequest body);
+    @PUT("projectlists/{project_tracking_list_id}/syncItems")
+    Call<ProjectTrackingList> syncProjectTrackingList(@Header("Authorization") String token, @Path("project_tracking_list_id") long project_tracking_list_id, @Body MoveProjectFromListRequest body);
+
 }

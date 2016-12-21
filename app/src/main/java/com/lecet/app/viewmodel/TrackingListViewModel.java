@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Point;
@@ -33,6 +34,10 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
 
     private final static String TAG = "ProjectTrackingListVM";
 
+    public static final int MODIFY_TRACKING_LIST_REQUEST_CODE = 666;
+    public static final String RESULT_EXTRA_ITEMS_EDITED = "result_extra_move_items";
+    public static final String RESULT_EXTRA_SELECTED_SORT = "result_extra_selected_sort";
+
     private AppCompatActivity appCompatActivity;
     private RecyclerView recyclerView;
     private TrackingListAdapter listAdapter;
@@ -64,6 +69,8 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     public abstract TrackingListAdapter recyclerViewAdapter();
 
     public abstract void handleEditMode();
+
+    public abstract void handleOnActivityResult(int requestCode, int resultCode, Intent data);
 
     /**
      * Getters && Setters

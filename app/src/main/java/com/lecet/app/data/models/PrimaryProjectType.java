@@ -80,7 +80,7 @@ public class PrimaryProjectType extends RealmObject {
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (buildingOrHighway != null ? !buildingOrHighway.equals(that.buildingOrHighway) : that.buildingOrHighway != null)
             return false;
-        return projectCategory != null ? projectCategory.equals(that.projectCategory) : that.projectCategory == null;
+        return projectCategory != null ? projectCategory.getId() != that.getProjectCategory().getId() : that.projectCategory == null;
 
     }
 

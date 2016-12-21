@@ -1,8 +1,13 @@
 package com.lecet.app.domain;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.api.request.MoveCompanyFromListRequest;
 import com.lecet.app.data.api.request.MoveProjectFromListRequest;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -11,7 +16,9 @@ import com.lecet.app.interfaces.LecetCallback;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Realm;
@@ -20,6 +27,7 @@ import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,14 +45,14 @@ public class TrackingListDomain {
     private final Realm realm;
     private ProjectDomain projectDomain;
 
-    @Deprecated
+
     public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
     }
 
-
+    @Deprecated
     public TrackingListDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm, RealmChangeListener listener) {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
@@ -60,7 +68,13 @@ public class TrackingListDomain {
         this.projectDomain = projectDomain;
     }
 
+
     // Realm Management
+    public void addRealmChangeListener(RealmChangeListener listener) {
+        realm.addChangeListener(listener);
+    }
+
+
     public void removeRealmChangeListener(RealmChangeListener listener) {
         realm.removeChangeListener(listener);
     }
@@ -111,33 +125,28 @@ public class TrackingListDomain {
         call.enqueue(callback);
     }
 
-    private Call<ProjectTrackingList> moveProjectsFromProjectTrackingList(long projectTrackingListId, List<Long> projectIds, Callback<ProjectTrackingList> callback) {
+    public Call<ProjectTrackingList> syncProjectTrackingList(long projectTrackingListId, List<Long> projectIds, Callback<ProjectTrackingList> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         MoveProjectFromListRequest body = new MoveProjectFromListRequest(projectIds);
 
-        Call<ProjectTrackingList> call = lecetClient.getTrackingListService().moveProjectsForProjectTrackingList(token, projectTrackingListId, body);
+        Call<ProjectTrackingList> call = lecetClient.getTrackingListService().syncProjectTrackingList(token, projectTrackingListId, body);
         call.enqueue(callback);
 
         return call;
     }
 
-    public Call<ProjectTrackingList> removeProjectsFromProjectTrackingList(long trackingListID, List<Long> removedProjectIds, Callback<ProjectTrackingList> callback) {
-
-        return moveProjectsFromProjectTrackingList(trackingListID, removedProjectIds, callback);
-    }
-
-    public void moveProjectsToDestinationTrackingList(long sourceProjectTrackingListId, final long destinationTrackingListId, final List<Long> movedProjectIds, final LecetCallback callback) {
+    public void moveProjectsToDestinationTrackingList(long sourceProjectTrackingListId, final long destinationTrackingListId, final List<Long> destinationIds, final List<Long> sourceIds, final LecetCallback callback) {
 
         // First remove from source tracking list
-        removeProjectsFromProjectTrackingList(sourceProjectTrackingListId, movedProjectIds, new Callback<ProjectTrackingList>() {
+        syncProjectTrackingList(sourceProjectTrackingListId, sourceIds, new Callback<ProjectTrackingList>() {
             @Override
             public void onResponse(Call<ProjectTrackingList> call, Response<ProjectTrackingList> response) {
 
                 if (response.isSuccessful()) {
 
                     // Now we have to move the projects to destination
-                    moveProjectsFromProjectTrackingList(destinationTrackingListId, movedProjectIds, new Callback<ProjectTrackingList>() {
+                    syncProjectTrackingList(destinationTrackingListId, destinationIds, new Callback<ProjectTrackingList>() {
                         @Override
                         public void onResponse(Call<ProjectTrackingList> call, Response<ProjectTrackingList> response) {
 
@@ -165,6 +174,62 @@ public class TrackingListDomain {
 
             @Override
             public void onFailure(Call<ProjectTrackingList> call, Throwable t) {
+
+                callback.onFailure(-1, "Network Failure");
+            }
+        });
+    }
+
+    public Call<CompanyTrackingList> syncCompanyTrackingList(long projectTrackingListId, List<Long> itemIds, Callback<CompanyTrackingList> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        MoveCompanyFromListRequest body = new MoveCompanyFromListRequest(itemIds);
+
+        Call<CompanyTrackingList> call = lecetClient.getTrackingListService().syncCompanyTrackingList(token, projectTrackingListId, body);
+        call.enqueue(callback);
+
+        return call;
+    }
+
+
+    public void moveCompaniesToDestinationTrackingList(long sourceProjectTrackingListId, final long destinationTrackingListId, final List<Long> destinationIds, final List<Long> sourceIds, final LecetCallback callback) {
+
+        // First remove from source tracking list
+        syncCompanyTrackingList(sourceProjectTrackingListId, sourceIds, new Callback<CompanyTrackingList>() {
+            @Override
+            public void onResponse(Call<CompanyTrackingList> call, Response<CompanyTrackingList> response) {
+
+                if (response.isSuccessful()) {
+
+                    // Now we have to move the projects to destination
+                    syncCompanyTrackingList(destinationTrackingListId, destinationIds, new Callback<CompanyTrackingList>() {
+                        @Override
+                        public void onResponse(Call<CompanyTrackingList> call, Response<CompanyTrackingList> response) {
+
+                            if (response.isSuccessful()) {
+
+                                callback.onSuccess(null);
+                            } else {
+
+                                callback.onFailure(response.code(), response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CompanyTrackingList> call, Throwable t) {
+
+                            callback.onFailure(-1, "Network Failure");
+                        }
+                    });
+
+                } else {
+
+                    callback.onFailure(response.code(), response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CompanyTrackingList> call, Throwable t) {
 
                 callback.onFailure(-1, "Network Failure");
             }
@@ -245,6 +310,118 @@ public class TrackingListDomain {
                 results.deleteAllFromRealm();
             }
         });
+    }
+
+    public RealmList<Project> deleteProjectsFromTrackingList(ProjectTrackingList trackingList, List<Project> toBeDeleted) {
+
+        RealmList<Project> projects = trackingList.getProjects();
+        realm.beginTransaction();
+        projects.removeAll(toBeDeleted);
+        realm.commitTransaction();
+
+        return projects;
+    }
+
+    public void deleteProjectsFromTrackingListAsync(final long trackingListId, final List<Long> toBeDeleted, @NonNull final LecetCallback<ProjectTrackingList> callback) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm asyncRealm) {
+
+                ProjectTrackingList threadSafeTrackingList = asyncRealm.where(ProjectTrackingList.class).equalTo("id", trackingListId).findFirst();
+                RealmList<Project> trackedProjects = threadSafeTrackingList.getProjects();
+
+                Iterator<Project> projectIterator = trackedProjects.iterator();
+                while (projectIterator.hasNext()) {
+
+                    Project project = projectIterator.next();
+
+                    if (toBeDeleted.contains(project.getId())){
+                        projectIterator.remove();
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+
+                callback.onSuccess(null);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+
+                callback.onFailure(666, error.getMessage());
+                error.printStackTrace();
+            }
+        });
+    }
+
+    public RealmList<Company> deleteCompaniesFromTrackingList(CompanyTrackingList trackingList, List<Company> toBeDeleted) {
+
+        RealmList<Company> companies = trackingList.getCompanies();
+        realm.beginTransaction();
+        companies.removeAll(toBeDeleted);
+        realm.commitTransaction();
+
+        return companies;
+    }
+
+    public void deleteCompaniesFromTrackingListAsync(final long trackingListId, final List<Long> toBeDeleted, @NonNull final LecetCallback<CompanyTrackingList> callback) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm asyncRealm) {
+
+                CompanyTrackingList threadSafeTrackingList = asyncRealm.where(CompanyTrackingList.class).equalTo("id", trackingListId).findFirst();
+                RealmList<Company> trackedCompanies = threadSafeTrackingList.getCompanies();
+
+                Iterator<Company> projectIterator = trackedCompanies.iterator();
+                while (projectIterator.hasNext()) {
+
+                    Company company = projectIterator.next();
+
+                    if (toBeDeleted.contains(company.getId())){
+                        projectIterator.remove();
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+
+                callback.onSuccess(null);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+
+                callback.onFailure(666, error.getMessage());
+                error.printStackTrace();
+            }
+        });
+    }
+
+    // ADD
+
+    public RealmList<Project> addProjectsToTrackingList(ProjectTrackingList trackingList, List<Project> toBeDeleted) {
+
+        RealmList<Project> projects = trackingList.getProjects();
+        realm.beginTransaction();
+        projects.addAll(toBeDeleted);
+        realm.commitTransaction();
+
+        return projects;
+    }
+
+    public RealmList<Company> addCompaniesToTrackingList(CompanyTrackingList trackingList, List<Company> toBeDeleted) {
+
+        RealmList<Company> companies = trackingList.getCompanies();
+        realm.beginTransaction();
+        companies.addAll(toBeDeleted);
+        realm.commitTransaction();
+
+        return companies;
     }
 
     // Project Update Mapping

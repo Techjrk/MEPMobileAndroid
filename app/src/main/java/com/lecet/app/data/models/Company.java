@@ -194,7 +194,7 @@ public class Company extends RealmObject implements TrackedObject {
             return false;
         if (updates != null ? !updates.equals(company.updates) : company.updates != null)
             return false;
-        return recentUpdate != null ? recentUpdate.equals(company.recentUpdate) : company.recentUpdate == null;
+        return recentUpdate != null ? recentUpdate.getId() != company.getRecentUpdate().getId() : company.recentUpdate == null;
 
     }
 

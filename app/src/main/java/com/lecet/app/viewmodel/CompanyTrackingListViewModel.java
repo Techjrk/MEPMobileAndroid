@@ -1,13 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyTrackingListAdapter;
-import com.lecet.app.adapters.ModifyCompanyListAdapter;
 import com.lecet.app.adapters.TrackingListAdapter;
 import com.lecet.app.content.ModifyCompanyTrackingListActivity;
 import com.lecet.app.content.ModifyTrackingListActivity;
@@ -15,11 +13,11 @@ import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.CompanyTrackingList;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.utility.DateUtility;
 
-import java.util.Arrays;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -44,6 +42,7 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
     private final TrackingListDomain trackingListDomain;
 
     private int selectedSort;
+    private String filter;
 
     public CompanyTrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId, TrackingListDomain trackingListDomain, CompanyDomain companyDomain) {
         super(appCompatActivity, listItemId);
@@ -59,7 +58,8 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
         if (companyList != null) {
             RealmList<Company> companies = companyList.getCompanies();
 
-            setAdapterData(companies.sort("name"));
+            selectedSort = SORT_ALPHABETICAL;
+            setAdapterData(companies.sort("name", Sort.ASCENDING));
             getListAdapter().notifyDataSetChanged();
         }
 
@@ -89,20 +89,29 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
         });
     }
 
+    private void updateTrackingList(long listId) {
+
+        CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listId);
+        if (companyList != null) {
+            RealmList<Company> companies = companyList.getCompanies();
+            setAdapterData(companies.sort(filter, selectedSort == SORT_ALPHABETICAL ? Sort.ASCENDING : Sort.DESCENDING));
+            getListAdapter().notifyDataSetChanged();
+        }
+    }
 
     @Override
     public String[] sortMenuOptions() {
-        return  getAppCompatActivity().getResources().getStringArray(R.array.mobile_company_tracking_list_sort_menu);
+        return getAppCompatActivity().getResources().getStringArray(R.array.mobile_company_tracking_list_sort_menu);
     }
 
     @Override
     public void handleSortSelection(int position) {
 
-        String filter;
         Sort sort = Sort.DESCENDING;
 
         switch (position) {
             case SORT_ALPHABETICAL:
+                sort = Sort.ASCENDING;
                 selectedSort = SORT_ALPHABETICAL;
                 filter = "name";
                 break;
@@ -134,10 +143,12 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
         @ModifyTrackingListViewModel.TrackingSort int sort = getSortType(selectedSort);
 
         Intent intent = ModifyTrackingListActivity.intentForResult(getAppCompatActivity(), ModifyCompanyTrackingListActivity.class, listItemId, listItemTitle, listItemSize, sort);
-        getAppCompatActivity().startActivity(intent);
+        getAppCompatActivity().startActivityForResult(intent, TrackingListViewModel.MODIFY_TRACKING_LIST_REQUEST_CODE);
     }
 
-    private @ModifyTrackingListViewModel.TrackingSort int getSortType(int type) {
+    private
+    @ModifyTrackingListViewModel.TrackingSort
+    int getSortType(int type) {
 
         switch (type) {
             case SORT_ALPHABETICAL:
@@ -146,6 +157,39 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
                 return ModifyTrackingListViewModel.SORT_COMPANY_UPDATED;
             default:
                 return ModifyTrackingListViewModel.SORT_COMPANY_NAME;
+        }
+    }
+
+    @Override
+    public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == TrackingListViewModel.MODIFY_TRACKING_LIST_REQUEST_CODE) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                if (data != null && data.getBooleanExtra(RESULT_EXTRA_ITEMS_EDITED, false)) {
+
+                    setSort(data.getIntExtra(ProjectTrackingListViewModel.RESULT_EXTRA_SELECTED_SORT, -1));
+                    updateTrackingList(getListItemId());
+                }
+            }
+        }
+    }
+
+    private void setSort(int sortType) {
+
+        switch (sortType) {
+            case SORT_ALPHABETICAL:
+                selectedSort = SORT_ALPHABETICAL;
+                filter = "name";
+                break;
+            case SORT_LAST_UPDATE:
+                selectedSort = SORT_LAST_UPDATE;
+                filter = "updatedAt";
+                break;
+            default:
+                filter = "name";
+                break;
         }
     }
 }

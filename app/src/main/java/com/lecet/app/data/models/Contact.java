@@ -70,7 +70,7 @@ public class Contact extends RealmObject {
         if (companyId != contact.companyId) return false;
         if (projectId != contact.projectId) return false;
         if (contactTypeId != contact.contactTypeId) return false;
-        return company != null ? company.equals(contact.company) : contact.company == null;
+        return company != null ? company.getId() != contact.getCompany().getId() : contact.company == null;
 
     }
 
