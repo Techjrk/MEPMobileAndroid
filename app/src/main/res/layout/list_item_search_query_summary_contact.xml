@@ -38,19 +38,20 @@
                 <ImageView
                     android:id="@+id/imgholder"
                     style="@style/SearchPageSectionImageContactQuery1" />
+
                 <TextView
                     android:id="@+id/contact_name"
                     style="@style/ListItemProjectTrackingTextView.Title"
-                    android:paddingTop="8dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/pureBlack"
-                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
                     android:layout_toRightOf="@id/imgholder"
                     android:paddingLeft="12dp"
+                    android:paddingTop="8dp"
                     android:text="@{viewModel.contactName}"
+                    android:textColor="@color/pureBlack"
+                    android:textSize="14sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="Contact Name" />
                 <!-- Contacts Title -->
@@ -59,9 +60,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/contact_name"
+                    android:layout_marginTop="0dp"
                     android:layout_toRightOf="@id/imgholder"
                     android:paddingLeft="12dp"
-                    android:layout_marginTop="0dp"
                     android:text="@{viewModel.contactDetail}"
                     android:textColor="@color/pureBlack"
                     android:textSize="14sp"
@@ -82,7 +83,7 @@
             </RelativeLayout>
         </LinearLayout>
         <!-- Horizontal Separator -->
-        <include layout="@layout/rule_horiz_light"/>
+        <include layout="@layout/rule_horiz_light" />
 
     </LinearLayout>
 

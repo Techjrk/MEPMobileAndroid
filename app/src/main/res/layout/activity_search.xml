@@ -18,7 +18,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
             android:orientation="vertical">
 
             <!-- SEARCH FIELD -->
@@ -28,12 +29,12 @@
                 android:background="@color/lecetDarkestBlue"
 
                 >
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:background="@drawable/rounded_edittext"
                     android:layout_margin="10dp"
-                    >
+                    android:background="@drawable/rounded_edittext">
 
                     <ImageButton
                         android:id="@+id/filter_image_button"
@@ -69,16 +70,18 @@
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
 
-                        android:layout_toStartOf="@id/close_image_button"
                         android:layout_marginBottom="0dp"
+                        android:layout_toStartOf="@id/close_image_button"
+                        android:background="@null"
                         android:drawableStart="@drawable/ic_action_search"
                         android:hint="@string/search"
                         android:inputType="textPersonName"
                         android:text="@={viewModel.query}"
                         android:textColor="@color/lecetTextWhite"
                         android:textSize="15sp"
-                        android:background="@null"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
+
+
                 </RelativeLayout>
             </LinearLayout>
             <!-- MSE 1 SECTION -->
@@ -167,7 +170,7 @@
             <!-- MSR 1.1 SECTION -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/lecetDarkestBlue"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.isMSE2SectionVisible ? View.GONE : View.VISIBLE}">
@@ -192,7 +195,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@color/lecetDarkestBlue"
                         android:orientation="vertical"
                         android:paddingBottom="4dp"
@@ -228,7 +231,8 @@
                         <!-- CONTACT All SEARCHES -->
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@color/lecetDarkestBlue"
                             android:orientation="vertical"
                             android:visibility="@{viewModel.isMSR13Visible ? View.VISIBLE : View.GONE}">
 

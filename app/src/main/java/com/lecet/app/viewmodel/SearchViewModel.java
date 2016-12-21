@@ -96,6 +96,7 @@ public class SearchViewModel extends BaseObservable {
     private int queryProjectTotal;
     private int queryCompanyTotal;
     private int queryContactTotal;
+    private boolean isQueryProjectTotalZero;
 
 
     public void setQueryProjectTotal(int queryProjectTotal) {
@@ -157,7 +158,7 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-
+        getQueryProjectTotal();
         if (query == null || query.trim().equals("")) {
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
@@ -654,6 +655,16 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isMSE2SectionVisible);
         notifyPropertyChanged(BR.isMSR13Visible);
     }
+    @Bindable
+    public boolean getIsQueryProjectTotalZero() {
+        return queryProjectTotal <= 0;
+    }
+
+    @Bindable
+    public void setIsQueryProjectTotalZero(boolean queryProjectTotalZero) {
+        isQueryProjectTotalZero = queryProjectTotalZero;
+        notifyPropertyChanged(BR.isQueryProjectTotalZero);
+    }
 
     @Bindable
     public String getQueryProjectTitle() {
@@ -672,7 +683,9 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public String getQueryProjectTotal() {
-        return queryProjectTotal + ((queryProjectTotal > 0) ? " Projects" : " Project");
+        boolean notzerovalue = (queryProjectTotal > 0);
+        setIsQueryProjectTotalZero(notzerovalue);
+        return queryProjectTotal + (notzerovalue ? " Projects" : " Project");
     }
 
     @Bindable

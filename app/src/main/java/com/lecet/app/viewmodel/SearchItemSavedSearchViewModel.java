@@ -12,7 +12,7 @@ import com.lecet.app.data.models.SearchSaved;
 
 /**
  * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -32,11 +32,11 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
     // BINDABLE
 
     @Bindable
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
         notifyPropertyChanged(BR.title);
     }
