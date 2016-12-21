@@ -22,59 +22,65 @@
             android:orientation="vertical">
 
             <!-- SEARCH FIELD -->
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:background="@color/lecetDarkestBlue">
+                android:background="@color/lecetDarkestBlue"
 
-                <ImageButton
-                    android:id="@+id/filter_image_button"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@null"
-                    android:onClick="@{viewModel.onFilterClicked}"
-                    android:paddingEnd="0dp"
-                    android:paddingStart="1dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/ic_filter" />
-
-                <ImageButton
-                    android:id="@+id/close_image_button"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/filter_image_button"
-                    android:background="@null"
-                    android:onClick="@{viewModel.onClearClicked}"
-                    android:paddingEnd="1dp"
-                    android:paddingStart="1dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/ic_clear_text" />
-
-                <EditText
-                    android:id="@+id/search_edit_text"
-                    android:layout_width="match_parent"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_toStartOf="@id/close_image_button"
                     android:background="@drawable/rounded_edittext"
-                    android:drawableStart="@drawable/ic_action_search"
-                    android:hint="@string/search"
-                    android:inputType="textPersonName"
-                    android:text="@={viewModel.query}"
-                    android:textColor="@color/lecetTextWhite"
-                    android:textSize="15sp"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                    android:layout_margin="10dp"
+                    >
 
-            </RelativeLayout>
+                    <ImageButton
+                        android:id="@+id/filter_image_button"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@null"
+                        android:onClick="@{viewModel.onFilterClicked}"
+                        android:paddingEnd="0dp"
+                        android:paddingStart="1dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_filter" />
 
+                    <ImageButton
+                        android:id="@+id/close_image_button"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/filter_image_button"
+                        android:background="@null"
+                        android:onClick="@{viewModel.onClearClicked}"
+                        android:paddingEnd="1dp"
+                        android:paddingStart="1dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_clear_text" />
+
+                    <EditText
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+
+                        android:layout_toStartOf="@id/close_image_button"
+                        android:layout_marginBottom="0dp"
+                        android:drawableStart="@drawable/ic_action_search"
+                        android:hint="@string/search"
+                        android:inputType="textPersonName"
+                        android:text="@={viewModel.query}"
+                        android:textColor="@color/lecetTextWhite"
+                        android:textSize="15sp"
+                        android:background="@null"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                </RelativeLayout>
+            </LinearLayout>
             <!-- MSE 1 SECTION -->
             <ScrollView
                 android:id="@+id/mse1section"
