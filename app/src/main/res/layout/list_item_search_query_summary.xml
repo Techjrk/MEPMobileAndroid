@@ -213,6 +213,12 @@
                     </RelativeLayout>
                 </LinearLayout>
                 <!-- COMPANY Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.isQueryCompanyTotalZero  ? View.GONE : View.VISIBLE}">
+
                 <TextView
                     style="@style/SearchPageSectionTextView"
                     android:layout_marginTop="14dp"
@@ -249,7 +255,7 @@
                         android:textSize="14sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
-
+            </LinearLayout>
                 <!-- CONTACT Details -->
                 <TextView
                     style="@style/SearchPageSectionTextView"

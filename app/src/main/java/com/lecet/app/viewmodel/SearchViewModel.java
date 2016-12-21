@@ -97,6 +97,7 @@ public class SearchViewModel extends BaseObservable {
     private int queryCompanyTotal;
     private int queryContactTotal;
     private boolean isQueryProjectTotalZero;
+    private boolean isQueryCompanyTotalZero;
 
 
     public void setQueryProjectTotal(int queryProjectTotal) {
@@ -158,7 +159,6 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-        getQueryProjectTotal();
         if (query == null || query.trim().equals("")) {
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
@@ -173,29 +173,36 @@ public class SearchViewModel extends BaseObservable {
         setQueryCompanyTitle(query + " in Companies");
         setQueryContactTitle(query + " in Contacts");
 
-        //query = searchfield.getText().toString().trim();
+        checkTotal();
         /** For Project query total view
          */
-        getQueryProjectTotal();
+      //  getQueryProjectTotal();
         getProjectQuery(query);
 
         /**
          * For Company query total view
          */
-        getQueryCompanyTotal();
+      //  getQueryCompanyTotal();
         getCompanyQuery(query);
 
         /**
          * For Contact query total view
          */
-        getQueryContactTotal();
+       // getQueryContactTotal();
         getContactQuery(query);
 
     }
 
+
+
     /**
      * Get the list of Project in Query Search Summary
      */
+    private void checkTotal() {
+      getQueryProjectTotal();
+        getQueryCompanyTotal();
+        getQueryContactTotal();
+    }
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -667,6 +674,17 @@ public class SearchViewModel extends BaseObservable {
     }
 
     @Bindable
+    public boolean getIsQueryCompanyTotalZero() {
+        return queryCompanyTotal <= 0;
+    }
+
+    @Bindable
+    public void setIsQueryCompanyTotalZero(boolean queryCompanyTotalZero) {
+        isQueryCompanyTotalZero = queryCompanyTotalZero;
+        notifyPropertyChanged(BR.isQueryCompanyTotalZero);
+    }
+
+    @Bindable
     public String getQueryProjectTitle() {
         return queryProjectTitle;
     }
@@ -690,7 +708,9 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public String getQueryCompanyTotal() {
-        return queryCompanyTotal + ((queryCompanyTotal > 0) ? " Companies" : " Company");
+        boolean notzerovalue = (queryCompanyTotal > 0);
+        setIsQueryCompanyTotalZero(notzerovalue);
+        return queryCompanyTotal + (notzerovalue ? " Companies" : " Company");
     }
 
     @Bindable
