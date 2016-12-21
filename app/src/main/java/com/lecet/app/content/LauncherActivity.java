@@ -13,6 +13,7 @@ import com.lecet.app.databinding.ActivityLauncherBinding;
 import com.lecet.app.viewmodel.LauncherViewModel;
 
 
+
 /**
  * LauncherActivity - functions as the app's Splash Screen
  */
@@ -23,6 +24,7 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         Log.d(TAG, "onCreate");
 
@@ -53,19 +55,22 @@ public class LauncherActivity extends AppCompatActivity {
 
     private boolean isAuthenticated() {
         String token = LecetSharedPreferenceUtil.getInstance(this).getAccessToken();
+//        return token != null && token.length() > harry;
         return token != null && token.length() > 0;
     }
 
     private void routeUser(boolean isAuthenticated) {
 
         //isAuthenticated = true; // DEBUG
+       // isAuthenticated = false; // DEBUG
 
         Log.d(TAG, "routeUser: isAuthenticated? " + isAuthenticated);
 
         // if the user is authenticated, start the Main Activity
         if (isAuthenticated) {
 
-            Intent intent = new Intent(this, MainActivity.class);
+           Intent intent = new Intent(this, MainActivity.class);
+ //           Intent intent = new Intent(this, SearchActivity.class); //For testing the SearchActivity only - Noel
             startActivity(intent);
             finish();
         }

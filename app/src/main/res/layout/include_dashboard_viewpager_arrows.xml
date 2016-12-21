@@ -21,6 +21,7 @@
     <ImageButton
             android:id="@+id/dashboard_page_right_button"
             style="@style/ViewPagerArrowButton.Right"
+
             android:onClick="@{viewModel.onPageRightClicked}"/>
 
     </RelativeLayout>

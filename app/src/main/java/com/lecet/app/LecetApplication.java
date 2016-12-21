@@ -3,6 +3,7 @@ package com.lecet.app;
 import android.app.Application;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * File: LecetApplication Created: 10/10/16 Author: domandtom
@@ -15,8 +16,36 @@ public class LecetApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+Realm realm;
         Realm.init(this);
+//
+
+
+  //Testing - Deleting existing database - Migration needed for new RealmObject created - Noel
+
+
+
+
+/*
+
+
+      RealmConfiguration config = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        realm = Realm.getInstance(config);
+
+*/
+
+
+
+
+
+
+
+
+
     }
 
 
