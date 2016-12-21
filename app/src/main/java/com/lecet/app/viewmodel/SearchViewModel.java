@@ -98,6 +98,7 @@ public class SearchViewModel extends BaseObservable {
     private int queryContactTotal;
     private boolean isQueryProjectTotalZero;
     private boolean isQueryCompanyTotalZero;
+    private boolean isQueryContactTotalZero;
 
 
     public void setQueryProjectTotal(int queryProjectTotal) {
@@ -684,6 +685,18 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isQueryCompanyTotalZero);
     }
 
+
+    @Bindable
+    public boolean getIsQueryContactTotalZero() {
+        return queryContactTotal <= 0;
+    }
+
+    @Bindable
+    public void setIsQueryContactTotalZero(boolean queryContactTotalZero) {
+        isQueryContactTotalZero = queryContactTotalZero;
+        notifyPropertyChanged(BR.isQueryContactTotalZero);
+    }
+
     @Bindable
     public String getQueryProjectTitle() {
         return queryProjectTitle;
@@ -715,7 +728,9 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public String getQueryContactTotal() {
-        return queryContactTotal + ((queryContactTotal > 0) ? " Contacts" : " Contact");
+        boolean notzerovalue = (queryContactTotal > 0);
+        setIsQueryContactTotalZero(notzerovalue);
+        return queryContactTotal + (notzerovalue ? " Contacts" : " Contact");
     }
 
     /**
