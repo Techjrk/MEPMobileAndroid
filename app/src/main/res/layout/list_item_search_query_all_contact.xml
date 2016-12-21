@@ -17,6 +17,7 @@
         android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/shape_rect_list_item_bg_1"
+        android:onClick="@{viewModel.onContactClick}"
         android:orientation="vertical"
         android:paddingBottom="6dp">
 
@@ -27,49 +28,60 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="-4dp"
             android:gravity="center_vertical"
-            android:onClick="@{viewModel.onContactClick}"
             android:orientation="horizontal">
-
 
             <!-- Details -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp">
+                android:layout_height="65dp">
 
                 <ImageView
                     android:id="@+id/imgholder"
-                    style="@style/SearchPageSectionImageContactQuery"
-                    android:layout_alignParentLeft="true"
-                    android:src="@mipmap/ic_image_placeholder" />
+                    style="@style/SearchPageSectionImageContactQuery2" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/contact_name"
+                    style="@style/ListItemProjectTrackingTextView.Title"
+                    android:paddingTop="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/pureBlack"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
                     android:layout_toRightOf="@id/imgholder"
-                    android:orientation="vertical"
-                    android:paddingLeft="12dp">
+                    android:paddingLeft="12dp"
+                    android:text="@{viewModel.contactName}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="Contact Name" />
 
-                    <TextView
-                        android:id="@+id/contact_name"
-                        style="@style/ListItemProjectTrackingTextView.Title"
-                        android:text="@{viewModel.contactName}"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Paz" />
+                <TextView
+                    android:id="@+id/contact_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/contact_name"
+                    android:layout_toRightOf="@id/imgholder"
+                    android:paddingLeft="12dp"
+                    android:layout_marginTop="0dp"
+                    android:text="@{viewModel.contactDetail}"
+                    android:textColor="@color/pureBlack"
+                    android:textSize="14sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="Detail1," />
 
-                    <TextView
-                        android:id="@+id/contact_detail"
-                        style="@style/ListItemProjectTrackingTextView.Detail2"
-                        android:text="@{viewModel.contactDetail}"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Tampa, FL" />
-
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/contact_detail2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/contact_name"
+                    android:layout_toRightOf="@id/contact_detail"
+                    android:text="@{viewModel.contactDetail2}"
+                    android:textColor="@color/lecetLightGray"
+                    android:textSize="14sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="Detail 2" />
             </RelativeLayout>
-
         </LinearLayout>
-
-
     </LinearLayout>
 
 </layout>

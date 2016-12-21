@@ -500,5 +500,24 @@
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+    <style name="SearchPageSectionImageContactQuery1">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:src">@mipmap/ic_image_placeholder</item>
+    </style>
+
+    <style name="SearchPageSectionImageContactQuery2">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:src">@mipmap/ic_image_placeholder</item>
+    </style>
 
 </resources>

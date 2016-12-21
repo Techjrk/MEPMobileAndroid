@@ -151,17 +151,19 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public String getContactDetail() {
-        String title = "", fipcounty = "";
+        String title = "", company = "";
         if (contact == null) return "Unknown";
-        if (contact.getTitle() != null) title = contact.getTitle();
-        //    if (contact.getTitle() == null) return "-";
-        //    if (contact.getTitle().equals("null")) return "-";
-        if (contact.getFipsCounty() != null) fipcounty = contact.getFipsCounty();
-        //   if (contact.getFipsCounty() == null) return "-";
-        //    if (contact.getFipsCounty().equals("null")) return "-";
-        return title + ((title != "" && fipcounty != "") ? "," : " ") + fipcounty;
+        if (contact.getTitle() != null) title = contact.getTitle().trim();
+        if (contact.getCompany() != null) company = contact.getCompany().getName().trim();
+        return title + ((title != "" && company != "") ? "," : " ") ;
     }
 
+    public String getContactDetail2() {
+        String company = "";
+        if (contact == null) return "";
+        if (contact.getCompany() != null) company = contact.getCompany().getName().trim();
+        return company;
+    }
 
     ////////////////////////////////////
     // MAP IMAGE URL - UNIVERSAL
