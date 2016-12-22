@@ -159,7 +159,7 @@
 
                     <!-- INCLUDE - List Item Search Query Summary -->
                     <include
-                        layout="@layout/list_item_search_query_summary"
+                        layout="@layout/include_search_predictive"
                         bind:viewModel="@{viewModel}" />
                 </LinearLayout>
             </ScrollView>

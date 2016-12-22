@@ -1,17 +1,18 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivitySearchBinding;
-import com.lecet.app.databinding.ListItemSearchQuerySummaryBinding;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.viewmodel.SearchViewModel;
 
@@ -40,5 +41,10 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.checkDisplayMSESectionOrMain();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(this, "Activity Result request: "+requestCode+"  result: "+resultCode, Toast.LENGTH_SHORT).show();
+    }
 }
 

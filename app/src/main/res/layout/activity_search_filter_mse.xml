@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchFilterMSEViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lecet.app.content.widget.SearchFilterMSEActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:orientation="vertical">
+            <!-- MENU -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@color/lecetButtonDarkBlue"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+
+                    android:onClick="@{viewModel.onClicked}"
+                    android:text="CANCEL"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:text="Filters"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <Button
+                    android:id="@+id/apply_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:onClick="@{viewModel.onClicked}"
+                    android:text="APPLY"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+            </LinearLayout>
+
+            <!-- Project - Company SECTION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lecetDarkestBlue"
+                    android:orientation="horizontal">
+                    <!-- Project Select -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:background="@android:drawable/divider_horizontal_bright"
+                            android:onClick="@{viewModel.onClicked}"
+                            android:padding="10dp"
+                            android:text="Projects"
+                            android:textAllCaps="false"
+                            android:textColor="@color/pureWhite"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:paddingLeft="32dp"
+                            android:paddingRight="32dp"
+                            android:src="@drawable/shape_rect_filled_orange"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <!-- Company Select -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:drawable/divider_horizontal_bright"
+                            android:onClick="@{viewModel.onClicked}"
+                            android:padding="10dp"
+                            android:text="Companies"
+                            android:textAllCaps="false"
+                            android:textColor="@color/pureWhite"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:paddingLeft="32dp"
+                            android:paddingRight="32dp"
+                            android:src="@drawable/shape_rect_filled_orange"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+                <!-- Fields -->
+
+                <!-- Company Fields -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LOCATION"
+                        android:textSize="16sp"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_rect_solid_border_1"
+                        android:hint="Project Location"
+                        android:padding="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Related Projects"
+                        android:textColor="@color/lecetDarkestBlue"
+                        android:textSize="17sp"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="VALUE"
+                        android:textSize="15sp"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_rect_solid_border_1"
+                        android:hint="No Min - No Max"
+                        android:padding="12dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/SearchFilterSectionTextView"
+                            android:text="JURISDICTION"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            style="@style/SearchFilterSectionTextView"
+                            android:layout_alignParentRight="true"
+                            android:text="Any"
+                            android:textColor="@color/lecetLightGray"
+
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+                    </RelativeLayout>
+                    <!-- Horizontal Separator -->
+                    <include layout="@layout/rule_horiz_light" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/SearchFilterSectionTextView"
+                            android:text="BIDDING WITHIN"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            style="@style/SearchFilterSectionTextView"
+                            android:layout_alignParentRight="true"
+                            android:text="Any"
+                            android:textColor="@color/lecetLightGray"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+                    </RelativeLayout>
+                    <!-- Horizontal Separator -->
+                    <include layout="@layout/rule_horiz_light" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/SearchFilterSectionTextView"
+                            android:layout_alignParentLeft="true"
+                            android:text="PROJECT TYPE"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            style="@style/SearchFilterSectionTextView"
+                            android:layout_alignParentRight="true"
+                            android:text="Any"
+                            android:textColor="@color/lecetLightGray"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+                    </RelativeLayout>
+                    <!-- Horizontal Separator -->
+                    <include layout="@layout/rule_horiz_light" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

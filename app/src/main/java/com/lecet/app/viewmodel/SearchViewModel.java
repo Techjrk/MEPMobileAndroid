@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.IdRes;
@@ -22,6 +23,7 @@ import com.lecet.app.adapters.SearchAllProjectRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchRecentRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchProjectRecyclerViewAdapter;
+import com.lecet.app.content.widget.SearchFilterMSEActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
@@ -742,7 +744,9 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void onFilterClicked(View view) {
-        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(activity,SearchFilterMSEActivity.class);
+        activity.startActivityForResult(i,0);
     }
 
     public void onClickSeeAllProject(View view) {
