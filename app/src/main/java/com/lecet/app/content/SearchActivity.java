@@ -21,6 +21,7 @@ import io.realm.Realm;
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     SearchViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(this, "Activity Result request: "+requestCode+"  result: "+resultCode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Search Activity Result request: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
     }
 }
 

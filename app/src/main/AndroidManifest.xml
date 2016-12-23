@@ -93,7 +93,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
 
-        <activity android:name=".content.widget.SearchFilterMSEActivity"></activity>
+        <activity android:name=".content.SearchFilterMSEActivity" />
+        <activity android:name=".content.SearchFilterMPSActivity" />
+        <activity android:name=".content.SearchFilterMPFLocationActivity" />
+        <activity android:name=".content.SearchFilterMPFTypeActivity" />
+        <activity android:name=".content.SearchFilterMPFValueActivity"></activity>
     </application>
 
 </manifest>

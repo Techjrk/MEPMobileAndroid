@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMSEViewModel" />
+            type="com.lecet.app.viewmodel.SearchFilterMPFViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -47,7 +47,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_horizontal"
-                    android:text="Filters"
+                    android:text="Refine Search"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -71,70 +71,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/lecetDarkestBlue"
-                    android:orientation="horizontal">
-                    <!-- Project Select -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
-                        <Button
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:background="@android:drawable/divider_horizontal_bright"
-                            android:onClick="@{viewModel.onClicked}"
-                            android:padding="10dp"
-                            android:text="Projects"
-                            android:textAllCaps="false"
-                            android:textColor="@color/pureWhite"
-                            android:textSize="14sp"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:paddingLeft="32dp"
-                            android:paddingRight="32dp"
-                            android:src="@drawable/shape_rect_filled_orange"
-                            android:visibility="visible" />
-                    </LinearLayout>
-
-                    <!-- Company Select -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:drawable/divider_horizontal_bright"
-                            android:onClick="@{viewModel.onClicked}"
-                            android:padding="10dp"
-                            android:text="Companies"
-                            android:textAllCaps="false"
-                            android:textColor="@color/pureWhite"
-                            android:textSize="14sp"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:paddingLeft="32dp"
-                            android:paddingRight="32dp"
-                            android:src="@drawable/shape_rect_filled_orange"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-
-                </LinearLayout>
                 <!-- *** Fields -->
                 <!-- Project Fields -->
                 <LinearLayout
@@ -151,10 +88,12 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <EditText
+                        android:id="@+id/location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="Everywhere"
+                        android:hint=""
+                        android:onClick="@{viewModel.onClicked}"
                         android:padding="12dp" />
 
                     <TextView
@@ -164,11 +103,14 @@
                         android:textColor="@color/lecetDarkestBlue"
                         android:textSize="17sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
+
                     <EditText
+                        android:id="@+id/type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="All Types"
+                        android:hint=""
+                        android:onClick="@{viewModel.onClicked}"
                         android:padding="12dp" />
 
                     <TextView
@@ -180,11 +122,15 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <EditText
+                        android:id="@+id/value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
                         android:hint="No Min - No Max"
+                        android:onClick="@{viewModel.onClicked}"
+
                         android:padding="12dp" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -202,6 +148,7 @@
 
                             bind:typeface="@{`Lato-Bold.ttf`}" />
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -248,16 +195,16 @@
                         <TextView
                             android:id="@+id/option"
                             style="@style/SearchFilterSectionTextView"
+                            android:layout_centerHorizontal="true"
                             android:text="More Options"
-                            bind:typeface="@{`Lato-Bold.ttf`}"
-                            android:layout_centerHorizontal="true" />
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
                         <ImageView
-                            android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:layout_toRightOf="@id/option"
-                            android:src="@drawable/ic_down_triangle"
+                            android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                             />
+                            android:layout_toRightOf="@id/option"
+                            android:src="@drawable/ic_down_triangle" />
                     </RelativeLayout>
                     <!-- Horizontal Separator -->
                     <include layout="@layout/rule_horiz_light" />
@@ -267,8 +214,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -23,7 +22,8 @@ import com.lecet.app.adapters.SearchAllProjectRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchRecentRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchProjectRecyclerViewAdapter;
-import com.lecet.app.content.widget.SearchFilterMSEActivity;
+import com.lecet.app.content.SearchFilterMPSActivity;
+import com.lecet.app.content.SearchFilterMSEActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
@@ -179,33 +179,33 @@ public class SearchViewModel extends BaseObservable {
         checkTotal();
         /** For Project query total view
          */
-      //  getQueryProjectTotal();
+        //  getQueryProjectTotal();
         getProjectQuery(query);
 
         /**
          * For Company query total view
          */
-      //  getQueryCompanyTotal();
+        //  getQueryCompanyTotal();
         getCompanyQuery(query);
 
         /**
          * For Contact query total view
          */
-       // getQueryContactTotal();
+        // getQueryContactTotal();
         getContactQuery(query);
 
     }
-
 
 
     /**
      * Get the list of Project in Query Search Summary
      */
     private void checkTotal() {
-      getQueryProjectTotal();
+        getQueryProjectTotal();
         getQueryCompanyTotal();
         getQueryContactTotal();
     }
+
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -526,7 +526,7 @@ public class SearchViewModel extends BaseObservable {
         recyclerView.setAdapter(searchAdapterRecentlyViewed);
     }
 
-     /**
+    /**
      * Initialize Saved Projects Adapter
      */
     private void initializeAdapterSavedProject() {
@@ -665,6 +665,7 @@ public class SearchViewModel extends BaseObservable {
         notifyPropertyChanged(BR.isMSE2SectionVisible);
         notifyPropertyChanged(BR.isMSR13Visible);
     }
+
     @Bindable
     public boolean getIsQueryProjectTotalZero() {
         return queryProjectTotal <= 0;
@@ -745,8 +746,9 @@ public class SearchViewModel extends BaseObservable {
 
     public void onFilterClicked(View view) {
 //        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(activity,SearchFilterMSEActivity.class);
-        activity.startActivityForResult(i,0);
+//        Intent i = new Intent(activity,SearchFilterMSEActivity.class);
+        Intent i = new Intent(activity, SearchFilterMPSActivity.class);
+        activity.startActivityForResult(i, 0);
     }
 
     public void onClickSeeAllProject(View view) {

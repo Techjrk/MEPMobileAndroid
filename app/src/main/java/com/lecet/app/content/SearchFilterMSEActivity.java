@@ -1,4 +1,4 @@
-package com.lecet.app.content.widget;
+package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;

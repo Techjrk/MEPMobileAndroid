@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -8,20 +9,24 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lecet.app.R;
+import com.lecet.app.content.SearchFilterMPFLocationActivity;
+import com.lecet.app.content.SearchFilterMPFTypeActivity;
+import com.lecet.app.content.SearchFilterMPFValueActivity;
+import com.lecet.app.content.SearchFilterMPSActivity;
 
 /**
  * Created by DomandTom 2016.
  */
 
-public class SearchFilterMSEViewModel extends BaseObservable {
+public class SearchFilterMPFViewModel extends BaseObservable {
 
-    private static final String TAG = "SearchFilterMSEViewModel";
+    private static final String TAG = "SearchFilterMPFViewModel";
     private AppCompatActivity activity;
 
     /**
      * Constructor
      */
-    public SearchFilterMSEViewModel(AppCompatActivity activity) {
+    public SearchFilterMPFViewModel(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -47,16 +52,23 @@ public class SearchFilterMSEViewModel extends BaseObservable {
      **/
 
     public void onClicked(View view) {
-        Toast.makeText(activity, "Clicked.", Toast.LENGTH_SHORT).show();
-/*     switch (view.getId()) {
-         case R.id.location:
-             break;
-     }*/
+        Intent i = null;
+        switch (view.getId()) {
+            case R.id.location:
+                i = new Intent(activity, SearchFilterMPFLocationActivity.class);
+                break;
+            case R.id.type:
+                i = new Intent(activity, SearchFilterMPFTypeActivity.class);
+                break;
+            case R.id.value:
+                i = new Intent(activity, SearchFilterMPFValueActivity.class);
+                break;
+            default:
+                activity.finish();
+                return;
+        }
+        activity.startActivityForResult(i, 0);
+
     }
 
-    public void onFilterClicked(View view) {
-//        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
-     //   Intent i = new Intent(activity, SearchFilterMSEActivity.class);
-    //    activity.startActivityForResult(i, 0);
-    }
 }
