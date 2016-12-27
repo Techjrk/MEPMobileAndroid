@@ -150,6 +150,14 @@
     <string name="company_query_searches">COMPANIES</string>
     <string name="title_contacts">CONTACTS</string>
     <string name="see_all">See all</string>
+    <string name="time_any">Any</string>
+    <string name="time_next_24_hours">Next 24 Hours</string>
+    <string name="time_next_7_days">Next 7 Days</string>
+    <string name="time_next_30_days">Next 30 Days</string>
+    <string name="time_next_60_days">Next 60 Days</string>
+    <string name="time_next_90_days">Next 90 Days</string>
+    <string name="time_next_6_months">Next 6 Months</string>
+    <string name="time_next_12_months">Next 12 Months</string>
 
 
 </resources>

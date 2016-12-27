@@ -97,7 +97,10 @@
         <activity android:name=".content.SearchFilterMPSActivity" />
         <activity android:name=".content.SearchFilterMPFLocationActivity" />
         <activity android:name=".content.SearchFilterMPFTypeActivity" />
-        <activity android:name=".content.SearchFilterMPFValueActivity"></activity>
+        <activity android:name=".content.SearchFilterMPFValueActivity" />
+        <activity android:name=".content.SearchFilterMPFBiddingWithinActivity" />
+        <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity" />
+        <activity android:name=".content.SearchFilterMPFJurisdictionActivity"></activity>
     </application>
 
 </manifest>

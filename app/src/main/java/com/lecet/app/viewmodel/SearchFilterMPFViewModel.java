@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lecet.app.R;
+import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
+import com.lecet.app.content.SearchFilterMPFJurisdictionActivity;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFTypeActivity;
+import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterMPFValueActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
 
@@ -62,6 +65,15 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 break;
             case R.id.value:
                 i = new Intent(activity, SearchFilterMPFValueActivity.class);
+                break;
+            case R.id.updated_within:
+                i = new Intent(activity, SearchFilterMPFUpdatedWithinActivity.class);
+                break;
+            case R.id.jurisdiction:
+                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                break;
+            case R.id.bidding_within:
+                i = new Intent(activity, SearchFilterMPFBiddingWithinActivity.class);
                 break;
             default:
                 activity.finish();

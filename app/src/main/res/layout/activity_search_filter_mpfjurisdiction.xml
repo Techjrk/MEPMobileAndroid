@@ -15,7 +15,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.SearchFilterMPFTypeActivity">
+        tools:context="com.lecet.app.content.SearchFilterMPFJurisdictionActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,18 +48,17 @@
                         android:background="@null"
                         android:drawableStart="@drawable/ic_action_search"
 
-                        android:hint="Search for Project Types"
+                        android:hint="Search for jurisdiction"
                         android:inputType="textPersonName"
                         android:text=""
                         android:textColor="@color/lecetTextWhite"
                         android:textSize="15sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
-
                 </RelativeLayout>
 
                 <Button
-                    android:id="@+id/apply"
+                    android:id="@+id/apply_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -82,9 +81,9 @@
                     android:layout_height="wrap_content">
 
                     <CheckBox
-                        android:id="@+id/eng"
+                        android:id="@+id/seca"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Engineering"
+                        android:text="SECA"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
@@ -103,9 +102,9 @@
                     android:layout_height="wrap_content">
 
                     <CheckBox
-                        android:id="@+id/gb"
+                        android:id="@+id/east"
                         style="@style/SearchFilterSectionButton"
-                        android:text="General Building"
+                        android:text="EAST"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView

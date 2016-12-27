@@ -13,13 +13,14 @@ import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterMSEViewModel;
 
 public class SearchFilterMPFLocationActivity extends AppCompatActivity {
-SearchFilterMPFViewModel sfilter;
+    SearchFilterMPFViewModel sfilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_search_filter_mpflocation);
-        ActivitySearchFilterMpflocationBinding sfilter =   DataBindingUtil.setContentView(this,R.layout.activity_search_filter_mpflocation);
-        SearchFilterMPFViewModel viewModel =  new SearchFilterMPFViewModel(this);
+        ActivitySearchFilterMpflocationBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpflocation);
+        SearchFilterMPFViewModel viewModel = new SearchFilterMPFViewModel(this);
         sfilter.setViewModel(viewModel);
     }
 
