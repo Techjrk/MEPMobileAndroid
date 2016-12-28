@@ -79,6 +79,7 @@
                     <RadioButton
                         android:id="@+id/time_any"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="true"
                         android:text="@string/time_any" />
 
                     <View

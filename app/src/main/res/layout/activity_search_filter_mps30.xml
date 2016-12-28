@@ -14,7 +14,7 @@
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.SearchFilterMSEActivity">
+        tools:context="com.lecet.app.content.SearchFilterMPSActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,262 +65,384 @@
                     bind:typeface="@{`Lato-Bold.ttf`}" />
             </LinearLayout>
 
-            <!-- Project - Company SECTION -->
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-                <!-- *** Fields -->
-                <!-- Project Fields -->
+                android:layout_height="match_parent">
+                <!-- Project and Company SECTION -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="LOCATION"
-                        android:textSize="16sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
 
-                    <TextView
-                        android:id="@+id/location"
+                    <!-- *** Fields -->
+                    <!-- Project Fields -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint=""
-                        android:onClick="@{viewModel.onClicked}"
-                        android:padding="12dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TYPE"
-                        android:textColor="@color/lecetDarkestBlue"
-                        android:textSize="17sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                    <TextView
-                        android:id="@+id/type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint=""
-                        android:onClick="@{viewModel.onClicked}"
-                        android:padding="12dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="VALUE"
-                        android:textSize="15sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                    <TextView
-                        android:id="@+id/value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint=""
-                        android:onClick="@{viewModel.onClicked}"
-
-                        android:padding="12dp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_margin="15dp"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/updated_within"
-                            style="@style/SearchFilterSectionTextView"
-                            android:onClick="@{viewModel.onClicked}"
-                            android:text="UPDATED WITHIN"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentRight="true"
-                            android:text="Any"
-                            android:textColor="@color/lecetLightGray"
-
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/jurisdiction"
-                            style="@style/SearchFilterSectionTextView"
-                            android:onClick="@{viewModel.onClicked}"
-                            android:text="JURISDICTION"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentRight="true"
-                            android:text="Any"
-                            android:textColor="@color/lecetLightGray"
-
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-                    </RelativeLayout>
-                    <!-- Horizontal Separator -->
-                    <include layout="@layout/rule_horiz_light" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/bidding_within"
-                            style="@style/SearchFilterSectionTextView"
-                            android:onClick="@{viewModel.onClicked}"
-                            android:text="BIDDING WITHIN"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentRight="true"
-                            android:text="Any"
-                            android:textColor="@color/lecetLightGray"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-                    </RelativeLayout>
-                    <!-- Horizontal Separator -->
-                    <include layout="@layout/rule_horiz_light" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/option"
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_centerHorizontal="true"
-                            android:text="More Options"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:layout_toRightOf="@id/option"
-                            android:src="@drawable/ic_down_triangle" />
-                    </RelativeLayout>
-                    <!-- Horizontal Separator -->
-                    <include layout="@layout/rule_horiz_light" />
+                            android:text="LOCATION"
+                            android:textSize="15sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:id="@+id/location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rect_solid_border_1"
+                            android:hint=""
+                            android:onClick="@{viewModel.onClicked}"
+                            android:padding="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TYPE"
+                            android:textColor="@color/lecetDarkestBlue"
+                            android:textSize="15sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:id="@+id/type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rect_solid_border_1"
+                            android:hint=""
+                            android:onClick="@{viewModel.onClicked}"
+                            android:padding="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="VALUE"
+                            android:textSize="15sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:id="@+id/value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rect_solid_border_1"
+                            android:hint=""
+                            android:onClick="@{viewModel.onClicked}"
+
+                            android:padding="12dp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/updated_within"
+                                style="@style/SearchFilterSectionTextView"
+                                android:onClick="@{viewModel.onClicked}"
+                                android:text="UPDATED WITHIN"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/jurisdiction"
+                                style="@style/SearchFilterSectionTextView"
+                                android:onClick="@{viewModel.onClicked}"
+                                android:text="JURISDICTION"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/stage"
+                                style="@style/SearchFilterSectionTextView"
+                                android:onClick="@{viewModel.onClicked}"
+                                android:text="STAGE"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/bidding_within"
+                                style="@style/SearchFilterSectionTextView"
+                                android:onClick="@{viewModel.onClicked}"
+                                android:text="BIDDING WITHIN"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="@{viewModel.moreOption ? View.GONE : View.VISIBLE }">
+
+                            <TextView
+                                android:id="@+id/option"
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_centerHorizontal="true"
+                                android:onClick="@{viewModel.onClicked}"
+                                android:text="More Options"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="12dp"
+                                android:layout_toRightOf="@id/option"
+                                android:src="@drawable/ic_down_triangle" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{viewModel.moreOption ? View.VISIBLE : View.GONE }">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/bh"
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:onClick="@{viewModel.onClicked}"
+                                    android:text="B/H"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                                <TextView
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:layout_alignParentRight="true"
+                                    android:text="Any"
+                                    android:textColor="@color/lecetLightGray"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                            </RelativeLayout>
+                            <!-- Horizontal Separator -->
+                            <include layout="@layout/rule_horiz_light" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/ownertype"
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:onClick="@{viewModel.onClicked}"
+                                    android:text="OWNER TYPE"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                                <TextView
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:layout_alignParentRight="true"
+                                    android:text="Any"
+                                    android:textColor="@color/lecetLightGray"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                            </RelativeLayout>
+                            <!-- Horizontal Separator -->
+                            <include layout="@layout/rule_horiz_light" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/worktype"
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:onClick="@{viewModel.onClicked}"
+                                    android:text="WORK TYPE"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                                <TextView
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:layout_alignParentRight="true"
+                                    android:text="Any"
+                                    android:textColor="@color/lecetLightGray"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                            </RelativeLayout>
+                            <!-- Horizontal Separator -->
+                            <include layout="@layout/rule_horiz_light" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                     android:id="@+id/feweroption"
+                                    style="@style/SearchFilterSectionTextView"
+                                    android:layout_centerHorizontal="true"
+                                    android:onClick="@{viewModel.onClicked}"
+                                    android:text="Fewer Options"
+                                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="12dp"
+                                    android:layout_toRightOf="@id/feweroption"
+                                    android:src="@drawable/ic_up_triangle" />
+                            </RelativeLayout>
+                            <!-- Horizontal Separator -->
+                            <include layout="@layout/rule_horiz_light" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!-- Company Fields -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="13dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="COMPANY LOCATION"
+                            android:textSize="15sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rect_solid_border_1"
+                            android:hint="Everywhere"
+                            android:padding="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Related Projects"
+                            android:textColor="@color/lecetDarkestBlue"
+                            android:textSize="15sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="VALUE"
+                            android:textSize="15sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rect_solid_border_1"
+                            android:hint="No Min - No Max"
+                            android:padding="12dp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:text="JURISDICTION"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:text="BIDDING WITHIN"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentLeft="true"
+                                android:text="PROJECT TYPE"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                            <TextView
+                                style="@style/SearchFilterSectionTextView"
+                                android:layout_alignParentRight="true"
+                                android:text="Any"
+                                android:textColor="@color/lecetLightGray"
+                                bind:typeface="@{`Lato-Bold.ttf`}" />
+                        </RelativeLayout>
+                        <!-- Horizontal Separator -->
+                        <include layout="@layout/rule_horiz_light" />
+                    </LinearLayout>
                 </LinearLayout>
-                <!-- Company Fields -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="COMPANY LOCATION"
-                        android:textSize="16sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="Everywhere"
-                        android:padding="12dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Related Projects"
-                        android:textColor="@color/lecetDarkestBlue"
-                        android:textSize="17sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="VALUE"
-                        android:textSize="15sp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="No Min - No Max"
-                        android:padding="12dp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:text="JURISDICTION"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentRight="true"
-                            android:text="Any"
-                            android:textColor="@color/lecetLightGray"
-
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-                    </RelativeLayout>
-                    <!-- Horizontal Separator -->
-                    <include layout="@layout/rule_horiz_light" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:text="BIDDING WITHIN"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentRight="true"
-                            android:text="Any"
-                            android:textColor="@color/lecetLightGray"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-                    </RelativeLayout>
-                    <!-- Horizontal Separator -->
-                    <include layout="@layout/rule_horiz_light" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentLeft="true"
-                            android:text="PROJECT TYPE"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            style="@style/SearchFilterSectionTextView"
-                            android:layout_alignParentRight="true"
-                            android:text="Any"
-                            android:textColor="@color/lecetLightGray"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-                    </RelativeLayout>
-                    <!-- Horizontal Separator -->
-                    <include layout="@layout/rule_horiz_light" />
-                </LinearLayout>
-
-            </LinearLayout>
+            </ScrollView>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

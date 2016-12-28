@@ -15,7 +15,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.SearchFilterMPFBiddingWithinActivity">
+        tools:context="com.lecet.app.content.SearchFilterMPFBHActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,8 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_horizontal"
-                    android:text="Bidding Within"
+                    android:text="B/H"
+                    android:textStyle="bold"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -66,7 +67,7 @@
                     bind:typeface="@{`Lato-Bold.ttf`}" />
             </LinearLayout>
 
-            <!-- UPDATED WITHIN SCHEDULE DETAIL SECTION -->
+            <!-- B/H DETAIL SECTION -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -77,67 +78,31 @@
                     android:layout_height="wrap_content">
 
                     <RadioButton
-                        android:id="@+id/time_any"
+                        android:id="@+id/both"
                         style="@style/SearchFilterSectionButton"
                         android:checked="true"
-                        android:text="@string/time_any" />
+                        android:text="@string/both" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_24h"
+                        android:id="@+id/building"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_24_hours" />
+                        android:text="@string/building" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/lecetLighterGray"/>
                     <RadioButton
-                        android:id="@+id/time_7d"
+                        android:id="@+id/heavyhighway"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_7_days" />
+                        android:text="@string/heavy_highway" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/lecetLighterGray"/>
-                    <RadioButton
-                        android:id="@+id/time_30d"
-                        style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_30_days" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray"/>
-                    <RadioButton
-                        android:id="@+id/time_60d"
-                        style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_60_days" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray"/>
-                    <RadioButton
-                        android:id="@+id/time_90d"
-                        style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_90_days" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray"/>
-                    <RadioButton
-                        android:id="@+id/time_6m"
-                        style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_6_months" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray"/>
-                    <RadioButton
-                        android:id="@+id/time_12m"
-                        style="@style/SearchFilterSectionButton"
-                        android:text="@string/time_next_12_months" />
                 </RadioGroup>
 
                 <!-- Horizontal Separator -->
