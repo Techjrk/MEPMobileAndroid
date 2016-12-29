@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterMpflocationBinding;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
+import com.lecet.app.viewmodel.SearchFilterMPFLocationViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterMSEViewModel;
 
@@ -20,7 +21,7 @@ public class SearchFilterMPFLocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_search_filter_mpflocation);
         ActivitySearchFilterMpflocationBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpflocation);
-        SearchFilterMPFViewModel viewModel = new SearchFilterMPFViewModel(this);
+        SearchFilterMPFLocationViewModel viewModel = new SearchFilterMPFLocationViewModel(this);
         sfilter.setViewModel(viewModel);
     }
 

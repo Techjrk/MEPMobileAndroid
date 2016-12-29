@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterMpfbhBinding;
 import com.lecet.app.databinding.ActivitySearchFilterMpflocationBinding;
+import com.lecet.app.viewmodel.SearchFilterMPFBHViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 
 public class SearchFilterMPFBHActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class SearchFilterMPFBHActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_filter_mpfbh);
         ActivitySearchFilterMpfbhBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfbh);
-        SearchFilterMPFViewModel viewModel = new SearchFilterMPFViewModel(this);
+        SearchFilterMPFBHViewModel viewModel = new SearchFilterMPFBHViewModel(this);
         sfilter.setViewModel(viewModel);
 
     }

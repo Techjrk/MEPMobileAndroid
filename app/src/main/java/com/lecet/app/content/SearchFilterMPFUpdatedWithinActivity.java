@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterMpfjurisdictionBinding;
 import com.lecet.app.databinding.ActivitySearchFilterMpfupdatedWithinBinding;
+import com.lecet.app.viewmodel.SearchFilterMPFUpdatedWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 
 public class SearchFilterMPFUpdatedWithinActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class SearchFilterMPFUpdatedWithinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_search_filter_mpfupdated_within);
         ActivitySearchFilterMpfupdatedWithinBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfupdated_within);
-        SearchFilterMPFViewModel viewModel = new SearchFilterMPFViewModel(this);
+        SearchFilterMPFUpdatedWithinViewModel viewModel = new SearchFilterMPFUpdatedWithinViewModel(this);
         sfilter.setViewModel(viewModel);
     }
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMPFViewModel" />
+            type="com.lecet.app.viewmodel.SearchFilterMPFBHViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -49,9 +49,9 @@
                     android:background="@null"
                     android:gravity="center_horizontal"
                     android:text="B/H"
-                    android:textStyle="bold"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
+                    android:textStyle="bold"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <Button
@@ -81,7 +81,9 @@
                         android:id="@+id/both"
                         style="@style/SearchFilterSectionButton"
                         android:checked="true"
+                        android:onClick="@{viewModel.onSelected}"
                         android:text="@string/both" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -90,19 +92,24 @@
                     <RadioButton
                         android:id="@+id/building"
                         style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
                         android:text="@string/building" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray"/>
+                        android:background="@color/lecetLighterGray" />
+
                     <RadioButton
                         android:id="@+id/heavyhighway"
                         style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
                         android:text="@string/heavy_highway" />
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray"/>
+                        android:background="@color/lecetLighterGray" />
                 </RadioGroup>
 
                 <!-- Horizontal Separator -->
