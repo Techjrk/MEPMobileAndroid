@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMPFViewModel" />
+            type="com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -83,6 +83,7 @@
                     <CheckBox
                         android:id="@+id/seca"
                         style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
                         android:text="SECA"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -104,6 +105,7 @@
                     <CheckBox
                         android:id="@+id/east"
                         style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
                         android:text="EAST"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 

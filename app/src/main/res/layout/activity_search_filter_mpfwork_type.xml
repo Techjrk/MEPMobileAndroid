@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMPFViewModel" />
+            type="com.lecet.app.viewmodel.SearchFilterMPFWorkTypeViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -81,6 +81,7 @@
                         android:id="@+id/workadditions"
                         style="@style/SearchFilterSectionButton"
                         android:text="Additions"
+                        android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>
@@ -97,6 +98,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:text="Alterations"
+                        android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
@@ -111,6 +113,7 @@
                         android:id="@+id/workinteriors"
                         style="@style/SearchFilterSectionButton"
                         android:text="Interiors"
+                        android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
@@ -125,6 +128,7 @@
                         android:id="@+id/worknewproject"
                         style="@style/SearchFilterSectionButton"
                         android:text="New Project"
+                        android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>

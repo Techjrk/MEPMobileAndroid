@@ -96,9 +96,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/shape_rect_solid_border_1"
                             android:hint=""
-                            android:text="@{viewModel.location_select}"
                             android:onClick="@{viewModel.onClicked}"
-                            android:padding="12dp" />
+                            android:padding="12dp"
+                            android:text="@{viewModel.location_select}" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -114,9 +114,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/shape_rect_solid_border_1"
                             android:hint=""
-                            android:text="@{viewModel.type_select}"
                             android:onClick="@{viewModel.onClicked}"
-                            android:padding="12dp" />
+                            android:padding="12dp"
+                            android:text="@{viewModel.type_select}" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -133,17 +133,17 @@
                             android:background="@drawable/shape_rect_solid_border_1"
                             android:hint=""
                             android:onClick="@{viewModel.onClicked}"
-                            android:text="@{viewModel.value_select}"
-                            android:padding="12dp" />
+                            android:padding="12dp"
+                            android:text="@{viewModel.value_select}" />
 
                         <RelativeLayout
+                            android:id="@+id/updated_within"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:onClick="@{viewModel.onClicked}">
 
                             <TextView
-                                android:id="@+id/updated_within"
                                 style="@style/SearchFilterSectionTextView"
-                                android:onClick="@{viewModel.onClicked}"
                                 android:text="UPDATED WITHIN"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -159,13 +159,13 @@
                         <include layout="@layout/rule_horiz_light" />
 
                         <RelativeLayout
+                            android:id="@+id/jurisdiction"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:onClick="@{viewModel.onClicked}">
 
                             <TextView
-                                android:id="@+id/jurisdiction"
                                 style="@style/SearchFilterSectionTextView"
-                                android:onClick="@{viewModel.onClicked}"
                                 android:text="JURISDICTION"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -181,13 +181,13 @@
                         <include layout="@layout/rule_horiz_light" />
 
                         <RelativeLayout
+                            android:id="@+id/stage"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:onClick="@{viewModel.onClicked}">
 
                             <TextView
-                                android:id="@+id/stage"
                                 style="@style/SearchFilterSectionTextView"
-                                android:onClick="@{viewModel.onClicked}"
                                 android:text="STAGE"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -203,13 +203,14 @@
                         <include layout="@layout/rule_horiz_light" />
 
                         <RelativeLayout
+                            android:id="@+id/bidding_within"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:onClick="@{viewModel.onClicked}">
 
                             <TextView
-                                android:id="@+id/bidding_within"
                                 style="@style/SearchFilterSectionTextView"
-                                android:onClick="@{viewModel.onClicked}"
+
                                 android:text="BIDDING WITHIN"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -224,15 +225,15 @@
                         <include layout="@layout/rule_horiz_light" />
 
                         <RelativeLayout
+                            android:id="@+id/option"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="@{viewModel.onClicked}"
                             android:visibility="@{viewModel.moreOption ? View.GONE : View.VISIBLE }">
 
                             <TextView
-                                android:id="@+id/option"
                                 style="@style/SearchFilterSectionTextView"
                                 android:layout_centerHorizontal="true"
-                                android:onClick="@{viewModel.onClicked}"
                                 android:text="More Options"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -247,20 +248,19 @@
                         <include layout="@layout/rule_horiz_light" />
 
                         <LinearLayout
-
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:visibility="@{viewModel.moreOption ? View.VISIBLE : View.GONE }">
 
                             <RelativeLayout
+                                android:id="@+id/bh"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:onClick="@{viewModel.onClicked}">
 
                                 <TextView
-                                    android:id="@+id/bh"
                                     style="@style/SearchFilterSectionTextView"
-                                    android:onClick="@{viewModel.onClicked}"
                                     android:text="B/H"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -275,13 +275,13 @@
                             <include layout="@layout/rule_horiz_light" />
 
                             <RelativeLayout
+                                android:id="@+id/ownertype"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:onClick="@{viewModel.onClicked}">
 
                                 <TextView
-                                    android:id="@+id/ownertype"
                                     style="@style/SearchFilterSectionTextView"
-                                    android:onClick="@{viewModel.onClicked}"
                                     android:text="OWNER TYPE"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -296,13 +296,13 @@
                             <include layout="@layout/rule_horiz_light" />
 
                             <RelativeLayout
+                                android:id="@+id/worktype"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:onClick="@{viewModel.onClicked}">
 
                                 <TextView
-                                    android:id="@+id/worktype"
                                     style="@style/SearchFilterSectionTextView"
-                                    android:onClick="@{viewModel.onClicked}"
                                     android:text="WORK TYPE"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -317,14 +317,14 @@
                             <include layout="@layout/rule_horiz_light" />
 
                             <RelativeLayout
+                                android:id="@+id/feweroption"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:onClick="@{viewModel.onClicked}">
 
                                 <TextView
-                                     android:id="@+id/feweroption"
                                     style="@style/SearchFilterSectionTextView"
                                     android:layout_centerHorizontal="true"
-                                    android:onClick="@{viewModel.onClicked}"
                                     android:text="Fewer Options"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 

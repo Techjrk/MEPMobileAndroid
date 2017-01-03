@@ -34,6 +34,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private static int id;
 
+    /**
+     *  User's selected filter item
+     *
+     */
     private String location_select = "";
     private String type_select = "";
     private String value_select = "";

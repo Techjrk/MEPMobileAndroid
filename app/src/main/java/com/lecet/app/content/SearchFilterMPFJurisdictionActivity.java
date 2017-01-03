@@ -1,13 +1,12 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.ActivitySearchFilterMpfbiddingWithinBinding;
 import com.lecet.app.databinding.ActivitySearchFilterMpfjurisdictionBinding;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 
 public class SearchFilterMPFJurisdictionActivity extends AppCompatActivity {
 
@@ -16,7 +15,7 @@ public class SearchFilterMPFJurisdictionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //   setContentView(R.layout.activity_search_filter_mpfjurisdiction);
         ActivitySearchFilterMpfjurisdictionBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfjurisdiction);
-        SearchFilterMPFViewModel viewModel = new SearchFilterMPFViewModel(this);
+        SearchFilterMPFJurisdictionViewModel viewModel = new SearchFilterMPFJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);
 
     }
