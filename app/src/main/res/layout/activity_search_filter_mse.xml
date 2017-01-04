@@ -36,7 +36,7 @@
                     android:background="@null"
 
                     android:onClick="@{viewModel.onClicked}"
-                    android:text="CANCEL"
+                    android:text="@string/msecancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -47,7 +47,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_horizontal"
-                    android:text="Filters"
+                    android:text="@string/msefilters"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -59,7 +59,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:onClick="@{viewModel.onClicked}"
-                    android:text="APPLY"
+                    android:text="@string/mseapply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -90,7 +90,7 @@
                             android:background="@android:drawable/divider_horizontal_bright"
                             android:onClick="@{viewModel.onClicked}"
                             android:padding="10dp"
-                            android:text="Projects"
+                            android:text="@string/mseprojects"
                             android:textAllCaps="false"
                             android:textColor="@color/pureWhite"
                             android:textSize="14sp"
@@ -118,7 +118,7 @@
                             android:background="@android:drawable/divider_horizontal_bright"
                             android:onClick="@{viewModel.onClicked}"
                             android:padding="10dp"
-                            android:text="Companies"
+                            android:text="@string/msecompanies"
                             android:textAllCaps="false"
                             android:textColor="@color/pureWhite"
                             android:textSize="14sp"
@@ -146,7 +146,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="LOCATION"
+                        android:text="@string/mselocation"
                         android:textSize="16sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -154,13 +154,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="Everywhere"
+                        android:hint="@string/everywhere"
                         android:padding="12dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TYPE"
+                        android:text="@string/msetype"
                         android:textColor="@color/lecetDarkestBlue"
                         android:textSize="17sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -168,14 +168,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="All Types"
+                        android:hint="@string/all_types"
                         android:padding="12dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="VALUE"
+                        android:text="@string/msevalue"
                         android:textSize="15sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -183,7 +183,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="No Min - No Max"
+                        android:hint="@string/no_min_no_max"
                         android:padding="12dp" />
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -191,13 +191,13 @@
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
-                            android:text="UPDATED WITHIN"
+                            android:text="@string/mseupdated_within"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentRight="true"
-                            android:text="Any"
+                            android:text="@string/any"
                             android:textColor="@color/lecetLightGray"
 
                             bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -208,13 +208,13 @@
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
-                            android:text="JURISDICTION"
+                            android:text="@string/msejurisdiction"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentRight="true"
-                            android:text="Any"
+                            android:text="@string/any"
                             android:textColor="@color/lecetLightGray"
 
                             bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -228,13 +228,13 @@
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
-                            android:text="BIDDING WITHIN"
+                            android:text="@string/msebidding_within"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentRight="true"
-                            android:text="Any"
+                            android:text="@string/any"
                             android:textColor="@color/lecetLightGray"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
                     </RelativeLayout>
@@ -248,7 +248,7 @@
                         <TextView
                             android:id="@+id/option"
                             style="@style/SearchFilterSectionTextView"
-                            android:text="More Options"
+                            android:text="@string/more_options"
                             bind:typeface="@{`Lato-Bold.ttf`}"
                             android:layout_centerHorizontal="true" />
                         <ImageView
@@ -273,7 +273,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="COMPANY LOCATION"
+                        android:text="@string/msecompany_location"
                         android:textSize="16sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -281,13 +281,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="Everywhere"
+                        android:hint="@string/everywhere"
                         android:padding="12dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Related Projects"
+                        android:text="@string/mserelated_projects"
                         android:textColor="@color/lecetDarkestBlue"
                         android:textSize="17sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -296,7 +296,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="VALUE"
+                        android:text="@string/msevalue"
                         android:textSize="15sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -304,7 +304,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint="No Min - No Max"
+                        android:hint="@string/no_min_no_max"
                         android:padding="12dp" />
 
                     <RelativeLayout
@@ -313,13 +313,13 @@
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
-                            android:text="JURISDICTION"
+                            android:text="@string/msejurisdiction"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentRight="true"
-                            android:text="Any"
+                            android:text="@string/any"
                             android:textColor="@color/lecetLightGray"
 
                             bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -333,13 +333,13 @@
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
-                            android:text="BIDDING WITHIN"
+                            android:text="@string/msebidding_within"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentRight="true"
-                            android:text="Any"
+                            android:text="@string/any"
                             android:textColor="@color/lecetLightGray"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
                     </RelativeLayout>
@@ -353,13 +353,13 @@
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentLeft="true"
-                            android:text="PROJECT TYPE"
+                            android:text="@string/mseproject_type"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
                             style="@style/SearchFilterSectionTextView"
                             android:layout_alignParentRight="true"
-                            android:text="Any"
+                            android:text="@string/any"
                             android:textColor="@color/lecetLightGray"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
                     </RelativeLayout>

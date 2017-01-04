@@ -84,8 +84,50 @@
                     <CheckBox
                         android:id="@+id/eng"
                         style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
                         android:text="Engineering"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@android:drawable/arrow_down_float" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/gb"
+                        style="@style/SearchFilterSectionButton"
+                        android:text="General Building"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@android:drawable/arrow_down_float" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/housing"
+                        style="@style/SearchFilterSectionButton"
+                        android:text="Housing"
+                        android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
@@ -104,10 +146,10 @@
                     android:layout_height="wrap_content">
 
                     <CheckBox
-                        android:id="@+id/gb"
+                        android:id="@+id/unclassified"
                         style="@style/SearchFilterSectionButton"
+                        android:text="Unclassified"
                         android:onClick="@{viewModel.onSelected}"
-                        android:text="General Building"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
@@ -118,8 +160,28 @@
                         android:layout_marginRight="10dp"
                         android:src="@android:drawable/arrow_down_float" />
                 </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <CheckBox
+                        android:id="@+id/utilities"
+                        style="@style/SearchFilterSectionButton"
+                        android:text="Utilities"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@android:drawable/arrow_down_float" />
+                </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
             </LinearLayout>

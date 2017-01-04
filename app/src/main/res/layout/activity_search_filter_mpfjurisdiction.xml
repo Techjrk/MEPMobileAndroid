@@ -75,25 +75,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <CheckBox
                         android:id="@+id/seca"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:text="SECA"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
-
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/SearchFilterSectionDownArrow" />
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
@@ -101,24 +93,127 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <CheckBox
                         android:id="@+id/east"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:text="EAST"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
-
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/SearchFilterSectionDownArrow" />
                 </RelativeLayout>
-
-
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/gtlk"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="GTLK"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/matl"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="MATL"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/mwst"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="MWST"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/neng"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="NENG"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/nwst"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="NWST"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/ovss"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="OVSS"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/pswt"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="PSWT"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/wmok"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="WMOK"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/SearchFilterSectionDownArrow" />
+                </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
             </LinearLayout>

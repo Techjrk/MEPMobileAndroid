@@ -47,5 +47,11 @@ public class SearchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Toast.makeText(this, "Search Activity Result request: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       viewModel.init();
+    }
 }
 

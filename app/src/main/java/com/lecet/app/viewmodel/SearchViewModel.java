@@ -48,9 +48,9 @@ import retrofit2.Response;
  */
 
 public class SearchViewModel extends BaseObservable {
-
+    private static AlertDialog.Builder builder;
+    private String errorMessage=null;
     private static final String TAG = "SearchViewModel";
-
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
@@ -139,19 +139,19 @@ public class SearchViewModel extends BaseObservable {
     public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
         this.activity = activity;
         this.searchDomain = sd;
-
         //  projectmodel = new SearchProjectViewModel(this,activity,sd);
+       // init();
+    }
 
-
+    public void init() {
+        setErrorMessage(null);
         // Init the Recently Viewed Items adapter and fetch its data
         initializeAdapterRecentlyViewed();
         getUserRecentlyViewed(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());
-
         // Init the Saved Search adapters (Projects and Companies) and fetch date for each of them
         initializeAdapterSavedProject();
         initializeAdapterSavedCompany();
         getUserSavedSearches(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());
-
         //Init the search query
         initializeAdapterProjectQuerySummary();
         initializeAdapterCompanyQuerySummary();
@@ -310,7 +310,8 @@ public class SearchViewModel extends BaseObservable {
                             }
                         } catch (Exception e) {
                             //TODO - handle exception
-                            Log.e("tUserRecentlyViewed", "Exception in getUserRecentlyViewed" + e.getMessage());
+                            Log.e("UserRecentlyViewed", "Exception in getUserRecentlyViewed" + e.getMessage());
+                            errorDisplayMsg("Problem in retrieving user Recently viewed" + e.getMessage());
                         }
                     }
 
@@ -371,6 +372,7 @@ public class SearchViewModel extends BaseObservable {
                 errorDisplayMsg(t.getLocalizedMessage());
             }
         });
+
     }
 
     public void getProjectQuery(String q) {
@@ -439,14 +441,18 @@ public class SearchViewModel extends BaseObservable {
      * Display error message
      */
     public void errorDisplayMsg(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + message + "\r\n");
-        Log.e("Error:", "Error " + message);
-        builder.setMessage(message);
+        if (errorMessage !=null) return;
+        //if (errorMessage == null) errorMessage="";
+        errorMessage =message+"\r\n";
+        if (builder == null) builder = new AlertDialog.Builder(activity); //Applying singleton;
+        builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
+        Log.e("Error:", "Error " + errorMessage);
+        builder.setMessage(errorMessage);
 //        builder.setMessage(activity.getString(R.string.error_network_message));
         builder.setNegativeButton(activity.getString(R.string.ok), null);
-        Log.e("onFailure", "onFailure: " + message);
+        Log.e("onFailure", "onFailure: " + errorMessage);
         builder.show();
+
     }
 
     /**
@@ -764,5 +770,9 @@ public class SearchViewModel extends BaseObservable {
     public void onClickSeeAllContact(View view) {
         setIsMSR13Visible(true);
         setIsMSE2SectionVisible(false);
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

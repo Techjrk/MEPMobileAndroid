@@ -36,7 +36,7 @@
                     android:background="@null"
 
                     android:onClick="@{viewModel.onClicked}"
-                    android:text="CANCEL"
+                    android:text="@string/msecancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -47,7 +47,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="center_horizontal"
-                    android:text="Refine Search"
+                    android:text="@string/refine_search"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -59,7 +59,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:onClick="@{viewModel.onClicked}"
-                    android:text="APPLY"
+                    android:text="@string/mseapply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -86,7 +86,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="LOCATION"
+                            android:text="@string/mselocation"
                             android:textSize="15sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -103,7 +103,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TYPE"
+                            android:text="@string/msetype"
                             android:textColor="@color/lecetDarkestBlue"
                             android:textSize="15sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -122,7 +122,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="VALUE"
+                            android:text="@string/msevalue"
                             android:textSize="15sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -144,7 +144,7 @@
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
-                                android:text="UPDATED WITHIN"
+                                android:text="@string/mseupdated_within"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -166,7 +166,7 @@
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
-                                android:text="JURISDICTION"
+                                android:text="@string/msejurisdiction"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -188,7 +188,7 @@
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
-                                android:text="STAGE"
+                                android:text="@string/stage"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -211,7 +211,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
 
-                                android:text="BIDDING WITHIN"
+                                android:text="@string/msebidding_within"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -234,7 +234,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
                                 android:layout_centerHorizontal="true"
-                                android:text="More Options"
+                                android:text="@string/more_options"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <ImageView
@@ -261,7 +261,7 @@
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
-                                    android:text="B/H"
+                                    android:text="@string/mseb_h"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -282,7 +282,7 @@
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
-                                    android:text="OWNER TYPE"
+                                    android:text="@string/mseowner_type"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -303,7 +303,7 @@
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
-                                    android:text="WORK TYPE"
+                                    android:text="@string/msework_type"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -325,7 +325,7 @@
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
                                     android:layout_centerHorizontal="true"
-                                    android:text="Fewer Options"
+                                    android:text="@string/msefewer_options"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <ImageView
@@ -350,7 +350,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="COMPANY LOCATION"
+                            android:text="@string/msecompany_location"
                             android:textSize="15sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -358,7 +358,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/shape_rect_solid_border_1"
-                            android:hint="Everywhere"
+                            android:hint="@string/everywhere"
                             android:padding="12dp" />
 
                         <TextView
@@ -373,7 +373,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="VALUE"
+                            android:text="@string/msevalue"
                             android:textSize="15sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 

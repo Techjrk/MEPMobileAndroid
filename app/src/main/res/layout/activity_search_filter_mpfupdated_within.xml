@@ -94,7 +94,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="1"
-                        android:text="@string/time_next_24_hours" />
+                        android:text="@string/time_last_24_hours" />
 
                     <View
                         android:layout_width="match_parent"
@@ -106,7 +106,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="7"
-                        android:text="@string/time_next_7_days" />
+                        android:text="@string/time_last_7_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -118,19 +118,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="30"
-                        android:text="@string/time_next_30_days" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray" />
-
-                    <RadioButton
-                        android:id="@+id/time_60d"
-                        style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
-                        android:tag="60"
-                        android:text="@string/time_next_60_days" />
+                        android:text="@string/time_last_30_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -142,7 +130,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="90"
-                        android:text="@string/time_next_90_days" />
+                        android:text="@string/time_last_90_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -154,7 +142,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="180"
-                        android:text="@string/time_next_6_months" />
+                        android:text="@string/time_last_6_months" />
 
                     <View
                         android:layout_width="match_parent"
@@ -166,7 +154,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="360"
-                        android:text="@string/time_next_12_months" />
+                        android:text="@string/time_last_12_months" />
                 </RadioGroup>
 
                 <!-- Horizontal Separator -->
