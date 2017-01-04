@@ -246,7 +246,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 setMoreOption(false);
                 return;
             default:
-                activity.finish();
+                //TODO: return all filter data in Intent back to MSE
+                activity.finish();  // includes Cancel and Apply buttons
                 return;
         }
         activity.startActivityForResult(i, id & 0xfff);

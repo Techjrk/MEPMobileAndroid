@@ -22,6 +22,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         sfilter.setViewModel(viewModel);
     }
 
+    /**
+     * Get data back from user input from a Filter Activity
+     * and put that data into the View Model
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

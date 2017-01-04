@@ -42,9 +42,15 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.checkDisplayMSESectionOrMain();
     }
 
+    /**
+     * Handle the result of all filters being applied and make the filtered query.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //TODO - make filtered data call
+
         Toast.makeText(this, "Search Activity Result request: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
     }
 
