@@ -232,6 +232,7 @@
                             android:visibility="@{viewModel.moreOption ? View.GONE : View.VISIBLE }">
 
                             <TextView
+                                android:id="@+id/text_option"
                                 style="@style/SearchFilterSectionTextView"
                                 android:layout_centerHorizontal="true"
                                 android:text="@string/more_options"
@@ -241,7 +242,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="12dp"
-                                android:layout_toRightOf="@id/option"
+                                android:layout_toRightOf="@id/text_option"
                                 android:src="@drawable/ic_down_triangle" />
                         </RelativeLayout>
                         <!-- Horizontal Separator -->
@@ -323,6 +324,7 @@
                                 android:onClick="@{viewModel.onClicked}">
 
                                 <TextView
+                                    android:id="@+id/text_fewer_option"
                                     style="@style/SearchFilterSectionTextView"
                                     android:layout_centerHorizontal="true"
                                     android:text="@string/msefewer_options"
@@ -332,7 +334,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="12dp"
-                                    android:layout_toRightOf="@id/feweroption"
+                                    android:layout_toRightOf="@id/text_fewer_option"
                                     android:src="@drawable/ic_up_triangle" />
                             </RelativeLayout>
                             <!-- Horizontal Separator -->
