@@ -10,20 +10,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchAllCompanyRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchSummaryCompanyRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchCompanyRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchAllContactRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchSummaryContactRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchAllProjectRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchRecentRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchCompanyRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchProjectRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchRecentRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchSummaryCompanyRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchSummaryContactRecyclerViewAdapter;
+import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
 import com.lecet.app.content.SearchFilterMPSActivity;
-import com.lecet.app.content.SearchFilterMSEActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
@@ -48,8 +48,12 @@ import retrofit2.Response;
  */
 
 public class SearchViewModel extends BaseObservable {
+    static final String CONTACT_TEXT = " Contact";
+    static final String COMPANY_TEXT = " Company";
+    static final String PROJECT_TEXT = " Project";
+
     private static AlertDialog.Builder builder;
-    private String errorMessage=null;
+    private String errorMessage = null;
     private static final String TAG = "SearchViewModel";
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
@@ -140,7 +144,7 @@ public class SearchViewModel extends BaseObservable {
         this.activity = activity;
         this.searchDomain = sd;
         //  projectmodel = new SearchProjectViewModel(this,activity,sd);
-       // init();
+        // init();
     }
 
     public void init() {
@@ -441,18 +445,20 @@ public class SearchViewModel extends BaseObservable {
      * Display error message
      */
     public void errorDisplayMsg(String message) {
-        if (errorMessage !=null) return;
-        //if (errorMessage == null) errorMessage="";
-        errorMessage =message+"\r\n";
-        if (builder == null) builder = new AlertDialog.Builder(activity); //Applying singleton;
-        builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
-        Log.e("Error:", "Error " + errorMessage);
-        builder.setMessage(errorMessage);
-//        builder.setMessage(activity.getString(R.string.error_network_message));
-        builder.setNegativeButton(activity.getString(R.string.ok), null);
-        Log.e("onFailure", "onFailure: " + errorMessage);
-        builder.show();
-
+        if (errorMessage != null || activity == null) return;
+        errorMessage = message + "\r\n";
+        try {
+            if (builder == null) builder = new AlertDialog.Builder(activity); //Applying singleton;
+            builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
+            Log.e("Error:", "Error " + errorMessage);
+            builder.setMessage(errorMessage);
+            builder.setNegativeButton(activity.getString(R.string.ok), null);
+            Log.e("onFailure", "onFailure: " + errorMessage);
+            builder.show();
+        } catch (Exception e) {
+            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder"+e.getMessage());
+            Toast.makeText(activity,"Error in displaying Dialog"+e.getMessage(),Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -725,21 +731,21 @@ public class SearchViewModel extends BaseObservable {
     public String getQueryProjectTotal() {
         boolean notzerovalue = (queryProjectTotal > 0);
         setIsQueryProjectTotalZero(notzerovalue);
-        return queryProjectTotal + (notzerovalue ? " Projects" : " Project");
+        return queryProjectTotal + (notzerovalue ? PROJECT_TEXT + "s" : PROJECT_TEXT);
     }
 
     @Bindable
     public String getQueryCompanyTotal() {
         boolean notzerovalue = (queryCompanyTotal > 0);
         setIsQueryCompanyTotalZero(notzerovalue);
-        return queryCompanyTotal + (notzerovalue ? " Companies" : " Company");
+        return queryCompanyTotal + (notzerovalue ? " Companies" : COMPANY_TEXT);
     }
 
     @Bindable
     public String getQueryContactTotal() {
         boolean notzerovalue = (queryContactTotal > 0);
         setIsQueryContactTotalZero(notzerovalue);
-        return queryContactTotal + (notzerovalue ? " Contacts" : " Contact");
+        return queryContactTotal + (notzerovalue ? CONTACT_TEXT + "s" : CONTACT_TEXT);
     }
 
     /**

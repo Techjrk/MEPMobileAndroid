@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -164,6 +164,7 @@
                         android:textColor="@color/lecetDarkestBlue"
                         android:textSize="17sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
+
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -185,6 +186,7 @@
                         android:background="@drawable/shape_rect_solid_border_1"
                         android:hint="@string/no_min_no_max"
                         android:padding="12dp" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -202,6 +204,7 @@
 
                             bind:typeface="@{`Lato-Bold.ttf`}" />
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -248,16 +251,16 @@
                         <TextView
                             android:id="@+id/option"
                             style="@style/SearchFilterSectionTextView"
+                            android:layout_centerHorizontal="true"
                             android:text="@string/more_options"
-                            bind:typeface="@{`Lato-Bold.ttf`}"
-                            android:layout_centerHorizontal="true" />
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
                         <ImageView
-                            android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:layout_toRightOf="@id/option"
-                            android:src="@drawable/ic_down_triangle"
+                            android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                             />
+                            android:layout_toRightOf="@id/option"
+                            android:src="@drawable/ic_down_triangle" />
                     </RelativeLayout>
                     <!-- Horizontal Separator -->
                     <include layout="@layout/rule_horiz_light" />
@@ -267,8 +270,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

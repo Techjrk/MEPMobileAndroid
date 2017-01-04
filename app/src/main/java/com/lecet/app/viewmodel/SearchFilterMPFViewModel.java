@@ -3,12 +3,10 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.support.annotation.BoolRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -22,7 +20,6 @@ import com.lecet.app.content.SearchFilterMPFTypeActivity;
 import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterMPFValueActivity;
 import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
-import com.lecet.app.content.SearchFilterMPSActivity;
 
 /**
  * Created by DomandTom 2016.
@@ -35,19 +32,19 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private static int id;
 
     /**
-     *  User's selected filter item
-     *
+     * User's selected filter item
      */
-    private String location_select = "";
-    private String type_select = "";
-    private String value_select = "";
-    private String updated_within_select = "Any";
-    private String jurisdiction_select = "Any";
-    private String stage_select = "Any";
-    private String bidding_within_select = "Any";
-    private String bh_select = "Any";
-    private String owner_type_select = "Any";
-    private String work_type_select = "Any";
+    private String locationSelect;
+    private String typeSelect;
+    private String valueSelect;
+    private String updatedWithinSelect;
+    private String jurisdictionSelect;
+    private String stageSelect;
+    private String biddingWithinSelect;
+    private String bhSelect;
+    private String ownerTypeSelect;
+    private String workTypeSelect;
+    static final String ANY = "Any";
 
     /*  public static final int LOCATION =0;
       public static final int TYPE =1;
@@ -62,108 +59,108 @@ public class SearchFilterMPFViewModel extends BaseObservable {
      */
     @Bindable
     public String getLocation_select() {
-        return location_select;
+        return locationSelect;
     }
 
     @Bindable
     public String getType_select() {
-        return type_select;
+        return typeSelect;
     }
 
     @Bindable
     public String getValue_select() {
-        return value_select;
+        return valueSelect;
     }
 
     @Bindable
     public String getUpdated_within_select() {
-        return updated_within_select;
+        return updatedWithinSelect;
     }
 
     @Bindable
     public String getJurisdiction_select() {
-        return jurisdiction_select;
+        return jurisdictionSelect;
     }
 
     @Bindable
     public String getStage_select() {
-        return stage_select;
+        return stageSelect;
     }
 
     @Bindable
     public String getBidding_within_select() {
-        return bidding_within_select;
+        return biddingWithinSelect;
     }
 
     @Bindable
     public String getBh_select() {
-        return bh_select;
+        return bhSelect;
     }
 
     @Bindable
     public String getOwner_type_select() {
-        return owner_type_select;
+        return ownerTypeSelect;
     }
 
     @Bindable
     public String getWork_type_select() {
-        return work_type_select;
+        return workTypeSelect;
     }
 
-    public void setLocation_select(String location_select) {
-        this.location_select = location_select;
+    public void setLocation_select(String locationSelect) {
+        this.locationSelect = locationSelect;
         notifyPropertyChanged(BR.location_select);
     }
 
-    public void setType_select(String type_select) {
-        this.type_select = type_select;
+    public void setType_select(String typeSelect) {
+        this.typeSelect = typeSelect;
         notifyPropertyChanged(BR.type_select);
     }
 
-    public void setValue_select(String value_select) {
-        this.value_select = value_select;
+    public void setValue_select(String valueSelect) {
+        this.valueSelect = valueSelect;
         notifyPropertyChanged(BR.value_select);
 
     }
 
-    public void setUpdated_within_select(String updated_within_select) {
-        this.updated_within_select = updated_within_select;
+    public void setUpdated_within_select(String updatedWithinSelect) {
+        this.updatedWithinSelect = updatedWithinSelect;
         notifyPropertyChanged(BR.updated_within_select);
 
     }
 
-    public void setJurisdiction_select(String jurisdiction_select) {
-        this.jurisdiction_select = jurisdiction_select;
+    public void setJurisdiction_select(String jurisdictionSelect) {
+        this.jurisdictionSelect = jurisdictionSelect;
         notifyPropertyChanged(BR.jurisdiction_select);
 
     }
 
-    public void setStage_select(String stage_select) {
-        this.stage_select = stage_select;
+    public void setStage_select(String stageSelect) {
+        this.stageSelect = stageSelect;
         notifyPropertyChanged(BR.stage_select);
 
     }
 
-    public void setBidding_within_select(String bidding_within_select) {
-        this.bidding_within_select = bidding_within_select;
+    public void setBidding_within_select(String biddingWithinSelect) {
+        this.biddingWithinSelect = biddingWithinSelect;
         notifyPropertyChanged(BR.bidding_within_select);
 
     }
 
-    public void setBh_select(String bh_select) {
-        this.bh_select = bh_select;
+    public void setBh_select(String bhSelect) {
+        this.bhSelect = bhSelect;
         notifyPropertyChanged(BR.bh_select);
 
     }
 
-    public void setOwner_type_select(String owner_type_select) {
-        this.owner_type_select = owner_type_select;
+    public void setOwner_type_select(String ownerTypeSelect) {
+        this.ownerTypeSelect = ownerTypeSelect;
         notifyPropertyChanged(BR.owner_type_select);
 
     }
 
-    public void setWork_type_select(String work_type_select) {
-        this.work_type_select = work_type_select;
+    public void setWork_type_select(String workTypeSelect) {
+        this.workTypeSelect = workTypeSelect;
         notifyPropertyChanged(BR.work_type_select);
 
     }
@@ -173,6 +170,16 @@ public class SearchFilterMPFViewModel extends BaseObservable {
      */
     public SearchFilterMPFViewModel(AppCompatActivity activity) {
         this.activity = activity;
+        setLocation_select("");
+        setType_select("");
+        setValue_select("");
+        setUpdated_within_select(ANY);
+        setJurisdiction_select(ANY);
+        setStage_select(ANY);
+        setBidding_within_select(ANY);
+        setBh_select(ANY);
+        setOwner_type_select(ANY);
+        setWork_type_select(ANY);
     }
 
     /**
