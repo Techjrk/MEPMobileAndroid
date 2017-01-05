@@ -13,7 +13,7 @@ import com.lecet.app.viewmodel.SearchFilterMSEViewModel;
 
 public class SearchFilterMPFTypeActivity extends AppCompatActivity {
     SearchFilterMPFTypeViewModel sfilter;
-
+    //// TODO: 1/5/17 Create nested items for Type layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

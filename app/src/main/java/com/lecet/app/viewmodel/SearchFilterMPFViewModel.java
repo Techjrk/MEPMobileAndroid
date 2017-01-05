@@ -30,6 +30,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private static final String TAG = "SearchFilterMPFViewModel";
     private AppCompatActivity activity;
     private static int id;
+    private Intent intent;
 
     /**
      * User's selected filter item
@@ -180,6 +181,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         setBh_select(ANY);
         setOwner_type_select(ANY);
         setWork_type_select(ANY);
+        intent = activity.getIntent();
     }
 
     /**
@@ -247,10 +249,19 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 return;
             default:
                 //TODO: return all filter data in Intent back to MSE
+                saveResult();
                 activity.finish();  // includes Cancel and Apply buttons
                 return;
         }
         activity.startActivityForResult(i, id & 0xfff);
+    }
+
+    public void setSearchFilterResult(String name, String content) {
+        intent.putExtra(name, content);
+    }
+
+    public void saveResult() {
+        activity.setResult(1, intent);
     }
 
     private boolean moreOption;

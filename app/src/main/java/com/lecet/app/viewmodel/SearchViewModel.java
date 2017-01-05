@@ -51,7 +51,7 @@ public class SearchViewModel extends BaseObservable {
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
-
+    private int seeAllForResult = -1;
     private static AlertDialog.Builder builder;
     private String errorMessage = null;
     private static final String TAG = "SearchViewModel";
@@ -106,6 +106,9 @@ public class SearchViewModel extends BaseObservable {
     private boolean isQueryCompanyTotalZero;
     private boolean isQueryContactTotalZero;
 
+    public void setProjectSearchFilter(String filter) {
+        searchDomain.setProjectFilter(filter);
+    }
 
     public void setQueryProjectTotal(int queryProjectTotal) {
         this.queryProjectTotal = queryProjectTotal;
@@ -144,11 +147,12 @@ public class SearchViewModel extends BaseObservable {
         this.activity = activity;
         this.searchDomain = sd;
         //  projectmodel = new SearchProjectViewModel(this,activity,sd);
-        // init();
+        init();
     }
 
     public void init() {
         setErrorMessage(null);
+        seeAllForResult = -1;
         // Init the Recently Viewed Items adapter and fetch its data
         initializeAdapterRecentlyViewed();
         getUserRecentlyViewed(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());
@@ -456,8 +460,8 @@ public class SearchViewModel extends BaseObservable {
             Log.e("onFailure", "onFailure: " + errorMessage);
             builder.show();
         } catch (Exception e) {
-            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder"+e.getMessage());
-            Toast.makeText(activity,"Error in displaying Dialog"+e.getMessage(),Toast.LENGTH_SHORT);
+            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
+            Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);
         }
     }
 
@@ -593,7 +597,9 @@ public class SearchViewModel extends BaseObservable {
             setIsMSE2SectionVisible(false);
             setIsMSE1SectionVisible(true);
             setQuery("");
-        } else activity.finish();
+        } else {
+            activity.finish();
+        }
     }
 
     ///////////////////////////////////
@@ -754,6 +760,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void onClearClicked(View view) {
         setQuery(null);
+        searchDomain.initFilter();
     }
 
     public void onFilterClicked(View view) {
@@ -763,18 +770,47 @@ public class SearchViewModel extends BaseObservable {
         activity.startActivityForResult(i, 0);
     }
 
+
+    public int getSeeAllForResult() {
+        return seeAllForResult;
+    }
+
     public void onClickSeeAllProject(View view) {
-        setIsMSR11Visible(true);
-        setIsMSE2SectionVisible(false);
+       /* setIsMSR11Visible(true);
+        setIsMSE2SectionVisible(false);*/
+        setSeeAll(0);
     }
 
     public void onClickSeeAllCompany(View view) {
-        setIsMSR12Visible(true);
-        setIsMSE2SectionVisible(false);
+        setSeeAll(1);
     }
 
     public void onClickSeeAllContact(View view) {
-        setIsMSR13Visible(true);
+        setSeeAll(2);
+    }
+
+    /**
+     * setSeeAll - Used to display the previous search view correctly  after using the search filter section by the user.
+     *
+     * @param seeOrder
+     */
+    public void setSeeAll(int seeOrder) {
+        seeAllForResult = seeOrder;
+
+        switch (seeOrder) {
+            case 0:  //for see all Project
+                setIsMSR11Visible(true);
+                break;
+            case 1:
+                setIsMSR12Visible(true);
+                break;
+            case 2:
+                setIsMSR13Visible(true);
+                break;
+            default:
+                return;
+        }
+
         setIsMSE2SectionVisible(false);
     }
 

@@ -11,7 +11,7 @@ import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 
 public class SearchFilterMPFStageActivity extends AppCompatActivity {
-
+    //// TODO: 1/5/17 Create nested items for Stage layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

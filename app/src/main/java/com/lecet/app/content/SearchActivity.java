@@ -2,17 +2,15 @@ package com.lecet.app.content;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.ActivitySearchBinding;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.viewmodel.SearchViewModel;
 
@@ -20,7 +18,8 @@ import io.realm.Realm;
 
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
-    SearchViewModel viewModel;
+    private SearchViewModel viewModel;
+    private String searchFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,7 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.checkDisplayMSESectionOrMain();
     }
 
+
     /**
      * Handle the result of all filters being applied and make the filtered query.
      */
@@ -51,13 +51,16 @@ public class SearchActivity extends AppCompatActivity {
 
         //TODO - make filtered data call
 
-        Toast.makeText(this, "Search Activity Result request: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
+        String projectLocation = data.getStringExtra("projectLocation");
+        Log.d("projectLocation", "projectLocation = " + projectLocation);
+        searchFilter = "{" + projectLocation + "}";
+        Log.d("searchFilter", "searchFilter = " + projectLocation);
+        //TODO set the result filter to the domain...
+        viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        viewModel.updateViewQuery();
+        viewModel.setSeeAll(viewModel.getSeeAllForResult());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-       viewModel.init();
-    }
 }
 

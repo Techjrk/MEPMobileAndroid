@@ -9,7 +9,7 @@ import com.lecet.app.databinding.ActivitySearchFilterMpfjurisdictionBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 
 public class SearchFilterMPFJurisdictionActivity extends AppCompatActivity {
-
+//// TODO: 1/5/17 Create nested items for jurisdiction layout 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

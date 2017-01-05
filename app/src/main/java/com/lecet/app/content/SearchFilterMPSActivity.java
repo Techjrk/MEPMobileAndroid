@@ -20,6 +20,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         ActivitySearchFilterMps30Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mps30);
         viewModel = new SearchFilterMPFViewModel(this);
         sfilter.setViewModel(viewModel);
+        // intent = getIntent();
     }
 
     /**
@@ -42,45 +43,52 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     String county = !info[2].trim().equals("") ? (!state.equals("") ? ", " + info[2] : " " + info[2]) : "";
                     String zip = !info[3].trim().equals("") ? (!county.equals("") ? ", " + info[3] : " " + info[3]) : "";
                     viewModel.setLocation_select(city + state + county + zip);
+                    String projectLocation = "\"projectLocation\": {\"zip5\":\"" + info[0] + "\",\"city\":\"" + info[1] + "\",\"county\":\"" + info[2] + "\",\"state\":\"" + info[3] + "\"}";
+                    viewModel.setSearchFilterResult("projectLocation", projectLocation);
                     break;
                 case R.id.type & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for Type and set it to setSearchFilterResult
                     viewModel.setType_select(info[0]);
                     break;
                 case R.id.value & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for Value and set it to setSearchFilterResult
                     viewModel.setValue_select("$ " + info[0] + " - $" + info[1]);
                     break;
                 case R.id.updated_within & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for UpdatedWithin and set it to setSearchFilterResult
                     viewModel.setUpdated_within_select(info[0]);
                     break;
                 case R.id.jurisdiction & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for Jurisdiction and set it to setSearchFilterResult
                     viewModel.setJurisdiction_select(info[0]);
                     break;
                 case R.id.stage & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for Stage and set it to setSearchFilterResult
                     viewModel.setStage_select(info[0]);
                     break;
                 case R.id.bidding_within & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for Bidding Within and set it to setSearchFilterResult
                     viewModel.setBidding_within_select(info[0]);
                     break;
                 case R.id.bh & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
+                    //TODO: Compose the correct search filter result for BH and set it to setSearchFilterResult
                     viewModel.setBh_select(info[0]);
                     break;
                 case R.id.ownertype & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
-                    //       Log.d("value:", "value: " + info.length);
+                    //TODO: Compose the correct search filter result for OwnerType and set it to setSearchFilterResult
                     viewModel.setOwner_type_select(info[0]);
                     break;
                 case R.id.worktype & 0xfff:
-                    //       info = data.getStringArrayExtra("data");
-                    //       Log.d("value:", "value: " + info.length);
+                    //TODO: Compose the correct search filter result for WorkType and set it to setSearchFilterResult
                     viewModel.setWork_type_select(info[0]);
                     break;
             }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //store the search filter result data to be used by the Search activity. 
+        viewModel.saveResult();
     }
 }
