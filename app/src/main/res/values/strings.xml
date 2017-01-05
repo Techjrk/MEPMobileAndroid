@@ -104,6 +104,11 @@
     <string name="reset_password">Reset Password</string>
     <string name="help">Help</string>
 
+    <!-- Share Toolbar -->
+    <string name="track">Track</string>
+    <string name="share">Share</string>
+    <string name="hide">Hide</string>
+
     <!-- Dialogs and Frequently-Used Button Text-->
     <string name="yes">Yes</string>
     <string name="accept">Accept</string>

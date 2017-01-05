@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ListItemHeaderProjectBinding;
+import com.lecet.app.databinding.ListItemHeaderShareBinding;
 import com.lecet.app.databinding.ListItemProjectDetailBinding;
 import com.lecet.app.databinding.ListItemProjectNoteBinding;
 import com.lecet.app.databinding.ListItemSectionHeaderBinding;
@@ -135,6 +136,8 @@ public class ProjectDetailAdapter extends SectionedAdapter {
             } else if (section == SECTION_BIDDERS) {
 
                 ((SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel("Project Bidders"));
+            } else if (section == SECTION_SHARE) {
+
             }
         }
     }
@@ -184,10 +187,9 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
             case SHARE_HEADER: {
 
-                View v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_header_share, parent, false);
+                ListItemHeaderShareBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_header_share, parent, false);
 
-                return new ShareViewHolder(v);
+                return new ShareViewHolder(binding);
             }
 
             case ALL_VIEW_TYPE: {
@@ -253,8 +255,12 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
     private class ShareViewHolder extends RecyclerView.ViewHolder {
 
-        public ShareViewHolder(View itemView) {
-            super(itemView);
+        private final ListItemHeaderShareBinding binding;
+
+        public ShareViewHolder(ListItemHeaderShareBinding binding) {
+            super(binding.getRoot());
+
+            this.binding = binding;
         }
     }
 

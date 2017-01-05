@@ -1,8 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="40dp"
-              android:background="@color/lecetTextLightGray">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ShareToolbarViewModel"/>
+    </data>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:layout_marginTop="20dp"
+                  android:layout_marginBottom="20dp"
+                  android:layout_marginRight="20dp">
+
+        <android.support.v7.widget.Toolbar android:layout_width="match_parent"
+                                           android:layout_height="match_parent">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="horizontal"
+                          android:background="@color/lecetLightGray">
+
+                <Button android:id="@+id/track_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:text="@string/track"
+                        android:textColor="@color/lecetShareBlue"
+                        android:background="@color/pureWhite"
+                        android:onClick="@{viewModel.onTrackSelected}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"/>
+
+                <Button android:id="@+id/share_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:text="@string/share"
+                        android:textColor="@color/lecetShareBlue"
+                        android:background="@color/pureWhite"
+                        android:onClick="@{viewModel.onShareSelected}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"/>
+
+                <Button android:id="@+id/hide_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:text="@string/hide"
+                        android:textColor="@color/lecetShareBlue"
+                        android:background="@color/pureWhite"
+                        android:onClick="@{viewModel.onHideSelected}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+</layout>
