@@ -1,16 +1,13 @@
 package com.lecet.app.content.widget;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Scroller;
+import android.widget.GridView;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.utility.DateUtility;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
@@ -19,7 +16,6 @@ import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.entity.SelectedDateItem;
 import com.p_v.flexiblecalendar.view.BaseCellView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -50,7 +46,7 @@ public class LecetCalendar extends FlexibleCalendarView {
                     LayoutInflater inflater = LayoutInflater.from(getContext());
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
                     int size = getResources().getDimensionPixelSize(R.dimen.calendar_cell_size);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(size, size);
+                    ViewGroup.LayoutParams params = new GridView.LayoutParams(size, size);
                     cellView.setLayoutParams(params);
                 }
                 return cellView;
@@ -62,7 +58,7 @@ public class LecetCalendar extends FlexibleCalendarView {
                 if (cellView == null) { //removing week day name
                     LayoutInflater inflater = LayoutInflater.from(getContext());
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, 0);
+                    ViewGroup.LayoutParams params = new GridView.LayoutParams(0, 0);
                     cellView.setLayoutParams(params);
                 }
                 return cellView;
@@ -78,31 +74,10 @@ public class LecetCalendar extends FlexibleCalendarView {
 
     private void removeSwipe() {
         MonthViewPager viewPager = (MonthViewPager) getChildAt(1);
+        viewPager.requestDisallowInterceptTouchEvent(true);
+        viewPager.setCanScrollHorizontally(false);
         viewPager.setSwipeEnable(false);
 
-        setMyScroller(viewPager);
-    }
-
-    private void setMyScroller(ViewPager viewPager) {
-        try {
-            Class<?> viewpager = ViewPager.class;
-            Field scroller = viewpager.getDeclaredField("mScroller");
-            scroller.setAccessible(true);
-            scroller.set(viewPager, new DisableSwipeScroller(getContext()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public class DisableSwipeScroller extends Scroller {
-        public DisableSwipeScroller(Context context) {
-            super(context, new DecelerateInterpolator());
-        }
-
-        @Override
-        public void startScroll(int startX, int startY, int dx, int dy, int duration) {
-            super.startScroll(startX, startY, dx, dy, 350 /*1 secs*/);
-        }
     }
 
     public void addEventsToCalendar(List<Project> projects) {

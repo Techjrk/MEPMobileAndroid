@@ -66,10 +66,10 @@ public class UserDomain {
      * Persisted
      **/
 
-    public User copyToRealmTransaction(User bid) {
+    public User copyToRealmTransaction(User user) {
 
         realm.beginTransaction();
-        User persistedUser = realm.copyToRealmOrUpdate(bid);
+        User persistedUser = realm.copyToRealmOrUpdate(user);
         realm.commitTransaction();
 
         return persistedUser;

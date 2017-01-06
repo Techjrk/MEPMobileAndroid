@@ -3,9 +3,13 @@ package com.lecet.app.data.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.lecet.app.data.api.deserializer.ActivityUpdateDeserializer;
 import com.lecet.app.data.api.service.BidService;
 import com.lecet.app.data.api.service.ProjectService;
+import com.lecet.app.data.api.service.SearchService;
+import com.lecet.app.data.api.service.TrackingListService;
 import com.lecet.app.data.api.service.UserService;
+import com.lecet.app.data.models.ActivityUpdate;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -28,6 +32,8 @@ public class LecetClient {
     private BidService bidService;
     private UserService userService;
     private ProjectService projectService;
+    private TrackingListService trackingListService;
+    private SearchService searchService;
 
     public static LecetClient getInstance() {
         return ourInstance;
@@ -50,6 +56,7 @@ public class LecetClient {
 
         // Custom GSON for date conversion
         Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ActivityUpdate.class, new ActivityUpdateDeserializer())
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create();
 
@@ -62,6 +69,8 @@ public class LecetClient {
         bidService = retrofit.create(BidService.class);
         projectService = retrofit.create(ProjectService.class);
         userService = retrofit.create(UserService.class);
+        trackingListService = retrofit.create(TrackingListService.class);
+        searchService = retrofit.create(SearchService.class);
     }
 
 
@@ -77,4 +86,9 @@ public class LecetClient {
         return userService;
     }
 
+    public TrackingListService getTrackingListService() {
+        return trackingListService;
+    }
+
+    public SearchService getSearchService() { return searchService; }
 }

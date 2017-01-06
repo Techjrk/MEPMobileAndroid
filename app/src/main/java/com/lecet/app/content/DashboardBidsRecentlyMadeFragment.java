@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.BaseDashboardChartFragment;
-import com.lecet.app.databinding.FragmentDashboardBidsRecentlyMadeBinding;
+import com.lecet.app.databinding.FragmentDashboardChartBaseBinding;
 import com.lecet.app.interfaces.DashboardChart;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
-import com.lecet.app.viewmodel.DashboardBidsRecentlyMadeVM;
+import com.lecet.app.viewmodel.BaseDashboardChartViewModel;
 
 /**
  * Created by jasonm on 10/5/16.
@@ -28,7 +28,7 @@ public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragmen
     private MBRDataSource dataSource;
     private MBRDelegate delegate;
 
-    private FragmentDashboardBidsRecentlyMadeBinding binding;
+    private FragmentDashboardChartBaseBinding binding;
 
     public static DashboardBidsRecentlyMadeFragment newInstance(String subtitle) {
         Log.d(TAG, "newInstance");
@@ -74,12 +74,12 @@ public class DashboardBidsRecentlyMadeFragment extends BaseDashboardChartFragmen
 
     @Override
     public View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_bids_recently_made, container, false);
-        binding.setViewModel(new DashboardBidsRecentlyMadeVM(this));
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard_chart_base, container, false);
+        binding.setViewModel(new BaseDashboardChartViewModel(this, BaseDashboardChartViewModel.DATA_SOURCE_TYPE_MBR));
         View view = binding.getRoot();
         pieChart = binding.pieChartView;
-        DashboardBidsRecentlyMadeVM viewModel = binding.getViewModel();
-        viewModel.initialize(view, subtitle, dataSource, delegate);
+        BaseDashboardChartViewModel viewModel = binding.getViewModel();
+        viewModel.initializeMBR(view, subtitle, dataSource, delegate);
         viewModel.initializeChart(pieChart);
         return view;
     }

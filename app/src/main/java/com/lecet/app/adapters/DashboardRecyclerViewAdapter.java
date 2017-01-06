@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.databinding.ListItemBidHappSoonBinding;
 import com.lecet.app.databinding.ListItemDashboardProjectBinding;
-import com.lecet.app.databinding.ListItemRecentBidBinding;
 import com.lecet.app.viewmodel.DashboardProjectItemViewModel;
 import com.lecet.app.viewmodel.MainViewModel;
 import com.lecet.app.viewmodel.RecentBidItemViewModel;
@@ -21,7 +19,7 @@ import java.util.List;
 import io.realm.RealmObject;
 
 /**
- * File: DashboardAdapter Created: 10/21/16 Author: domandtom
+ * File: DashboardRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
@@ -49,12 +47,12 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
 
             case MainViewModel.DASHBOARD_POSITION_MBR:
-                ListItemRecentBidBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_recent_bid, parent, false);
+                com.lecet.app.databinding.ListItemRecentBidBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_recent_bid, parent, false);
                 viewHolder = new MBRViewHolder(binding);
                 break;
 
             case MainViewModel.DASHBOARD_POSITION_MHS:
-                ListItemBidHappSoonBinding bindingMHS = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_bid_happ_soon, parent, false);
+                com.lecet.app.databinding.ListItemBidHappSoonBinding bindingMHS = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_bid_happ_soon, parent, false);
                 viewHolder = new MHSViewHolder(bindingMHS);
                 break;
 
@@ -112,16 +110,16 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     class MBRViewHolder extends RecyclerView.ViewHolder {
 
-        private ListItemRecentBidBinding binding;
+        private com.lecet.app.databinding.ListItemRecentBidBinding binding;
 
-        public MBRViewHolder(ListItemRecentBidBinding binding) {
+        public MBRViewHolder(com.lecet.app.databinding.ListItemRecentBidBinding binding) {
 
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemRecentBidBinding getBinding() {
+        public com.lecet.app.databinding.ListItemRecentBidBinding getBinding() {
             return binding;
         }
     }
@@ -129,15 +127,15 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     public class MHSViewHolder extends RecyclerView.ViewHolder {
 
-        private ListItemBidHappSoonBinding binding;
+        private com.lecet.app.databinding.ListItemBidHappSoonBinding binding;
 
-        public MHSViewHolder(ListItemBidHappSoonBinding binding) {
+        public MHSViewHolder(com.lecet.app.databinding.ListItemBidHappSoonBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemBidHappSoonBinding getBinding() {
+        public com.lecet.app.databinding.ListItemBidHappSoonBinding getBinding() {
             return binding;
         }
     }

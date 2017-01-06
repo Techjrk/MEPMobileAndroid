@@ -11,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
-        versionName "0.0.1"
+        versionName "0.1.1"
 
         // HockeyApp
         manifestPlaceholders = [HOCKEY_APP_ID: "505f17e52bfc4a6ca45f31c165ac7cb1"]
@@ -59,6 +59,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
 
     // Google Play Services
+    compile 'com.google.android.gms:play-services-maps:9.4.0'
     compile 'com.google.android.gms:play-services-gcm:9.4.0'
     compile 'com.google.android.gms:play-services-location:9.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'

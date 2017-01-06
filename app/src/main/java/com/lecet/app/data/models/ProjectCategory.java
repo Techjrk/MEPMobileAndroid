@@ -67,7 +67,7 @@ public class ProjectCategory extends RealmObject {
         if (id != that.id) return false;
         if (projectGroupId != that.projectGroupId) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        return projectGroup != null ? projectGroup.equals(that.projectGroup) : that.projectGroup == null;
+        return projectGroup != null ? projectGroup.getId() != that.getProjectGroup().getId() : that.projectGroup == null;
 
     }
 

@@ -25,6 +25,7 @@
     <string name="project_bidders">Project Bidders</string>
     <string name="architect">Architect</string>
     <string name="see_all">See All</string>
+    <string name="updating">Updating..</string>
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
@@ -41,16 +42,17 @@
     <string name="title_fragment_bids_happening_soon">Bids Happening Soon</string>
     <string name="title_fragment_projects_recently_added">Projects Recently Added</string>
     <string name="title_fragment_projects_recently_updated">Projects Recently Updated</string>
-    <string name="dashboard_bids">BIDS</string>
+    <!--string name="dashboard_bids">BIDS</string-->
     <string name="dashboard_projects">PROJECTS</string>
-    <string name="dashboard_recently_made">RECENTLY MADE</string>
-    <string name="dashboard_happening_soon">HAPPENING SOON</string>
-    <string name="dashboard_recently_added">RECENTLY ADDED</string>
-    <string name="dashboard_recently_updated">RECENTLY UPDATED</string>
+    <string name="dashboard_recently_made">PROJECTS RECENTLY BID</string>
+    <string name="dashboard_happening_soon">PROJECTS BIDDING SOON</string>
+    <string name="dashboard_recently_added">PROJECTS RECENTLY ADDED</string>
+    <string name="dashboard_recently_updated">PROJECTS RECENTLY UPDATED</string>
     <string name="dashboard_housing">HOUSING</string>
     <string name="dashboard_engineering">ENGINEERING</string>
     <string name="dashboard_building">BUILDING</string>
     <string name="dashboard_utilities">UTILITIES</string>
+    <string name="dashboard_heavy_highway">HEAVY HIGHWAY</string>
 
     <!-- Create Password -->
     <string name="title_activity_create_password">Create Password</string>
@@ -66,8 +68,17 @@
     <!-- Company Detail: Project Bids List -->
     <string name="title_activity_company_detail_project_bids">Company Detail: Project Bids</string>
 
-    <!-- Project Tracking List-->
+    <!-- MPL Project Tracking List -->
     <string name="title_activity_project_tracking_list">Project Tracking List</string>
+    <string name="new_bid_placed">A new bid has been placed</string>
+    <string name="bid_placed_at">A bid was placed at</string>
+    <string name="new_note_added">A new note has been added</string>
+    <string name="show_updates">Show Updates</string>
+    <string name="edit">EDIT</string>
+    <string name="project">Project</string>
+    <string name="projects">Projects</string>
+    <string name="company">Company</string>
+    <string name="companies">Companies</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
@@ -84,6 +95,8 @@
     <!-- Profile -->
     <string name="title_activity_profile">Profile</string>
     <string name="edit_profile">Edit Profile</string>
+
+    <!-- Projects Near Me -->
 
     <!-- Home Fragment -->
     <string name="title_activity_main">Main</string>
@@ -117,6 +130,7 @@
     <string name="no">No</string>
     <string name="decline">Decline</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
     <string name="continue_str">Continue</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
@@ -133,10 +147,37 @@
     <string name="error_login_message">You don\’t have permission to access MEP using your account
     </string>
     <string name="error_network_title">Network Error</string>
-    <string name="error_network_message">Please check your internet connection and try again
-    </string>
+    <string name="error_network_message">Please check your internet connection and try again</string>
+    <string name="error_fetching_address">Address not found.</string>
 
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
+
+    <!-- Info Window -->
+    <string name="get_directions">Get Directions</string>
+
+    <!-- Projects Near Me Confirm Dialog Fragment -->
+    <string name="confirm_share_your_location_description">This feature is only available\nwhen you share your location\nwith this app. Please tap OK\nwhen prompted.</string>
+    <string name="confirm_enable_your_location_description">This feature is only available\nwhen you share your location\nwith this app.</string>
+    <string name="confirm_share_your_location">SHARE MY LOCATION</string>
+    <string name="confirm_go_to_settings">GO TO SETTINGS</string>
+    <string name="confirm_cancel">CANCEL</string>
+
+    <!-- MTM Menu -->
+    <string name="mtm_menu_number_company">%d Companies</string>
+    <string name="mtm_menu_number_projects">%d Projects</string>
+
+    <!-- MTM SortBy Menu -->
+    <string name="mtm_sort_menu_title">Sort by</string>
+
+    <!-- MTM SortBy Activity -->
+    <string name="remove">REMOVE</string>
+    <string name="move">MOVE</string>
+    <string name="x_selected">%s Selected</string>
+    <string name="move_to">Move to</string>
+
+    <!-- MTM Confirmation -->
+    <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s</string>
+    <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s</string>
 
 </resources>

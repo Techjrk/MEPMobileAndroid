@@ -1,90 +1,119 @@
 package com.lecet.app.viewmodel;
 
-import android.content.Context;
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
-import android.view.View;
-import android.widget.ImageView;
+import com.lecet.app.data.models.PrimaryProjectType;
+import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectCategory;
+import com.lecet.app.data.models.ProjectGroup;
+import com.lecet.app.domain.ProjectDomain;
+
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 
 /**
- * File: ListItemProjectTrackingViewModel Created: 8/28/16 Author: domandtom
+ * File: ListItemProjectTrackingViewModel Created: 11/29/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ListItemProjectTrackingViewModel extends BaseObservable {
 
-    private final Context context;
+public class ListItemProjectTrackingViewModel extends ListItemTrackingViewModel {
 
-    private String projectName;
-    private String location;
-    private String keywords;
-    private ImageView mapImageView;
-    // TODO: add new bid field
-    // TODO: add new note field
+    private Project project;
+    private ProjectDomain projectDomain;
 
-    public ListItemProjectTrackingViewModel(Context context) {
+    @Deprecated
+    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
+        super(mapsApiKey, showUpdates, project.getRecentUpdate());
 
-        this.context = context;
+        this.project = project;
+
+        init();
     }
 
-    @Bindable
-    public String getProjectName() {
-        return projectName;
+    public ListItemProjectTrackingViewModel(ProjectDomain projectDomain , Project project, String mapsApiKey, boolean showUpdates) {
+        super(mapsApiKey, showUpdates, project.getRecentUpdate());
+
+        this.projectDomain = projectDomain;
+        this.project = project;
+
+        init();
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-        //notifyPropertyChanged(BR.projectName);
+    @Override
+    public String getItemName() {
+        return project.getTitle();
     }
 
-    @Bindable
-    public String getLocation() {
-        return location;
+    @Override
+    public String generateDetailPrimary() {
+        return generateAddress();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-        //notifyPropertyChanged(BR.location);
+    @Override
+    public String generateDetailSecondary() {
+
+        return generateProjectKeywords();
     }
 
-    @Bindable
-    public String getKeywords() {
-        return keywords;
+
+    @Override
+    public String getMapUrl() {
+
+        if (project.getGeocode() == null) return null;
+
+        String mapStr = String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=200x200&" +
+                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                project.getGeocode().getLat(), project.getGeocode().getLng(), getMapsApiKey());
+
+        return mapStr;
     }
 
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-        //notifyPropertyChanged(BR.keywords);
+    @Override
+    public boolean displaySecondaryDetail() {
+        return true;
     }
 
-    @BindingAdapter({"android:src"})
-    public static void setImageViewResource(ImageView imageView, int resource) {
-        imageView.setImageResource(resource);
-    }
-
-    /** OnClick handler for clicking the entire Pojo1 List Item view **/
-
-    public void onClick(View view) {
-
-        /*domain.handleItemClick(new Callback<Pojo1>() {
-            @Override
-            public void onResponse(Call<Pojo1> call, Response<Pojo1> response) {
-
-                if (response.isSuccessful()) {
-
-
-                } else {
-
-
+    /**
+     * Return a String built from a list of the project's PrimaryProjectType, ProjectCategory, and
+     * ProjectGroup
+     **/
+    private String generateProjectKeywords() {
+        StringBuilder sb = new StringBuilder();
+        long id = project.getPrimaryProjectTypeId();
+        PrimaryProjectType primaryProjectType = project.getPrimaryProjectType();
+        if (primaryProjectType != null) {
+            String pptTitle = primaryProjectType.getTitle();
+            if (pptTitle != null) sb.append(pptTitle);
+            ProjectCategory category = primaryProjectType.getProjectCategory();
+            if (category != null) {
+                String categoryTitle = category.getTitle();
+                if (categoryTitle != null) {
+                    sb.append(", ");
+                    sb.append(categoryTitle);
+                }
+                ProjectGroup group = category.getProjectGroup();
+                if (group != null) {
+                    String groupTitle = group.getTitle();
+                    if (groupTitle != null) {
+                        sb.append(", ");
+                        sb.append(groupTitle);
+                    }
                 }
             }
+        }
 
-            @Override
-            public void onFailure(Call<Pojo1> call, Throwable t) {
-
-            }
-        });*/
+        String str = sb.toString();
+        if (str.length() == 0) return null;
+        return str;
     }
 
+    private String generateAddress() {
+
+        StringBuilder sb = new StringBuilder();
+        if (project.getCity() != null) sb.append(project.getCity());
+        if (project.getCity() != null && project.getState() != null) sb.append(", ");
+        if (project.getState() != null) sb.append(project.getState());
+        setDetail1(sb.toString());
+
+        return sb.toString();
+    }
 }

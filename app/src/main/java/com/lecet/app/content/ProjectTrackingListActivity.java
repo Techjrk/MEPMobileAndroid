@@ -1,35 +1,50 @@
 package com.lecet.app.content;
 
-import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-
 import com.lecet.app.R;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
+import com.lecet.app.viewmodel.TrackingListViewModel;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
- * ProjectTrackingListActivity
- * Created by jasonm on 8/15/16.
+ * File: ProjectTrackingListActivity Created: 12/6/16 Author: domandtom
+ *
+ * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectTrackingListActivity extends NavigationBaseActivity {
-
-    private final String TAG = "ProjectTrackingListAct";
+public class ProjectTrackingListActivity extends TrackingListActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public TrackingListViewModel buildViewModel(long listItemId) {
 
-        Log.d(TAG, "onCreate");
+        ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
+            @Override
+            public void onChange(Object element) {
 
-        setContentView(R.layout.activity_project_tracking_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            }
+        }, projectDomain);
+
+        return new ProjectTrackingListViewModel(this, listItemId, projectDomain, trackingListDomain);
     }
 
     @Override
-    public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
+    public String getActionBarSubtitle(int dataSize) {
 
+        // subtitle, handle plural or singular
+        StringBuilder subtitleSb = new StringBuilder();
+        subtitleSb.append(dataSize);
+        subtitleSb.append(" ");
+
+        if (dataSize != 1) {
+            subtitleSb.append(getResources().getString(R.string.projects));
+        } else subtitleSb.append(getResources().getString(R.string.project));
+
+        return subtitleSb.toString();
     }
 }

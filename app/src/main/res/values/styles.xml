@@ -6,13 +6,14 @@
         <item name="colorPrimary">@color/lecetMediumBlue</item>
         <item name="colorPrimaryDark">@color/lecetButtonDarkBlue</item>
         <item name="colorAccent">@color/lecetLightBlue</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_button</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay"  parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.FullScreen"    parent="Theme.AppCompat.Light">
+    <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
@@ -26,6 +27,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@android:color/transparent</item>
+        <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
+    </style>
+
+    <style name="LacetToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@drawable/activity_bar_background</item>
         <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
@@ -274,6 +282,20 @@
         <item name="android:layout_marginLeft">16sp</item>
     </style>
 
+    <style name="DashboardChartButtonImage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/strip_vertical_spacing</item>
+    </style>
+
+    <style name="DashboardChartButtonText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 
     <!-- Change Password -->
@@ -381,12 +403,17 @@
     <style name="ListItemProjectTrackingTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
         <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
     <style name="ListItemProjectTrackingTextView.Title">
-        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">4sp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
 
     <style name="ListItemProjectTrackingTextView.Detail1">
@@ -397,6 +424,59 @@
     <style name="ListItemProjectTrackingTextView.Detail2">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/lecetTextLightGray</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.Expandable">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/pureWhite</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.ExpandableBody">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/pureWhite</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:minLines">2</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:background">@drawable/shape_rect_list_item_expand_2</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage"/>
+
+    <style name="ListItemProjectTrackingImage.DetailMap">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage.DetailIcon">
+        <item name="android:layout_width">9dp</item>
+        <item name="android:layout_height">13dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage.ExpandableIcon">
+        <item name="android:layout_width">14dp</item>
+        <item name="android:layout_height">14dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage.ExpandableCaret">
+        <item name="android:layout_width">11dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_alignParentRight">true</item>
     </style>
 
 

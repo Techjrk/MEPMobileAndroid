@@ -12,9 +12,13 @@
     <color name="lecetButtonDarkBlue">#08497C</color>
     <color name="lecetButtonDarkerBlue">#08497C</color>
     <color name="lecetNavyBlue">#073064</color>
+    <color name="lecetDarkestBlue">#09274E</color>
     <color name="lecetNavyBlueTransp">#AA073064</color>
     <color name="lecetDeepBlueTransp">#88001636</color>
     <color name="lecetShareBlue">#003872</color>
+    <color name="lacetLightBlueTitleBackground">#8CA8BF</color>
+    <color name="lacetLightBlueTitleColor">#A8C3E6</color>
+    <color name="lecetModifyToolbarBlue">#0a2851</color>
 
 
     <color name="lecetLightOrange">#FCB76C</color>
@@ -37,5 +41,9 @@
     <!-- Calendar Colors -->
     <color name="calendar_center_color">#0F3C6D</color>
     <color name="calendar_end_color">#05224A</color>
+
+    <!-- Near Me Bar Colors -->
+    <color name="near_me_bar_end_color">#516A89</color>
+    <color name="near_me_bar_start_color">#557292</color>
 
 </resources>

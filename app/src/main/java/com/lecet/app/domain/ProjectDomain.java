@@ -6,6 +6,8 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
+import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
@@ -20,6 +22,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -80,7 +85,7 @@ public class ProjectDomain {
 
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
-                " \"limit\":%d, \"order\":\"firstPublishDate DESC\"}", formattedStart, formattedEnd, limit);
+                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -93,6 +98,7 @@ public class ProjectDomain {
         Date endDate = DateUtility.addDays(30);
         getProjectsHappeningSoon(current, endDate, limit, callback);
     }
+
 
     public void getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
@@ -111,7 +117,7 @@ public class ProjectDomain {
         String formattedStart = sdf.format(startDate);
 
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
+                "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -141,7 +147,7 @@ public class ProjectDomain {
         String formattedStart = sdf.format(startDate);
 
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
+                "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -155,12 +161,14 @@ public class ProjectDomain {
         getBidsRecentlyAdded(endDate, limit, callback);
     }
 
+
     public void getBidsRecentlyAdded(Callback<List<Project>> callback) {
 
         int limit = 150;
 
         getBidsRecentlyAdded(limit, callback);
     }
+
 
     public void getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
 
@@ -176,11 +184,13 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
+
     public void getProjectsRecentlyUpdated(int limit, Callback<List<Project>> callback) {
 
         Date publishDate = DateUtility.addDays(-30);
         getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
+
 
     public void getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
 
@@ -202,9 +212,19 @@ public class ProjectDomain {
      * Persisted
      **/
 
-    public Project fetchProjectById(long id) {
+    public void removeChangeListeners(RealmChangeListener listener) {
+
+        realm.removeChangeListener(listener);
+    }
+
+    public Project fetchProjectById(Realm realm, long id) {
 
         return realm.where(Project.class).equalTo("id", id).findFirst();
+    }
+
+    public Project fetchProjectById(long id) {
+
+        return fetchProjectById(realm, id);
     }
 
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
@@ -274,6 +294,13 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+    public RealmResults<PrimaryProjectType> fetchProjectTypeAsync(long primaryProjectTypeId, RealmChangeListener<RealmResults<PrimaryProjectType>> listener) {
+
+        RealmResults<PrimaryProjectType> result = realm.where(PrimaryProjectType.class).equalTo("id", primaryProjectTypeId).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
 
     public RealmResults<Contact> fetchProjectContacts(long projectID) {
 
@@ -292,6 +319,22 @@ public class ProjectDomain {
                 .findAllSorted("amount", Sort.ASCENDING);
 
         return bidsResult;
+    }
+
+    public RealmResults<ActivityUpdate> fetchProjectActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("projectId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
+
+    public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
     }
 
     public Project copyToRealmTransaction(Project project) {

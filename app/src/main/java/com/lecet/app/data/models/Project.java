@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.lecet.app.interfaces.TrackedObject;
+
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -14,7 +16,7 @@ import io.realm.annotations.PrimaryKey;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class Project extends RealmObject {
+public class Project extends RealmObject implements TrackedObject {
 
     @SerializedName("bidSubmitTo")
     private String bidSubmitTo;
@@ -171,6 +173,11 @@ public class Project extends RealmObject {
     private RealmList<Bid> bids;
 
     private boolean hidden;
+
+    @SerializedName("updates")
+    private RealmList<ActivityUpdate> updates;
+
+    private ActivityUpdate recentUpdate;
 
     public Project() {
     }
@@ -435,6 +442,18 @@ public class Project extends RealmObject {
         return projectType;
     }
 
+    public RealmList<ActivityUpdate> getUpdates() {
+        return updates;
+    }
+
+    public ActivityUpdate getRecentUpdate() {
+        return recentUpdate;
+    }
+
+    public void setRecentUpdate(ActivityUpdate recentUpdate) {
+        this.recentUpdate = recentUpdate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -442,100 +461,103 @@ public class Project extends RealmObject {
 
         Project project = (Project) o;
 
-        if (Double.compare(project.estLow, estLow) != 0) return false;
-        if (primaryProjectTypeId != project.primaryProjectTypeId) return false;
-        if (id != project.id) return false;
-        if (Double.compare(project.estHigh, estHigh) != 0) return false;
-        if (hidden != project.hidden) return false;
-        if (bidSubmitTo != null ? !bidSubmitTo.equals(project.bidSubmitTo) : project.bidSubmitTo != null)
-            return false;
-        if (state != null ? !state.equals(project.state) : project.state != null) return false;
-        if (address1 != null ? !address1.equals(project.address1) : project.address1 != null)
-            return false;
-        if (address2 != null ? !address2.equals(project.address2) : project.address2 != null)
-            return false;
-        if (statusText != null ? !statusText.equals(project.statusText) : project.statusText != null)
-            return false;
-        if (projectStage != null ? !projectStage.equals(project.projectStage) : project.projectStage != null)
-            return false;
-        if (bidDate != null ? !bidDate.equals(project.bidDate) : project.bidDate != null)
-            return false;
-        if (city != null ? !city.equals(project.city) : project.city != null) return false;
-        if (zip5 != null ? !zip5.equals(project.zip5) : project.zip5 != null) return false;
-        if (cnProjectUrl != null ? !cnProjectUrl.equals(project.cnProjectUrl) : project.cnProjectUrl != null)
-            return false;
-        if (title != null ? !title.equals(project.title) : project.title != null) return false;
-        if (contractNbr != null ? !contractNbr.equals(project.contractNbr) : project.contractNbr != null)
-            return false;
-        if (numberOfFloorsAboveGround != null ? !numberOfFloorsAboveGround.equals(project.numberOfFloorsAboveGround) : project.numberOfFloorsAboveGround != null)
-            return false;
-        if (details != null ? !details.equals(project.details) : project.details != null)
-            return false;
-        if (dodgeNumber != null ? !dodgeNumber.equals(project.dodgeNumber) : project.dodgeNumber != null)
-            return false;
-        if (lastPublishDate != null ? !lastPublishDate.equals(project.lastPublishDate) : project.lastPublishDate != null)
-            return false;
-        if (contractType != null ? !contractType.equals(project.contractType) : project.contractType != null)
-            return false;
-        if (projDlvrySys != null ? !projDlvrySys.equals(project.projDlvrySys) : project.projDlvrySys != null)
-            return false;
-        if (planInd != null ? !planInd.equals(project.planInd) : project.planInd != null)
-            return false;
-        if (dodgeVersion != null ? !dodgeVersion.equals(project.dodgeVersion) : project.dodgeVersion != null)
-            return false;
-        if (primaryProjectType != null ? !primaryProjectType.equals(project.primaryProjectType) : project.primaryProjectType != null)
-            return false;
-        if (specAvailable != null ? !specAvailable.equals(project.specAvailable) : project.specAvailable != null)
-            return false;
-        if (fipsCounty != null ? !fipsCounty.equals(project.fipsCounty) : project.fipsCounty != null)
-            return false;
-        if (targetFinishDate != null ? !targetFinishDate.equals(project.targetFinishDate) : project.targetFinishDate != null)
-            return false;
-        if (priorPublishDate != null ? !priorPublishDate.equals(project.priorPublishDate) : project.priorPublishDate != null)
-            return false;
-        if (numberOfBuildings != null ? !numberOfBuildings.equals(project.numberOfBuildings) : project.numberOfBuildings != null)
-            return false;
-        if (statusProjDlvrySys != null ? !statusProjDlvrySys.equals(project.statusProjDlvrySys) : project.statusProjDlvrySys != null)
-            return false;
-        if (stdIncludes != null ? !stdIncludes.equals(project.stdIncludes) : project.stdIncludes != null)
-            return false;
-        if (currencyType != null ? !currencyType.equals(project.currencyType) : project.currencyType != null)
-            return false;
-        if (country != null ? !country.equals(project.country) : project.country != null)
-            return false;
-        if (geocode != null ? !geocode.equals(project.geocode) : project.geocode != null)
-            return false;
-        if (zipPlus4 != null ? !zipPlus4.equals(project.zipPlus4) : project.zipPlus4 != null)
-            return false;
-        if (projectStageId != null ? !projectStageId.equals(project.projectStageId) : project.projectStageId != null)
-            return false;
-        if (projectNotes != null ? !projectNotes.equals(project.projectNotes) : project.projectNotes != null)
-            return false;
-        if (targetStartDate != null ? !targetStartDate.equals(project.targetStartDate) : project.targetStartDate != null)
-            return false;
-        if (geoLocationType != null ? !geoLocationType.equals(project.geoLocationType) : project.geoLocationType != null)
-            return false;
-        if (county != null ? !county.equals(project.county) : project.county != null) return false;
-        if (firstPublishDate != null ? !firstPublishDate.equals(project.firstPublishDate) : project.firstPublishDate != null)
-            return false;
-        if (addendaInd != null ? !addendaInd.equals(project.addendaInd) : project.addendaInd != null)
-            return false;
-        if (availableFrom != null ? !availableFrom.equals(project.availableFrom) : project.availableFrom != null)
-            return false;
-        if (geoType != null ? !geoType.equals(project.geoType) : project.geoType != null)
-            return false;
-        if (unionDesignation != null ? !unionDesignation.equals(project.unionDesignation) : project.unionDesignation != null)
-            return false;
-        if (bidTimeZone != null ? !bidTimeZone.equals(project.bidTimeZone) : project.bidTimeZone != null)
-            return false;
-        if (bondInformation != null ? !bondInformation.equals(project.bondInformation) : project.bondInformation != null)
-            return false;
-        if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
-            return false;
-        if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
-            return false;
-        return bids != null ? bids.equals(project.bids) : project.bids == null;
+        return id != project.id;
 
+//        if (Double.compare(project.estLow, estLow) != 0) return false;
+//        if (primaryProjectTypeId != project.primaryProjectTypeId) return false;
+//        if (id != project.id) return false;
+//        if (Double.compare(project.estHigh, estHigh) != 0) return false;
+//        if (hidden != project.hidden) return false;
+//        if (bidSubmitTo != null ? !bidSubmitTo.equals(project.bidSubmitTo) : project.bidSubmitTo != null)
+//            return false;
+//        if (state != null ? !state.equals(project.state) : project.state != null) return false;
+//        if (address1 != null ? !address1.equals(project.address1) : project.address1 != null)
+//            return false;
+//        if (address2 != null ? !address2.equals(project.address2) : project.address2 != null)
+//            return false;
+//        if (statusText != null ? !statusText.equals(project.statusText) : project.statusText != null)
+//            return false;
+//        if (projectStage != null ? !projectStage.equals(project.projectStage) : project.projectStage != null)
+//            return false;
+//        if (bidDate != null ? !bidDate.equals(project.bidDate) : project.bidDate != null)
+//            return false;
+//        if (city != null ? !city.equals(project.city) : project.city != null) return false;
+//        if (zip5 != null ? !zip5.equals(project.zip5) : project.zip5 != null) return false;
+//        if (cnProjectUrl != null ? !cnProjectUrl.equals(project.cnProjectUrl) : project.cnProjectUrl != null)
+//            return false;
+//        if (title != null ? !title.equals(project.title) : project.title != null) return false;
+//        if (contractNbr != null ? !contractNbr.equals(project.contractNbr) : project.contractNbr != null)
+//            return false;
+//        if (numberOfFloorsAboveGround != null ? !numberOfFloorsAboveGround.equals(project.numberOfFloorsAboveGround) : project.numberOfFloorsAboveGround != null)
+//            return false;
+//        if (details != null ? !details.equals(project.details) : project.details != null)
+//            return false;
+//        if (dodgeNumber != null ? !dodgeNumber.equals(project.dodgeNumber) : project.dodgeNumber != null)
+//            return false;
+//        if (lastPublishDate != null ? !lastPublishDate.equals(project.lastPublishDate) : project.lastPublishDate != null)
+//            return false;
+//        if (contractType != null ? !contractType.equals(project.contractType) : project.contractType != null)
+//            return false;
+//        if (projDlvrySys != null ? !projDlvrySys.equals(project.projDlvrySys) : project.projDlvrySys != null)
+//            return false;
+//        if (planInd != null ? !planInd.equals(project.planInd) : project.planInd != null)
+//            return false;
+//        if (dodgeVersion != null ? !dodgeVersion.equals(project.dodgeVersion) : project.dodgeVersion != null)
+//            return false;
+//        if (primaryProjectType != null ? !primaryProjectType.equals(project.primaryProjectType) : project.primaryProjectType != null)
+//            return false;
+//        if (specAvailable != null ? !specAvailable.equals(project.specAvailable) : project.specAvailable != null)
+//            return false;
+//        if (fipsCounty != null ? !fipsCounty.equals(project.fipsCounty) : project.fipsCounty != null)
+//            return false;
+//        if (targetFinishDate != null ? !targetFinishDate.equals(project.targetFinishDate) : project.targetFinishDate != null)
+//            return false;
+//        if (priorPublishDate != null ? !priorPublishDate.equals(project.priorPublishDate) : project.priorPublishDate != null)
+//            return false;
+//        if (numberOfBuildings != null ? !numberOfBuildings.equals(project.numberOfBuildings) : project.numberOfBuildings != null)
+//            return false;
+//        if (statusProjDlvrySys != null ? !statusProjDlvrySys.equals(project.statusProjDlvrySys) : project.statusProjDlvrySys != null)
+//            return false;
+//        if (stdIncludes != null ? !stdIncludes.equals(project.stdIncludes) : project.stdIncludes != null)
+//            return false;
+//        if (currencyType != null ? !currencyType.equals(project.currencyType) : project.currencyType != null)
+//            return false;
+//        if (country != null ? !country.equals(project.country) : project.country != null)
+//            return false;
+//        if (geocode != null ? !geocode.equals(project.geocode) : project.geocode != null)
+//            return false;
+//        if (zipPlus4 != null ? !zipPlus4.equals(project.zipPlus4) : project.zipPlus4 != null)
+//            return false;
+//        if (projectStageId != null ? !projectStageId.equals(project.projectStageId) : project.projectStageId != null)
+//            return false;
+//        if (projectNotes != null ? !projectNotes.equals(project.projectNotes) : project.projectNotes != null)
+//            return false;
+//        if (targetStartDate != null ? !targetStartDate.equals(project.targetStartDate) : project.targetStartDate != null)
+//            return false;
+//        if (geoLocationType != null ? !geoLocationType.equals(project.geoLocationType) : project.geoLocationType != null)
+//            return false;
+//        if (county != null ? !county.equals(project.county) : project.county != null) return false;
+//        if (firstPublishDate != null ? !firstPublishDate.equals(project.firstPublishDate) : project.firstPublishDate != null)
+//            return false;
+//        if (addendaInd != null ? !addendaInd.equals(project.addendaInd) : project.addendaInd != null)
+//            return false;
+//        if (availableFrom != null ? !availableFrom.equals(project.availableFrom) : project.availableFrom != null)
+//            return false;
+//        if (geoType != null ? !geoType.equals(project.geoType) : project.geoType != null)
+//            return false;
+//        if (unionDesignation != null ? !unionDesignation.equals(project.unionDesignation) : project.unionDesignation != null)
+//            return false;
+//        if (bidTimeZone != null ? !bidTimeZone.equals(project.bidTimeZone) : project.bidTimeZone != null)
+//            return false;
+//        if (bondInformation != null ? !bondInformation.equals(project.bondInformation) : project.bondInformation != null)
+//            return false;
+//        if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
+//            return false;
+//        if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
+//            return false;
+//        if (updates != null ? !updates.equals(project.updates) : project.updates != null)
+//            return false;
+//        return recentUpdate != null ? recentUpdate.getId() != project.getRecentUpdate().getId() : project.recentUpdate == null;
     }
 
     @Override
@@ -596,6 +618,8 @@ public class Project extends RealmObject {
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
         result = 31 * result + (bids != null ? bids.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (updates != null ? updates.hashCode() : 0);
+        result = 31 * result + (recentUpdate != null ? recentUpdate.hashCode() : 0);
         return result;
     }
 
@@ -654,6 +678,8 @@ public class Project extends RealmObject {
                 ", contacts=" + contacts +
                 ", bids=" + bids +
                 ", hidden=" + hidden +
+                ", updates=" + updates +
+                ", recentUpdate=" + recentUpdate +
                 '}';
     }
 }

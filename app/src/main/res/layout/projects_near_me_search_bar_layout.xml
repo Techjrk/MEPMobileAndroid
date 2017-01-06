@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:paddingBottom="8dp"
+    android:paddingRight="12dp"
+    android:paddingTop="8dp">
+
+    <EditText
+        android:id="@+id/search_entry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/search_near_me_bar_background"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingLeft="45dp"
+        android:paddingRight="45dp"
+        android:singleLine="true"
+        android:textColor="@color/lecetTextWhite"
+        android:textSize="17sp" />
+
+    <ImageView
+        android:id="@+id/button_search"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_action_search_near_me" />
+
+    <ImageView
+        android:id="@+id/button_clear"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_action_clear_near_me"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -2,18 +2,21 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.lecet.app.interfaces.TrackedObject;
+
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * File: Company Created: 10/19/16 Author: domandtom
  *
- * This code is copyright (c) 2016 Dom & Tom Inc.
+ * This code is copyright (c) 2016 Dom & Tom Inc. 
  */
 
-public class Company extends RealmObject {
+public class Company extends RealmObject implements TrackedObject {
 
     @SerializedName("name")
     private String name;
@@ -69,6 +72,10 @@ public class Company extends RealmObject {
 
     @SerializedName("updatedAt")
     private Date updatedAt;
+
+    private RealmList<ActivityUpdate> updates;
+
+    private ActivityUpdate recentUpdate;
 
     public Company() {
     }
@@ -145,6 +152,10 @@ public class Company extends RealmObject {
         return updatedAt;
     }
 
+    public ActivityUpdate getRecentUpdate() {
+        return recentUpdate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -179,7 +190,11 @@ public class Company extends RealmObject {
             return false;
         if (createdAt != null ? !createdAt.equals(company.createdAt) : company.createdAt != null)
             return false;
-        return updatedAt != null ? updatedAt.equals(company.updatedAt) : company.updatedAt == null;
+        if (updatedAt != null ? !updatedAt.equals(company.updatedAt) : company.updatedAt != null)
+            return false;
+        if (updates != null ? !updates.equals(company.updates) : company.updates != null)
+            return false;
+        return recentUpdate != null ? recentUpdate.getId() != company.getRecentUpdate().getId() : company.recentUpdate == null;
 
     }
 
@@ -203,6 +218,8 @@ public class Company extends RealmObject {
         result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+        result = 31 * result + (updates != null ? updates.hashCode() : 0);
+        result = 31 * result + (recentUpdate != null ? recentUpdate.hashCode() : 0);
         return result;
     }
 
@@ -227,6 +244,8 @@ public class Company extends RealmObject {
                 ", id=" + id +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", updates=" + updates +
+                ", recentUpdate=" + recentUpdate +
                 '}';
     }
 }

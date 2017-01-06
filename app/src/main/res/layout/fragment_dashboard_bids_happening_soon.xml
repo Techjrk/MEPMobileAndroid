@@ -20,33 +20,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/bids_happening_soon_text_view"
-                style="@style/CommonText.Light.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/DashboardText.Subtitle"
                 android:text="@={viewModel.bidsHappeningSoon}"
-                android:textColor="@color/lecetTextWhite"
-                bind:typeface="@{`Lato-Regular.ttf`}" />
+                bind:typeface="@{`Lato-Bold.ttf`}" />
 
             <TextView
-                style="@style/CommonText.Light.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="@string/dashboard_happening_soon"
-                android:textColor="@color/lecetTextWhite"
-                bind:typeface="@{`Lato-Regular.ttf`}" />
+                style="@style/DashboardText.Subtitle"
+                android:layout_marginLeft="8dp"
+                android:text="@string/dashboard_happening_soon" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="@dimen/calendar_width"
             android:layout_height="@dimen/calendar_height"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="21dp"
             android:background="@drawable/calendar_days_background"
             android:orientation="vertical">
 

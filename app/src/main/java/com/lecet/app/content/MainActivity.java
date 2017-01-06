@@ -1,8 +1,8 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,16 +25,20 @@ import android.widget.TextView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
+import com.lecet.app.adapters.MTMMenuAdapter;
 import com.lecet.app.adapters.OverflowMenuAdapter;
 import com.lecet.app.contentbase.NavigationBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.enums.LacetFont;
 import com.lecet.app.interfaces.LecetCallback;
@@ -46,6 +50,7 @@ import com.lecet.app.interfaces.MRADataSource;
 import com.lecet.app.interfaces.MRADelegate;
 import com.lecet.app.interfaces.MRUDataSource;
 import com.lecet.app.interfaces.MRUDelegate;
+import com.lecet.app.interfaces.MTMMenuCallback;
 import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.TextViewUtility;
@@ -59,13 +64,14 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
  */
 public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
-        MRADelegate, MRUDelegate, MRUDataSource{
+        MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";
 
@@ -84,6 +90,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     ImageButton pageRightButton;
 
     ListPopupWindow overflowMenu;
+    ListPopupWindow mtmMenu;
+    MTMMenuAdapter mtmAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +105,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+            viewModel.getTrackingLists();
         }
     }
 
@@ -108,6 +117,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+            viewModel.getTrackingLists();
         }
     }
 
@@ -116,22 +126,29 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
+            @Override
+            public void onChange(Object element) {
+
+            }
+        });
+
         Calendar calendar = Calendar.getInstance();
-        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar);
+        viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar, trackingListDomain);
         binding.setViewModel(viewModel);
     }
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.dashboard_bids);
+        setTitle(R.string.dashboard_projects);
         TextView toolbarTitle = null;
         try {
             Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
             f.setAccessible(true);
             toolbarTitle = (TextView) f.get(toolbar);
             TextViewUtility.changeTypeface(toolbarTitle, LacetFont.LATO_REGULAR);
-            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+            toolbarTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         } catch (NoSuchFieldException e) {
         } catch (IllegalAccessException e) {
         }
@@ -174,19 +191,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
                 // Notify view model of latest position.
                 viewModel.currentPagerPosition(position);
-
-                int title = 0;
-                switch (position) {
-                    case 0:
-                    case 1:
-                        title = R.string.dashboard_bids;
-                        break;
-                    case 2:
-                    case 3:
-                        title = R.string.dashboard_projects;
-                        break;
-                }
-                setTitle(title);
+                setTitle(R.string.dashboard_projects);
             }
 
             @Override
@@ -301,7 +306,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         viewModel.fetchProjectsByBidDate(selectedDate);
     }
 
-    /** MRA Implementation **/
+    /**
+     * MRA Implementation
+     **/
 
     @Override
     public void refreshRecentlyAddedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
@@ -317,7 +324,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     }
 
 
-    /** MRU Implementation **/
+    /**
+     * MRU Implementation
+     **/
 
     @Override
     public void refreshRecentlyUpdatedProjects(LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
@@ -331,7 +340,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         Date publishDate = DateUtility.addDays(-30);
         viewModel.fetchProjectsRecentlyUpdated(group, publishDate);
     }
-
 
 
     /**
@@ -350,8 +358,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_item_arrow:
+                startActivity(new Intent(this, ProjectsNearMeActivity.class));
                 return true;
             case R.id.menu_item_folder:
+                toogleMTMMenu();
                 return true;
             case R.id.menu_item_search:
                 return true;
@@ -371,6 +381,17 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         overflowMenu.show();
     }
 
+    private void toogleMTMMenu() {
+        if (mtmMenu == null) {
+            createMTMMenu(findViewById(R.id.menu_item_folder));
+        } else {
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+            mtmAdapter.setCompanyTrackingList(trackingListDomain.fetchUserCompanyTrackingList());
+            mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
+        }
+        mtmMenu.show();
+    }
+
     private void createOverflowMenu(View anchor) {
         if (overflowMenu == null) {
             overflowMenu = new ListPopupWindow(this);
@@ -383,8 +404,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_width);
-            int offset = (int) (width * 0.875); //enough to show it below more item menu
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0] - (getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space) / 2.0));
             overflowMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.overflow_menu_background));
             overflowMenu.setAnchorView(anchor);
             overflowMenu.setModal(true);
@@ -412,6 +435,37 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         }
     }
 
+    private void createMTMMenu(View anchor) {
+        if (mtmMenu == null) {
+            mtmMenu = new ListPopupWindow(this);
+
+            TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+
+            mtmAdapter
+                    = new MTMMenuAdapter(this
+                    , getResources().getStringArray(R.array.mtm_menu)
+                    , trackingListDomain.fetchUserProjectTrackingList()
+                    , trackingListDomain.fetchUserCompanyTrackingList()
+                    , this);
+
+
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x - getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space);
+            int[] coordinates = new int[2];
+            anchor.getLocationOnScreen(coordinates);
+            int offset = (int) (coordinates[0] - (getResources().getDimensionPixelSize(R.dimen.overflow_menu_margin_space) / 2.0));
+
+            mtmMenu.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.mtm_back));
+            mtmMenu.setAnchorView(anchor);
+            mtmMenu.setModal(true);
+            mtmMenu.setWidth(width);
+            mtmMenu.setHorizontalOffset(-offset);
+            mtmMenu.setAdapter(mtmAdapter);
+        }
+    }
+
     @Override
     public void onProfileClicked() {
 
@@ -427,4 +481,21 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
     }
 
+    @Override
+    public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
+        Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
+        Intent intent = new Intent(getBaseContext(), CompanyTrackingListActivity.class);
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, companyTrackingList.getId());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, companyTrackingList.getCompanies().size());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, companyTrackingList.getName());
+        startActivity(intent);
+    }
 }

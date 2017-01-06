@@ -5,4 +5,22 @@
         <item>Hidden Projects</item>
         <item>Settings</item>
     </string-array>
+
+    <string-array name="mtm_menu">
+        <item>Project Lists</item>
+        <item>Company Lists</item>
+    </string-array>
+
+    <string-array name="mobile_tracking_list_sort_menu">
+        <item>Bid Date</item>
+        <item>Last Updated</item>
+        <item>Date Added</item>
+        <item>Value: High to Low</item>
+        <item>Value: Low to High</item>
+    </string-array>
+
+    <string-array name="mobile_company_tracking_list_sort_menu">
+        <item>Last Updated</item>
+        <item>Alphabetical</item>
+    </string-array>
 </resources>
