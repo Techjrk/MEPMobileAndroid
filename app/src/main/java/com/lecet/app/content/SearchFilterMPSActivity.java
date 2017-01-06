@@ -43,8 +43,18 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     String county = !info[2].trim().equals("") ? (!state.equals("") ? ", " + info[2] : " " + info[2]) : "";
                     String zip = !info[3].trim().equals("") ? (!county.equals("") ? ", " + info[3] : " " + info[3]) : "";
                     viewModel.setLocation_select(city + state + county + zip);
-                    String projectLocation = "\"projectLocation\": {\"zip5\":\"" + info[0] + "\",\"city\":\"" + info[1] + "\",\"county\":\"" + info[2] + "\",\"state\":\"" + info[3] + "\"}";
-                    viewModel.setSearchFilterResult("projectLocation", projectLocation);
+//                    String projectLocation = "\"projectLocation\": {";
+                    String projectLocation="";
+                    projectLocation+=( !info[0].equals("") ? "\"zip5\":\"" + info[0] + "\"":"");
+                    projectLocation+=( !info[1].equals("") ? (!info[0].equals("") ? ",\"city\":\"" + info[1] + "\"" : "\"city\":\"" + info[1] + "\""):"");
+                    projectLocation+=( !info[2].equals("") ? (!info[0].equals("") || !info[1].equals("") ? ",\"county\":\"" + info[2] + "\"" : "\"county\":\"" + info[2] + "\""):"");
+//                    projectLocation+=( !info[2].equals("") ? "\"county\":\"" + info[2] + "\",":"");
+                    projectLocation+=( !info[3].equals("") ? (!info[0].equals("") || !info[1].equals("") || !info[2].equals("")  ? ",\"state\":\"" + info[3] + "\"" : "\"state\":\"" + info[3] + "\""):"");
+//                    projectLocation+=( !info[3].equals("") ? "\"state\":\"" + info[3] + "\"}":"}");
+                    if ( !projectLocation.trim().equals("")) {
+                      projectLocation = "\"projectLocation\": {"+projectLocation+"}";
+                         viewModel.setSearchFilterResult("projectLocation", projectLocation);
+                    } else  viewModel.setSearchFilterResult("projectLocation", "");
                     break;
                 case R.id.type & 0xfff:
                     //TODO: Compose the correct search filter result for Type and set it to setSearchFilterResult

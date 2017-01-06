@@ -52,12 +52,16 @@ public class SearchActivity extends AppCompatActivity {
         //TODO - make filtered data call
 
         Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
-        String projectLocation = data.getStringExtra("projectLocation");
-        Log.d("projectLocation", "projectLocation = " + projectLocation);
-        searchFilter = "{" + projectLocation + "}";
-        Log.d("searchFilter", "searchFilter = " + projectLocation);
-        //TODO set the result filter to the domain...
-        viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        if (data !=null) {
+            String projectLocation = data.getStringExtra("projectLocation");
+            if (projectLocation != null && !projectLocation.equals("")) {
+                Log.d("projectLocation", "projectLocation = " + projectLocation);
+                searchFilter = "{" + projectLocation + "}";
+                Log.d("searchFilter", "searchFilter = " + projectLocation);
+                //TODO set the result filter to the domain...
+                viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+            } else viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}");
+        } else viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}");
         viewModel.updateViewQuery();
         viewModel.setSeeAll(viewModel.getSeeAllForResult());
     }
