@@ -48,13 +48,22 @@ import retrofit2.Response;
  */
 
 public class SearchViewModel extends BaseObservable {
+    private static final String TAG = "SearchViewModel";
+
+    public static final String FILTER_EXTRA_DATA = "data";
+    public static final String FILTER_PROJECT_LOCATION = "projectLocation";
+    public static final String FILTER_PROJECT_TYPE = "projectType";
+    public static final String FILTER_PROJECT_VALUE = "projectValue";
+    public static final String FILTER_PROJECT_UPDATED_IN_LAST = "updatedInLast";
+
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
-    private int seeAllForResult = -1;
-    private static AlertDialog.Builder builder;
+    private int seeAllForResult = -1;   //TODO - include comment on purpose
+    private static AlertDialog.Builder builder; //TODO - rename to dialogBuilder for clarity
     private String errorMessage = null;
-    private static final String TAG = "SearchViewModel";
+
+    // Adapter types. TODO - convert to IntDefs
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;

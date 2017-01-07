@@ -25,7 +25,7 @@ public class SearchFilterMPFBiddingWithinViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data", time);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, time);
         activity.setResult(R.id.bidding_within & 0xfff,intent);
         activity.finish();
     }

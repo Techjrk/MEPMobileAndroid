@@ -31,7 +31,7 @@ public class SearchFilterMPFLocationViewModel extends BaseObservable{
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data",new String[]{getCity(),getState(),getCounty(),getZipcode()});
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA,new String[]{getCity(),getState(),getCounty(),getZipcode()});
         activity.setResult(R.id.location & 0xfff,intent);
         activity.finish();
     }

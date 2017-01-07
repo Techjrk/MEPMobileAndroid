@@ -26,7 +26,7 @@ public class SearchFilterMPFWorkTypeViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data", worktype);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, worktype);
         activity.setResult(R.id.worktype & 0xfff, intent);
         activity.finish();
     }

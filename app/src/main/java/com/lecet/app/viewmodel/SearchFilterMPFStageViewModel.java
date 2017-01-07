@@ -26,7 +26,7 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data", stage);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stage);
         activity.setResult(R.id.stage & 0xfff, intent);
         activity.finish();
     }

@@ -26,7 +26,7 @@ public class SearchFilterMPFOwnerTypeViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data", ownertype);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, ownertype);
         activity.setResult(R.id.ownertype & 0xfff, intent);
         activity.finish();
     }

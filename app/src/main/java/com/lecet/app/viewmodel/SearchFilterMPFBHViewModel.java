@@ -25,7 +25,7 @@ public class SearchFilterMPFBHViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data", bh);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, bh);
         activity.setResult(R.id.bh & 0xfff,intent);
         activity.finish();
     }

@@ -26,7 +26,7 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra("data", jurisdiction);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, jurisdiction);
         activity.setResult(R.id.jurisdiction & 0xfff, intent);
         activity.finish();
     }

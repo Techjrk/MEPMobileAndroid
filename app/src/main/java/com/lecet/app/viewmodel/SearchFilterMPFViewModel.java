@@ -256,6 +256,9 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         activity.startActivityForResult(i, id & 0xfff);
     }
 
+    /**
+     * Put the passed filter name and String value into an Extra to be returned with the Intent
+     */
     public void setSearchFilterResult(String name, String content) {
         intent.putExtra(name, content);
     }
@@ -264,7 +267,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         activity.setResult(1, intent);
     }
 
-    private boolean moreOption;
+    private boolean moreOption; //TODO - move to top of class
 
     @Bindable
     public boolean getMoreOption() {
