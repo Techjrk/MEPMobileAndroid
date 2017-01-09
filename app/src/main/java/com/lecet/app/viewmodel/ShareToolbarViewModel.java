@@ -202,15 +202,11 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         return currentIds;
     }
 
-    public List<Long> getAddedIds(List<T> selectedItems, U trackingList) {
+    public List<Long> getAddedIds(T currentTrackedObject, U trackingList) {
         RealmList<T> trackedItems = getTrackedItems(trackingList);
 
         List<Long> currentIds = getTrackedIds(trackedItems);
-
-        for (T trackedObject : selectedItems) {
-
-            currentIds.add(trackedObject.getId());
-        }
+        currentIds.add(currentTrackedObject.getId());
 
         return currentIds;
     }
