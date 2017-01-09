@@ -54,27 +54,53 @@ public class SearchActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
 
+        String locationFilter = "";
+        String typeFilter = "";
+        String valueFilter = "";
+        String updatedWithinFilter = "";
+
         StringBuilder sb = new StringBuilder();
 
         if (data != null) {
-            sb.append(processLocationFilter(data));
-            sb.append(processTypeFilter(data));
-            sb.append(processValueFilter(data));
-            sb.append(processUpdatedWithinFilter(data));
-            //TODO - append commas as necessary when building the filter string
+
+            // Location Filter (valid but incorrect) - {"projectLocation": {"zip5":"Brooklyn","city":"NY","county":"Kings","state":"11215"}}
+            locationFilter = (processLocationFilter(data));
+            if(locationFilter.length() > 0) {
+                sb.append(locationFilter);
+            }
+
+            // Type Filter (INVALID) {"type": {Engineering}}
+            typeFilter = (processTypeFilter(data));
+            if(typeFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(typeFilter);
+            }
+
+            // Value Filter (valid)
+            valueFilter = (processValueFilter(data));
+            if(valueFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(valueFilter);
+            }
+
+            // Updated Within Filter (valid)
+            updatedWithinFilter = (processUpdatedWithinFilter(data));
+            if(valueFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(updatedWithinFilter);
+            }
+
+            //TODO - append commas as necessary when building the filter string (in progress)
 
             // prepend searchFilter param if there are any filters used
             if(sb.length() > 0) {
-                sb.insert(0, ",\"searchFilter\":\"");
+                //sb.insert(0, ",\"searchFilter\":\"");
+                sb.insert(0, ",\"searchFilter\":");
             }
         }
 
-        //TODO - NEED TO GET SYNTAX CORRECT ON THE FINAL COMBINEDFILTER.
-
         String combinedFilter = sb.toString();
-
-
-        // EXAMPLE filter = {"include":[{"bids":["company",{"project":["projectStage"]}]},{"contacts":["company","contact","contactType"]},"csiCodes",{"primaryProjectType":["projectCategory"]},"projectStage","secondaryProjectTypes","specAlerts","userNotes","workTypes"],"jurisdiction":true,"limit":28,"searchFilter":{"projectTypeId":{"inq":[501,502,503,504]},"updatedInLast":1,"projectValue":{"min":555,"max":666},"projectStageId":{"inq":[203]},"projectLocation":{"city":"Brooklyn","county":"Kings","zip5":"11215"},"buildingOrHighway":{"inq":["B"]},"biddingInNext":7,"ownerType":{"inq":["Federal"]},"workTypeId":{"inq":[4]},"jurisdictions":{"inq":[3]},"deepJurisdictionId":["3-3_2-1_1"]},"skip":0}
+        Log.d(TAG, "onActivityResult: combinedFilter: " + combinedFilter);
 
         String searchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + combinedFilter + "}";
         Log.d(TAG, "onActivityResult: searchStr: " + searchStr);

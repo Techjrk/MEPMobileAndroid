@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SearchFilterMPSActivity extends AppCompatActivity {
     SearchFilterMPFViewModel viewModel;
@@ -96,29 +100,55 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     }
 
     private void processLocation(String[] arr) {
-        //       arr = data.getStringArrayExtra("data");
-        //       Log.d("location:", "location: " + arr.length + " : " + arr[0]);
-        String city = !arr[0].trim().equals("") ? arr[0] : "";
-        String state = !arr[1].trim().equals("") ? (!city.equals("") ? ", " + arr[1] : " " + arr[1]) : "";       //TODO - strip comma and validate state
-        String county = !arr[2].trim().equals("") ? (!state.equals("") ? ", " + arr[2] : " " + arr[2]) : "";
-        String zip = !arr[3].trim().equals("") ? (!county.equals("") ? ", " + arr[3] : " " + arr[3]) : "";
-        viewModel.setLocation_select(city + state + county + zip);
-//                    String projectLocation = "\"projectLocation\": {";
-        String projectLocation="";
-        projectLocation += ( !arr[0].equals("") ? "\"zip5\":\"" + arr[0] + "\"":"");
-        projectLocation += ( !arr[1].equals("") ? (!arr[0].equals("") ? ",\"city\":\"" + arr[1] + "\"" : "\"city\":\"" + arr[1] + "\""):"");
-        projectLocation += ( !arr[2].equals("") ? (!arr[0].equals("") || !arr[1].equals("") ? ",\"county\":\"" + arr[2] + "\"" : "\"county\":\"" + arr[2] + "\""):"");
-//                    projectLocation += ( !arr[2].equals("") ? "\"county\":\"" + arr[2] + "\",":"");
-        projectLocation += ( !arr[3].equals("") ? (!arr[0].equals("") || !arr[1].equals("") || !arr[2].equals("")  ? ",\"state\":\"" + arr[3] + "\"" : "\"state\":\"" + arr[3] + "\""):"");
-//                    projectLocation += ( !arr[3].equals("") ? "\"state\":\"" + arr[3] + "\"}":"}");
+
+        // initial vars from raw data
+        String city   = arr[0];
+        String state  = arr[1];
+        String county = arr[2];
+        String zip    = arr[3];
+
+        // comma-separated constructed String for UI display
+        String cityStr   = city;
+        String stateStr  = !state.equals("")  ? (!city.equals("")   ? "," + state  : " " + state)  : "";       //TODO - any validation here? compare iOS version
+        String countyStr = !county.equals("") ? (!state.equals("")  ? "," + county : " " + county) : "";
+        String zipStr    = !zip.equals("")    ? (!zip.equals("")    ? "," + zip    : " " + zip)    : "";
+
+        String locationText = cityStr + stateStr + countyStr + zipStr;
+        viewModel.setLocation_select(locationText);
+        Log.d("SearchFilterMPSAct", "location: " + locationText);
+
+        // StringBuilder used for generating query with commas as appropriate
+        String projectLocation = "";
+                //projectLocation += ( !city.equals("") ? "\"city\":\"" + city + "\"":"");
+                        //projectLocation += ( !city.equals("") ? (!city.equals("") ? ",\"city\":\"" + city + "\"" : "\"city\":\"" + city + "\""):"");
+                //projectLocation += ( !state.equals("") ? (!state.equals("") || !state.equals("") || !state.equals("")  ? ",\"state\":\"" + state + "\"" : "\"state\":\"" + state + "\""):"");
+                //projectLocation += ( !county.equals("") ? (!county.equals("") || !county.equals("") ? ",\"county\":\"" + county + "\"" : "\"county\":\"" + county + "\""):"");
+                        //projectLocation += ( !zip.equals("") ? "\"zip5\":\"" + zip + "\"":"");
+               // projectLocation += ( !zip.equals("") ? (!zip.equals("") ? ",\"zip5\":\"" + zip + "\"" : "\"zip5\":\"" + zip + "\""):"");
+
+        StringBuilder sb = new StringBuilder();
+        if(city.length() > 0) {
+            sb.append("\"city\":\"" + city + "\"");
+        }
+        if(state.length() > 0) {
+            if(sb.length() > 0) sb.append(",");
+            sb.append("\"state\":\"" + state + "\"");
+        }
+        if(county.length() > 0) {
+            if(sb.length() > 0) sb.append(",");
+            sb.append("\"county\":\"" + county + "\"");
+        }
+        if(zip.length() > 0) {
+            if(sb.length() > 0) sb.append(",");
+            sb.append("\"zip5\":\"" + zip + "\"");
+        }
+
+        projectLocation = sb.toString();
+
         if (!projectLocation.trim().equals("")) {
-            projectLocation = "\"projectLocation\": {"+projectLocation+"}";
+            projectLocation = "\"projectLocation\":{" + projectLocation + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_LOCATION, projectLocation);  // this should work whether or not projectLocation is empty
-
-        /*else {
-            viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_LOCATION, "");
-        }*/
     }
 
     //TODO: Compose the correct search filter result for Type and set it to setSearchFilterResult
