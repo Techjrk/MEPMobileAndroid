@@ -46,10 +46,10 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
+    private final T trackedObject;
 
     @NavigationMode
     private int selectedMode;
-    private U currentTrackingList;
 
     private ListPopupWindow sharePopupWindow;
     private ListPopupWindow mtmPopupWindow;
@@ -57,18 +57,30 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
     private Dialog hideDialog;
 
-    public ShareToolbarViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain) {
+    public ShareToolbarViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, T trackedObject) {
 
         this.appCompatActivity = appCompatActivity;
         this.trackingListDomain = trackingListDomain;
+        this.trackedObject = trackedObject;
     }
 
     public abstract MoveToAdapter getMoveToListAdapter(AppCompatActivity appCompatActivity, String title, MoveToListCallback callback, RealmResults<U> lists);
 
+    public abstract U getAssociatedTrackingList(T trackedObject);
+
     public abstract RealmResults<U> getUserTrackingListsExcludingCurrentList(U currentTrackingList);
+
+    public abstract RealmResults<U> getAllUserTrackingLists();
 
     public abstract RealmList<T> getTrackedItems(U trackingList);
 
+    public abstract void removeTrackedObjectFromTrackingList(long trackingListId, List<Long> trackedIds);
+
+    public abstract void addTrackedObjectToTrackingList(long trackingListId, List<Long> trackedIds);
+
+    public TrackingListDomain getTrackingListDomain() {
+        return trackingListDomain;
+    }
 
     @SuppressWarnings("unused")
     public void onTrackSelected(View view) {
@@ -130,7 +142,18 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         if (mtmPopupWindow == null) {
             createMoveMenu(view);
         } else {
-            mtmAdapter.setTrackingLists(getUserTrackingListsExcludingCurrentList(currentTrackingList));
+
+            U currentTrackingList = getAssociatedTrackingList(trackedObject);
+
+            if (currentTrackingList == null) {
+
+                mtmAdapter.setTrackingLists(getAllUserTrackingLists());
+
+            } else {
+
+                mtmAdapter.setTrackingLists(getUserTrackingListsExcludingCurrentList(currentTrackingList));
+            }
+
         }
         mtmPopupWindow.show();
     }
@@ -139,7 +162,19 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         if (mtmPopupWindow == null) {
             mtmPopupWindow = new ListPopupWindow(appCompatActivity);
 
-            mtmAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, getUserTrackingListsExcludingCurrentList(currentTrackingList));
+            U currentTrackingList = getAssociatedTrackingList(trackedObject);
+            RealmResults<U> trackingLists;
+
+            if (currentTrackingList == null) {
+
+                trackingLists = getAllUserTrackingLists();
+
+            } else {
+
+                trackingLists = getUserTrackingListsExcludingCurrentList(currentTrackingList);
+            }
+
+            mtmAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, trackingLists);
 
             Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -179,10 +214,25 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
     public void onTrackingListClicked(U trackingList) {
 
         dismissWindow();
-        handleMoveItemsClicked(getSelectedItems(), trackingList);
+        handleTrackingListSelected(trackedObject, trackingList);
     }
 
     /* Tracking List Management */
+
+    public void handleTrackingListSelected(T trackedObject, U trackingList) {
+
+        // Remove from any existing tracking list, then add to new tracking list
+        U existingTrackingList = getAssociatedTrackingList(trackedObject);
+
+        if (existingTrackingList != null) {
+
+            List<Long> retainedIds = getRetainedIds(trackedObject, existingTrackingList);
+            removeTrackedObjectFromTrackingList(existingTrackingList.getId(), retainedIds);
+        }
+
+        List<Long> trackedIds = getAddedIds(trackedObject, trackingList);
+        addTrackedObjectToTrackingList(trackingList.getId(), trackedIds);
+    }
 
     public List<Long> getTrackedIds(List<T> selectedItems) {
 
@@ -195,19 +245,23 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         return ids;
     }
 
-    public List<Long> getRetainedIds(T currentTrackedObject, List<Long> currentIds) {
+    public List<Long> getRetainedIds(T currentTrackedObject, U trackingList) {
 
+        RealmList<T> trackedItems = getTrackedItems(trackingList);
+        List<Long> currentIds = getTrackedIds(trackedItems);
         currentIds.remove(currentTrackedObject.getId());
 
         return currentIds;
     }
 
     public List<Long> getAddedIds(T currentTrackedObject, U trackingList) {
-        RealmList<T> trackedItems = getTrackedItems(trackingList);
 
+        RealmList<T> trackedItems = getTrackedItems(trackingList);
         List<Long> currentIds = getTrackedIds(trackedItems);
         currentIds.add(currentTrackedObject.getId());
 
         return currentIds;
     }
+
+
 }
