@@ -63,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if (data != null) {
 
-            // Location Filter (valid but incorrect) - {"projectLocation": {"zip5":"Brooklyn","city":"NY","county":"Kings","state":"11215"}}
+            // Location Filter (valid) - {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
             locationFilter = (processLocationFilter(data));
             if(locationFilter.length() > 0) {
                 sb.append(locationFilter);
