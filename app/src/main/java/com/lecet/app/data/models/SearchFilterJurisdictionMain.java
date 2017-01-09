@@ -10,12 +10,12 @@ import java.util.List;
      */
 public class SearchFilterJurisdictionMain {
     public String name;
-    public Object longName;
+    public String longName;
     public String abbreviation;
     public int id;
     public List<SearchFilterJurisdictionLocal> locals;
-    public List<Object> districtCouncils;
-    public List<Object> localsWithNoDistrict;
+    public List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
+    public List<SearchFilterJurisdictionLocal> localsWithNoDistrict;
 
     public String getName() {
         return name;
@@ -25,11 +25,11 @@ public class SearchFilterJurisdictionMain {
         this.name = name;
     }
 
-    public Object getLongName() {
+    public String getLongName() {
         return longName;
     }
 
-    public void setLongName(Object longName) {
+    public void setLongName(String longName) {
         this.longName = longName;
     }
 
@@ -57,19 +57,19 @@ public class SearchFilterJurisdictionMain {
         this.locals = locals;
     }
 
-    public List<Object> getDistrictCouncils() {
+    public List<SearchFilterJurisdictionDistrictCouncil> getDistrictCouncils() {
         return districtCouncils;
     }
 
-    public void setDistrictCouncils(List<Object> districtCouncils) {
+    public void setDistrictCouncils(List<SearchFilterJurisdictionDistrictCouncil> districtCouncils) {
         this.districtCouncils = districtCouncils;
     }
 
-    public List<Object> getLocalsWithNoDistrict() {
+    public List<SearchFilterJurisdictionLocal> getLocalsWithNoDistrict() {
         return localsWithNoDistrict;
     }
 
-    public void setLocalsWithNoDistrict(List<Object> localsWithNoDistrict) {
+    public void setLocalsWithNoDistrict(List<SearchFilterJurisdictionLocal> localsWithNoDistrict) {
         this.localsWithNoDistrict = localsWithNoDistrict;
     }
 

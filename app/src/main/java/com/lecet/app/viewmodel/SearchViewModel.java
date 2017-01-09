@@ -29,6 +29,9 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
+import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
+import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -59,8 +62,12 @@ public class SearchViewModel extends BaseObservable {
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
-    private int seeAllForResult = -1;   //TODO - include comment on purpose
-    private static AlertDialog.Builder builder; //TODO - rename to dialogBuilder for clarity
+    public static final int SEE_ALL_NO_RESULT =-1;
+    public static final int SEE_ALL_PROJECTS =0;
+    public static final int SEE_ALL_COMPANIES =1;
+    public static final int SEE_ALL_CONTACTS =2;
+    private int seeAllForResult = SEE_ALL_NO_RESULT;
+    private static AlertDialog.Builder dialogBuilder;
     private String errorMessage = null;
 
     // Adapter types. TODO - convert to IntDefs
@@ -176,6 +183,7 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterProjectQueryAll();
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
+        getJurisdictionList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -223,6 +231,49 @@ public class SearchViewModel extends BaseObservable {
         getQueryContactTotal();
     }
 
+    /***
+     * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
+     */
+    public void getJurisdictionList() {
+        searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
+            @Override
+            public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
+                List<SearchFilterJurisdictionMain> slist;
+                if (response.isSuccessful()) {
+                    slist = response.body();
+                    /*
+                    TODO: for checking and testing the complex content of Jurisdiction main list items. This section need to be discussed on how these list items will be displayed in UI layout.
+                     */
+                    for (SearchFilterJurisdictionMain jdMain : slist) {
+                        Log.d("jmain","jmain = name:"+jdMain.getName()+" long name:"+ jdMain.getAbbreviation()+" abbreviation:"+jdMain.getAbbreviation()+" id:"+jdMain.getId());
+                         for(SearchFilterJurisdictionLocal jlocal: jdMain.getLocals()){
+                             Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());
+                         }
+
+                          for(  SearchFilterJurisdictionDistrictCouncil dcouncil : jdMain.getDistrictCouncils()){
+                              Log.d("jdcouncil","jdcouncil = name:"+ dcouncil.getName()+" abbreviation:"+dcouncil.getAbbreviation()+" id:"+dcouncil.getId()+" regionId:"+dcouncil.getRegionId());
+                            if (dcouncil.getLocals()!=null) {
+                                for (SearchFilterJurisdictionLocal dclocals: dcouncil.getLocals()) {
+                                    Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
+                                }
+                            }
+                          }
+                        for(SearchFilterJurisdictionLocal nodc: jdMain.getLocalsWithNoDistrict()) {
+                            Log.d("nodc","nodc = name:"+nodc.getName()+" id"+nodc.getId()+" dc id:"+nodc.getDistrictCouncilId());
+                        }
+                    }
+
+                } else {
+                    errorDisplayMsg("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SearchFilterJurisdictionMain>> call, Throwable t) {
+                errorDisplayMsg("Network is busy. Pls. try again. ");
+            }
+        });
+    }
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -239,7 +290,7 @@ public class SearchViewModel extends BaseObservable {
 
                 }
             } catch (Exception e) {
-                //TODO - handle exception
+                //if no project is found, just do nothing...
                 Log.w("No project", "No project in the list");
             }
         }
@@ -268,7 +319,7 @@ public class SearchViewModel extends BaseObservable {
 
                 }
             } catch (Exception e) {
-                //TODO - handle exception
+                //if no company is found, just do nothing...
                 Log.w("No company", "No company in the list");
             }
         }
@@ -297,7 +348,7 @@ public class SearchViewModel extends BaseObservable {
 
                 }
             } catch (Exception e) {
-                //TODO - handle exception
+                //if no contact object is found, just do nothing...
                 Log.w("No contact", "No contact in the list");
             }
         }
@@ -326,8 +377,7 @@ public class SearchViewModel extends BaseObservable {
                                 adapterDataRecentlyViewed.add(s);
                             }
                         } catch (Exception e) {
-                            //TODO - handle exception
-                            Log.e("UserRecentlyViewed", "Exception in getUserRecentlyViewed" + e.getMessage());
+                            //Log.e("UserRecentlyViewed", "Exception in getUserRecentlyViewed" + e.getMessage());
                             errorDisplayMsg("Problem in retrieving user Recently viewed" + e.getMessage());
                         }
                     }
@@ -360,20 +410,17 @@ public class SearchViewModel extends BaseObservable {
                     if (adapterDataProjectSearchSaved == null) new ArrayList<SearchSaved>();
                     adapterDataProjectSearchSaved.clear();
                     adapterDataCompanySearchSaved.clear();
-                    int projectcounter = 0, companycounter = 0;  //TODO - rename variables for more clarity
+                    int projectCounter = 0, companyCounter = 0;
 
                     for (SearchSaved s : slist) {
-                        //TODO: testing for getting the result of  UserSaved search
-                        //projectcounter++;
                         if (s != null) {
                             if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
 
-                                projectcounter++;
+                                projectCounter++;
                             } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
-
-                                companycounter++;
+                                companyCounter++;
                             }
                         }
                     }
@@ -461,13 +508,13 @@ public class SearchViewModel extends BaseObservable {
         if (errorMessage != null || activity == null) return;
         errorMessage = message + "\r\n";
         try {
-            if (builder == null) builder = new AlertDialog.Builder(activity); //Applying singleton;
-            builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
+            if (dialogBuilder == null) dialogBuilder = new AlertDialog.Builder(activity); //Applying singleton;
+            dialogBuilder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
             Log.e("Error:", "Error " + errorMessage);
-            builder.setMessage(errorMessage);
-            builder.setNegativeButton(activity.getString(R.string.ok), null);
+            dialogBuilder.setMessage(errorMessage);
+            dialogBuilder.setNegativeButton(activity.getString(R.string.ok), null);
             Log.e("onFailure", "onFailure: " + errorMessage);
-            builder.show();
+            dialogBuilder.show();
         } catch (Exception e) {
             Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
             Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);
@@ -803,17 +850,19 @@ public class SearchViewModel extends BaseObservable {
      *
      * @param seeOrder
      */
+
+
     public void setSeeAll(int seeOrder) {
         seeAllForResult = seeOrder;
 
         switch (seeOrder) {
-            case 0:  //for see all Project
+            case SEE_ALL_PROJECTS:  //for see all Project
                 setIsMSR11Visible(true);
                 break;
-            case 1:
+            case SEE_ALL_COMPANIES:
                 setIsMSR12Visible(true);
                 break;
-            case 2:
+            case SEE_ALL_CONTACTS:
                 setIsMSR13Visible(true);
                 break;
             default:

@@ -6,6 +6,7 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
+import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -47,6 +48,14 @@ public class SearchDomain {
         initFilter();
     }
 
+    /**
+     * To call the retrofit service for the jurisdiction list items to be displayed in the UI layout for jurisdiciton section.
+     * @param callback
+     */
+    public void getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
+        Call<List<SearchFilterJurisdictionMain>> call = lecetClient.getSearchService().getSearchFilterJurisdictionItems();
+        call.enqueue(callback);
+    }
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}");

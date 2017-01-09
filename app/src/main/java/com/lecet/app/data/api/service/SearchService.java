@@ -84,5 +84,5 @@ public interface SearchService {
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("Regions/tree")
-    Call<SearchFilterJurisdictionMain> getSearchFilterJurisdictionItems();
+    Call<List<SearchFilterJurisdictionMain>> getSearchFilterJurisdictionItems();
 }
