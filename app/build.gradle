@@ -11,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
-        versionName "0.1.1"
+        versionName "0.7.0"
 
         // HockeyApp
         manifestPlaceholders = [HOCKEY_APP_ID: "bf2b988cbd6245d48903f92ea181b6af"]
