@@ -60,6 +60,7 @@ public class SearchActivity extends AppCompatActivity {
         String valueFilter = "";
         String updatedWithinFilter = "";
         String jurisdictionFilter = "";
+        String stageFilter = "";
 
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
@@ -104,6 +105,13 @@ public class SearchActivity extends AppCompatActivity {
             if(jurisdictionFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(jurisdictionFilter);
+            }
+
+            // Stage Filter (valid)
+            stageFilter = (processStageFilter(data));
+            if(stageFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(stageFilter);
             }
 
             // prepend searchFilter param if there are any filters used
@@ -226,6 +234,22 @@ public class SearchActivity extends AppCompatActivity {
             Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
             //filter = "{" + jurisdiction + "}";
             filter = jurisdiction;
+            //TODO set the result filter to the domain...
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Stage filter data
+     * Ex: "projectStageId":{"inq":[203, 201, 206]}
+     */
+    private String processStageFilter(Intent data) {
+        String filter = "";
+        String stage = data.getStringExtra(SearchViewModel.FILTER_PROJECT_STAGE);
+        if(stage != null && !stage.equals("")) {
+            Log.d(TAG, "onActivityResult: stage: " + stage);
+            //filter = "{" + stage + "}";
+            filter = stage;
             //TODO set the result filter to the domain...
         }
         return filter;

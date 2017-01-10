@@ -63,7 +63,8 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_TYPE_ID = "projectTypeId";
     public static final String FILTER_PROJECT_VALUE = "projectValue";
     public static final String FILTER_PROJECT_UPDATED_IN_LAST = "updatedInLast";
-    public static final String FILTER_PROJECT_JURISDICTION = "jurisdiction";
+    public static final String FILTER_PROJECT_JURISDICTION = "projectJurisdiction";
+    public static final String FILTER_PROJECT_STAGE = "projectStage";
 
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";

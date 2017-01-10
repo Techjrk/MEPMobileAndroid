@@ -70,8 +70,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Project Stage
                 case R.id.stage & 0xfff:
-                    //TODO: Compose the correct search filter result for Stage and set it to setSearchFilterResult
-                    viewModel.setStage_select(info[0]);
+                    processStage(info);
                     break;
 
                 // Bidding Within
@@ -221,6 +220,23 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
     }
+
+    //TODO: Compose the correct search filter result for Stage and set it to setSearchFilterResult
+    private void processStage(String[] arr) {
+        String stageStr = arr[0];
+        String stages = "";
+        viewModel.setStage_select(stageStr);
+        if(stageStr != null && !stageStr.trim().equals("")) {
+            List<Integer> sList = new ArrayList<>();
+            sList.add(203);    //TODO - HARD-CODED. Get from client-provided list of Stages
+            sList.add(201);
+            sList.add(206);
+            stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
+    }
+
+
 
     @Override
     public void onBackPressed() {
