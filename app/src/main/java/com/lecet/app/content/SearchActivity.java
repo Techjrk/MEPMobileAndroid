@@ -59,6 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         String projectTypeIdFilter = "";
         String valueFilter = "";
         String updatedWithinFilter = "";
+        String jurisdictionFilter = "";
 
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
@@ -98,7 +99,12 @@ public class SearchActivity extends AppCompatActivity {
                 sb.append(updatedWithinFilter);
             }
 
-            //TODO - append commas as necessary when building the filter string (in progress)
+            // Jurisdiction Filter (valid)
+            jurisdictionFilter = (processJurisdictionFilter(data));
+            if(jurisdictionFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(jurisdictionFilter);
+            }
 
             // prepend searchFilter param if there are any filters used
             if(sb.length() > 0) {
@@ -139,7 +145,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     /**
-     * Process the Type filter data
+     * Process the Primary Project Type filter data
      */
     private String processPrimaryProjectTypeFilter(Intent data) {
         String filter = "";
@@ -208,6 +214,24 @@ public class SearchActivity extends AppCompatActivity {
         }
         return filter;
     }
+
+    /**
+     * Process the Jurisdictions filter data
+     * Ex: "jurisdictions":{"inq":["Eastern","New Jersey","3"]}
+     */
+    private String processJurisdictionFilter(Intent data) {
+        String filter = "";
+        String jurisdiction = data.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION);
+        if(jurisdiction != null && !jurisdiction.equals("")) {
+            Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
+            //filter = "{" + jurisdiction + "}";
+            filter = jurisdiction;
+            //TODO set the result filter to the domain...
+        }
+        return filter;
+    }
+
+
 
 }
 

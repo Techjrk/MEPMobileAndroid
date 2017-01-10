@@ -65,8 +65,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Jurisdiction
                 case R.id.jurisdiction & 0xfff:
-                    //TODO: Compose the correct search filter result for Jurisdiction and set it to setSearchFilterResult
-                    viewModel.setJurisdiction_select(info[0]);
+                    processJurisdiction(info);
                     break;
 
                 // Project Stage
@@ -204,6 +203,23 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
+    }
+
+    //TODO: Compose the correct search filter result for Jurisdiction and set it to setSearchFilterResult
+    //NOTE: jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
+    private void processJurisdiction(String[] arr) {
+        String jurisdiction = arr[0];
+        String jurisdictions = "";
+        viewModel.setJurisdiction_select(jurisdiction);
+        if(jurisdiction != null && !jurisdiction.trim().equals("")) {
+            List<String> jList = new ArrayList<>();
+            jList.add("\"Eastern\"");    //TODO - HARD-CODED. Get from client-provided list of jurisdictions
+            jList.add("\"New Jersey\"");
+            jList.add("\"3\"");
+            String js = jList.toString();
+            jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";         // square brackets [ ] come for free when the list is converted to a String
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
     }
 
     @Override
