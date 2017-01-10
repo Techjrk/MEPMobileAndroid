@@ -168,7 +168,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processProjectTypeId(String[] arr) {
         String typeIdStr = arr[0];
         String projectTypeId = "";
-        viewModel.setType_select(typeIdStr);
+        viewModel.setType_select(typeIdStr);    //TODO - this is the same var set by processPrimaryProjectType
         if(typeIdStr != null && !typeIdStr.trim().equals("")) {
             List<Integer> idList = new ArrayList<>();
             idList.add(501);    //TODO - HARD-CODED. Get from client-privided map of project categories mapped to type ID codes **********

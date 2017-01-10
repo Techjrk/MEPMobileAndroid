@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity {
         String valueFilter = "";
         String updatedWithinFilter = "";
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
         if (data != null) {
 
@@ -93,7 +93,7 @@ public class SearchActivity extends AppCompatActivity {
 
             // Updated Within Filter (valid)
             updatedWithinFilter = (processUpdatedWithinFilter(data));
-            if(valueFilter.length() > 0) {
+            if(updatedWithinFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(updatedWithinFilter);
             }
@@ -103,7 +103,8 @@ public class SearchActivity extends AppCompatActivity {
             // prepend searchFilter param if there are any filters used
             if(sb.length() > 0) {
                 //sb.insert(0, ",\"searchFilter\":\"");
-                sb.insert(0, ",\"searchFilter\":");
+                sb.insert(0, ",\"searchFilter\":{");
+                sb.append("}");
             }
         }
 
@@ -127,7 +128,8 @@ public class SearchActivity extends AppCompatActivity {
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
         if (projectLocation != null && !projectLocation.equals("")) {
             Log.d("projectLocation", "projectLocation = " + projectLocation);
-            filter = "{" + projectLocation + "}";
+            //filter = "{" + projectLocation + "}";
+            filter = projectLocation;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectLocation);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
@@ -144,7 +146,8 @@ public class SearchActivity extends AppCompatActivity {
         String projectType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE);
         if(projectType != null && !projectType.equals("")) {
             Log.d(TAG, "onActivityResult: projectType: " + projectType);
-            filter = "{" + projectType + "}";
+            //filter = "{" + projectType + "}";
+            filter = projectType;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectType);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
@@ -161,7 +164,8 @@ public class SearchActivity extends AppCompatActivity {
         String projectTypeIds = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE_ID);
         if(projectTypeIds != null && !projectTypeIds.equals("")) {
             Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
-            filter = "{" + projectTypeIds + "}";
+            //filter = "{" + projectTypeIds + "}";
+            filter = projectTypeIds;
             //TODO set the result filter to the domain...
         }
         return filter;
@@ -178,7 +182,8 @@ public class SearchActivity extends AppCompatActivity {
         String projectValue = data.getStringExtra(SearchViewModel.FILTER_PROJECT_VALUE);
         if(projectValue != null && !projectValue.equals("")) {
             Log.d(TAG, "onActivityResult: projectValue: " + projectValue);
-            filter = "{" + projectValue + "}";
+            //filter = "{" + projectValue + "}";
+            filter = projectValue;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectValue);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
@@ -195,7 +200,8 @@ public class SearchActivity extends AppCompatActivity {
         String projectUpdatedWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST);
         if(projectUpdatedWithin != null && !projectUpdatedWithin.equals("")) {
             Log.d(TAG, "onActivityResult: projectUpdatedWithin: " + projectUpdatedWithin);
-            filter = "{" + projectUpdatedWithin + "}";
+            //filter = "{" + projectUpdatedWithin + "}";
+            filter = projectUpdatedWithin;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectUpdatedWithin);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
