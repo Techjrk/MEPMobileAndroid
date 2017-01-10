@@ -7,6 +7,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -28,8 +29,6 @@ public class SearchDomain {
     private final Realm realm;
     private String projectFilter;
 
-//// TODO: 1/5/17 getting the nested content items from url to be used for jurisdiction, if there's available.
-//// TODO: 1/5/17 getting the nested content items from url to be used for type, if there's available.
 //// TODO: 1/5/17 getting the nested content items from url to be used for stage, if there's available.
 
     public String getProjectFilter() {
@@ -48,6 +47,16 @@ public class SearchDomain {
         initFilter();
     }
 
+    /**
+     * To call the retrofit service for the project types list items to be displayed in the UI layout for project types section.
+     * @param callback
+     */
+    public void getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
+        String filter = "projectTypes";
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<SearchFilterProjectTypesMain>> call = lecetClient.getSearchService().getSearchFilterProjectTypesItems(token, filter);
+        call.enqueue(callback);
+    }
     /**
      * To call the retrofit service for the jurisdiction list items to be displayed in the UI layout for jurisdiciton section.
      * @param callback

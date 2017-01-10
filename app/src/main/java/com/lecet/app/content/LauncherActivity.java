@@ -70,7 +70,6 @@ public class LauncherActivity extends AppCompatActivity {
         if (isAuthenticated) {
 
             Intent intent = new Intent(this, MainActivity.class);
-            //Intent intent = new Intent(this, SearchActivity.class); //TODO - REMOVE BEFORE COMMITTING. For testing the SearchActivity only - Noel
             startActivity(intent);
             finish();
         }

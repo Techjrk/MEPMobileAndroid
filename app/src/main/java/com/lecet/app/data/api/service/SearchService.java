@@ -6,6 +6,7 @@ import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -85,4 +86,14 @@ public interface SearchService {
     })
     @GET("Regions/tree")
     Call<List<SearchFilterJurisdictionMain>> getSearchFilterJurisdictionItems();
+
+    //*** Project Types content items
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("ProjectGroups")
+    Call<List<SearchFilterProjectTypesMain>> getSearchFilterProjectTypesItems(@Header("Authorization") String token, @Query("filter[include][projectCategories]") String filter);
+//    filter[include][projectCategories]
+
 }

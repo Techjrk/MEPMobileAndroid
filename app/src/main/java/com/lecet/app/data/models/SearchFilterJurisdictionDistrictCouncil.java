@@ -1,5 +1,7 @@
 package com.lecet.app.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -9,11 +11,20 @@ import java.util.List;
     This class will be used as the district council object for search filter jurisdiction section.
      */
 public class SearchFilterJurisdictionDistrictCouncil {
-    public String name;
-    public String abbreviation;
-    public int id;
-    public int regionId;
-    public List<SearchFilterJurisdictionLocal> locals;
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("abbreviation")
+    private String abbreviation;
+
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("regionId")
+    private int regionId;
+
+    @SerializedName("locals")
+    private List<SearchFilterJurisdictionLocal> locals;
 
     public String getName() {
         return name;
@@ -55,4 +66,29 @@ public class SearchFilterJurisdictionDistrictCouncil {
         this.locals = locals;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SearchFilterJurisdictionDistrictCouncil that = (SearchFilterJurisdictionDistrictCouncil) o;
+
+        if (id != that.id) return false;
+        if (regionId != that.regionId) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (abbreviation != null ? !abbreviation.equals(that.abbreviation) : that.abbreviation != null)
+            return false;
+        return locals != null ? locals.equals(that.locals) : that.locals == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (abbreviation != null ? abbreviation.hashCode() : 0);
+        result = 31 * result + id;
+        result = 31 * result + regionId;
+        result = 31 * result + (locals != null ? locals.hashCode() : 0);
+        return result;
+    }
 }

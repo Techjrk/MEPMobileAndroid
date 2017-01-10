@@ -26,12 +26,16 @@ import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
 import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -184,6 +188,7 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
         getJurisdictionList();
+        getProjectTypesList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -232,8 +237,45 @@ public class SearchViewModel extends BaseObservable {
     }
 
     /***
-     * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
+     * getProjectTypesList -  to populate the list of SearchFilterProjectTypesMain POJO object for Project Types section
      */
+    public void getProjectTypesList() {
+        searchDomain.getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
+            @Override
+            public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
+                List<SearchFilterProjectTypesMain> slist;
+                if (response.isSuccessful()) {
+                    slist = response.body();
+                    /*
+                    TODO: for checking and testing the complex content of Project Types main list items.
+                     */
+                    List<SearchFilterProjectTypesProjectCategory> ptpclist=null;
+                    for (SearchFilterProjectTypesMain ptMain : slist) {
+                        if (ptMain !=null)  Log.d("Project Types","Project Types = title:"+ptMain.getTitle()+" id:"+ptMain.getId());
+                          ptpclist = ptMain.getProjectCategories();
+                        for (SearchFilterProjectTypesProjectCategory ptpc: ptpclist) {
+                            if (ptpc !=null)  Log.d("PT PCateg","PT PCateg = title:"+ptpc.getTitle()+" id:"+ptpc.getId()+" projectgroupid:"+ptpc.getProjectGroupId());
+                            List<PrimaryProjectType> pptlist = ptpc.getProjectTypes();
+                            for (PrimaryProjectType ppt : pptlist) {
+                                if (ppt !=null) Log.d("PType","PType = title:"+ppt.getTitle()+" bldg or hway :"+ppt.getBuildingOrHighway()+" id:"+ppt.getId()+" pcateg id:"+ppt.getProjectCategoryId());
+                                ProjectCategory pptpc = ppt.getProjectCategory();
+                                if (pptpc !=null) Log.d("PType PCategory","PType PCategory = title:"+pptpc.getTitle()+" id:"+pptpc.getId()+" project group id:"+pptpc.getProjectGroupId());
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<SearchFilterProjectTypesMain>> call, Throwable t) {
+                errorDisplayMsg("Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
+                        ////
+                        /***
+                         * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
+                         */
     public void getJurisdictionList() {
         searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
@@ -245,21 +287,21 @@ public class SearchViewModel extends BaseObservable {
                     TODO: for checking and testing the complex content of Jurisdiction main list items. This section need to be discussed on how these list items will be displayed in UI layout.
                      */
                     for (SearchFilterJurisdictionMain jdMain : slist) {
-                        Log.d("jmain","jmain = name:"+jdMain.getName()+" long name:"+ jdMain.getAbbreviation()+" abbreviation:"+jdMain.getAbbreviation()+" id:"+jdMain.getId());
+                       if (jdMain !=null) Log.d("jmain","jmain = name:"+jdMain.getName()+" long name:"+ jdMain.getAbbreviation()+" abbreviation:"+jdMain.getAbbreviation()+" id:"+jdMain.getId());
                          for(SearchFilterJurisdictionLocal jlocal: jdMain.getLocals()){
-                             Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());
+                             if (jlocal !=null)   Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());
                          }
 
                           for(  SearchFilterJurisdictionDistrictCouncil dcouncil : jdMain.getDistrictCouncils()){
-                              Log.d("jdcouncil","jdcouncil = name:"+ dcouncil.getName()+" abbreviation:"+dcouncil.getAbbreviation()+" id:"+dcouncil.getId()+" regionId:"+dcouncil.getRegionId());
+                              if (dcouncil !=null)  Log.d("jdcouncil","jdcouncil = name:"+ dcouncil.getName()+" abbreviation:"+dcouncil.getAbbreviation()+" id:"+dcouncil.getId()+" regionId:"+dcouncil.getRegionId());
                             if (dcouncil.getLocals()!=null) {
                                 for (SearchFilterJurisdictionLocal dclocals: dcouncil.getLocals()) {
-                                    Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
+                                    if (dclocals !=null)   Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
                                 }
                             }
                           }
                         for(SearchFilterJurisdictionLocal nodc: jdMain.getLocalsWithNoDistrict()) {
-                            Log.d("nodc","nodc = name:"+nodc.getName()+" id"+nodc.getId()+" dc id:"+nodc.getDistrictCouncilId());
+                            if (nodc !=null) Log.d("nodc","nodc = name:"+nodc.getName()+" id"+nodc.getId()+" dc id:"+nodc.getDistrictCouncilId());
                         }
                     }
 
