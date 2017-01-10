@@ -61,6 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         String updatedWithinFilter = "";
         String jurisdictionFilter = "";
         String stageFilter = "";
+        String biddingWithinFilter = "";
 
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
@@ -72,14 +73,14 @@ public class SearchActivity extends AppCompatActivity {
                 sb.append(locationFilter);
             }
 
-            // Primary Project Type Filter (INVALID) {"type": {Engineering}}
+            // Primary Project Type Filter (valid?) {"type": {Engineering}}
             primaryProjectTypeFilter = (processPrimaryProjectTypeFilter(data));
             if(primaryProjectTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(primaryProjectTypeFilter);
             }
 
-            // Project ID Type Filter (INVALID)
+            // Project ID Type Filter (valid)
             projectTypeIdFilter = (processProjectTypeIdFilter(data));
             if(projectTypeIdFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
@@ -112,6 +113,13 @@ public class SearchActivity extends AppCompatActivity {
             if(stageFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(stageFilter);
+            }
+
+            // Bidding Within Filter (valid)
+            biddingWithinFilter = (processBiddingWithinFilter(data));
+            if(biddingWithinFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(biddingWithinFilter);
             }
 
             // prepend searchFilter param if there are any filters used
@@ -254,6 +262,26 @@ public class SearchActivity extends AppCompatActivity {
         }
         return filter;
     }
+
+    /**
+     * Process the Bidding Within filter data
+     * Ex, using 21 days: "biddingInNext":21
+     */
+    private String processBiddingWithinFilter(Intent data) {
+        String filter = "";
+        String projectBiddingWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN);
+        if(projectBiddingWithin != null && !projectBiddingWithin.equals("")) {
+            Log.d(TAG, "onActivityResult: projectBiddingWithin: " + projectBiddingWithin);
+            //filter = "{" + projectBiddingWithin + "}";
+            filter = projectBiddingWithin;
+            //Log.d(TAG, "onActivityResult: searchFilter: " + projectBiddingWithin);
+            //TODO set the result filter to the domain...
+            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        }
+        return filter;
+    }
+
+
 
 
 

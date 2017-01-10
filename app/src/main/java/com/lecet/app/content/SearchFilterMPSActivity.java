@@ -75,8 +75,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Bidding Within
                 case R.id.bidding_within & 0xfff:
-                    //TODO: Compose the correct search filter result for Bidding Within and set it to setSearchFilterResult
-                    viewModel.setBidding_within_select(info[0]);
+                    processBiddingWithin(info);
                     break;
 
                 // Building / Highway
@@ -234,6 +233,18 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
+    }
+
+    //TODO: Compose the correct search filter result for Bidding Within and set it to setSearchFilterResult
+    private void processBiddingWithin(String[] arr) {
+        String biddingWithinStr = arr[0];   // text for display
+        String biddingWithinInt = arr[1];   // int for query
+        String projectBiddingWithin = "";
+        viewModel.setBidding_within_select(biddingWithinStr);
+        if(biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
+            projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
     }
 
 
