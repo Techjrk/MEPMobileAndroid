@@ -62,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
         String jurisdictionFilter = "";
         String stageFilter = "";
         String biddingWithinFilter = "";
+        String buildingOrHighwayFilter = "";
 
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
@@ -74,52 +75,59 @@ public class SearchActivity extends AppCompatActivity {
             }
 
             // Primary Project Type Filter (valid?) {"type": {Engineering}}
-            primaryProjectTypeFilter = (processPrimaryProjectTypeFilter(data));
+            primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
             if(primaryProjectTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(primaryProjectTypeFilter);
             }
 
             // Project ID Type Filter (valid)
-            projectTypeIdFilter = (processProjectTypeIdFilter(data));
+            projectTypeIdFilter = processProjectTypeIdFilter(data);
             if(projectTypeIdFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(projectTypeIdFilter);
             }
 
             // Value Filter (valid)
-            valueFilter = (processValueFilter(data));
+            valueFilter = processValueFilter(data);
             if(valueFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(valueFilter);
             }
 
             // Updated Within Filter (valid)
-            updatedWithinFilter = (processUpdatedWithinFilter(data));
+            updatedWithinFilter = processUpdatedWithinFilter(data);
             if(updatedWithinFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(updatedWithinFilter);
             }
 
             // Jurisdiction Filter (valid)
-            jurisdictionFilter = (processJurisdictionFilter(data));
+            jurisdictionFilter = processJurisdictionFilter(data);
             if(jurisdictionFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(jurisdictionFilter);
             }
 
             // Stage Filter (valid)
-            stageFilter = (processStageFilter(data));
+            stageFilter = processStageFilter(data);
             if(stageFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(stageFilter);
             }
 
             // Bidding Within Filter (valid)
-            biddingWithinFilter = (processBiddingWithinFilter(data));
+            biddingWithinFilter = processBiddingWithinFilter(data);
             if(biddingWithinFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(biddingWithinFilter);
+            }
+
+            // Building-or-Highway Filter (valid)
+            buildingOrHighwayFilter = processBuildingOrHighwayFilter(data);
+            if(buildingOrHighwayFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(buildingOrHighwayFilter);
             }
 
             // prepend searchFilter param if there are any filters used
@@ -275,6 +283,24 @@ public class SearchActivity extends AppCompatActivity {
             //filter = "{" + projectBiddingWithin + "}";
             filter = projectBiddingWithin;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectBiddingWithin);
+            //TODO set the result filter to the domain...
+            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Building-or-Highway filter data
+     * Ex: "buildingOrHighway":{"inq":["B","H"]}
+     */
+    private String processBuildingOrHighwayFilter(Intent data) {
+        String filter = "";
+        String projectBuildingOrHighwayWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY);
+        if(projectBuildingOrHighwayWithin != null && !projectBuildingOrHighwayWithin.equals("")) {
+            Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
+            //filter = "{" + projectBuildingOrHighwayWithin + "}";
+            filter = projectBuildingOrHighwayWithin;
+            //Log.d(TAG, "onActivityResult: searchFilter: " + projectBuildingOrHighwayWithin);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }

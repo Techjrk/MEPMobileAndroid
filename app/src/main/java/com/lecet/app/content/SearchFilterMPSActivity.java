@@ -80,8 +80,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Building / Highway
                 case R.id.bh & 0xfff:
-                    //TODO: Compose the correct search filter result for BH and set it to setSearchFilterResult
-                    viewModel.setBh_select(info[0]);
+                    processBuildingOrHighway(info);
                     break;
 
                 // Owner Type
@@ -245,6 +244,24 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
+    }
+
+    //TODO: Compose the correct search filter result for Building-or-Highway and set it to setSearchFilterResult
+    private void processBuildingOrHighway(String[] arr) {
+        String bhStr = arr[0];      // could come in as "Both", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+        String bh = "";
+        viewModel.setBh_select(bhStr);
+        if(bhStr != null && !bhStr.trim().equals("")) {
+            List<String> bhList = new ArrayList<>();
+            if(bhStr.equals("Building")) bhList.add("\"B\"");
+            else if(bhStr.equals("Heavy-Highway")) bhList.add("\"H\"");
+            else {
+                bhList.add("\"B\"");
+                bhList.add("\"H\"");
+            }
+            bh = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bh);
     }
 
 
