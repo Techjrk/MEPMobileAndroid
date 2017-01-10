@@ -55,7 +55,8 @@ public class SearchActivity extends AppCompatActivity {
         Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
 
         String locationFilter = "";
-        String typeFilter = "";
+        String primaryProjectTypeFilter = "";
+        String projectTypeIdFilter = "";
         String valueFilter = "";
         String updatedWithinFilter = "";
 
@@ -69,11 +70,18 @@ public class SearchActivity extends AppCompatActivity {
                 sb.append(locationFilter);
             }
 
-            // Type Filter (INVALID) {"type": {Engineering}}
-            typeFilter = (processTypeFilter(data));
-            if(typeFilter.length() > 0) {
+            // Primary Project Type Filter (INVALID) {"type": {Engineering}}
+            primaryProjectTypeFilter = (processPrimaryProjectTypeFilter(data));
+            if(primaryProjectTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
-                sb.append(typeFilter);
+                sb.append(primaryProjectTypeFilter);
+            }
+
+            // Project ID Type Filter (INVALID)
+            projectTypeIdFilter = (processProjectTypeIdFilter(data));
+            if(projectTypeIdFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(projectTypeIdFilter);
             }
 
             // Value Filter (valid)
@@ -131,7 +139,7 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * Process the Type filter data
      */
-    private String processTypeFilter(Intent data) {
+    private String processPrimaryProjectTypeFilter(Intent data) {
         String filter = "";
         String projectType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE);
         if(projectType != null && !projectType.equals("")) {
@@ -140,6 +148,21 @@ public class SearchActivity extends AppCompatActivity {
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectType);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Project Type IDs filter data
+     * Ex: "projectTypeId":{"inq": [501, 502, 503]}
+     */
+    private String processProjectTypeIdFilter(Intent data) {
+        String filter = "";
+        String projectTypeIds = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE_ID);
+        if(projectTypeIds != null && !projectTypeIds.equals("")) {
+            Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
+            filter = "{" + projectTypeIds + "}";
+            //TODO set the result filter to the domain...
         }
         return filter;
     }

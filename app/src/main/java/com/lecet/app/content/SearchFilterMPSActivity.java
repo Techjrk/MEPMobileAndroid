@@ -11,6 +11,7 @@ import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +49,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Type
                 case R.id.type & 0xfff:
-                    processType(info);
+                    //processPrimaryProjectType(info);
+                    processProjectTypeId(info);
                     break;
 
                 // Dollar Value
@@ -151,16 +153,33 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_LOCATION, projectLocation);  // this should work whether or not projectLocation is empty
     }
 
-    //TODO: Compose the correct search filter result for Type and set it to setSearchFilterResult
-    private void processType(String[] arr) {
+    //TODO: Compose the correct search filter result for Primary Project Type and set it to setSearchFilterResult
+    private void processPrimaryProjectType(String[] arr) {
         String typeStr = arr[0];
         String projectType = "";
         viewModel.setType_select(typeStr);
         if(typeStr != null && !typeStr.trim().equals("")) {
-            projectType = "\"type\": {"+typeStr+"}";
+            projectType = "\"primaryProjectType\":{" + typeStr + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, projectType);
     }
+
+    //TODO: Compose the correct search filter result for Project Type ID and set it to setSearchFilterResult
+    private void processProjectTypeId(String[] arr) {
+        String typeIdStr = arr[0];
+        String projectTypeId = "";
+        viewModel.setType_select(typeIdStr);
+        if(typeIdStr != null && !typeIdStr.trim().equals("")) {
+            List<Integer> idList = new ArrayList<>();
+            idList.add(501);    //TODO - HARD-CODED. Get from client-privided map of project categories mapped to type ID codes **********
+            idList.add(502);
+            idList.add(503);
+            String ids = idList.toString();
+            projectTypeId = "\"projectTypeId\":{\"inq\":" + ids + "}";         // square brackets [ ] come for free when the list is converted to a String
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE_ID, projectTypeId);
+    }
+
 
     //TODO: Compose the correct search filter result for Value and set it to setSearchFilterResult (needs a low and high value, two vars)
     private void processValue(String[] arr) {
@@ -170,7 +189,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String projectValue = "";
         viewModel.setValue_select(valueStr);
         if(valueStr != null && !valueStr.trim().equals("")) {
-            projectValue = "\"projectValue\": {"+ "\"min\":" + min + ",\"max\":" + max + "}";
+            projectValue = "\"projectValue\":{"+ "\"min\":" + min + ",\"max\":" + max + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, projectValue);
     }
@@ -182,7 +201,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String projectUpdatedWithin = "";
         viewModel.setUpdated_within_select(updatedWithinStr);
         if(updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
-            projectUpdatedWithin = "\"updatedInLast\": " + updatedWithinInt;
+            projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
     }
