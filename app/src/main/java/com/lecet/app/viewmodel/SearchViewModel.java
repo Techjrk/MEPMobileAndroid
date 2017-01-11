@@ -358,6 +358,7 @@ public class SearchViewModel extends BaseObservable {
             }
         });
     }
+
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -601,7 +602,8 @@ public class SearchViewModel extends BaseObservable {
             dialogBuilder.show();
         } catch (Exception e) {
             Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
-            Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);
+
+            Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
         }
     }
 

@@ -50,9 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //TODO - make filtered data call
-
-        Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();    //TODO - Toast
 
         String locationFilter = "";
         String primaryProjectTypeFilter = "";
@@ -148,7 +146,6 @@ public class SearchActivity extends AppCompatActivity {
 
             // prepend searchFilter param if there are any filters used
             if(sb.length() > 0) {
-                //sb.insert(0, ",\"searchFilter\":\"");
                 sb.insert(0, ",\"searchFilter\":{");
                 sb.append("}");
             }
@@ -174,13 +171,8 @@ public class SearchActivity extends AppCompatActivity {
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
         if (projectLocation != null && !projectLocation.equals("")) {
             Log.d("projectLocation", "projectLocation = " + projectLocation);
-            //filter = "{" + projectLocation + "}";
             filter = projectLocation;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectLocation);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
-        //else viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}");
         return filter;
     }
 
@@ -192,11 +184,7 @@ public class SearchActivity extends AppCompatActivity {
         String projectType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE);
         if(projectType != null && !projectType.equals("")) {
             Log.d(TAG, "onActivityResult: projectType: " + projectType);
-            //filter = "{" + projectType + "}";
             filter = projectType;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectType);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
@@ -210,9 +198,7 @@ public class SearchActivity extends AppCompatActivity {
         String projectTypeIds = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE_ID);
         if(projectTypeIds != null && !projectTypeIds.equals("")) {
             Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
-            //filter = "{" + projectTypeIds + "}";
             filter = projectTypeIds;
-            //TODO set the result filter to the domain...
         }
         return filter;
     }
@@ -223,16 +209,10 @@ public class SearchActivity extends AppCompatActivity {
      */
     private String processValueFilter(Intent data) {
         String filter = "";
-        //String min = "";
-        //String max = "";
         String projectValue = data.getStringExtra(SearchViewModel.FILTER_PROJECT_VALUE);
         if(projectValue != null && !projectValue.equals("")) {
             Log.d(TAG, "onActivityResult: projectValue: " + projectValue);
-            //filter = "{" + projectValue + "}";
             filter = projectValue;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectValue);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
@@ -246,11 +226,7 @@ public class SearchActivity extends AppCompatActivity {
         String projectUpdatedWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST);
         if(projectUpdatedWithin != null && !projectUpdatedWithin.equals("")) {
             Log.d(TAG, "onActivityResult: projectUpdatedWithin: " + projectUpdatedWithin);
-            //filter = "{" + projectUpdatedWithin + "}";
             filter = projectUpdatedWithin;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectUpdatedWithin);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
@@ -264,9 +240,7 @@ public class SearchActivity extends AppCompatActivity {
         String jurisdiction = data.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION);
         if(jurisdiction != null && !jurisdiction.equals("")) {
             Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
-            //filter = "{" + jurisdiction + "}";
             filter = jurisdiction;
-            //TODO set the result filter to the domain...
         }
         return filter;
     }
@@ -280,9 +254,7 @@ public class SearchActivity extends AppCompatActivity {
         String stage = data.getStringExtra(SearchViewModel.FILTER_PROJECT_STAGE);
         if(stage != null && !stage.equals("")) {
             Log.d(TAG, "onActivityResult: stage: " + stage);
-            //filter = "{" + stage + "}";
             filter = stage;
-            //TODO set the result filter to the domain...
         }
         return filter;
     }
@@ -296,11 +268,7 @@ public class SearchActivity extends AppCompatActivity {
         String projectBiddingWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN);
         if(projectBiddingWithin != null && !projectBiddingWithin.equals("")) {
             Log.d(TAG, "onActivityResult: projectBiddingWithin: " + projectBiddingWithin);
-            //filter = "{" + projectBiddingWithin + "}";
             filter = projectBiddingWithin;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectBiddingWithin);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
@@ -314,11 +282,7 @@ public class SearchActivity extends AppCompatActivity {
         String projectBuildingOrHighwayWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY);
         if(projectBuildingOrHighwayWithin != null && !projectBuildingOrHighwayWithin.equals("")) {
             Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
-            //filter = "{" + projectBuildingOrHighwayWithin + "}";
             filter = projectBuildingOrHighwayWithin;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectBuildingOrHighwayWithin);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
@@ -332,11 +296,7 @@ public class SearchActivity extends AppCompatActivity {
         String ownerType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_OWNER_TYPE);
         if(ownerType != null && !ownerType.equals("")) {
             Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
-            //filter = "{" + ownerType + "}";
             filter = ownerType;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + projectBuildingOrHighwayWithin);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
@@ -350,18 +310,10 @@ public class SearchActivity extends AppCompatActivity {
         String workType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_WORK_TYPE);
         if(workType != null && !workType.equals("")) {
             Log.d(TAG, "onActivityResult: workType: " + workType);
-            //filter = "{" + workType + "}";
             filter = workType;
-            //Log.d(TAG, "onActivityResult: searchFilter: " + filter);
-            //TODO set the result filter to the domain...
-            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }
         return filter;
     }
-
-
-
-
 
 }
 
