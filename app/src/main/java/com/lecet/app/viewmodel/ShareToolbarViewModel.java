@@ -1,14 +1,20 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.databinding.BaseObservable;
 import android.graphics.Point;
-import android.support.annotation.IntDef;
+import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.MoveToAdapter;
@@ -17,15 +23,12 @@ import com.lecet.app.interfaces.MoveToListCallback;
 import com.lecet.app.interfaces.TrackedObject;
 import com.lecet.app.interfaces.TrackingListObject;
 
-import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * File: ShareToolbarViewModel Created: 1/5/17 Author: domandtom
@@ -35,27 +38,20 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObject, U extends RealmObject & TrackingListObject> extends BaseObservable implements MoveToListCallback<U> {
 
-    @Retention(SOURCE)
-    @IntDef({NAVIGATION_MODE_TRACK, NAVIGATION_MODE_SHARE, NAVIGATION_MODE_HIDE})
-    private @interface NavigationMode {
-    }
-
-    private static final int NAVIGATION_MODE_TRACK = 0;
-    private static final int NAVIGATION_MODE_SHARE = 1;
-    private static final int NAVIGATION_MODE_HIDE = 2;
-
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
     private final T trackedObject;
 
-    @NavigationMode
-    private int selectedMode;
-
+    private ProgressDialog progressDialog;
     private ListPopupWindow sharePopupWindow;
     private ListPopupWindow mtmPopupWindow;
     private MoveToAdapter mtmAdapter;
 
     private Dialog hideDialog;
+    private AlertDialog alertDialog;
+
+    @IdRes
+    private int radioGroupId;
 
     public ShareToolbarViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, T trackedObject) {
 
@@ -82,30 +78,29 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         return trackingListDomain;
     }
 
+    public AppCompatActivity getAppCompatActivity() {
+        return appCompatActivity;
+    }
+
+    public T getTrackedObject() {
+        return trackedObject;
+    }
+
     @SuppressWarnings("unused")
     public void onTrackSelected(View view) {
 
-        if (selectedMode == NAVIGATION_MODE_TRACK) return;
-
-        selectedMode = NAVIGATION_MODE_TRACK;
-        showTrackWindow();
+        showTrackWindow(view);
     }
 
     @SuppressWarnings("unused")
     public void onShareSelected(View view) {
 
-        if (selectedMode == NAVIGATION_MODE_SHARE) return;
-
-        selectedMode = NAVIGATION_MODE_SHARE;
-        showShareWindow();
+        showShareWindow(view);
     }
 
     @SuppressWarnings("unused")
     public void onHideSelected(View view) {
 
-        if (selectedMode == NAVIGATION_MODE_HIDE) return;
-
-        selectedMode = NAVIGATION_MODE_HIDE;
         showHideDialog();
     }
 
@@ -124,13 +119,18 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         }
     }
 
-    private void showTrackWindow() {
+    private void showTrackWindow(View view) {
+
+        radioGroupId = ((View) view.getParent()).getId();
 
         dismissWindow();
         dismissDialog();
+        toogleMoveMenu(view);
     }
 
-    private void showShareWindow() {
+    private void showShareWindow(View view) {
+
+        radioGroupId = ((View) view.getParent()).getId();
 
         dismissWindow();
         dismissDialog();
@@ -190,11 +190,19 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
             mtmPopupWindow.setWidth(width);
             mtmPopupWindow.setHorizontalOffset(-offset);
             mtmPopupWindow.setAdapter(mtmAdapter);
+            mtmPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+
+                    RadioGroup radioGroup = (RadioGroup) appCompatActivity.findViewById(radioGroupId);
+                    radioGroup.clearCheck();
+                }
+            });
         }
     }
 
 
-    /* Dialog */
+    /* Popup Window */
 
     private void dismissDialog() {
 
@@ -208,6 +216,38 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
         dismissWindow();
         dismissDialog();
+    }
+
+    /* Alert Dialog */
+
+    public void dismissAlertDialog() {
+
+        if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();
+    }
+
+    public void showAlertDialog(String title, String message) {
+
+        dismissAlertDialog();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(appCompatActivity);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(appCompatActivity.getString(R.string.ok), null);
+
+        alertDialog = builder.show();
+    }
+
+    /* Progress Dialog */
+    public void showProgressDialog(String title, String message) {
+
+        dismissProgressDialog();
+
+        progressDialog = ProgressDialog.show(appCompatActivity, title, message, true, false);
+    }
+
+    public void dismissProgressDialog() {
+
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 
     /* MoveToListCallback */

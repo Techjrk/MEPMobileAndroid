@@ -2,6 +2,7 @@ package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.IntDef;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,18 +10,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.models.Project;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ListItemHeaderProjectBinding;
 import com.lecet.app.databinding.ListItemHeaderShareBinding;
 import com.lecet.app.databinding.ListItemProjectDetailBinding;
 import com.lecet.app.databinding.ListItemProjectNoteBinding;
 import com.lecet.app.databinding.ListItemSectionHeaderBinding;
+import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.viewmodel.HeaderViewModel;
 import com.lecet.app.viewmodel.ProjDetailItemViewModel;
 import com.lecet.app.viewmodel.ProjectDetailHeaderViewModel;
+import com.lecet.app.viewmodel.ProjectShareToolbarViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
  * File: ProjectDetailAdapter Created: 10/27/16 Author: domandtom
@@ -55,13 +65,19 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private static final int SECTION_PARTICIPANTS = 3;
     private static final int SECTION_BIDDERS = 4;
 
+    private AppCompatActivity appCompatActivity;
+    private Project project;
     private List<List<ProjDetailItemViewModel>> data;
     private ProjectDetailHeaderViewModel headerViewModel;
+    private ProjectDomain projectDomain;
 
-    public ProjectDetailAdapter(List<List<ProjDetailItemViewModel>> data, ProjectDetailHeaderViewModel headerViewModel) {
+    public ProjectDetailAdapter(AppCompatActivity appCompatActivity, Project project, List<List<ProjDetailItemViewModel>> data, ProjectDetailHeaderViewModel headerViewModel, ProjectDomain projectDomain) {
 
+        this.appCompatActivity = appCompatActivity;
+        this.project = project;
         this.data = data;
         this.headerViewModel = headerViewModel;
+        this.projectDomain = projectDomain;
     }
 
     @Override
@@ -136,9 +152,17 @@ public class ProjectDetailAdapter extends SectionedAdapter {
             } else if (section == SECTION_BIDDERS) {
 
                 ((SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel("Project Bidders"));
-            } else if (section == SECTION_SHARE) {
 
             }
+        } else if (holder instanceof ShareViewHolder) {
+            Log.d("SHARE", "Section Share");
+            TrackingListDomain trackingListDomain =  new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance(), new RealmChangeListener() {
+                @Override
+                public void onChange(Object element) {
+
+                }
+            }, projectDomain);
+            ((ShareViewHolder) holder).getBinding().setViewModel(new ProjectShareToolbarViewModel(appCompatActivity, trackingListDomain, project));
         }
     }
 
@@ -261,6 +285,10 @@ public class ProjectDetailAdapter extends SectionedAdapter {
             super(binding.getRoot());
 
             this.binding = binding;
+        }
+
+        public ListItemHeaderShareBinding getBinding() {
+            return binding;
         }
     }
 

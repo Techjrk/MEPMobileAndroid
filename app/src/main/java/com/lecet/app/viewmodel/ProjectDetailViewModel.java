@@ -139,7 +139,7 @@ public class ProjectDetailViewModel {
      **/
     private void initProjectDetailAdapter(ProjectDetailActivity activity, Project project) {
 
-        projectDetailAdapter = new ProjectDetailAdapter(buildDetails(project, activity), new ProjectDetailHeaderViewModel(project));
+        projectDetailAdapter = new ProjectDetailAdapter(activity, project, buildDetails(project, activity), new ProjectDetailHeaderViewModel(project), projectDomain);
         initRecyclerView(activity, projectDetailAdapter);
     }
 
