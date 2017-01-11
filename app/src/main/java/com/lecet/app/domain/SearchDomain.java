@@ -8,6 +8,7 @@ import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -45,6 +46,17 @@ public class SearchDomain {
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
         initFilter();
+    }
+
+    /**
+     * To call the retrofit service for the stages list items to be displayed in the UI layout for Stage section.
+     * @param callback
+     */
+    public void getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
+        String filter = "stages";
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<SearchFilterStagesMain>> call = lecetClient.getSearchService().getSearchFilterStagesItems(token, filter);
+        call.enqueue(callback);
     }
 
     /**
@@ -117,6 +129,7 @@ public class SearchDomain {
         Call<Project> call = lecetClient.getSearchService().getProjectDetail(token, pId);
         call.enqueue(callback);
     }
+
 
 
 }

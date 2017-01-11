@@ -89,12 +89,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
@@ -111,12 +106,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -131,12 +121,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
@@ -153,12 +138,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
@@ -175,12 +155,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
@@ -197,12 +172,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
@@ -219,12 +189,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:src="@android:drawable/arrow_down_float" />
+                        style="@style/ImageDownArrow"/>
                 </RelativeLayout>
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />

@@ -7,6 +7,7 @@ import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -24,6 +25,7 @@ import retrofit2.http.Query;
  * File: SearchService domandtom 2016
  */
 public interface SearchService {
+    //*** User recently viewed
     @Headers({
             "Accept: application/json",
             "Content-Type: application/x-www-form-urlencoded"
@@ -94,6 +96,10 @@ public interface SearchService {
     })
     @GET("ProjectGroups")
     Call<List<SearchFilterProjectTypesMain>> getSearchFilterProjectTypesItems(@Header("Authorization") String token, @Query("filter[include][projectCategories]") String filter);
-//    filter[include][projectCategories]
+
+    //*** Stage content items
+    @GET("ProjectParentStages")
+    Call<List<SearchFilterStagesMain>> getSearchFilterStagesItems(@Header("Authorization") String token, @Query("filter[include]") String filter);
+
 
 }

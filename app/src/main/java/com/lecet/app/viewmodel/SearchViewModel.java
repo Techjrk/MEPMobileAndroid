@@ -36,6 +36,8 @@ import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
+import com.lecet.app.data.models.SearchFilterStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -189,6 +191,7 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterContactQueryAll();
         getJurisdictionList();
         getProjectTypesList();
+        getStagesList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -235,6 +238,36 @@ public class SearchViewModel extends BaseObservable {
         getQueryCompanyTotal();
         getQueryContactTotal();
     }
+    /***
+     * getStagesList -  to populate the list of SearchFilterStagesMain POJO object for Stage section
+     */
+    public void getStagesList() {
+        searchDomain.getStagesList(new Callback<List<SearchFilterStagesMain>>() {
+            @Override
+            public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
+                List<SearchFilterStagesMain> slist;
+                if (response.isSuccessful()) {
+                    slist = response.body();
+                    /*
+                    TODO: use this logic data to process the UI layout of Stage view section.
+                    Codes below is just for checking and testing the complex content of stages main list items.
+                     */
+                    List<SearchFilterStage> stagelist=null;
+                    for (SearchFilterStagesMain sMain : slist) {
+                        if (sMain !=null)  Log.d("Stages ","Stages = name:"+sMain.getName()+" id:"+sMain.getId());
+                        stagelist = sMain.getStages();
+                        for (SearchFilterStage stage: stagelist) {
+                            if (stage !=null)  Log.d("Stage ","Stage name"+stage.getName()+" id:"+stage.getId()+" parentId:"+stage.getParentId());
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
+                errorDisplayMsg("Network is busy. Pls. try again. ");
+            }
+        });
+    }
 
     /***
      * getProjectTypesList -  to populate the list of SearchFilterProjectTypesMain POJO object for Project Types section
@@ -247,7 +280,8 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     slist = response.body();
                     /*
-                    TODO: for checking and testing the complex content of Project Types main list items.
+                    TODO: use this logic data to process the UI layout of Project Types view section.
+                    Codes below is just for checking and testing the complex content of project types main list items.
                      */
                     List<SearchFilterProjectTypesProjectCategory> ptpclist=null;
                     for (SearchFilterProjectTypesMain ptMain : slist) {
@@ -284,7 +318,8 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     slist = response.body();
                     /*
-                    TODO: for checking and testing the complex content of Jurisdiction main list items. This section need to be discussed on how these list items will be displayed in UI layout.
+                    TODO: use this logic data to process the UI layout of jurisdiction view section.
+                    Codes below is just for checking and testing the complex content of stages main list items.
                      */
                     for (SearchFilterJurisdictionMain jdMain : slist) {
                        if (jdMain !=null) Log.d("jmain","jmain = name:"+jdMain.getName()+" long name:"+ jdMain.getAbbreviation()+" abbreviation:"+jdMain.getAbbreviation()+" id:"+jdMain.getId());
