@@ -85,8 +85,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Owner Type
                 case R.id.ownertype & 0xfff:
-                    //TODO: Compose the correct search filter result for OwnerType and set it to setSearchFilterResult
-                    viewModel.setOwner_type_select(info[0]);
+                    processOwnerType(info);
                     break;
 
                 // Work Type
@@ -262,6 +261,19 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             bh = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bh);
+    }
+
+    //TODO: Compose the correct search filter result for Owner Type and set it to setSearchFilterResult
+    private void processOwnerType(String[] arr) {
+        String ownerTypeStr = arr[0];               // TODO - make sure UI only allows single selection, as per iOS
+        String ownerType = "";
+        viewModel.setOwner_type_select(ownerTypeStr);
+        if(ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
+            List<String> oList = new ArrayList<>();
+            oList.add("\"" + ownerTypeStr + "\"");
+            ownerType = "\"ownerType\":{\"inq\":" + oList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE, ownerType);
     }
 
 

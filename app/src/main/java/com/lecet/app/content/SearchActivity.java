@@ -63,6 +63,7 @@ public class SearchActivity extends AppCompatActivity {
         String stageFilter = "";
         String biddingWithinFilter = "";
         String buildingOrHighwayFilter = "";
+        String ownerTypeFilter = "";
 
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
@@ -128,6 +129,13 @@ public class SearchActivity extends AppCompatActivity {
             if(buildingOrHighwayFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(buildingOrHighwayFilter);
+            }
+
+            // Owner Type Filter (valid)
+            ownerTypeFilter = processOwnerTypeFilter(data);
+            if(ownerTypeFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(ownerTypeFilter);
             }
 
             // prepend searchFilter param if there are any filters used
@@ -300,6 +308,24 @@ public class SearchActivity extends AppCompatActivity {
             Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
             //filter = "{" + projectBuildingOrHighwayWithin + "}";
             filter = projectBuildingOrHighwayWithin;
+            //Log.d(TAG, "onActivityResult: searchFilter: " + projectBuildingOrHighwayWithin);
+            //TODO set the result filter to the domain...
+            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Owner Type filter data
+     * Ex: "ownerType":{"inq":["Federal"]}
+     */
+    private String processOwnerTypeFilter(Intent data) {
+        String filter = "";
+        String ownerType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_OWNER_TYPE);
+        if(ownerType != null && !ownerType.equals("")) {
+            Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
+            //filter = "{" + projectBuildingOrHighwayWithin + "}";
+            filter = ownerType;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectBuildingOrHighwayWithin);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
