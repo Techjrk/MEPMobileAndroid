@@ -64,6 +64,7 @@ public class SearchActivity extends AppCompatActivity {
         String biddingWithinFilter = "";
         String buildingOrHighwayFilter = "";
         String ownerTypeFilter = "";
+        String workTypeFilter = "";
 
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
@@ -136,6 +137,13 @@ public class SearchActivity extends AppCompatActivity {
             if(ownerTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(ownerTypeFilter);
+            }
+
+            // Work Type Filter (valid)
+            workTypeFilter = processWorkTypeFilter(data);
+            if(workTypeFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(workTypeFilter);
             }
 
             // prepend searchFilter param if there are any filters used
@@ -324,9 +332,27 @@ public class SearchActivity extends AppCompatActivity {
         String ownerType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_OWNER_TYPE);
         if(ownerType != null && !ownerType.equals("")) {
             Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
-            //filter = "{" + projectBuildingOrHighwayWithin + "}";
+            //filter = "{" + ownerType + "}";
             filter = ownerType;
             //Log.d(TAG, "onActivityResult: searchFilter: " + projectBuildingOrHighwayWithin);
+            //TODO set the result filter to the domain...
+            //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Work Type filter data
+     * Ex: "workTypeId":{"inq":["2"]}
+     */
+    private String processWorkTypeFilter(Intent data) {
+        String filter = "";
+        String workType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_WORK_TYPE);
+        if(workType != null && !workType.equals("")) {
+            Log.d(TAG, "onActivityResult: workType: " + workType);
+            //filter = "{" + workType + "}";
+            filter = workType;
+            //Log.d(TAG, "onActivityResult: searchFilter: " + filter);
             //TODO set the result filter to the domain...
             //viewModel.setProjectSearchFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":" + searchFilter + "}");
         }

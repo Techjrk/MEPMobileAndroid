@@ -90,8 +90,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Work Type
                 case R.id.worktype & 0xfff:
-                    //TODO: Compose the correct search filter result for WorkType and set it to setSearchFilterResult
-                    viewModel.setWork_type_select(info[0]);
+                    processWorkType(info);
                     break;
             }
     }
@@ -274,6 +273,19 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             ownerType = "\"ownerType\":{\"inq\":" + oList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE, ownerType);
+    }
+
+    //TODO: Compose the correct search filter result for Work Type and set it to setSearchFilterResult
+    private void processWorkType(String[] arr) {
+        String workTypeStr = arr[0];               // TODO - make sure UI only allows single selection, as per iOS
+        String workType = "";
+        viewModel.setWork_type_select(workTypeStr);
+        if(workTypeStr != null && !workTypeStr.trim().equals("")) {
+            List<String> wList = new ArrayList<>();
+            wList.add("\"" + workTypeStr + "\"");
+            workType = "\"workTypeId\":{\"inq\":" + wList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, workType);
     }
 
 
