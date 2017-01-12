@@ -196,6 +196,7 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
                     RadioGroup radioGroup = (RadioGroup) appCompatActivity.findViewById(radioGroupId);
                     radioGroup.clearCheck();
+                    mtmPopupWindow = null;
                 }
             });
         }
