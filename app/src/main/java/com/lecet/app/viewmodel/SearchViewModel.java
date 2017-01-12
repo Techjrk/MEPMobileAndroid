@@ -69,6 +69,8 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_STAGE = "projectStage";
     public static final String FILTER_PROJECT_BIDDING_WITHIN = "biddingWithin";
     public static final String FILTER_PROJECT_BUILDING_OR_HIGHWAY = "buildingOrHighway";
+    public static final String FILTER_PROJECT_OWNER_TYPE = "ownerType";
+    public static final String FILTER_PROJECT_WORK_TYPE = "workType";
 
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
@@ -356,6 +358,7 @@ public class SearchViewModel extends BaseObservable {
             }
         });
     }
+
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -599,7 +602,8 @@ public class SearchViewModel extends BaseObservable {
             dialogBuilder.show();
         } catch (Exception e) {
             Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
-            Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);
+
+            Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
         }
     }
 

@@ -38,7 +38,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
         if (data == null) return;
 
-        String[] info = data.getStringArrayExtra("data");   //TODO - get values by name rather than array access such as [0] etc. Refactor into private helpers such as getCity(info), getProjectLocation(info), etc
+        String[] info = data.getStringArrayExtra("data");
         if (info != null)
             switch (resultCode) {
 
@@ -85,18 +85,23 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // Owner Type
                 case R.id.ownertype & 0xfff:
-                    //TODO: Compose the correct search filter result for OwnerType and set it to setSearchFilterResult
-                    viewModel.setOwner_type_select(info[0]);
+                    processOwnerType(info);
                     break;
 
                 // Work Type
                 case R.id.worktype & 0xfff:
-                    //TODO: Compose the correct search filter result for WorkType and set it to setSearchFilterResult
-                    viewModel.setWork_type_select(info[0]);
+                    processWorkType(info);
+                    break;
+
+                default:
+                    Log.w("SearchFilterMPSAct", "onActivityResult: WARNING: no case for resultCode " + resultCode);
                     break;
             }
     }
 
+    /**
+     * Process the Location input data
+     */
     private void processLocation(String[] arr) {
 
         // initial vars from raw data
@@ -115,16 +120,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setLocation_select(locationText);
         Log.d("SearchFilterMPSAct", "location: " + locationText);
 
-        // StringBuilder used for generating query with commas as appropriate
-        String projectLocation = "";
-                //projectLocation += ( !city.equals("") ? "\"city\":\"" + city + "\"":"");
-                        //projectLocation += ( !city.equals("") ? (!city.equals("") ? ",\"city\":\"" + city + "\"" : "\"city\":\"" + city + "\""):"");
-                //projectLocation += ( !state.equals("") ? (!state.equals("") || !state.equals("") || !state.equals("")  ? ",\"state\":\"" + state + "\"" : "\"state\":\"" + state + "\""):"");
-                //projectLocation += ( !county.equals("") ? (!county.equals("") || !county.equals("") ? ",\"county\":\"" + county + "\"" : "\"county\":\"" + county + "\""):"");
-                        //projectLocation += ( !zip.equals("") ? "\"zip5\":\"" + zip + "\"":"");
-               // projectLocation += ( !zip.equals("") ? (!zip.equals("") ? ",\"zip5\":\"" + zip + "\"" : "\"zip5\":\"" + zip + "\""):"");
 
+        // StringBuilder used for generating query with commas as appropriate
         StringBuilder sb = new StringBuilder();
+        String projectLocation = "";
+
         if(city.length() > 0) {
             sb.append("\"city\":\"" + city + "\"");
         }
@@ -149,7 +149,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_LOCATION, projectLocation);  // this should work whether or not projectLocation is empty
     }
 
-    //TODO: Compose the correct search filter result for Primary Project Type and set it to setSearchFilterResult
+    /**
+     * Process the Primary Project Type input data
+     * TODO: Use in conjunction with processProjectTypeId()
+     */
     private void processPrimaryProjectType(String[] arr) {
         String typeStr = arr[0];
         String projectType = "";
@@ -160,14 +163,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, projectType);
     }
 
-    //TODO: Compose the correct search filter result for Project Type ID and set it to setSearchFilterResult
+    /**
+     * Process the Project Type Id code based on input data from list
+     * TODO - HARD-CODED. Get from map of project categories mapped to type ID codes **********
+     */
     private void processProjectTypeId(String[] arr) {
         String typeIdStr = arr[0];
         String projectTypeId = "";
         viewModel.setType_select(typeIdStr);    //TODO - this is the same var set by processPrimaryProjectType
         if(typeIdStr != null && !typeIdStr.trim().equals("")) {
             List<Integer> idList = new ArrayList<>();
-            idList.add(501);    //TODO - HARD-CODED. Get from client-privided map of project categories mapped to type ID codes **********
+            idList.add(501);
             idList.add(502);
             idList.add(503);
             String ids = idList.toString();
@@ -176,8 +182,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE_ID, projectTypeId);
     }
 
-
-    //TODO: Compose the correct search filter result for Value and set it to setSearchFilterResult (needs a low and high value, two vars)
+    /**
+     * Process the dollar Value from input data
+     */
     private void processValue(String[] arr) {
         String min = arr[0];                          // int for query
         String max = arr[1];                          // int for query
@@ -190,7 +197,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, projectValue);
     }
 
-    //TODO: Compose the correct search filter result for UpdatedWithin and set it to setSearchFilterResult
+    /**
+     * Process the Updated Within input data
+     */
     private void processUpdatedWithin(String[] arr) {
         String updatedWithinStr = arr[0];   // text for display
         String updatedWithinInt = arr[1];   // int for query
@@ -202,39 +211,47 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
     }
 
-    //TODO: Compose the correct search filter result for Jurisdiction and set it to setSearchFilterResult
-    //NOTE: jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
+    /**
+     * Process the Jurisdiction input data
+     * TODO - jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
+     * TODO - also we need to map input to jurisdiction codes. Hard-coded for now.
+     */
     private void processJurisdiction(String[] arr) {
         String jurisdiction = arr[0];
         String jurisdictions = "";
         viewModel.setJurisdiction_select(jurisdiction);
         if(jurisdiction != null && !jurisdiction.trim().equals("")) {
             List<String> jList = new ArrayList<>();
-            jList.add("\"Eastern\"");    //TODO - HARD-CODED. Get from client-provided list of jurisdictions
+            jList.add("\"Eastern\"");
             jList.add("\"New Jersey\"");
             jList.add("\"3\"");
             String js = jList.toString();
-            jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";         // square brackets [ ] come for free when the list is converted to a String
+            jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
     }
 
-    //TODO: Compose the correct search filter result for Stage and set it to setSearchFilterResult
+    /**
+     * Process the Stage input data
+     * TODO - map project Stage from input. Hard-coded for now.
+     */
     private void processStage(String[] arr) {
         String stageStr = arr[0];
         String stages = "";
         viewModel.setStage_select(stageStr);
         if(stageStr != null && !stageStr.trim().equals("")) {
             List<Integer> sList = new ArrayList<>();
-            sList.add(203);    //TODO - HARD-CODED. Get from client-provided list of Stages
+            sList.add(203);
             sList.add(201);
             sList.add(206);
-            stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
+            stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
     }
 
-    //TODO: Compose the correct search filter result for Bidding Within and set it to setSearchFilterResult
+    /**
+     * Process the Bidding Within input data, which is an int, # of days
+     */
     private void processBiddingWithin(String[] arr) {
         String biddingWithinStr = arr[0];   // text for display
         String biddingWithinInt = arr[1];   // int for query
@@ -246,7 +263,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
     }
 
-    //TODO: Compose the correct search filter result for Building-or-Highway and set it to setSearchFilterResult
+    /**
+     * Process the Building-or-Highway input data, which is an array of one or two elements
+     */
     private void processBuildingOrHighway(String[] arr) {
         String bhStr = arr[0];      // could come in as "Both", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
         String bh = "";
@@ -259,9 +278,42 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 bhList.add("\"B\"");
                 bhList.add("\"H\"");
             }
-            bh = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";         // square brackets [ ] come for free when the list is converted to a String
+            bh = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bh);
+    }
+
+    /**
+     * Process the Owner Type input data, which is a String array with one element
+     * TODO - make sure UI only allows single selection, as per iOS
+     */
+    private void processOwnerType(String[] arr) {
+        String ownerTypeStr = arr[0];
+        String ownerType = "";
+        viewModel.setOwner_type_select(ownerTypeStr);
+        if(ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
+            List<String> oList = new ArrayList<>();
+            oList.add("\"" + ownerTypeStr + "\"");
+            ownerType = "\"ownerType\":{\"inq\":" + oList.toString() + "}";
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE, ownerType);
+    }
+
+    /**
+     * Process the Work Type input data, which is a String array with one element
+     * TODO - make sure UI only allows single selection, as per iOS
+     * TODO - work types need to be mapped to integer IDs
+     */
+    private void processWorkType(String[] arr) {
+        String workTypeStr = arr[0];
+        String workType = "";
+        viewModel.setWork_type_select(workTypeStr);
+        if(workTypeStr != null && !workTypeStr.trim().equals("")) {
+            List<String> wList = new ArrayList<>();
+            wList.add("\"" + workTypeStr + "\"");
+            workType = "\"workTypeId\":{\"inq\":" + wList.toString() + "}";
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, workType);
     }
 
 
