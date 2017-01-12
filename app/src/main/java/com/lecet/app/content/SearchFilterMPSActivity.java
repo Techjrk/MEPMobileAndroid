@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.SearchFilterStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
@@ -232,18 +234,35 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     }
 
     /**
-     * Process the Stage input data
-     * TODO - map project Stage from input. Hard-coded for now.
+     * Process the Stage input data based on the received list of Stages from the API
      */
     private void processStage(String[] arr) {
-        String stageStr = arr[0];
+        String stageStr = arr[0];   // text display
         String stages = "";
         viewModel.setStage_select(stageStr);
+
         if(stageStr != null && !stageStr.trim().equals("")) {
             List<Integer> sList = new ArrayList<>();
-            sList.add(203);
-            sList.add(201);
-            sList.add(206);
+            for(SearchFilterStagesMain parentStage : SearchViewModel.stageMainList) {
+                if(stageStr.equals(parentStage.getName())) {
+
+                    // add the parent Stage ID
+                    sList.add(parentStage.getId());
+
+                    // also add each child Stage IDs
+                    List<SearchFilterStage> subStages = null;
+                    subStages = parentStage.getStages();
+                    for (SearchFilterStage subStage: subStages) {
+                        if (subStage != null)  {
+                            sList.add(subStage.getId());
+                        }
+                    }
+                    break;
+                }
+            }
+            Log.d("SearchFilterMPSAct", "processStage: input Stage: " + stageStr);
+            Log.d("SearchFilterMPSAct", "processStage: parent and child Stages: " + sList);
+
             stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
