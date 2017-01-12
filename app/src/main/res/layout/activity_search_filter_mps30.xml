@@ -89,12 +89,8 @@
 
                         <TextView
                             android:id="@+id/location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/shape_rect_solid_border_1"
-                            android:hint=""
+                            style="@style/SearchFilterSectionFieldValue"
                             android:onClick="@{viewModel.onClicked}"
-                            android:padding="12dp"
                             android:text="@{viewModel.location_select}" />
 
                         <TextView
@@ -104,12 +100,8 @@
 
                         <TextView
                             android:id="@+id/type"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/shape_rect_solid_border_1"
-                            android:hint=""
+                            style="@style/SearchFilterSectionFieldValue"
                             android:onClick="@{viewModel.onClicked}"
-                            android:padding="12dp"
                             android:text="@{viewModel.type_select}" />
 
                         <TextView
@@ -119,12 +111,8 @@
 
                         <TextView
                             android:id="@+id/value"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/shape_rect_solid_border_1"
-                            android:hint=""
+                            style="@style/SearchFilterSectionFieldValue"
                             android:onClick="@{viewModel.onClicked}"
-                            android:padding="12dp"
                             android:text="@{viewModel.value_select}" />
 
                         <RelativeLayout
@@ -236,8 +224,6 @@
                                 android:layout_toRightOf="@id/text_option"
                                 android:src="@drawable/ic_down_triangle" />
                         </RelativeLayout>
-                        <!-- Horizontal Separator -->
-                        <include layout="@layout/rule_horiz_light" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -328,8 +314,7 @@
                                     android:layout_toRightOf="@id/text_fewer_option"
                                     android:src="@drawable/ic_up_triangle" />
                             </RelativeLayout>
-                            <!-- Horizontal Separator -->
-                            <include layout="@layout/rule_horiz_light" />
+
                         </LinearLayout>
                     </LinearLayout>
                     <!-- Company Fields -->
