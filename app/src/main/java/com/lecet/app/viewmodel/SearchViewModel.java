@@ -245,6 +245,10 @@ public class SearchViewModel extends BaseObservable {
         getQueryCompanyTotal();
         getQueryContactTotal();
     }
+   // public static SearchFilterStagesMain stagesMain;
+    public static List<SearchFilterStagesMain> stageMainList;
+    public static List<SearchFilterProjectTypesMain> typeMainList;
+    public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
     /***
      * getStagesList -  to populate the list of SearchFilterStagesMain POJO object for Stage section
      */
@@ -252,15 +256,16 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.getStagesList(new Callback<List<SearchFilterStagesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
-                List<SearchFilterStagesMain> slist;
+         //       if (stageMainList !=null) return;
+                Log.d("Create List","Create List stages");
                 if (response.isSuccessful()) {
-                    slist = response.body();
+                    stageMainList = response.body();
                     /*
                     TODO: use this logic data to process the UI layout of Stage view section.
                     Codes below is just for checking and testing the complex content of stages main list items.
                      */
                     List<SearchFilterStage> stagelist=null;
-                    for (SearchFilterStagesMain sMain : slist) {
+                    for (SearchFilterStagesMain sMain : stageMainList) {
                         if (sMain !=null)  Log.d("Stages ","Stages = name:"+sMain.getName()+" id:"+sMain.getId());
                         stagelist = sMain.getStages();
                         for (SearchFilterStage stage: stagelist) {
@@ -283,15 +288,16 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                List<SearchFilterProjectTypesMain> slist;
+                //if (typeMainList !=null) return;
+                Log.d("Create List","Create List types");
                 if (response.isSuccessful()) {
-                    slist = response.body();
+                    typeMainList = response.body();
                     /*
                     TODO: use this logic data to process the UI layout of Project Types view section.
                     Codes below is just for checking and testing the complex content of project types main list items.
                      */
                     List<SearchFilterProjectTypesProjectCategory> ptpclist=null;
-                    for (SearchFilterProjectTypesMain ptMain : slist) {
+                    for (SearchFilterProjectTypesMain ptMain : typeMainList) {
                         if (ptMain !=null)  Log.d("Project Types","Project Types = title:"+ptMain.getTitle()+" id:"+ptMain.getId());
                           ptpclist = ptMain.getProjectCategories();
                         for (SearchFilterProjectTypesProjectCategory ptpc: ptpclist) {
@@ -321,14 +327,15 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-                List<SearchFilterJurisdictionMain> slist;
+            //    if (jurisdictionMainList !=null) return;
+                Log.d("Create List","Create List jurisdiction");
                 if (response.isSuccessful()) {
-                    slist = response.body();
+                    jurisdictionMainList = response.body();
                     /*
                     TODO: use this logic data to process the UI layout of jurisdiction view section.
                     Codes below is just for checking and testing the complex content of stages main list items.
                      */
-                    for (SearchFilterJurisdictionMain jdMain : slist) {
+                    for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
                        if (jdMain !=null) Log.d("jmain","jmain = name:"+jdMain.getName()+" long name:"+ jdMain.getAbbreviation()+" abbreviation:"+jdMain.getAbbreviation()+" id:"+jdMain.getId());
                          for(SearchFilterJurisdictionLocal jlocal: jdMain.getLocals()){
                              if (jlocal !=null)   Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());

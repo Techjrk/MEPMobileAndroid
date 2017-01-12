@@ -13,6 +13,7 @@ import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class SearchDomain {
      * @param callback
      */
     public void getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
+        if (SearchViewModel.stageMainList !=null) return;
         String filter = "stages";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterStagesMain>> call = lecetClient.getSearchService().getSearchFilterStagesItems(token, filter);
@@ -64,6 +66,7 @@ public class SearchDomain {
      * @param callback
      */
     public void getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
+        if (SearchViewModel.typeMainList !=null) return;
         String filter = "projectTypes";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterProjectTypesMain>> call = lecetClient.getSearchService().getSearchFilterProjectTypesItems(token, filter);
@@ -74,6 +77,7 @@ public class SearchDomain {
      * @param callback
      */
     public void getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
+        if (SearchViewModel.jurisdictionMainList !=null) return;
         Call<List<SearchFilterJurisdictionMain>> call = lecetClient.getSearchService().getSearchFilterJurisdictionItems();
         call.enqueue(callback);
     }
