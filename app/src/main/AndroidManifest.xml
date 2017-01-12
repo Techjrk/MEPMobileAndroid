@@ -40,19 +40,19 @@
         <activity
             android:name=".content.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.FullScreen"/>
+            android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".content.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.CompanyDetailProjectBidsActivity"
             android:label="@string/title_activity_company_detail_project_bids"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ModifyProjectTrackingListActivity"
             android:label="@string/title_activity_project_tracking_list"
@@ -64,22 +64,22 @@
         <activity
             android:name=".content.CreatePasswordActivity"
             android:label="@string/title_activity_create_password"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ContactDetailActivity"
             android:label="@string/title_activity_change_password"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.SearchActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ProjectsNearMeActivity"
             android:parentActivityName=".content.MainActivity"
@@ -113,7 +113,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
 
-
+        <activity android:name=".content.SearchFilterMSEActivity" />
+        <activity android:name=".content.SearchFilterMPSActivity" />
+        <activity android:name=".content.SearchFilterMPFLocationActivity" />
+        <activity android:name=".content.SearchFilterMPFTypeActivity" />
+        <activity android:name=".content.SearchFilterMPFValueActivity" />
+        <activity android:name=".content.SearchFilterMPFBiddingWithinActivity" />
+        <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity" />
+        <activity android:name=".content.SearchFilterMPFJurisdictionActivity" />
+        <activity android:name=".content.SearchFilterMPFBHActivity" />
+        <activity android:name=".content.SearchFilterMPFStageActivity" />
+        <activity android:name=".content.SearchFilterMPFOwnerTypeActivity" />
+        <activity android:name=".content.SearchFilterMPFWorkTypeActivity"></activity>
     </application>
 
 </manifest>

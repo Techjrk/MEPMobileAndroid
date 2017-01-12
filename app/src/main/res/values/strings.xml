@@ -80,6 +80,13 @@
     <string name="company">Company</string>
     <string name="companies">Companies</string>
 
+    <!-- MSE: Search Page -->
+    <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
+    <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
+    <string name="recent">RECENT</string>
+    <string name="last_checked">Last checked </string>
+    <string name="search">Search</string>
+
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
     <string name="geofence_not_available">Geofence is not available</string>
@@ -164,8 +171,53 @@
     <string name="confirm_cancel">CANCEL</string>
 
     <!-- MTM Menu -->
-    <string name="mtm_menu_number_company">%d Companies</string>
-    <string name="mtm_menu_number_projects">%d Projects</string>
+    <string name="mtm_menu_number_company">%s Companies</string>
+    <string name="mtm_menu_number_projects">%s Projects</string>
+    <string name="mse_2_0">MSE 2.0</string>
+    <string name="project_query_searches">PROJECTS</string>
+    <string name="company_query_searches">COMPANIES</string>
+    <string name="title_contacts">CONTACTS</string>
+    <string name="time_any">Any</string>
+    <string name="time_next_24_hours">Next 24 Hours</string>
+    <string name="time_next_7_days">Next 7 Days</string>
+    <string name="time_next_30_days">Next 30 Days</string>
+    <string name="time_next_60_days">Next 60 Days</string>
+    <string name="time_next_90_days">Next 90 Days</string>
+    <string name="time_next_6_months">Next 6 Months</string>
+    <string name="time_next_12_months">Next 12 Months</string>
+    <string name="time_last_24_hours">Last 24 Hours</string>
+    <string name="time_last_7_days">Last 7 Days</string>
+    <string name="time_last_30_days">Last 30 Days</string>
+    <string name="time_last_90_days">Last 90 Days</string>
+    <string name="time_last_6_months">Last 6 Months</string>
+    <string name="time_last_12_months">Last 12 Months</string>
+    <string name="heavy_highway">Heavy-Highway</string>
+    <string name="both">Both</string>
+    <string name="building">Building</string>
+    <string name="msecancel">CANCEL</string>
+    <string name="msefilters">Filters</string>
+    <string name="mseapply">APPLY</string>
+    <string name="mseprojects">Projects</string>
+    <string name="msecompanies">Companies</string>
+    <string name="mselocation">LOCATION</string>
+    <string name="msetype">TYPE</string>
+    <string name="msevalue">VALUE</string>
+    <string name="mseupdated_within">UPDATED WITHIN</string>
+    <string name="any">Any</string>
+    <string name="msejurisdiction">JURISDICTION</string>
+    <string name="msebidding_within">BIDDING WITHIN</string>
+    <string name="more_options">More Options</string>
+    <string name="msecompany_location">COMPANY LOCATION</string>
+    <string name="mserelated_projects">Related Projects</string>
+    <string name="no_min_no_max">No Min - No Max</string>
+    <string name="mseproject_type">PROJECT TYPE</string>
+    <string name="everywhere">Everywhere</string>
+    <string name="all_types">All Types</string>
+    <string name="refine_search">Refine Search</string>
+    <string name="mseb_h">B/H</string>
+    <string name="mseowner_type">OWNER TYPE</string>
+    <string name="msework_type">WORK TYPE</string>
+    <string name="msefewer_options">Fewer Options</string>
 
     <!-- MTM SortBy Menu -->
     <string name="mtm_sort_menu_title">Sort by</string>

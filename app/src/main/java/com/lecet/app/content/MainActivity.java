@@ -364,6 +364,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
                 toogleMTMMenu();
                 return true;
             case R.id.menu_item_search:
+                startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_item_more:
                 toogleOverflowMenu();

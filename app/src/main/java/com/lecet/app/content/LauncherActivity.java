@@ -69,8 +69,7 @@ public class LauncherActivity extends AppCompatActivity {
         // if the user is authenticated, start the Main Activity
         if (isAuthenticated) {
 
-           Intent intent = new Intent(this, MainActivity.class);
- //           Intent intent = new Intent(this, SearchActivity.class); //For testing the SearchActivity only - Noel
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }

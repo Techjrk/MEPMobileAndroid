@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lecet.app.content.SearchFilterMPFJurisdictionActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:orientation="vertical">
+
+            <!-- SEARCH FIELD -->
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/lecetDarkestBlue">
+
+                <RelativeLayout
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/rounded_edittext">
+
+                    <EditText
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="0dp"
+                        android:layout_toStartOf="@id/close_image_button"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_action_search"
+
+                        android:hint="Search for jurisdiction"
+                        android:inputType="textPersonName"
+                        android:text=""
+                        android:textColor="@color/lecetTextWhite"
+                        android:textSize="15sp"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/apply_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:width="30dp"
+                    android:background="@null"
+                    android:onClick="@{viewModel.onClicked}"
+                    android:text="APPLY"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+            </LinearLayout>
+            <!-- UPDATED WITHIN SCHEDULE DETAIL SECTION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/seca"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="SECA"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/east"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="EAST"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/gtlk"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="GTLK"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/matl"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="MATL"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/mwst"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="MWST"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/neng"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="NENG"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/nwst"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="NWST"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/ovss"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="OVSS"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/pswt"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="PSWT"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/wmok"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text="WMOK"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"/>
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

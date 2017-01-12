@@ -35,6 +35,15 @@ public class Contact extends RealmObject {
     @SerializedName("contactType")
     private ContactType contactType;
 
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("fipsCounty")
+    private String fipsCounty;
+
     public Contact() {}
 
     public long getId() {
@@ -64,6 +73,19 @@ public class Contact extends RealmObject {
     public ContactType getContactType() {
         return contactType;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getFipsCounty() {
+        return fipsCounty;
+    }
+
 
     @Override
     public boolean equals(Object o) {
