@@ -178,7 +178,6 @@ public class ProjectDetailViewModel {
         List<ProjDetailItemViewModel> section0 = new ArrayList<>();
         data.add(section0);
 
-
         // Build Project Details
         List<ProjDetailItemViewModel> section1 = new ArrayList<>();
         data.add(section1);
@@ -223,7 +222,10 @@ public class ProjectDetailViewModel {
             data.add(section4);
 
             RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
-            for (Bid bid : bids) {
+            // Show only three max
+            for (int i=0; i < 3; i++) {
+
+                Bid bid = bids.get(i);
 
                 Company company = bid.getCompany();
                 if (company != null) {
@@ -233,6 +235,7 @@ public class ProjectDetailViewModel {
                     section4.add(new ProjDetailItemViewModel(price, detail));
                 }
             }
+
         }
 
         return data;
