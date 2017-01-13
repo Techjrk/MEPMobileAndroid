@@ -94,6 +94,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="1"
+                        android:checked="@{(viewModel.time[1]).equals(`1`)}"
                         android:text="@string/time_last_24_hours" />
 
                     <View
@@ -106,6 +107,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="7"
+                        android:checked="@{(viewModel.time[1]).equals(`7`)}"
                         android:text="@string/time_last_7_days" />
 
                     <View
@@ -118,6 +120,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="30"
+                        android:checked="@{(viewModel.time[1]).equals(`30`)}"
                         android:text="@string/time_last_30_days" />
 
                     <View
@@ -130,6 +133,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="90"
+                        android:checked="@{(viewModel.time[1]).equals(`90`)}"
                         android:text="@string/time_last_90_days" />
 
                     <View
@@ -142,6 +146,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="180"
+                        android:checked="@{(viewModel.time[1]).equals(`180`)}"
                         android:text="@string/time_last_6_months" />
 
                     <View
@@ -154,6 +159,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="360"
+                        android:checked="@{(viewModel.time[1]).equals(`360`)}"
                         android:text="@string/time_last_12_months" />
                 </RadioGroup>
 

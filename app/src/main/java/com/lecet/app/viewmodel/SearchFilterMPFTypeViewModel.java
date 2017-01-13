@@ -36,4 +36,14 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
         type[0] = ((CheckBox) view).getText().toString();
 //        time[1] = (String)view.getTag();
     }
+
+    public String[] getType() {
+        return type;
+    }
+
+    public void setType(String[] type) {
+        this.type = type;
+    }
+
+
 }

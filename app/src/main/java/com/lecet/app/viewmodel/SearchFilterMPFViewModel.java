@@ -33,6 +33,16 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
     public static final String EXTRA_LOCATION_ZIP = "persistedLocationZip";
+    public static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
+    public static final String EXTRA_VALUE_MIN = "persistedValueMin";
+    public static final String EXTRA_VALUE_MAX = "persistedValueMax";
+    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
+    public static final String EXTRA_JURISDICTION = "persistedJurisdiction";
+    public static final String EXTRA_STAGE = "persistedStage";
+    public static final String EXTRA_BIDDING_WITHIN = "persistedBiddingWithin";
+    public static final String EXTRA_BUILDING_OR_HIGHWAY = "persistedBuildingOrHighway";
+    public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
+    public static final String EXTRA_WORK_TYPE = "persistedWorkType";
 
     private AppCompatActivity activity;
     private static int id;
@@ -52,6 +62,25 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private String ownerTypeSelect;
     private String workTypeSelect;
 
+    /**
+     * User's selected filter item - Values for persistence between filter Activities
+     */
+    private String persistedLocationCity;
+    private String persistedLocationState;
+    private String persistedLocationCounty;
+    private String persistedLocationZip;
+    private String persistedProjectTypeId;
+    private String persistedValueMin;
+    private String persistedValueMax;
+    private String[] persistedUpdatedWithin;
+    private String persistedJurisdiction;
+    private String persistedStage;
+    private String persistedBiddingWithin;
+    private String persistedBuildingOrHighway;
+    private String persistedOwnerType;
+    private String persistedWorkType;
+
+
     public String getPersistedLocationCity() {
         return persistedLocationCity;
     }
@@ -59,11 +88,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public void setPersistedLocationCity(String persistedLocationCity) {
         this.persistedLocationCity = persistedLocationCity;
     }
-
-    /**
-     * User's selected filter item - Values for persistence between filter Activities
-     */
-    private String persistedLocationCity;
 
     public String getPersistedLocationState() {
         return persistedLocationState;
@@ -89,9 +113,86 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         this.persistedLocationZip = persistedLocationZip;
     }
 
-    private String persistedLocationState;
-    private String persistedLocationCounty;
-    private String persistedLocationZip;
+    public String getPersistedProjectTypeId() {
+        return persistedProjectTypeId;
+    }
+
+    public void setPersistedProjectTypeId(String persistedProjectTypeId) {
+        this.persistedProjectTypeId = persistedProjectTypeId;
+    }
+
+    public String getPersistedValueMin() {
+        return persistedValueMin;
+    }
+
+    public void setPersistedValueMin(String persistedValueMin) {
+        this.persistedValueMin = persistedValueMin;
+    }
+
+    public String getPersistedValueMax() {
+        return persistedValueMax;
+    }
+
+    public void setPersistedValueMax(String persistedValueMax) {
+        this.persistedValueMax = persistedValueMax;
+    }
+
+    public String[] getPersistedUpdatedWithin() {
+        return persistedUpdatedWithin;
+    }
+
+    public void setPersistedUpdatedWithin(String[] persistedUpdatedWithin) {
+        this.persistedUpdatedWithin = persistedUpdatedWithin;
+    }
+
+    public String getPersistedJurisdiction() {
+        return persistedJurisdiction;
+    }
+
+    public void setPersistedJurisdiction(String persistedJurisdiction) {
+        this.persistedJurisdiction = persistedJurisdiction;
+    }
+
+    public String getPersistedStage() {
+        return persistedStage;
+    }
+
+    public void setPersistedStage(String persistedStage) {
+        this.persistedStage = persistedStage;
+    }
+
+    public String getPersistedBiddingWithin() {
+        return persistedBiddingWithin;
+    }
+
+    public void setPersistedBiddingWithin(String persistedBiddingWithin) {
+        this.persistedBiddingWithin = persistedBiddingWithin;
+    }
+
+    public String getPersistedBuildingOrHighway() {
+        return persistedBuildingOrHighway;
+    }
+
+    public void setPersistedBuildingOrHighway(String persistedBuildingOrHighway) {
+        this.persistedBuildingOrHighway = persistedBuildingOrHighway;
+    }
+
+    public String getPersistedOwnerType() {
+        return persistedOwnerType;
+    }
+
+    public void setPersistedOwnerType(String persistedOwnerType) {
+        this.persistedOwnerType = persistedOwnerType;
+    }
+
+    public String getPersistedWorkType() {
+        return persistedWorkType;
+    }
+
+    public void setPersistedWorkType(String persistedWorkType) {
+        this.persistedWorkType = persistedWorkType;
+    }
+
 
 
 
@@ -270,38 +371,58 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.type:
                 i = new Intent(activity, SearchFilterMPFTypeActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
                 break;
+
             case R.id.value:
                 i = new Intent(activity, SearchFilterMPFValueActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
                 break;
+
             case R.id.updated_within:
                 i = new Intent(activity, SearchFilterMPFUpdatedWithinActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
                 break;
+
             case R.id.jurisdiction:
                 i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
+
             case R.id.stage:
                 i = new Intent(activity, SearchFilterMPFStageActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_STAGE, getPersistedStage());
                 break;
+
             case R.id.bidding_within:
                 i = new Intent(activity, SearchFilterMPFBiddingWithinActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN, getPersistedBiddingWithin());
                 break;
+
             case R.id.bh:
                 i = new Intent(activity, SearchFilterMPFBHActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_BUILDING_OR_HIGHWAY, getPersistedBuildingOrHighway());
                 break;
+
             case R.id.ownertype:
                 i = new Intent(activity, SearchFilterMPFOwnerTypeActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
+
             case R.id.worktype:
                 i = new Intent(activity, SearchFilterMPFWorkTypeActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
 
             case R.id.option:
                 setMoreOption(true);
                 return;
+
             case R.id.feweroption:
                 setMoreOption(false);
                 return;
+
             default:
                 //TODO: return all filter data in Intent back to MSE
                 saveResult();

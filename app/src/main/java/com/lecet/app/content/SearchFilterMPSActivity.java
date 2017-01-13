@@ -185,6 +185,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processProjectTypeId(String[] arr) {
         String typeIdStr = arr[0];
         String projectTypeId = "";
+        viewModel.setPersistedProjectTypeId(projectTypeId);
         viewModel.setType_select(typeIdStr);    //TODO - this is the same var set by processPrimaryProjectType
 
         if(typeIdStr != null && !typeIdStr.trim().equals("")) {
@@ -232,6 +233,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String max = arr[1];                          // int for query
         String valueStr = "$" + min + " - $" + max;   // text for display
         String projectValue = "";
+        viewModel.setPersistedValueMin(min);
+        viewModel.setPersistedValueMax(max);
         viewModel.setValue_select(valueStr);
         if(valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{"+ "\"min\":" + min + ",\"max\":" + max + "}";
@@ -245,7 +248,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processUpdatedWithin(String[] arr) {
         String updatedWithinStr = arr[0];   // text for display
         String updatedWithinInt = arr[1];   // int for query
+        String[] updatedWithinArr = {updatedWithinStr, updatedWithinInt};
         String projectUpdatedWithin = "";
+        viewModel.setPersistedUpdatedWithin(updatedWithinArr);
         viewModel.setUpdated_within_select(updatedWithinStr);
         if(updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
@@ -261,6 +266,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processJurisdiction(String[] arr) {
         String jurisdiction = arr[0];
         String jurisdictions = "";
+        viewModel.setPersistedJurisdiction(jurisdiction);
         viewModel.setJurisdiction_select(jurisdiction);
         if(jurisdiction != null && !jurisdiction.trim().equals("")) {
             List<String> jList = new ArrayList<>();
@@ -279,6 +285,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processStage(String[] arr) {
         String stageStr = arr[0];   // text display
         String stages = "";
+        viewModel.setPersistedStage(stageStr);
         viewModel.setStage_select(stageStr);
 
         if(stageStr != null && !stageStr.trim().equals("")) {
@@ -315,6 +322,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String biddingWithinStr = arr[0];   // text for display
         String biddingWithinInt = arr[1];   // int for query
         String projectBiddingWithin = "";
+        viewModel.setPersistedBiddingWithin(biddingWithinInt);
         viewModel.setBidding_within_select(biddingWithinStr);
         if(biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
@@ -328,6 +336,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processBuildingOrHighway(String[] arr) {
         String bhStr = arr[0];      // could come in as "Both", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
         String bh = "";
+        viewModel.setPersistedBuildingOrHighway(bhStr);
         viewModel.setBh_select(bhStr);
         if(bhStr != null && !bhStr.trim().equals("")) {
             List<String> bhList = new ArrayList<>();
@@ -349,6 +358,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processOwnerType(String[] arr) {
         String ownerTypeStr = arr[0];
         String ownerType = "";
+        viewModel.setPersistedOwnerType(ownerTypeStr);
         viewModel.setOwner_type_select(ownerTypeStr);
         if(ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
             List<String> oList = new ArrayList<>();
@@ -366,6 +376,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processWorkType(String[] arr) {
         String workTypeStr = arr[0];
         String workType = "";
+        viewModel.setPersistedWorkType(workTypeStr);
         viewModel.setWork_type_select(workTypeStr);
         if(workTypeStr != null && !workTypeStr.trim().equals("")) {
             List<String> wList = new ArrayList<>();

@@ -24,16 +24,11 @@ public class SearchFilterMPFLocationActivity extends AppCompatActivity {
         ActivitySearchFilterMpflocationBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpflocation);
 
         // get Location Extras
-        Intent locationIntent = getIntent();
-        String city   = locationIntent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY);
-        String state  = locationIntent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE);
-        String county = locationIntent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY);
-        String zip    = locationIntent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP);
-
-        Log.d("SearchFilterMPFLocAct", "onCreate: city: " + city);
-        Log.d("SearchFilterMPFLocAct", "onCreate: state: " + state);
-        Log.d("SearchFilterMPFLocAct", "onCreate: county: " + county);
-        Log.d("SearchFilterMPFLocAct", "onCreate: zip: " + zip);
+        Intent intent = getIntent();
+        String city   = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY);
+        String state  = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE);
+        String county = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY);
+        String zip    = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP);
 
         SearchFilterMPFLocationViewModel viewModel = new SearchFilterMPFLocationViewModel(this);
         viewModel.setCity(city);
