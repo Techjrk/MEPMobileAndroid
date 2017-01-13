@@ -28,12 +28,18 @@ import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
 public class SearchFilterMPFViewModel extends BaseObservable {
 
     private static final String TAG = "SearchFilterMPFViewModel";
+
+    public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
+    public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
+    public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
+    public static final String EXTRA_LOCATION_ZIP = "persistedLocationZip";
+
     private AppCompatActivity activity;
     private static int id;
     private Intent intent;
 
     /**
-     * User's selected filter item
+     * User's selected filter item - values for display
      */
     private String locationSelect;
     private String typeSelect;
@@ -45,6 +51,50 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private String bhSelect;
     private String ownerTypeSelect;
     private String workTypeSelect;
+
+    public String getPersistedLocationCity() {
+        return persistedLocationCity;
+    }
+
+    public void setPersistedLocationCity(String persistedLocationCity) {
+        this.persistedLocationCity = persistedLocationCity;
+    }
+
+    /**
+     * User's selected filter item - Values for persistence between filter Activities
+     */
+    private String persistedLocationCity;
+
+    public String getPersistedLocationState() {
+        return persistedLocationState;
+    }
+
+    public void setPersistedLocationState(String persistedLocationState) {
+        this.persistedLocationState = persistedLocationState;
+    }
+
+    public String getPersistedLocationCounty() {
+        return persistedLocationCounty;
+    }
+
+    public void setPersistedLocationCounty(String persistedLocationCounty) {
+        this.persistedLocationCounty = persistedLocationCounty;
+    }
+
+    public String getPersistedLocationZip() {
+        return persistedLocationZip;
+    }
+
+    public void setPersistedLocationZip(String persistedLocationZip) {
+        this.persistedLocationZip = persistedLocationZip;
+    }
+
+    private String persistedLocationState;
+    private String persistedLocationCounty;
+    private String persistedLocationZip;
+
+
+
     static final String ANY = "Any";
 
     /*  public static final int LOCATION =0;
@@ -212,7 +262,12 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         switch (id) {
             case R.id.location:
                 i = new Intent(activity, SearchFilterMPFLocationActivity.class);
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY, getPersistedLocationCity());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE, getPersistedLocationState());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY, getPersistedLocationCounty());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP, getPersistedLocationZip());
                 break;
+
             case R.id.type:
                 i = new Intent(activity, SearchFilterMPFTypeActivity.class);
                 break;
@@ -253,7 +308,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 activity.finish();  // includes Cancel and Apply buttons
                 return;
         }
-        activity.startActivityForResult(i, id & 0xfff);
+        activity.startActivityForResult(i, id & 0xfff); //mark
     }
 
     /**

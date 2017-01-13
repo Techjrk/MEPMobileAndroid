@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.PrimaryProjectType;
+import com.lecet.app.data.models.ProjectCategory;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
@@ -106,11 +110,16 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      */
     private void processLocation(String[] arr) {
 
+        String city = "";
+        String state = "";
+        String county = "";
+        String zip = "";
+
         // initial vars from raw data
-        String city   = arr[0];
-        String state  = arr[1];
-        String county = arr[2];
-        String zip    = arr[3];
+        city   = arr[0];
+        state  = arr[1];
+        county = arr[2];
+        zip    = arr[3];
 
         // comma-separated constructed String for UI display
         String cityStr   = city;
@@ -119,6 +128,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String zipStr    = !zip.equals("")    ? (!zip.equals("")    ? "," + zip    : " " + zip)    : "";
 
         String locationText = cityStr + stateStr + countyStr + zipStr;
+        viewModel.setPersistedLocationCity(city);   //mark
+        viewModel.setPersistedLocationState(state);
+        viewModel.setPersistedLocationCounty(county);
+        viewModel.setPersistedLocationZip(zip);
         viewModel.setLocation_select(locationText);
         Log.d("SearchFilterMPSAct", "location: " + locationText);
 
@@ -173,11 +186,38 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String typeIdStr = arr[0];
         String projectTypeId = "";
         viewModel.setType_select(typeIdStr);    //TODO - this is the same var set by processPrimaryProjectType
+
         if(typeIdStr != null && !typeIdStr.trim().equals("")) {
-            List<Integer> idList = new ArrayList<>();
-            idList.add(501);
-            idList.add(502);
-            idList.add(503);
+            List<Long> idList = new ArrayList<>();
+
+            List<SearchFilterProjectTypesProjectCategory> ptpclist = null;
+            for (SearchFilterProjectTypesMain ptMain : SearchViewModel.typeMainList) {
+                if (ptMain !=null)  {
+                    Log.d("Project Types","Project Types = title:"+ptMain.getTitle()+" id:"+ptMain.getId());
+                    //idList.add(ptMain.getId());
+                }
+                ptpclist = ptMain.getProjectCategories();
+                for (SearchFilterProjectTypesProjectCategory ptpc: ptpclist) {
+                    if (ptpc !=null)  {
+                        Log.d("PT PCateg","PT PCateg = title:"+ptpc.getTitle()+" id:"+ptpc.getId()+" projectgroupid:"+ptpc.getProjectGroupId());
+                        idList.add(ptpc.getId());
+                    }
+                    List<PrimaryProjectType> pptlist = ptpc.getProjectTypes();
+                    for (PrimaryProjectType ppt : pptlist) {
+                        if (ppt !=null) {
+                            Log.d("PType","PType = title:"+ppt.getTitle()+" bldg or hway :"+ppt.getBuildingOrHighway()+" id:"+ppt.getId()+" pcateg id:"+ppt.getProjectCategoryId());
+                            idList.add(ppt.getId());
+                        }
+                        ProjectCategory pptpc = ppt.getProjectCategory();
+                        if (pptpc !=null) {
+                            Log.d("PType PCategory","PType PCategory = title:"+pptpc.getTitle()+" id:"+pptpc.getId()+" project group id:"+pptpc.getProjectGroupId());
+                            idList.add(pptpc.getId());
+                        }
+                    }
+                }
+            }
+
+
             String ids = idList.toString();
             projectTypeId = "\"projectTypeId\":{\"inq\":" + ids + "}";         // square brackets [ ] come for free when the list is converted to a String
         }
