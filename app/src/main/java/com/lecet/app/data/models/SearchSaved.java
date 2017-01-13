@@ -19,7 +19,7 @@ public class SearchSaved{
     private String query;
 
     @SerializedName("filter")
-    private SearchFilter filter;
+    private Filter filter;
 
     @SerializedName("optIn")
     private String optIn;
@@ -42,7 +42,7 @@ public class SearchSaved{
         return query;
     }
 
-    public SearchFilter getFilter() {
+    public Filter getFilter() {
         return filter;
     }
 

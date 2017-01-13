@@ -261,7 +261,7 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     stageMainList = response.body();
                     /*
-                    TODO: use this logic data to process the UI layout of Stage view section.
+                    TODO: use this logic data to process the UI layout of Stage view section. Need to generate here dynamically the UI layout for the stages nested items.
                     Codes below is just for checking and testing the complex content of stages main list items.
                      */
                     List<SearchFilterStage> stagelist=null;
@@ -293,7 +293,7 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     typeMainList = response.body();
                     /*
-                    TODO: use this logic data to process the UI layout of Project Types view section.
+                    TODO: use this logic data to process the UI layout of Project Types view section. Need to generate here dynamically the UI layout for the project types nested items.
                     Codes below is just for checking and testing the complex content of project types main list items.
                      */
                     List<SearchFilterProjectTypesProjectCategory> ptpclist=null;
@@ -332,7 +332,7 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     jurisdictionMainList = response.body();
                     /*
-                    TODO: use this logic data to process the UI layout of jurisdiction view section.
+                    TODO: use this logic data to process the UI layout of jurisdiction view section. Need to generate here dynamically the UI layout for the Jurisdiction nested items.
                     Codes below is just for checking and testing the complex content of stages main list items.
                      */
                     for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
