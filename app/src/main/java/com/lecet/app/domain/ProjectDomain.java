@@ -7,6 +7,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -27,6 +28,7 @@ import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -205,6 +207,13 @@ public class ProjectDomain {
 
         String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
         Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
+        call.enqueue(callback);
+    }
+
+    public void getProjectJurisdiction(long projectId, Callback<List<Jurisdiction>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Jurisdiction>> call = lecetClient.getProjectService().projectJurisdiction(token, projectId);
         call.enqueue(callback);
     }
 

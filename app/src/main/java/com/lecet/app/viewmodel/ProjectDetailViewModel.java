@@ -9,17 +9,21 @@ import android.widget.ImageView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectDetailAdapter;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.DateUtility;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -187,6 +191,16 @@ public class ProjectDetailViewModel {
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
+
+        //TODO: Handle view all and data set toggling
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.stage), project.getProjectStage().getName()));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), DateUtility.formatDateForDisplay(project.getBidDate())));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.value), "$ 0"));
+        section1.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(context), Realm.getDefaultInstance()), projectID, context.getString(R.string.jurisdiction)));
+        section1.add(new ProjDetailItemViewModel(context.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
 
         // Notes
         List<ProjDetailItemViewModel> section2 = new ArrayList<>();

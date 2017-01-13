@@ -1,15 +1,20 @@
 package com.lecet.app.viewmodel;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.lecet.app.BR;
+
 /**
  * File: ProjDetailItemViewModel Created: 11/7/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjDetailItemViewModel {
+public class ProjDetailItemViewModel extends BaseObservable {
 
     private final String title;
-    private final String info;
+    private String info;
 
     public ProjDetailItemViewModel(String title, String info) {
 
@@ -17,12 +22,18 @@ public class ProjDetailItemViewModel {
         this.info = info;
     }
 
+    @Bindable
     public String getInfo() {
         return info;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+        notifyPropertyChanged(BR.info);
     }
 
     @Override

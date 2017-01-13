@@ -1,6 +1,7 @@
 package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.Project;
 
 
@@ -45,5 +46,13 @@ public interface ProjectService {
     })
     @GET("Projects/{projectID}")
     Call<Project> project(@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
+
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("Projects/{projectID}/jurisdiction")
+    Call<List<Jurisdiction>> projectJurisdiction(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
 }

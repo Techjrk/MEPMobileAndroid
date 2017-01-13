@@ -26,6 +26,14 @@
     <string name="architect">Architect</string>
     <string name="see_all">See All</string>
     <string name="updating">Updating..</string>
+    <string name="est_high">Est. High</string>
+    <string name="date_added">Date Added</string>
+    <string name="bid_date">Bid Date</string>
+    <string name="last_updated">Last Updated</string>
+    <string name="value">Value</string>
+    <string name="jurisdiction">Jurisdiction</string>
+    <string name="b_h">B/H</string>
+
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
