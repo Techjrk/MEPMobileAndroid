@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+
+            <!-- JURISDICTION ITEM SECTION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/j_name"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:text=""
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                    <ImageView
+                        style="@style/ImageDownArrow"
+                        android:onClick="@{viewModel.onSelected}"
+                        />
+                </RelativeLayout>
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+            </LinearLayout>
+
+</layout>

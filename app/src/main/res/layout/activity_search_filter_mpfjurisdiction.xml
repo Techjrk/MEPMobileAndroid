@@ -70,7 +70,7 @@
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
             </LinearLayout>
-            <!-- UPDATED WITHIN SCHEDULE DETAIL SECTION -->
+            <!-- JURISDICTION ITEM DETAIL SECTION -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

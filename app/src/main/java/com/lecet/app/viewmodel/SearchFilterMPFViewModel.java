@@ -13,6 +13,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterMPFJurisdictionActivity;
+import com.lecet.app.content.SearchFilterMPFJurisdictionActivity2;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterMPFStageActivity;
@@ -20,6 +21,7 @@ import com.lecet.app.content.SearchFilterMPFTypeActivity;
 import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterMPFValueActivity;
 import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
+import com.lecet.app.content.TestActivity;
 
 /**
  * Created by DomandTom 2016.
@@ -223,7 +225,9 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 i = new Intent(activity, SearchFilterMPFUpdatedWithinActivity.class);
                 break;
             case R.id.jurisdiction:
-                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
+//                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                //i = new Intent(activity, TestActivity.class);
                 break;
             case R.id.stage:
                 i = new Intent(activity, SearchFilterMPFStageActivity.class);
