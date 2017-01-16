@@ -65,11 +65,15 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private static final int SECTION_PARTICIPANTS = 3;
     private static final int SECTION_BIDDERS = 4;
 
+    private static final int DETAILS_DEFAULT_COUNT = 5;
+
     private AppCompatActivity appCompatActivity;
     private Project project;
     private List<List<ProjDetailItemViewModel>> data;
     private ProjectDetailHeaderViewModel headerViewModel;
     private ProjectDomain projectDomain;
+
+    private boolean detailsExpanded;
 
     public ProjectDetailAdapter(AppCompatActivity appCompatActivity, Project project, List<List<ProjDetailItemViewModel>> data, ProjectDetailHeaderViewModel headerViewModel, ProjectDomain projectDomain) {
 
@@ -80,6 +84,15 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         this.projectDomain = projectDomain;
     }
 
+    public void setDetailsExpanded(boolean detailsExpanded) {
+        this.detailsExpanded = detailsExpanded;
+        notifyDataSetChanged();
+    }
+
+    public boolean isDetailsExpanded() {
+        return detailsExpanded;
+    }
+
     @Override
     public int getSectionCount() {
         return data.size();
@@ -87,7 +100,19 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
     @Override
     public int getItemCountForSection(int section) {
-        return data.get(section).size();
+
+        int count = data.get(section).size();
+
+        if (section == SECTION_SHARE) {
+
+            if (!isDetailsExpanded()) {
+
+                // Show details up to Est. Low
+                count = DETAILS_DEFAULT_COUNT;
+            }
+        }
+
+        return count;
     }
 
     @Override
@@ -126,8 +151,13 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     @Override
     public boolean enableFooterForSection(int section) {
 
-        if (section == SECTION_SHARE || section == SECTION_BIDDERS) {
+        if (section == SECTION_SHARE) {
             return true;
+        }
+
+        if (section == SECTION_BIDDERS || section == SECTION_PARTICIPANTS) {
+
+            return data.get(section).size() > 3;
         }
 
         return false;
@@ -188,7 +218,9 @@ public class ProjectDetailAdapter extends SectionedAdapter {
             @Override
             public void onClick(View view) {
 
-                Log.d(TAG, "Footer Section: " + section + " Clicked");
+                if (section == SECTION_SHARE) {
+                    setDetailsExpanded(!detailsExpanded);
+                }
             }
         });
     }
@@ -326,5 +358,6 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         public FooterViewHolder(View itemView) {
             super(itemView);
         }
+
     }
 }

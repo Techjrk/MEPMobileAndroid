@@ -191,8 +191,6 @@ public class ProjectDetailViewModel {
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
-
-        //TODO: Handle view all and data set toggling
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.stage), project.getProjectStage().getName()));
         section1.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
@@ -220,8 +218,9 @@ public class ProjectDetailViewModel {
             data.add(section3);
 
             RealmResults<Contact> contacts = projectDomain.fetchProjectContacts(projectID);
-            for (Contact contact : contacts) {
+            for (int i=0; i < 3; i++) {
 
+                Contact contact = contacts.get(i);
                 String contactType = contact.getContactType().getCategory();
                 String detail = contact.getCompany().getName() + " \n " + contact.getCompany().getCity() + ", " + contact.getCompany().getState();
 
