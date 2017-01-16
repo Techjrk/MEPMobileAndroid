@@ -218,7 +218,9 @@ public class ProjectDetailViewModel {
             data.add(section3);
 
             RealmResults<Contact> contacts = projectDomain.fetchProjectContacts(projectID);
-            for (int i=0; i < 3; i++) {
+            int maxSize = contacts.size() > 3 ? contacts.size() : 3;
+
+            for (int i=0; i < maxSize; i++) {
 
                 Contact contact = contacts.get(i);
                 String contactType = contact.getContactType().getCategory();
@@ -235,8 +237,11 @@ public class ProjectDetailViewModel {
             data.add(section4);
 
             RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
+            int maxSize = bids.size() > 3 ? bids.size() : 3;
+
+
             // Show only three max
-            for (int i=0; i < 3; i++) {
+            for (int i=0; i < maxSize; i++) {
 
                 Bid bid = bids.get(i);
 
