@@ -321,8 +321,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processBiddingWithin(String[] arr) {
         String biddingWithinStr = arr[0];   // text for display
         String biddingWithinInt = arr[1];   // int for query
+        String[] updatedWithinArr = {biddingWithinStr, biddingWithinInt};
         String projectBiddingWithin = "";
-        viewModel.setPersistedBiddingWithin(biddingWithinInt);
+        viewModel.setPersistedBiddingWithin(updatedWithinArr);
         viewModel.setBidding_within_select(biddingWithinStr);
         if(biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;

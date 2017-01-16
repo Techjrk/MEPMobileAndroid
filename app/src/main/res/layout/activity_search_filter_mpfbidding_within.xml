@@ -35,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-
                     android:onClick="@{viewModel.onClicked}"
                     android:text=""
                     android:textColor="@color/lecetTextWhite"
@@ -94,6 +93,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="1"
+                        android:checked="@{(viewModel.time[1]).equals(`1`)}"
                         android:text="@string/time_next_24_hours" />
 
                     <View
@@ -106,6 +106,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="7"
+                        android:checked="@{(viewModel.time[1]).equals(`7`)}"
                         android:text="@string/time_next_7_days" />
 
                     <View
@@ -118,6 +119,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="30"
+                        android:checked="@{(viewModel.time[1]).equals(`30`)}"
                         android:text="@string/time_next_30_days" />
 
                     <View
@@ -130,6 +132,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="60"
+                        android:checked="@{(viewModel.time[1]).equals(`60`)}"
                         android:text="@string/time_next_60_days" />
 
                     <View
@@ -142,6 +145,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="90"
+                        android:checked="@{(viewModel.time[1]).equals(`90`)}"
                         android:text="@string/time_next_90_days" />
 
                     <View
@@ -154,6 +158,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="180"
+                        android:checked="@{(viewModel.time[1]).equals(`180`)}"
                         android:text="@string/time_next_6_months" />
 
                     <View
@@ -166,6 +171,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="360"
+                        android:checked="@{(viewModel.time[1]).equals(`360`)}"
                         android:text="@string/time_next_12_months" />
                 </RadioGroup>
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.ActivitySearchFilterMpfjurisdictionBinding;
 import com.lecet.app.databinding.ActivitySearchFilterMpfupdatedWithinBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFUpdatedWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
