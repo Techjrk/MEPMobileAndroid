@@ -240,4 +240,8 @@
     <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s</string>
     <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s</string>
 
+    <!-- Share -->
+    <string name="share_project">Share Project Details</string>
+    <string name="share_company">Share Company Details</string>
+
 </resources>

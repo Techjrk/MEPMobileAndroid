@@ -43,7 +43,6 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
     private final T trackedObject;
 
     private ProgressDialog progressDialog;
-    private ListPopupWindow sharePopupWindow;
     private ListPopupWindow mtmPopupWindow;
     private MoveToAdapter mtmAdapter;
 
@@ -74,6 +73,8 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
     public abstract void addTrackedObjectToTrackingList(long trackingListId, List<Long> trackedIds);
 
+    public abstract void onShareObjectSelected(T trackedObject);
+
     public TrackingListDomain getTrackingListDomain() {
         return trackingListDomain;
     }
@@ -85,6 +86,7 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
     public T getTrackedObject() {
         return trackedObject;
     }
+
 
     @SuppressWarnings("unused")
     public void onTrackSelected(View view) {
@@ -112,11 +114,6 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
             mtmPopupWindow.dismiss();
         }
-
-        if (sharePopupWindow != null && sharePopupWindow.isShowing()) {
-
-            sharePopupWindow.dismiss();
-        }
     }
 
     private void showTrackWindow(View view) {
@@ -134,6 +131,7 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
         dismissWindow();
         dismissDialog();
+        onShareObjectSelected(trackedObject);
     }
 
     /* Tracking List */

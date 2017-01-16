@@ -1,10 +1,12 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.adapters.MoveToProjectListAdapter;
+import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.TrackingListDomain;
@@ -139,5 +141,24 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                 showAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), message);
             }
         });
+    }
+
+    @Override
+    public void onShareObjectSelected(Project trackedObject) {
+
+        String projectUrl = LecetClient.ENDPOINT + "project/" + trackedObject.getId();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("DODGE NUMBER : ");
+        sb.append(trackedObject.getDodgeNumber());
+        sb.append("/n");
+        sb.append("WEB LINK : ");
+        sb.append(projectUrl);
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        sendIntent.setType("text/plain");
+        getAppCompatActivity().startActivity(Intent.createChooser(sendIntent, getAppCompatActivity().getResources().getText(R.string.share_project)));
     }
 }
