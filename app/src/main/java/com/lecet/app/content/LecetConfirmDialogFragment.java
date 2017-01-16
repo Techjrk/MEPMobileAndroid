@@ -1,7 +1,7 @@
 package com.lecet.app.content;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -18,7 +18,7 @@ import com.lecet.app.utility.TextViewUtility;
  * Created by Josué Rodríguez on 27/10/2016.
  */
 
-public class LacetConfirmDialogFragment extends DialogFragment implements View.OnClickListener {
+public class LecetConfirmDialogFragment extends DialogFragment implements View.OnClickListener {
 
     public static final String TAG = "LacetConfirmDialogFragment";
 
@@ -31,8 +31,8 @@ public class LacetConfirmDialogFragment extends DialogFragment implements View.O
     String confirmMessage;
     String cancelMessage;
 
-    public static LacetConfirmDialogFragment newInstance(String message, String confirmMessage, String cancelMessage) {
-        LacetConfirmDialogFragment dialogFragment = new LacetConfirmDialogFragment();
+    public static LecetConfirmDialogFragment newInstance(String message, String confirmMessage, String cancelMessage) {
+        LecetConfirmDialogFragment dialogFragment = new LecetConfirmDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MESSAGE, message);
         args.putString(ARG_CONFIRM_MESSAGE, confirmMessage);
@@ -54,6 +54,7 @@ public class LacetConfirmDialogFragment extends DialogFragment implements View.O
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_confirm_dialog_layout, null, false);
         TextView labelMessage = (TextView) view.findViewById(R.id.label_message);
@@ -92,20 +93,25 @@ public class LacetConfirmDialogFragment extends DialogFragment implements View.O
         dismiss();
     }
 
-    public interface ConfirmDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog);
-
-        void onDialogNegativeClick(DialogFragment dialog);
-    }
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (ConfirmDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement NoticeDialogListener");
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+
+        if (mListener != null) {
+            mListener.onDialogCancel(LecetConfirmDialogFragment.this);
         }
     }
+
+    public void setCallbackListener(ConfirmDialogListener listener) {
+
+        this.mListener = listener;
+    }
+
+    public interface ConfirmDialogListener {
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogCancel(DialogFragment dialog);
+    }
+
+
 }

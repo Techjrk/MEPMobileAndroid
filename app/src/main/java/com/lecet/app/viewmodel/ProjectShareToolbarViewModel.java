@@ -1,11 +1,13 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.adapters.MoveToProjectListAdapter;
+import com.lecet.app.content.LecetConfirmDialogFragment;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -28,7 +30,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project, ProjectTrackingList> {
+public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project, ProjectTrackingList> implements LecetConfirmDialogFragment.ConfirmDialogListener {
 
 
     public ProjectShareToolbarViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, Project trackedObject) {
@@ -160,5 +162,93 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
         sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
         sendIntent.setType("text/plain");
         getAppCompatActivity().startActivity(Intent.createChooser(sendIntent, getAppCompatActivity().getResources().getText(R.string.share_project)));
+    }
+
+    @Override
+    public void onHideObjectSelected(Project trackedObject) {
+
+        String message = String.format(trackedObject.isHidden() ? getAppCompatActivity().getString(R.string.you_are_about_unhide) : getAppCompatActivity().getString(R.string.you_are_about_hide), getAppCompatActivity().getString(R.string.project));
+        String positive = String.format(trackedObject.isHidden() ? getAppCompatActivity().getString(R.string.unhide_blank) :  getAppCompatActivity().getString(R.string.hide_blank), getAppCompatActivity().getString(R.string.project));
+
+        LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(message, positive, getAppCompatActivity().getString(R.string.confirm_cancel));
+
+        dialogFragment.setCallbackListener(this);
+        dialogFragment.show(getAppCompatActivity().getSupportFragmentManager(), LecetConfirmDialogFragment.TAG);
+    }
+
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+        clearRadioGroup();
+
+        showProgressDialog(getAppCompatActivity().getString(R.string.app_name), "");
+
+        Project project = getTrackedObject();
+        if (project.isHidden()) {
+
+            getTrackingListDomain().getProjectDomain().unhideProject(project.getId(), new Callback<Project>() {
+                @Override
+                public void onResponse(Call<Project> call, Response<Project> response) {
+
+                    if (response.isSuccessful()) {
+
+                        dismissProgressDialog();
+                        getTrackingListDomain().getProjectDomain().copyToRealmTransaction(response.body());
+
+                    } else {
+
+                        dismissProgressDialog();
+                        showAlertDialog(getAppCompatActivity().getString(R.string.app_name), response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Project> call, Throwable t) {
+
+                    dismissProgressDialog();
+                    showAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), getAppCompatActivity().getString(R.string.error_network_message));
+                }
+            });
+
+        } else {
+
+            getTrackingListDomain().getProjectDomain().hideProject(project.getId(), new Callback<Project>() {
+                @Override
+                public void onResponse(Call<Project> call, Response<Project> response) {
+
+                    if (response.isSuccessful()) {
+
+                        dismissProgressDialog();
+                        getTrackingListDomain().getProjectDomain().copyToRealmTransaction(response.body());
+
+                    } else {
+
+                        dismissProgressDialog();
+                        showAlertDialog(getAppCompatActivity().getString(R.string.app_name), response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Project> call, Throwable t) {
+
+                    dismissProgressDialog();
+                    showAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), getAppCompatActivity().getString(R.string.error_network_message));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+        clearRadioGroup();
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onDialogCancel(DialogFragment dialog) {
+
+        clearRadioGroup();
     }
 }

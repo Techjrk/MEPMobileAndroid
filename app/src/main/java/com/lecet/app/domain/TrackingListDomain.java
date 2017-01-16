@@ -79,6 +79,10 @@ public class TrackingListDomain {
         realm.removeChangeListener(listener);
     }
 
+    public ProjectDomain getProjectDomain() {
+        return projectDomain;
+    }
+
     // API
 
     public void getUserProjectTrackingLists(Callback<List<ProjectTrackingList>> callback) {

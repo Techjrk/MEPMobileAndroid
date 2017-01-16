@@ -13,6 +13,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -55,4 +56,17 @@ public interface ProjectService {
     @GET("Projects/{projectID}/jurisdiction")
     Call<List<Jurisdiction>> projectJurisdiction(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("Projects/{projectID}/hide")
+    Call<Project> hide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("Projects/{projectID}/unhide")
+    Call<Project> unhide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 }

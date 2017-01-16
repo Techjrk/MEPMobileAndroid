@@ -217,6 +217,20 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
+    public void hideProject(long projectId, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<Project> call = lecetClient.getProjectService().hide(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void unhideProject(long projectId, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<Project> call = lecetClient.getProjectService().unhide(token, projectId);
+        call.enqueue(callback);
+    }
+
     /**
      * Persisted
      **/

@@ -49,8 +49,6 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
     private Dialog hideDialog;
     private AlertDialog alertDialog;
 
-    @IdRes
-    private int radioGroupId;
 
     public ShareToolbarViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, T trackedObject) {
 
@@ -74,6 +72,8 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
     public abstract void addTrackedObjectToTrackingList(long trackingListId, List<Long> trackedIds);
 
     public abstract void onShareObjectSelected(T trackedObject);
+
+    public abstract void onHideObjectSelected(T trackedObject);
 
     public TrackingListDomain getTrackingListDomain() {
         return trackingListDomain;
@@ -118,8 +118,6 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
     private void showTrackWindow(View view) {
 
-        radioGroupId = ((View) view.getParent()).getId();
-
         dismissWindow();
         dismissDialog();
         toogleMoveMenu(view);
@@ -127,11 +125,12 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
     private void showShareWindow(View view) {
 
-        radioGroupId = ((View) view.getParent()).getId();
-
         dismissWindow();
         dismissDialog();
         onShareObjectSelected(trackedObject);
+
+        // We have no way of knowing if the share intent was dismissed, so let's clear the group on selection
+        clearRadioGroup();
     }
 
     /* Tracking List */
@@ -192,14 +191,19 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
                 @Override
                 public void onDismiss() {
 
-                    RadioGroup radioGroup = (RadioGroup) appCompatActivity.findViewById(radioGroupId);
-                    radioGroup.clearCheck();
+                    clearRadioGroup();
                     mtmPopupWindow = null;
                 }
             });
         }
     }
 
+    /* Radio Group */
+    public void clearRadioGroup() {
+
+        RadioGroup radioGroup = (RadioGroup) appCompatActivity.findViewById(R.id.share_radio_group);
+        radioGroup.clearCheck();
+    }
 
     /* Popup Window */
 
@@ -215,6 +219,7 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
         dismissWindow();
         dismissDialog();
+        onHideObjectSelected(trackedObject);
     }
 
     /* Alert Dialog */

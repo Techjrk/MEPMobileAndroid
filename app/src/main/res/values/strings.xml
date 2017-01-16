@@ -243,5 +243,9 @@
     <!-- Share -->
     <string name="share_project">Share Project Details</string>
     <string name="share_company">Share Company Details</string>
+    <string name="you_are_about_hide">You are about to hide this %s</string>
+    <string name="you_are_about_unhide">You are about to unhide this %s</string>
+    <string name="hide_blank">HIDE %s</string>
+    <string name="unhide_blank">UNHIDE %s</string>
 
 </resources>
