@@ -21,7 +21,6 @@ import com.lecet.app.content.SearchFilterMPFTypeActivity;
 import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterMPFValueActivity;
 import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
-import com.lecet.app.content.TestActivity;
 
 /**
  * Created by DomandTom 2016.
