@@ -29,6 +29,7 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectCategory;
+import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -198,7 +199,7 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterContactQueryAll();
         getJurisdictionList();
         getProjectTypesList();
-        getStagesList();
+        //getStagesList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -245,41 +246,9 @@ public class SearchViewModel extends BaseObservable {
         getQueryCompanyTotal();
         getQueryContactTotal();
     }
-   // public static SearchFilterStagesMain stagesMain;
-    public static List<SearchFilterStagesMain> stageMainList;
+
     public static List<SearchFilterProjectTypesMain> typeMainList;
     public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
-    /***
-     * getStagesList -  to populate the list of SearchFilterStagesMain POJO object for Stage section
-     */
-    public void getStagesList() {
-        searchDomain.getStagesList(new Callback<List<SearchFilterStagesMain>>() {
-            @Override
-            public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
-         //       if (stageMainList !=null) return;
-                Log.d("Create List","Create List stages");
-                if (response.isSuccessful()) {
-                    stageMainList = response.body();
-                    /*
-                    TODO: use this logic data to process the UI layout of Stage view section.
-                    Codes below is just for checking and testing the complex content of stages main list items.
-                     */
-                    List<SearchFilterStage> stagelist=null;
-                    for (SearchFilterStagesMain sMain : stageMainList) {
-                        if (sMain !=null)  Log.d("Stages ","Stages = name:"+sMain.getName()+" id:"+sMain.getId());
-                        stagelist = sMain.getStages();
-                        for (SearchFilterStage stage: stagelist) {
-                            if (stage !=null)  Log.d("Stage ","Stage name"+stage.getName()+" id:"+stage.getId()+" parentId:"+stage.getParentId());
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
-            }
-        });
-    }
 
     /***
      * getProjectTypesList -  to populate the list of SearchFilterProjectTypesMain POJO object for Project Types section

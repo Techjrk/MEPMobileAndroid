@@ -2,6 +2,9 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -23,6 +26,8 @@ public class ProjectStage extends RealmObject {
     @SerializedName("name")
     private String name;
 
+    @SerializedName("childStages")
+    public RealmList<ProjectStage> childStages = new RealmList<>();
 
     public ProjectStage() {
     }
@@ -31,12 +36,47 @@ public class ProjectStage extends RealmObject {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public long getParentId() {
         return parentId;
     }
 
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public RealmList<ProjectStage> getChildStages() {
+        return childStages;
+    }
+
+    public void setChildStages(RealmList<ProjectStage> childStages) {
+        this.childStages = childStages;
+    }
+
+    public void addChildStage(ProjectStage childStage) {
+        this.childStages.add(childStage);
+    }
+
+    /**
+     * Helper for toString() output of child IDs
+     */
+    private String getChildStageIds() {
+        ArrayList<Long> arr = new ArrayList<>();
+        for(ProjectStage childStage : childStages) {
+            arr.add(childStage.getId());
+        }
+        return arr.toString();
     }
 
     @Override
@@ -45,6 +85,7 @@ public class ProjectStage extends RealmObject {
                 "id=" + id +
                 ", parentId=" + parentId +
                 ", name='" + name + '\'' +
+                ", childStages=" + getChildStageIds() +
                 '}';
     }
 
@@ -57,7 +98,8 @@ public class ProjectStage extends RealmObject {
 
         if (id != that.id) return false;
         if (parentId != that.parentId) return false;
-        return name != null ? name.equals(that.name) : that.name == null;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        return childStages != null ? childStages.equals(that.childStages) : that.childStages == null;
 
     }
 
@@ -66,6 +108,8 @@ public class ProjectStage extends RealmObject {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (parentId ^ (parentId >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (childStages != null ? childStages.hashCode() : 0);
         return result;
     }
+
 }

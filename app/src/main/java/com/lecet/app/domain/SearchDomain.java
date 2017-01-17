@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
@@ -18,8 +20,11 @@ import com.lecet.app.viewmodel.SearchViewModel;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by DomAndTom 2016.
@@ -54,11 +59,73 @@ public class SearchDomain {
      * @param callback
      */
     public void getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
-        if (SearchViewModel.stageMainList !=null) return;
+        //if (SearchViewModel.stageMainList !=null) return;
         String filter = "stages";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterStagesMain>> call = lecetClient.getSearchService().getSearchFilterStagesItems(token, filter);
         call.enqueue(callback);
+    }
+
+    /**
+     * Retrieve the list of Project Stages and store them, along with their child Project Stages, in a Realm list.
+     */
+    public void generateRealmStageList() {
+        getStagesList(new Callback<List<SearchFilterStagesMain>>() {
+            @Override
+            public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
+                Log.d("SearchDomain","Create List stages");
+                if (response.isSuccessful()) {
+                    final List<SearchFilterStagesMain> stageMainList = response.body();
+
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            List<SearchFilterStage> childStages;
+                            RealmList<ProjectStage> realmProjectStageList = new RealmList<ProjectStage>();
+                            ProjectStage parentStage;
+                            ProjectStage childStage;
+
+                            // parent stages
+                            for (SearchFilterStagesMain pStage : stageMainList) {
+                                if (pStage != null)  {
+                                    parentStage = new ProjectStage();   //realm.createObject(ProjectStage.class, pStage.getId());
+                                    parentStage.setName(pStage.getName());
+                                    parentStage.setId(pStage.getId());
+                                    parentStage.setParentId(0);
+                                    Log.d("Stages:","Stage: name:" + pStage.getName() + " id:" + pStage.getId());
+
+                                    // child stages
+                                    childStages = pStage.getStages();
+                                    for (SearchFilterStage cStage: childStages) {
+                                        if (cStage != null)  {
+                                            childStage = new ProjectStage();   //realm.createObject(ProjectStage.class, cStage.getId());
+                                            childStage.setName(cStage.getName());
+                                            childStage.setId(cStage.getId());
+                                            childStage.setParentId(cStage.getParentId());
+                                            parentStage.addChildStage(childStage);
+                                            //realmProjectStageList.add(childStage);
+                                            Log.d("Stages:","  Child Stage: name:" + cStage.getName() + " id:" + cStage.getId() + " parentId:" + cStage.getParentId());
+                                        }
+                                    }
+
+                                    realmProjectStageList.add(parentStage);
+                                }
+                            }
+                            Log.d("Stages:","realmProjectStageList: size: " + realmProjectStageList.size());
+                            Log.d("Stages:","realmProjectStageList: " + realmProjectStageList);
+                            realm.copyToRealmOrUpdate(realmProjectStageList);
+                        }
+                    });
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
+                Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
+            }
+        });
     }
 
     /**

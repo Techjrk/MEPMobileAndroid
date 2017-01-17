@@ -9,6 +9,7 @@ import android.util.Log;
 import com.lecet.app.R;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectCategory;
+import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchFilterStage;
@@ -20,6 +21,9 @@ import com.lecet.app.viewmodel.SearchViewModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class SearchFilterMPSActivity extends AppCompatActivity {
     SearchFilterMPFViewModel viewModel;
@@ -280,39 +284,52 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     }
 
     /**
-     * Process the Stage input data based on the received list of Stages from the API
+     * Process the Stage input data based on the received list of Stages persisted in Realm
+     * arr[0] - Stage name
+     * arr[1] - Stage ID
      */
-    private void processStage(String[] arr) {
-        String stageStr = arr[0];   // text display
-        String stages = "";
-        viewModel.setPersistedStage(stageStr);
-        viewModel.setStage_select(stageStr);
+    private void processStage(final String[] arr) {
 
-        if(stageStr != null && !stageStr.trim().equals("")) {
-            List<Integer> sList = new ArrayList<>();
-            for(SearchFilterStagesMain parentStage : SearchViewModel.stageMainList) {
-                if(stageStr.equals(parentStage.getName())) {
+        Realm realm = Realm.getDefaultInstance();
 
-                    // add the parent Stage ID
-                    sList.add(parentStage.getId());
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<ProjectStage> realmStages;
+                realmStages = realm.where(ProjectStage.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
+                Log.d("processStage: ","realmStages size: " + realmStages.size());
+                Log.d("processStage: ","realmStages: " + realmStages);
 
-                    // also add each child Stage IDs
-                    List<SearchFilterStage> subStages = null;
-                    subStages = parentStage.getStages();
-                    for (SearchFilterStage subStage: subStages) {
-                        if (subStage != null)  {
-                            sList.add(subStage.getId());
+                String stageStr = arr[0];   // text display
+                String stageId  = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String stages = "";
+                viewModel.setPersistedStage(stageStr);
+                viewModel.setStage_select(stageStr);
+
+                // build the list of IDs for the query, which include the parent ID and any of its child IDs
+                List<String> sList = new ArrayList<>();
+                sList.add(stageId);
+                if(stageStr != null && !stageStr.trim().equals("")) {
+                    // add each child Stage ID
+                    for(ProjectStage parentStage : realmStages) {
+                        if(stageStr.equals(parentStage.getName())) {
+                            List<ProjectStage> childStages = parentStage.getChildStages();
+                            for (ProjectStage childStage: childStages) {
+                                if (childStage != null)  {
+                                    sList.add(Long.toString(childStage.getId()));
+                                }
+                            }
+                            break;
                         }
                     }
-                    break;
-                }
-            }
-            Log.d("SearchFilterMPSAct", "processStage: input Stage: " + stageStr);
-            Log.d("SearchFilterMPSAct", "processStage: parent and child Stages: " + sList);
+                    Log.d("SearchFilterMPSAct", "processStage: input Stage name: " + stageStr);
+                    Log.d("SearchFilterMPSAct", "processStage: parent and child Stage IDs: " + sList);
 
-            stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
+                    stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
+                }
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
+            }
+        });
     }
 
     /**
