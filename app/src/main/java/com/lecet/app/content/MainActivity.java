@@ -118,6 +118,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
         if (isNetworkConnected()) {
             searchDomain.generateRealmStageList();
+            searchDomain.generateRealmProjectTypesList();
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();

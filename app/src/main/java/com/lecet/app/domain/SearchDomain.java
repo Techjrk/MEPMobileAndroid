@@ -3,12 +3,16 @@ package com.lecet.app.domain;
 import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectStage;
+import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
+import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
@@ -80,6 +84,7 @@ public class SearchDomain {
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {
+
                         @Override
                         public void execute(Realm realm) {
                             List<SearchFilterStage> childStages;
@@ -94,7 +99,7 @@ public class SearchDomain {
                                     parentStage.setName(pStage.getName());
                                     parentStage.setId(pStage.getId());
                                     parentStage.setParentId(0);
-                                    Log.d("Stages:","Stage: name:" + pStage.getName() + " id:" + pStage.getId());
+                                    Log.d("SearchDomain:","Stage: name:" + pStage.getName() + " id:" + pStage.getId());
 
                                     // child stages
                                     childStages = pStage.getStages();
@@ -106,21 +111,22 @@ public class SearchDomain {
                                             childStage.setParentId(cStage.getParentId());
                                             parentStage.addChildStage(childStage);
                                             //realmProjectStageList.add(childStage);
-                                            Log.d("Stages:","  Child Stage: name:" + cStage.getName() + " id:" + cStage.getId() + " parentId:" + cStage.getParentId());
+                                            Log.d("SearchDomain:","  Child Stage: name:" + cStage.getName() + " id:" + cStage.getId() + " parentId:" + cStage.getParentId());
                                         }
                                     }
 
                                     realmProjectStageList.add(parentStage);
                                 }
                             }
-                            Log.d("Stages:","realmProjectStageList: size: " + realmProjectStageList.size());
-                            Log.d("Stages:","realmProjectStageList: " + realmProjectStageList);
+                            Log.d("SearchDomain:","realmProjectStageList: size: " + realmProjectStageList.size());
+                            Log.d("SearchDomain:","realmProjectStageList: " + realmProjectStageList);
                             realm.copyToRealmOrUpdate(realmProjectStageList);
                         }
                     });
 
                 }
             }
+
             @Override
             public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
                 Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
@@ -139,6 +145,72 @@ public class SearchDomain {
         Call<List<SearchFilterProjectTypesMain>> call = lecetClient.getSearchService().getSearchFilterProjectTypesItems(token, filter);
         call.enqueue(callback);
     }
+
+    /**
+     * Retrieve the list of Project Types and store them, along with their child Project Types and grandchild Project Types, in a Realm list.
+     */
+    public void generateRealmProjectTypesList() {
+        getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
+            @Override
+            public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
+                Log.d("SearchDomain","Create List project types");
+                if (response.isSuccessful()) {
+                    final List<SearchFilterProjectTypesMain> typeMainList = response.body();
+
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+
+                        @Override
+                        public void execute(Realm realm) {
+                            List<SearchFilterProjectTypesProjectCategory> childTypes;
+                            RealmList<ProjectType> realmProjectTypeList = new RealmList<>();
+                            ProjectType parentType;
+                            ProjectType childType;
+
+                            // parent types
+                            for (SearchFilterProjectTypesMain pType : typeMainList) {
+                                if (pType != null)  {
+                                    parentType = new ProjectType();
+                                    parentType.setName(pType.getTitle());
+                                    parentType.setId(pType.getId());
+                                    parentType.setParentId(0);
+                                    Log.d("SearchDomain:","Type: title:" + pType.getTitle() + " id:" + pType.getId());
+
+                                    // child types
+                                    childTypes = pType.getProjectCategories();
+                                    for (SearchFilterProjectTypesProjectCategory cType: childTypes) {
+                                        if (cType != null)  {
+                                            childType = new ProjectType();
+                                            childType.setName(cType.getTitle());
+                                            childType.setId(cType.getId());
+                                            childType.setParentId(pType.getId());
+                                            parentType.addChildType(childType);
+                                            Log.d("SearchDomain:","  Child Type: title:" + cType.getTitle() + " id:" + cType.getId()/* + " parentId:" + cType.getParentId()*/);
+                                        }
+                                    }
+
+                                    realmProjectTypeList.add(parentType);
+                                }
+                            }
+                            Log.d("SearchDomain:","realmProjectTypeList: size: " + realmProjectTypeList.size());
+                            Log.d("SearchDomain:","realmProjectTypeList: " + realmProjectTypeList);
+                            realm.copyToRealmOrUpdate(realmProjectTypeList);
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SearchFilterProjectTypesMain>> call, Throwable t) {
+                Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
+            }
+        });
+    }
+
+
+
     /**
      * To call the retrofit service for the jurisdiction list items to be displayed in the UI layout for jurisdiciton section.
      * @param callback

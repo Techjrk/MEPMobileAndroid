@@ -55,6 +55,6 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
 
     public void onSelected(View view) {
         stage[0] = ((CheckBox) view).getText().toString();
-        stage[1] = "103";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stage[0] rather than the String name
+        stage[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stage[0] rather than the String name
     }
 }
