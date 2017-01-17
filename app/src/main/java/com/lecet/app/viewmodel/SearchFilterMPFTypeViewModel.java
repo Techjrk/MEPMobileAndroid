@@ -22,7 +22,7 @@ import io.realm.RealmResults;
 public class SearchFilterMPFTypeViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
-    private String[] type = {"", ""};   // name, id
+    private String[] type;// = {"", ""};   // name, id
     private RealmResults<ProjectType> realmProjectTypes;
 
     /**
@@ -56,8 +56,9 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
     }
 
     public void onSelected(View view) {
+        type = new String[2];
         type[0] = ((CheckBox) view).getText().toString();
-        //type[1] = "103";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
+        type[1] = "103";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
     }
 
     public String[] getType() {

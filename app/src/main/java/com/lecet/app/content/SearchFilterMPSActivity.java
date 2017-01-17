@@ -10,6 +10,7 @@ import com.lecet.app.R;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectStage;
+import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchFilterStage;
@@ -186,47 +187,51 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Process the Project Type Id code based on input data from list
      * TODO - HARD-CODED. Get from map of project categories mapped to type ID codes **********
      */
-    private void processProjectTypeId(String[] arr) {
-        String typeIdStr = arr[0];
-        String projectTypeId = "";
-        viewModel.setPersistedProjectTypeId(projectTypeId);
-        viewModel.setType_select(typeIdStr);    //TODO - this is the same var set by processPrimaryProjectType
+    private void processProjectTypeId(final String[] arr) {
+        Realm realm = Realm.getDefaultInstance();
 
-        if(typeIdStr != null && !typeIdStr.trim().equals("")) {
-            List<Long> idList = new ArrayList<>();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<ProjectType> realmTypes;
+                realmTypes = realm.where(ProjectType.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectTypes, which each contain a list of child ProjectTypes
+                Log.d("processProjectTypeId: ","realmTypes size: " + realmTypes.size());
+                Log.d("processProjectTypeId: ","realmTypes: " + realmTypes);
 
-            List<SearchFilterProjectTypesProjectCategory> ptpclist = null;
-            for (SearchFilterProjectTypesMain ptMain : SearchViewModel.typeMainList) {
-                if (ptMain !=null)  {
-                    Log.d("Project Types","Project Types = title:"+ptMain.getTitle()+" id:"+ptMain.getId());
-                    //idList.add(ptMain.getId());
-                }
-                ptpclist = ptMain.getProjectCategories();
-                for (SearchFilterProjectTypesProjectCategory ptpc: ptpclist) {
-                    if (ptpc !=null)  {
-                        Log.d("PT PCateg","PT PCateg = title:"+ptpc.getTitle()+" id:"+ptpc.getId()+" projectgroupid:"+ptpc.getProjectGroupId());
-                        idList.add(ptpc.getId());
-                    }
-                    List<PrimaryProjectType> pptlist = ptpc.getProjectTypes();
-                    for (PrimaryProjectType ppt : pptlist) {
-                        if (ppt !=null) {
-                            Log.d("PType","PType = title:"+ppt.getTitle()+" bldg or hway :"+ppt.getBuildingOrHighway()+" id:"+ppt.getId()+" pcateg id:"+ppt.getProjectCategoryId());
-                            idList.add(ppt.getId());
-                        }
-                        ProjectCategory pptpc = ppt.getProjectCategory();
-                        if (pptpc !=null) {
-                            Log.d("PType PCategory","PType PCategory = title:"+pptpc.getTitle()+" id:"+pptpc.getId()+" project group id:"+pptpc.getProjectGroupId());
-                            idList.add(pptpc.getId());
+                String typeStr = arr[0];   // text display
+                String typeId  = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String types = "";
+                viewModel.setPersistedProjectTypeId(typeStr);
+                viewModel.setType_select(typeStr);
+
+                // build the list of IDs for the query, which include the parent ID and any of its child IDs
+                List<String> tList = new ArrayList<>();
+                tList.add(typeId);
+                if(typeStr != null && !typeStr.trim().equals("")) {
+                    // add each child Type ID
+                    for(ProjectType parentType : realmTypes) {
+                        if(typeStr.equals(parentType.getName())) {
+                            List<ProjectType> childTypes = parentType.getChildTypes();
+                            for (ProjectType childType: childTypes) {
+                                if (childType != null)  {
+                                    tList.add(Long.toString(childType.getId()));
+                                }
+                            }
+                            break;
                         }
                     }
+                    Log.d("SearchFilterMPSAct", "processType: input Type name: " + typeStr);
+                    Log.d("SearchFilterMPSAct", "processType: parent and child Type IDs: " + tList);
+
+//                    String ids = idList.toString();
+//                    projectTypeId = "\"projectTypeId\":{\"inq\":" + ids + "}";         // square brackets [ ] come for free when the list is converted to a String
+
+
+                    types = "\"projectTypeId\":{\"inq\":" + tList.toString() + "}";
                 }
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
             }
-
-
-            String ids = idList.toString();
-            projectTypeId = "\"projectTypeId\":{\"inq\":" + ids + "}";         // square brackets [ ] come for free when the list is converted to a String
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE_ID, projectTypeId);
+        });
     }
 
     /**

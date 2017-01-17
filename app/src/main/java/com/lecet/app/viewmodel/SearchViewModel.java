@@ -198,8 +198,6 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
         getJurisdictionList();
-        getProjectTypesList();
-        //getStagesList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -247,51 +245,10 @@ public class SearchViewModel extends BaseObservable {
         getQueryContactTotal();
     }
 
-    public static List<SearchFilterProjectTypesMain> typeMainList;
     public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
-
     /***
-     * getProjectTypesList -  to populate the list of SearchFilterProjectTypesMain POJO object for Project Types section
+     * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
      */
-    public void getProjectTypesList() {
-        searchDomain.getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
-            @Override
-            public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                //if (typeMainList !=null) return;
-                Log.d("Create List","Create List types");
-                if (response.isSuccessful()) {
-                    typeMainList = response.body();
-                    /*
-                    TODO: use this logic data to process the UI layout of Project Types view section.
-                    Codes below is just for checking and testing the complex content of project types main list items.
-                     */
-                    List<SearchFilterProjectTypesProjectCategory> ptpclist=null;
-                    for (SearchFilterProjectTypesMain ptMain : typeMainList) {
-                        if (ptMain !=null)  Log.d("Project Types","Project Types = title:"+ptMain.getTitle()+" id:"+ptMain.getId());
-                          ptpclist = ptMain.getProjectCategories();
-                        for (SearchFilterProjectTypesProjectCategory ptpc: ptpclist) {
-                            if (ptpc !=null)  Log.d("PT PCateg","PT PCateg = title:"+ptpc.getTitle()+" id:"+ptpc.getId()+" projectgroupid:"+ptpc.getProjectGroupId());
-                            List<PrimaryProjectType> pptlist = ptpc.getProjectTypes();
-                            for (PrimaryProjectType ppt : pptlist) {
-                                if (ppt !=null) Log.d("PType","PType = title:"+ppt.getTitle()+" bldg or hway :"+ppt.getBuildingOrHighway()+" id:"+ppt.getId()+" pcateg id:"+ppt.getProjectCategoryId());
-                                ProjectCategory pptpc = ppt.getProjectCategory();
-                                if (pptpc !=null) Log.d("PType PCategory","PType PCategory = title:"+pptpc.getTitle()+" id:"+pptpc.getId()+" project group id:"+pptpc.getProjectGroupId());
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<List<SearchFilterProjectTypesMain>> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
-            }
-        });
-    }
-
-                        ////
-                        /***
-                         * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
-                         */
     public void getJurisdictionList() {
         searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override

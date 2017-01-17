@@ -139,7 +139,7 @@ public class SearchDomain {
      * @param callback
      */
     public void getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
-        if (SearchViewModel.typeMainList !=null) return;
+        //if (SearchViewModel.typeMainList !=null) return;
         String filter = "projectTypes";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterProjectTypesMain>> call = lecetClient.getSearchService().getSearchFilterProjectTypesItems(token, filter);
