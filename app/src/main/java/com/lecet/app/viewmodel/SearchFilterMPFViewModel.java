@@ -29,7 +29,6 @@ import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
 public class SearchFilterMPFViewModel extends BaseObservable {
 
     private static final String TAG = "SearchFilterMPFViewModel";
-
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
@@ -48,6 +47,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private static int id;
     private Intent intent;
+    private boolean isProjectViewVisible = true;
 
     /**
      * User's selected filter item - values for display
@@ -432,6 +432,15 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 return;
         }
         activity.startActivityForResult(i, id & 0xfff); //mark
+    }
+    public void onClickedProjectCompanyTab(View view) {
+        isProjectViewVisible = view.getId() == R.id.btn_project;
+//        isProjectViewVisible = !isProjectViewVisible;
+        notifyPropertyChanged(BR.isProjectViewVisible);
+    }
+@Bindable
+    public boolean getIsProjectViewVisible() {
+        return isProjectViewVisible;
     }
 
     /**

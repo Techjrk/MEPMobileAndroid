@@ -26,19 +26,12 @@ import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
 import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
-import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectCategory;
-import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
-import com.lecet.app.data.models.SearchFilterStage;
-import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -76,10 +69,10 @@ public class SearchViewModel extends BaseObservable {
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
-    public static final int SEE_ALL_NO_RESULT =-1;
-    public static final int SEE_ALL_PROJECTS =0;
-    public static final int SEE_ALL_COMPANIES =1;
-    public static final int SEE_ALL_CONTACTS =2;
+    public static final int SEE_ALL_NO_RESULT = -1;
+    public static final int SEE_ALL_PROJECTS = 0;
+    public static final int SEE_ALL_COMPANIES = 1;
+    public static final int SEE_ALL_CONTACTS = 2;
     private int seeAllForResult = SEE_ALL_NO_RESULT;
     private static AlertDialog.Builder dialogBuilder;
     private String errorMessage = null;
@@ -246,6 +239,7 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
+
     /***
      * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
      */
@@ -253,8 +247,8 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-            //    if (jurisdictionMainList !=null) return;
-                Log.d("Create List","Create List jurisdiction");
+                //    if (jurisdictionMainList !=null) return;
+                Log.d("Create List", "Create List jurisdiction");
                 if (response.isSuccessful()) {
                     jurisdictionMainList = response.body();
                     /*
@@ -262,21 +256,26 @@ public class SearchViewModel extends BaseObservable {
                     Codes below is just for checking and testing the complex content of stages main list items.
                      */
                     for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
-                       if (jdMain !=null) Log.d("jmain","jmain = name:"+jdMain.getName()+" long name:"+ jdMain.getAbbreviation()+" abbreviation:"+jdMain.getAbbreviation()+" id:"+jdMain.getId());
-                         for(SearchFilterJurisdictionLocal jlocal: jdMain.getLocals()){
-                             if (jlocal !=null)   Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());
-                         }
+                        if (jdMain != null)
+                            Log.d("jmain", "jmain = name:" + jdMain.getName() + " long name:" + jdMain.getAbbreviation() + " abbreviation:" + jdMain.getAbbreviation() + " id:" + jdMain.getId());
+                        for (SearchFilterJurisdictionLocal jlocal : jdMain.getLocals()) {
+                            if (jlocal != null)
+                                Log.d("jlocal", "jlocal = name:" + jlocal.getName() + " id:" + jlocal.getId() + " districtcouncilid:" + jlocal.getDistrictCouncilId());
+                        }
 
-                          for(  SearchFilterJurisdictionDistrictCouncil dcouncil : jdMain.getDistrictCouncils()){
-                              if (dcouncil !=null)  Log.d("jdcouncil","jdcouncil = name:"+ dcouncil.getName()+" abbreviation:"+dcouncil.getAbbreviation()+" id:"+dcouncil.getId()+" regionId:"+dcouncil.getRegionId());
-                            if (dcouncil.getLocals()!=null) {
-                                for (SearchFilterJurisdictionLocal dclocals: dcouncil.getLocals()) {
-                                    if (dclocals !=null)   Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
+                        for (SearchFilterJurisdictionDistrictCouncil dcouncil : jdMain.getDistrictCouncils()) {
+                            if (dcouncil != null)
+                                Log.d("jdcouncil", "jdcouncil = name:" + dcouncil.getName() + " abbreviation:" + dcouncil.getAbbreviation() + " id:" + dcouncil.getId() + " regionId:" + dcouncil.getRegionId());
+                            if (dcouncil.getLocals() != null) {
+                                for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
+                                    if (dclocals != null)
+                                        Log.d("jdcouncillocals", "jdcouncillocals = name:" + dclocals.getName() + " id:" + dclocals.getId() + " dcid:" + dclocals.getDistrictCouncilId());
                                 }
                             }
-                          }
-                        for(SearchFilterJurisdictionLocal nodc: jdMain.getLocalsWithNoDistrict()) {
-                            if (nodc !=null) Log.d("nodc","nodc = name:"+nodc.getName()+" id"+nodc.getId()+" dc id:"+nodc.getDistrictCouncilId());
+                        }
+                        for (SearchFilterJurisdictionLocal nodc : jdMain.getLocalsWithNoDistrict()) {
+                            if (nodc != null)
+                                Log.d("nodc", "nodc = name:" + nodc.getName() + " id" + nodc.getId() + " dc id:" + nodc.getDistrictCouncilId());
                         }
                     }
 
@@ -526,7 +525,8 @@ public class SearchViewModel extends BaseObservable {
         if (errorMessage != null || activity == null) return;
         errorMessage = message + "\r\n";
         try {
-            if (dialogBuilder == null) dialogBuilder = new AlertDialog.Builder(activity); //Applying singleton;
+            if (dialogBuilder == null)
+                dialogBuilder = new AlertDialog.Builder(activity); //Applying singleton;
             dialogBuilder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
             Log.e("Error:", "Error " + errorMessage);
             dialogBuilder.setMessage(errorMessage);
@@ -840,9 +840,15 @@ public class SearchViewModel extends BaseObservable {
 
     public void onFilterClicked(View view) {
 //        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
-//        Intent i = new Intent(activity,SearchFilterMSEActivity.class);
-        Intent i = new Intent(activity, SearchFilterMPSActivity.class);
-        activity.startActivityForResult(i, 0);
+        Intent intent=new Intent(activity, SearchFilterMPSActivity.class);
+        if (getIsMSE1SectionVisible()) {
+//            intent = new Intent(activity, SearchFilterMSEActivity.class);
+            intent.putExtra("instantSearch",true);
+        } else {
+//            intent = new Intent(activity, SearchFilterMPSActivity.class);
+            intent.putExtra("instantSearch",false);
+        }
+        activity.startActivityForResult(intent, 0);
     }
 
 
