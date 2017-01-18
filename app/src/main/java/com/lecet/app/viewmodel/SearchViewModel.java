@@ -29,6 +29,7 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectCategory;
+import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -197,8 +198,6 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
         getJurisdictionList();
-        getProjectTypesList();
-        getStagesList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -245,84 +244,11 @@ public class SearchViewModel extends BaseObservable {
         getQueryCompanyTotal();
         getQueryContactTotal();
     }
-   // public static SearchFilterStagesMain stagesMain;
-    public static List<SearchFilterStagesMain> stageMainList;
-    public static List<SearchFilterProjectTypesMain> typeMainList;
+
     public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
     /***
-     * getStagesList -  to populate the list of SearchFilterStagesMain POJO object for Stage section
+     * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
      */
-    public void getStagesList() {
-        searchDomain.getStagesList(new Callback<List<SearchFilterStagesMain>>() {
-            @Override
-            public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
-         //       if (stageMainList !=null) return;
-                Log.d("Create List","Create List stages");
-                if (response.isSuccessful()) {
-                    stageMainList = response.body();
-                    /*
-                    TODO: use this logic data to process the UI layout of Stage view section. Need to generate here dynamically the UI layout for the stages nested items.
-                    Codes below is just for checking and testing the complex content of stages main list items.
-                     */
-                    List<SearchFilterStage> stagelist=null;
-                    for (SearchFilterStagesMain sMain : stageMainList) {
-                        if (sMain !=null)  Log.d("Stages ","Stages = name:"+sMain.getName()+" id:"+sMain.getId());
-                        stagelist = sMain.getStages();
-                        for (SearchFilterStage stage: stagelist) {
-                            if (stage !=null)  Log.d("Stage ","Stage name"+stage.getName()+" id:"+stage.getId()+" parentId:"+stage.getParentId());
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
-            }
-        });
-    }
-
-    /***
-     * getProjectTypesList -  to populate the list of SearchFilterProjectTypesMain POJO object for Project Types section
-     */
-    public void getProjectTypesList() {
-        searchDomain.getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
-            @Override
-            public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                //if (typeMainList !=null) return;
-                Log.d("Create List","Create List types");
-                if (response.isSuccessful()) {
-                    typeMainList = response.body();
-                    /*
-                    TODO: use this logic data to process the UI layout of Project Types view section. Need to generate here dynamically the UI layout for the project types nested items.
-                    Codes below is just for checking and testing the complex content of project types main list items.
-                     */
-                    List<SearchFilterProjectTypesProjectCategory> ptpclist=null;
-                    for (SearchFilterProjectTypesMain ptMain : typeMainList) {
-                        if (ptMain !=null)  Log.d("Project Types","Project Types = title:"+ptMain.getTitle()+" id:"+ptMain.getId());
-                          ptpclist = ptMain.getProjectCategories();
-                        for (SearchFilterProjectTypesProjectCategory ptpc: ptpclist) {
-                            if (ptpc !=null)  Log.d("PT PCateg","PT PCateg = title:"+ptpc.getTitle()+" id:"+ptpc.getId()+" projectgroupid:"+ptpc.getProjectGroupId());
-                            List<PrimaryProjectType> pptlist = ptpc.getProjectTypes();
-                            for (PrimaryProjectType ppt : pptlist) {
-                                if (ppt !=null) Log.d("PType","PType = title:"+ppt.getTitle()+" bldg or hway :"+ppt.getBuildingOrHighway()+" id:"+ppt.getId()+" pcateg id:"+ppt.getProjectCategoryId());
-                                ProjectCategory pptpc = ppt.getProjectCategory();
-                                if (pptpc !=null) Log.d("PType PCategory","PType PCategory = title:"+pptpc.getTitle()+" id:"+pptpc.getId()+" project group id:"+pptpc.getProjectGroupId());
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<List<SearchFilterProjectTypesMain>> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
-            }
-        });
-    }
-
-                        ////
-                        /***
-                         * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
-                         */
     public void getJurisdictionList() {
         searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
@@ -332,7 +258,7 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     jurisdictionMainList = response.body();
                     /*
-                    TODO: use this logic data to process the UI layout of jurisdiction view section. Need to generate here dynamically the UI layout for the Jurisdiction nested items.
+                    TODO: use this logic data to process the UI layout of jurisdiction view section.
                     Codes below is just for checking and testing the complex content of stages main list items.
                      */
                     for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {

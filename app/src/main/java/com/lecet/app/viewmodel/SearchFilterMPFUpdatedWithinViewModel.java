@@ -15,6 +15,7 @@ import com.lecet.app.R;
 
 public class SearchFilterMPFUpdatedWithinViewModel extends BaseObservable {
     private AppCompatActivity activity;
+
     private String[] time = {"Any", "0"};
 
     /**
@@ -35,4 +36,16 @@ public class SearchFilterMPFUpdatedWithinViewModel extends BaseObservable {
         time[0] = ((RadioButton) view).getText().toString();
         time[1] = (String) view.getTag();
     }
+
+    @Bindable
+    public String[] getTime() {
+        return time;
+    }
+
+    public void setTime(String[] time) {
+        this.time = time;
+    }
+
+
+
 }

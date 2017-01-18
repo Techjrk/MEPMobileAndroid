@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,11 +35,15 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
+import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.enums.LacetFont;
@@ -61,10 +66,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
@@ -76,6 +87,10 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     private static final String TAG = "MainActivity";
 
     private MainViewModel viewModel;
+    private SearchDomain searchDomain;
+
+    private static AlertDialog.Builder dialogBuilder;
+    private String errorMessage = null;
 
     // Fragment Pager
     ViewPager viewPager;
@@ -93,6 +108,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     ListPopupWindow mtmMenu;
     MTMMenuAdapter mtmAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +117,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         setupToolbar();
 
         if (isNetworkConnected()) {
-
+            searchDomain.generateRealmStageList();
+            searchDomain.generateRealmProjectTypesList();
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
@@ -127,6 +144,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        searchDomain = new SearchDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         Calendar calendar = Calendar.getInstance();
         viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar, trackingListDomain);
         binding.setViewModel(viewModel);
@@ -267,7 +285,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             pageRightButton.setVisibility(View.INVISIBLE);
         } else pageRightButton.setVisibility(View.VISIBLE);
     }
-
 
     /**
      * MBR Implementation
@@ -490,4 +507,27 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         //TODO open activity?
         Toast.makeText(this, "Company Tracking List Clicked", Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * Display error message - TODO - replace?
+     */
+    public void errorDisplayMsg(String message) {
+        if (errorMessage != null) return;
+        errorMessage = message + "\r\n";
+        try {
+            if (dialogBuilder == null) dialogBuilder = new AlertDialog.Builder(this); //Applying singleton;
+            dialogBuilder.setTitle(this.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
+            Log.e("Error:", "Error " + errorMessage);
+            dialogBuilder.setMessage(errorMessage);
+            dialogBuilder.setNegativeButton(this.getString(R.string.ok), null);
+            Log.e("onFailure", "onFailure: " + errorMessage);
+            dialogBuilder.show();
+        } catch (Exception e) {
+            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
+
+            Toast.makeText(this, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
+        }
+    }
+
+
 }

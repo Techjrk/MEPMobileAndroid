@@ -9,12 +9,12 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * File: ProjectStage Created: 10/5/16 Author: domandtom
+ * File: ProjectType Created: 1/17/17 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectStage extends RealmObject {
+public class ProjectType extends RealmObject {
 
     @PrimaryKey
     @SerializedName("id")
@@ -26,17 +26,17 @@ public class ProjectStage extends RealmObject {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("childStages")
-    public RealmList<ProjectStage> childStages = new RealmList<>();
+    @SerializedName("childTypes")
+    public RealmList<ProjectType> childTypes = new RealmList<>();
 
-    public ProjectStage() {
+    public ProjectType() {
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -56,37 +56,27 @@ public class ProjectStage extends RealmObject {
         this.name = name;
     }
 
-    public RealmList<ProjectStage> getChildStages() {
-        return childStages;
+    public RealmList<ProjectType> getChildTypes() {
+        return childTypes;
     }
 
-    public void setChildStages(RealmList<ProjectStage> childStages) {
-        this.childStages = childStages;
+    public void setChildTypes(RealmList<ProjectType> childTypes) {
+        this.childTypes = childTypes;
     }
 
-    public void addChildStage(ProjectStage childStage) {
-        this.childStages.add(childStage);
+    public void addChildType(ProjectType childType) {
+        this.childTypes.add(childType);
     }
 
     /**
      * Helper for toString() output of child IDs
      */
-    private String getChildStageIds() {
+    private String getChildTypeIds() {
         ArrayList<Long> arr = new ArrayList<>();
-        for(ProjectStage childStage : childStages) {
-            arr.add(childStage.getId());
+        for(ProjectType childType : childTypes) {
+            arr.add(childType.getId());
         }
         return arr.toString();
-    }
-
-    @Override
-    public String toString() {
-        return "ProjectStage{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", name='" + name + '\'' +
-                ", childStages=" + getChildStageIds() +
-                '}';
     }
 
     @Override
@@ -94,12 +84,12 @@ public class ProjectStage extends RealmObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectStage that = (ProjectStage) o;
+        ProjectType that = (ProjectType) o;
 
         if (id != that.id) return false;
         if (parentId != that.parentId) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        return childStages != null ? childStages.equals(that.childStages) : that.childStages == null;
+        return childTypes != null ? childTypes.equals(that.childTypes) : that.childTypes == null;
 
     }
 
@@ -108,8 +98,19 @@ public class ProjectStage extends RealmObject {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (parentId ^ (parentId >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (childStages != null ? childStages.hashCode() : 0);
+        result = 31 * result + (childTypes != null ? childTypes.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+
+        return "ProjectType{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", name='" + name + '\'' +
+                ", childTypes=" + getChildTypeIds() +
+                '}';
     }
 
 }
