@@ -2,7 +2,9 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by getdevsinc on 1/5/17.
@@ -10,21 +12,31 @@ import java.util.List;
     /*
     This class will be used as the district council object for search filter jurisdiction section.
      */
-public class SearchFilterJurisdictionDistrictCouncil {
+public class SearchFilterJurisdictionDistrictCouncil extends RealmObject {
+
+    @PrimaryKey
+    @SerializedName("id")
+    private int id;
+
     @SerializedName("name")
     private String name;
 
     @SerializedName("abbreviation")
     private String abbreviation;
 
-    @SerializedName("id")
-    private int id;
-
     @SerializedName("regionId")
     private int regionId;
 
     @SerializedName("locals")
-    private List<SearchFilterJurisdictionLocal> locals;
+    private RealmList<SearchFilterJurisdictionLocal> locals;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -42,14 +54,6 @@ public class SearchFilterJurisdictionDistrictCouncil {
         this.abbreviation = abbreviation;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getRegionId() {
         return regionId;
     }
@@ -58,11 +62,11 @@ public class SearchFilterJurisdictionDistrictCouncil {
         this.regionId = regionId;
     }
 
-    public List<SearchFilterJurisdictionLocal> getLocals() {
+    public RealmList<SearchFilterJurisdictionLocal> getLocals() {
         return locals;
     }
 
-    public void setLocals(List<SearchFilterJurisdictionLocal> locals) {
+    public void setLocals(RealmList<SearchFilterJurisdictionLocal> locals) {
         this.locals = locals;
     }
 

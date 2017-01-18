@@ -2,7 +2,10 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by getdevsinc on 1/5/17.
@@ -10,7 +13,12 @@ import java.util.List;
     /*
     This class will be used as the main object for search filter jurisdiction section.
      */
-public class SearchFilterJurisdictionMain {
+public class SearchFilterJurisdictionMain extends RealmObject {
+
+    @PrimaryKey
+    @SerializedName("id")
+    private int id;
+
     @SerializedName("name")
     private String name;
 
@@ -20,17 +28,22 @@ public class SearchFilterJurisdictionMain {
     @SerializedName("abbreviation")
     private String abbreviation;
 
-    @SerializedName("id")
-    private int id;
-
     @SerializedName("locals")
-    private List<SearchFilterJurisdictionLocal> locals;
+    private RealmList<SearchFilterJurisdictionLocal> locals;
 
     @SerializedName("districtCouncils")
-    private List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
+    private RealmList<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
 
     @SerializedName("localsWithNoDistrict")
-    private List<SearchFilterJurisdictionLocal> localsWithNoDistrict;
+    private RealmList<SearchFilterJurisdictionLocal> localsWithNoDistrict;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -56,35 +69,27 @@ public class SearchFilterJurisdictionMain {
         this.abbreviation = abbreviation;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public List<SearchFilterJurisdictionLocal> getLocals() {
+    public RealmList<SearchFilterJurisdictionLocal> getLocals() {
         return locals;
     }
 
-    public void setLocals(List<SearchFilterJurisdictionLocal> locals) {
+    public void setLocals(RealmList<SearchFilterJurisdictionLocal> locals) {
         this.locals = locals;
     }
 
-    public List<SearchFilterJurisdictionDistrictCouncil> getDistrictCouncils() {
+    public RealmList<SearchFilterJurisdictionDistrictCouncil> getDistrictCouncils() {
         return districtCouncils;
     }
 
-    public void setDistrictCouncils(List<SearchFilterJurisdictionDistrictCouncil> districtCouncils) {
+    public void setDistrictCouncils(RealmList<SearchFilterJurisdictionDistrictCouncil> districtCouncils) {
         this.districtCouncils = districtCouncils;
     }
 
-    public List<SearchFilterJurisdictionLocal> getLocalsWithNoDistrict() {
+    public RealmList<SearchFilterJurisdictionLocal> getLocalsWithNoDistrict() {
         return localsWithNoDistrict;
     }
 
-    public void setLocalsWithNoDistrict(List<SearchFilterJurisdictionLocal> localsWithNoDistrict) {
+    public void setLocalsWithNoDistrict(RealmList<SearchFilterJurisdictionLocal> localsWithNoDistrict) {
         this.localsWithNoDistrict = localsWithNoDistrict;
     }
 

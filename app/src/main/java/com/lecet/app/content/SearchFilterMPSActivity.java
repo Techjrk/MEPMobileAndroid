@@ -11,6 +11,8 @@ import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectType;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
+import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchFilterStage;
@@ -271,21 +273,56 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Process the Jurisdiction input data
      * TODO - jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
      * TODO - also we need to map input to jurisdiction codes. Hard-coded for now.
+     * ex:
+     * "jurisdiction": true
+     * "jurisdictions": { "inq": [3] }
+     * "deepJurisdictionId": ["3-3_2-1_1"]
      */
-    private void processJurisdiction(String[] arr) {
-        String jurisdiction = arr[0];
-        String jurisdictions = "";
-        viewModel.setPersistedJurisdiction(jurisdiction);
-        viewModel.setJurisdiction_select(jurisdiction);
-        if(jurisdiction != null && !jurisdiction.trim().equals("")) {
-            List<String> jList = new ArrayList<>();
-            jList.add("\"Eastern\"");
-            jList.add("\"New Jersey\"");
-            jList.add("\"3\"");
-            String js = jList.toString();
-            jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
+    private void processJurisdiction(final String[] arr) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
+                Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("jurisdiction: ","realmJurisdictions: " + realmJurisdictions);
+
+                String jurisdiction = arr[0];
+                String jurisdictionTag = arr[1];
+                String jurisdictions = "";
+                viewModel.setPersistedJurisdiction(jurisdiction);
+                viewModel.setJurisdiction_select(jurisdiction);
+
+                // build the list of IDs for the query, which include ... ? //TODO - see
+                List<String> jList = new ArrayList<>();
+                jList.add(jurisdictionTag);
+                if(jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
+                    // add each child Stage ID
+                    /*for(SearchFilterJurisdictionMain j : realmJurisdictions) {
+                        if(jurisdictionTag.equals(j.getName())) {
+                            List<SearchFilterJurisdictionDistrictCouncil> districtCouncils = j.getDistrictCouncils();
+                            for (SearchFilterJurisdictionDistrictCouncil dc: districtCouncils) {
+                                if (dc != null)  {
+                                    jList.add(dc.getName());
+                                }
+                            }
+                            break;
+                        }
+                    }*/
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdiction);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction tag: " + jurisdictionTag);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
+
+                    String js = jList.toString();
+                    jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
+                }
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
+            }
+        });
+
     }
 
     /**

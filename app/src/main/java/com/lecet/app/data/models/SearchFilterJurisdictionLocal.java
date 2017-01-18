@@ -2,21 +2,34 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by getdevsinc on 1/5/17.
  */
     /*
     This class will be used as the local object for search filter jurisdiction section.
      */
-public class SearchFilterJurisdictionLocal {
-    @SerializedName("name")
-    private String name;
+public class SearchFilterJurisdictionLocal extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("id")
     private int id;
 
+    @SerializedName("name")
+    private String name;
+
     @SerializedName("districtCouncilId")
     private Integer districtCouncilId;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -32,14 +45,6 @@ public class SearchFilterJurisdictionLocal {
 
     public void setDistrictCouncilId(Integer districtCouncilId) {
         this.districtCouncilId = districtCouncilId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     @Override
