@@ -13,6 +13,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterMPFJurisdictionActivity;
+import com.lecet.app.content.SearchFilterMPFJurisdictionActivity2;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterMPFStageActivity;
@@ -386,7 +387,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 break;
 
             case R.id.jurisdiction:
-                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+               // i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                 i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
 
