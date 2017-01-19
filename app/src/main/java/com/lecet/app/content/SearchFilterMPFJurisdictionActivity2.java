@@ -41,8 +41,8 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         JurisdictionAdapter.Parent parent;
         List<JurisdictionAdapter.Parent> data = new ArrayList<>();
 
-       // JurisdictionAdapter.Subtype subtype = null; // new JurisdictionAdapter.Subtype();
-       // JurisdictionAdapter.SubSubtype subSubtype = null; // new JurisdictionAdapter.Subtype();
+        // JurisdictionAdapter.Subtype subtype = null; // new JurisdictionAdapter.Subtype();
+        // JurisdictionAdapter.SubSubtype subSubtype = null; // new JurisdictionAdapter.Subtype();
         // subtypes.add(subtype1);
 
         int ctr = 0;
@@ -53,7 +53,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             parent = new JurisdictionAdapter.Parent();
             parent.setName(jmain.getName());
             ctr++;
-subtypes = new ArrayList<>();
+            subtypes = new ArrayList<>();
             for (SearchFilterJurisdictionLocal jlocal : jmain.getLocals()) {
                 //     if (jlocal !=null)   Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());
                 if (jlocal != null) {
@@ -62,7 +62,7 @@ subtypes = new ArrayList<>();
                     subtypes.add(subtype);
                 }
             }
-           // parent.setSubtypes(subtypes);
+            // parent.setSubtypes(subtypes);
             for (SearchFilterJurisdictionDistrictCouncil dcouncil : jmain.getDistrictCouncils()) {
 //                if (dcouncil !=null)  Log.d("jdcouncil","jdcouncil = name:"+ dcouncil.getName()+" abbreviation:"+dcouncil.getAbbreviation()+" id:"+dcouncil.getId()+" regionId:"+dcouncil.getRegionId());
                 if (dcouncil != null) {

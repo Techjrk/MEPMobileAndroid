@@ -1,12 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
-
-import com.lecet.app.R;
 
 /**
  * Created by getdevsinc on 12/29/16.
@@ -27,7 +26,8 @@ public class SearchFilterMPFWorkTypeViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, worktype);
-        activity.setResult(R.id.worktype & 0xfff, intent);
+        //activity.setResult(R.id.worktype & 0xfff, intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 

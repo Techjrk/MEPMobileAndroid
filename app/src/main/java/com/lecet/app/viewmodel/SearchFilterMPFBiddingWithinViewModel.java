@@ -1,13 +1,12 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
-
-import com.lecet.app.R;
 
 /**
  * Created by getdevsinc on 12/29/16.
@@ -28,7 +27,8 @@ public class SearchFilterMPFBiddingWithinViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, time);
-        activity.setResult(R.id.bidding_within & 0xfff,intent);
+//        activity.setResult(R.id.bidding_within & 0xfff,intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 
@@ -45,7 +45,6 @@ public class SearchFilterMPFBiddingWithinViewModel extends BaseObservable {
     public void setTime(String[] time) {
         this.time = time;
     }
-
 
 
 }

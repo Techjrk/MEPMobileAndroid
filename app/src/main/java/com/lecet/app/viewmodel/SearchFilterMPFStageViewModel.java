@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.lecet.app.R;
 import com.lecet.app.data.models.ProjectStage;
 
 import io.realm.Realm;
@@ -40,8 +40,8 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmStages = realm.where(ProjectStage.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
-                Log.d("SearchFilterMPFStageVM:","realmStages size: " + realmStages.size());
-                Log.d("SearchFilterMPFStageVM:","realmStages list: " + realmStages);
+                Log.d("SearchFilterMPFStageVM:", "realmStages size: " + realmStages.size());
+                Log.d("SearchFilterMPFStageVM:", "realmStages list: " + realmStages);
             }
         });
     }
@@ -49,7 +49,8 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stage);
-        activity.setResult(R.id.stage & 0xfff, intent);
+//        activity.setResult(R.id.stage & 0xfff, intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 

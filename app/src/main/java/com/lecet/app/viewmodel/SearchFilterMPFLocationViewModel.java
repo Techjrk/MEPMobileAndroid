@@ -1,24 +1,21 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.Observable;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
-import com.lecet.app.R;
 
 /**
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFLocationViewModel extends BaseObservable{
-    private String city="";
-    private String state="";
-    private String county="";
-    private String zipcode="";
+public class SearchFilterMPFLocationViewModel extends BaseObservable {
+    private String city = "";
+    private String state = "";
+    private String county = "";
+    private String zipcode = "";
 
     private AppCompatActivity activity;
 
@@ -31,13 +28,14 @@ public class SearchFilterMPFLocationViewModel extends BaseObservable{
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA,new String[]{getCity(),getState(),getCounty(),getZipcode()});
-        activity.setResult(R.id.location & 0xfff,intent);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, new String[]{getCity(), getState(), getCounty(), getZipcode()});
+//        activity.setResult(R.id.location & 0xfff,intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
+
     /**
      * Bindable
-     *
      */
     @Bindable
     public String getCity() {

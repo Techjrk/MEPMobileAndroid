@@ -1,15 +1,13 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
 
-import com.lecet.app.R;
-import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectType;
 
 import io.realm.Realm;
@@ -42,8 +40,8 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmProjectTypes = realm.where(ProjectType.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectType, which each contain a list of child ProjectType
-                Log.d("SearchFilterMPFTypeVM:","realmProjectTypes size: " + realmProjectTypes.size());
-                Log.d("SearchFilterMPFTypeVM:","realmProjectTypes list: " + realmProjectTypes);
+                Log.d("SearchFilterMPFTypeVM:", "realmProjectTypes size: " + realmProjectTypes.size());
+                Log.d("SearchFilterMPFTypeVM:", "realmProjectTypes list: " + realmProjectTypes);
             }
         });
     }
@@ -51,7 +49,8 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, type);
-        activity.setResult(R.id.type & 0xfff, intent);
+//        activity.setResult(R.id.type & 0xfff, intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 

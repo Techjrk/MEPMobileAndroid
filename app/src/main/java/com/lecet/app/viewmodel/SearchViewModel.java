@@ -29,8 +29,6 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
-import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
-import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
@@ -290,7 +288,6 @@ public class SearchViewModel extends BaseObservable {
             }
         });
     }*/
-
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
@@ -840,13 +837,13 @@ public class SearchViewModel extends BaseObservable {
 
     public void onFilterClicked(View view) {
 //        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
-        Intent intent=new Intent(activity, SearchFilterMPSActivity.class);
+        Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
         if (getIsMSE1SectionVisible()) {
 //            intent = new Intent(activity, SearchFilterMSEActivity.class);
-            intent.putExtra("instantSearch",true);
+            intent.putExtra("instantSearch", true);
         } else {
 //            intent = new Intent(activity, SearchFilterMPSActivity.class);
-            intent.putExtra("instantSearch",false);
+            intent.putExtra("instantSearch", false);
         }
         activity.startActivityForResult(intent, 0);
     }

@@ -1,12 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
-
-import com.lecet.app.R;
 
 /**
  * Created by getdevsinc on 12/29/16.
@@ -14,7 +13,7 @@ import com.lecet.app.R;
 
 public class SearchFilterMPFBHViewModel extends BaseObservable {
     private AppCompatActivity activity;
-    private String [] bh = {"Any","0"};
+    private String[] bh = {"Any", "0"};
 
     /**
      * Constructor
@@ -26,11 +25,13 @@ public class SearchFilterMPFBHViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, bh);
-        activity.setResult(R.id.bh & 0xfff,intent);
+//      activity.setResult(R.id.bh & 0xfff,intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
+
     public void onSelected(View view) {
-        bh[0] = ((RadioButton)view).getText().toString();
+        bh[0] = ((RadioButton) view).getText().toString();
 
     }
 }

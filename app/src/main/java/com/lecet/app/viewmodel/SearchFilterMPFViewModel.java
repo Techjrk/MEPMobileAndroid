@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -13,7 +14,6 @@ import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterMPFJurisdictionActivity;
-import com.lecet.app.content.SearchFilterMPFJurisdictionActivity2;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterMPFStageActivity;
@@ -27,6 +27,17 @@ import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
  */
 
 public class SearchFilterMPFViewModel extends BaseObservable {
+    public static final int LOCATION = 0;
+    public static final int TYPE = 1;
+    public static final int VALUE = 2;
+    public static final int UPDATED_WITHIN = 3;
+    public static final int JURISDICTION = 4;
+    public static final int STAGE = 5;
+    public static final int BIDDING_WITHIN = 6;
+    public static final int BH = 7;
+    public static final int OWNER_TYPE = 8;
+    public static final int WORK_TYPE = 9;
+
 
     private static final String TAG = "SearchFilterMPFViewModel";
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
@@ -195,8 +206,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     }
 
 
-
-
     static final String ANY = "Any";
 
     /*  public static final int LOCATION =0;
@@ -361,8 +370,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent i = null;
         id = view.getId();
+        int section = 0;
         switch (id) {
             case R.id.location:
+                section = LOCATION;
                 i = new Intent(activity, SearchFilterMPFLocationActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY, getPersistedLocationCity());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE, getPersistedLocationState());
@@ -371,48 +382,57 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 break;
 
             case R.id.type:
+                section = TYPE;
                 i = new Intent(activity, SearchFilterMPFTypeActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
                 break;
 
             case R.id.value:
+                section = VALUE;
                 i = new Intent(activity, SearchFilterMPFValueActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
                 break;
 
             case R.id.updated_within:
+                section = UPDATED_WITHIN;
                 i = new Intent(activity, SearchFilterMPFUpdatedWithinActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
                 break;
 
             case R.id.jurisdiction:
-               // i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
-                 i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
+                section = JURISDICTION;
+                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                //  i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
 
             case R.id.stage:
+                section = STAGE;
                 i = new Intent(activity, SearchFilterMPFStageActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_STAGE, getPersistedStage());
                 break;
 
             case R.id.bidding_within:
+                section = BIDDING_WITHIN;
                 i = new Intent(activity, SearchFilterMPFBiddingWithinActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN, getPersistedBiddingWithin());
                 break;
 
             case R.id.bh:
+                section = BH;
                 i = new Intent(activity, SearchFilterMPFBHActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_BUILDING_OR_HIGHWAY, getPersistedBuildingOrHighway());
                 break;
 
             case R.id.ownertype:
+                section = OWNER_TYPE;
                 i = new Intent(activity, SearchFilterMPFOwnerTypeActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 
             case R.id.worktype:
+                section = WORK_TYPE;
                 i = new Intent(activity, SearchFilterMPFWorkTypeActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
@@ -431,14 +451,18 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 activity.finish();  // includes Cancel and Apply buttons
                 return;
         }
-        activity.startActivityForResult(i, id & 0xfff); //mark
+
+//        activity.startActivityForResult(i, id & 0xfff); //mark
+        activity.startActivityForResult(i, section); //mark
     }
+
     public void onClickedProjectCompanyTab(View view) {
         isProjectViewVisible = view.getId() == R.id.btn_project;
 //        isProjectViewVisible = !isProjectViewVisible;
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
-@Bindable
+
+    @Bindable
     public boolean getIsProjectViewVisible() {
         return isProjectViewVisible;
     }
@@ -451,7 +475,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     }
 
     public void saveResult() {
-        activity.setResult(1, intent);
+        activity.setResult(Activity.RESULT_OK, intent);
+//        activity.setResult(1, intent);
     }
 
     private boolean moreOption; //TODO - move to top of class

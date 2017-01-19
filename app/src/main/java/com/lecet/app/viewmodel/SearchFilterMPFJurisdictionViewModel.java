@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.lecet.app.R;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 
 import io.realm.Realm;
@@ -40,8 +40,8 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d("SearchFilterMPFJurisVM:","realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d("SearchFilterMPFJurisVM:","realmJurisdictions list: " + realmJurisdictions);
+                Log.d("SearchFilterMPFJurisVM:", "realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("SearchFilterMPFJurisVM:", "realmJurisdictions list: " + realmJurisdictions);
             }
         });
     }
@@ -49,13 +49,14 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, jurisdictionExtra);
-        activity.setResult(R.id.jurisdiction & 0xfff, intent);
+//        activity.setResult(R.id.jurisdiction & 0xfff, intent);
+        activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 
     public void onSelected(View view) {
         jurisdictionExtra = new String[2];
         jurisdictionExtra[0] = ((CheckBox) view).getText().toString();  //TODO - the Views and their Tags are hard-coded until dynamic nested Views are working. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
-        jurisdictionExtra[1] = (String)view.getTag();
+        jurisdictionExtra[1] = (String) view.getTag();
     }
 }
