@@ -10,6 +10,7 @@ import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilter;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
@@ -216,10 +217,76 @@ public class SearchDomain {
      * @param callback
      */
     public void getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
-        if (SearchViewModel.jurisdictionMainList !=null) return;
+        //if (SearchViewModel.jurisdictionMainList !=null) return;
         Call<List<SearchFilterJurisdictionMain>> call = lecetClient.getSearchService().getSearchFilterJurisdictionItems();
         call.enqueue(callback);
     }
+
+    /**
+     * Retrieve the list of Jurisdictions and store them, along with their children and grandchild object, in a Realm list.
+     */
+    public void generateRealmJurisdictionList() {
+        getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
+            @Override
+            public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
+                Log.d("SearchDomain","Create list of Jurisdictions");
+                if (response.isSuccessful()) {
+                    final List<SearchFilterJurisdictionMain> jurisdictionMainList = response.body();
+
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+
+                        @Override
+                        public void execute(Realm realm) {
+                            /*RealmList<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
+                            RealmList<SearchFilterJurisdictionMain> realmJurisdictionList = new RealmList<>();
+                            SearchFilterJurisdictionMain jurisdictionMain;
+                            SearchFilterJurisdictionDistrictCouncil districtCouncil;
+
+                            // Jurisdictions
+                            for (SearchFilterJurisdictionMain jMain : jurisdictionMainList) {
+                                if (jMain != null)  {
+                                    jurisdictionMain = new SearchFilterJurisdictionMain();
+                                    jurisdictionMain.setId(jMain.getId());
+                                    jurisdictionMain.setAbbreviation(jMain.getAbbreviation());
+                                    jurisdictionMain.setName(jMain.getName());
+                                    jurisdictionMain.setLongName(jMain.getLongName());
+                                    Log.d("SearchDomain:", "Jurisdiction: id:" + jMain.getId() + " abbrev:" + jMain.getAbbreviation() + " name:" + jMain.getName() + " longName:" + jMain.getLongName());
+
+                                    // District Council child types
+                                    districtCouncils = jMain.getDistrictCouncils();
+                                    for (SearchFilterJurisdictionDistrictCouncil dc: districtCouncils) {
+                                        if (dc != null)  {
+                                            districtCouncil = new SearchFilterJurisdictionDistrictCouncil();
+                                            districtCouncil.setName(dc.getName());
+                                            districtCouncil.setId(dc.getId());
+                                            districtCouncil.setAbbreviation(dc.getAbbreviation());
+                                            districtCouncil.setRegionId(dc.getRegionId());
+                                            jurisdictionMain.setDistrictCouncils(districtCouncils);
+                                            Log.d("SearchDomain:", "  District Council: id:" + dc.getId() + " abbrev:" + dc.getAbbreviation() + " dc:" + jMain.getName() + " getRegionId:" + dc.getRegionId());
+                                        }
+                                    }
+
+                                    realmJurisdictionList.add(jurisdictionMain);
+                                }
+                            }
+                            Log.d("SearchDomain:","realmJurisdictionList: size: " + realmJurisdictionList.size());
+                            Log.d("SearchDomain:","realmJurisdictionList: " + realmJurisdictionList);*/
+                            realm.copyToRealmOrUpdate(jurisdictionMainList);
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SearchFilterJurisdictionMain>> call, Throwable t) {
+                Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
+            }
+        });
+    }
+
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}");

@@ -7,14 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.PrimaryProjectType;
+import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectType;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
+import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
+import com.lecet.app.data.models.SearchFilterStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
-import com.lecet.app.databinding.ActivitySearchFilterMseBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
@@ -26,21 +34,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //     setContentView(R.layout.activity_search_filter_mse);
         // setContentView(R.layout.activity_search_filter_mps30);
+        ActivitySearchFilterMps30Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mps30);
         viewModel = new SearchFilterMPFViewModel(this);
-        Intent i = getIntent();
-        boolean instantSearch = i.getBooleanExtra("instantSearch", true);
-        if (instantSearch) {
-            ActivitySearchFilterMseBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mse);
-            sfilter.setViewModel(viewModel);
-        } else {
-            ActivitySearchFilterMps30Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mps30);
-            sfilter.setViewModel(viewModel);
-        }
-
-
+        sfilter.setViewModel(viewModel);
+        // intent = getIntent();
     }
 
     /**
@@ -124,16 +123,16 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String zip = "";
 
         // initial vars from raw data
-        city = arr[0];
-        state = arr[1];
+        city   = arr[0];
+        state  = arr[1];
         county = arr[2];
-        zip = arr[3];
+        zip    = arr[3];
 
         // comma-separated constructed String for UI display
-        String cityStr = city;
-        String stateStr = !state.equals("") ? (!city.equals("") ? "," + state : " " + state) : "";       //TODO - any validation here? compare iOS version
-        String countyStr = !county.equals("") ? (!state.equals("") ? "," + county : " " + county) : "";
-        String zipStr = !zip.equals("") ? (!zip.equals("") ? "," + zip : " " + zip) : "";
+        String cityStr   = city;
+        String stateStr  = !state.equals("")  ? (!city.equals("")   ? "," + state  : " " + state)  : "";       //TODO - any validation here? compare iOS version
+        String countyStr = !county.equals("") ? (!state.equals("")  ? "," + county : " " + county) : "";
+        String zipStr    = !zip.equals("")    ? (!zip.equals("")    ? "," + zip    : " " + zip)    : "";
 
         String locationText = cityStr + stateStr + countyStr + zipStr;
         viewModel.setPersistedLocationCity(city);   //mark
@@ -148,19 +147,19 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         StringBuilder sb = new StringBuilder();
         String projectLocation = "";
 
-        if (city.length() > 0) {
+        if(city.length() > 0) {
             sb.append("\"city\":\"" + city + "\"");
         }
-        if (state.length() > 0) {
-            if (sb.length() > 0) sb.append(",");
+        if(state.length() > 0) {
+            if(sb.length() > 0) sb.append(",");
             sb.append("\"state\":\"" + state + "\"");
         }
-        if (county.length() > 0) {
-            if (sb.length() > 0) sb.append(",");
+        if(county.length() > 0) {
+            if(sb.length() > 0) sb.append(",");
             sb.append("\"county\":\"" + county + "\"");
         }
-        if (zip.length() > 0) {
-            if (sb.length() > 0) sb.append(",");
+        if(zip.length() > 0) {
+            if(sb.length() > 0) sb.append(",");
             sb.append("\"zip5\":\"" + zip + "\"");
         }
 
@@ -180,7 +179,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String typeStr = arr[0];
         String projectType = "";
         viewModel.setType_select(typeStr);
-        if (typeStr != null && !typeStr.trim().equals("")) {
+        if(typeStr != null && !typeStr.trim().equals("")) {
             projectType = "\"primaryProjectType\":{" + typeStr + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, projectType);
@@ -198,11 +197,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<ProjectType> realmTypes;
                 realmTypes = realm.where(ProjectType.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectTypes, which each contain a list of child ProjectTypes
-                Log.d("processProjectTypeId: ", "realmTypes size: " + realmTypes.size());
-                Log.d("processProjectTypeId: ", "realmTypes: " + realmTypes);
+                Log.d("processProjectTypeId: ","realmTypes size: " + realmTypes.size());
+                Log.d("processProjectTypeId: ","realmTypes: " + realmTypes);
 
                 String typeStr = arr[0];   // text display
-                String typeId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String typeId  = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String types = "";
                 viewModel.setPersistedProjectTypeId(typeStr);
                 viewModel.setType_select(typeStr);
@@ -210,13 +209,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 // build the list of IDs for the query, which include the parent ID and any of its child IDs
                 List<String> tList = new ArrayList<>();
                 tList.add(typeId);
-                if (typeStr != null && !typeStr.trim().equals("")) {
+                if(typeStr != null && !typeStr.trim().equals("")) {
                     // add each child Type ID
-                    for (ProjectType parentType : realmTypes) {
-                        if (typeStr.equals(parentType.getName())) {
+                    for(ProjectType parentType : realmTypes) {
+                        if(typeStr.equals(parentType.getName())) {
                             List<ProjectType> childTypes = parentType.getChildTypes();
-                            for (ProjectType childType : childTypes) {
-                                if (childType != null) {
+                            for (ProjectType childType: childTypes) {
+                                if (childType != null)  {
                                     tList.add(Long.toString(childType.getId()));
                                 }
                             }
@@ -248,8 +247,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel.setPersistedValueMin(min);
         viewModel.setPersistedValueMax(max);
         viewModel.setValue_select(valueStr);
-        if (valueStr != null && !valueStr.trim().equals("")) {
-            projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
+        if(valueStr != null && !valueStr.trim().equals("")) {
+            projectValue = "\"projectValue\":{"+ "\"min\":" + min + ",\"max\":" + max + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, projectValue);
     }
@@ -264,7 +263,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String projectUpdatedWithin = "";
         viewModel.setPersistedUpdatedWithin(updatedWithinArr);
         viewModel.setUpdated_within_select(updatedWithinStr);
-        if (updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
+        if(updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
@@ -274,21 +273,56 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Process the Jurisdiction input data
      * TODO - jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
      * TODO - also we need to map input to jurisdiction codes. Hard-coded for now.
+     * ex:
+     * "jurisdiction": true
+     * "jurisdictions": { "inq": [3] }
+     * "deepJurisdictionId": ["3-3_2-1_1"]
      */
-    private void processJurisdiction(String[] arr) {
-        String jurisdiction = arr[0];
-        String jurisdictions = "";
-        viewModel.setPersistedJurisdiction(jurisdiction);
-        viewModel.setJurisdiction_select(jurisdiction);
-        if (jurisdiction != null && !jurisdiction.trim().equals("")) {
-            List<String> jList = new ArrayList<>();
-            jList.add("\"Eastern\"");
-            jList.add("\"New Jersey\"");
-            jList.add("\"3\"");
-            String js = jList.toString();
-            jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
+    private void processJurisdiction(final String[] arr) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
+                Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("jurisdiction: ","realmJurisdictions: " + realmJurisdictions);
+
+                String jurisdiction = arr[0];
+                String jurisdictionTag = arr[1];
+                String jurisdictions = "";
+                viewModel.setPersistedJurisdiction(jurisdiction);
+                viewModel.setJurisdiction_select(jurisdiction);
+
+                // build the list of IDs for the query, which include ... ? //TODO - see
+                List<String> jList = new ArrayList<>();
+                jList.add(jurisdictionTag);
+                if(jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
+                    // add each child Stage ID
+                    /*for(SearchFilterJurisdictionMain j : realmJurisdictions) {
+                        if(jurisdictionTag.equals(j.getName())) {
+                            List<SearchFilterJurisdictionDistrictCouncil> districtCouncils = j.getDistrictCouncils();
+                            for (SearchFilterJurisdictionDistrictCouncil dc: districtCouncils) {
+                                if (dc != null)  {
+                                    jList.add(dc.getName());
+                                }
+                            }
+                            break;
+                        }
+                    }*/
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdiction);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction tag: " + jurisdictionTag);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
+
+                    String js = jList.toString();
+                    jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
+                }
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
+            }
+        });
+
     }
 
     /**
@@ -305,11 +339,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<ProjectStage> realmStages;
                 realmStages = realm.where(ProjectStage.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
-                Log.d("processStage: ", "realmStages size: " + realmStages.size());
-                Log.d("processStage: ", "realmStages: " + realmStages);
+                Log.d("processStage: ","realmStages size: " + realmStages.size());
+                Log.d("processStage: ","realmStages: " + realmStages);
 
                 String stageStr = arr[0];   // text display
-                String stageId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String stageId  = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String stages = "";
                 viewModel.setPersistedStage(stageStr);
                 viewModel.setStage_select(stageStr);
@@ -317,13 +351,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 // build the list of IDs for the query, which include the parent ID and any of its child IDs
                 List<String> sList = new ArrayList<>();
                 sList.add(stageId);
-                if (stageStr != null && !stageStr.trim().equals("")) {
+                if(stageStr != null && !stageStr.trim().equals("")) {
                     // add each child Stage ID
-                    for (ProjectStage parentStage : realmStages) {
-                        if (stageStr.equals(parentStage.getName())) {
+                    for(ProjectStage parentStage : realmStages) {
+                        if(stageStr.equals(parentStage.getName())) {
                             List<ProjectStage> childStages = parentStage.getChildStages();
-                            for (ProjectStage childStage : childStages) {
-                                if (childStage != null) {
+                            for (ProjectStage childStage: childStages) {
+                                if (childStage != null)  {
                                     sList.add(Long.toString(childStage.getId()));
                                 }
                             }
@@ -350,7 +384,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String projectBiddingWithin = "";
         viewModel.setPersistedBiddingWithin(updatedWithinArr);
         viewModel.setBidding_within_select(biddingWithinStr);
-        if (biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
+        if(biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
@@ -364,10 +398,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String bh = "";
         viewModel.setPersistedBuildingOrHighway(bhStr);
         viewModel.setBh_select(bhStr);
-        if (bhStr != null && !bhStr.trim().equals("")) {
+        if(bhStr != null && !bhStr.trim().equals("")) {
             List<String> bhList = new ArrayList<>();
-            if (bhStr.equals("Building")) bhList.add("\"B\"");
-            else if (bhStr.equals("Heavy-Highway")) bhList.add("\"H\"");
+            if(bhStr.equals("Building")) bhList.add("\"B\"");
+            else if(bhStr.equals("Heavy-Highway")) bhList.add("\"H\"");
             else {
                 bhList.add("\"B\"");
                 bhList.add("\"H\"");
@@ -386,7 +420,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String ownerType = "";
         viewModel.setPersistedOwnerType(ownerTypeStr);
         viewModel.setOwner_type_select(ownerTypeStr);
-        if (ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
+        if(ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
             List<String> oList = new ArrayList<>();
             oList.add("\"" + ownerTypeStr + "\"");
             ownerType = "\"ownerType\":{\"inq\":" + oList.toString() + "}";
@@ -404,13 +438,14 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String workType = "";
         viewModel.setPersistedWorkType(workTypeStr);
         viewModel.setWork_type_select(workTypeStr);
-        if (workTypeStr != null && !workTypeStr.trim().equals("")) {
+        if(workTypeStr != null && !workTypeStr.trim().equals("")) {
             List<String> wList = new ArrayList<>();
             wList.add("\"" + workTypeStr + "\"");
             workType = "\"workTypeId\":{\"inq\":" + wList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, workType);
     }
+
 
 
     @Override

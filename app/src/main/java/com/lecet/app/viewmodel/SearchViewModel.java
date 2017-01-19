@@ -190,7 +190,7 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterProjectQueryAll();
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
-        getJurisdictionList();
+//        getJurisdictionList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -243,7 +243,7 @@ public class SearchViewModel extends BaseObservable {
     /***
      * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
      */
-    public void getJurisdictionList() {
+    /*public void getJurisdictionList() {
         searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
@@ -251,10 +251,10 @@ public class SearchViewModel extends BaseObservable {
                 Log.d("Create List", "Create List jurisdiction");
                 if (response.isSuccessful()) {
                     jurisdictionMainList = response.body();
-                    /*
+                    *//*
                     TODO: use this logic data to process the UI layout of jurisdiction view section.
                     Codes below is just for checking and testing the complex content of stages main list items.
-                     */
+                     *//*
                     for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
                         if (jdMain != null)
                             Log.d("jmain", "jmain = name:" + jdMain.getName() + " long name:" + jdMain.getAbbreviation() + " abbreviation:" + jdMain.getAbbreviation() + " id:" + jdMain.getId());
@@ -289,7 +289,7 @@ public class SearchViewModel extends BaseObservable {
                 errorDisplayMsg("Network is busy. Pls. try again. ");
             }
         });
-    }
+    }*/
 
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
