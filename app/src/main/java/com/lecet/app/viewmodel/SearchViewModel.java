@@ -29,6 +29,8 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
+import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
@@ -39,7 +41,9 @@ import com.lecet.app.domain.SearchDomain;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -188,7 +192,8 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterProjectQueryAll();
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
-//        getJurisdictionList();
+        Log.d("GetJurisdictionView","JurisdictionView");
+        getJurisdictionList();
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -237,6 +242,54 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
+//    public static List<SearchFilterJurisdictionMain> jurisdictionMainList;
+    private void getJurisdictionList()  {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+//                RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+//                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
+                RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
+                jurisdictionMainList = realmJurisdictions;
+                Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("jurisdiction: ","realmJurisdictions: " + realmJurisdictions);
+                //**noel
+                for (SearchFilterJurisdictionMain jdMain : realmJurisdictions) {
+//                    for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
+                    if (jdMain != null)
+                        Log.d("jmain", "jmain = name:" + jdMain.getName() + " long name:" + jdMain.getAbbreviation() + " abbreviation:" + jdMain.getAbbreviation() + " id:" + jdMain.getId());
+                    for (SearchFilterJurisdictionLocal jlocal : jdMain.getLocals()) {
+                        if (jlocal != null)
+                            Log.d("jlocal", "jlocal = name:" + jlocal.getName() + " id:" + jlocal.getId() + " districtcouncilid:" + jlocal.getDistrictCouncilId());
+                    }
+
+                    for (SearchFilterJurisdictionDistrictCouncil dcouncil : jdMain.getDistrictCouncils()) {
+                        if (dcouncil != null)
+                            Log.d("jdcouncil", "jdcouncil = name:" + dcouncil.getName() + " abbreviation:" + dcouncil.getAbbreviation() + " id:" + dcouncil.getId() + " regionId:" + dcouncil.getRegionId());
+                        if (dcouncil.getLocals() != null) {
+                            for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
+                                if (dclocals != null)
+                                    Log.d("jdcouncillocals", "jdcouncillocals = name:" + dclocals.getName() + " id:" + dclocals.getId() + " dcid:" + dclocals.getDistrictCouncilId());
+                            }
+                        }
+                    }
+                    for (SearchFilterJurisdictionLocal nodc : jdMain.getLocalsWithNoDistrict()) {
+                        if (nodc != null)
+                            Log.d("nodc", "nodc = name:" + nodc.getName() + " id" + nodc.getId() + " dc id:" + nodc.getDistrictCouncilId());
+                    }
+                }
+//**noel
+            }
+
+
+
+        });
+
+    }
 
     /***
      * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section

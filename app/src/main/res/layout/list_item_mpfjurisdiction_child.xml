@@ -22,14 +22,17 @@
             android:layout_height="wrap_content">
 
             <CheckBox
-                android:id="@+id/j_district_name"
+                android:id="@+id/j_child"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="10dp"
+                android:paddingRight="5dp"
                 android:onClick="@{viewModel.onSelected}"
                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
             <ImageView
+                android:id="@+id/j_child_img"
                 style="@style/ImageDownArrow"
                 android:onClick="@{viewModel.onSelected}" />
         </RelativeLayout>

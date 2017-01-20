@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import com.lecet.app.R;
 
@@ -14,8 +15,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * File: SubtypeExampleAdapter Created: 1/11/17 Author: domandtom
@@ -26,70 +31,26 @@ import java.util.Map;
 public class JurisdictionAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({PARENT_VIEW_TYPE, SUB_VIEW_TYPE, SUB_SUB_VIEW_TYPE})
+    @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
     @interface ViewTypes {
     }
 
     private static final int PARENT_VIEW_TYPE = 0;
-    private static final int SUB_VIEW_TYPE = 1;
-    private static final int SUB_SUB_VIEW_TYPE = 2;
+    private static final int CHILD_VIEW_TYPE = 1;
+    private static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
-    private List<Integer> expandedParents;
-    private Map<Integer, List<Integer>> expandedSubTypes;
+    private List<Integer> expandedParents; // Keep track of expanded parents
+    private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
     public JurisdictionAdapter(List<Parent> data) {
 
         this.data = data;
 
-        // We will expand the parents in position 0, 3. In a real example
-        // we will need to keep track of clicks and position.
         expandedParents = new ArrayList<>();
-        // Expanded subtypes, we need to keep track of section and then subtype position
-        expandedSubTypes = new HashMap<>();
 
-        for (int i = 0; i < data.size(); i++) {
-            expandedParents.add(i);
-            List<Subtype> subtype = data.get(i).getSubtypes();
-            if (subtype != null) {
-                int subtypesize = subtype.size();
-                if (subtypesize > 0) {
-                    //  List subsubtype = subtype.get(i).se
-                    List expandedSubtypeSection = new ArrayList();
-
-                    /**
-                     * TODO: Out Of Memory occurs when it implemented the commented codes below that I created.
-                     */
-/*                    for (int k = 0; k < subtype.size(); k++){
-                        Log.d("subtypesize", "subtypesize " + subtypesize);
-                    List<SubSubtype> subsubtype = subtype.get(k).getSubtypes();
-                    if (subsubtype != null) {
-
-                      //  List expandedSubtypeSection = new ArrayList();
-                        for (int j = 0; j < subtypesize; i++) {
-                            expandedSubtypeSection.add(j);
-                        }
-                    }
-                    expandedSubTypes.put(k, expandedSubtypeSection);
-                    }
-                    */
-                }
-            }
-        }
-//        expandedParents.add(0);
-//        expandedParents.add(2);
-
-/**
- * TODO: Using the given code sample below does not display the subsubtype items... Is there any missing here?
- */
-        List expandedSubtypeSectionZero = new ArrayList();
-        //   expandedSubtypeSectionZero.add(2);
-
-        List expandedSubtypeSectionTwo = new ArrayList();
-        //   expandedSubtypeSectionTwo.add(1);
-
-        // expandedSubTypes.put(0, expandedSubtypeSectionZero);
-        // expandedSubTypes.put(2, expandedSubtypeSectionTwo);
+        // Expanded grandChildrens, we need to keep track of section and then subtype position
+        expandedChildren = new HashMap<>();
     }
 
     @Override
@@ -97,50 +58,41 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
         if (data == null) return 0;
 
-        Log.d("SectionCount", " section count" + data.size());  //To check the section count returns;
         return data.size();
     }
-
-    /**
-     * I temporarily convert the subSubTypeSize to instance variable and assign a fixed value so I could check the 3rd-level display item.
-     */
-    int subSubTypeSize = 12;
 
     @Override
     public int getItemCountForSection(int section) {
 
         // Expanded scenario, where subtype and subsub are expanded
         Parent parent = data.get(section);
-        List<Subtype> subtypes = parent.getSubtypes();
+        List<Child> children = parent.getChildren();
 
-        if (subtypes == null) return 0;
+        if (children == null) return 0;
 
-        // Do we need to expand, if so check subtype size and if subsubtypes have been selected
-        // if so we need to display them too.
+        // Do we need to expand, if so check children size and if a child has been selected
+        // if so we need to display the grand children too.
         if (expandedParents.contains(section)) {
 
-            int subTypeSize = subtypes.size();
+            int childrenSize = children.size();
 
-            //MODIFIED
-            //  int subSubTypeSize = 2;
-/**
- * Note: I think the code below should be changed in order to display the 3rd-level items correctly.
- */
-         /*   if (expandedSubTypes.containsKey(section)) {
+            if (expandedChildren.containsKey(section)) {
 
-                List<Integer> expandedSubSubPositions = expandedSubTypes.get(section);
+                int grandChildrenSize = 0;
 
-                for (Integer pos : expandedSubSubPositions) {
+                TreeMap<Integer, Integer> expandedChilrenPositions = expandedChildren.get(section);
 
-                    Subtype subtype = subtypes.get(pos);
-                    subSubTypeSize = subSubTypeSize + (subtype.getSubtypes() != null ? subtype.getSubtypes().size() : 0);
+                for (Map.Entry<Integer, Integer> entry : expandedChilrenPositions.entrySet()) {
+                    Integer size = entry.getValue();
+                    grandChildrenSize = grandChildrenSize + size;
                 }
-            }*/
-/**
- *  I cannot figure this out how it works. I observed that the last 3rd-level items (subsubtype) will only be displayed at the end of the last 2nd-level (subtype) section,
- *  not below on each 2nd-level items where it belongs.
- */
-            return subTypeSize + subSubTypeSize;
+
+                Log.d("SubTypeExample", "section = " + section + ", children = " + childrenSize + ", grandChildren = " + grandChildrenSize);
+
+                return childrenSize + grandChildrenSize;
+            }
+
+            return childrenSize;
         }
 
         return 0;
@@ -149,24 +101,9 @@ public class JurisdictionAdapter extends SectionedAdapter {
     @Override
     public int getItemViewType(int section, int position) {
 
-        // Check and see the section and size of subtypes. If we
-        // position is greater than the size of the subtypes, then we
-        // are assuming that it is a subsubtype view
-
-        Parent parent = data.get(section);
-        List<Subtype> subtype = parent.getSubtypes();
-
-        int subtTypeSize = parent.getSubtypes() != null ? parent.getSubtypes().size() : 0;
-
-        Log.d("ItemViewType", "ItemViewType: section" + section + " position:" + position + " subtype size:" + subtTypeSize); //To monitor how often it will call this method
-
-//**??? The 3rd level item (subsubtype) only appears at the end of the section. I think the condition below should be modified.
-        if (position < subtTypeSize) {
-            return SUB_VIEW_TYPE;
-        }
-
-        return SUB_SUB_VIEW_TYPE;
+        return isChild(section, position) ? CHILD_VIEW_TYPE : GRAND_CHILD_VIEW_TYPE;
     }
+
     @Override
     public int getHeaderViewType(int section) {
         return PARENT_VIEW_TYPE;
@@ -178,59 +115,159 @@ public class JurisdictionAdapter extends SectionedAdapter {
     }
 
     @Override
-    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position) {
-        Subtype subtype = null;
-        if (holder instanceof SubTypeViewHolder) {
+    public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
-            Parent parent = data.get(section);
+        Parent parent = data.get(section);
+        boolean isChild = isChild(section, position);
 
-            // SubType position is denoted by position
-            subtype = parent.getSubtypes().get(position);
+        if (holder instanceof ChildViewHolder && isChild) {
 
-            SubTypeViewHolder subTypeViewHolder = (SubTypeViewHolder) holder;
-            subTypeViewHolder.checkView.setText(subtype.getName());
-//            subTypeViewHolder.textView.setText(subtype.getName());
+            Integer truePosition = childPositionInIndex(section, position);
+            final Child child = parent.getChildren().get(truePosition);
 
+            ChildViewHolder childViewHolder = (ChildViewHolder) holder;
+            childViewHolder.checkView.setText(child.name);
+//            childViewHolder.checkView.setText("ch sect: " + section + ", pos: " + position + ", name:" + child.name);
 
-        } else if (holder instanceof SubSubTypeViewHolder) {
+            childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            //MODIFY2
-            Parent parent = data.get(section);
-            // SubType position is denoted by position
-            List<Subtype> listSubType = parent.getSubtypes();
+                    TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
+                    if (expanded == null) {
 
-            /**
-             * Using the code below, I was able to display the name in the 3rd-level item.
-             */
-            int subTypeCount = listSubType.size();
-            //    int subSubtypePos = subTypeCount - position;
-            int subSubtypePos = position - subTypeCount;
-            Log.d("subsubsec", "subsubsec " + section + " position:" + position + " typepos:" + subSubtypePos + " count:" + subTypeCount);
-            //SubSubtype subSubtype = data.get(section).getSubtypes().get(subSubtypePos);
-            // Subtype subtype1 = data.get(section).getSubtypes().get(subSubtypePos);
-            Subtype subtype1 = listSubType.get(subTypeCount - 1);
-            List<SubSubtype> list2xSubType = subtype1.getSubtypes();
-            SubSubTypeViewHolder subSubTypeViewHolder = (SubSubTypeViewHolder) holder;
-            if (list2xSubType != null && list2xSubType.size() > subSubtypePos && subSubtypePos >= 0) {
-                SubSubtype subSubtype = list2xSubType.get(subSubtypePos);
-                //  if (subtype!=null){
-                //    SubSubtype subSubtype = subtype.getSubtypes().get(position);
-                subSubTypeViewHolder.checkView.setText(subSubtype.getName());
-//               subSubTypeViewHolder.checkView.setText("position"+position+ " section"+section);
-                //}
-            }
+                        expanded = new TreeMap<>();
+                        expandedChildren.put(section, expanded);
+                    }
+
+                    // If the position is already in the expanded list, then we need to remove it
+                    if (expanded.containsKey(position)) {
+
+                        // Keep track of what needs to be added and removed.
+                        List<Integer> toBeRemoved = new ArrayList<>();
+                        TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
+
+                        // We need to find any selected positions that will be affected by the
+                        // new child selection. If the previously selected child's position is in a position
+                        // greater than selected position, we need to decrease previous selection by
+                        // selected grand child count.
+                        SortedMap<Integer, Integer> tailMap = expanded.tailMap(position, false);
+
+                        // Increase every child position, by the count of the grandchildren in the set. We also need to keep
+                        // track of the keys that need to be removed from the expandedChildren.
+                        for (Iterator<Map.Entry<Integer, Integer>> it = tailMap.entrySet().iterator(); it.hasNext(); ) {
+                            Map.Entry<Integer, Integer> entry = it.next();
+
+                            Integer key = entry.getKey();
+                            Integer value = entry.getValue();
+
+                            toBeRemoved.add(key);
+
+                            Integer newKey = key - (child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
+                            toBeAdded.put(newKey, value);
+                        }
+
+                        for (Integer integer : toBeRemoved) {
+                            expanded.remove(integer);
+                        }
+
+                        expanded.remove(Integer.valueOf(position));
+                        expanded.putAll(toBeAdded);
+
+                    } else {
+
+                        // Keep track of what needs to be added and removed.
+                        List<Integer> toBeRemoved = new ArrayList<>();
+                        TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
+
+                        // We need to find any selected positions that will be affected by the
+                        // new child selection. If the previously selected child's position is in a position
+                        // greater than selected position, we need to increase previous selection by
+                        // selected grand child count.
+                        SortedMap<Integer, Integer> tailMap = expanded.tailMap(position);
+
+                        // Increase every child position, by the count of the grandchildren in the set. We also need to keep
+                        // track of the keys that need to be removed from the expandedChildren.
+                        for (Iterator<Map.Entry<Integer, Integer>> it = tailMap.entrySet().iterator(); it.hasNext(); ) {
+                            Map.Entry<Integer, Integer> entry = it.next();
+
+                            Integer key = entry.getKey();
+                            Integer value = entry.getValue();
+
+                            toBeRemoved.add(key);
+
+                            Integer newKey = key + (child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
+                            toBeAdded.put(newKey, value);
+                        }
+
+                        for (Integer integer : toBeRemoved) {
+                            expanded.remove(integer);
+                        }
+
+                        expanded.put(position, child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
+                        expanded.putAll(toBeAdded);
+                    }
+
+                    notifyDataSetChanged();
+                }
+            });
+
+        } else if (holder instanceof GrandChildTypeViewHolder && !isChild) {
+
+/**
+ * TODO: Display the grandchildren name. There are some blank items displaying especially towards at the end of the child section.
+ * Getting the grandchildren's name is erratic.
+ */
+
+            Integer truePosition = childPositionInIndex(section, position);
+        //    Child child = parent.getChildren().get(truePosition);
+        //    if (child.getGrandChildren() == null) return;
+            Map.Entry<Integer, Integer> floorEntry = expandedChildren.get(section).floorEntry(position);
+            Integer selectedChildPosition = floorEntry.getKey();
+            Integer grandChildren = floorEntry.getValue();
+            Integer grandChildrenEndPostion = selectedChildPosition + grandChildren;
+//           child = parent.getChildren().get(grandChildrenEndPostion-1);
+//           child = parent.getChildren().get(truePosition+grandChildren-1);
+       //     int gsize = child.getGrandChildren().size();
+//            final GrandChild gchild = child.getGrandChildren().get(0);
+            //       int compute = position - grandChildrenEndPostion-(grandChildren-1);
+        //    int compute = position - selectedChildPosition + grandChildren - 1;
+            //    if (compute == -1) compute+=1;
+            //      final GrandChild gchild = child.getGrandChildren().get(compute);
+            GrandChildTypeViewHolder subTypeViewHolder = (GrandChildTypeViewHolder) holder;
+            subTypeViewHolder.checkView.setText("GChild sect:" + section + ", pos:" + position + ", truepos:" + truePosition +
+                    " endp:" + grandChildrenEndPostion + " selChPos:" + selectedChildPosition + " gch:" + grandChildren);
+//            subTypeViewHolder.checkView.setText("GChild sect:" + section + ", position:" + position);
         }
     }
 
+    // int gsize=0;
     @Override
-    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int section) {
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
 
         ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
 
         // Parent denoted by section number
         Parent parent = data.get(section);
-//        parentViewHolder.textView.setText(parent.getName());
         parentViewHolder.checkView.setText(parent.getName());
+
+        ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (expandedParents.contains(section)) {
+
+                    expandedParents.remove(Integer.valueOf(section));
+                    expandedChildren.remove(Integer.valueOf(section));
+
+                } else {
+
+                    expandedParents.add(section);
+                }
+
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -241,18 +278,18 @@ public class JurisdictionAdapter extends SectionedAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType == SUB_VIEW_TYPE) {
+        if (viewType == CHILD_VIEW_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_mpfjurisdiction_local, parent, false);
-            SubTypeViewHolder vh = new SubTypeViewHolder(v);
+                    .inflate(R.layout.list_item_mpfjurisdiction_child, parent, false);
+            ChildViewHolder vh = new ChildViewHolder(v);
             return vh;
 
-        } else if (viewType == SUB_SUB_VIEW_TYPE) {
+        } else if (viewType == GRAND_CHILD_VIEW_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_mpfjurisdiction_district, parent, false);
-            SubSubTypeViewHolder vh = new SubSubTypeViewHolder(v);
+                    .inflate(R.layout.list_item_mpfjurisdiction_grandchild, parent, false);
+            GrandChildTypeViewHolder vh = new GrandChildTypeViewHolder(v);
             return vh;
 
         } else {
@@ -260,6 +297,10 @@ public class JurisdictionAdapter extends SectionedAdapter {
             // create a parent layout
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_mpfjurisdiction_parent, parent, false);
+/*
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.test_parent_layout, parent, false);
+*/
             ParentViewHolder vh = new ParentViewHolder(v);
             return vh;
         }
@@ -271,47 +312,136 @@ public class JurisdictionAdapter extends SectionedAdapter {
         return true;
     }
 
+    /**
+     * Use to check and see if the section and position relates to child position
+     * in the data set.
+     *
+     * @param section  The section in the data set you want to check against.
+     * @param position The position in the section.
+     * @return true if the section, position in the data set relates to a child. False equates
+     * to a grandchild.
+     */
+    public boolean isChild(int section, int position) {
+
+        // Check to see if the section, position is an expanded position
+        if (expandedChildren.containsKey(section)) {
+
+            // Lets check the floor key for the given position. If it returns null then we know
+            // that there is no selected child before it and it must be CHILD_VIEW_TYPE.
+            if (expandedChildren.get(section).floorKey(position) == null) {
+
+                return true;
+
+            } else {
+
+                // We know there is an expanded child, if the position equals expanded child.
+                // then we know that its not a grandchild
+                Map.Entry<Integer, Integer> floorEntry = expandedChildren.get(section).floorEntry(position);
+                Integer selectedChildPosition = floorEntry.getKey();
+                Integer grandChildren = floorEntry.getValue();
+
+                if (selectedChildPosition == position) {
+
+                    return true;
+
+                } else {
+
+                    Integer grandChildrenEndPostion = selectedChildPosition + grandChildren;
+                    return position > grandChildrenEndPostion;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Use this method to get the true position of child within a data set.
+     * Best if you check if the
+     *
+     * @param section  The section in the adapter
+     * @param position The position within the given section.
+     * @return The position within the original data set.
+     */
+    public Integer childPositionInIndex(Integer section, Integer position) {
+
+        // Check to see if the section, position is an expanded position
+        if (expandedChildren.containsKey(section)) {
+
+            // Lets check the floor key for the given position. If it returns null then we know
+            // that there is no selected child before it and it must be CHILD_VIEW_TYPE.
+            if (expandedChildren.get(section).floorKey(position) == null) {
+
+                return position;
+
+            } else {
+
+                // Get a count of all grandchildren visible before this position.
+                int grandChildrenSize = 0;
+
+                TreeMap<Integer, Integer> expandedChildrenPositions = expandedChildren.get(section);
+
+                NavigableMap<Integer, Integer> floorMap = expandedChildrenPositions.headMap(position, false);
+
+                for (Map.Entry<Integer, Integer> entry : floorMap.entrySet()) {
+                    Integer size = entry.getValue();
+                    grandChildrenSize = grandChildrenSize + size;
+                }
+
+                return position - grandChildrenSize;
+            }
+        }
+
+        return position;
+    }
+
     public class ParentViewHolder extends RecyclerView.ViewHolder {
 
-        //  public TextView textView;
+        //        public TextView textView;
         public CheckBox checkView;
+        public ImageView imgView;
 
         public ParentViewHolder(View itemView) {
             super(itemView);
-            checkView = (CheckBox) itemView.findViewById(R.id.j_name);
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
 
+//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
+            checkView = (CheckBox) itemView.findViewById(R.id.j_parent);
+            imgView = (ImageView) itemView.findViewById(R.id.j_parent_img);
         }
     }
 
-    public class SubTypeViewHolder extends RecyclerView.ViewHolder {
+    public class ChildViewHolder extends RecyclerView.ViewHolder {
+
+        //        public TextView textView;
+        public CheckBox checkView;
+        public ImageView imgView;
+
+        public ChildViewHolder(View itemView) {
+            super(itemView);
+
+//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
+            checkView = (CheckBox) itemView.findViewById(R.id.j_child);
+            imgView = (ImageView) itemView.findViewById(R.id.j_child_img);
+        }
+    }
+
+    public class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
 
         //        public TextView textView;
         public CheckBox checkView;
 
-        public SubTypeViewHolder(View itemView) {
+        public GrandChildTypeViewHolder(View itemView) {
             super(itemView);
-            checkView = (CheckBox) itemView.findViewById(R.id.j_local_name);
-            //    textView = (TextView) itemView.findViewById(R.id.name_text_view);
-        }
-    }
 
-    public class SubSubTypeViewHolder extends RecyclerView.ViewHolder {
-
-        //   public TextView textView;
-        public CheckBox checkView;
-
-        public SubSubTypeViewHolder(View itemView) {
-            super(itemView);
-            checkView = (CheckBox) itemView.findViewById(R.id.j_district_name);
-            //  textView = (TextView) itemView.findViewById(R.id.name_text_view);
+//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
+            checkView = (CheckBox) itemView.findViewById(R.id.j_grandchild);
         }
     }
 
     public static class Parent {
 
         private String name;
-        private List<Subtype> subtypes;
+        private List<Child> children;
 
         public void setName(String name) {
             this.name = name;
@@ -321,19 +451,19 @@ public class JurisdictionAdapter extends SectionedAdapter {
             return name;
         }
 
-        public void setSubtypes(List<Subtype> subtypes) {
-            this.subtypes = subtypes;
+        public void setChildren(List<Child> children) {
+            this.children = children;
         }
 
-        public List<Subtype> getSubtypes() {
-            return subtypes;
+        public List<Child> getChildren() {
+            return children;
         }
     }
 
-    public static class Subtype {
+    public static class Child {
 
         private String name;
-        private List<SubSubtype> subtypes;
+        private List<GrandChild> grandChildren;
 
         public void setName(String name) {
             this.name = name;
@@ -343,16 +473,16 @@ public class JurisdictionAdapter extends SectionedAdapter {
             return name;
         }
 
-        public void setSubtypes(List<SubSubtype> subtypes) {
-            this.subtypes = subtypes;
+        public void setGrandChildren(List<GrandChild> grandChildren) {
+            this.grandChildren = grandChildren;
         }
 
-        public List<SubSubtype> getSubtypes() {
-            return subtypes;
+        public List<GrandChild> getGrandChildren() {
+            return grandChildren;
         }
     }
 
-    public static class SubSubtype {
+    public static class GrandChild {
 
         private String name;
 
@@ -365,9 +495,6 @@ public class JurisdictionAdapter extends SectionedAdapter {
         }
 
     }
+
 }
 
-
-/**
- * On final note. I think there's a need to add or modify codes in the SectionedAdapter in order to work the 3rd-level multi-item selection.
- */

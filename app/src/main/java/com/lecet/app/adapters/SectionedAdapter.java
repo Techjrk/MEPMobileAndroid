@@ -72,8 +72,9 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
         SparseIntArray sectionCountMap; sectionCountMap = new SparseIntArray();
 
         // Clear any existing data
+        positionToSectionMap.clear();
         sectionIndexPositionMap.clear();
-        sectionCountMap.clear();
+        sectionFooterMap.clear();
 
         // We will collect the number of sections then call the data source to determine
         // the number of items in section.
@@ -196,3 +197,4 @@ public abstract class SectionedAdapter extends RecyclerView.Adapter {
         }
     }
 }
+

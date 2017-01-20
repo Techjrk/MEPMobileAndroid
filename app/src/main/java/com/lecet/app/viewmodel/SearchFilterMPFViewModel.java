@@ -14,6 +14,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterMPFJurisdictionActivity;
+import com.lecet.app.content.SearchFilterMPFJurisdictionActivity2;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterMPFStageActivity;
@@ -205,20 +206,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         this.persistedWorkType = persistedWorkType;
     }
 
-
     static final String ANY = "Any";
 
-    /*  public static final int LOCATION =0;
-      public static final int TYPE =1;
-      public static final int VALUE =2;
-      public static final int UPDATED_WITHIN =3;
-      public static final int JURISDICTION =4;
-      public static final int STAGE =5;
-      public static final int BIDDING_WITHIN =6;
-      public static final int BH =7;
-      public static final int OWNER_TYPE =8;
-      public static final int WORK_TYPE=9;
-     */
     @Bindable
     public String getLocation_select() {
         return locationSelect;
@@ -402,8 +391,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.jurisdiction:
                 section = JURISDICTION;
-                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
-                //  i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
+//                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
+                  i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
 

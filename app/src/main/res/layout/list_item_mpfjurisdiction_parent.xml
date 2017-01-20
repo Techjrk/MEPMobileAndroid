@@ -22,12 +22,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <CheckBox
-                        android:id="@+id/j_name"
+                        android:id="@+id/j_parent"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:text=""
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                     <ImageView
+                        android:id="@+id/j_parent_img"
                         style="@style/ImageDownArrow"
                         android:onClick="@{viewModel.onSelected}"
                         />
