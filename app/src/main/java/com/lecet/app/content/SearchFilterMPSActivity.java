@@ -9,6 +9,8 @@ import android.util.Log;
 import com.lecet.app.R;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectType;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
+import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
 import com.lecet.app.databinding.ActivitySearchFilterMseBinding;
@@ -38,7 +40,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         } else {
             ActivitySearchFilterMps30Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mps30);
             sfilter.setViewModel(viewModel);
-
         }
     }
 
@@ -299,31 +300,43 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d("jurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d("jurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
+                Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("jurisdiction: ","realmJurisdictions: " + realmJurisdictions);
 
-                String jurisdiction = arr[0];
-                String jurisdictionTag = arr[1];
+                String jurisdiction = arr[0];       // name
+                String jurisdictionTag = arr[1];    // tag
                 String jurisdictions = "";
                 viewModel.setPersistedJurisdiction(jurisdiction);
                 viewModel.setJurisdiction_select(jurisdiction);
 
-                // build the list of IDs for the query, which include ... ? //TODO - see
+                // build the list of IDs for the query, which include ... ? //TODO - this parsing needs to be updated to send the correct query
                 List<String> jList = new ArrayList<>();
+
+                // add the highest-level Jurisdiction ID
                 jList.add(jurisdictionTag);
-                if (jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
-                    // add each child Stage ID
-                    /*for(SearchFilterJurisdictionMain j : realmJurisdictions) {
+                if(jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
+
+                    // add each District Council ID
+                    for(SearchFilterJurisdictionMain j : realmJurisdictions) {
                         if(jurisdictionTag.equals(j.getName())) {
+                            jList.add(Integer.toString(j.getId()));
                             List<SearchFilterJurisdictionDistrictCouncil> districtCouncils = j.getDistrictCouncils();
+
+                            // add each Local ID
                             for (SearchFilterJurisdictionDistrictCouncil dc: districtCouncils) {
                                 if (dc != null)  {
-                                    jList.add(dc.getName());
+                                    jList.add(Integer.toString(dc.getId()));
+                                    List<SearchFilterJurisdictionLocal> locals = dc.getLocals();
+                                    for (SearchFilterJurisdictionLocal local: locals) {
+                                        if (local != null)  {
+                                            jList.add(Integer.toString(local.getId()));
+                                        }
+                                    }
                                 }
                             }
                             break;
                         }
-                    }*/
+                    }
                     Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdiction);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction tag: " + jurisdictionTag);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
@@ -336,6 +349,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         });
 
     }
+
 
     /**
      * Process the Stage input data based on the received list of Stages persisted in Realm
