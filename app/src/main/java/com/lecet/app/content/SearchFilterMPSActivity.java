@@ -25,6 +25,7 @@ import io.realm.RealmResults;
 
 public class SearchFilterMPSActivity extends AppCompatActivity {
     SearchFilterMPFViewModel viewModel;
+    boolean instantSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         // setContentView(R.layout.activity_search_filter_mps30);
         viewModel = new SearchFilterMPFViewModel(this);
         Intent i = getIntent();
-        boolean instantSearch = i.getBooleanExtra("instantSearch", true);
+        instantSearch = i.getBooleanExtra("instantSearch", true);
         if (instantSearch) {
             ActivitySearchFilterMseBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mse);
             sfilter.setViewModel(viewModel);
@@ -57,7 +58,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK)
 //            switch (resultCode) {
                 switch (requestCode) {
-
                     // Location
 //                case R.id.location & 0xfff:
                     case SearchFilterMPFViewModel.LOCATION:
@@ -148,11 +148,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String zipStr = !zip.equals("") ? (!zip.equals("") ? "," + zip : " " + zip) : "";
 
         String locationText = cityStr + stateStr + countyStr + zipStr;
-        viewModel.setPersistedLocationCity(city);   //mark
-        viewModel.setPersistedLocationState(state);
-        viewModel.setPersistedLocationCounty(county);
-        viewModel.setPersistedLocationZip(zip);
-        viewModel.setLocation_select(locationText);
+
+
+        if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+            viewModel.setClocationSelect(locationText);
+        } else {
+            viewModel.setPersistedLocationCity(city);   //mark
+            viewModel.setPersistedLocationState(state);
+            viewModel.setPersistedLocationCounty(county);
+            viewModel.setPersistedLocationZip(zip);
+            viewModel.setLocation_select(locationText);
+        }
         Log.d("SearchFilterMPSAct", "location: " + locationText);
 
 
@@ -285,7 +291,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     /**
      * Process the Jurisdiction input data
      * TODO - jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
-     * TODO - also we need to map input to jurisdiction codes. Hard-coded for now.
+     * TODO - also we need to map input to jurisdiction codes
      * ex:
      * "jurisdiction": true
      * "jurisdictions": { "inq": [3] }
@@ -300,35 +306,40 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d("jurisdiction: ","realmJurisdictions: " + realmJurisdictions);
+                Log.d("jurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("jurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
 
                 String jurisdiction = arr[0];       // name
                 String jurisdictionTag = arr[1];    // tag
                 String jurisdictions = "";
-                viewModel.setPersistedJurisdiction(jurisdiction);
-                viewModel.setJurisdiction_select(jurisdiction);
+                if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+                    viewModel.setCjurisdictionSelect(jurisdiction);
+                } else {
+                    viewModel.setPersistedJurisdiction(jurisdiction);
+                    viewModel.setJurisdiction_select(jurisdiction);
+                }
+
 
                 // build the list of IDs for the query, which include ... ? //TODO - this parsing needs to be updated to send the correct query
                 List<String> jList = new ArrayList<>();
 
                 // add the highest-level Jurisdiction ID
                 jList.add(jurisdictionTag);
-                if(jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
+                if (jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
 
                     // add each District Council ID
-                    for(SearchFilterJurisdictionMain j : realmJurisdictions) {
-                        if(jurisdictionTag.equals(j.getName())) {
+                    for (SearchFilterJurisdictionMain j : realmJurisdictions) {
+                        if (jurisdictionTag.equals(j.getName())) {
                             jList.add(Integer.toString(j.getId()));
                             List<SearchFilterJurisdictionDistrictCouncil> districtCouncils = j.getDistrictCouncils();
 
                             // add each Local ID
-                            for (SearchFilterJurisdictionDistrictCouncil dc: districtCouncils) {
-                                if (dc != null)  {
+                            for (SearchFilterJurisdictionDistrictCouncil dc : districtCouncils) {
+                                if (dc != null) {
                                     jList.add(Integer.toString(dc.getId()));
                                     List<SearchFilterJurisdictionLocal> locals = dc.getLocals();
-                                    for (SearchFilterJurisdictionLocal local: locals) {
-                                        if (local != null)  {
+                                    for (SearchFilterJurisdictionLocal local : locals) {
+                                        if (local != null) {
                                             jList.add(Integer.toString(local.getId()));
                                         }
                                     }

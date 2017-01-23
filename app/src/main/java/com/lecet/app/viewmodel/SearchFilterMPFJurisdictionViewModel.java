@@ -44,6 +44,7 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
                 Log.d("SearchFilterMPFJurisVM:", "realmJurisdictions list: " + realmJurisdictions);
             }
         });
+        jurisdictionExtra = new String[2];
     }
 
     public void onClicked(View view) {
@@ -55,8 +56,13 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
     }
 
     public void onSelected(View view) {
-        jurisdictionExtra = new String[2];
+
         jurisdictionExtra[0] = ((CheckBox) view).getText().toString();  //TODO - the Views and their Tags are hard-coded until dynamic nested Views are working. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
         jurisdictionExtra[1] = (String) view.getTag();
+        Log.d("checkbox", "checkbox:" + ((CheckBox) view).getText().toString());
+    }
+
+    public void setJurisdictionExtraName(String jurisdictionExtra) {
+        this.jurisdictionExtra[0] = jurisdictionExtra;
     }
 }

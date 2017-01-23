@@ -39,7 +39,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         // JurisdictionAdapter.Parent parent2 = new JurisdictionAdapter.Parent();
 
         JurisdictionAdapter.GrandChild grandChild = new JurisdictionAdapter.GrandChild();
-    //    List<JurisdictionAdapter.GrandChild> grandChildren = new ArrayList<>();
+        //    List<JurisdictionAdapter.GrandChild> grandChildren = new ArrayList<>();
 
         List<JurisdictionAdapter.Parent> data = new ArrayList<>();
 
@@ -50,31 +50,31 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         int ctr = 0;
 
         List<SearchFilterJurisdictionMain> sMain = SearchViewModel.jurisdictionMainList;
-   //     List<JurisdictionAdapter.Subtype> subtypes;
-        List<JurisdictionAdapter.Child> children =  null;
+        //     List<JurisdictionAdapter.Subtype> subtypes;
+        List<JurisdictionAdapter.Child> children = null;
         for (SearchFilterJurisdictionMain jmain : sMain) {
             JurisdictionAdapter.Parent parent = new JurisdictionAdapter.Parent();
             parent.setName(jmain.getName());
-          //  ctr++;
+            //  ctr++;
 
             children = new ArrayList<>();
-           // int childctr=0;
+            // int childctr=0;
             for (SearchFilterJurisdictionLocal jlocal : jmain.getLocals()) {
-           //     ctr++; childctr++;
-           //     if (childctr>3) break;
+                //     ctr++; childctr++;
+                //     if (childctr>3) break;
                 //     if (jlocal !=null)   Log.d("jlocal","jlocal = name:"+jlocal.getName()+ " id:"+jlocal.getId()+" districtcouncilid:"+jlocal.getDistrictCouncilId());
                 if (jlocal != null) {
                     JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
-               //     JurisdictionAdapter.Subtype subtype = new JurisdictionAdapter.Subtype();
+                    //     JurisdictionAdapter.Subtype subtype = new JurisdictionAdapter.Subtype();
                     child.setName(jlocal.getName());
                     children.add(child);
                 }
             }
-           // parent.setSubtypes(subtypes);
-         //   int childctr2=0;
+            // parent.setSubtypes(subtypes);
+            //   int childctr2=0;
             for (SearchFilterJurisdictionDistrictCouncil dcouncil : jmain.getDistrictCouncils()) {
-               // childctr2++;
-             //   if (childctr2 > 0 ) break;
+                // childctr2++;
+                //   if (childctr2 > 0 ) break;
 //                if (dcouncil !=null)  Log.d("jdcouncil","jdcouncil = name:"+ dcouncil.getName()+" abbreviation:"+dcouncil.getAbbreviation()+" id:"+dcouncil.getId()+" regionId:"+dcouncil.getRegionId());
                 if (dcouncil != null) {
                     ctr++;
@@ -105,7 +105,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             parent.setChildren(children);
 //            parent.setSubtypes(subtypes);
             data.add(parent);
-          //  if (ctr > 10) break;
+            //  if (ctr > 10) break;
             //   data.add(parent3);
         }
 
@@ -180,7 +180,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         data.add(parent1);
         data.add(parent2);
         data.add(parent3);*/
-        JurisdictionAdapter adapter = new JurisdictionAdapter(data);
+        JurisdictionAdapter adapter = new JurisdictionAdapter(data, viewModel);
         recyclerView.setAdapter(adapter);
     }
 

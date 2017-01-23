@@ -13,7 +13,6 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
-import com.lecet.app.content.SearchFilterMPFJurisdictionActivity;
 import com.lecet.app.content.SearchFilterMPFJurisdictionActivity2;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
@@ -62,7 +61,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private boolean isProjectViewVisible = true;
 
     /**
-     * User's selected filter item - values for display
+     * User's selected filter item - values for Project display
      */
     private String locationSelect;
     private String typeSelect;
@@ -74,6 +73,15 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private String bhSelect;
     private String ownerTypeSelect;
     private String workTypeSelect;
+
+    /**
+     * User's selected filter item - values for Company display
+     */
+    private String clocationSelect;
+    private String cvalueSelect;
+    private String cjurisdictionSelect;
+    private String cbiddingWithinSelect;
+    private String ctypeSelect;
 
     /**
      * User's selected filter item - Values for persistence between filter Activities
@@ -208,6 +216,64 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
     static final String ANY = "Any";
 
+    /**
+     * getter and setter
+     *
+     * @return
+     */
+    @Bindable
+    public String getClocationSelect() {
+        return clocationSelect;
+    }
+
+    public void setClocationSelect(String clocationSelect) {
+        this.clocationSelect = clocationSelect;
+        notifyPropertyChanged(BR.clocationSelect);
+    }
+
+    @Bindable
+    public String getCvalueSelect() {
+        return cvalueSelect;
+    }
+
+    public void setCvalueSelect(String cvalueSelect) {
+        this.cvalueSelect = cvalueSelect;
+        notifyPropertyChanged(BR.cvalueSelect);
+    }
+
+    @Bindable
+    public String getCjurisdictionSelect() {
+        return cjurisdictionSelect;
+    }
+
+    public void setCjurisdictionSelect(String cjurisdictionSelect) {
+        this.cjurisdictionSelect = cjurisdictionSelect;
+        notifyPropertyChanged(BR.cjurisdictionSelect);
+
+    }
+
+    @Bindable
+    public String getCbiddingWithinSelect() {
+        return cbiddingWithinSelect;
+    }
+
+    public void setCbiddingWithinSelect(String cbiddingWithinSelect) {
+        this.cbiddingWithinSelect = cbiddingWithinSelect;
+        notifyPropertyChanged(BR.cbiddingWithinSelect);
+
+    }
+
+    @Bindable
+    public String getCtypeSelect() {
+        return ctypeSelect;
+    }
+
+    public void setCtypeSelect(String ctypeSelect) {
+        this.ctypeSelect = ctypeSelect;
+        notifyPropertyChanged(BR.ctypeSelect);
+
+    }
+
     @Bindable
     public String getLocation_select() {
         return locationSelect;
@@ -331,6 +397,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         setBh_select(ANY);
         setOwner_type_select(ANY);
         setWork_type_select(ANY);
+        setCjurisdictionSelect(ANY);
+        setCbiddingWithinSelect(ANY);
+        setCtypeSelect(ANY);
+
         intent = activity.getIntent();
     }
 
@@ -361,6 +431,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         id = view.getId();
         int section = 0;
         switch (id) {
+            case R.id.clocation:
             case R.id.location:
                 section = LOCATION;
                 i = new Intent(activity, SearchFilterMPFLocationActivity.class);
@@ -376,6 +447,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
                 break;
 
+            case R.id.cvalue:
             case R.id.value:
                 section = VALUE;
                 i = new Intent(activity, SearchFilterMPFValueActivity.class);
@@ -388,11 +460,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 i = new Intent(activity, SearchFilterMPFUpdatedWithinActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
                 break;
-
+            case R.id.cjurisdiction:
             case R.id.jurisdiction:
                 section = JURISDICTION;
 //                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
-                  i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
+                i = new Intent(activity, SearchFilterMPFJurisdictionActivity2.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
 

@@ -1,5 +1,6 @@
 package com.lecet.app.adapters;
 
+import android.databinding.DataBindingUtil;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,9 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
+import com.lecet.app.content.SearchFilterMPFJurisdictionActivity2;
+import com.lecet.app.databinding.ListItemMpfjurisdictionChildBinding;
+import com.lecet.app.databinding.ListItemMpfjurisdictionGrandchildBinding;
+import com.lecet.app.databinding.ListItemMpfjurisdictionParentBinding;
+import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -40,17 +47,25 @@ public class JurisdictionAdapter extends SectionedAdapter {
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
+    private SearchFilterMPFJurisdictionViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public JurisdictionAdapter(List<Parent> data) {
+    public JurisdictionAdapter(List<Parent> data, SearchFilterMPFJurisdictionViewModel viewModel) {
 
         this.data = data;
-
+        this.viewModel = viewModel;
         expandedParents = new ArrayList<>();
 
         // Expanded grandChildrens, we need to keep track of section and then subtype position
         expandedChildren = new HashMap<>();
+/*
+        ListItemMpfjurisdictionParentBinding bindParent = DataBindingUtil.setContentView(activity, R.layout.list_item_mpfjurisdiction_parent);
+        ListItemMpfjurisdictionChildBinding bindChild = DataBindingUtil.setContentView(activity, R.layout.list_item_mpfjurisdiction_child);
+        ListItemMpfjurisdictionGrandchildBinding bindGrandChild = DataBindingUtil.setContentView(activity, R.layout.list_item_mpfjurisdiction_grandchild);
+        bindParent.setViewModel(viewModel);
+        bindChild.setViewModel(viewModel);
+        bindGrandChild.setViewModel(viewModel);*/
     }
 
     @Override
@@ -125,8 +140,17 @@ public class JurisdictionAdapter extends SectionedAdapter {
             Integer truePosition = childPositionInIndex(section, position);
             final Child child = parent.getChildren().get(truePosition);
 
-            ChildViewHolder childViewHolder = (ChildViewHolder) holder;
+            final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.checkView.setText(child.name);
+            childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        viewModel.setJurisdictionExtraName(childViewHolder.checkView.getText().toString());
+                      //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
+                    }
+                }
+            });
 //            childViewHolder.checkView.setText("ch sect: " + section + ", pos: " + position + ", name:" + child.name);
 
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
@@ -245,12 +269,20 @@ public class JurisdictionAdapter extends SectionedAdapter {
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
 
-        ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
+        final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
 
         // Parent denoted by section number
         Parent parent = data.get(section);
         parentViewHolder.checkView.setText(parent.getName());
-
+        parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    viewModel.setJurisdictionExtraName(parentViewHolder.checkView.getText().toString());
+                      Log.d("check","check"+parentViewHolder.checkView.getText().toString());
+                }
+            }
+        });
         ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
