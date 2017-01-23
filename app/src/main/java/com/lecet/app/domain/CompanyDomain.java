@@ -2,13 +2,17 @@ package com.lecet.app.domain;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.Company;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmList;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * File: CompanyDomain Created: 12/5/16 Author: domandtom
@@ -29,6 +33,25 @@ public class CompanyDomain {
         this.realm = realm;
     }
 
+    /** Networking **/
+
+    public void getCompanyDetails(long companyId, Callback<Company> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        String filter = "{\"include\":[\"contacts\",{\"projects\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}},{\"bids\":[\"company\",\"contact\",\"project\"]}]}";
+
+        Call<Company> call = lecetClient.getCompanyService().company(token, companyId, filter);
+        call.enqueue(callback);
+    }
+
+    /** Persisted **/
+
+    public RealmResults<Company> fetchCompany(long companyId) {
+
+        RealmResults<Company> results = realm.where(Company.class).equalTo("id", companyId).findAll();
+        return results;
+    }
+
     public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
 
         RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
@@ -36,4 +59,14 @@ public class CompanyDomain {
 
         return result;
     }
+
+    public Company copyToRealmTransaction(Company company) {
+
+        realm.beginTransaction();
+        Company persistedCompany = realm.copyToRealmOrUpdate(company);
+        realm.commitTransaction();
+
+        return persistedCompany;
+    }
+
 }

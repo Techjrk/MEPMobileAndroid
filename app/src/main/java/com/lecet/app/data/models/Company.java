@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
 /**
  * File: Company Created: 10/19/16 Author: domandtom
  *
- * This code is copyright (c) 2016 Dom & Tom Inc. 
+ * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
 public class Company extends RealmObject implements TrackedObject {
