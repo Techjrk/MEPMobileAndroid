@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.WindowManager;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.JurisdictionAdapter;
@@ -23,20 +24,20 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //   setContentView(R.layout.activity_search_filter_mpfjurisdiction);
         ActivitySearchFilterMpfjurisdiction2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfjurisdiction2);
         SearchFilterMPFJurisdictionViewModel viewModel = new SearchFilterMPFJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);
-/**
- * Process the multi-level display item of the jurisdiction with adapter
- */
+        initRecycleView(viewModel);
+    }
+    public void initRecycleView(SearchFilterMPFJurisdictionViewModel viewModel){
+        /**
+         * Process the multi-level display item of the jurisdiction with adapter
+         */
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.test_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        // Setup some dummy data
-        // JurisdictionAdapter.Parent parent1 = new JurisdictionAdapter.Parent();
-        // JurisdictionAdapter.Parent parent2 = new JurisdictionAdapter.Parent();
 
         JurisdictionAdapter.GrandChild grandChild = new JurisdictionAdapter.GrandChild();
         //    List<JurisdictionAdapter.GrandChild> grandChildren = new ArrayList<>();

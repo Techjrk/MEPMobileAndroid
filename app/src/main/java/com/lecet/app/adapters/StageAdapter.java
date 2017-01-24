@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.lecet.app.R;
 import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
+import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,7 +31,7 @@ import java.util.TreeMap;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class JurisdictionAdapter extends SectionedAdapter {
+public class StageAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
@@ -42,11 +43,11 @@ public class JurisdictionAdapter extends SectionedAdapter {
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
-    private SearchFilterMPFJurisdictionViewModel viewModel;
+    private SearchFilterMPFStageViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public JurisdictionAdapter(List<Parent> data, SearchFilterMPFJurisdictionViewModel viewModel) {
+    public StageAdapter(List<Parent> data, SearchFilterMPFStageViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;
@@ -135,7 +136,7 @@ public class JurisdictionAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setJurisdictionExtraName(childViewHolder.checkView.getText().toString());
+                        viewModel.setStageName(childViewHolder.checkView.getText().toString());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
@@ -239,7 +240,7 @@ public class JurisdictionAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setJurisdictionExtraName(grandChildViewHolder.checkView.getText().toString());
+                        viewModel.setStageName(grandChildViewHolder.checkView.getText().toString());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
@@ -260,7 +261,7 @@ public class JurisdictionAdapter extends SectionedAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewModel.setJurisdictionExtraName(parentViewHolder.checkView.getText().toString());
+                    viewModel.setStageName(parentViewHolder.checkView.getText().toString());
                     Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
                 }
             }

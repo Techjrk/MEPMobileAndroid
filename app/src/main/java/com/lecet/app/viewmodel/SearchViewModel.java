@@ -255,9 +255,10 @@ public class SearchViewModel extends BaseObservable {
                 RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
                 jurisdictionMainList = realmJurisdictions;
-                Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
+
+               /* Log.d("jurisdiction: ","realmJurisdictions size: " + realmJurisdictions.size());
                 Log.d("jurisdiction: ","realmJurisdictions: " + realmJurisdictions);
-                //**noel
+                /*//**noel
                 for (SearchFilterJurisdictionMain jdMain : realmJurisdictions) {
 //                    for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
                     if (jdMain != null)
@@ -281,8 +282,8 @@ public class SearchViewModel extends BaseObservable {
                         if (nodc != null)
                             Log.d("nodc", "nodc = name:" + nodc.getName() + " id" + nodc.getId() + " dc id:" + nodc.getDistrictCouncilId());
                     }
-                }
-//**noel
+                }*/
+
             }
 
 
@@ -291,56 +292,6 @@ public class SearchViewModel extends BaseObservable {
 
     }
 
-    /***
-     * getJurisdictionList -  to populate the list of SearchFilterJurisdictionMain POJO object for Jurisdiciton section
-     */
-    /*public void getJurisdictionList() {
-        searchDomain.getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
-            @Override
-            public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-                //    if (jurisdictionMainList !=null) return;
-                Log.d("Create List", "Create List jurisdiction");
-                if (response.isSuccessful()) {
-                    jurisdictionMainList = response.body();
-                    *//*
-                    TODO: use this logic data to process the UI layout of jurisdiction view section.
-                    Codes below is just for checking and testing the complex content of stages main list items.
-                     *//*
-                    for (SearchFilterJurisdictionMain jdMain : jurisdictionMainList) {
-                        if (jdMain != null)
-                            Log.d("jmain", "jmain = name:" + jdMain.getName() + " long name:" + jdMain.getAbbreviation() + " abbreviation:" + jdMain.getAbbreviation() + " id:" + jdMain.getId());
-                        for (SearchFilterJurisdictionLocal jlocal : jdMain.getLocals()) {
-                            if (jlocal != null)
-                                Log.d("jlocal", "jlocal = name:" + jlocal.getName() + " id:" + jlocal.getId() + " districtcouncilid:" + jlocal.getDistrictCouncilId());
-                        }
-
-                        for (SearchFilterJurisdictionDistrictCouncil dcouncil : jdMain.getDistrictCouncils()) {
-                            if (dcouncil != null)
-                                Log.d("jdcouncil", "jdcouncil = name:" + dcouncil.getName() + " abbreviation:" + dcouncil.getAbbreviation() + " id:" + dcouncil.getId() + " regionId:" + dcouncil.getRegionId());
-                            if (dcouncil.getLocals() != null) {
-                                for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
-                                    if (dclocals != null)
-                                        Log.d("jdcouncillocals", "jdcouncillocals = name:" + dclocals.getName() + " id:" + dclocals.getId() + " dcid:" + dclocals.getDistrictCouncilId());
-                                }
-                            }
-                        }
-                        for (SearchFilterJurisdictionLocal nodc : jdMain.getLocalsWithNoDistrict()) {
-                            if (nodc != null)
-                                Log.d("nodc", "nodc = name:" + nodc.getName() + " id" + nodc.getId() + " dc id:" + nodc.getDistrictCouncilId());
-                        }
-                    }
-
-                } else {
-                    errorDisplayMsg("Unsuccessful Query. " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<SearchFilterJurisdictionMain>> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
-            }
-        });
-    }*/
     public void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
