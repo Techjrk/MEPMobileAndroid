@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchFilterMPFStageViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lecet.app.content.SearchFilterMPFStageActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:orientation="vertical">
+
+            <!-- SEARCH FIELD -->
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/lecetDarkestBlue">
+
+                <RelativeLayout
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/rounded_edittext">
+
+                    <EditText
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="0dp"
+                        android:layout_toStartOf="@id/close_image_button"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_action_search"
+
+                        android:hint="Search for stages"
+                        android:inputType="textPersonName"
+                        android:text=""
+                        android:textColor="@color/lecetTextWhite"
+                        android:textSize="15sp"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:width="30dp"
+                    android:background="@null"
+                    android:onClick="@{viewModel.onClicked}"
+                    android:text="APPLY"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+            </LinearLayout>
+            <!-- STAGE DETAIL SECTION -->
+            <android.support.v7.widget.RecyclerView android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

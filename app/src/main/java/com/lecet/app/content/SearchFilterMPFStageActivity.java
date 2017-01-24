@@ -1,45 +1,90 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.StageAdapter;
-import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
-import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
-import com.lecet.app.data.models.SearchFilterJurisdictionMain;
-import com.lecet.app.databinding.ActivitySearchFilterMpflocationBinding;
+import com.lecet.app.adapters.StageAdapter;
+import com.lecet.app.data.models.SearchFilterStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
+import com.lecet.app.data.models.SearchFilterStagesMain;
+import com.lecet.app.databinding.ActivitySearchFilterMpfstage2Binding;
 import com.lecet.app.databinding.ActivitySearchFilterMpfstageBinding;
-import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class SearchFilterMPFStageActivity extends AppCompatActivity {
-    //// TODO: 1/5/17 Create nested items for Stage layout
+    RealmResults<SearchFilterStagesMain> realmStages;
+    SearchFilterMPFStageViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
- //       setContentView(R.layout.activity_search_filter_mpfstage);
-        ActivitySearchFilterMpfstageBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfstage);
-        SearchFilterMPFStageViewModel viewModel = new SearchFilterMPFStageViewModel(this);
+        //       setContentView(R.layout.activity_search_filter_mpfstage);
+        ActivitySearchFilterMpfstage2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfstage2);
+        viewModel = new SearchFilterMPFStageViewModel(this);
         sfilter.setViewModel(viewModel);
-        initRecycleView(viewModel);
-   
+       // getStageList();
+
+      initRecycleView(viewModel);
+
     }
-    public void initRecycleView(SearchFilterMPFStageViewModel viewModel){
+    public void initRecycleView(SearchFilterMPFStageViewModel viewModel) {
+        Log.d("stageinit","stageinit");
         /**
-         * Process the multi-level display item of the stage with adapter
+         * Process the multi-level display item of the Stage with adapter
          */
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.test_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
+        List<StageAdapter.Parent> data = new ArrayList<>();
+
+        List<SearchFilterStagesMain> sMain = SearchViewModel.stageMainList;
+        List<StageAdapter.Child> children = null;
+        for (SearchFilterStagesMain jmain : sMain) {
+
+            Log.d("stagelist","stagelist"+jmain.getName());
+            StageAdapter.Parent parent = new StageAdapter.Parent();
+            parent.setName(jmain.getName());
+
+            children = new ArrayList<>();
+            for (SearchFilterStage jlocal : jmain.getStages()) {
+                if (jlocal != null) {
+                    StageAdapter.Child child = new StageAdapter.Child();
+                    child.setName(jlocal.getName());
+                    children.add(child);
+                }
+            }
+            parent.setChildren(children);
+            data.add(parent);
+        }
+        Log.d("stagemain","stagemain"+sMain.size());
+//        Log.d("stagemain","stagemain"+realmStages.size());
+        StageAdapter adapter = new StageAdapter(data, viewModel);
+        recyclerView.setAdapter(adapter);
     }
+
+    private void getStageList() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realmStages = realm.where(SearchFilterStagesMain.class).findAll();
+            }
+        });
+        initRecycleView(viewModel);
+    }
+
 }

@@ -2,11 +2,13 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by getdevsinc on 1/10/17.
  */
 
-public class SearchFilterStage {
+public class SearchFilterStage extends RealmObject {
     @SerializedName("name")
     private String name;
 

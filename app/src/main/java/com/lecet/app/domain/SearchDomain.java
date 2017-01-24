@@ -81,7 +81,7 @@ public class SearchDomain {
                 Log.d("SearchDomain","Create List stages");
                 if (response.isSuccessful()) {
                     final List<SearchFilterStagesMain> stageMainList = response.body();
-
+                    SearchViewModel.stageMainList = stageMainList;
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {

@@ -2,20 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel" />
-
-        <import type="android.view.View" />
-    </data>
-    <!-- JURISDICTION DISTRICT COUNCIL ITEM SECTION -->
+    <!-- CHILD ITEM SECTION -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,14 +19,12 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="10dp"
                 android:paddingRight="5dp"
-                android:onClick="@{viewModel.onSelected}"
                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
             <ImageView
                 android:id="@+id/j_child_img"
                 style="@style/ImageDownArrow"
-                android:onClick="@{viewModel.onSelected}"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
         </RelativeLayout>
         <!-- Horizontal Separator -->
         <include layout="@layout/rule_horiz_light" />

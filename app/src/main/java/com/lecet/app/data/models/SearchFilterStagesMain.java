@@ -4,11 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * Created by getdevsinc on 1/10/17.
  */
 
-public class SearchFilterStagesMain {
+public class SearchFilterStagesMain  extends RealmObject {
     @SerializedName("name")
     private String name;
 
@@ -16,7 +19,7 @@ public class SearchFilterStagesMain {
     private int id;
 
     @SerializedName("stages")
-    private List<SearchFilterStage> stages;
+    private RealmList<SearchFilterStage> stages;
 
     public String getName() {
         return name;
@@ -34,11 +37,11 @@ public class SearchFilterStagesMain {
         this.id = id;
     }
 
-    public List<SearchFilterStage> getStages() {
+    public RealmList<SearchFilterStage> getStages() {
         return stages;
     }
 
-    public void setStages(List<SearchFilterStage> stages) {
+    public void setStages(RealmList<SearchFilterStage> stages) {
         this.stages = stages;
     }
 

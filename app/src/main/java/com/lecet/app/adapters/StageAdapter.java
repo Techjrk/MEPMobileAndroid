@@ -11,7 +11,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
 
 import java.lang.annotation.Retention;
@@ -130,7 +129,8 @@ public class StageAdapter extends SectionedAdapter {
             final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.imgView.setVisibility(View.GONE);
-            if (child.getGrandChildren()!=null )             childViewHolder.imgView.setVisibility(View.VISIBLE);
+            if (child.getGrandChildren() != null)
+                childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
             childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
