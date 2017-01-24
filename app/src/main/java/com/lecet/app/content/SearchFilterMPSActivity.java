@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.adapters.JurisdictionAdapter;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -309,47 +310,80 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("jurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
                 Log.d("jurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
 
-                String jurisdiction = arr[0];       // name
-                String jurisdictionTag = arr[1];    // tag
+                int jurisdictionViewType    = Integer.valueOf(arr[0]);    // viewType
+                String jurisdictionId       = arr[1];    // id
+                String jurisdictionName     = arr[2];    // name
                 String jurisdictions = "";
+
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
-                    viewModel.setCjurisdictionSelect(jurisdiction);
+                    viewModel.setCjurisdictionSelect(jurisdictionName);
                 } else {
-                    viewModel.setPersistedJurisdiction(jurisdiction);
-                    viewModel.setJurisdiction_select(jurisdiction);
+                    viewModel.setPersistedJurisdiction(jurisdictionName);
+                    viewModel.setJurisdiction_select(jurisdictionName);
                 }
 
-
-                // build the list of IDs for the query, which include ... ? //TODO - this parsing needs to be updated to send the correct query
+                // build the list of IDs for the query, which include ... ?
                 List<String> jList = new ArrayList<>();
 
+                List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
+                List<SearchFilterJurisdictionLocal> locals;
+
                 // add the highest-level Jurisdiction ID
-                jList.add(jurisdictionTag);
-                if (jurisdictionTag != null && !jurisdictionTag.trim().equals("")) {
+                jList.add(jurisdictionName);
+                if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
 
-                    // add each District Council ID
-                    for (SearchFilterJurisdictionMain j : realmJurisdictions) {
-                        if (jurisdictionTag.equals(j.getName())) {
-                            jList.add(Integer.toString(j.getId()));
-                            List<SearchFilterJurisdictionDistrictCouncil> districtCouncils = j.getDistrictCouncils();
+                    if(jurisdictionViewType == JurisdictionAdapter.PARENT_VIEW_TYPE) {
+                        // add each District Council ID
+                        for (SearchFilterJurisdictionMain j : realmJurisdictions) {
+                            if (jurisdictionName.equals(j.getName())) {
+                                jList.add(j.getName());
+                                districtCouncils = j.getDistrictCouncils();
 
-                            // add each Local ID
+                                // add each Local ID
+                                for (SearchFilterJurisdictionDistrictCouncil dc : districtCouncils) {
+                                    if (dc != null) {
+                                        jList.add(dc.getName());
+                                        locals = dc.getLocals();
+                                        for (SearchFilterJurisdictionLocal local : locals) {
+                                            if (local != null) {
+                                                jList.add(local.getName());
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    //TODO - correct this section
+                    else if(jurisdictionViewType == JurisdictionAdapter.CHILD_VIEW_TYPE) {
+                        // look for matching District Council ID
+                        for (SearchFilterJurisdictionMain j : realmJurisdictions) {
+                            districtCouncils = j.getDistrictCouncils();
                             for (SearchFilterJurisdictionDistrictCouncil dc : districtCouncils) {
                                 if (dc != null) {
-                                    jList.add(Integer.toString(dc.getId()));
-                                    List<SearchFilterJurisdictionLocal> locals = dc.getLocals();
-                                    for (SearchFilterJurisdictionLocal local : locals) {
-                                        if (local != null) {
-                                            jList.add(Integer.toString(local.getId()));
+                                    jList.add(dc.getName());
+                                    if(jurisdictionName.equals(dc.getName())) {
+                                        locals = dc.getLocals();
+                                        for (SearchFilterJurisdictionLocal local : locals) {
+                                            if (local != null) {
+                                                jList.add(local.getName());
+                                            }
                                         }
                                     }
                                 }
                             }
-                            break;
                         }
                     }
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdiction);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction tag: " + jurisdictionTag);
+
+                    //TODO - implement this section
+                    else if(jurisdictionViewType == JurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
+
+                    }
+
+                    //Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdictionName);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
 
                     String js = jList.toString();

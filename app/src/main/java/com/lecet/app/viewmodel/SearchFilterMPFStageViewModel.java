@@ -20,7 +20,7 @@ import io.realm.RealmResults;
 public class SearchFilterMPFStageViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
-    private String[] stage = {"", ""};  // name, id
+    private String[] stage; // = {"", ""};  // name, id
     private RealmResults<ProjectStage> realmStages;
 
     /**
@@ -29,6 +29,7 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
     public SearchFilterMPFStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
         getProjectStages();
+        stage = new String[2];
     }
     public void setStageName(String name) {
         stage[0] = name;
@@ -48,6 +49,7 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         });
     }
 
+    //TODO - rename to specify that this is coming only from the Apply button for this filter
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stage);
@@ -56,8 +58,10 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         activity.finish();
     }
 
+    //TODO - this is never called
     public void onSelected(View view) {
         stage[0] = ((CheckBox) view).getText().toString();
         stage[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stage[0] rather than the String name
+        Log.d("SearchFilterMPFStageVM:", "onSelected stage[0]: " + stage[0] + "stage[1]: " + stage[1]);
     }
 }

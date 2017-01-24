@@ -11,6 +11,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
+import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
+import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
+import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 
 import java.lang.annotation.Retention;
@@ -37,9 +40,9 @@ public class JurisdictionAdapter extends SectionedAdapter {
     @interface ViewTypes {
     }
 
-    private static final int PARENT_VIEW_TYPE = 0;
-    private static final int CHILD_VIEW_TYPE = 1;
-    private static final int GRAND_CHILD_VIEW_TYPE = 2;
+    public static final int PARENT_VIEW_TYPE = 0;
+    public static final int CHILD_VIEW_TYPE = 1;
+    public static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
     private SearchFilterMPFJurisdictionViewModel viewModel;
@@ -123,6 +126,9 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
         Parent parent = data.get(section);
         boolean isChild = isChild(section, position);
+
+        // Mid-level categories. (District Councils and unaffiliated Locals directly under regions)
+
         if (holder instanceof ChildViewHolder && isChild) {
 
             Integer truePosition = childPositionInIndex(section, position);
@@ -131,11 +137,14 @@ public class JurisdictionAdapter extends SectionedAdapter {
             childViewHolder.imgView.setVisibility(View.GONE);
             if (child.getGrandChildren()!=null )             childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
+            //childViewHolder.checkView.setTag("99999");
             childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setJurisdictionExtraName(childViewHolder.checkView.getText().toString());
+                        //viewModel.setJurisdictionExtraName(childViewHolder.checkView.getText().toString());
+                        //viewModel.onSelected(childViewHolder.checkView);
+                        viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
@@ -225,21 +234,28 @@ public class JurisdictionAdapter extends SectionedAdapter {
                 }
             });
 
-        } else if (holder instanceof GrandChildTypeViewHolder && !isChild) {
+        }
+
+        // Locals which are part of a District Council
+
+        else if (holder instanceof GrandChildTypeViewHolder && !isChild) {
 
             final GrandChildTypeViewHolder grandChildViewHolder = (GrandChildTypeViewHolder) holder;
 
             Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
             Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
             Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
-            GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
+            final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
+            //grandChildViewHolder.checkView.setTag("888888");
 //          grandChildViewHolder.textView.setText("GrandChild section : " + section + ", position : " + position + " name: " + grandChild.getName());
             grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setJurisdictionExtraName(grandChildViewHolder.checkView.getText().toString());
+                        //viewModel.setJurisdictionExtraName(grandChildViewHolder.checkView.getText().toString());
+                        //viewModel.onSelected(grandChildViewHolder.checkView);
+                        viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
@@ -248,20 +264,26 @@ public class JurisdictionAdapter extends SectionedAdapter {
     }
 
     // int gsize=0;
+    /**
+     * Top-level categories (regions of the country such as Eastern)
+     */
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
 
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
 
         // Parent denoted by section number
-        Parent parent = data.get(section);
+        final Parent parent = data.get(section);
         parentViewHolder.checkView.setText(parent.getName());
+        //parentViewHolder.checkView.setTag("777777");
         parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewModel.setJurisdictionExtraName(parentViewHolder.checkView.getText().toString());
-                    Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
+                    //viewModel.setJurisdictionExtraName(parentViewHolder.checkView.getText().toString());
+                    //viewModel.onSelected(parentViewHolder.checkView);
+                    viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), parent.getName(), parent.getAbbreviation(), parent.getLongName());
+                    //Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
                 }
             }
         });
@@ -471,8 +493,20 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
     public static class Parent {
 
+        private int id;
         private String name;
+        private String abbreviation;
+        private String longName;
         private List<Child> children;
+
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public void setName(String name) {
             this.name = name;
@@ -480,6 +514,22 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
         public String getName() {
             return name;
+        }
+
+        public String getAbbreviation() {
+            return abbreviation;
+        }
+
+        public void setAbbreviation(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
+
+        public String getLongName() {
+            return longName;
+        }
+
+        public void setLongName(String longName) {
+            this.longName = longName;
         }
 
         public void setChildren(List<Child> children) {
@@ -493,8 +543,21 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
     public static class Child {
 
+        private int id;
         private String name;
+        private String abbreviation;
+        private String longName;
+
         private List<GrandChild> grandChildren;
+        private Integer districtCouncilId;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public void setName(String name) {
             this.name = name;
@@ -502,6 +565,22 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
         public String getName() {
             return name;
+        }
+
+        public String getAbbreviation() {
+            return abbreviation;
+        }
+
+        public void setAbbreviation(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
+
+        public String getLongName() {
+            return longName;
+        }
+
+        public void setLongName(String longName) {
+            this.longName = longName;
         }
 
         public void setGrandChildren(List<GrandChild> grandChildren) {
@@ -511,11 +590,30 @@ public class JurisdictionAdapter extends SectionedAdapter {
         public List<GrandChild> getGrandChildren() {
             return grandChildren;
         }
+
+        public void setDistrictCouncilId(Integer districtCouncilId) {
+            this.districtCouncilId = districtCouncilId;
+        }
+
+        public Integer getDistrictCouncilId() {
+            return districtCouncilId;
+        }
     }
 
     public static class GrandChild {
 
+        private int id;
         private String name;
+        private String abbreviation;
+        private String longName;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public void setName(String name) {
             this.name = name;
@@ -525,6 +623,21 @@ public class JurisdictionAdapter extends SectionedAdapter {
             return name;
         }
 
+        public String getAbbreviation() {
+            return abbreviation;
+        }
+
+        public void setAbbreviation(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
+
+        public String getLongName() {
+            return longName;
+        }
+
+        public void setLongName(String longName) {
+            this.longName = longName;
+        }
     }
 
 }

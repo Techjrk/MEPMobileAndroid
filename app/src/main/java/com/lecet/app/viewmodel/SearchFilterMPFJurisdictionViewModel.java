@@ -18,9 +18,13 @@ import io.realm.RealmResults;
  */
 
 public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
+
+    private static final String TAG = "SearchFilterMPFJurisVM";
+
     private AppCompatActivity activity;
 
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+    private SearchFilterJurisdictionMain jurisdictionMain;
     private String[] jurisdictionExtra;  // = {"", ""};
 
     /**
@@ -40,11 +44,11 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d("SearchFilterMPFJurisVM:", "realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d("SearchFilterMPFJurisVM:", "realmJurisdictions list: " + realmJurisdictions);
+                Log.d(TAG, "realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d(TAG, "realmJurisdictions list: " + realmJurisdictions);
             }
         });
-        jurisdictionExtra = new String[2];
+        jurisdictionExtra = new String[3];
     }
 
     public void onClicked(View view) {
@@ -56,13 +60,33 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
     }
 
     public void onSelected(View view) {
-
-        jurisdictionExtra[0] = ((CheckBox) view).getText().toString();  //TODO - the Views and their Tags are hard-coded until dynamic nested Views are working. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
-        jurisdictionExtra[1] = (String) view.getTag();
-        Log.d("checkbox", "checkbox:" + ((CheckBox) view).getText().toString());
+        String tag = (String) view.getTag();
+        String viewText = ((CheckBox) view).getText().toString();
+        //jurisdictionExtra[0] = tag;
+        //jurisdictionExtra[1] = viewText;
+        //Log.d(TAG, "onSelected: tag: " + tag + ", viewText: " + viewText);
     }
 
-    public void setJurisdictionExtraName(String jurisdictionExtra) {
+    /**
+     * Set the selected Jurisdiction data based on the checked selection.
+     * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, or 2=grandchild)
+     * Each has its own ID starting at 0.
+     * While 'name' usually looks like an int, it needs to be a String to support names like '18A'
+     */
+    public void setJurisdictionData(int viewType, int id, String name, String abbreviation, String longName) {
+        this.jurisdictionMain = jurisdictionMain;
+        //TODO - map this to a Jurisdiction object here? or in the main search viewmodel
+        Log.d(TAG, "setJurisdictionData: viewType: " + viewType + ", id: " + id + ", name: " + name + ", abbreviation: " + abbreviation + ", longName: " + longName);
+        jurisdictionExtra[0] = Integer.toString(viewType);
+        jurisdictionExtra[1] = Integer.toString(id);
+        jurisdictionExtra[2] = name;
+    }
+
+    /*public void setJurisdictionExtraName(String jurisdictionExtra) {
         this.jurisdictionExtra[0] = jurisdictionExtra;
+    }*/
+
+    public RealmResults<SearchFilterJurisdictionMain> getRealmJurisdictions() {
+        return this.realmJurisdictions;
     }
 }
