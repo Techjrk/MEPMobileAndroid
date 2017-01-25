@@ -61,4 +61,8 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         stageExtra[0] = ((CheckBox) view).getText().toString();
         stageExtra[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stageExtra[0] rather than the String name
     }
+
+    public RealmResults<SearchFilterStagesMain> getRealmStages() {
+        return realmStages;
+    }
 }

@@ -14,17 +14,11 @@ import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.databinding.ActivitySearchFilterMpfjurisdiction2Binding;
 import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
-import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
-
 public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
-
-    RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +28,13 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         ActivitySearchFilterMpfjurisdiction2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfjurisdiction2);
         SearchFilterMPFJurisdictionViewModel viewModel = new SearchFilterMPFJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);
-        getJurisdictionList();
         initRecycleView(viewModel);
     }
 
+    /**
+     * Process the multi-level display item of the jurisdiction with adapter
+     */
     public void initRecycleView(SearchFilterMPFJurisdictionViewModel viewModel) {
-        /**
-         * Process the multi-level display item of the jurisdiction with adapter
-         */
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.test_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -54,7 +47,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
 
         List<JurisdictionAdapter.Child> children = null;
 
-        for (SearchFilterJurisdictionMain jMain : realmJurisdictions) {
+        for (SearchFilterJurisdictionMain jMain : viewModel.getRealmJurisdictions()) {
             JurisdictionAdapter.Parent parent = new JurisdictionAdapter.Parent();
             parent.setName(jMain.getName());
             //  ctr++;
@@ -100,13 +93,4 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void getJurisdictionList() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-            }
-        });
-    }
 }
