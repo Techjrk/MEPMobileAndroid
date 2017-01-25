@@ -52,18 +52,16 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
 
 //        int ctr = 0;
 
-    //    List<SearchFilterJurisdictionMain> sMain = SearchViewModel.jurisdictionMainList;
-        List<SearchFilterJurisdictionMain> sMain = realmJurisdictions;
         List<JurisdictionAdapter.Child> children = null;
 
-        for (SearchFilterJurisdictionMain jmain : sMain) {
+        for (SearchFilterJurisdictionMain jMain : realmJurisdictions) {
             JurisdictionAdapter.Parent parent = new JurisdictionAdapter.Parent();
-            parent.setName(jmain.getName());
+            parent.setName(jMain.getName());
             //  ctr++;
 
             children = new ArrayList<>();
             // int childctr=0;
-            for (SearchFilterJurisdictionLocal jlocal : jmain.getLocals()) {
+            for (SearchFilterJurisdictionLocal jlocal : jMain.getLocals()) {
                 if (jlocal != null) {
                     JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
                     child.setName(jlocal.getName());
@@ -72,7 +70,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             }
             // parent.setSubtypes(subtypes);
             //   int childctr2=0;
-            for (SearchFilterJurisdictionDistrictCouncil dcouncil : jmain.getDistrictCouncils()) {
+            for (SearchFilterJurisdictionDistrictCouncil dcouncil : jMain.getDistrictCouncils()) {
                 if (dcouncil != null) {
 //                    ctr++;
                     JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
