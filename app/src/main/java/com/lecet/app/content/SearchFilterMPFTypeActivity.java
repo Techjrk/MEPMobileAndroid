@@ -24,8 +24,6 @@ import java.util.List;
 
 public class SearchFilterMPFTypeActivity extends AppCompatActivity {
 
-    SearchFilterMPFTypeViewModel viewModel;
-
     //// TODO: 1/5/17 Create nested items for Type layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
