@@ -56,7 +56,6 @@ import retrofit2.Response;
 
 public class SearchViewModel extends BaseObservable {
     private static final String TAG = "SearchViewModel";
-    public  static List<SearchFilterProjectTypesMain> typeMainList;
     public static final String FILTER_EXTRA_DATA = "data";
     public static final String FILTER_PROJECT_LOCATION = "projectLocation";
     public static final String FILTER_PROJECT_TYPE = "projectType";

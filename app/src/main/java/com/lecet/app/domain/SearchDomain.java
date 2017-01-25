@@ -82,7 +82,6 @@ public class SearchDomain {
                 Log.d(TAG,"Create List of Project Stages");
                 if (response.isSuccessful()) {
                     final List<SearchFilterStagesMain> stageMainList = response.body();
-                    //SearchViewModel.stageMainList = stageMainList;
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {
@@ -155,23 +154,22 @@ public class SearchDomain {
         getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                Log.d(TAG,"Create List project types");
+                Log.d(TAG,"Create List of Project Types");
                 if (response.isSuccessful()) {
-                    final List<SearchFilterProjectTypesMain> typeMainList = response.body();
-                    SearchViewModel.typeMainList = typeMainList;
+                    final List<SearchFilterProjectTypesMain> projectTypesMainList = response.body();
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {
 
                         @Override
                         public void execute(Realm realm) {
-                            List<SearchFilterProjectTypesProjectCategory> childTypes;
+                            /*List<SearchFilterProjectTypesProjectCategory> childTypes;
                             RealmList<ProjectType> realmProjectTypeList = new RealmList<>();
                             ProjectType parentType;
                             ProjectType childType;
 
                             // parent types
-                            for (SearchFilterProjectTypesMain pType : typeMainList) {
+                            for (SearchFilterProjectTypesMain pType : projectTypesMainList) {
                                 if (pType != null)  {
                                     parentType = new ProjectType();
                                     parentType.setName(pType.getTitle());
@@ -188,16 +186,16 @@ public class SearchDomain {
                                             childType.setId(cType.getId());
                                             childType.setParentId(pType.getId());
                                             parentType.addChildType(childType);
-                                            Log.d("SearchDomain:","  Child Type: title:" + cType.getTitle() + " id:" + cType.getId()/* + " parentId:" + cType.getParentId()*/);
+                                            Log.d("SearchDomain:","  Child Type: title:" + cType.getTitle() + " id:" + cType.getId()*//**//* + " parentId:" + cType.getParentId()*//**//*);
                                         }
                                     }
 
                                     realmProjectTypeList.add(parentType);
                                 }
-                            }
-                            Log.d("SearchDomain:","realmProjectTypeList: size: " + realmProjectTypeList.size());
-                            Log.d("SearchDomain:","realmProjectTypeList: " + realmProjectTypeList);
-                            realm.copyToRealmOrUpdate(realmProjectTypeList);
+                            }*/
+                            Log.d("SearchDomain:","projectTypesMainList: size: " + projectTypesMainList.size());
+                            Log.d("SearchDomain:","projectTypesMainList: " + projectTypesMainList);
+                            realm.copyToRealmOrUpdate(projectTypesMainList);
                         }
                     });
 
@@ -271,9 +269,9 @@ public class SearchDomain {
 
                                     realmJurisdictionList.add(jurisdictionMain);
                                 }
-                            }
-                            Log.d("SearchDomain:","realmJurisdictionList: size: " + realmJurisdictionList.size());
-                            Log.d("SearchDomain:","realmJurisdictionList: " + realmJurisdictionList);*/
+                            }*/
+                            Log.d("SearchDomain:","jurisdictionMainList: size: " + jurisdictionMainList.size());
+                            Log.d("SearchDomain:","jurisdictionMainList: " + jurisdictionMainList);
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
                         }
                     });

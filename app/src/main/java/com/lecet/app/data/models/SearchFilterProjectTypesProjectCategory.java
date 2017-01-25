@@ -2,8 +2,7 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -13,20 +12,20 @@ import io.realm.annotations.PrimaryKey;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class SearchFilterProjectTypesProjectCategory {
-
-    @SerializedName("title")
-    private String title;
+public class SearchFilterProjectTypesProjectCategory extends RealmObject {
 
     @PrimaryKey
     @SerializedName("id")
     private long id;
 
+    @SerializedName("title")
+    private String title;
+
     @SerializedName("projectGroupId")
     private long projectGroupId;
 
     @SerializedName("projectTypes")
-    public List<PrimaryProjectType> projectTypes;
+    public RealmList<PrimaryProjectType> projectTypes;
 
     public SearchFilterProjectTypesProjectCategory() {
     }
@@ -39,12 +38,11 @@ public class SearchFilterProjectTypesProjectCategory {
         return title;
     }
 
-
     public long getProjectGroupId() {
         return projectGroupId;
     }
 
-    public List<PrimaryProjectType> getProjectTypes() {
+    public RealmList<PrimaryProjectType> getProjectTypes() {
         return projectTypes;
     }
 
