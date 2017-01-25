@@ -98,7 +98,7 @@ public class ProjectDetailViewModel {
                     project = projectDomain.fetchProjectById(projectID);
 
                     // Setup RecyclerView
-                    initProjectDetailAdapter(activity, project);
+                    initProjectDetailAdapter(activity, project, activity);
 
                     // Setup paralax imageview
                     initMapImageView(activity, getMapUrl(project));
@@ -141,9 +141,45 @@ public class ProjectDetailViewModel {
     /**
      * View management
      **/
-    private void initProjectDetailAdapter(ProjectDetailActivity activity, Project project) {
+    private void initProjectDetailAdapter(ProjectDetailActivity activity, Project project, Context context) {
 
-        projectDetailAdapter = new ProjectDetailAdapter(activity, project, buildDetails(project, activity), new ProjectDetailHeaderViewModel(project), projectDomain);
+        // Build Project Details
+        List<ProjDetailItemViewModel> details = new ArrayList<>();
+
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.stage), project.getProjectStage().getName()));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), DateUtility.formatDateForDisplay(project.getBidDate())));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.value), "$ 0"));
+        details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(context), Realm.getDefaultInstance()), projectID, context.getString(R.string.jurisdiction)));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
+
+        // Notes
+        String notes = null;
+
+        if (project.getProjectNotes() != null) notes = project.getProjectNotes();
+        if (project.getStdIncludes() != null) notes = notes + " " + project.getStdIncludes();
+
+        ProjDetailItemViewModel note = null;
+
+        if (notes != null) {
+            note = new ProjDetailItemViewModel(null, notes);
+        }
+
+        // Participants
+        RealmResults<Contact> contacts = projectDomain.fetchProjectContacts(projectID);
+
+        // Bidders
+        RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
+
+
+        projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
         initRecyclerView(activity, projectDetailAdapter);
     }
 
@@ -172,91 +208,6 @@ public class ProjectDetailViewModel {
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=800x500&" +
                         "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
-    }
-
-    private List<List<ProjDetailItemViewModel>> buildDetails(Project project, Context context) {
-
-        List<List<ProjDetailItemViewModel>> data = new ArrayList<>();
-
-        // First section will only have a header
-        List<ProjDetailItemViewModel> section0 = new ArrayList<>();
-        data.add(section0);
-
-        // Build Project Details
-        List<ProjDetailItemViewModel> section1 = new ArrayList<>();
-        data.add(section1);
-
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.stage), project.getProjectStage().getName()));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), DateUtility.formatDateForDisplay(project.getBidDate())));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.value), "$ 0"));
-        section1.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(context), Realm.getDefaultInstance()), projectID, context.getString(R.string.jurisdiction)));
-        section1.add(new ProjDetailItemViewModel(context.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
-
-        // Notes
-        List<ProjDetailItemViewModel> section2 = new ArrayList<>();
-        data.add(section2);
-
-        String notes = "";
-
-        if (project.getProjectNotes() != null) notes = project.getProjectNotes();
-        if (project.getStdIncludes() != null) notes = notes + " " + project.getStdIncludes();
-
-        section2.add(new ProjDetailItemViewModel(null, notes));
-
-        // Participants
-        if (project.getContacts().size() > 0) {
-
-            List<ProjDetailItemViewModel> section3 = new ArrayList<>();
-            data.add(section3);
-
-            RealmResults<Contact> contacts = projectDomain.fetchProjectContacts(projectID);
-            int maxSize = contacts.size() > 3 ? contacts.size() : 3;
-
-            for (int i=0; i < maxSize; i++) {
-
-                Contact contact = contacts.get(i);
-                String contactType = contact.getContactType().getCategory();
-                String detail = contact.getCompany().getName() + " \n " + contact.getCompany().getCity() + ", " + contact.getCompany().getState();
-
-                section3.add(new ProjDetailItemViewModel(contactType, detail));
-            }
-        }
-
-        // Bidders
-        if (project.getBids().size() > 0) {
-
-            List<ProjDetailItemViewModel> section4 = new ArrayList<>();
-            data.add(section4);
-
-            RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
-            int maxSize = bids.size() > 3 ? bids.size() : 3;
-
-
-            // Show only three max
-            for (int i=0; i < maxSize; i++) {
-
-                Bid bid = bids.get(i);
-
-                Company company = bid.getCompany();
-                if (company != null) {
-                    String detail = company.getName() + " \n " + company.getCity() + ", " + company.getState();
-                    String price = String.format("$ %,.0f", bid.getAmount());
-
-                    section4.add(new ProjDetailItemViewModel(price, detail));
-                }
-            }
-
-        }
-
-        return data;
     }
 
 }

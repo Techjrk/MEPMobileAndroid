@@ -108,7 +108,7 @@ public class RecentBidItemViewModel {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
-        return simpleDateFormat.format(bid.getCreateDate());
+        return simpleDateFormat.format(bid.getProject().getBidDate());
     }
 
     public boolean isUnion() {

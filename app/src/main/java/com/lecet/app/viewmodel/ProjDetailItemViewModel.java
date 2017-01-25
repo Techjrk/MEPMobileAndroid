@@ -36,6 +36,7 @@ public class ProjDetailItemViewModel extends BaseObservable {
         notifyPropertyChanged(BR.info);
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

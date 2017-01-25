@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:bind="http://schemas.android.com/apk/res-auto"
         tools:context="com.lecet.app.content.CompanyDetailProjectBidsActivity">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemCompanyDetailProjectBidVM"/>
+        <variable name="viewModel"
+                  type="com.lecet.app.viewmodel.ListItemCompanyDetailProjectBidVM"/>
     </data>
 
     <LinearLayout android:orientation="vertical"
