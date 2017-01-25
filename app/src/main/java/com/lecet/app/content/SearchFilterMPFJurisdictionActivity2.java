@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
-    //RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;    //removed as this is already available from the view model
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +28,6 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         ActivitySearchFilterMpfjurisdiction2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfjurisdiction2);
         SearchFilterMPFJurisdictionViewModel viewModel = new SearchFilterMPFJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);
-        //getJurisdictionList();
         initRecycleView(viewModel);
     }
 
@@ -46,24 +45,20 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
 
 //        int ctr = 0;
 
-    //    List<SearchFilterJurisdictionMain> sMain = SearchViewModel.jurisdictionMainList;
-        List<SearchFilterJurisdictionMain> sMain = viewModel.getRealmJurisdictions();
         List<JurisdictionAdapter.Child> children = null;
 
-        for (SearchFilterJurisdictionMain jmain : sMain) {
-
-            // Parent
+        for (SearchFilterJurisdictionMain jMain : viewModel.getRealmJurisdictions()) {
             JurisdictionAdapter.Parent parent = new JurisdictionAdapter.Parent();
-            parent.setId(jmain.getId());
-            parent.setName(jmain.getName());
-            parent.setAbbreviation(jmain.getAbbreviation());
-            parent.setLongName(jmain.getLongName());
+            parent.setId(jMain.getId());
+            parent.setName(jMain.getName());
+            parent.setAbbreviation(jMain.getAbbreviation());
+            parent.setLongName(jMain.getLongName());
             //  ctr++;
 
             // Children (District Councils)
             children = new ArrayList<>();
             // int childctr=0;
-            for (SearchFilterJurisdictionLocal jlocal : jmain.getLocals()) {
+            for (SearchFilterJurisdictionLocal jlocal : jMain.getLocals()) {
                 if (jlocal != null) {
                     JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
                     child.setId(jlocal.getId());
@@ -74,7 +69,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             }
             // parent.setSubtypes(subtypes);
             //   int childctr2=0;
-            for (SearchFilterJurisdictionDistrictCouncil dcouncil : jmain.getDistrictCouncils()) {
+            for (SearchFilterJurisdictionDistrictCouncil dcouncil : jMain.getDistrictCouncils()) {
                 if (dcouncil != null) {
 //                    ctr++;
                     JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
@@ -107,13 +102,4 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    /*private void getJurisdictionList() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-            }
-        });
-    }*/
 }

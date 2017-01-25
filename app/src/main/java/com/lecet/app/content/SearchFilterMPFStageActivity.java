@@ -9,58 +9,46 @@ import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.StageAdapter;
-import com.lecet.app.adapters.StageAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
-import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFilterMpfstage2Binding;
-import com.lecet.app.databinding.ActivitySearchFilterMpfstageBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
-import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
-
 public class SearchFilterMPFStageActivity extends AppCompatActivity {
-    RealmResults<SearchFilterStagesMain> realmStages;
-    SearchFilterMPFStageViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //       setContentView(R.layout.activity_search_filter_mpfstage);
         ActivitySearchFilterMpfstage2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfstage2);
-        viewModel = new SearchFilterMPFStageViewModel(this);
+        SearchFilterMPFStageViewModel viewModel = new SearchFilterMPFStageViewModel(this);
         sfilter.setViewModel(viewModel);
-       // getStageList();
-
-      initRecycleView(viewModel);
-
+        initRecycleView(viewModel);
     }
+
+    /**
+     * Process the multi-level display item of the Stage with adapter
+     */
     public void initRecycleView(SearchFilterMPFStageViewModel viewModel) {
-        Log.d("stageinit","stageinit");
-        /**
-         * Process the multi-level display item of the Stage with adapter
-         */
+        Log.d("SearchFilterMPFStageAct", "stageinit");
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
         List<StageAdapter.Parent> data = new ArrayList<>();
 
-        List<SearchFilterStagesMain> sMain = SearchViewModel.stageMainList;
         List<StageAdapter.Child> children = null;
-        for (SearchFilterStagesMain jmain : sMain) {
+        for (SearchFilterStagesMain sMain : viewModel.getRealmStages()) {
 
-            Log.d("stagelist","stagelist"+jmain.getName());
+            Log.d("SearchFilterMPFStageAct", "stagelist: name: " + sMain.getName());
             StageAdapter.Parent parent = new StageAdapter.Parent();
-            parent.setName(jmain.getName());
+            parent.setName(sMain.getName());
 
             children = new ArrayList<>();
-            for (SearchFilterStage jlocal : jmain.getStages()) {
+            for (SearchFilterStage jlocal : sMain.getStages()) {
                 if (jlocal != null) {
                     StageAdapter.Child child = new StageAdapter.Child();
                     child.setName(jlocal.getName());
@@ -70,21 +58,10 @@ public class SearchFilterMPFStageActivity extends AppCompatActivity {
             parent.setChildren(children);
             data.add(parent);
         }
-        Log.d("stagemain","stagemain"+sMain.size());
-//        Log.d("stagemain","stagemain"+realmStages.size());
+
+        Log.d("SearchFilterMPFStageAct", "stagemain size: "+viewModel.getRealmStages().size());
         StageAdapter adapter = new StageAdapter(data, viewModel);
         recyclerView.setAdapter(adapter);
-    }
-
-    private void getStageList() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmStages = realm.where(SearchFilterStagesMain.class).findAll();
-            }
-        });
-        initRecycleView(viewModel);
     }
 
 }

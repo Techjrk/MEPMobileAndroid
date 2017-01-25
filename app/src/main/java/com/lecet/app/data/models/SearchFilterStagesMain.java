@@ -2,32 +2,24 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by getdevsinc on 1/10/17.
  */
 
 public class SearchFilterStagesMain  extends RealmObject {
-    @SerializedName("name")
-    private String name;
-
+    @PrimaryKey
     @SerializedName("id")
     private int id;
 
+    @SerializedName("name")
+    private String name;
+
     @SerializedName("stages")
     private RealmList<SearchFilterStage> stages;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getId() {
         return id;
@@ -35,6 +27,14 @@ public class SearchFilterStagesMain  extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public RealmList<SearchFilterStage> getStages() {

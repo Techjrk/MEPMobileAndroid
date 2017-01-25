@@ -31,6 +31,7 @@ import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
@@ -55,7 +56,6 @@ import retrofit2.Response;
 
 public class SearchViewModel extends BaseObservable {
     private static final String TAG = "SearchViewModel";
-    public  static List<SearchFilterStagesMain> stageMainList;
     public static final String FILTER_EXTRA_DATA = "data";
     public static final String FILTER_PROJECT_LOCATION = "projectLocation";
     public static final String FILTER_PROJECT_TYPE = "projectType";
@@ -271,6 +271,7 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Get the list of Company in Query Search Summary
      */
+
     public void getCompanyQueryListSummary(SearchCompany sp) {
         RealmList<Company> slist = sp.getResults();
 

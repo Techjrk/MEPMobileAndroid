@@ -24,7 +24,6 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
-    private SearchFilterJurisdictionMain jurisdictionMain;
     private String[] jurisdictionExtra;  // = {"", ""};
 
     /**
@@ -33,10 +32,11 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
     public SearchFilterMPFJurisdictionViewModel(AppCompatActivity activity) {
         this.activity = activity;
         getJurisdictions();
+        jurisdictionExtra = new String[3];
     }
 
     /**
-     * Read Realm Jurisdiction data - TODO: use for generating nested list views
+     * Read Realm Jurisdiction data
      */
     private void getJurisdictions() {
         Realm realm = Realm.getDefaultInstance();
@@ -48,7 +48,6 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
                 Log.d(TAG, "realmJurisdictions list: " + realmJurisdictions);
             }
         });
-        jurisdictionExtra = new String[3];
     }
 
     public void onClicked(View view) {
@@ -74,7 +73,6 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
      * While 'name' usually looks like an int, it needs to be a String to support names like '18A'
      */
     public void setJurisdictionData(int viewType, int id, String name, String abbreviation, String longName) {
-        this.jurisdictionMain = jurisdictionMain;
         //TODO - map this to a Jurisdiction object here? or in the main search viewmodel
         Log.d(TAG, "setJurisdictionData: viewType: " + viewType + ", id: " + id + ", name: " + name + ", abbreviation: " + abbreviation + ", longName: " + longName);
         jurisdictionExtra[0] = Integer.toString(viewType);
@@ -82,11 +80,7 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
         jurisdictionExtra[2] = name;
     }
 
-    /*public void setJurisdictionExtraName(String jurisdictionExtra) {
-        this.jurisdictionExtra[0] = jurisdictionExtra;
-    }*/
-
     public RealmResults<SearchFilterJurisdictionMain> getRealmJurisdictions() {
-        return this.realmJurisdictions;
+        return realmJurisdictions;
     }
 }
