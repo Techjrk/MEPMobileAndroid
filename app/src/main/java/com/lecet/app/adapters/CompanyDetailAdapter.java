@@ -19,6 +19,7 @@ import com.lecet.app.databinding.ListItemMcdBidBinding;
 import com.lecet.app.databinding.ListItemMcdContactBinding;
 import com.lecet.app.databinding.ListItemMcdInfoBinding;
 import com.lecet.app.databinding.ListItemMcdProjectBinding;
+import com.lecet.app.databinding.ListItemMpdFooterBinding;
 import com.lecet.app.databinding.ListItemProjectDetailBinding;
 import com.lecet.app.databinding.ListItemSectionHeaderBinding;
 import com.lecet.app.domain.ProjectDomain;
@@ -29,9 +30,11 @@ import com.lecet.app.viewmodel.CompanyDetailHeaderViewModel;
 import com.lecet.app.viewmodel.CompanyDetailInfoViewModel;
 import com.lecet.app.viewmodel.CompanyDetailProjectViewModel;
 import com.lecet.app.viewmodel.CompanyShareToolbarViewModel;
+import com.lecet.app.viewmodel.DetailFooterViewModel;
 import com.lecet.app.viewmodel.HeaderViewModel;
 import com.lecet.app.viewmodel.ProjDetailItemViewModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +64,12 @@ public class CompanyDetailAdapter extends SectionedAdapter {
     private static final int SECTION_TITLE = 0;
     private static final int SECTION_INFO = 1;
     private static final int SECTION_DETAIL = 2;
-    private static final int SECTION_PROJECT = 3;
-    private static final int SECTION_PARTICIPANTS = 4;
-    private static final int SECTION_BIDDERS = 5;
 
-    private static final int SECTION_COUNT = 6;
+    private static final int MIN_SECTIONS = 3;
+
+    private int SECTION_PROJECT = -1;
+    private int SECTION_CONTACTS = -1;
+    private int SECTION_BIDDERS = -1;
 
     private AppCompatActivity appCompatActivity;
     private Company company;
@@ -74,6 +78,9 @@ public class CompanyDetailAdapter extends SectionedAdapter {
     List<CompanyDetailInfoViewModel> companyInfo;
     List<ProjDetailItemViewModel> companyDetails;
 
+    private boolean projectsDisplayed;
+    private boolean bidsDisplayed;
+    private boolean contactsDisplayed;
 
     public CompanyDetailAdapter(AppCompatActivity appCompatActivity, Company company, ProjectDomain projectDomain) {
 
@@ -84,7 +91,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
         // Get a list of the company contact info we need.
         companyInfo = new ArrayList<>();
 
-        if (company.getContacts() != null) {
+        if (company.getContacts() != null && company.getContacts().size() > 0) {
 
             Contact contact = company.getContacts().get(0);
 
@@ -107,6 +114,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
             companyInfo.add(viewModel);
         }
 
+        // Total valuation is a sum of all projects estLow.
         double totalValuation = 0.00;
 
         if (company.getProjects() != null && company.getProjects().size() > 0) {
@@ -117,71 +125,114 @@ public class CompanyDetailAdapter extends SectionedAdapter {
             }
         }
 
+        DecimalFormat formatter = new DecimalFormat("$ #,###");
+        String strValuation = formatter.format(totalValuation);
+
         // Get the company's address and project info.
         companyDetails = new ArrayList<>();
 
         companyDetails.add(new ProjDetailItemViewModel(appCompatActivity.getString(R.string.address), company.getFullAddress()));
         companyDetails.add(new ProjDetailItemViewModel(appCompatActivity.getString(R.string.total_projects), String.valueOf(company.getProjects() != null ? company.getProjects().size() : 0)));
-        companyDetails.add(new ProjDetailItemViewModel(appCompatActivity.getString(R.string.total_valuation), "$ " + String.valueOf(totalValuation)));
+        companyDetails.add(new ProjDetailItemViewModel(appCompatActivity.getString(R.string.total_valuation), strValuation));
+
+        projectsDisplayed = company.getProjects() != null && company.getProjects().size() > 0;
+        bidsDisplayed = company.getBids() != null && company.getBids().size() > 0;
+        contactsDisplayed = company.getContacts() != null && company.getContacts().size() > 0;
+
+        if (projectsDisplayed) {
+
+            SECTION_PROJECT = 3;
+        }
+
+        if (!projectsDisplayed && contactsDisplayed) {
+
+            SECTION_CONTACTS = 3;
+
+        } else if (projectsDisplayed && contactsDisplayed) {
+
+            SECTION_CONTACTS = 4;
+        }
+
+        if (!projectsDisplayed && !contactsDisplayed && bidsDisplayed) {
+
+            SECTION_BIDDERS = 3;
+
+        } else if (!projectsDisplayed || !contactsDisplayed && bidsDisplayed) {
+
+            SECTION_BIDDERS = 4;
+
+        } else if (projectsDisplayed || contactsDisplayed && bidsDisplayed) {
+
+            SECTION_BIDDERS = 5;
+
+        }
     }
 
 
     @Override
     public int getSectionCount() {
-        return SECTION_COUNT;
+
+        // MIN_SECTIONS plus the any additional sections available
+
+        return MIN_SECTIONS + (projectsDisplayed ? 1 : 0) + (contactsDisplayed ? 1 : 0) + (bidsDisplayed ? 1 :  0);
     }
 
     @Override
     public int getItemCountForSection(int section) {
 
-        switch (section) {
-            case SECTION_TITLE:
-                return 0;
-            case SECTION_INFO: {
-                return companyInfo.size();
-            }
-            case SECTION_DETAIL:
-                return 3;
-            case SECTION_PROJECT: {
+        if (section == SECTION_TITLE) {
 
-                if (company.getProjects() == null) return 0;
+            return 0;
 
-                return company.getProjects().size() <= 3 ? company.getProjects().size() : 3;
-            }
-            case SECTION_PARTICIPANTS: {
+        }  else if (section == SECTION_DETAIL) {
 
-                if (company.getContacts() == null) return 0;
-
-                return company.getContacts().size() <= 3 ? company.getContacts().size() : 3;
-            }
-            case SECTION_BIDDERS: {
-
-                if (company.getBids() == null) return 0;
-
-                return company.getBids().size() <= 3 ? company.getBids().size() : 3;
-            }
-            default:
-                return 0;
+            return 3;
         }
+        else if (section == SECTION_INFO) {
+
+            return companyInfo.size();
+
+        } else if (projectsDisplayed && section == SECTION_PROJECT) {
+
+            return company.getProjects().size() <= 3 ? company.getProjects().size() : 3;
+
+        } else if (contactsDisplayed && section == SECTION_CONTACTS) {
+
+            return company.getContacts().size() <= 3 ? company.getContacts().size() : 3;
+
+        } else if (bidsDisplayed && section == SECTION_BIDDERS) {
+
+            return company.getBids().size() <= 3 ? company.getBids().size() : 3;
+        }
+
+        return 0;
     }
 
     @Override
     public int getItemViewType(int section, int position) {
 
-        switch (section) {
-            case SECTION_INFO:
-                return  INFO_VIEW_TYPE;
-            case SECTION_DETAIL:
-                return DETAIL_VIEW_TYPE;
-            case SECTION_PROJECT:
-                return PROJECT_VIEW_TYPE;
-            case SECTION_PARTICIPANTS:
-                return CONTACT_VIEW_TYPE;
-            case SECTION_BIDDERS:
-                return BID_VIEW_TYPE;
-            default:
-                return INFO_VIEW_TYPE;
+        if (section == SECTION_DETAIL) {
+
+            return DETAIL_VIEW_TYPE;
         }
+        else if (section == SECTION_INFO) {
+
+            return INFO_VIEW_TYPE;
+
+        } else if (projectsDisplayed && section == SECTION_PROJECT) {
+
+            return PROJECT_VIEW_TYPE;
+
+        } else if (contactsDisplayed && section == SECTION_CONTACTS) {
+
+            return CONTACT_VIEW_TYPE;
+
+        } else if (bidsDisplayed && section == SECTION_BIDDERS) {
+
+            return BID_VIEW_TYPE;
+        }
+
+        return INFO_VIEW_TYPE;
     }
 
     @Override
@@ -203,28 +254,28 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
     @Override
     public boolean enableHeaderForSection(int section) {
+
         return true;
     }
 
     @Override
     public boolean enableFooterForSection(int section) {
 
-
-        if (section == SECTION_BIDDERS) {
+        if (bidsDisplayed && section == SECTION_BIDDERS) {
 
             if (company.getBids() == null) return false;
 
             return company.getBids().size() > 3;
         }
 
-        if (section == SECTION_PROJECT) {
+        if (projectsDisplayed && section == SECTION_PROJECT) {
 
             if (company.getProjects() == null) return false;
 
             return company.getProjects().size() > 3;
         }
 
-        if (section == SECTION_PARTICIPANTS) {
+        if (contactsDisplayed && section == SECTION_CONTACTS) {
 
             if (company.getContacts() == null) return false;
 
@@ -247,7 +298,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
                 ((CompanyDetailAdapter.SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel(appCompatActivity.getString(R.string.associated_projects)));
 
-            } else if (section == SECTION_PARTICIPANTS) {
+            } else if (section == SECTION_CONTACTS) {
 
                 ((CompanyDetailAdapter.SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel(appCompatActivity.getString(R.string.contacts)));
 
@@ -271,27 +322,27 @@ public class CompanyDetailAdapter extends SectionedAdapter {
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int section, int position) {
 
-        if (holder instanceof CompanyInfoViewHolder) {
+        if (section == SECTION_INFO) {
 
             CompanyDetailInfoViewModel viewModel = companyInfo.get(position);
             ((CompanyInfoViewHolder) holder).getBinding().setViewModel(viewModel);
 
-        } else if (holder instanceof CompanyDetailViewHolder) {
+        } else if (section == SECTION_DETAIL) {
 
             ProjDetailItemViewModel viewModel = companyDetails.get(position);
             ((CompanyDetailViewHolder) holder).getBinding().setViewModel(viewModel);
 
-        } else if (holder instanceof CompanyProjectViewHolder) {
+        } else if (section == SECTION_PROJECT) {
 
             CompanyDetailProjectViewModel viewModel = new CompanyDetailProjectViewModel(company.getProjects().get(position), appCompatActivity.getString(R.string.google_maps_key));
             ((CompanyProjectViewHolder) holder).getBinding().setViewModel(viewModel);
 
-        } else if (holder instanceof CompanyContactViewHolder) {
+        } else if (section == SECTION_CONTACTS) {
 
             CompanyDetailContactViewModel viewModel = new CompanyDetailContactViewModel(appCompatActivity, company.getContacts().get(position));
             ((CompanyContactViewHolder) holder).getBinding().setViewModel(viewModel);
 
-        } else if (holder instanceof CompanyBidViewHolder) {
+        } else if (section == SECTION_BIDDERS) {
 
             CompanyDetailBidViewModel viewModel = new CompanyDetailBidViewModel(appCompatActivity, appCompatActivity.getString(R.string.google_maps_key), company.getBids().get(position));
             ((CompanyBidViewHolder) holder).getBinding().setViewModel(viewModel);
@@ -302,6 +353,22 @@ public class CompanyDetailAdapter extends SectionedAdapter {
     @Override
     public void onBindFooterViewHolder(RecyclerView.ViewHolder holder, final int section) {
 
+        if (section == SECTION_CONTACTS) {
+
+            DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(company.getContacts().size()), appCompatActivity.getString(R.string.contacts));
+            ((FooterViewHolder) holder).getBinding().setViewModel(viewModel);
+
+        } else if (section == SECTION_BIDDERS) {
+
+            DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(company.getBids().size()), appCompatActivity.getString(R.string.bidders));
+            ((FooterViewHolder) holder).getBinding().setViewModel(viewModel);
+
+        } else if (section == SECTION_PROJECT) {
+
+            DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(company.getProjects().size()), appCompatActivity.getString(R.string.projects));
+            ((FooterViewHolder) holder).getBinding().setViewModel(viewModel);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -309,6 +376,8 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
             }
         });
+
+
     }
 
     @Override
@@ -348,7 +417,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
             case PROJECT_VIEW_TYPE: {
 
-                 ListItemMcdProjectBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_mcd_project, parent, false);
+                ListItemMcdProjectBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_mcd_project, parent, false);
                 return new CompanyProjectViewHolder(binding);
             }
 
@@ -366,9 +435,8 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
             case FOOTER_VIEW_TYPE: {
 
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_mpd_footer, parent, false);
-
-                return new CompanyDetailAdapter.FooterViewHolder(v);
+                ListItemMpdFooterBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_mpd_footer, parent, false);
+                return new FooterViewHolder(binding);
             }
 
             default: {
@@ -504,9 +572,16 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
     private class FooterViewHolder extends RecyclerView.ViewHolder {
 
-        public FooterViewHolder(View itemView) {
-            super(itemView);
+        private final ListItemMpdFooterBinding binding;
+
+        public FooterViewHolder(ListItemMpdFooterBinding binding) {
+            super(binding.getRoot());
+
+            this.binding = binding;
         }
 
+        public ListItemMpdFooterBinding getBinding() {
+            return binding;
+        }
     }
 }

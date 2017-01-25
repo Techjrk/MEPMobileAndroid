@@ -1,11 +1,13 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.lecet.app.BR;
+import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.data.models.Contact;
 
 /**
@@ -26,7 +28,7 @@ public class CompanyDetailContactViewModel extends BaseObservable {
         this.appCompatActivity = appCompatActivity;
         this.contact = contact;
         setContactName(this.contact.getName() != null ? this.contact.getName() : "[ not given ]");
-        setCompanyName(this.contact.getCompany().getName());
+        setCompanyName(this.contact.getCompany() != null ? this.contact.getCompany().getName() : "[ not given ]");
     }
 
     public void setContactName(String contactName) {
@@ -53,5 +55,8 @@ public class CompanyDetailContactViewModel extends BaseObservable {
 
     public void onContactSelected(View view) {
 
+        Intent intent = new Intent(appCompatActivity, CompanyDetailActivity.class);
+        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, contact.getCompanyId());
+        appCompatActivity.startActivity(intent);
     }
 }

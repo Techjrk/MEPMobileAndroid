@@ -1,5 +1,9 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.view.View;
+
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Project;
 
 /**
@@ -48,5 +52,10 @@ public class CompanyDetailProjectViewModel {
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
+    public void onProjectSelected(View view) {
 
+        Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+        view.getContext().startActivity(intent);
+    }
 }

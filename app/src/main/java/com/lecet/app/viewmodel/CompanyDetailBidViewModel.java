@@ -1,9 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.data.models.Bid;
 
 import java.text.DecimalFormat;
@@ -63,7 +65,9 @@ public class CompanyDetailBidViewModel extends BaseObservable {
 
     public void onBidSelected(View view) {
 
-
+        Intent intent = new Intent(activity, CompanyDetailActivity.class);
+        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, bid.getCompany().getId());
+        activity.startActivity(intent);
     }
 
 }

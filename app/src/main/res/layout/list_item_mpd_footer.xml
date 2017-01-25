@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:bind="http://schemas.android.com/apk/res-auto">
-    <data></data>
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.DetailFooterViewModel"/>
+    </data>
 
     <RelativeLayout
             android:orientation="vertical"
@@ -15,8 +18,9 @@
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="@string/see_all"
+                      android:text="@{viewModel.title}"
                       android:textColor="@color/lecetFooterGray"
+                      tools:text="See all 34 Bids"
                       bind:typeface="@{`Lato-Black.ttf`}"/>
 
             <ImageView android:layout_width="8dp"
