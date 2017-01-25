@@ -157,7 +157,7 @@ public class SearchDomain {
                 Log.d("SearchDomain","Create List project types");
                 if (response.isSuccessful()) {
                     final List<SearchFilterProjectTypesMain> typeMainList = response.body();
-
+                    SearchViewModel.typeMainList = typeMainList;
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {
