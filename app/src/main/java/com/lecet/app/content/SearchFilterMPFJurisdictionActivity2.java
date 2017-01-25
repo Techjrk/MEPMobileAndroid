@@ -23,7 +23,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
+
     RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -36,6 +36,7 @@ import retrofit2.Response;
  */
 
 public class SearchDomain {
+    private final String TAG = "SearchDomain";
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
@@ -78,17 +79,17 @@ public class SearchDomain {
         getStagesList(new Callback<List<SearchFilterStagesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
-                Log.d("SearchDomain","Create List stages");
+                Log.d(TAG,"Create List of Project Stages");
                 if (response.isSuccessful()) {
                     final List<SearchFilterStagesMain> stageMainList = response.body();
-                    SearchViewModel.stageMainList = stageMainList;
+                    //SearchViewModel.stageMainList = stageMainList;
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {
 
                         @Override
                         public void execute(Realm realm) {
-                            List<SearchFilterStage> childStages;
+                            /*List<SearchFilterStage> childStages;
                             RealmList<ProjectStage> realmProjectStageList = new RealmList<ProjectStage>();
                             ProjectStage parentStage;
                             ProjectStage childStage;
@@ -118,10 +119,10 @@ public class SearchDomain {
 
                                     realmProjectStageList.add(parentStage);
                                 }
-                            }
-                            Log.d("SearchDomain:","realmProjectStageList: size: " + realmProjectStageList.size());
-                            Log.d("SearchDomain:","realmProjectStageList: " + realmProjectStageList);
-                            realm.copyToRealmOrUpdate(realmProjectStageList);
+                            }*/
+                            Log.d("SearchDomain:","stageMainList: size: " + stageMainList.size());
+                            Log.d("SearchDomain:","stageMainList: " + stageMainList);
+                            realm.copyToRealmOrUpdate(stageMainList);
                         }
                     });
 
@@ -154,7 +155,7 @@ public class SearchDomain {
         getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                Log.d("SearchDomain","Create List project types");
+                Log.d(TAG,"Create List project types");
                 if (response.isSuccessful()) {
                     final List<SearchFilterProjectTypesMain> typeMainList = response.body();
                     SearchViewModel.typeMainList = typeMainList;
@@ -229,7 +230,7 @@ public class SearchDomain {
         getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-                Log.d("SearchDomain","Create list of Jurisdictions");
+                Log.d(TAG,"Create list of Jurisdictions");
                 if (response.isSuccessful()) {
                     final List<SearchFilterJurisdictionMain> jurisdictionMainList = response.body();
 
@@ -270,9 +271,9 @@ public class SearchDomain {
 
                                     realmJurisdictionList.add(jurisdictionMain);
                                 }
-                            }*/
-                            Log.d("SearchDomain:","realmJurisdictionList: size: " + jurisdictionMainList.size());
-                            Log.d("SearchDomain:","realmJurisdictionList: " + jurisdictionMainList);
+                            }
+                            Log.d("SearchDomain:","realmJurisdictionList: size: " + realmJurisdictionList.size());
+                            Log.d("SearchDomain:","realmJurisdictionList: " + realmJurisdictionList);*/
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
                         }
                     });

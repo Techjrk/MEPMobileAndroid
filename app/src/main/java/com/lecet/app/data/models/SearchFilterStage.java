@@ -3,28 +3,22 @@ package com.lecet.app.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by getdevsinc on 1/10/17.
  */
 
 public class SearchFilterStage extends RealmObject {
-    @SerializedName("name")
-    private String name;
-
+    @PrimaryKey
     @SerializedName("id")
     private int id;
 
+    @SerializedName("name")
+    private String name;
+
     @SerializedName("parentId")
     private int parentId;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getId() {
         return id;
@@ -32,6 +26,14 @@ public class SearchFilterStage extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getParentId() {
