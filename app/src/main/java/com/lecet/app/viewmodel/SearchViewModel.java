@@ -273,6 +273,7 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Get the list of Company in Query Search Summary
      */
+
     public void getCompanyQueryListSummary(SearchCompany sp) {
         RealmList<Company> slist = sp.getResults();
 

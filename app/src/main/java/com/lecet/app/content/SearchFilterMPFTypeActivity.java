@@ -4,13 +4,23 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.ActivitySearchFilterMpflocationBinding;
+
+import com.lecet.app.adapters.TypeAdapter;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
+import com.lecet.app.databinding.ActivitySearchFilterMpftype2Binding;
 import com.lecet.app.databinding.ActivitySearchFilterMpftypeBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFTypeViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
-import com.lecet.app.viewmodel.SearchFilterMSEViewModel;
+import com.lecet.app.viewmodel.SearchViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFilterMPFTypeActivity extends AppCompatActivity {
     SearchFilterMPFTypeViewModel sfilter;
@@ -18,7 +28,6 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivitySearchFilterMpftypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype);
 
         // get Type ID Extras
         Intent intent = getIntent();
@@ -26,9 +35,50 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
         String[] typeIds = new String[1];
         typeIds[0] = typeId;
 
+//        ActivitySearchFilterMpftypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype);
+        ActivitySearchFilterMpftype2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype2);
         SearchFilterMPFTypeViewModel viewModel = new SearchFilterMPFTypeViewModel(this);
         viewModel.setType(typeIds);
         sfilter.setViewModel(viewModel);
+        initRecycleView(viewModel);
+    }
+
+    public void initRecycleView(SearchFilterMPFTypeViewModel viewModel) {
+        Log.d("typeinit","typeinit");
+        /**
+         * Process the multi-level display item of the Type with adapter
+         */
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        List<TypeAdapter.Parent> data = new ArrayList<>();
+
+        List<SearchFilterProjectTypesMain> sMain = SearchViewModel.typeMainList;
+        List<TypeAdapter.Child> children = null;
+        for (SearchFilterProjectTypesMain ptMain : sMain) {
+
+            Log.d("Typelist","Typelist"+ptMain.getTitle());
+            TypeAdapter.Parent parent = new TypeAdapter.Parent();
+            parent.setName(ptMain.getTitle());
+            parent.setId(""+ptMain.getId());
+
+            children = new ArrayList<>();
+            for (SearchFilterProjectTypesProjectCategory jlocal : ptMain.getProjectCategories()) {
+                if (jlocal != null) {
+                    TypeAdapter.Child child = new TypeAdapter.Child();
+                    child.setName(jlocal.getTitle());
+                    child.setId(""+jlocal.getId());
+                    children.add(child);
+                }
+            }
+            parent.setChildren(children);
+            data.add(parent);
+        }
+        Log.d("Typemain","Typemain"+sMain.size());
+//        Log.d("Typemain","Typemain"+realmTypes.size());
+        TypeAdapter adapter = new TypeAdapter(data, viewModel);
+        recyclerView.setAdapter(adapter);
     }
 
 }

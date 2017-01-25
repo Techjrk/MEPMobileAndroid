@@ -40,6 +40,7 @@ public class SearchFilterMPFStageActivity extends AppCompatActivity {
       initRecycleView(viewModel);
 
     }
+
     public void initRecycleView(SearchFilterMPFStageViewModel viewModel) {
         Log.d("stageinit","stageinit");
         /**

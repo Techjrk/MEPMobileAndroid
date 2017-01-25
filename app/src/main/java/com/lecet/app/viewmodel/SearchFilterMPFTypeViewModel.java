@@ -20,7 +20,7 @@ import io.realm.RealmResults;
 public class SearchFilterMPFTypeViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
-    private String[] type;// = {"", ""};   // name, id
+    private String[] ptype;// = {"", ""};   // name, id
     private RealmResults<ProjectType> realmProjectTypes;
 
     /**
@@ -48,24 +48,31 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, type);
+        if (ptype == null || ptype.length == 1) ptype = new String[]{"",""};
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, ptype);
 //        activity.setResult(R.id.type & 0xfff, intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
-
+    public void setTypeName(String name, String id) {
+        Log.d("ptype","ptype size"+ptype.length);
+      //  ptype[1]="";
+        if (ptype == null || ptype.length == 1) ptype = new String[2];
+        ptype[0] = name;
+        ptype[1] = id;
+    }
     public void onSelected(View view) {
-        type = new String[2];
-        type[0] = ((CheckBox) view).getText().toString();
-        type[1] = "103";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
+        ptype = new String[2];
+        ptype[0] = ((CheckBox) view).getText().toString();
+        ptype[1] = "103";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as type[0] rather than the String name
     }
 
     public String[] getType() {
-        return type;
+        return ptype;
     }
 
-    public void setType(String[] type) {
-        this.type = type;
+    public void setType(String[] ptype) {
+        this.ptype = ptype;
     }
 
 
