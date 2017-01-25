@@ -83,7 +83,7 @@
     <string name="new_note_added">A new note has been added</string>
     <string name="show_updates">Show Updates</string>
     <string name="edit">EDIT</string>
-    <string name="project">Project</string>
+    <string name="company">Project</string>
     <string name="projects">Projects</string>
     <string name="company">Company</string>
     <string name="companies">Companies</string>
@@ -92,7 +92,7 @@
     <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
     <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
     <string name="recent">RECENT</string>
-    <string name="last_checked">Last checked </string>
+    <string name="last_checked">Last checked</string>
     <string name="search">Search</string>
 
     <!-- Geofencing -->
@@ -162,7 +162,8 @@
     <string name="error_login_message">You don\’t have permission to access MEP using your account
     </string>
     <string name="error_network_title">Network Error</string>
-    <string name="error_network_message">Please check your internet connection and try again</string>
+    <string name="error_network_message">Please check your internet connection and try again
+    </string>
     <string name="error_fetching_address">Address not found.</string>
 
     <!-- Web links -->
@@ -172,8 +173,12 @@
     <string name="get_directions">Get Directions</string>
 
     <!-- Projects Near Me Confirm Dialog Fragment -->
-    <string name="confirm_share_your_location_description">This feature is only available\nwhen you share your location\nwith this app. Please tap OK\nwhen prompted.</string>
-    <string name="confirm_enable_your_location_description">This feature is only available\nwhen you share your location\nwith this app.</string>
+    <string name="confirm_share_your_location_description">This feature is only available\nwhen you
+        share your location\nwith this app. Please tap OK\nwhen prompted.
+    </string>
+    <string name="confirm_enable_your_location_description">This feature is only available\nwhen you
+        share your location\nwith this app.
+    </string>
     <string name="confirm_share_your_location">SHARE MY LOCATION</string>
     <string name="confirm_go_to_settings">GO TO SETTINGS</string>
     <string name="confirm_cancel">CANCEL</string>
@@ -247,5 +252,13 @@
     <string name="you_are_about_unhide">You are about to unhide this %s</string>
     <string name="hide_blank">HIDE %s</string>
     <string name="unhide_blank">UNHIDE %s</string>
+
+    <!-- MCD -->
+    <string name="associated_projects">Associated Projects</string>
+    <string name="contacts">Contacts</string>
+    <string name="project_bids">Project Bids</string>
+    <string name="total_projects">Total Projects</string>
+    <string name="total_valuation">Total Valuation</string>
+    <string name="title_activity_company_detail">CompanyDetailActivity</string>
 
 </resources>

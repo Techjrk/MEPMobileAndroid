@@ -1,130 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lecet.app">
+          package="com.lecet.app">
 
     <!-- Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!-- Uses feature -->
     <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
+            android:glEsVersion="0x00020000"
+            android:required="true"/>
 
     <!-- Application -->
     <application
-        android:name=".LecetApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:name=".LecetApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
 
         <!-- HockeyApp Integration -->
         <meta-data
-            android:name="net.hockeyapp.android.appIdentifier"
-            android:value="bf2b988cbd6245d48903f92ea181b6af" /> <!-- TODO: update with current app id -->
+                android:name="net.hockeyapp.android.appIdentifier"
+                android:value="bf2b988cbd6245d48903f92ea181b6af"/> <!-- TODO: update with current app id -->
 
 
         <!-- Activities -->
         <activity
-            android:name=".content.LauncherActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.FullScreen">
+                android:name=".content.LauncherActivity"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".content.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.FullScreen" />
+                android:name=".content.LoginActivity"
+                android:label="@string/title_activity_login"
+                android:theme="@style/AppTheme.FullScreen"/>
         <activity
-            android:name=".content.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" />
+                android:name=".content.MainActivity"
+                android:label="@string/title_activity_main"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme" />
+                android:name=".content.ProfileActivity"
+                android:label="@string/title_activity_profile"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.CompanyDetailProjectBidsActivity"
-            android:label="@string/title_activity_company_detail_project_bids"
-            android:theme="@style/AppTheme" />
+                android:name=".content.CompanyDetailProjectBidsActivity"
+                android:label="@string/title_activity_company_detail_project_bids"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.ModifyProjectTrackingListActivity"
-            android:label="@string/title_activity_project_tracking_list"
-            android:theme="@style/AppTheme"/>
+                android:name=".content.ModifyProjectTrackingListActivity"
+                android:label="@string/title_activity_project_tracking_list"
+                android:theme="@style/AppTheme"/>
         <activity
                 android:name=".content.ModifyCompanyTrackingListActivity"
                 android:label="@string/title_activity_project_tracking_list"
                 android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.CreatePasswordActivity"
-            android:label="@string/title_activity_create_password"
-            android:theme="@style/AppTheme" />
+                android:name=".content.CreatePasswordActivity"
+                android:label="@string/title_activity_create_password"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.ContactDetailActivity"
-            android:label="@string/title_activity_change_password"
-            android:theme="@style/AppTheme" />
+                android:name=".content.ContactDetailActivity"
+                android:label="@string/title_activity_change_password"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.UpdateProfileActivity"
-            android:label="@string/title_activity_update_profile"
-            android:theme="@style/AppTheme" />
+                android:name=".content.UpdateProfileActivity"
+                android:label="@string/title_activity_update_profile"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme" />
+                android:name=".content.SettingsActivity"
+                android:label="@string/title_activity_settings"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.SearchActivity"
-            android:theme="@style/AppTheme" />
+                android:name=".content.SearchActivity"
+                android:theme="@style/AppTheme"/>
         <activity
-            android:name=".content.ProjectsNearMeActivity"
-            android:parentActivityName=".content.MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".content.MainActivity" />
-        </activity>
-        <activity android:name=".content.ProjectTrackingListActivity"
-                  android:parentActivityName=".content.MainActivity"
-                  android:theme="@style/AppTheme">
+                android:name=".content.ProjectsNearMeActivity"
+                android:parentActivityName=".content.MainActivity"
+                android:theme="@style/AppTheme">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".content.MainActivity" />
+                    android:value=".content.MainActivity"/>
         </activity>
-        <activity android:name=".content.CompanyTrackingListActivity"
-                  android:parentActivityName=".content.MainActivity"
-                  android:theme="@style/AppTheme">
+        <activity
+                android:name=".content.ProjectTrackingListActivity"
+                android:parentActivityName=".content.MainActivity"
+                android:theme="@style/AppTheme">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".content.MainActivity" />
+                    android:value=".content.MainActivity"/>
+        </activity>
+        <activity
+                android:name=".content.CompanyTrackingListActivity"
+                android:parentActivityName=".content.MainActivity"
+                android:theme="@style/AppTheme">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".content.MainActivity"/>
         </activity>
         <activity android:name=".content.ProjectDetailActivity">
         </activity>
 
         <!-- Metadata -->
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key" />
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_api_key"/>
 
-        <activity android:name=".content.SearchFilterMSEActivity" />
-        <activity android:name=".content.SearchFilterMPSActivity" />
-        <activity android:name=".content.SearchFilterMPFLocationActivity" />
-        <activity android:name=".content.SearchFilterMPFTypeActivity" />
-        <activity android:name=".content.SearchFilterMPFValueActivity" />
-        <activity android:name=".content.SearchFilterMPFBiddingWithinActivity" />
-        <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity" />
-        <activity android:name=".content.SearchFilterMPFJurisdictionActivity" />
-        <activity android:name=".content.SearchFilterMPFBHActivity" />
-        <activity android:name=".content.SearchFilterMPFStageActivity" />
-        <activity android:name=".content.SearchFilterMPFOwnerTypeActivity" />
-        <activity android:name=".content.SearchFilterMPFWorkTypeActivity"></activity>
+        <activity android:name=".content.SearchFilterMSEActivity"/>
+        <activity android:name=".content.SearchFilterMPSActivity"/>
+        <activity android:name=".content.SearchFilterMPFLocationActivity"/>
+        <activity android:name=".content.SearchFilterMPFTypeActivity"/>
+        <activity android:name=".content.SearchFilterMPFValueActivity"/>
+        <activity android:name=".content.SearchFilterMPFBiddingWithinActivity"/>
+        <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity"/>
+        <activity android:name=".content.SearchFilterMPFJurisdictionActivity"/>
+        <activity android:name=".content.SearchFilterMPFBHActivity"/>
+        <activity android:name=".content.SearchFilterMPFStageActivity"/>
+        <activity android:name=".content.SearchFilterMPFOwnerTypeActivity"/>
+        <activity android:name=".content.SearchFilterMPFWorkTypeActivity"/>
+        <activity
+                android:name=".content.CompanyDetailActivity"
+                android:label="@string/title_activity_company_detail"
+                android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

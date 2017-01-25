@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.CompanyDetailBidViewModel"/>
+    </data>
+
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:paddingTop="5dp"
+                 android:paddingLeft="20dp"
+                 android:paddingRight="20dp"
+                 android:paddingBottom="3dp">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="88dp"
+                android:elevation="2dp"
+                android:background="@drawable/rounded_white"
+                android:onClick="@{viewModel.onBidSelected}">
+
+            <ImageView android:layout_width="60dp"
+                       android:layout_height="60dp"
+                       android:layout_gravity="center"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:scaleType="centerCrop"
+                       bind:imageUrl="@{viewModel.mapUrl}"/>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginLeft="10dp"
+                          android:layout_gravity="center"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="0dp"
+                          android:layout_weight="50"
+                          android:textColor="@color/lecetTextDarkGray"
+                          android:textSize="14sp"
+                          android:gravity="left"
+                          android:maxLines="1"
+                          android:text="@{viewModel.projectName}"
+                          android:ellipsize="end"
+                          bind:typeface="@{`Lato-Regular.ttf`}"
+                          tools:text="Maline Creek CSO 051 and 052 Storage and and and and"/>
+
+                <LinearLayout android:layout_width="wrap_content"
+                              android:layout_height="0dp"
+                              android:layout_weight="50"
+                              android:layout_marginTop="5dp"
+                              android:orientation="horizontal">
+
+                    <ImageView android:layout_width="9dp"
+                               android:layout_height="13dp"
+                               android:layout_gravity="center"
+                               android:src="@drawable/ic_grey_marker"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="match_parent"
+                              android:layout_marginLeft="5dp"
+                              android:textColor="@color/lecetLightGray"
+                              android:textSize="14sp"
+                              android:gravity="left"
+                              android:maxLines="1"
+                              android:text="@{viewModel.clientLocation}"
+                              bind:typeface="@{`Lato-Regular.ttf`}"
+                              tools:text="Saint Louis, MO"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:layout_marginTop="10dp">
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/lecetTextDarkGray"
+                              android:textSize="14sp"
+                              android:gravity="left"
+                              android:maxLines="1"
+                              android:text="@{viewModel.bidAmount}"
+                              android:ellipsize="end"
+                              bind:typeface="@{`Lato-Semibold.ttf`}"
+                              tools:text="$82,828,282"/>
+
+                    <View android:layout_width="1dp"
+                          android:layout_height="match_parent"
+                          android:layout_marginLeft="10dp"
+                          android:layout_marginRight="10dp"
+                          android:background="@color/lecetTextLightGray"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/lecetLightGray"
+                              android:textSize="11sp"
+                              android:gravity="left"
+                              android:maxLines="1"
+                              android:text="@{viewModel.startDateString}"
+                              android:ellipsize="end"
+                              bind:typeface="@{`Lato-Regular.ttf`}"
+                              tools:text="1/15/2016"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+</layout>

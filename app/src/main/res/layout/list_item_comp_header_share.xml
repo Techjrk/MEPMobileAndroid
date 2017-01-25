@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ShareToolbarViewModel"/>
+    </data>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:layout_marginTop="20dp"
+                  android:layout_marginBottom="20dp"
+                  android:layout_marginRight="20dp">
+
+        <android.support.v7.widget.Toolbar android:layout_width="match_parent"
+                                           android:layout_height="match_parent">
+
+            <RadioGroup android:id="@+id/share_radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/lecetLightGray">
+
+                <RadioButton android:id="@+id/track_textview"
+                             android:layout_width="0dp"
+                             android:layout_height="match_parent"
+                             android:layout_weight="1"
+                             android:layout_marginRight="1dp"
+                             android:gravity="center"
+                             android:textSize="14sp"
+                             android:text="@string/track"
+                             android:textColor="@color/radio_selector_text"
+                             android:background="@drawable/share_radio_background"
+                             android:button="@null"
+                             android:onClick="@{viewModel::onTrackSelected}"
+                             bind:typeface="@{`Lato-Regular.ttf`}"/>
+
+                <RadioButton android:id="@+id/share_textview"
+                             android:layout_width="0dp"
+                             android:layout_height="match_parent"
+                             android:layout_weight="1"
+                             android:layout_marginRight="1dp"
+                             android:gravity="center"
+                             android:textSize="14sp"
+                             android:text="@string/share"
+                             android:textColor="@color/radio_selector_text"
+                             android:background="@drawable/share_radio_background"
+                             android:button="@null"
+                             android:onClick="@{viewModel::onShareSelected}"
+                             bind:typeface="@{`Lato-Regular.ttf`}"/>
+
+            </RadioGroup>
+
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+</layout>

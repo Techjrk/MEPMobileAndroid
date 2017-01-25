@@ -31,5 +31,4 @@ public class LecetBindingAdapter {
     public static void loadImage(ImageView view, String url) {
         Picasso.with(view.getContext()).load(url).fit().into(view);
     }
-
 }

@@ -177,6 +177,11 @@ public class Company extends RealmObject implements TrackedObject {
         return bids;
     }
 
+    public String getFullAddress() {
+
+        return address1 + " " + (address2 != null ? address2 : "") + " " + city + " " + state + " " + zipPlus4;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
