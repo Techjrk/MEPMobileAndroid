@@ -270,9 +270,9 @@ public class SearchDomain {
 
                                     realmJurisdictionList.add(jurisdictionMain);
                                 }
-                            }
-                            Log.d("SearchDomain:","realmJurisdictionList: size: " + realmJurisdictionList.size());
-                            Log.d("SearchDomain:","realmJurisdictionList: " + realmJurisdictionList);*/
+                            }*/
+                            Log.d("SearchDomain:","realmJurisdictionList: size: " + jurisdictionMainList.size());
+                            Log.d("SearchDomain:","realmJurisdictionList: " + jurisdictionMainList);
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
                         }
                     });
