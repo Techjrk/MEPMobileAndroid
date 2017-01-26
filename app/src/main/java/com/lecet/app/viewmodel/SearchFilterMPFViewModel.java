@@ -441,6 +441,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP, getPersistedLocationZip());
                 break;
 
+            case R.id.ctype:
             case R.id.type:
                 section = TYPE;
                 i = new Intent(activity, SearchFilterMPFTypeActivity.class);
@@ -474,6 +475,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_STAGE, getPersistedStage());
                 break;
 
+            case R.id.cbidding_within:
             case R.id.bidding_within:
                 section = BIDDING_WITHIN;
                 i = new Intent(activity, SearchFilterMPFBiddingWithinActivity.class);

@@ -59,6 +59,7 @@ public class SearchViewModel extends BaseObservable {
     public  static List<SearchFilterStagesMain> stageMainList;
     public  static List<SearchFilterProjectTypesMain> typeMainList;
     public static final String FILTER_EXTRA_DATA = "data";
+    public static final String FILTER_EXTRA_DATA_BUNDLE = "data2";
     public static final String FILTER_PROJECT_LOCATION = "projectLocation";
     public static final String FILTER_PROJECT_TYPE = "projectType";
     public static final String FILTER_PROJECT_TYPE_ID = "projectTypeId";

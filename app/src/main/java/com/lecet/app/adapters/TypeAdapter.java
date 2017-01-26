@@ -11,7 +11,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFTypeViewModel;
 
 import java.lang.annotation.Retention;
@@ -133,13 +132,18 @@ public class TypeAdapter extends SectionedAdapter {
             if (child.getGrandChildren() != null)
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
-     //       childViewHolder.id = child.getId();
+            //       childViewHolder.id = child.getId();
             childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setTypeName(childViewHolder.checkView.getText().toString(),child.getId());
-                          Log.d("check","check"+childViewHolder.checkView.getText().toString()+child.getId());
+                        viewModel.setTypeName(childViewHolder.checkView.getText().toString(), child.getId());
+                     //   Log.d("check", "check" + childViewHolder.checkView.getText().toString() + child.getId());
+                        //  viewModel.addListTypeDataResult(childViewHolder.checkView.getText().toString());
+                        viewModel.addPTypeData(child.getId(), childViewHolder.checkView.getText().toString());
+                      //  Log.d("addbundle", "addbundle");
+                    } else {
+                        viewModel.removePTypeData(child.getId());
                     }
                 }
             });
@@ -243,8 +247,11 @@ public class TypeAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setTypeName(grandChildViewHolder.checkView.getText().toString(),grandChild.getId());
+                        viewModel.setTypeName(grandChildViewHolder.checkView.getText().toString(), grandChild.getId());
+                        viewModel.addPTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
+                    } else {
+                        viewModel.removePTypeData(grandChild.getId());
                     }
                 }
             });
@@ -260,15 +267,17 @@ public class TypeAdapter extends SectionedAdapter {
         // Parent denoted by section number
         final Parent parent = data.get(section);
         parentViewHolder.checkView.setText(parent.getName());
-       // parentViewHolder.id = parent.getId();
+        // parentViewHolder.id = parent.getId();
         parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewModel.setTypeName(parentViewHolder.checkView.getText().toString(),parent.getId());
-                    Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
+                    viewModel.setTypeName(parentViewHolder.checkView.getText().toString(), parent.getId());
+                    // Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
+                    viewModel.addPTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
+                    //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                 } else {
-                    Log.d("uncheck", "uncheck" + parentViewHolder.checkView.getText().toString()+":"+parent.getId());
+                    viewModel.removePTypeData(parent.getId());
                 }
             }
         });
@@ -507,6 +516,7 @@ public class TypeAdapter extends SectionedAdapter {
     public static class Child {
         private String name;
         private String id;
+        private List<TypeAdapter.GrandChild> grandChildren;
 
         public String getId() {
             return id;
@@ -515,7 +525,6 @@ public class TypeAdapter extends SectionedAdapter {
         public void setId(String id) {
             this.id = id;
         }
-        private List<GrandChild> grandChildren;
 
         public void setName(String name) {
             this.name = name;

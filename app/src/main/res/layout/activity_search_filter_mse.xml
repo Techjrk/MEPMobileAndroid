@@ -257,7 +257,7 @@
                             <include layout="@layout/rule_horiz_light" />
 
                             <RelativeLayout
-                                android:id="@+id/bidding2_within"
+                                android:id="@+id/bidding_within"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:onClick="@{viewModel.onClicked}">
@@ -489,6 +489,7 @@
                         <include layout="@layout/rule_horiz_light" />
 
                         <RelativeLayout
+                            android:id="@+id/ctype"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{viewModel.onClicked}">

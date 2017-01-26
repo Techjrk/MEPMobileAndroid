@@ -52,9 +52,14 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data == null) return;
+        Bundle info2 = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);
+        String[] info = null;
+        if (info2 == null) {
+          //  Log.d("nobundle","nobundle");
+            info = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
+        } //else             Log.d("hasbundle","hasbundle");
 
-        String[] info = data.getStringArrayExtra("data");
-        if (info != null)
+        if (info != null || info2 !=null)
             if (resultCode == RESULT_OK)
 //            switch (resultCode) {
                 switch (requestCode) {
@@ -68,7 +73,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     //               case R.id.type & 0xfff:
                     case SearchFilterMPFViewModel.TYPE:
                         //processPrimaryProjectType(info);
-                        processProjectTypeId(info);
+
+                        if (info2 != null){
+                            processBundleProjectTypeId(info2);
+                        } else
+                         processProjectTypeId(info);
                         break;
 
                     // Dollar Value
@@ -205,6 +214,44 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     }
 
     /**
+     * Bundle extra data
+     */
+
+    private void processBundleProjectTypeId(final Bundle arr) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<ProjectType> realmTypes;
+                realmTypes = realm.where(ProjectType.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectTypes, which each contain a list of child ProjectTypes
+                Log.d("processProjectTypeId: ", "realmTypes size: " + realmTypes.size());
+                Log.d("processProjectTypeId: ", "realmTypes: " + realmTypes);
+
+                String typeStr = "\r\n"; //arr[0];   // text display
+                //    String typeId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String types = "";
+
+                for (String key : arr.keySet()) {
+                    typeStr += arr.get(key) + ", ";
+                }
+                typeStr = typeStr.substring(0, typeStr.length()-2);
+                if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+                    viewModel.setCtypeSelect(typeStr);
+                } else {
+                    viewModel.setPersistedProjectTypeId(typeStr);
+                    viewModel.setType_select(typeStr);
+                }
+
+
+                types = "\"projectTypeId\":{\"inq\":" + typeStr + "}";
+
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
+            }
+        });
+    }
+
+    /**
      * Process the Project Type Id code based on input data from list
      * TODO - HARD-CODED. Get from map of project categories mapped to type ID codes **********
      */
@@ -222,8 +269,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 String typeStr = arr[0];   // text display
                 String typeId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String types = "";
-                viewModel.setPersistedProjectTypeId(typeStr);
-                viewModel.setType_select(typeStr);
+
 
                 // build the list of IDs for the query, which include the parent ID and any of its child IDs
                 List<String> tList = new ArrayList<>();
@@ -240,6 +286,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                             }
                             break;
                         }
+                    }
+                    if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+                        viewModel.setCtypeSelect(typeStr);
+                    } else {
+                        viewModel.setPersistedProjectTypeId(typeStr);
+                        viewModel.setType_select(typeStr);
                     }
                     Log.d("SearchFilterMPSAct", "processType: input Type name: " + typeStr);
                     Log.d("SearchFilterMPSAct", "processType: parent and child Type IDs: " + tList);
@@ -263,12 +315,19 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String max = arr[1];                          // int for query
         String valueStr = "$" + min + " - $" + max;   // text for display
         String projectValue = "";
-        viewModel.setPersistedValueMin(min);
-        viewModel.setPersistedValueMax(max);
-        viewModel.setValue_select(valueStr);
+
         if (valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
         }
+
+        if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+            viewModel.setCvalueSelect(valueStr);
+        } else {
+            viewModel.setPersistedValueMin(min);
+            viewModel.setPersistedValueMax(max);
+            viewModel.setValue_select(valueStr);
+        }
+
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, projectValue);
     }
 
@@ -419,8 +478,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String biddingWithinInt = arr[1];   // int for query
         String[] updatedWithinArr = {biddingWithinStr, biddingWithinInt};
         String projectBiddingWithin = "";
-        viewModel.setPersistedBiddingWithin(updatedWithinArr);
-        viewModel.setBidding_within_select(biddingWithinStr);
+        if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+            viewModel.setCbiddingWithinSelect(biddingWithinStr);
+        } else {
+            viewModel.setPersistedBiddingWithin(updatedWithinArr);
+            viewModel.setBidding_within_select(biddingWithinStr);
+        }
+
         if (biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
         }

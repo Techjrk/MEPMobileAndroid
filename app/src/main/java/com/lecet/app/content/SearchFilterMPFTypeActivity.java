@@ -11,6 +11,8 @@ import android.util.Log;
 import com.lecet.app.R;
 
 import com.lecet.app.adapters.TypeAdapter;
+import com.lecet.app.data.models.PrimaryProjectType;
+import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFilterMpftype2Binding;
@@ -56,24 +58,42 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
 
         List<SearchFilterProjectTypesMain> sMain = SearchViewModel.typeMainList;
         List<TypeAdapter.Child> children = null;
+       // List<TypeAdapter.GrandChild> grandChildren = null;
         for (SearchFilterProjectTypesMain ptMain : sMain) {
-
-            Log.d("Typelist","Typelist"+ptMain.getTitle());
+        if (ptMain !=null) {
+            Log.d("Typelist", "Typelist" + ptMain.getTitle());
             TypeAdapter.Parent parent = new TypeAdapter.Parent();
             parent.setName(ptMain.getTitle());
-            parent.setId(""+ptMain.getId());
+            parent.setId("" + ptMain.getId());
 
             children = new ArrayList<>();
-            for (SearchFilterProjectTypesProjectCategory jlocal : ptMain.getProjectCategories()) {
-                if (jlocal != null) {
+           // List<TypeAdapter.GrandChild>  grandChildren = new ArrayList<>();
+            for (SearchFilterProjectTypesProjectCategory ptpc : ptMain.getProjectCategories()) {
+                if (ptpc != null) {
                     TypeAdapter.Child child = new TypeAdapter.Child();
-                    child.setName(jlocal.getTitle());
-                    child.setId(""+jlocal.getId());
+                    child.setName(ptpc.getTitle());
+                    child.setId("" + ptpc.getId());
+                    //children.add(child);
+                    List<PrimaryProjectType> gchildTypes =     ptpc.getProjectTypes();
+                    //
+                    List<TypeAdapter.GrandChild>  grandChildren = new ArrayList<>();
+                    for (PrimaryProjectType ppType: gchildTypes) {
+                        if (ppType != null)  {
+                            TypeAdapter.GrandChild gchild = new TypeAdapter.GrandChild();
+                            gchild.setName(ppType.getTitle());
+                            gchild.setId(""+ppType.getId());
+                            grandChildren.add(gchild);
+                            //Log.d("SearchDomain:","  Child Type: title:" + cType.getTitle() + " id:" + cType.getId()/* + " parentId:" + cType.getParentId()*/);
+                        }
+                    }
+                    child.setGrandChildren(grandChildren);
                     children.add(child);
+                    //
                 }
             }
             parent.setChildren(children);
             data.add(parent);
+        }
         }
         Log.d("Typemain","Typemain"+sMain.size());
 //        Log.d("Typemain","Typemain"+realmTypes.size());
