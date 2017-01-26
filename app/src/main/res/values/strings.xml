@@ -262,5 +262,9 @@
     <string name="total_projects">Total Projects</string>
     <string name="total_valuation">Total Valuation</string>
     <string name="title_activity_company_detail">CompanyDetailActivity</string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
+    </string>
+    <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
+    <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
 
 </resources>

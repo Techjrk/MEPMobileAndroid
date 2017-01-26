@@ -1,5 +1,6 @@
 package com.lecet.app.adapters;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.content.CompanyAssociatedProjectsActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
@@ -373,7 +375,12 @@ public class CompanyDetailAdapter extends SectionedAdapter {
             @Override
             public void onClick(View view) {
 
+                if (projectsDisplayed && section == SECTION_PROJECT) {
 
+                    Intent intent = new Intent(appCompatActivity, CompanyAssociatedProjectsActivity.class);
+                    intent.putExtra(CompanyAssociatedProjectsActivity.COMPANY_ID_EXTRA, company.getId());
+                    appCompatActivity.startActivity(intent);
+                }
             }
         });
 
