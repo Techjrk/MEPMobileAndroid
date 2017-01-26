@@ -8,19 +8,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.ProjectBiddersAdapter;
-import com.lecet.app.data.models.Bid;
+import com.lecet.app.adapters.ProjectParticipantAdapter;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.domain.ProjectDomain;
 
 import io.realm.RealmResults;
 
 /**
- * File: ProjectsBiddersViewModel Created: 1/25/17 Author: domandtom
+ * File: ProjectParticipantViewModel Created: 1/26/17 Author: domandtom
  *
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class ProjectsBiddersViewModel {
+public class ProjectParticipantViewModel {
 
     /**
      * Tool Bar
@@ -34,15 +34,15 @@ public class ProjectsBiddersViewModel {
     private final ProjectDomain projectDomain;
 
     private RecyclerView recyclerView;
-    private ProjectBiddersAdapter listAdapter;
+    private ProjectParticipantAdapter listAdapter;
 
 
-    public ProjectsBiddersViewModel(AppCompatActivity appCompatActivity, ProjectDomain projectDomain, long projectID) {
+    public ProjectParticipantViewModel(AppCompatActivity appCompatActivity, ProjectDomain projectDomain, long projectID) {
         this.appCompatActivity = appCompatActivity;
         this.projectDomain = projectDomain;
 
-        RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
-        initRecyclerView(bids);
+        RealmResults<Contact> contacts = this.projectDomain.fetchProjectContacts(projectID);
+        initRecyclerView(contacts);
     }
 
 
@@ -70,18 +70,18 @@ public class ProjectsBiddersViewModel {
      * Adapter Data Management: Project List
      **/
 
-    private void initRecyclerView(RealmResults<Bid> data) {
+    private void initRecyclerView(RealmResults<Contact> contacts) {
 
         recyclerView = (RecyclerView) appCompatActivity.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        initializeAdapter(data);
+        initializeAdapter(contacts);
     }
 
-    private void initializeAdapter(RealmResults<Bid> data) {
+    private void initializeAdapter(RealmResults<Contact> contacts) {
 
-        listAdapter = new ProjectBiddersAdapter(data);
+        listAdapter = new ProjectParticipantAdapter(contacts);
         recyclerView.setAdapter(listAdapter);
     }
 

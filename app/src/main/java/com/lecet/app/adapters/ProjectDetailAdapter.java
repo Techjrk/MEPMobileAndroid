@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.content.ProjectBiddersActivity;
+import com.lecet.app.content.ProjectParticipantsActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
@@ -284,7 +285,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
             Contact contact = projectParticipants.get(position);
 
-            ((ParticipantViewHolder) holder).getBinding().setViewModel(new ProjectDetailContactViewModel(appCompatActivity, contact));
+            ((ParticipantViewHolder) holder).getBinding().setViewModel(new ProjectDetailContactViewModel(contact));
 
         } else if (section == SECTION_BIDDERS) {
 
@@ -322,6 +323,12 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
                     Intent intent = new Intent(appCompatActivity, ProjectBiddersActivity.class);
                     intent.putExtra(ProjectBiddersActivity.PROJECT_ID_EXTRA, project.getId());
+                    appCompatActivity.startActivity(intent);
+
+                } else if (section == SECTION_PARTICIPANTS) {
+
+                    Intent intent = new Intent(appCompatActivity, ProjectParticipantsActivity.class);
+                    intent.putExtra(ProjectParticipantsActivity.PROJECT_ID_EXTRA, project.getId());
                     appCompatActivity.startActivity(intent);
                 }
             }

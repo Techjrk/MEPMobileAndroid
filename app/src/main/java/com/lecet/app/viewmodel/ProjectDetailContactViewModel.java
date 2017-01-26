@@ -17,12 +17,9 @@ import com.lecet.app.data.models.Contact;
 
 public class ProjectDetailContactViewModel extends BaseObservable {
 
-    private final AppCompatActivity appCompatActivity;
     private final Contact contact;
 
-
-    public ProjectDetailContactViewModel(AppCompatActivity appCompatActivity, Contact contact) {
-        this.appCompatActivity = appCompatActivity;
+    public ProjectDetailContactViewModel(Contact contact) {
         this.contact = contact;
     }
 
@@ -37,8 +34,8 @@ public class ProjectDetailContactViewModel extends BaseObservable {
 
     public void onContactSelected(View view) {
 
-        Intent intent = new Intent(appCompatActivity, CompanyDetailActivity.class);
+        Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, contact.getCompanyId());
-        appCompatActivity.startActivity(intent);
+        view.getContext().startActivity(intent);
     }
 }
