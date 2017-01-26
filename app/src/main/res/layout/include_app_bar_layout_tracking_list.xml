@@ -49,7 +49,7 @@
                 android:textColor="@color/lecetTextLightGray"
                 android:textSize="12sp"
                 bind:typeface="@{`Lato-Regular.ttf`}"
-                android:text="17 Projects"/>
+                tools:text="17 Projects"/>
 
         <ImageView
                 android:id="@+id/sort_menu_button"

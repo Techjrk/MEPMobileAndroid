@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ContactViewModel"/>
+    </data>
 
     <android.support.design.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:background="@color/lecetButtonDarkBlue"
             tools:context="com.lecet.app.content.ContactDetailActivity">
 
-        <android.support.design.widget.AppBarLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:theme="@style/AppTheme.AppBarOverlay">
+        <!-- Toolbar -->
+        <include layout="@layout/include_activity_bar_layout"/>
 
-            <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    style="@style/CustomToolbar"/>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <include layout="@layout/content_contact_detail"/>
+        <include layout="@layout/content_contact_detail"
+                 bind:viewModel="@{viewModel}"/>
 
     </android.support.design.widget.CoordinatorLayout>
+
 </layout>

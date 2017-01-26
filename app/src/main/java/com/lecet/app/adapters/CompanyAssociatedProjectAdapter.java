@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemCompanyAsscProjectBinding;
-import com.lecet.app.databinding.ListItemMcdProjectBinding;
 import com.lecet.app.viewmodel.CompanyDetailProjectViewModel;
 
 import io.realm.RealmResults;

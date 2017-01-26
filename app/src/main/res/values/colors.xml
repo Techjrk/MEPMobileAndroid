@@ -21,6 +21,7 @@
     <color name="lacetLightBlueTitleColor">#A8C3E6</color>
     <color name="lecetModifyToolbarBlue">#0a2851</color>
     <color name="lecetDetailHeaderBlue">#13568D</color>
+    <color name="lecetSpannableBlue">#4C91D1</color>
 
 
     <color name="lecetLightOrange">#FCB76C</color>

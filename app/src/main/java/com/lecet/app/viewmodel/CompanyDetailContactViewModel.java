@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.content.CompanyDetailActivity;
+import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.data.models.Contact;
 
 /**
@@ -55,8 +56,8 @@ public class CompanyDetailContactViewModel extends BaseObservable {
 
     public void onContactSelected(View view) {
 
-        Intent intent = new Intent(appCompatActivity, CompanyDetailActivity.class);
-        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, contact.getCompanyId());
+        Intent intent = new Intent(appCompatActivity, ContactDetailActivity.class);
+        intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
         appCompatActivity.startActivity(intent);
     }
 }

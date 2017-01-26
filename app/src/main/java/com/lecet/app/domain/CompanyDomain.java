@@ -3,6 +3,7 @@ package com.lecet.app.domain;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import java.util.Date;
@@ -60,6 +61,12 @@ public class CompanyDomain {
         result.addChangeListener(listener);
 
         return result;
+    }
+
+    public Contact fetchCompanyContact(long contactID) {
+
+        RealmResults<Contact> results = realm.where(Contact.class).equalTo("id", contactID).findAll();
+        return results.first();
     }
 
     public Company copyToRealmTransaction(Company company) {

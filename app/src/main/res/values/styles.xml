@@ -565,4 +565,13 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:src">@mipmap/ic_chevron_down_black</item>
     </style>
+
+    <!-- MCT -->
+    <style name="ContactDetailTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
+    </style>
+
 </resources>
