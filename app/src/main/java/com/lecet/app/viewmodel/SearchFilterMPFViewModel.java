@@ -431,7 +431,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         id = view.getId();
         int section = 0;
         switch (id) {
+
             case R.id.clocation:
+                section = LOCATION;
+                i = new Intent(activity, SearchFilterMPFLocationActivity.class);
+                break;
             case R.id.location:
                 section = LOCATION;
                 i = new Intent(activity, SearchFilterMPFLocationActivity.class);
