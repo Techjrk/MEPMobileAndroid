@@ -18,11 +18,9 @@ import com.lecet.app.data.models.Company;
 
 public class ProjectDetailBidViewModel extends BaseObservable {
 
-    private final AppCompatActivity appCompatActivity;
     private final Bid bid;
 
-    public ProjectDetailBidViewModel(AppCompatActivity appCompatActivity, Bid bid) {
-        this.appCompatActivity = appCompatActivity;
+    public ProjectDetailBidViewModel(Bid bid) {
         this.bid = bid;
     }
 
@@ -43,8 +41,8 @@ public class ProjectDetailBidViewModel extends BaseObservable {
 
     public void onBidSelected(View view) {
 
-        Intent intent = new Intent(appCompatActivity, CompanyDetailActivity.class);
+        Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, bid.getCompany().getId());
-        appCompatActivity.startActivity(intent);
+        view.getContext().startActivity(intent);
     }
 }

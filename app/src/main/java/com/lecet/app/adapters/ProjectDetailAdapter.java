@@ -1,5 +1,6 @@
 package com.lecet.app.adapters;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.content.ProjectBiddersActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
@@ -287,7 +289,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         } else if (section == SECTION_BIDDERS) {
 
             Bid bid = projectBids.get(position);
-            ((BidViewHolder) holder).getBinding().setViewModel(new ProjectDetailBidViewModel(appCompatActivity, bid));
+            ((BidViewHolder) holder).getBinding().setViewModel(new ProjectDetailBidViewModel(bid));
         }
     }
 
@@ -315,6 +317,12 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
                 if (section == SECTION_DETAILS) {
                     setDetailsExpanded(!detailsExpanded);
+
+                } else if (section == SECTION_BIDDERS) {
+
+                    Intent intent = new Intent(appCompatActivity, ProjectBiddersActivity.class);
+                    intent.putExtra(ProjectBiddersActivity.PROJECT_ID_EXTRA, project.getId());
+                    appCompatActivity.startActivity(intent);
                 }
             }
         });
