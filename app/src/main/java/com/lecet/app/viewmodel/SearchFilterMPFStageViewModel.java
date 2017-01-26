@@ -35,7 +35,7 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         stageExtra[0] = name;
     }
     /**
-     * Read Realm ProjectStage data - TODO: use for generating nested list views
+     * Read Realm ProjectStage data
      */
     private void getProjectStages() {
         Realm realm = Realm.getDefaultInstance();

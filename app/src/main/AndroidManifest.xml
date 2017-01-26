@@ -93,14 +93,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
 
-        <activity android:name=".content.SearchFilterMSEActivity" />
+        <!--activity android:name=".content.SearchFilterMSEActivity" /--> <!-- TODO - Class does not exist. Remove? -->
         <activity android:name=".content.SearchFilterMPSActivity" />
         <activity android:name=".content.SearchFilterMPFLocationActivity" />
         <activity android:name=".content.SearchFilterMPFTypeActivity" />
         <activity android:name=".content.SearchFilterMPFValueActivity" />
         <activity android:name=".content.SearchFilterMPFBiddingWithinActivity" />
         <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity" />
-        <activity android:name=".content.SearchFilterMPFJurisdictionActivity" />
         <activity android:name=".content.SearchFilterMPFBHActivity" />
         <activity android:name=".content.SearchFilterMPFStageActivity" />
         <activity android:name=".content.SearchFilterMPFOwnerTypeActivity" />
