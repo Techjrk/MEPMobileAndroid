@@ -137,7 +137,7 @@ public class TypeAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setTypeName(childViewHolder.checkView.getText().toString(), child.getId());
+                        //viewModel.setTypeName(childViewHolder.checkView.getText().toString(), child.getId());
                      //   Log.d("check", "check" + childViewHolder.checkView.getText().toString() + child.getId());
                         //  viewModel.addListTypeDataResult(childViewHolder.checkView.getText().toString());
                         viewModel.addPTypeData(child.getId(), childViewHolder.checkView.getText().toString());
@@ -247,7 +247,7 @@ public class TypeAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setTypeName(grandChildViewHolder.checkView.getText().toString(), grandChild.getId());
+                        //viewModel.setTypeName(grandChildViewHolder.checkView.getText().toString(), grandChild.getId());
                         viewModel.addPTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     } else {
@@ -272,7 +272,7 @@ public class TypeAdapter extends SectionedAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewModel.setTypeName(parentViewHolder.checkView.getText().toString(), parent.getId());
+                    //viewModel.setTypeName(parentViewHolder.checkView.getText().toString(), parent.getId());
                     // Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
                     viewModel.addPTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
                     //  Log.d("check","check"+childViewHolder.checkView.getText().toString());

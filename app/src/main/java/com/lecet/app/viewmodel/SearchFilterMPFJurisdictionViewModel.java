@@ -50,7 +50,10 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
         });
     }
 
-    public void onClicked(View view) {
+    /**
+     * Apply the filter and return to the main Search activity
+     */
+    public void onApplyButtonClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, jurisdictionExtra);
 //        activity.setResult(R.id.jurisdiction & 0xfff, intent);
@@ -58,13 +61,13 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
         activity.finish();
     }
 
-    public void onSelected(View view) {
+    /*public void onSelected(View view) {
         String tag = (String) view.getTag();
         String viewText = ((CheckBox) view).getText().toString();
         //jurisdictionExtra[0] = tag;
         //jurisdictionExtra[1] = viewText;
         //Log.d(TAG, "onSelected: tag: " + tag + ", viewText: " + viewText);
-    }
+    }*/
 
     /**
      * Set the selected Jurisdiction data based on the checked selection.

@@ -15,7 +15,7 @@ public class PrimaryProjectType extends RealmObject {
 
     @PrimaryKey
     @SerializedName("id")
-    private long id;
+    private int id;
 
     @SerializedName("title")
     private String title;
@@ -33,7 +33,7 @@ public class PrimaryProjectType extends RealmObject {
     public PrimaryProjectType() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

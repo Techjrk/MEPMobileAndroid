@@ -16,7 +16,7 @@ public class SearchFilterProjectTypesProjectCategory extends RealmObject {
 
     @PrimaryKey
     @SerializedName("id")
-    private long id;
+    private int id;
 
     @SerializedName("title")
     private String title;
@@ -30,7 +30,7 @@ public class SearchFilterProjectTypesProjectCategory extends RealmObject {
     public SearchFilterProjectTypesProjectCategory() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

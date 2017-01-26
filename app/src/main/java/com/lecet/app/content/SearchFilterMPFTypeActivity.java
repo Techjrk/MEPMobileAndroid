@@ -40,7 +40,7 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
 //        ActivitySearchFilterMpftypeBinding viewModel = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype);
         ActivitySearchFilterMpftype2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype2);
         SearchFilterMPFTypeViewModel viewModel = new SearchFilterMPFTypeViewModel(this);
-        viewModel.setType(typeIds);
+        //viewModel.setType(typeIds);   //TODO - is this needed?
         sfilter.setViewModel(viewModel);
         initRecycleView(viewModel);
     }

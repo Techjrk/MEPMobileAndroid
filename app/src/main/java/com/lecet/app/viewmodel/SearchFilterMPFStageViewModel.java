@@ -30,9 +30,11 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         getProjectStages();
         stageExtra = new String[2];
     }
+
     public void setStageName(String name) {
         stageExtra[0] = name;
     }
+
     /**
      * Read Realm ProjectStage data
      */
@@ -41,15 +43,17 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realmStages = realm.where(SearchFilterStagesMain.class).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
+                realmStages = realm.where(SearchFilterStagesMain.class).findAll();
                 Log.d("SearchFilterMPFStageVM:", "realmStages size: " + realmStages.size());
                 Log.d("SearchFilterMPFStageVM:", "realmStages list: " + realmStages);
             }
         });
     }
 
-    //TODO - rename to specify that this is coming only from the Apply button for this filter
-    public void onClicked(View view) {
+    /**
+     * Apply the filter and return to the main Search activity
+     */
+    public void onApplyButtonClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stageExtra);
 //        activity.setResult(R.id.stageExtra & 0xfff, intent);
@@ -58,10 +62,10 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
     }
 
     //TODO - this is never called
-    public void onSelected(View view) {
+    /*public void onSelected(View view) {
         stageExtra[0] = ((CheckBox) view).getText().toString();
         stageExtra[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stageExtra[0] rather than the String name
-    }
+    }*/
 
     public RealmResults<SearchFilterStagesMain> getRealmStages() {
         return realmStages;

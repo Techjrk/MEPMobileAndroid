@@ -8,18 +8,23 @@ import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.JurisdictionAdapter;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
 import com.lecet.app.databinding.ActivitySearchFilterMseBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -76,9 +81,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         //processPrimaryProjectType(info);
 
                         if (info2 != null){
-                            processBundleProjectTypeId(info2);
-                        } else
-                         processProjectTypeId(info);
+                            processProjectType(info2);
+                        }
+                        //else
+                         //processProjectTypeId(info);
                         break;
 
                     // Dollar Value
@@ -202,9 +208,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Primary Project Type input data
-     * TODO: Use in conjunction with processProjectTypeId()
+     * TODO: Use in conjunction with processProjectTypeId() ?
      */
-    private void processPrimaryProjectType(String[] arr) {
+    /*private void processPrimaryProjectType(String[] arr) {
         String typeStr = arr[0];
         String projectType = "";
         viewModel.setType_select(typeStr);
@@ -212,40 +218,75 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             projectType = "\"primaryProjectType\":{" + typeStr + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, projectType);
-    }
+    }*/
 
     /**
-     * Bundle extra data
+     * Process the Project Type Bundle extra data
      */
+    private void processProjectType(final Bundle bundle) {
 
-    private void processBundleProjectTypeId(final Bundle arr) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<ProjectType> realmTypes;
-                realmTypes = realm.where(ProjectType.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectTypes, which each contain a list of child ProjectTypes
-                Log.d("processProjectTypeId: ", "realmTypes size: " + realmTypes.size());
-                Log.d("processProjectTypeId: ", "realmTypes: " + realmTypes);
+                RealmResults<SearchFilterProjectTypesMain> realmTypes;
+                realmTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
+                //Log.d("processProjectType", "realmTypes size: " + realmTypes.size());
+                //Log.d("processProjectType", "realmTypes: " + realmTypes);
 
-                String typeStr = "\r\n"; //arr[0];   // text display
-                //    String typeId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String displayStr = ""; // = "\r\n"; //bundle[0];   // text display     //removed line break as it was unnecessary
+                //    String typeId = bundle[1];   // ID
                 String types = "";
+                Set<Integer> idSet = new HashSet<Integer>();        // using a Set to prevent dupes
+                List<Integer> idList;
 
-                for (String key : arr.keySet()) {
-                    typeStr += arr.get(key) + ", ";
+                //TODO - The final ID list should be all 500-level IDs, meaning only Primary Project Type IDs. Currently that works only if the top-level category is selected.
+
+                // add each parent type ID
+                for (String key : bundle.keySet()) {
+
+                    Object value = bundle.get(key);
+                    Log.d("processProjectType", key + "=" + value.toString());
+                    displayStr += value + ", ";
+
+                    // add each child Type ID (District Council)
+                    for (SearchFilterProjectTypesMain mainType : realmTypes) {
+                        if (value.equals(mainType.getTitle())) {
+                            //idSet.add(Integer.valueOf(mainType.getId()));
+
+                            // add each grandchild Type ID (Primary Type)
+                            for (SearchFilterProjectTypesProjectCategory category : mainType.getProjectCategories()) {
+                                if (category != null) {
+                                    //idSet.add(Integer.valueOf(category.getId()));
+                                    //displayStr += category.getTitle() + ", ";
+
+                                    for(PrimaryProjectType primaryType : category.getProjectTypes()) {
+                                        if(primaryType != null) {
+                                            idSet.add(Integer.valueOf(primaryType.getId()));
+                                            //displayStr += primaryType.getTitle() + ", ";
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
                 }
-                typeStr = typeStr.substring(0, typeStr.length()-2);
+
+                displayStr = displayStr.substring(0, displayStr.length()-2);         //trim trailing ", "
+                idList = new ArrayList<>(idSet);
+                Log.d("processProjectType", "displayStr: " + displayStr);
+                Log.d("processProjectType", "ids: " + idList);
+
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
-                    viewModel.setCtypeSelect(typeStr);
+                    viewModel.setCtypeSelect(displayStr);
                 } else {
-                    viewModel.setPersistedProjectTypeId(typeStr);
-                    viewModel.setType_select(typeStr);
+                    viewModel.setPersistedProjectTypeId(displayStr);
+                    viewModel.setType_select(displayStr);
                 }
 
-
-                types = "\"projectTypeId\":{\"inq\":" + typeStr + "}";
+                types = "\"projectTypeId\":{\"inq\":" + idList + "}";
 
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
             }
@@ -254,9 +295,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Project Type Id code based on input data from list
-     * TODO - HARD-CODED. Get from map of project categories mapped to type ID codes **********
      */
-    private void processProjectTypeId(final String[] arr) {
+    /*private void processProjectTypeId(final String[] arr) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -268,7 +308,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("processProjectTypeId: ", "realmTypes: " + realmTypes);
 
                 String typeStr = arr[0];   // text display
-                String typeId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String typeId = arr[1];   // ID
                 String types = "";
 
 
@@ -277,7 +317,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 tList.add(typeId);
                 if (typeStr != null && !typeStr.trim().equals("")) {
                     // add each child Type ID
-                    for (ProjectType parentType : realmTypes) {             //TODO - ProjectType should be removed from here and the codebase
+                    for (ProjectType parentType : realmTypes) {
                         if (typeStr.equals(parentType.getName())) {
                             List<ProjectType> childTypes = parentType.getChildTypes();
                             for (ProjectType childType : childTypes) {
@@ -306,7 +346,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
             }
         });
-    }
+    }*/
 
     /**
      * Process the dollar Value from input data

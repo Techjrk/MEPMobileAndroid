@@ -88,37 +88,6 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            /*List<SearchFilterStage> childStages;
-                            RealmList<ProjectStage> realmProjectStageList = new RealmList<ProjectStage>();
-                            ProjectStage parentStage;
-                            ProjectStage childStage;
-
-                            // parent stages
-                            for (SearchFilterStagesMain pStage : stageMainList) {
-                                if (pStage != null)  {
-                                    parentStage = new ProjectStage();   //realm.createObject(ProjectStage.class, pStage.getId());
-                                    parentStage.setName(pStage.getName());
-                                    parentStage.setId(pStage.getId());
-                                    parentStage.setParentId(0);
-                                    Log.d("SearchDomain:","Stage: name:" + pStage.getName() + " id:" + pStage.getId());
-
-                                    // child stages
-                                    childStages = pStage.getStages();
-                                    for (SearchFilterStage cStage: childStages) {
-                                        if (cStage != null)  {
-                                            childStage = new ProjectStage();   //realm.createObject(ProjectStage.class, cStage.getId());
-                                            childStage.setName(cStage.getName());
-                                            childStage.setId(cStage.getId());
-                                            childStage.setParentId(cStage.getParentId());
-                                            parentStage.addChildStage(childStage);
-                                            //realmProjectStageList.add(childStage);
-                                            Log.d("SearchDomain:","  Child Stage: name:" + cStage.getName() + " id:" + cStage.getId() + " parentId:" + cStage.getParentId());
-                                        }
-                                    }
-
-                                    realmProjectStageList.add(parentStage);
-                                }
-                            }*/
                             Log.d("SearchDomain:","stageMainList: size: " + stageMainList.size());
                             Log.d("SearchDomain:","stageMainList: " + stageMainList);
                             realm.copyToRealmOrUpdate(stageMainList);
@@ -163,36 +132,6 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            /*List<SearchFilterProjectTypesProjectCategory> childTypes;
-                            RealmList<ProjectType> realmProjectTypeList = new RealmList<>();
-                            ProjectType parentType;
-                            ProjectType childType;
-
-                            // parent types
-                            for (SearchFilterProjectTypesMain pType : projectTypesMainList) {
-                                if (pType != null)  {
-                                    parentType = new ProjectType();
-                                    parentType.setName(pType.getTitle());
-                                    parentType.setId(pType.getId());
-                                    parentType.setParentId(0);
-                                    Log.d("SearchDomain:","Type: title:" + pType.getTitle() + " id:" + pType.getId());
-
-                                    // child types
-                                    childTypes = pType.getProjectCategories();
-                                    for (SearchFilterProjectTypesProjectCategory cType: childTypes) {
-                                        if (cType != null)  {
-                                            childType = new ProjectType();
-                                            childType.setName(cType.getTitle());
-                                            childType.setId(cType.getId());
-                                            childType.setParentId(pType.getId());
-                                            parentType.addChildType(childType);
-                                            Log.d("SearchDomain:","  Child Type: title:" + cType.getTitle() + " id:" + cType.getId()*//**//* + " parentId:" + cType.getParentId()*//**//*);
-                                        }
-                                    }
-
-                                    realmProjectTypeList.add(parentType);
-                                }
-                            }*/
                             Log.d("SearchDomain:","projectTypesMainList: size: " + projectTypesMainList.size());
                             Log.d("SearchDomain:","projectTypesMainList: " + projectTypesMainList);
                             realm.copyToRealmOrUpdate(projectTypesMainList);
@@ -238,38 +177,6 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            /*RealmList<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
-                            RealmList<SearchFilterJurisdictionMain> realmJurisdictionList = new RealmList<>();
-                            SearchFilterJurisdictionMain jurisdictionMain;
-                            SearchFilterJurisdictionDistrictCouncil districtCouncil;
-
-                            // Jurisdictions
-                            for (SearchFilterJurisdictionMain jMain : jurisdictionMainList) {
-                                if (jMain != null)  {
-                                    jurisdictionMain = new SearchFilterJurisdictionMain();
-                                    jurisdictionMain.setId(jMain.getId());
-                                    jurisdictionMain.setAbbreviation(jMain.getAbbreviation());
-                                    jurisdictionMain.setName(jMain.getName());
-                                    jurisdictionMain.setLongName(jMain.getLongName());
-                                    Log.d("SearchDomain:", "Jurisdiction: id:" + jMain.getId() + " abbrev:" + jMain.getAbbreviation() + " name:" + jMain.getName() + " longName:" + jMain.getLongName());
-
-                                    // District Council child types
-                                    districtCouncils = jMain.getDistrictCouncils();
-                                    for (SearchFilterJurisdictionDistrictCouncil dc: districtCouncils) {
-                                        if (dc != null)  {
-                                            districtCouncil = new SearchFilterJurisdictionDistrictCouncil();
-                                            districtCouncil.setName(dc.getName());
-                                            districtCouncil.setId(dc.getId());
-                                            districtCouncil.setAbbreviation(dc.getAbbreviation());
-                                            districtCouncil.setRegionId(dc.getRegionId());
-                                            jurisdictionMain.setDistrictCouncils(districtCouncils);
-                                            Log.d("SearchDomain:", "  District Council: id:" + dc.getId() + " abbrev:" + dc.getAbbreviation() + " dc:" + jMain.getName() + " getRegionId:" + dc.getRegionId());
-                                        }
-                                    }
-
-                                    realmJurisdictionList.add(jurisdictionMain);
-                                }
-                            }*/
                             Log.d("SearchDomain:","jurisdictionMainList: size: " + jurisdictionMainList.size());
                             Log.d("SearchDomain:","jurisdictionMainList: " + jurisdictionMainList);
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
