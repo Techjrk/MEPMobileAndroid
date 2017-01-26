@@ -16,7 +16,7 @@ import com.lecet.app.viewmodel.SearchViewModel;
 
 import io.realm.Realm;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity { //test comment - ignore
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
     private String searchFilter;

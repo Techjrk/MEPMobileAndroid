@@ -19,13 +19,13 @@ import com.lecet.app.databinding.ActivitySearchFilterMpftype2Binding;
 import com.lecet.app.databinding.ActivitySearchFilterMpftypeBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFTypeViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
-import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class SearchFilterMPFTypeActivity extends AppCompatActivity {
-    SearchFilterMPFTypeViewModel sfilter;
+
     //// TODO: 1/5/17 Create nested items for Type layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
         String[] typeIds = new String[1];
         typeIds[0] = typeId;
 
-//        ActivitySearchFilterMpftypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype);
+//        ActivitySearchFilterMpftypeBinding viewModel = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype);
         ActivitySearchFilterMpftype2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype2);
         SearchFilterMPFTypeViewModel viewModel = new SearchFilterMPFTypeViewModel(this);
         viewModel.setType(typeIds);
@@ -45,23 +45,21 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
         initRecycleView(viewModel);
     }
 
+    /**
+     * Process the multi-level display item of the Project Type with adapter
+     */
     public void initRecycleView(SearchFilterMPFTypeViewModel viewModel) {
         Log.d("typeinit","typeinit");
-        /**
-         * Process the multi-level display item of the Type with adapter
-         */
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
         List<TypeAdapter.Parent> data = new ArrayList<>();
 
-        List<SearchFilterProjectTypesMain> sMain = SearchViewModel.typeMainList;
         List<TypeAdapter.Child> children = null;
-       // List<TypeAdapter.GrandChild> grandChildren = null;
-        for (SearchFilterProjectTypesMain ptMain : sMain) {
-        if (ptMain !=null) {
-            Log.d("Typelist", "Typelist" + ptMain.getTitle());
+        for (SearchFilterProjectTypesMain ptMain : viewModel.getRealmProjectTypes()) {
+
+            Log.d("Typelist","Typelist"+ptMain.getTitle());
             TypeAdapter.Parent parent = new TypeAdapter.Parent();
             parent.setName(ptMain.getTitle());
             parent.setId("" + ptMain.getId());
@@ -94,9 +92,6 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
             parent.setChildren(children);
             data.add(parent);
         }
-        }
-        Log.d("Typemain","Typemain"+sMain.size());
-//        Log.d("Typemain","Typemain"+realmTypes.size());
         TypeAdapter adapter = new TypeAdapter(data, viewModel);
         recyclerView.setAdapter(adapter);
     }

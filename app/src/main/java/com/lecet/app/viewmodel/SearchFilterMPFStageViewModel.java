@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.lecet.app.data.models.ProjectStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -20,8 +20,8 @@ import io.realm.RealmResults;
 public class SearchFilterMPFStageViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
-    private String[] stage = {"", ""};  // name, id
-    private RealmResults<ProjectStage> realmStages;
+    private String[] stageExtra;     // = {"", ""};  // name, id
+    private RealmResults<SearchFilterStagesMain> realmStages;
 
     /**
      * Constructor
@@ -29,9 +29,10 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
     public SearchFilterMPFStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
         getProjectStages();
+        stageExtra = new String[2];
     }
     public void setStageName(String name) {
-        stage[0] = name;
+        stageExtra[0] = name;
     }
     /**
      * Read Realm ProjectStage data - TODO: use for generating nested list views
@@ -41,23 +42,29 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realmStages = realm.where(ProjectStage.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
+                realmStages = realm.where(SearchFilterStagesMain.class).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
                 Log.d("SearchFilterMPFStageVM:", "realmStages size: " + realmStages.size());
                 Log.d("SearchFilterMPFStageVM:", "realmStages list: " + realmStages);
             }
         });
     }
 
+    //TODO - rename to specify that this is coming only from the Apply button for this filter
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stage);
-//        activity.setResult(R.id.stage & 0xfff, intent);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stageExtra);
+//        activity.setResult(R.id.stageExtra & 0xfff, intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 
+    //TODO - this is never called
     public void onSelected(View view) {
-        stage[0] = ((CheckBox) view).getText().toString();
-        stage[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stage[0] rather than the String name
+        stageExtra[0] = ((CheckBox) view).getText().toString();
+        stageExtra[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stageExtra[0] rather than the String name
+    }
+
+    public RealmResults<SearchFilterStagesMain> getRealmStages() {
+        return realmStages;
     }
 }
