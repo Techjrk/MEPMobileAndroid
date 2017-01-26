@@ -12,11 +12,9 @@ import com.lecet.app.R;
 
 import com.lecet.app.adapters.TypeAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFilterMpftype2Binding;
-import com.lecet.app.databinding.ActivitySearchFilterMpftypeBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFTypeViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 
@@ -24,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Activity for Search Filter: Project Type
+ */
 public class SearchFilterMPFTypeActivity extends AppCompatActivity {
 
-    //// TODO: 1/5/17 Create nested items for Type layout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

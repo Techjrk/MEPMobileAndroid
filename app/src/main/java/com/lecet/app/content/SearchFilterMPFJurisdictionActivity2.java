@@ -18,6 +18,9 @@ import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for Search Filter: Jurisdiction //TODO - remove '2' from name of this class and related layout
+ */
 public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
 
     @Override

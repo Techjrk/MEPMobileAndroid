@@ -17,6 +17,9 @@ import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for Search Filter: Stage
+ */
 public class SearchFilterMPFStageActivity extends AppCompatActivity {
 
     @Override

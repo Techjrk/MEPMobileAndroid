@@ -277,7 +277,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 tList.add(typeId);
                 if (typeStr != null && !typeStr.trim().equals("")) {
                     // add each child Type ID
-                    for (ProjectType parentType : realmTypes) {
+                    for (ProjectType parentType : realmTypes) {             //TODO - ProjectType should be removed from here and the codebase
                         if (typeStr.equals(parentType.getName())) {
                             List<ProjectType> childTypes = parentType.getChildTypes();
                             for (ProjectType childType : childTypes) {

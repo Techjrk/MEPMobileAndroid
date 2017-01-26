@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
+ * View Model for Search Filter Activity: Project Type
  * Created by getdevsinc on 12/29/16.
  */
 

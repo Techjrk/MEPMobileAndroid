@@ -14,9 +14,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
+ * View Model for Search Filter Activity: Jurisdiction
  * Created by getdevsinc on 12/29/16.
  */
-
 public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
 
     private static final String TAG = "SearchFilterMPFJurisVM";
