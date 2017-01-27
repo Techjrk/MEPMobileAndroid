@@ -26,21 +26,12 @@ import java.util.List;
  * Activity for Search Filter: Project Type
  */
 public class SearchFilterMPFTypeActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // get Type ID Extras
-        Intent intent = getIntent();
-        String typeId = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_PROJECT_TYPE_ID);
-        String[] typeIds = new String[1];
-        typeIds[0] = typeId;
-
-//        ActivitySearchFilterMpftypeBinding viewModel = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype);
         ActivitySearchFilterMpftype2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpftype2);
         SearchFilterMPFTypeViewModel viewModel = new SearchFilterMPFTypeViewModel(this);
-        //viewModel.setType(typeIds);   //TODO - is this needed?
         sfilter.setViewModel(viewModel);
         initRecycleView(viewModel);
     }
@@ -55,25 +46,18 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
 
         List<TypeAdapter.Parent> data = new ArrayList<>();
-
         List<TypeAdapter.Child> children = null;
         for (SearchFilterProjectTypesMain ptMain : viewModel.getRealmProjectTypes()) {
-
-            Log.d("Typelist","Typelist"+ptMain.getTitle());
             TypeAdapter.Parent parent = new TypeAdapter.Parent();
             parent.setName(ptMain.getTitle());
             parent.setId("" + ptMain.getId());
-
             children = new ArrayList<>();
-           // List<TypeAdapter.GrandChild>  grandChildren = new ArrayList<>();
             for (SearchFilterProjectTypesProjectCategory ptpc : ptMain.getProjectCategories()) {
                 if (ptpc != null) {
                     TypeAdapter.Child child = new TypeAdapter.Child();
                     child.setName(ptpc.getTitle());
                     child.setId("" + ptpc.getId());
-                    //children.add(child);
                     List<PrimaryProjectType> gchildTypes =     ptpc.getProjectTypes();
-                    //
                     List<TypeAdapter.GrandChild>  grandChildren = new ArrayList<>();
                     for (PrimaryProjectType ppType: gchildTypes) {
                         if (ppType != null)  {
@@ -81,12 +65,10 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
                             gchild.setName(ppType.getTitle());
                             gchild.setId(""+ppType.getId());
                             grandChildren.add(gchild);
-                            //Log.d("SearchDomain:","  Child Type: title:" + cType.getTitle() + " id:" + cType.getId()/* + " parentId:" + cType.getParentId()*/);
                         }
                     }
                     child.setGrandChildren(grandChildren);
                     children.add(child);
-                    //
                 }
             }
             parent.setChildren(children);
@@ -95,5 +77,4 @@ public class SearchFilterMPFTypeActivity extends AppCompatActivity {
         TypeAdapter adapter = new TypeAdapter(data, viewModel);
         recyclerView.setAdapter(adapter);
     }
-
 }
