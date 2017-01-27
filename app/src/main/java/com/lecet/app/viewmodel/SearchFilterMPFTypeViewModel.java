@@ -42,8 +42,6 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmProjectTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
-                Log.d(TAG, "realmProjectTypes size: " + realmProjectTypes.size());
-                Log.d(TAG, "realmProjectTypes list: " + realmProjectTypes);
             }
         });
     }
@@ -64,13 +62,9 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
 
     public void addPTypeData(String key, String value) {
         pTypeData.putString(key, value);
-        Log.d(TAG, "addPTypeData: " + key + ", value: " + value);
-        Log.d(TAG, "addPTypeData: pTypeData is now: " + pTypeData);
     }
 
     public void removePTypeData(String key) {
-        Log.d(TAG, "removePTypeData removing key: " + key);
         pTypeData.remove(key);
-        Log.d(TAG, "addPTypeData: pTypeData is now: " + pTypeData);
     }
 }
