@@ -12,7 +12,7 @@ import android.view.View;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
-import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
+import com.lecet.app.content.SearchFilterBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
 import com.lecet.app.content.SearchFilterLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
@@ -482,7 +482,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.cbidding_within:
             case R.id.bidding_within:
                 section = BIDDING_WITHIN;
-                i = new Intent(activity, SearchFilterMPFBiddingWithinActivity.class);
+                i = new Intent(activity, SearchFilterBiddingWithinActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN, getPersistedBiddingWithin());
                 break;
 
