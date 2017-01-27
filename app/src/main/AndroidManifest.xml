@@ -104,7 +104,7 @@
         <activity android:name=".content.SearchFilterMPFStageActivity" />
         <activity android:name=".content.SearchFilterMPFOwnerTypeActivity" />
         <activity android:name=".content.SearchFilterMPFWorkTypeActivity"></activity>
-        <activity android:name=".content.SearchFilterMPFJurisdictionActivity2" />
+        <activity android:name=".content.SearchFilterJurisdictionActivity" />
     </application>
 
 </manifest>

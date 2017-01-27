@@ -8,28 +8,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.WindowManager;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.JurisdictionAdapter;
+import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
-import com.lecet.app.databinding.ActivitySearchFilterMpfjurisdiction2Binding;
-import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
+import com.lecet.app.databinding.ActivitySearchFilterJurisdictionBinding;
+import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Activity for Search Filter: Jurisdiction //TODO - remove '2' from name of this class and related layout
+ * Activity for Search Filter: Jurisdiction
  */
-public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
+public class SearchFilterJurisdictionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //   setContentView(R.layout.activity_search_filter_mpfjurisdiction);
-        ActivitySearchFilterMpfjurisdiction2Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mpfjurisdiction2);
-        SearchFilterMPFJurisdictionViewModel viewModel = new SearchFilterMPFJurisdictionViewModel(this);
+        ActivitySearchFilterJurisdictionBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_jurisdiction);
+        SearchFilterJurisdictionViewModel viewModel = new SearchFilterJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);
         initRecycleView(viewModel);
     }
@@ -37,21 +37,21 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
     /**
      * Process the multi-level display item of the jurisdiction with adapter
      */
-    public void initRecycleView(SearchFilterMPFJurisdictionViewModel viewModel) {
+    public void initRecycleView(SearchFilterJurisdictionViewModel viewModel) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.test_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        JurisdictionAdapter.GrandChild grandChild = new JurisdictionAdapter.GrandChild();
+        SearchFilterJurisdictionAdapter.GrandChild grandChild = new SearchFilterJurisdictionAdapter.GrandChild();
 
-        List<JurisdictionAdapter.Parent> data = new ArrayList<>();
+        List<SearchFilterJurisdictionAdapter.Parent> data = new ArrayList<>();
 
 //        int ctr = 0;
 
-        List<JurisdictionAdapter.Child> children = null;
+        List<SearchFilterJurisdictionAdapter.Child> children = null;
 
         for (SearchFilterJurisdictionMain jMain : viewModel.getRealmJurisdictions()) {
-            JurisdictionAdapter.Parent parent = new JurisdictionAdapter.Parent();
+            SearchFilterJurisdictionAdapter.Parent parent = new SearchFilterJurisdictionAdapter.Parent();
             parent.setId(jMain.getId());
             parent.setName(jMain.getName());
             parent.setAbbreviation(jMain.getAbbreviation());
@@ -63,7 +63,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             // int childctr=0;
             for (SearchFilterJurisdictionLocal jlocal : jMain.getLocals()) {
                 if (jlocal != null) {
-                    JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
+                    SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
                     child.setId(jlocal.getId());
                     child.setName(jlocal.getName());
                     child.setDistrictCouncilId(jlocal.getDistrictCouncilId());
@@ -75,17 +75,17 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             for (SearchFilterJurisdictionDistrictCouncil dcouncil : jMain.getDistrictCouncils()) {
                 if (dcouncil != null) {
 //                    ctr++;
-                    JurisdictionAdapter.Child child = new JurisdictionAdapter.Child();
+                    SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
                     child.setName(dcouncil.getName());
 
                     if (dcouncil.getLocals() != null) {
-                        List<JurisdictionAdapter.GrandChild> grandChildren1 = new ArrayList<>();
-//                        List<JurisdictionAdapter.SubSubtype> subSubtypes = new ArrayList<>();
+                        List<SearchFilterJurisdictionAdapter.GrandChild> grandChildren1 = new ArrayList<>();
+//                        List<SearchFilterJurisdictionAdapter.SubSubtype> subSubtypes = new ArrayList<>();
 
                         // Locals
                         for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
                             if (dclocals != null) {
-                                JurisdictionAdapter.GrandChild grandChild1 = new JurisdictionAdapter.GrandChild();
+                                SearchFilterJurisdictionAdapter.GrandChild grandChild1 = new SearchFilterJurisdictionAdapter.GrandChild();
                                 grandChild1.setId(dclocals.getId());
                                 grandChild1.setName(dclocals.getName());
                                 grandChildren1.add(grandChild1);
@@ -101,7 +101,7 @@ public class SearchFilterMPFJurisdictionActivity2 extends AppCompatActivity {
             data.add(parent);
         }
 
-        JurisdictionAdapter adapter = new JurisdictionAdapter(data, viewModel);
+        SearchFilterJurisdictionAdapter adapter = new SearchFilterJurisdictionAdapter(data, viewModel);
         recyclerView.setAdapter(adapter);
     }
 

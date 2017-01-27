@@ -7,10 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.JurisdictionAdapter;
+import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectStage;
-import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
@@ -431,7 +430,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 jList.add(jurisdictionName);
                 if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
 
-                    if(jurisdictionViewType == JurisdictionAdapter.PARENT_VIEW_TYPE) {
+                    if(jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
                         // add each District Council ID
                         for (SearchFilterJurisdictionMain j : realmJurisdictions) {
                             if (jurisdictionName.equals(j.getName())) {
@@ -456,7 +455,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     }
 
                     //TODO - correct this section
-                    else if(jurisdictionViewType == JurisdictionAdapter.CHILD_VIEW_TYPE) {
+                    else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
                         // look for matching District Council ID
                         for (SearchFilterJurisdictionMain j : realmJurisdictions) {
                             districtCouncils = j.getDistrictCouncils();
@@ -477,7 +476,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     }
 
                     //TODO - implement this section
-                    else if(jurisdictionViewType == JurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
+                    else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
 
                     }
 

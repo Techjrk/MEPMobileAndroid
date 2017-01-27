@@ -7,15 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
-import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
-import com.lecet.app.data.models.SearchFilterJurisdictionMain;
-import com.lecet.app.viewmodel.SearchFilterMPFJurisdictionViewModel;
+import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -29,12 +24,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * File: SubtypeExampleAdapter Created: 1/11/17 Author: domandtom
+ * File: SearchFilterJurisdictionAdapter Created: 1/11/17 Author: domandtom
  * <p>
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class JurisdictionAdapter extends SectionedAdapter {
+public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
@@ -49,11 +44,11 @@ public class JurisdictionAdapter extends SectionedAdapter {
     private static int lastCheckedPos = 0;
 
     private List<Parent> data;
-    private SearchFilterMPFJurisdictionViewModel viewModel;
+    private SearchFilterJurisdictionViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public JurisdictionAdapter(List<Parent> data, SearchFilterMPFJurisdictionViewModel viewModel) {
+    public SearchFilterJurisdictionAdapter(List<Parent> data, SearchFilterJurisdictionViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;

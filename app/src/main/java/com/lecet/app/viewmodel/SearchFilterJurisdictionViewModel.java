@@ -17,7 +17,7 @@ import io.realm.RealmResults;
  * View Model for Search Filter Activity: Jurisdiction
  * Created by getdevsinc on 12/29/16.
  */
-public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
+public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
     private static final String TAG = "SearchFilterMPFJurisVM";
 
@@ -29,7 +29,7 @@ public class SearchFilterMPFJurisdictionViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFJurisdictionViewModel(AppCompatActivity activity) {
+    public SearchFilterJurisdictionViewModel(AppCompatActivity activity) {
         this.activity = activity;
         getJurisdictions();
         jurisdictionExtra = new String[3];
