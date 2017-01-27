@@ -11,7 +11,7 @@ import android.widget.CheckBox;
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFWorkTypeViewModel extends BaseObservable {
+public class SearchFilterWorkTypeViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
     private String[] worktype = {"", ""};
@@ -19,7 +19,7 @@ public class SearchFilterMPFWorkTypeViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFWorkTypeViewModel(AppCompatActivity activity) {
+    public SearchFilterWorkTypeViewModel(AppCompatActivity activity) {
         this.activity = activity;
     }
 

@@ -296,7 +296,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         if (viewType == CHILD_VIEW_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_mpf_adapter_child, parent, false);
+                    .inflate(R.layout.list_item_sectioned_adapter_child, parent, false);
 
             ChildViewHolder vh = new ChildViewHolder(v);
             return vh;
@@ -304,7 +304,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         } else if (viewType == GRAND_CHILD_VIEW_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_mpf_adapter_grandchild, parent, false);
+                    .inflate(R.layout.list_item_sectioned_adapter_grandchild, parent, false);
 
             GrandChildTypeViewHolder vh = new GrandChildTypeViewHolder(v);
             return vh;
@@ -313,7 +313,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
             // create a parent layout
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_mpf_adapter_parent, parent, false);
+                    .inflate(R.layout.list_item_sectioned_adapter_parent, parent, false);
 
             ParentViewHolder vh = new ParentViewHolder(v);
             return vh;

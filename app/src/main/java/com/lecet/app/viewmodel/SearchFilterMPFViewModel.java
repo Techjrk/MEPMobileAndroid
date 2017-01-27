@@ -20,7 +20,7 @@ import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterValueActivity;
-import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
+import com.lecet.app.content.SearchFilterWorkTypeActivity;
 
 /**
  * Created by DomandTom 2016.
@@ -500,7 +500,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.worktype:
                 section = WORK_TYPE;
-                i = new Intent(activity, SearchFilterMPFWorkTypeActivity.class);
+                i = new Intent(activity, SearchFilterWorkTypeActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
 

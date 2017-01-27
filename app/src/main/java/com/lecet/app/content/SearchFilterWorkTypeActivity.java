@@ -6,15 +6,15 @@ import android.os.Bundle;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterWorkTypeBinding;
-import com.lecet.app.viewmodel.SearchFilterMPFWorkTypeViewModel;
+import com.lecet.app.viewmodel.SearchFilterWorkTypeViewModel;
 
-public class SearchFilterMPFWorkTypeActivity extends AppCompatActivity {
+public class SearchFilterWorkTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySearchFilterWorkTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_work_type);
-        SearchFilterMPFWorkTypeViewModel viewModel = new SearchFilterMPFWorkTypeViewModel(this);
+        SearchFilterWorkTypeViewModel viewModel = new SearchFilterWorkTypeViewModel(this);
         sfilter.setViewModel(viewModel);
     }
 }

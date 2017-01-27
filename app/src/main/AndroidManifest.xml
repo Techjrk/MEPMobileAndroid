@@ -103,7 +103,7 @@
         <activity android:name=".content.SearchFilterBuildingOrHighwayActivity" />
         <activity android:name=".content.SearchFilterStageActivity" />
         <activity android:name=".content.SearchFilterOwnerTypeActivity" />
-        <activity android:name=".content.SearchFilterMPFWorkTypeActivity"></activity>
+        <activity android:name=".content.SearchFilterWorkTypeActivity"></activity>
         <activity android:name=".content.SearchFilterJurisdictionActivity" />
     </application>
 
