@@ -26,13 +26,11 @@ public class SearchFilterMPFWorkTypeViewModel extends BaseObservable {
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, worktype);
-        //activity.setResult(R.id.worktype & 0xfff, intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 
     public void onSelected(View view) {
         worktype[0] = ((CheckBox) view).getText().toString();
-//        time[1] = (String)view.getTag();
     }
 }
