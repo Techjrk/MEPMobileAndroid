@@ -11,21 +11,20 @@ import android.view.View;
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFValueViewModel extends BaseObservable {
+public class SearchFilterValueViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String min = "", max = "";
 
     /**
      * Constructor
      */
-    public SearchFilterMPFValueViewModel(AppCompatActivity activity) {
+    public SearchFilterValueViewModel(AppCompatActivity activity) {
         this.activity = activity;
     }
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, new String[]{min, max});
-        //activity.setResult(R.id.value & 0xfff,intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }

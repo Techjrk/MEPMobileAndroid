@@ -97,7 +97,7 @@
         <activity android:name=".content.SearchFilterMPSActivity" />
         <activity android:name=".content.SearchFilterLocationActivity" />
         <activity android:name=".content.SearchFilterProjectTypeActivity" />
-        <activity android:name=".content.SearchFilterMPFValueActivity" />
+        <activity android:name=".content.SearchFilterValueActivity" />
         <activity android:name=".content.SearchFilterMPFBiddingWithinActivity" />
         <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity" />
         <activity android:name=".content.SearchFilterMPFBHActivity" />

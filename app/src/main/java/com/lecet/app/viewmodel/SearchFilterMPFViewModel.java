@@ -19,7 +19,7 @@ import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
-import com.lecet.app.content.SearchFilterMPFValueActivity;
+import com.lecet.app.content.SearchFilterValueActivity;
 import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
 
 /**
@@ -455,7 +455,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.cvalue:
             case R.id.value:
                 section = VALUE;
-                i = new Intent(activity, SearchFilterMPFValueActivity.class);
+                i = new Intent(activity, SearchFilterValueActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
                 break;
