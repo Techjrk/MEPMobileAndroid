@@ -11,7 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.viewmodel.SearchFilterMPFStageViewModel;
+import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,12 +25,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * File: SubtypeExampleAdapter Created: 1/11/17 Author: domandtom
+ * File: SearchFilterStageAdapter Created: 1/11/17 Author: domandtom
  * <p>
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class StageAdapter extends SectionedAdapter {
+public class SearchFilterStageAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
@@ -42,11 +42,11 @@ public class StageAdapter extends SectionedAdapter {
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
-    private SearchFilterMPFStageViewModel viewModel;
+    private SearchFilterStageViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public StageAdapter(List<Parent> data, SearchFilterMPFStageViewModel viewModel) {
+    public SearchFilterStageAdapter(List<Parent> data, SearchFilterStageViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;

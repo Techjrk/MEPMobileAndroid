@@ -16,7 +16,7 @@ import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
 import com.lecet.app.content.SearchFilterMPFLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
-import com.lecet.app.content.SearchFilterMPFStageActivity;
+import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterMPFValueActivity;
@@ -475,7 +475,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.stage:
                 section = STAGE;
-                i = new Intent(activity, SearchFilterMPFStageActivity.class);
+                i = new Intent(activity, SearchFilterStageActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_STAGE, getPersistedStage());
                 break;
 

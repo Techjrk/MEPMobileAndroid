@@ -14,9 +14,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
- * View Model for Search Filter Activity: Stage //test comment - ignore
+ * View Model for Search Filter Activity: Stage
  */
-public class SearchFilterMPFStageViewModel extends BaseObservable {
+public class SearchFilterStageViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
     private String[] stageExtra;     // = {"", ""};  // name, id
@@ -25,7 +25,7 @@ public class SearchFilterMPFStageViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFStageViewModel(AppCompatActivity activity) {
+    public SearchFilterStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
         getProjectStages();
         stageExtra = new String[2];
