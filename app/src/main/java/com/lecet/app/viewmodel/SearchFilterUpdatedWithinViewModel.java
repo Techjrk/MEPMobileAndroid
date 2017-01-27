@@ -12,7 +12,7 @@ import android.widget.RadioButton;
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFUpdatedWithinViewModel extends BaseObservable {
+public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
     private String[] time = {"Any", "0"};
@@ -20,14 +20,13 @@ public class SearchFilterMPFUpdatedWithinViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFUpdatedWithinViewModel(AppCompatActivity activity) {
+    public SearchFilterUpdatedWithinViewModel(AppCompatActivity activity) {
         this.activity = activity;
     }
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, time);
-        //activity.setResult(R.id.updated_within & 0xfff, intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }

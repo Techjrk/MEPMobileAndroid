@@ -15,10 +15,10 @@ import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
 import com.lecet.app.content.SearchFilterLocationActivity;
-import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
+import com.lecet.app.content.SearchFilterOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
-import com.lecet.app.content.SearchFilterMPFUpdatedWithinActivity;
+import com.lecet.app.content.SearchFilterUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterValueActivity;
 import com.lecet.app.content.SearchFilterMPFWorkTypeActivity;
 
@@ -462,7 +462,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.updated_within:
                 section = UPDATED_WITHIN;
-                i = new Intent(activity, SearchFilterMPFUpdatedWithinActivity.class);
+                i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
                 break;
             case R.id.cjurisdiction:
@@ -494,7 +494,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.ownertype:
                 section = OWNER_TYPE;
-                i = new Intent(activity, SearchFilterMPFOwnerTypeActivity.class);
+                i = new Intent(activity, SearchFilterOwnerTypeActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 

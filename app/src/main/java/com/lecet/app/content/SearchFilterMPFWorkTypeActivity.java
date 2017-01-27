@@ -5,9 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.ActivitySearchFilterMpfownerTypeBinding;
 import com.lecet.app.databinding.ActivitySearchFilterMpfworkTypeBinding;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFWorkTypeViewModel;
 
 public class SearchFilterMPFWorkTypeActivity extends AppCompatActivity {

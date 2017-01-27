@@ -11,7 +11,7 @@ import android.widget.CheckBox;
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFOwnerTypeViewModel extends BaseObservable {
+public class SearchFilterOwnerTypeViewModel extends BaseObservable {
     private AppCompatActivity activity;
 
     private String[] ownertype = {"", ""};
@@ -19,20 +19,18 @@ public class SearchFilterMPFOwnerTypeViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFOwnerTypeViewModel(AppCompatActivity activity) {
+    public SearchFilterOwnerTypeViewModel(AppCompatActivity activity) {
         this.activity = activity;
     }
 
     public void onClicked(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, ownertype);
-//        activity.setResult(R.id.ownertype & 0xfff, intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 
     public void onSelected(View view) {
         ownertype[0] = ((CheckBox) view).getText().toString();
-//        time[1] = (String)view.getTag();
     }
 }
