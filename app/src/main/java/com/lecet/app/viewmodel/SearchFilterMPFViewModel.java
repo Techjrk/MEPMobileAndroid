@@ -14,7 +14,7 @@ import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterMPFBHActivity;
 import com.lecet.app.content.SearchFilterMPFBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
-import com.lecet.app.content.SearchFilterMPFLocationActivity;
+import com.lecet.app.content.SearchFilterLocationActivity;
 import com.lecet.app.content.SearchFilterMPFOwnerTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
@@ -434,11 +434,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.clocation:
                 section = LOCATION;
-                i = new Intent(activity, SearchFilterMPFLocationActivity.class);
+                i = new Intent(activity, SearchFilterLocationActivity.class);
                 break;
             case R.id.location:
                 section = LOCATION;
-                i = new Intent(activity, SearchFilterMPFLocationActivity.class);
+                i = new Intent(activity, SearchFilterLocationActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY, getPersistedLocationCity());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE, getPersistedLocationState());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY, getPersistedLocationCounty());

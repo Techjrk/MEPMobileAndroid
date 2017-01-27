@@ -11,7 +11,7 @@ import android.view.View;
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFLocationViewModel extends BaseObservable {
+public class SearchFilterLocationViewModel extends BaseObservable {
     private String city = "";
     private String state = "";
     private String county = "";
@@ -22,7 +22,7 @@ public class SearchFilterMPFLocationViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFLocationViewModel(AppCompatActivity activity) {
+    public SearchFilterLocationViewModel(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -33,7 +33,6 @@ public class SearchFilterMPFLocationViewModel extends BaseObservable {
             return;
         }
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, new String[]{getCity(), getState(), getCounty(), getZipcode()});
-//        activity.setResult(R.id.location & 0xfff,intent);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }

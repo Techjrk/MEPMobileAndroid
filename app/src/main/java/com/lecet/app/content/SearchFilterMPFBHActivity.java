@@ -6,9 +6,7 @@ import android.os.Bundle;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterMpfbhBinding;
-import com.lecet.app.databinding.ActivitySearchFilterMpflocationBinding;
 import com.lecet.app.viewmodel.SearchFilterMPFBHViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 
 public class SearchFilterMPFBHActivity extends AppCompatActivity {
 
