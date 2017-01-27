@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMPFBHViewModel" />
+            type="com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -15,7 +15,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.SearchFilterMPFBHActivity">
+        tools:context="com.lecet.app.content.SearchFilterBuildingOrHighwayActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

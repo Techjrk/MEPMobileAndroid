@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.content.SearchFilterMPFBHActivity;
+import com.lecet.app.content.SearchFilterBuildingOrHighwayActivity;
 import com.lecet.app.content.SearchFilterBiddingWithinActivity;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
 import com.lecet.app.content.SearchFilterLocationActivity;
@@ -488,7 +488,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
             case R.id.bh:
                 section = BH;
-                i = new Intent(activity, SearchFilterMPFBHActivity.class);
+                i = new Intent(activity, SearchFilterBuildingOrHighwayActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_BUILDING_OR_HIGHWAY, getPersistedBuildingOrHighway());
                 break;
 

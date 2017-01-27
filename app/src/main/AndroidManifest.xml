@@ -100,7 +100,7 @@
         <activity android:name=".content.SearchFilterValueActivity" />
         <activity android:name=".content.SearchFilterBiddingWithinActivity" />
         <activity android:name=".content.SearchFilterUpdatedWithinActivity" />
-        <activity android:name=".content.SearchFilterMPFBHActivity" />
+        <activity android:name=".content.SearchFilterBuildingOrHighwayActivity" />
         <activity android:name=".content.SearchFilterStageActivity" />
         <activity android:name=".content.SearchFilterOwnerTypeActivity" />
         <activity android:name=".content.SearchFilterMPFWorkTypeActivity"></activity>
