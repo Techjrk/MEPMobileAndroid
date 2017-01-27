@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -43,6 +44,9 @@ public class JurisdictionAdapter extends SectionedAdapter {
     public static final int PARENT_VIEW_TYPE = 0;
     public static final int CHILD_VIEW_TYPE = 1;
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
+    private static CheckBox lastChecked = null;
+//    private static RadioButton lastChecked = null;
+    private static int lastCheckedPos = 0;
 
     private List<Parent> data;
     private SearchFilterMPFJurisdictionViewModel viewModel;
@@ -120,7 +124,7 @@ public class JurisdictionAdapter extends SectionedAdapter {
     public int getFooterViewType(int section) {
         return 0;
     }
-
+//Child child;
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
@@ -132,24 +136,49 @@ public class JurisdictionAdapter extends SectionedAdapter {
         if (holder instanceof ChildViewHolder && isChild) {
 
             Integer truePosition = childPositionInIndex(section, position);
+//            child = parent.getChildren().get(truePosition);
             final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.imgView.setVisibility(View.GONE);
+            childViewHolder.checkView.setChecked(false);
             if (child.getGrandChildren()!=null )             childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
-            //childViewHolder.checkView.setTag("99999");
-            childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        //viewModel.setJurisdictionExtraName(childViewHolder.checkView.getText().toString());
-                        //viewModel.onSelected(childViewHolder.checkView);
-                        viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
-                        //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
+
+            childViewHolder.checkView.setChecked(child.getSelected());
+            childViewHolder.checkView.setTag(new Integer(truePosition));
+            // checkView.setChecked(child.isSelected);
+            // checkView.setTag(new Integer(truePosition));
+
+            if(truePosition == 0 && child.isSelected && childViewHolder.checkView.isChecked()){
+                //               if(truePosition == 0 && child.isSelected && checkView.isChecked()){
+                lastChecked = childViewHolder.checkView;
+//                  lastChecked = checkView;
+                lastCheckedPos =0;
+            }
+
+            childViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            CheckBox cb = (CheckBox) view;
+ //                           RadioButton cb = (RadioButton) view;
+                            int clickedPos = ((Integer) cb.getTag()).intValue();
+                            if (cb.isChecked()){
+                                if (lastChecked !=null) {
+                                    lastChecked.setChecked(false);
+                                    child.setSelected(false);
+                                }
+                                lastChecked=cb;
+                                lastCheckedPos = clickedPos;
+                            } else lastChecked=null;
+
+                            child.setSelected(cb.isChecked());
+
+                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
+                        }
                     }
-                }
-            });
-//            childViewHolder.checkView.setText("ch sect: " + section + ", pos: " + position + ", name:" + child.name);
+
+            );
 
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -247,23 +276,46 @@ public class JurisdictionAdapter extends SectionedAdapter {
             Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
             final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
-            //grandChildViewHolder.checkView.setTag("888888");
-//          grandChildViewHolder.textView.setText("GrandChild section : " + section + ", position : " + position + " name: " + grandChild.getName());
-            grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        //viewModel.setJurisdictionExtraName(grandChildViewHolder.checkView.getText().toString());
-                        //viewModel.onSelected(grandChildViewHolder.checkView);
-                        viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());
-                        //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
+
+
+            grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
+
+            grandChildViewHolder.checkView.setChecked(grandChild.isSelected);
+            grandChildViewHolder.checkView.setTag(new Integer(grandChildIndex));
+
+            if(grandChildIndex == 0 && grandChild.isSelected && grandChildViewHolder.checkView.isChecked()){
+                lastChecked = grandChildViewHolder.checkView;
+                lastCheckedPos =0;
+            }
+
+
+            grandChildViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            CheckBox cb = (CheckBox) view;
+                            //                           RadioButton cb = (RadioButton) view;
+                            int clickedPos = ((Integer) cb.getTag()).intValue();
+                            if (cb.isChecked()){
+                                if (lastChecked !=null) {
+                                    lastChecked.setChecked(false);
+                                    grandChild.setSelected(false);
+                                }
+                                lastChecked=cb;
+                                lastCheckedPos = clickedPos;
+                            } else lastChecked=null;
+
+                            grandChild.setSelected(cb.isChecked());
+                            if (grandChild.getSelected())
+                         viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());
+                        }
                     }
-                }
-            });
+
+            );
+
         }
     }
 
-    // int gsize=0;
     /**
      * Top-level categories (regions of the country such as Eastern)
      */
@@ -276,17 +328,41 @@ public class JurisdictionAdapter extends SectionedAdapter {
         final Parent parent = data.get(section);
         parentViewHolder.checkView.setText(parent.getName());
         //parentViewHolder.checkView.setTag("777777");
-        parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    //viewModel.setJurisdictionExtraName(parentViewHolder.checkView.getText().toString());
-                    //viewModel.onSelected(parentViewHolder.checkView);
-                    viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), parent.getName(), parent.getAbbreviation(), parent.getLongName());
-                    //Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
+
+
+        parentViewHolder.checkView.setChecked(parent.getSelected());
+        parentViewHolder.checkView.setTag(new Integer(section));
+
+        if(section == 0 && parent.isSelected && parentViewHolder.checkView.isChecked()){
+            lastChecked = parentViewHolder.checkView;
+            lastCheckedPos =0;
+        }
+
+
+        parentViewHolder.checkView.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        CheckBox cb = (CheckBox) view;
+                        //                           RadioButton cb = (RadioButton) view;
+                        int clickedPos = ((Integer) cb.getTag()).intValue();
+                        if (cb.isChecked()){
+                            if (lastChecked !=null) {
+                                lastChecked.setChecked(false);
+                                parent.setSelected(false);
+                            }
+                            lastChecked=cb;
+                            lastCheckedPos = clickedPos;
+                        } else lastChecked=null;
+
+                        parent.setSelected(cb.isChecked());
+
+                     if (parent.getSelected())
+                         viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), parent.getName(), parent.getAbbreviation(), parent.getLongName());
+                    }
                 }
-            }
-        });
+        );
+
         ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -300,7 +376,6 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
                     expandedParents.add(section);
                 }
-
                 notifyDataSetChanged();
             }
         });
@@ -449,45 +524,40 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
     //***
     public class ParentViewHolder extends RecyclerView.ViewHolder {
-
-        //        public TextView textView;
         public CheckBox checkView;
+//        public RadioButton checkView;
         public ImageView imgView;
 
         public ParentViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_parent);
+ //           checkView = (RadioButton) itemView.findViewById(R.id.j_parent);
             imgView = (ImageView) itemView.findViewById(R.id.j_parent_img);
         }
     }
 
     public class ChildViewHolder extends RecyclerView.ViewHolder {
-
-        //        public TextView textView;
         public CheckBox checkView;
+//        public RadioButton checkView;
         public ImageView imgView;
 
         public ChildViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_child);
+//            checkView = (RadioButton) itemView.findViewById(R.id.j_child);
             imgView = (ImageView) itemView.findViewById(R.id.j_child_img);
+
         }
     }
 
     public class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
-
-        //        public TextView textView;
         public CheckBox checkView;
+//        public RadioButton checkView;
 
         public GrandChildTypeViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_grandchild);
+//            checkView = (RadioButton) itemView.findViewById(R.id.j_grandchild);
         }
     }
 
@@ -498,6 +568,15 @@ public class JurisdictionAdapter extends SectionedAdapter {
         private String abbreviation;
         private String longName;
         private List<Child> children;
+        public boolean isSelected=false;
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
 
         public int getId() {
@@ -550,6 +629,15 @@ public class JurisdictionAdapter extends SectionedAdapter {
 
         private List<GrandChild> grandChildren;
         private Integer districtCouncilId;
+        public boolean isSelected=false;
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public int getId() {
             return id;
@@ -606,6 +694,15 @@ public class JurisdictionAdapter extends SectionedAdapter {
         private String name;
         private String abbreviation;
         private String longName;
+        public boolean isSelected=false;
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public int getId() {
             return id;

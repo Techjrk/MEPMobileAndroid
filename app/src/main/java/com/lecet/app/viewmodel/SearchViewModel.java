@@ -71,6 +71,7 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_WORK_TYPE = "workType";
     public static final String FILTER_INSTANT_SEARCH ="instantSearch";
     public static boolean USING_INSTANT_SEARCH=false;
+    public static final int REQUEST_CODE_ZERO = 0;
 
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
@@ -795,7 +796,7 @@ public class SearchViewModel extends BaseObservable {
         Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
         USING_INSTANT_SEARCH = getIsMSE1SectionVisible();
         intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
-        activity.startActivityForResult(intent, 0);
+        activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
     }
 
     public int getSeeAllForResult() {
