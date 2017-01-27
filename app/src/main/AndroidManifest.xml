@@ -96,7 +96,7 @@
         <!--activity android:name=".content.SearchFilterMSEActivity" /--> <!-- TODO - Class does not exist. Remove? -->
         <activity android:name=".content.SearchFilterMPSActivity" />
         <activity android:name=".content.SearchFilterMPFLocationActivity" />
-        <activity android:name=".content.SearchFilterMPFTypeActivity" />
+        <activity android:name=".content.SearchFilterProjectTypeActivity" />
         <activity android:name=".content.SearchFilterMPFValueActivity" />
         <activity android:name=".content.SearchFilterMPFBiddingWithinActivity" />
         <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity" />

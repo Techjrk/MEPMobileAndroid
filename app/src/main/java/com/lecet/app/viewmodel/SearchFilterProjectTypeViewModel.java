@@ -18,8 +18,8 @@ import io.realm.RealmResults;
  * Created by getdevsinc on 12/29/16.
  */
 
-public class SearchFilterMPFTypeViewModel extends BaseObservable {
-    private final String TAG = "SearchFilterMPFTypeVM";
+public class SearchFilterProjectTypeViewModel extends BaseObservable {
+    private final String TAG = "SearchFilterProjectTypeVM";
 
     private AppCompatActivity activity;
     private Bundle pTypeData = new Bundle();
@@ -28,7 +28,7 @@ public class SearchFilterMPFTypeViewModel extends BaseObservable {
     /**
      * Constructor
      */
-    public SearchFilterMPFTypeViewModel(AppCompatActivity activity) {
+    public SearchFilterProjectTypeViewModel(AppCompatActivity activity) {
         this.activity = activity;
         getProjectTypes();
     }

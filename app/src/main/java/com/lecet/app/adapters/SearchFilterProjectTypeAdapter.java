@@ -10,7 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.viewmodel.SearchFilterMPFTypeViewModel;
+import com.lecet.app.viewmodel.SearchFilterProjectTypeViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -29,7 +29,7 @@ import java.util.TreeMap;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class TypeAdapter extends SectionedAdapter {
+public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
@@ -41,11 +41,11 @@ public class TypeAdapter extends SectionedAdapter {
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
-    private SearchFilterMPFTypeViewModel viewModel;
+    private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public TypeAdapter(List<Parent> data, SearchFilterMPFTypeViewModel viewModel) {
+    public SearchFilterProjectTypeAdapter(List<Parent> data, SearchFilterProjectTypeViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;
@@ -497,7 +497,7 @@ public class TypeAdapter extends SectionedAdapter {
     public static class Child {
         private String name;
         private String id;
-        private List<TypeAdapter.GrandChild> grandChildren;
+        private List<SearchFilterProjectTypeAdapter.GrandChild> grandChildren;
 
         public String getId() {
             return id;
