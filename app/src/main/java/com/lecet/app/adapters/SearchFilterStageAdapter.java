@@ -136,7 +136,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setStageName(childViewHolder.checkView.getText().toString());
+                        //viewModel.setStageName(childViewHolder.checkView.getText().toString());
+                        viewModel.setStageData(CHILD_VIEW_TYPE, child.getId(), child.getName());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
@@ -226,21 +227,22 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 }
             });
 
-        } else if (holder instanceof GrandChildTypeViewHolder && !isChild) {
+        } else if (holder instanceof GrandChildTypeViewHolder && !isChild) {    //TODO - IS GRANDCHILD NECESSARY? STAGE ONLY USES PARENT AND CHILD.
 
             final GrandChildTypeViewHolder grandChildViewHolder = (GrandChildTypeViewHolder) holder;
 
             Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
             Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
             Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
-            GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
+            final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
 //          grandChildViewHolder.textView.setText("GrandChild section : " + section + ", position : " + position + " name: " + grandChild.getName());
             grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.setStageName(grandChildViewHolder.checkView.getText().toString());
+                        viewModel.setStageData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName());
+                        //viewModel.setStageName(grandChildViewHolder.checkView.getText().toString());
                         //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
@@ -255,13 +257,14 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
 
         // Parent denoted by section number
-        Parent parent = data.get(section);
+        final Parent parent = data.get(section);
         parentViewHolder.checkView.setText(parent.getName());
         parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewModel.setStageName(parentViewHolder.checkView.getText().toString());
+                    viewModel.setStageData(PARENT_VIEW_TYPE, parent.getId(), parent.getName());
+                    //viewModel.setStageName(parentViewHolder.checkView.getText().toString());
                     Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
                 }
             }
@@ -472,8 +475,18 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
     public static class Parent {
 
+        private int id;
         private String name;
         private List<Child> children;
+        public boolean isSelected=false;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public void setName(String name) {
             this.name = name;
@@ -482,6 +495,15 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         public String getName() {
             return name;
         }
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
+
 
         public void setChildren(List<Child> children) {
             this.children = children;
@@ -494,8 +516,26 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
     public static class Child {
 
+        private int id;
         private String name;
         private List<GrandChild> grandChildren;
+        public boolean isSelected=false;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public void setName(String name) {
             this.name = name;
@@ -516,7 +556,25 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
     public static class GrandChild {
 
+        private int id = -1;
         private String name;
+        public boolean isSelected=false;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public void setName(String name) {
             this.name = name;
