@@ -14,7 +14,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
- * View Model for Search Filter Activity: Stage
+ * View Model for Search Filter Activity: Stage //test comment - ignore
  */
 public class SearchFilterMPFStageViewModel extends BaseObservable {
     private AppCompatActivity activity;
