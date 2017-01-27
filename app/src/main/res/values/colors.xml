@@ -36,6 +36,7 @@
     <color name="lecetBidGray">#f5f5f5</color>
     <color name="lecetBorderGray">#c5c5c5</color>
     <color name="lecetFooterGray">#797878</color>
+    <color name="lecetProfileTitleGray">#959595</color>
 
     <!-- Other Colors -->
     <color name="pureWhite">#ffffff</color>

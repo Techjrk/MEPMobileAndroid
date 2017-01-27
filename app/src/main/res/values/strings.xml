@@ -36,7 +36,17 @@
     <string name="bidders">Bidders</string>
     <string name="bids">Bids</string>
     <string name="at">at</string>
-
+    <string name="title">Title</string>
+    <string name="organization">Organization</string>
+    <string name="fax">Fax</string>
+    <string name="street_address">Street Address</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="name">Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="save">Save</string>
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
@@ -267,5 +277,8 @@
     </string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
+
+    <!-- MPR Profile -->
+    <string name="my_profile">My Profile</string>
 
 </resources>

@@ -38,4 +38,5 @@ public class LecetBindingAdapter {
 
         textView.setText(spannable, TextView.BufferType.SPANNABLE);
     }
+
 }

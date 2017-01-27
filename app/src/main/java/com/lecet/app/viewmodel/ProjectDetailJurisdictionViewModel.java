@@ -44,17 +44,21 @@ public class ProjectDetailJurisdictionViewModel extends ProjDetailItemViewModel 
                     for (int i = 0; i < jurisdictions.size(); i++) {
 
                         Jurisdiction jurisdiction = jurisdictions.get(i);
-                        DistrictCouncil districtCouncil = jurisdiction.getDistrictCouncil();
-                        String abbreviation = districtCouncil.getAbbreviation();
+                        if (jurisdiction != null && jurisdiction.getDistrictCouncil() != null) {
 
-                        if (abbreviation != null && abbreviation.length() > 0) {
+                            DistrictCouncil districtCouncil = jurisdiction.getDistrictCouncil();
+                            String abbreviation = districtCouncil.getAbbreviation();
 
-                            jurString = jurString + " " + abbreviation;
+                            if (abbreviation != null && abbreviation.length() > 0) {
+
+                                jurString = jurString + " " + abbreviation;
+                            }
+
+                            if (i != (jurisdictions.size() - 1)) {
+                                jurString = jurString + ", ";
+                            }
                         }
 
-                        if (i != (jurisdictions.size() - 1)) {
-                            jurString = jurString + ", ";
-                        }
                     }
 
                     setInfo(jurString);

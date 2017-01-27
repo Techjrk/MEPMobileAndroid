@@ -470,6 +470,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onProfileClicked() {
 
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     @Override

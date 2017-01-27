@@ -358,8 +358,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/lecetTextMediumGray</item>
-        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/lecetProfileTitleGray</item>
+        <item name="android:background">@color/lecetBidGray</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ProfileTextView.Medium">
@@ -369,6 +373,20 @@
 
     <style name="ProfileTextView.Small">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ProfileEditTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
+        <item name="android:background">@color/pureWhite</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:inputType">textNoSuggestions</item>
     </style>
 
 
@@ -566,7 +584,7 @@
         <item name="android:src">@mipmap/ic_chevron_down_black</item>
     </style>
 
-    <!-- MCT -->
+    <!-- MCT Contact Detail-->
     <style name="ContactDetailTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

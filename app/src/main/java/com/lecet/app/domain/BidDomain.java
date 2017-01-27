@@ -77,7 +77,6 @@ public class BidDomain {
     public void getBidsRecentlyMade(Callback<List<Bid>> callback) {
 
         int limit = 100;
-
         getBidsRecentlyMade(limit, callback);
     }
 

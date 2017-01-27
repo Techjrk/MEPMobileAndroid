@@ -64,6 +64,8 @@ public class RecentBidItemViewModel {
 
     public String getProjectName() {
 
+        Log.d("RECENTBID", "BID ID " + bid.getId());
+        Log.d("RECENTBID", "Project ID " + bid.getProject().getId());
         return bid.getProject().getTitle();
     }
 

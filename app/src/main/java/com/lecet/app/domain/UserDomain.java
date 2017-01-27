@@ -3,6 +3,7 @@ package com.lecet.app.domain;
 import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -59,6 +60,17 @@ public class UserDomain {
         String token = sharedPreferenceUtil.getAccessToken();
 
         Call<User> call = lecetClient.getUserService().getUser(token, userId);
+        call.enqueue(callback);
+    }
+
+    public void updateUser(User user, Callback<User> callback) {
+
+        // Passing a Realm object directly doesn't seem to work in Retrofit due to variable
+        // lazy loading.
+        String token = sharedPreferenceUtil.getAccessToken();
+        UpdateUserProfileRequest body = new UpdateUserProfileRequest(user);
+
+        Call<User> call = lecetClient.getUserService().updateUser(token, user.getId(), body);
         call.enqueue(callback);
     }
 
