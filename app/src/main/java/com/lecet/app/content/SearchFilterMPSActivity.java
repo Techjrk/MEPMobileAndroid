@@ -273,7 +273,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     }
                 }
 
-                displayStr = displayStr.substring(0, displayStr.length()-2);         //trim trailing ", "
+                if(displayStr.length()> 2) {
+                    displayStr = displayStr.substring(0, displayStr.length() - 2);         //trim trailing ", "
+                }
                 idList = new ArrayList<>(idSet);
                 Log.d("processProjectType", "displayStr: " + displayStr);
                 Log.d("processProjectType", "ids: " + idList);
@@ -405,13 +407,22 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d("jurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d("jurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
+                Log.d("processJurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
+                Log.d("processJurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
 
-                int jurisdictionViewType    = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                String jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
-                String jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                int jurisdictionViewType = -1;
+                String jurisdictionId = null;
+                String jurisdictionName = null;
                 String jurisdictions = "";
+
+                try {
+                    jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
+                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                }
+                catch (Exception e) {
+                    Log.e("processJurisdiction: ", "Error parsing bundle.");
+                }
 
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
                     viewModel.setCjurisdictionSelect(jurisdictionName);
