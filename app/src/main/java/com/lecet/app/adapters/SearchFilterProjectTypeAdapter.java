@@ -133,9 +133,9 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.addPTypeData(child.getId(), childViewHolder.checkView.getText().toString());
+                        viewModel.addProjectTypeData(child.getId(), childViewHolder.checkView.getText().toString());
                     } else {
-                        viewModel.removePTypeData(child.getId());
+                        viewModel.removeProjectTypeData(child.getId());
                     }
                 }
             });
@@ -235,9 +235,9 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        viewModel.addPTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
+                        viewModel.addProjectTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
                     } else {
-                        viewModel.removePTypeData(grandChild.getId());
+                        viewModel.removeProjectTypeData(grandChild.getId());
                     }
                 }
             });
@@ -256,9 +256,9 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewModel.addPTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
+                    viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
                 } else {
-                    viewModel.removePTypeData(parent.getId());
+                    viewModel.removeProjectTypeData(parent.getId());
                 }
             }
         });

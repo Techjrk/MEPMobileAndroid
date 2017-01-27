@@ -17,7 +17,9 @@ import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
 import com.lecet.app.databinding.ActivitySearchFilterMseBinding;
+import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
@@ -56,88 +58,86 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data == null) return;
-        Bundle info2 = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);
-        String[] info = null;
-        if (info2 == null) {
-          //  Log.d("nobundle","nobundle");
-            info = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
-        } //else             Log.d("hasbundle","hasbundle");
+        if (data == null) return;   //TODO - handle case of no String[] data for Activities which pass it
 
-        if (info != null || info2 !=null)
-            if (resultCode == RESULT_OK)
-//            switch (resultCode) {
+        Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);      //TODO - handle case of no Bundle for Activities which pass it
+        String[] extrasArr = null;
+
+        if (bundle == null) {
+            extrasArr = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
+        }
+
+        // Activities which return result in String[] format
+        if (resultCode == RESULT_OK) {
+            if (extrasArr != null) {
                 switch (requestCode) {
+
                     // Location
-//                case R.id.location & 0xfff:
                     case SearchFilterMPFViewModel.LOCATION:
-                        processLocation(info);
-                        break;
-
-                    // Type
-                    //               case R.id.type & 0xfff:
-                    case SearchFilterMPFViewModel.TYPE:
-                        //processPrimaryProjectType(info);
-
-                        if (info2 != null){
-                            processProjectType(info2);
-                        }
-                        //else
-                         //processProjectTypeId(info);
+                        processLocation(extrasArr);
                         break;
 
                     // Dollar Value
-                    //   case R.id.value & 0xfff:
                     case SearchFilterMPFViewModel.VALUE:
-                        processValue(info);
+                        processValue(extrasArr);
                         break;
 
                     // Updated Within
-//                case R.id.updated_within & 0xfff:
                     case SearchFilterMPFViewModel.UPDATED_WITHIN:
-                        processUpdatedWithin(info);
-                        break;
-
-                    // Jurisdiction
-//                case R.id.jurisdiction & 0xfff:
-                    case SearchFilterMPFViewModel.JURISDICTION:
-                        processJurisdiction(info);
-                        break;
-
-                    // Project Stage
-//                case R.id.stage & 0xfff:
-                    case SearchFilterMPFViewModel.STAGE:
-                        processStage(info);
+                        processUpdatedWithin(extrasArr);
                         break;
 
                     // Bidding Within
-                    //   case R.id.bidding_within & 0xfff:
                     case SearchFilterMPFViewModel.BIDDING_WITHIN:
-                        processBiddingWithin(info);
+                        processBiddingWithin(extrasArr);
                         break;
 
                     // Building / Highway
-                    //  case R.id.bh & 0xfff:
                     case SearchFilterMPFViewModel.BH:
-                        processBuildingOrHighway(info);
+                        processBuildingOrHighway(extrasArr);
                         break;
 
                     // Owner Type
-//                case R.id.ownertype & 0xfff:
                     case SearchFilterMPFViewModel.OWNER_TYPE:
-                        processOwnerType(info);
+                        processOwnerType(extrasArr);
                         break;
 
                     // Work Type
-//                case R.id.worktype & 0xfff:
                     case SearchFilterMPFViewModel.WORK_TYPE:
-                        processWorkType(info);
+                        processWorkType(extrasArr);
                         break;
 
                     default:
                         Log.w("SearchFilterMPSAct", "onActivityResult: WARNING: no case for request code " + requestCode);
                         break;
                 }
+            }
+
+            // Activities which return result in Bundle format
+            else if (bundle != null) {
+                switch (requestCode) {
+
+                    // Project Type
+                    case SearchFilterMPFViewModel.TYPE:
+                        processProjectType(bundle);
+                        break;
+
+                    // Jurisdiction
+                    case SearchFilterMPFViewModel.JURISDICTION:
+                        processJurisdiction(bundle);
+                        break;
+
+                    // Project Stage
+                    case SearchFilterMPFViewModel.STAGE:
+                        processStage(bundle);
+                        break;
+
+                    default:
+                        Log.w("SearchFilterMPSAct", "onActivityResult: WARNING: no case for request code " + requestCode);
+                        break;
+                }
+            }
+        }
     }
 
     /**
@@ -240,7 +240,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Set<Integer> idSet = new HashSet<Integer>();        // using a Set to prevent dupes
                 List<Integer> idList;
 
-                //TODO - The final ID list should be all 500-level IDs, meaning only Primary Project Type IDs. Currently that works only if the top-level category is selected.
+                //TODO - VALIDITY INCOMPLETE. The final ID list should be all 500-level IDs, meaning only Primary Project Type IDs. Currently that works only if the top-level category is selected.
 
                 // add each parent type ID
                 for (String key : bundle.keySet()) {
@@ -396,7 +396,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * "jurisdictions": { "inq": [3] }
      * "deepJurisdictionId": ["3-3_2-1_1"]
      */
-    private void processJurisdiction(final String[] arr) {
+    private void processJurisdiction(final Bundle bundle) {          //TODO - NO LONGER VALID
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -408,9 +408,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("jurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
                 Log.d("jurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
 
-                int jurisdictionViewType    = Integer.valueOf(arr[0]);    // viewType
-                String jurisdictionId       = arr[1];    // id
-                String jurisdictionName     = arr[2];    // name
+                int jurisdictionViewType    = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
+                String jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                String jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
                 String jurisdictions = "";
 
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
@@ -495,11 +495,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
 
     /**
-     * Process the Stage input data based on the received list of Stages persisted in Realm
-     * arr[0] - Stage name
-     * arr[1] - Stage ID
+     * Process the Stage input data based on the received list of Stages persisted in Realm     //TODO - NO LONGER VALID
      */
-    private void processStage(final String[] arr) {
+    private void processStage(final Bundle bundle) {
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -511,8 +509,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("processStage: ", "realmStages size: " + realmStages.size());
                 Log.d("processStage: ", "realmStages: " + realmStages);
 
-                String stageStr = arr[0];   // text display
-                String stageId = arr[1];   // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);     // text display
+                String stageId = SearchFilterStageViewModel.BUNDLE_KEY_ID;                          // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String stages = "";
                 viewModel.setPersistedStage(stageStr);
                 viewModel.setStage_select(stageStr);
@@ -521,6 +519,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 List<String> sList = new ArrayList<>();
                 sList.add(stageId);
                 if (stageStr != null && !stageStr.trim().equals("")) {
+
                     // add each child Stage ID
                     for (ProjectStage parentStage : realmStages) {
                         if (stageStr.equals(parentStage.getName())) {

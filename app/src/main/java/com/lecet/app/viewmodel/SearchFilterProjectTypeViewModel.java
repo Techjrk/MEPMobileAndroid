@@ -17,12 +17,11 @@ import io.realm.RealmResults;
  * View Model for Search Filter Activity: Project Type
  * Created by getdevsinc on 12/29/16.
  */
-
 public class SearchFilterProjectTypeViewModel extends BaseObservable {
-    private final String TAG = "SearchFilterProjectTypeVM";
+    private final String TAG = "SearchFilterProjTypeVM";
 
     private AppCompatActivity activity;
-    private Bundle pTypeData = new Bundle();
+    private Bundle bundle;
     private RealmResults<SearchFilterProjectTypesMain> realmProjectTypes;
 
     /**
@@ -30,6 +29,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
      */
     public SearchFilterProjectTypeViewModel(AppCompatActivity activity) {
         this.activity = activity;
+        bundle = new Bundle();
         getProjectTypes();
     }
 
@@ -42,6 +42,8 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmProjectTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
+                Log.d(TAG, "realmProjectTypes size: " + realmProjectTypes.size());
+                Log.d(TAG, "realmProjectTypes list: " + realmProjectTypes);
             }
         });
     }
@@ -51,7 +53,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
      */
     public void onApplyButtonClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, pTypeData);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
@@ -60,11 +62,11 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         return realmProjectTypes;
     }
 
-    public void addPTypeData(String key, String value) {
-        pTypeData.putString(key, value);
+    public void addProjectTypeData(String key, String value) {
+        bundle.putString(key, value);
     }
 
-    public void removePTypeData(String key) {
-        pTypeData.remove(key);
+    public void removeProjectTypeData(String key) {
+        bundle.remove(key);
     }
 }

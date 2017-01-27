@@ -25,7 +25,6 @@ public class SearchFilterStageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //       setContentView(R.layout.activity_search_filter_mpfstage);
         ActivitySearchFilterStageBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_stage);
         SearchFilterStageViewModel viewModel = new SearchFilterStageViewModel(this);
         sfilter.setViewModel(viewModel);
@@ -44,17 +43,19 @@ public class SearchFilterStageActivity extends AppCompatActivity {
         List<SearchFilterStageAdapter.Parent> data = new ArrayList<>();
 
         List<SearchFilterStageAdapter.Child> children = null;
-        for (SearchFilterStagesMain sMain : viewModel.getRealmStages()) {
+        for (SearchFilterStagesMain parentStage : viewModel.getRealmStages()) {
 
-            Log.d("SearchFilterMPFStageAct", "stagelist: name: " + sMain.getName());
+            Log.d("SearchFilterMPFStageAct", "stagelist: name: " + parentStage.getName());
             SearchFilterStageAdapter.Parent parent = new SearchFilterStageAdapter.Parent();
-            parent.setName(sMain.getName());
+            parent.setId(parentStage.getId());
+            parent.setName(parentStage.getName());
 
             children = new ArrayList<>();
-            for (SearchFilterStage jlocal : sMain.getStages()) {
-                if (jlocal != null) {
+            for (SearchFilterStage childStage : parentStage.getStages()) {
+                if (childStage != null) {
                     SearchFilterStageAdapter.Child child = new SearchFilterStageAdapter.Child();
-                    child.setName(jlocal.getName());
+                    child.setId(childStage.getId());
+                    child.setName(childStage.getName());
                     children.add(child);
                 }
             }

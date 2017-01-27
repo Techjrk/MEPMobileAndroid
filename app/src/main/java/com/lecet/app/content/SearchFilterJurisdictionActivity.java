@@ -27,7 +27,6 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        //   setContentView(R.layout.activity_search_filter_mpfjurisdiction);
         ActivitySearchFilterJurisdictionBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_jurisdiction);
         SearchFilterJurisdictionViewModel viewModel = new SearchFilterJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);

@@ -3,10 +3,10 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 
 import com.lecet.app.data.models.SearchFilterStagesMain;
 
@@ -17,9 +17,14 @@ import io.realm.RealmResults;
  * View Model for Search Filter Activity: Stage
  */
 public class SearchFilterStageViewModel extends BaseObservable {
+    private static final String TAG = "SearchFilterStageVM";
+    public static final String BUNDLE_KEY_VIEW_TYPE = "viewType";
+    public static final String BUNDLE_KEY_ID = "id";
+    public static final String BUNDLE_KEY_NAME = "name";
+
     private AppCompatActivity activity;
 
-    private String[] stageExtra;     // = {"", ""};  // name, id
+    private Bundle bundle;
     private RealmResults<SearchFilterStagesMain> realmStages;
 
     /**
@@ -27,12 +32,8 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public SearchFilterStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
+        bundle = new Bundle();
         getProjectStages();
-        stageExtra = new String[2];
-    }
-
-    public void setStageName(String name) {
-        stageExtra[0] = name;
     }
 
     /**
@@ -55,17 +56,30 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public void onApplyButtonClicked(View view) {
         Intent intent = activity.getIntent();
-        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, stageExtra);
-//        activity.setResult(R.id.stageExtra & 0xfff, intent);
+        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
     }
 
-    //TODO - this is never called
-    /*public void onSelected(View view) {
-        stageExtra[0] = ((CheckBox) view).getText().toString();
-        stageExtra[1] = "102";   //(String)view.getTag();    //TODO - HARD-CODED. Use setTag(id) during dynamic generation of list views, and pass getTag() as stageExtra[0] rather than the String name
-    }*/
+    /**
+     * Set the selected Stage data in the bundle based on the checked selection.
+     * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, 2=grandchild)
+     * Each has its own ID starting at 0.
+     * Note: While 'name' usually looks like an int, it needs to be a String to support variant names like '18A'
+     */
+    public void setStageData(int viewType, int id, String name) {
+        Log.d(TAG, "setStageData: viewType: " + viewType + ", id: " + id + ", name: " + name);
+
+        // overwrite the Bundle instance with each selection since Stage only supports single-selection
+        bundle = new Bundle();
+        setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
+        setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
+        setBundleData(BUNDLE_KEY_NAME, name);
+    }
+
+    private void setBundleData(String key, String value) {
+        bundle.putString(key, value);
+    }
 
     public RealmResults<SearchFilterStagesMain> getRealmStages() {
         return realmStages;
