@@ -2,7 +2,6 @@ package com.lecet.app.adapters;
 
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,8 +90,6 @@ public class TypeAdapter extends SectionedAdapter {
                     grandChildrenSize = grandChildrenSize + size;
                 }
 
-                Log.d("SubTypeExample", "section = " + section + ", children = " + childrenSize + ", grandChildren = " + grandChildrenSize);
-
                 return childrenSize + grandChildrenSize;
             }
 
@@ -132,22 +129,16 @@ public class TypeAdapter extends SectionedAdapter {
             if (child.getGrandChildren() != null)
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
-            //       childViewHolder.id = child.getId();
             childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        //viewModel.setTypeName(childViewHolder.checkView.getText().toString(), child.getId());
-                     //   Log.d("check", "check" + childViewHolder.checkView.getText().toString() + child.getId());
-                        //  viewModel.addListTypeDataResult(childViewHolder.checkView.getText().toString());
                         viewModel.addPTypeData(child.getId(), childViewHolder.checkView.getText().toString());
-                      //  Log.d("addbundle", "addbundle");
                     } else {
                         viewModel.removePTypeData(child.getId());
                     }
                 }
             });
-//            childViewHolder.checkView.setText("ch sect: " + section + ", pos: " + position + ", name:" + child.name);
 
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,7 +146,6 @@ public class TypeAdapter extends SectionedAdapter {
 
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
-
                         expanded = new TreeMap<>();
                         expandedChildren.put(section, expanded);
                     }
@@ -241,15 +231,11 @@ public class TypeAdapter extends SectionedAdapter {
             Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
             final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
-//            grandChildViewHolder.id = grandChild.getId();
-//          grandChildViewHolder.textView.setText("GrandChild section : " + section + ", position : " + position + " name: " + grandChild.getName());
             grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        //viewModel.setTypeName(grandChildViewHolder.checkView.getText().toString(), grandChild.getId());
                         viewModel.addPTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
-                        //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     } else {
                         viewModel.removePTypeData(grandChild.getId());
                     }
@@ -258,10 +244,8 @@ public class TypeAdapter extends SectionedAdapter {
         }
     }
 
-    // int gsize=0;
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
-
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
 
         // Parent denoted by section number
@@ -272,10 +256,7 @@ public class TypeAdapter extends SectionedAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    //viewModel.setTypeName(parentViewHolder.checkView.getText().toString(), parent.getId());
-                    // Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
                     viewModel.addPTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
-                    //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                 } else {
                     viewModel.removePTypeData(parent.getId());
                 }
@@ -565,6 +546,4 @@ public class TypeAdapter extends SectionedAdapter {
         }
 
     }
-
 }
-

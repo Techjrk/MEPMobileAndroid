@@ -57,7 +57,7 @@ import retrofit2.Response;
 public class SearchViewModel extends BaseObservable {
     private static final String TAG = "SearchViewModel";
     public static final String FILTER_EXTRA_DATA = "data";
-    public static final String FILTER_EXTRA_DATA_BUNDLE = "data2";
+    public static final String FILTER_EXTRA_DATA_BUNDLE = "data_result";
     public static final String FILTER_PROJECT_LOCATION = "projectLocation";
     public static final String FILTER_PROJECT_TYPE = "projectType";
     public static final String FILTER_PROJECT_TYPE_ID = "projectTypeId";
@@ -69,6 +69,8 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_BUILDING_OR_HIGHWAY = "buildingOrHighway";
     public static final String FILTER_PROJECT_OWNER_TYPE = "ownerType";
     public static final String FILTER_PROJECT_WORK_TYPE = "workType";
+    public static final String FILTER_INSTANT_SEARCH ="instantSearch";
+    public static boolean USING_INSTANT_SEARCH=false;
 
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
@@ -264,7 +266,6 @@ public class SearchViewModel extends BaseObservable {
                 Log.w("No project", "No project in the list");
             }
         }
-        Log.d("Project adapter size", "ProjectAdapter size: " + adapterDataProjectAll.size());
         searchAdapterProjectSummary.notifyDataSetChanged();
         searchAdapterProjectAll.notifyDataSetChanged();
     }
@@ -285,7 +286,6 @@ public class SearchViewModel extends BaseObservable {
                 if (s != null) {
                     adapterDataCompanyAll.add(s);
                     if (ctr < CONTENT_MAX_SIZE) adapterDataCompanySummary.add(s);
-                    //else break;
                     ctr++;
 
                 }
@@ -314,7 +314,6 @@ public class SearchViewModel extends BaseObservable {
                 if (s != null) {
                     adapterDataContactAll.add(s);
                     if (ctr < CONTENT_MAX_SIZE) adapterDataContactSummary.add(s);
-                    //else break;
                     ctr++;
 
                 }
@@ -793,35 +792,26 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void onFilterClicked(View view) {
-//        Toast.makeText(activity, "Filter clicked.", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
-        if (getIsMSE1SectionVisible()) {
-//            intent = new Intent(activity, SearchFilterMSEActivity.class);
-            intent.putExtra("instantSearch", true);
-        } else {
-//            intent = new Intent(activity, SearchFilterMPSActivity.class);
-            intent.putExtra("instantSearch", false);
-        }
+        USING_INSTANT_SEARCH = getIsMSE1SectionVisible();
+        intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
         activity.startActivityForResult(intent, 0);
     }
-
 
     public int getSeeAllForResult() {
         return seeAllForResult;
     }
 
     public void onClickSeeAllProject(View view) {
-       /* setIsMSR11Visible(true);
-        setIsMSE2SectionVisible(false);*/
-        setSeeAll(0);
+        setSeeAll(SEE_ALL_PROJECTS);
     }
 
     public void onClickSeeAllCompany(View view) {
-        setSeeAll(1);
+        setSeeAll(SEE_ALL_COMPANIES);
     }
 
     public void onClickSeeAllContact(View view) {
-        setSeeAll(2);
+        setSeeAll(SEE_ALL_CONTACTS);
     }
 
     /**
@@ -854,6 +844,5 @@ public class SearchViewModel extends BaseObservable {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
-
 
 }
