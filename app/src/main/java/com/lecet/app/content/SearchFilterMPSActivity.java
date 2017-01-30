@@ -280,7 +280,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("processProjectType", "displayStr: " + displayStr);
                 Log.d("processProjectType", "ids: " + idList);
 
+                if (displayStr !=null && displayStr.length() >MAXCHARFIELD) displayStr = "\r\n"+displayStr;
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+                    if (displayStr == null || displayStr.equals("")) displayStr="Any";
                     viewModel.setCtypeSelect(displayStr);
                 } else {
                     viewModel.setPersistedProjectTypeId(displayStr);
@@ -360,6 +362,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
         if (valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
+        }
+        if (min == null || max == null) {
+            valueStr="";
         }
 
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
