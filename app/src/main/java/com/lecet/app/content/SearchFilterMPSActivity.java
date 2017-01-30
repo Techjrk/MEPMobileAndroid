@@ -423,6 +423,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
                 }
+                if (jurisdictionName == null || jurisdictionName.equals("")) {
+                    jurisdictionName="Any";
+                }
+                if (jurisdictionName.length() >MAXCHARFIELD) jurisdictionName = "\r\n"+jurisdictionName;
 
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
                     viewModel.setCjurisdictionSelect(jurisdictionName);
