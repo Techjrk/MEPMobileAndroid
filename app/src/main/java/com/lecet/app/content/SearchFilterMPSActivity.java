@@ -34,6 +34,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     SearchFilterMPFViewModel viewModel;
     boolean instantSearch;
     int MAXCHARFIELD = 16;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data == null) return;   //TODO - handle case of no String[] data for Activities which pass it
+        if (data == null)
+            return;   //TODO - handle case of no String[] data for Activities which pass it
 
         Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);      //TODO - handle case of no Bundle for Activities which pass it
         String[] extrasArr = null;
@@ -260,8 +262,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                                     //idSet.add(Integer.valueOf(category.getId()));
                                     //displayStr += category.getTitle() + ", ";
 
-                                    for(PrimaryProjectType primaryType : category.getProjectTypes()) {
-                                        if(primaryType != null) {
+                                    for (PrimaryProjectType primaryType : category.getProjectTypes()) {
+                                        if (primaryType != null) {
                                             idSet.add(Integer.valueOf(primaryType.getId()));
                                             //displayStr += primaryType.getTitle() + ", ";
                                         }
@@ -273,16 +275,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     }
                 }
 
-                if(displayStr.length()> 2) {
+                if (displayStr.length() > 2) {
                     displayStr = displayStr.substring(0, displayStr.length() - 2);         //trim trailing ", "
                 }
                 idList = new ArrayList<>(idSet);
                 Log.d("processProjectType", "displayStr: " + displayStr);
                 Log.d("processProjectType", "ids: " + idList);
 
-                if (displayStr !=null && displayStr.length() >MAXCHARFIELD) displayStr = "\r\n"+displayStr;
+                if (displayStr != null && displayStr.length() > MAXCHARFIELD)
+                    displayStr = "\r\n" + displayStr;
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
-                    if (displayStr == null || displayStr.equals("")) displayStr="Any";
+                    if (displayStr == null || displayStr.equals("")) displayStr = "Any";  //default value in Companies project type field
                     viewModel.setCtypeSelect(displayStr);
                 } else {
                     viewModel.setPersistedProjectTypeId(displayStr);
@@ -364,7 +367,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
         }
         if (min == null || max == null) {
-            valueStr="";
+            valueStr = "";
         }
 
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
@@ -422,16 +425,15 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 try {
                     jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
-                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
-                }
-                catch (Exception e) {
+                    jurisdictionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                } catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
                 }
                 if (jurisdictionName == null || jurisdictionName.equals("")) {
-                    jurisdictionName="Any";
-                }
-                if (jurisdictionName.length() >MAXCHARFIELD) jurisdictionName = "\r\n"+jurisdictionName;
+                    jurisdictionName = "Any";
+                } else if (jurisdictionName.length() > MAXCHARFIELD)
+                    jurisdictionName = "\r\n" + jurisdictionName;
 
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
                     viewModel.setCjurisdictionSelect(jurisdictionName);
@@ -450,7 +452,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 jList.add(jurisdictionName);
                 if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
 
-                    if(jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
+                    if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
                         // add each District Council ID
                         for (SearchFilterJurisdictionMain j : realmJurisdictions) {
                             if (jurisdictionName.equals(j.getName())) {
@@ -475,14 +477,14 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     }
 
                     //TODO - correct this section
-                    else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
+                    else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
                         // look for matching District Council ID
                         for (SearchFilterJurisdictionMain j : realmJurisdictions) {
                             districtCouncils = j.getDistrictCouncils();
                             for (SearchFilterJurisdictionDistrictCouncil dc : districtCouncils) {
                                 if (dc != null) {
                                     jList.add(dc.getName());
-                                    if(jurisdictionName.equals(dc.getName())) {
+                                    if (jurisdictionName.equals(dc.getName())) {
                                         locals = dc.getLocals();
                                         for (SearchFilterJurisdictionLocal local : locals) {
                                             if (local != null) {
@@ -496,7 +498,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     }
 
                     //TODO - implement this section
-                    else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
+                    else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
 
                     }
 
@@ -611,6 +613,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processOwnerType(String[] arr) {
         String ownerTypeStr = arr[0];
         String ownerType = "";
+        if (ownerTypeStr == null || ownerTypeStr.equals("")) {
+            ownerTypeStr = "Any";
+        }
         viewModel.setPersistedOwnerType(ownerTypeStr);
         viewModel.setOwner_type_select(ownerTypeStr);
         if (ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
@@ -629,6 +634,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processWorkType(String[] arr) {
         String workTypeStr = arr[0];
         String workType = "";
+        if (workTypeStr == null || workTypeStr.equals("")) {
+            workTypeStr = "Any";
+        }
         viewModel.setPersistedWorkType(workTypeStr);
         viewModel.setWork_type_select(workTypeStr);
         if (workTypeStr != null && !workTypeStr.trim().equals("")) {
