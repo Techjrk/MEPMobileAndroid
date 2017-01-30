@@ -33,7 +33,7 @@ import io.realm.RealmResults;
 public class SearchFilterMPSActivity extends AppCompatActivity {
     SearchFilterMPFViewModel viewModel;
     boolean instantSearch;
-
+    int MAXCHARFIELD = 16;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
