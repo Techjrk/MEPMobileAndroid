@@ -15,8 +15,8 @@ import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
-import com.lecet.app.databinding.ActivitySearchFilterMps30Binding;
-import com.lecet.app.databinding.ActivitySearchFilterMseBinding;
+import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
+import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
@@ -30,6 +30,8 @@ import java.util.Set;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
+
 public class SearchFilterMPSActivity extends AppCompatActivity {
     SearchFilterMPFViewModel viewModel;
     boolean instantSearch;
@@ -38,16 +40,20 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //     setContentView(R.layout.activity_search_filter_mse);
-        // setContentView(R.layout.activity_search_filter_mps30);
         viewModel = new SearchFilterMPFViewModel(this);
         Intent i = getIntent();
-        instantSearch = i.getBooleanExtra("instantSearch", true);
+        instantSearch = i.getBooleanExtra(FILTER_INSTANT_SEARCH, true);
+        //Log.d("SearchFilterMPSActivity", "onCreate: instantSearch: " + instantSearch);
+
+        // if coming from Search Activity when no text has been input or Saved Search used, use the tabbed Projects/Companies filter layout
         if (instantSearch) {
-            ActivitySearchFilterMseBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mse);
+            ActivitySearchFiltersAllTabbedBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filters_all_tabbed);       //Projects/Companies
             sfilter.setViewModel(viewModel);
-        } else {
-            ActivitySearchFilterMps30Binding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_mps30);
+        }
+
+        // if coming from Search Activity in a state where search text is entered (via user input or a Saved Search), use the non-tabbed Refine Search filter layout
+        else {
+            ActivitySearchFiltersAllRefineBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filters_all_refine);     //Refine Search
             sfilter.setViewModel(viewModel);
         }
     }

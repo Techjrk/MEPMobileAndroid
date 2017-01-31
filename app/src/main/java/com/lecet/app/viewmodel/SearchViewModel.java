@@ -794,7 +794,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void onFilterClicked(View view) {
         Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
-        USING_INSTANT_SEARCH = getIsMSE1SectionVisible();
+        USING_INSTANT_SEARCH = getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
         intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
         activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
     }
