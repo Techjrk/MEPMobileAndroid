@@ -137,51 +137,12 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             childViewHolder.imgView.setVisibility(View.GONE);
             childViewHolder.checkView.setChecked(false);
             if (child.getGrandChildren()!=null )             childViewHolder.imgView.setVisibility(View.VISIBLE);
-            childViewHolder.checkView.setText(child.name);
-
-            childViewHolder.checkView.setChecked(child.getSelected());
-            childViewHolder.checkView.setTag(new Integer(truePosition));
-            // checkView.setChecked(child.isSelected);
-            // checkView.setTag(new Integer(truePosition));
-
-            if(truePosition == 0 && child.isSelected && childViewHolder.checkView.isChecked()){
-                //               if(truePosition == 0 && child.isSelected && checkView.isChecked()){
-                lastChecked = childViewHolder.checkView;
-//                  lastChecked = checkView;
-                lastCheckedPos =0;
-            }
-
-            childViewHolder.checkView.setOnClickListener(
-                    new View.OnClickListener(){
-                        @Override
-                        public void onClick(View view) {
-                            CheckBox cb = (CheckBox) view;
- //                           RadioButton cb = (RadioButton) view;
-                            int clickedPos = ((Integer) cb.getTag()).intValue();
-                            if (cb.isChecked()){
-                                if (lastChecked !=null) {
-                                    lastChecked.setChecked(false);
-                                    child.setSelected(false);
-                                }
-                                lastChecked=cb;
-                                lastCheckedPos = clickedPos;
-                            } else lastChecked=null;
-
-                            child.setSelected(cb.isChecked());
-
-                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
-                        }
-                    }
-
-            );
-
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    child.isExpanded = !child.isExpanded;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
-
                         expanded = new TreeMap<>();
                         expandedChildren.put(section, expanded);
                     }
@@ -258,6 +219,49 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 }
             });
 
+
+            childViewHolder.checkView.setText(child.name);
+
+            childViewHolder.checkView.setChecked(child.getSelected());
+            childViewHolder.checkView.setTag(new Integer(truePosition));
+            if (child.isExpanded)
+                childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+            else
+                childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+
+
+            if(truePosition == 0 && child.isSelected && childViewHolder.checkView.isChecked()){
+                //               if(truePosition == 0 && child.isSelected && checkView.isChecked()){
+                lastChecked = childViewHolder.checkView;
+//                  lastChecked = checkView;
+                lastCheckedPos =0;
+            }
+
+            childViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            CheckBox cb = (CheckBox) view;
+ //                           RadioButton cb = (RadioButton) view;
+                            int clickedPos = ((Integer) cb.getTag()).intValue();
+                            if (cb.isChecked()){
+                                if (lastChecked !=null) {
+                                    lastChecked.setChecked(false);
+                                    child.setSelected(false);
+                                }
+                                lastChecked=cb;
+                                lastCheckedPos = clickedPos;
+                            } else lastChecked=null;
+
+                            child.setSelected(cb.isChecked());
+
+                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
+                        }
+                    }
+
+            );
+
+
         }
 
         // Locals which are part of a District Council
@@ -321,9 +325,28 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         // Parent denoted by section number
         final Parent parent = data.get(section);
-        parentViewHolder.checkView.setText(parent.getName());
-        //parentViewHolder.checkView.setTag("777777");
 
+        parentViewHolder.imgView.setOnClickListener(null);
+        parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parent.isExpanded = !parent.isExpanded;
+                if (expandedParents.contains(section)) {
+                    expandedParents.remove(Integer.valueOf(section));
+                    expandedChildren.remove(Integer.valueOf(section));
+                } else {
+                    expandedParents.add(section);
+                }
+
+                notifyDataSetChanged();
+            }
+        });
+        parentViewHolder.checkView.setText(parent.getName());
+
+        if (parent.isExpanded)
+            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+        else
+            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
         parentViewHolder.checkView.setChecked(parent.getSelected());
         parentViewHolder.checkView.setTag(new Integer(section));
@@ -358,22 +381,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 }
         );
 
-        ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (expandedParents.contains(section)) {
-
-                    expandedParents.remove(Integer.valueOf(section));
-                    expandedChildren.remove(Integer.valueOf(section));
-
-                } else {
-
-                    expandedParents.add(section);
-                }
-                notifyDataSetChanged();
-            }
-        });
     }
 
     @Override
@@ -563,7 +570,20 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private String abbreviation;
         private String longName;
         private List<Child> children;
-        public boolean isSelected=false;
+        private boolean isExpanded;
+        private boolean isSelected=false;
+
+        public boolean isExpanded() {
+            return isExpanded;
+        }
+
+        public void setExpanded(boolean expanded) {
+            isExpanded = expanded;
+        }
+
+        public boolean isSelected() {
+            return isSelected;
+        }
 
         public boolean getSelected() {
             return isSelected;
@@ -621,9 +641,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private String name;
         private String abbreviation;
         private String longName;
-
+        private boolean isExpanded;
         private List<GrandChild> grandChildren;
         private Integer districtCouncilId;
+
         public boolean isSelected=false;
 
         public boolean getSelected() {
@@ -690,7 +711,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private String abbreviation;
         private String longName;
         public boolean isSelected=false;
-
+        private boolean isExpanded;
         public boolean getSelected() {
             return isSelected;
         }
