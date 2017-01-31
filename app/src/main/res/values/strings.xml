@@ -81,10 +81,21 @@
     <string name="title_activity_update_profile">UpdateProfileActivity</string>
     <string name="create_password">Create Password</string>
 
-    <!-- Change Password -->
+    <!-- MST Change Password -->
     <string name="title_activity_change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="update_password">Update Password</string>
+    <string name="current">Current</string>
+    <string name="new_word">New</string>
+    <string name="your_current">Your current password</string>
+    <string name="confirm_new_pass">Confirm new password</string>
+    <string name="at_least_six_char">At least 6 characters</string>
+    <string name="please_enter_current_password">Please enter your current password.</string>
+    <string name="invalid_password_title">Invalid password</string>
+    <string name="invalid_password_message">Please enter a valid password.</string>
+    <string name="password_mismatch">The entered passwords do not match</string>
+    <string name="password_confirm_message">Are you sure you want to change your password?</string>
+
 
     <!-- Company Detail: Project Bids List -->
     <string name="title_activity_company_detail_project_bids">Company Detail: Project Bids</string>
@@ -273,12 +284,18 @@
     <string name="total_projects">Total Projects</string>
     <string name="total_valuation">Total Valuation</string>
     <string name="title_activity_company_detail">CompanyDetailActivity</string>
-    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
-    </string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity</string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
 
     <!-- MPR Profile -->
     <string name="my_profile">My Profile</string>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="logging_out">Logging out...</string>
+    <string name="notifications">Notifications</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="profile_error_message">Please enter your %s</string>
+
+
 
 </resources>

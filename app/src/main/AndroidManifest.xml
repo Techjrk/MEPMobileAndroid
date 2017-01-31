@@ -104,7 +104,9 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".content.MainActivity"/>
         </activity>
-        <activity android:name=".content.ProjectDetailActivity">
+        <activity
+                android:name=".content.ProjectDetailActivity"
+                android:theme="@style/AppTheme">
         </activity>
 
         <!-- Metadata -->
@@ -115,18 +117,42 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_api_key"/>
 
-        <activity android:name=".content.SearchFilterMSEActivity"/>
-        <activity android:name=".content.SearchFilterMPSActivity"/>
-        <activity android:name=".content.SearchFilterMPFLocationActivity"/>
-        <activity android:name=".content.SearchFilterMPFTypeActivity"/>
-        <activity android:name=".content.SearchFilterMPFValueActivity"/>
-        <activity android:name=".content.SearchFilterMPFBiddingWithinActivity"/>
-        <activity android:name=".content.SearchFilterMPFUpdatedWithinActivity"/>
-        <activity android:name=".content.SearchFilterMPFJurisdictionActivity"/>
-        <activity android:name=".content.SearchFilterMPFBHActivity"/>
-        <activity android:name=".content.SearchFilterMPFStageActivity"/>
-        <activity android:name=".content.SearchFilterMPFOwnerTypeActivity"/>
-        <activity android:name=".content.SearchFilterMPFWorkTypeActivity"/>
+        <activity
+                android:name=".content.SearchFilterMSEActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPSActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFLocationActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFTypeActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFValueActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFBiddingWithinActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFUpdatedWithinActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFJurisdictionActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFBHActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFStageActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFOwnerTypeActivity"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.SearchFilterMPFWorkTypeActivity"
+                android:theme="@style/AppTheme"/>
         <activity
                 android:name=".content.CompanyDetailActivity"
                 android:label="@string/title_activity_company_detail"
@@ -146,6 +172,9 @@
                 android:name=".content.ProjectParticipantsActivity"
                 android:label="@string/title_activity_project_participants"
                 android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".content.ChangePasswordActivity"
+                  android:theme="@style/AppTheme">
         </activity>
     </application>
 

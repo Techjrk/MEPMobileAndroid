@@ -1,5 +1,6 @@
 package com.lecet.app.data.api.service;
 
+import com.lecet.app.data.api.request.ChangePasswordRequest;
 import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;
@@ -51,4 +52,11 @@ public interface UserService {
     })
     @PUT("LecetUsers/{userId}")
     Call<User> updateUser(@Header("Authorization") String token, @Path("userId") long userId, @Body UpdateUserProfileRequest user);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("LecetUsers/{userId}")
+    Call<User> changePassword(@Header("Authorization") String token, @Path("userId") long userId, @Body ChangePasswordRequest body);
 }

@@ -51,10 +51,10 @@ public class ProfileActivity extends NavigationBaseActivity {
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_save, null);
 
-            viewModel.setToolbar(tb, title, subTitle);
-
             actionBar.setCustomView(tb);
             actionBar.setDisplayShowCustomEnabled(true);
+
+            viewModel.setToolbar(tb, title, subTitle);
         }
     }
 

@@ -482,6 +482,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onSettingsClicked() {
 
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
