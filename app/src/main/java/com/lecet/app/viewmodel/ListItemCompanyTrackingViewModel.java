@@ -1,5 +1,9 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.view.View;
+
+import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.domain.ProjectDomain;
@@ -78,6 +82,14 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
     @Override
     public boolean showSecondaryDetailIcon() {
         return false;
+    }
+
+    @Override
+    public void handleTrackingItemSelected(View view, Company object) {
+
+        Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
+        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, object.getId());
+        view.getContext().startActivity(intent);
     }
 
     private String mapUrl(Company company) {

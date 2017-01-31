@@ -63,6 +63,8 @@ public abstract class TrackingListItem<T extends RealmObject> {
 
     public abstract boolean showSecondaryDetailIcon();
 
+    public abstract void handleTrackingItemSelected(View view, T object);
+
     public void init(T object) {
         title.set(generateTitle(object));
         primaryDetail.set(generatePrimaryDetail(object));
@@ -119,5 +121,10 @@ public abstract class TrackingListItem<T extends RealmObject> {
     @SuppressWarnings("unused")
     public void onExpandableViewClick(View view) {
         activityUpdateLayoutExpanded.set(!activityUpdateLayoutExpanded.get());
+    }
+
+    public void onTrackingItemSelected(View view) {
+
+        handleTrackingItemSelected(view, object);
     }
 }

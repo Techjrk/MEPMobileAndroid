@@ -154,7 +154,7 @@ public class ProjectDetailViewModel {
         details.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.stage), project.getProjectStage().getName()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), DateUtility.formatDateForDisplay(project.getBidDate())));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.value), "$ 0"));
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(context), Realm.getDefaultInstance()), projectID, context.getString(R.string.jurisdiction)));

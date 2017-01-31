@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lecet.app.R;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
@@ -184,7 +185,16 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        //TODO open something? Campture the get direction tap?
+        Project project = (Project) marker.getTag();
+
+        Activity context = activity.get();
+
+        if (context != null) {
+
+            Intent intent = new Intent(context, ProjectDetailActivity.class);
+            intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+            context.startActivity(intent);
+        }
     }
 
     @Override

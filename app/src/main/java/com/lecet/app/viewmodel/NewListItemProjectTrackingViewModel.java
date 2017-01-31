@@ -1,5 +1,9 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.view.View;
+
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
@@ -111,6 +115,14 @@ public class NewListItemProjectTrackingViewModel extends TrackingListItem<Projec
     @Override
     public boolean showSecondaryDetailIcon() {
         return true;
+    }
+
+    @Override
+    public void handleTrackingItemSelected(View view, Project object) {
+
+        Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, object.getId());
+        view.getContext().startActivity(intent);
     }
 
     @Override
