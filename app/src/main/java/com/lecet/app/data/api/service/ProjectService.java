@@ -61,12 +61,19 @@ public interface ProjectService {
             "Content-Type: application/json"
     })
     @PUT("Projects/{projectID}/hide")
-    Call<Project> hide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
+    Call<ResponseBody> hide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
     })
     @PUT("Projects/{projectID}/unhide")
-    Call<Project> unhide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
+    Call<ResponseBody> unhide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("LecetUsers/{user_id}/hiddenProjects")
+    Call<List<Project>> hiddenProjects(@Header("Authorization") String authorization, @Path("user_id") long user_id);
 }

@@ -58,6 +58,8 @@ public class Bid extends RealmObject {
     @SerializedName("company")
     private Company company;
 
+    private boolean mbrItem; // Mobile bids recently made
+
     public Bid() {
     }
 
@@ -117,6 +119,34 @@ public class Bid extends RealmObject {
         return company;
     }
 
+    public boolean isMbrItem() {
+        return mbrItem;
+    }
+
+    public void setMbrItem(boolean mbrItem) {
+        this.mbrItem = mbrItem;
+    }
+
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "awardInd=" + awardInd +
+                ", createDate=" + createDate +
+                ", amount=" + amount +
+                ", bidderRole='" + bidderRole + '\'' +
+                ", rank=" + rank +
+                ", fipsCounty='" + fipsCounty + '\'' +
+                ", zip5='" + zip5 + '\'' +
+                ", id=" + id +
+                ", companyId=" + companyId +
+                ", contactId=" + contactId +
+                ", projectId=" + projectId +
+                ", project=" + project +
+                ", contact=" + contact +
+                ", company=" + company +
+                ", mbrItem=" + mbrItem +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -132,6 +162,7 @@ public class Bid extends RealmObject {
         if (companyId != bid.companyId) return false;
         if (contactId != bid.contactId) return false;
         if (projectId != bid.projectId) return false;
+        if (mbrItem != bid.mbrItem) return false;
         if (createDate != null ? !createDate.equals(bid.createDate) : bid.createDate != null)
             return false;
         if (bidderRole != null ? !bidderRole.equals(bid.bidderRole) : bid.bidderRole != null)
@@ -164,27 +195,7 @@ public class Bid extends RealmObject {
         result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (contact != null ? contact.hashCode() : 0);
         result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (mbrItem ? 1 : 0);
         return result;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Bid{" +
-                "awardInd=" + awardInd +
-                ", createDate=" + createDate +
-                ", amount=" + amount +
-                ", bidderRole='" + bidderRole + '\'' +
-                ", rank=" + rank +
-                ", fipsCounty='" + fipsCounty + '\'' +
-                ", zip5='" + zip5 + '\'' +
-                ", id=" + id +
-                ", companyId=" + companyId +
-                ", contactId=" + contactId +
-                ", projectId=" + projectId +
-                ", project=" + project +
-                ", contact=" + contact +
-                ", company=" + company +
-                '}';
     }
 }

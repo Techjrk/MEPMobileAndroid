@@ -20,6 +20,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -184,17 +185,17 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
         showProgressDialog(getAppCompatActivity().getString(R.string.app_name), "");
 
-        Project project = getTrackedObject();
+        final Project project = getTrackedObject();
         if (project.isHidden()) {
 
-            getTrackingListDomain().getProjectDomain().unhideProject(project.getId(), new Callback<Project>() {
+            getTrackingListDomain().getProjectDomain().unhideProject(project.getId(), new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<Project> call, Response<Project> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                     if (response.isSuccessful()) {
 
                         dismissProgressDialog();
-                        getTrackingListDomain().getProjectDomain().copyToRealmTransaction(response.body());
+                        getTrackingListDomain().getProjectDomain().setProjectHidden(project, false);
 
                     } else {
 
@@ -204,7 +205,7 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                 }
 
                 @Override
-                public void onFailure(Call<Project> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     dismissProgressDialog();
                     showAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), getAppCompatActivity().getString(R.string.error_network_message));
@@ -213,14 +214,14 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
         } else {
 
-            getTrackingListDomain().getProjectDomain().hideProject(project.getId(), new Callback<Project>() {
+            getTrackingListDomain().getProjectDomain().hideProject(project.getId(), new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<Project> call, Response<Project> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                     if (response.isSuccessful()) {
 
                         dismissProgressDialog();
-                        getTrackingListDomain().getProjectDomain().copyToRealmTransaction(response.body());
+                        getTrackingListDomain().getProjectDomain().setProjectHidden(project, true);
 
                     } else {
 
@@ -230,7 +231,7 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                 }
 
                 @Override
-                public void onFailure(Call<Project> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     dismissProgressDialog();
                     showAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), getAppCompatActivity().getString(R.string.error_network_message));

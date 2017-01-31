@@ -477,6 +477,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onHiddenObjectsClicked() {
 
+        Intent intent = new Intent(this, HiddenProjectsActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -173,8 +173,14 @@
                 android:label="@string/title_activity_project_participants"
                 android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".content.ChangePasswordActivity"
-                  android:theme="@style/AppTheme">
+        <activity
+                android:name=".content.ChangePasswordActivity"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
+                android:name=".content.HiddenProjectsActivity"
+                android:label="@string/title_activity_hidden_projects"
+                android:theme="@style/AppTheme">
         </activity>
     </application>
 

@@ -284,7 +284,8 @@
     <string name="total_projects">Total Projects</string>
     <string name="total_valuation">Total Valuation</string>
     <string name="title_activity_company_detail">CompanyDetailActivity</string>
-    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity</string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
+    </string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
 
@@ -295,7 +296,11 @@
     <string name="notifications">Notifications</string>
     <string name="sign_out">Sign Out</string>
     <string name="profile_error_message">Please enter your %s</string>
+    <string name="title_activity_hidden_projects">HiddenProjectsActivity</string>
 
-
+    <!-- MHD Hidden Projects -->
+    <string name="hidden_projects_title">Hidden Projects</string>
+    <string name="hidden_projects_sub_title">%d Hidden Projects</string>
+    <string name="unhide">Unhide</string>
 
 </resources>
