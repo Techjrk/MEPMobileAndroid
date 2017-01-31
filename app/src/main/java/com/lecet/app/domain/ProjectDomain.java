@@ -217,17 +217,24 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
-    public void hideProject(long projectId, Callback<Project> callback) {
+    public void hideProject(long projectId, Callback<ResponseBody> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<Project> call = lecetClient.getProjectService().hide(token, projectId);
+        Call<ResponseBody> call = lecetClient.getProjectService().hide(token, projectId);
         call.enqueue(callback);
     }
 
-    public void unhideProject(long projectId, Callback<Project> callback) {
+    public void unhideProject(long projectId, Callback<ResponseBody> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<Project> call = lecetClient.getProjectService().unhide(token, projectId);
+        Call<ResponseBody> call = lecetClient.getProjectService().unhide(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void getHiddenProjects(long userID, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Project>> call = lecetClient.getProjectService().hiddenProjects(token, userID);
         call.enqueue(callback);
     }
 
@@ -360,6 +367,17 @@ public class ProjectDomain {
         return result;
     }
 
+    public RealmResults<Project> fetchHiddenProjects() {
+
+        return realm.where(Project.class).equalTo("hidden", true).findAll();
+    }
+
+    public void setProjectHidden(Project project, boolean hidden) {
+        realm.beginTransaction();
+        project.setHidden(true);
+        realm.commitTransaction();
+    }
+
     public Project copyToRealmTransaction(Project project) {
 
         realm.beginTransaction();
@@ -378,6 +396,71 @@ public class ProjectDomain {
         return persistedProjects;
     }
 
+    public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, storedProject, hidden);
+
+                    } else {
+
+                        realm.copyToRealm(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
+    public void asyncCopyToRealm(final List<Project> projects, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, storedProject);
+
+                    } else {
+
+                        realm.copyToRealm(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
+    public void asyncCopyToRealm(final Project project, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                if (storedProject != null) {
+
+                    storedProject.updateProject(realm, project);
+
+                } else {
+
+                    realm.copyToRealm(project);
+                }
+            }
+        }, onSuccess, onError);
+    }
 
     public RealmResults<Project> queryResult(@BidGroup int categoryId, RealmResults<Project> result, String sortFieldName) {
 
@@ -386,6 +469,8 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .findAllSorted(sortFieldName, Sort.DESCENDING);
     }
+
+
 
     /**
      * Utility
