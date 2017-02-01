@@ -1,6 +1,8 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
@@ -261,6 +263,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
                 .findAll();
 
@@ -283,6 +286,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mraItem", true)
                 .greaterThanOrEqualTo("firstPublishDate", publishDate)
                 .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
@@ -294,6 +298,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .equalTo("mraItem", true)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("firstPublishDate", Sort.DESCENDING);
@@ -306,6 +311,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mruItem", true)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
 
@@ -317,6 +323,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                .equalTo("mruItem", true)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
@@ -419,7 +426,9 @@ public class ProjectDomain {
         }, onSuccess, onError);
     }
 
-    public void asyncCopyToRealm(final List<Project> projects, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+    public void asyncCopyToRealm(final List<Project> projects, @Nullable final Boolean isHidden, @Nullable final Boolean mbsItem,
+                                 @Nullable final Boolean mraItem, @Nullable final Boolean mruItem,
+                                 @NonNull Realm.Transaction.OnSuccess onSuccess, @NonNull Realm.Transaction.OnError onError) {
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -431,9 +440,29 @@ public class ProjectDomain {
 
                     if (storedProject != null) {
 
-                        storedProject.updateProject(realm, storedProject);
+                        storedProject.updateProject(realm, storedProject, isHidden, mbsItem, mraItem, mruItem);
 
                     } else {
+
+                        if (isHidden != null) {
+
+                            project.setHidden(isHidden.booleanValue());
+                        }
+
+                        if (mbsItem != null) {
+
+                            project.setMbsItem(mbsItem.booleanValue());
+                        }
+
+                        if (mraItem != null) {
+
+                            project.setMraItem(mraItem.booleanValue());
+                        }
+
+                        if (mruItem != null) {
+
+                            project.setMruItem(mruItem.booleanValue());
+                        }
 
                         realm.copyToRealm(project);
                     }
@@ -452,7 +481,7 @@ public class ProjectDomain {
 
                 if (storedProject != null) {
 
-                    storedProject.updateProject(realm, project);
+                    storedProject.updateProject(realm, project, null, null, null, null);
 
                 } else {
 

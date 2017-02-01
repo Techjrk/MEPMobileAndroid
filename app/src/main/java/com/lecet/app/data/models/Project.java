@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.support.annotation.Nullable;
+
 import com.lecet.app.interfaces.TrackedObject;
 
 import java.util.Date;
@@ -561,7 +563,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.hidden = hidden;
     }
 
-    public void updateProject(Realm realm, Project project) {
+    public void updateProject(Realm realm, Project project, @Nullable Boolean isHidden, @Nullable Boolean mbsItem, @Nullable Boolean mraItem, @Nullable Boolean mruItem) {
 
         this.bidSubmitTo = project.bidSubmitTo;
         this.state = project.getState();
@@ -603,7 +605,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.currencyType = project.getCurrencyType();
         this.country = project.getCountry();
         if (project.getGeocode() != null) {
-            realm.copyToRealmOrUpdate(project.getGeocode());
+            realm.copyToRealm(project.getGeocode());
             this.geocode = project.getGeocode();
         }
         this.zipPlus4 = project.getZipPlus4();
@@ -631,6 +633,26 @@ public class Project extends RealmObject implements TrackedObject {
         if (project.getUpdates() != null) {
             realm.copyToRealmOrUpdate(project.getUpdates());
             this.updates = project.getUpdates();
+        }
+
+        if (isHidden != null) {
+
+            this.hidden = isHidden.booleanValue();
+        }
+
+        if (mbsItem != null) {
+
+            this.mbsItem = mbsItem.booleanValue();
+        }
+
+        if (mraItem != null) {
+
+            this.mraItem = mraItem.booleanValue();
+        }
+
+        if (mruItem != null) {
+
+            this.mruItem = mruItem.booleanValue();
         }
     }
 

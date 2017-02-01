@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -162,16 +163,30 @@ public class MainViewModel {
 
                         // Store in Realm
                         List<Project> body = response.body();
-                        projectDomain.copyToRealmTransaction(body);
+                        //projectDomain.copyToRealmTransaction(body);
 
-                        // Fetch Realm managed Projects
-                        realmResultsMHS = fetchProjectsHappeningSoon();
-                        callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
+                        projectDomain.asyncCopyToRealm(body, null, new Boolean(true), null, null, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
 
-                        if (dashboardPosition == DASHBOARD_POSITION_MHS) {
+                                // Fetch Realm managed Projects
+                                realmResultsMHS = fetchProjectsHappeningSoon();
+                                callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
 
-                            setupAdapterWithProjects(realmResultsMHS);
-                        }
+                                if (dashboardPosition == DASHBOARD_POSITION_MHS) {
+
+                                    setupAdapterWithProjects(realmResultsMHS);
+                                }
+
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                callback.onFailure(-1, "Network Failure");
+                            }
+                        });
+
 
                     } else {
 
@@ -214,16 +229,29 @@ public class MainViewModel {
 
                         // Store in Realm
                         List<Project> body = response.body();
-                        projectDomain.copyToRealmTransaction(body);
 
-                        // Fetch Realm managed Projects
-                        realmResultsMRA = fetchProjectsRecentlyAdded();
-                        callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
+                        projectDomain.asyncCopyToRealm(body, null, null, new Boolean(true), null, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
 
-                        if (dashboardPosition == DASHBOARD_POSITION_MRA) {
+                                // Fetch Realm managed Projects
+                                realmResultsMRA = fetchProjectsRecentlyAdded();
+                                callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
 
-                            setupAdapterWithProjects(realmResultsMRA);
-                        }
+                                if (dashboardPosition == DASHBOARD_POSITION_MRA) {
+
+                                    setupAdapterWithProjects(realmResultsMRA);
+                                }
+
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                callback.onFailure(-1, "Network Failure");
+                            }
+                        });
+
 
                     } else {
 
@@ -266,16 +294,27 @@ public class MainViewModel {
 
                         // Store in Realm
                         List<Project> body = response.body();
-                        projectDomain.copyToRealmTransaction(body);
 
-                        // Fetch Realm managed Projects
-                        realmResultsMRU = fetchProjectsRecentlyUpdated();
-                        callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
+                        projectDomain.asyncCopyToRealm(body, null, null, null, new Boolean(true), new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
 
-                        if (dashboardPosition == DASHBOARD_POSITION_MRU) {
+                                // Fetch Realm managed Projects
+                                realmResultsMRU = fetchProjectsRecentlyUpdated();
+                                callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
 
-                            setupAdapterWithProjects(realmResultsMRU);
-                        }
+                                if (dashboardPosition == DASHBOARD_POSITION_MRU) {
+
+                                    setupAdapterWithProjects(realmResultsMRU);
+                                }
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                callback.onFailure(-1, "Network Failure");
+                            }
+                        });
 
                     } else {
 
