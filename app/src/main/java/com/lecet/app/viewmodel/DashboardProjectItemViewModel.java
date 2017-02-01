@@ -1,5 +1,9 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.view.View;
+
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Project;
 
 import java.text.SimpleDateFormat;
@@ -83,4 +87,10 @@ public class DashboardProjectItemViewModel {
         return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
     }
 
+    public void onItemClick(View view) {
+
+        Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+        view.getContext().startActivity(intent);
+    }
 }

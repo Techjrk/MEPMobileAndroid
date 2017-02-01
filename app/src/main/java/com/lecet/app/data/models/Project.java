@@ -2,10 +2,13 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.support.annotation.Nullable;
+
 import com.lecet.app.interfaces.TrackedObject;
 
 import java.util.Date;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -178,6 +181,12 @@ public class Project extends RealmObject implements TrackedObject {
     private RealmList<ActivityUpdate> updates;
 
     private ActivityUpdate recentUpdate;
+
+    private boolean mbsItem; // Mobile bids happening soon
+
+    private boolean mraItem; // Mobile projects recently added
+
+    private boolean mruItem; // Mobile projects recently updated
 
     public Project() {
     }
@@ -391,15 +400,41 @@ public class Project extends RealmObject implements TrackedObject {
         this.hidden = hidden;
     }
 
+    public boolean isMbsItem() {
+        return mbsItem;
+    }
+
+    public void setMbsItem(boolean mbsItem) {
+        this.mbsItem = mbsItem;
+    }
+
+    public boolean isMraItem() {
+        return mraItem;
+    }
+
+    public void setMraItem(boolean mraItem) {
+        this.mraItem = mraItem;
+    }
+
+    public boolean isMruItem() {
+        return mruItem;
+    }
+
+    public void setMruItem(boolean mruItem) {
+        this.mruItem = mruItem;
+    }
+
     public RealmList<Bid> getBids() {
         return bids;
     }
 
-    /** Convenience **/
+    /**
+     * Convenience
+     **/
 
     public String getFullAddress() {
 
-        String fullAddress  = "";
+        String fullAddress = "";
 
         if (this.address1 != null) {
 
@@ -424,7 +459,7 @@ public class Project extends RealmObject implements TrackedObject {
 
         String projectType = "";
 
-        if (this.primaryProjectType != null ) {
+        if (this.primaryProjectType != null) {
 
             projectType = primaryProjectType.getTitle();
 
@@ -453,6 +488,174 @@ public class Project extends RealmObject implements TrackedObject {
     public void setRecentUpdate(ActivityUpdate recentUpdate) {
         this.recentUpdate = recentUpdate;
     }
+
+    public void updateProject(Realm realm, Project project, boolean hidden) {
+
+        this.bidSubmitTo = project.bidSubmitTo;
+        this.state = project.getState();
+        this.address1 = project.address1;
+        this.address2 = project.getAddress2();
+        this.statusText = project.getStatusText();
+        if (project.getProjectStage() != null) {
+            realm.copyToRealmOrUpdate(project.getProjectStage());
+            this.projectStage = project.getProjectStage();
+        }
+        this.estLow = project.getEstLow();
+        this.bidDate = project.getBidDate();
+        this.city = project.getCity();
+        this.primaryProjectTypeId = project.getPrimaryProjectTypeId();
+        this.zip5 = project.getZip5();
+        this.cnProjectUrl = project.getCnProjectUrl();
+        this.title = project.getTitle();
+        this.contractNbr = project.getContractNbr();
+        this.numberOfFloorsAboveGround = project.getNumberOfFloorsAboveGround();
+        this.details = project.getDetails();
+        this.dodgeNumber = project.getDodgeNumber();
+        this.lastPublishDate = project.getLastPublishDate();
+        this.contractType = project.getContractType();
+        this.projDlvrySys = project.getProjDlvrySys();
+        this.planInd = project.getPlanInd();
+        this.dodgeVersion = project.getDodgeVersion();
+        if (project.getPrimaryProjectType() != null) {
+            realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
+            this.primaryProjectType = project.getPrimaryProjectType();
+        }
+        this.specAvailable = project.getSpecAvailable();
+        this.fipsCounty = project.getFipsCounty();
+        this.targetFinishDate = project.getTargetFinishDate();
+        this.priorPublishDate = project.getPriorPublishDate();
+        this.numberOfBuildings = project.getNumberOfBuildings();
+        this.statusProjDlvrySys = project.getStatusProjDlvrySys();
+        this.estHigh = project.getEstHigh();
+        this.stdIncludes = project.getStdIncludes();
+        this.currencyType = project.getCurrencyType();
+        this.country = project.getCountry();
+        if (project.getGeocode() != null) {
+            realm.copyToRealm(project.getGeocode());
+            this.geocode = project.getGeocode();
+        }
+        this.zipPlus4 = project.getZipPlus4();
+        this.projectStageId = project.getProjectStageId();
+        this.projectNotes = project.getProjectNotes();
+        this.targetStartDate = project.getTargetStartDate();
+        this.geoLocationType = project.getGeoLocationType();
+        this.county = project.getCounty();
+        this.firstPublishDate = project.getFirstPublishDate();
+        this.addendaInd = project.getAddendaInd();
+        this.availableFrom = project.getAvailableFrom();
+        this.geoType = project.getGeoType();
+        this.unionDesignation = project.getUnionDesignation();
+        this.bidTimeZone = project.getBidTimeZone();
+        this.bondInformation = project.getBondInformation();
+        this.ownerClass = project.getOwnerClass();
+        if (project.getContacts() != null) {
+            realm.copyToRealmOrUpdate(project.getContacts());
+            this.contacts = project.getContacts();
+        }
+        if (project.getBids() != null) {
+            realm.copyToRealmOrUpdate(project.getBids());
+            this.bids = project.getBids();
+        }
+        if (project.getUpdates() != null) {
+            realm.copyToRealmOrUpdate(project.getUpdates());
+            this.updates = project.getUpdates();
+        }
+        this.hidden = hidden;
+    }
+
+    public void updateProject(Realm realm, Project project, @Nullable Boolean isHidden, @Nullable Boolean mbsItem, @Nullable Boolean mraItem, @Nullable Boolean mruItem) {
+
+        this.bidSubmitTo = project.bidSubmitTo;
+        this.state = project.getState();
+        this.address1 = project.address1;
+        this.address2 = project.getAddress2();
+        this.statusText = project.getStatusText();
+        if (project.getProjectStage() != null) {
+            realm.copyToRealmOrUpdate(project.getProjectStage());
+            this.projectStage = project.getProjectStage();
+        }
+        this.estLow = project.getEstLow();
+        this.bidDate = project.getBidDate();
+        this.city = project.getCity();
+        this.primaryProjectTypeId = project.getPrimaryProjectTypeId();
+        this.zip5 = project.getZip5();
+        this.cnProjectUrl = project.getCnProjectUrl();
+        this.title = project.getTitle();
+        this.contractNbr = project.getContractNbr();
+        this.numberOfFloorsAboveGround = project.getNumberOfFloorsAboveGround();
+        this.details = project.getDetails();
+        this.dodgeNumber = project.getDodgeNumber();
+        this.lastPublishDate = project.getLastPublishDate();
+        this.contractType = project.getContractType();
+        this.projDlvrySys = project.getProjDlvrySys();
+        this.planInd = project.getPlanInd();
+        this.dodgeVersion = project.getDodgeVersion();
+        if (project.getPrimaryProjectType() != null) {
+            realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
+            this.primaryProjectType = project.getPrimaryProjectType();
+        }
+        this.specAvailable = project.getSpecAvailable();
+        this.fipsCounty = project.getFipsCounty();
+        this.targetFinishDate = project.getTargetFinishDate();
+        this.priorPublishDate = project.getPriorPublishDate();
+        this.numberOfBuildings = project.getNumberOfBuildings();
+        this.statusProjDlvrySys = project.getStatusProjDlvrySys();
+        this.estHigh = project.getEstHigh();
+        this.stdIncludes = project.getStdIncludes();
+        this.currencyType = project.getCurrencyType();
+        this.country = project.getCountry();
+        if (project.getGeocode() != null) {
+            realm.copyToRealm(project.getGeocode());
+            this.geocode = project.getGeocode();
+        }
+        this.zipPlus4 = project.getZipPlus4();
+        this.projectStageId = project.getProjectStageId();
+        this.projectNotes = project.getProjectNotes();
+        this.targetStartDate = project.getTargetStartDate();
+        this.geoLocationType = project.getGeoLocationType();
+        this.county = project.getCounty();
+        this.firstPublishDate = project.getFirstPublishDate();
+        this.addendaInd = project.getAddendaInd();
+        this.availableFrom = project.getAvailableFrom();
+        this.geoType = project.getGeoType();
+        this.unionDesignation = project.getUnionDesignation();
+        this.bidTimeZone = project.getBidTimeZone();
+        this.bondInformation = project.getBondInformation();
+        this.ownerClass = project.getOwnerClass();
+        if (project.getContacts() != null) {
+            realm.copyToRealmOrUpdate(project.getContacts());
+            this.contacts = project.getContacts();
+        }
+        if (project.getBids() != null) {
+            realm.copyToRealmOrUpdate(project.getBids());
+            this.bids = project.getBids();
+        }
+        if (project.getUpdates() != null) {
+            realm.copyToRealmOrUpdate(project.getUpdates());
+            this.updates = project.getUpdates();
+        }
+
+        if (isHidden != null) {
+
+            this.hidden = isHidden.booleanValue();
+        }
+
+        if (mbsItem != null) {
+
+            this.mbsItem = mbsItem.booleanValue();
+        }
+
+        if (mraItem != null) {
+
+            this.mraItem = mraItem.booleanValue();
+        }
+
+        if (mruItem != null) {
+
+            this.mruItem = mruItem.booleanValue();
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -584,6 +787,9 @@ public class Project extends RealmObject implements TrackedObject {
                 ", hidden=" + hidden +
                 ", updates=" + updates +
                 ", recentUpdate=" + recentUpdate +
+                ", mbsItem=" + mbsItem +
+                ", mraItem=" + mraItem +
+                ", mruItem=" + mruItem +
                 '}';
     }
 }

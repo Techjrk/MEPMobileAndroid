@@ -110,6 +110,8 @@ public class RecentBidItemViewModel {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
+        if (bid.getProject().getBidDate() == null) return "";
+
         return simpleDateFormat.format(bid.getProject().getBidDate());
     }
 

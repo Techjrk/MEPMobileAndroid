@@ -1,6 +1,8 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
@@ -217,17 +219,24 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
-    public void hideProject(long projectId, Callback<Project> callback) {
+    public void hideProject(long projectId, Callback<ResponseBody> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<Project> call = lecetClient.getProjectService().hide(token, projectId);
+        Call<ResponseBody> call = lecetClient.getProjectService().hide(token, projectId);
         call.enqueue(callback);
     }
 
-    public void unhideProject(long projectId, Callback<Project> callback) {
+    public void unhideProject(long projectId, Callback<ResponseBody> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<Project> call = lecetClient.getProjectService().unhide(token, projectId);
+        Call<ResponseBody> call = lecetClient.getProjectService().unhide(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void getHiddenProjects(long userID, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Project>> call = lecetClient.getProjectService().hiddenProjects(token, userID);
         call.enqueue(callback);
     }
 
@@ -254,6 +263,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
                 .findAll();
 
@@ -276,6 +286,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mraItem", true)
                 .greaterThanOrEqualTo("firstPublishDate", publishDate)
                 .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
@@ -287,6 +298,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .equalTo("mraItem", true)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("firstPublishDate", Sort.DESCENDING);
@@ -299,6 +311,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mruItem", true)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
 
@@ -310,6 +323,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                .equalTo("mruItem", true)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
@@ -360,6 +374,17 @@ public class ProjectDomain {
         return result;
     }
 
+    public RealmResults<Project> fetchHiddenProjects() {
+
+        return realm.where(Project.class).equalTo("hidden", true).findAll();
+    }
+
+    public void setProjectHidden(Project project, boolean hidden) {
+        realm.beginTransaction();
+        project.setHidden(true);
+        realm.commitTransaction();
+    }
+
     public Project copyToRealmTransaction(Project project) {
 
         realm.beginTransaction();
@@ -378,6 +403,93 @@ public class ProjectDomain {
         return persistedProjects;
     }
 
+    public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, storedProject, hidden);
+
+                    } else {
+
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
+    public void asyncCopyToRealm(final List<Project> projects, @Nullable final Boolean isHidden, @Nullable final Boolean mbsItem,
+                                 @Nullable final Boolean mraItem, @Nullable final Boolean mruItem,
+                                 @NonNull Realm.Transaction.OnSuccess onSuccess, @NonNull Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, storedProject, isHidden, mbsItem, mraItem, mruItem);
+
+                    } else {
+
+                        if (isHidden != null) {
+
+                            project.setHidden(isHidden.booleanValue());
+                        }
+
+                        if (mbsItem != null) {
+
+                            project.setMbsItem(mbsItem.booleanValue());
+                        }
+
+                        if (mraItem != null) {
+
+                            project.setMraItem(mraItem.booleanValue());
+                        }
+
+                        if (mruItem != null) {
+
+                            project.setMruItem(mruItem.booleanValue());
+                        }
+
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
+    public void asyncCopyToRealm(final Project project, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                if (storedProject != null) {
+
+                    storedProject.updateProject(realm, project, null, null, null, null);
+
+                } else {
+
+                    realm.copyToRealmOrUpdate(project);
+                }
+            }
+        }, onSuccess, onError);
+    }
 
     public RealmResults<Project> queryResult(@BidGroup int categoryId, RealmResults<Project> result, String sortFieldName) {
 
@@ -386,6 +498,8 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .findAllSorted(sortFieldName, Sort.DESCENDING);
     }
+
+
 
     /**
      * Utility

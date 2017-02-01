@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:showIn="@layout/activity_hidden_projects"
+        tools:context="com.lecet.app.content.HiddenProjectsActivity">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.HiddenProjectsViewModel"/>
+    </data>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:textColor="@color/pureWhite"
+                android:text="@{viewModel.subTitle}"
+                tools:text="43 Hidden Projects"
+                android:background="@color/lecetModifyToolbarBlue"
+                bind:typeface="@{`Lato-Semibold.ttf`}">
+
+        </TextView>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/list_item_hidden_project"/>
+
+    </LinearLayout>
+
+
+</layout>
+
+

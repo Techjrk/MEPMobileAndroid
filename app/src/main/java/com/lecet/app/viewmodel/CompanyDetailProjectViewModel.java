@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.databinding.BaseObservable;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailActivity;
@@ -12,7 +13,7 @@ import com.lecet.app.data.models.Project;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class CompanyDetailProjectViewModel {
+public class CompanyDetailProjectViewModel extends BaseObservable {
 
     private final Project project;
     private final String mapsApiKey;
@@ -22,6 +23,9 @@ public class CompanyDetailProjectViewModel {
         this.mapsApiKey = mapsApiKey;
     }
 
+    public Project getProject() {
+        return project;
+    }
 
     public String getProjectName() {
 

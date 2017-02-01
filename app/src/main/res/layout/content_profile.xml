@@ -27,8 +27,10 @@
 
             <EditText style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.firstName}"
+                      android:text="@={viewModel.firstName}"
                       android:hint="@string/first_name"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/last_name_edit_text"
                       tools:text="Katey"/>
 
             <LinearLayout android:layout_width="match_parent"
@@ -46,40 +48,52 @@
             </LinearLayout>
 
 
-            <EditText style="@style/ProfileEditTextView"
+            <EditText android:id="@+id/last_name_edit_text"
+                      style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.lastName}"
+                      android:text="@={viewModel.lastName}"
                       android:hint="@string/last_name"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/email_edit_text"
                       tools:text="Bailey"/>
 
             <TextView style="@style/ProfileTextView.Small"
                       app:typeface="@{`Lato-Bold.ttf`}"
                       android:text="@string/email_address"/>
 
-            <EditText style="@style/ProfileEditTextView"
+            <EditText android:id="@+id/email_edit_text"
+                      style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.email}"
+                      android:text="@={viewModel.email}"
                       android:hint="@string/email"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/title_edit_text"
                       tools:text="katey@lecet.org"/>
 
             <TextView style="@style/ProfileTextView.Small"
                       app:typeface="@{`Lato-Bold.ttf`}"
                       android:text="@string/title"/>
 
-            <EditText style="@style/ProfileEditTextView"
+            <EditText android:id="@+id/title_edit_text"
+                      style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.title}"
+                      android:text="@={viewModel.title}"
                       android:hint="@string/title"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/organizations_edit_text"
                       tools:text="Director of Operations"/>
 
             <TextView style="@style/ProfileTextView.Small"
                       app:typeface="@{`Lato-Bold.ttf`}"
                       android:text="@string/organization"/>
 
-            <EditText style="@style/ProfileEditTextView"
+            <EditText android:id="@+id/organizations_edit_text"
+                      style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.organization}"
+                      android:text="@={viewModel.organization}"
                       android:hint="@string/organization"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/phone_edit_text"
                       tools:text="Laborers-Employers Cooperation and Education Trust (LECET)"/>
 
             <LinearLayout android:layout_width="match_parent"
@@ -102,19 +116,25 @@
                           android:layout_height="wrap_content"
                           android:orientation="horizontal">
 
-                <EditText style="@style/ProfileEditTextView"
+                <EditText android:id="@+id/phone_edit_text"
+                          style="@style/ProfileEditTextView"
                           android:layout_weight="1"
                           app:typeface="@{`Lato-Regular.ttf`}"
-                          android:text="@{viewModel.phone}"
+                          android:text="@={viewModel.phone}"
                           android:hint="@string/phone"
+                          android:imeOptions="actionNext"
+                          android:nextFocusForward="@+id/fax_edit_text"
                           tools:text="(718) 501-1234"/>
 
-                <EditText style="@style/ProfileEditTextView"
+                <EditText android:id="@+id/fax_edit_text"
+                          style="@style/ProfileEditTextView"
                           android:layout_weight="1"
                           android:layout_marginLeft="3dp"
                           app:typeface="@{`Lato-Regular.ttf`}"
-                          android:text="@{viewModel.fax}"
+                          android:text="@={viewModel.fax}"
                           android:hint="@string/fax"
+                          android:imeOptions="actionNext"
+                          android:nextFocusForward="@+id/street_addy_edit_text"
                           tools:text="(718) 501-1234"/>
 
             </LinearLayout>
@@ -123,20 +143,26 @@
                       app:typeface="@{`Lato-Bold.ttf`}"
                       android:text="@string/street_address"/>
 
-            <EditText style="@style/ProfileEditTextView"
+            <EditText android:id="@+id/street_addy_edit_text"
+                      style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.address}"
+                      android:text="@={viewModel.address}"
                       android:hint="@string/street_address"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/city_edit_text"
                       tools:text="905 16th St NW"/>
 
             <TextView style="@style/ProfileTextView.Small"
                       app:typeface="@{`Lato-Bold.ttf`}"
                       android:text="@string/city"/>
 
-            <EditText style="@style/ProfileEditTextView"
+            <EditText android:id="@+id/city_edit_text"
+                      style="@style/ProfileEditTextView"
                       app:typeface="@{`Lato-Regular.ttf`}"
-                      android:text="@{viewModel.city}"
+                      android:text="@={viewModel.city}"
                       android:hint="@string/city"
+                      android:imeOptions="actionNext"
+                      android:nextFocusForward="@+id/state_edit_text"
                       tools:text="Washington"/>
 
             <LinearLayout android:layout_width="match_parent"
@@ -159,19 +185,24 @@
                           android:layout_height="wrap_content"
                           android:orientation="horizontal">
 
-                <EditText style="@style/ProfileEditTextView"
+                <EditText android:id="@+id/state_edit_text"
+                          style="@style/ProfileEditTextView"
                           android:layout_weight="1"
                           app:typeface="@{`Lato-Regular.ttf`}"
-                          android:text="@{viewModel.state}"
+                          android:text="@={viewModel.state}"
                           android:hint="@string/state"
+                          android:nextFocusForward="@+id/zip_edit_text"
+                          android:imeOptions="actionNext"
                           tools:text="DC"/>
 
-                <EditText style="@style/ProfileEditTextView"
+                <EditText android:id="@+id/zip_edit_text"
+                          style="@style/ProfileEditTextView"
                           android:layout_weight="1"
                           android:layout_marginLeft="3dp"
                           app:typeface="@{`Lato-Regular.ttf`}"
-                          android:text="@{viewModel.zip}"
+                          android:text="@={viewModel.zip}"
                           android:hint="@string/zip"
+                          android:imeOptions="actionDone"
                           tools:text="20006"/>
 
             </LinearLayout>

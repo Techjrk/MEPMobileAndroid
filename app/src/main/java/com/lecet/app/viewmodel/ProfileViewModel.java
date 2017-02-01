@@ -1,11 +1,10 @@
 package com.lecet.app.viewmodel;
 
 import android.app.ProgressDialog;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.UiThread;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ import retrofit2.Response;
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class ProfileViewModel extends BaseObservable {
+public class ProfileViewModel extends BaseActivityViewModel {
 
     private TextView titleTextView;
     private TextView subtitleTextView;
@@ -170,7 +169,129 @@ public class ProfileViewModel extends BaseObservable {
         notifyPropertyChanged(BR.zip);
     }
 
-    /** Toolbar **/
+    private boolean isFormsValid() {
+
+        if (TextUtils.isEmpty(firstName)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(lastName)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(email)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(title)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(title)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(phone)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(fax)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(address)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(city)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(state)) {
+
+            return false;
+        }
+        if (TextUtils.isEmpty(zip)) {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private void validateFormFields() {
+
+        if (TextUtils.isEmpty(firstName)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.first_name));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(lastName)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.last_name));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(email)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.email));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(title)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.title));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(title)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.title));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(phone)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.phone));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(fax)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.fax));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(address)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.address));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(city)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.city));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(state)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.state));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+        if (TextUtils.isEmpty(zip)) {
+
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.zip));
+            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            return;
+        }
+    }
+
+    /**
+     * Toolbar
+     **/
 
     public void setToolbar(View toolbar, String title, String subtitle) {
         titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
@@ -204,7 +325,14 @@ public class ProfileViewModel extends BaseObservable {
     @SuppressWarnings("unused")
     public void onSaveClicked(View view) {
 
-        updateUser(user);
+        if (isFormsValid()) {
+
+            updateUser(user);
+
+        } else {
+
+            validateFormFields();
+        }
     }
 
     public void onBackButtonClick(View view) {
@@ -217,7 +345,7 @@ public class ProfileViewModel extends BaseObservable {
      **/
     private void getUserProfile(final long userID) {
 
-        showProgressDialog(context.getString(R.string.app_name), context.getString(R.string.updating));
+        showProgressDialog(context, context.getString(R.string.app_name), context.getString(R.string.updating));
 
         userDomain.getUser(userID, new Callback<User>() {
             @Override
@@ -235,12 +363,7 @@ public class ProfileViewModel extends BaseObservable {
 
                     dismissProgressDialog();
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(context.getString(R.string.error_network_title));
-                    builder.setMessage(response.message());
-                    builder.setNegativeButton(context.getString(R.string.ok), null);
-
-                    builder.show();
+                    showCancelAlertDialog(context, context.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -249,19 +372,14 @@ public class ProfileViewModel extends BaseObservable {
 
                 dismissProgressDialog();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(context.getString(R.string.error_network_title));
-                builder.setMessage(context.getString(R.string.error_network_message));
-                builder.setNegativeButton(context.getString(R.string.ok), null);
-
-                builder.show();
+                showCancelAlertDialog(context, context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
             }
         });
     }
 
     private void updateUser(User update) {
 
-        showProgressDialog(context.getString(R.string.app_name), context.getString(R.string.updating));
+        showProgressDialog(context, context.getString(R.string.app_name), context.getString(R.string.updating));
 
         userDomain.updateUser(update, new Callback<User>() {
             @Override
@@ -279,12 +397,7 @@ public class ProfileViewModel extends BaseObservable {
 
                     dismissProgressDialog();
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(context.getString(R.string.error_network_title));
-                    builder.setMessage(context.getString(R.string.error_login_message));
-                    builder.setNegativeButton(context.getString(R.string.ok), null);
-
-                    builder.show();
+                    showCancelAlertDialog(context, context.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -293,12 +406,7 @@ public class ProfileViewModel extends BaseObservable {
 
                 dismissProgressDialog();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(context.getString(R.string.error_network_title));
-                builder.setMessage(context.getString(R.string.error_network_message));
-                builder.setNegativeButton(context.getString(R.string.ok), null);
-
-                builder.show();
+                showCancelAlertDialog(context, context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
             }
         });
     }
@@ -321,17 +429,5 @@ public class ProfileViewModel extends BaseObservable {
         setCity(user.getCity());
         setState(user.getState());
         setZip(user.getZip());
-    }
-
-    public void showProgressDialog(String title, String message) {
-
-        dismissProgressDialog();
-
-        progressDialog = ProgressDialog.show(context, title, message, true, false);
-    }
-
-    public void dismissProgressDialog() {
-
-        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 }
