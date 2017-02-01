@@ -523,7 +523,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
 
     /**
-     * Process the Stage input data based on the received list of Stages persisted in Realm     //TODO - NO LONGER VALID
+     * Process the Stage input data based on the received list of Stages persisted in Realm
      */
     private void processStage(final Bundle bundle) {
 
@@ -537,8 +537,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("processStage: ", "realmStages size: " + realmStages.size());
                 Log.d("processStage: ", "realmStages: " + realmStages);
 
-                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);     // text display
-                String stageId = SearchFilterStageViewModel.BUNDLE_KEY_ID;                          // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String viewType = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE);  // view type (parent, child, grandchild)
+                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);       // text display
+                String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);         // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String stages = "";
                 viewModel.setPersistedStage(stageStr);
                 viewModel.setStage_select(stageStr);
@@ -548,8 +549,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 sList.add(stageId);
                 if (stageStr != null && !stageStr.trim().equals("")) {
 
-                    // add each child Stage ID
-                    for (ProjectStage parentStage : realmStages) {
+                    // add each child Stage ID  // removed: only support single selection of Stage type
+                    /*for (ProjectStage parentStage : realmStages) {
                         if (stageStr.equals(parentStage.getName())) {
                             List<ProjectStage> childStages = parentStage.getChildStages();
                             for (ProjectStage childStage : childStages) {
@@ -559,7 +560,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                             }
                             break;
                         }
-                    }
+                    }*/
                     Log.d("SearchFilterMPSAct", "processStage: input Stage name: " + stageStr);
                     Log.d("SearchFilterMPSAct", "processStage: parent and child Stage IDs: " + sList);
 
