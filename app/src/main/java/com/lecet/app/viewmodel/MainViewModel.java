@@ -183,7 +183,7 @@ public class MainViewModel {
                             @Override
                             public void onError(Throwable error) {
 
-                                callback.onFailure(-1, "Network Failure");
+                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
                             }
                         });
 
@@ -248,7 +248,7 @@ public class MainViewModel {
                             @Override
                             public void onError(Throwable error) {
 
-                                callback.onFailure(-1, "Network Failure");
+                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
                             }
                         });
 
@@ -312,7 +312,7 @@ public class MainViewModel {
                             @Override
                             public void onError(Throwable error) {
 
-                                callback.onFailure(-1, "Network Failure");
+                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
                             }
                         });
 
@@ -325,7 +325,7 @@ public class MainViewModel {
                 @Override
                 public void onFailure(Call<List<Project>> call, Throwable t) {
 
-                    callback.onFailure(-1, "Network Failure");
+                    callback.onFailure(-1, "Network Failure: " + t.getMessage());
                 }
             });
 

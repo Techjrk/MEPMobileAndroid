@@ -419,7 +419,7 @@ public class ProjectDomain {
 
                     } else {
 
-                        realm.copyToRealm(project);
+                        realm.copyToRealmOrUpdate(project);
                     }
                 }
             }
@@ -464,7 +464,7 @@ public class ProjectDomain {
                             project.setMruItem(mruItem.booleanValue());
                         }
 
-                        realm.copyToRealm(project);
+                        realm.copyToRealmOrUpdate(project);
                     }
                 }
             }
@@ -485,7 +485,7 @@ public class ProjectDomain {
 
                 } else {
 
-                    realm.copyToRealm(project);
+                    realm.copyToRealmOrUpdate(project);
                 }
             }
         }, onSuccess, onError);
