@@ -183,7 +183,8 @@
     <string name="error_first_name">Please enter your first name</string>
     <string name="error_last_name">Please enter your last name</string>
     <string name="error_login_title">Login Error</string>
-    <string name="error_login_message">You don\’t have permission to access MEP using your account
+    <string name="error_login_message">Please verify your email and password and try again</string>
+    <string name="error_access_denied">You don\’t have permission to access MEP using your account
     </string>
     <string name="error_network_title">Network Error</string>
     <string name="error_network_message">Please check your internet connection and try again

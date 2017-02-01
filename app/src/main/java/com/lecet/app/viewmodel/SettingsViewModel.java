@@ -16,6 +16,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.ChangePasswordActivity;
 import com.lecet.app.content.LauncherActivity;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.UserDomain;
 
 import okhttp3.ResponseBody;
@@ -90,6 +91,8 @@ public class SettingsViewModel extends BaseActivityViewModel {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 if (response.isSuccessful()) {
+
+                    LecetSharedPreferenceUtil.getInstance(appCompatActivity).clearPreferences();
 
                     dismissProgressDialog();
 

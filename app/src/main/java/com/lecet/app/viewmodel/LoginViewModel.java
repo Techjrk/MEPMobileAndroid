@@ -3,7 +3,6 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -134,6 +133,27 @@ public class LoginViewModel extends BaseObservable {
                     builder.show();
                 }
             });
+        } else {
+
+            if (!emailValid) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(activity.getString(R.string.error_login_title));
+                builder.setMessage(activity.getString(R.string.error_invalid_email));
+                builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                builder.show();
+
+            } else if (!passwordValid) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(activity.getString(R.string.error_login_title));
+                builder.setMessage(activity.getString(R.string.error_invalid_password_length));
+                builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                builder.show();
+            }
+
         }
     }
 
@@ -160,7 +180,7 @@ public class LoginViewModel extends BaseObservable {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(activity.getString(R.string.error_login_title));
-                    builder.setMessage(activity.getString(R.string.error_login_message));
+                    builder.setMessage(activity.getString(R.string.error_access_denied));
                     builder.setNegativeButton(activity.getString(R.string.ok), null);
 
                     builder.show();
