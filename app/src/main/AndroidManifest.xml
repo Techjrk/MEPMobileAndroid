@@ -35,6 +35,11 @@
         <meta-data android:name="com.google.android.geo.API_KEY"
                    android:value="@string/google_maps_key"/>
 
+        <!-- Metadata -->
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
+
         <!-- Activities -->
         <activity
                 android:name=".content.LauncherActivity"
@@ -118,14 +123,6 @@
                 android:theme="@style/AppTheme">
         </activity>
 
-        <!-- Metadata -->
-        <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version"/>
-        <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_api_key"/>
-
         <activity
                 android:name=".content.SearchFilterMSEActivity"
                 android:theme="@style/AppTheme"/>
@@ -192,7 +189,7 @@
                 android:theme="@style/AppTheme">
         </activity>
 
-        <activity android:name="com.lecet.app.content.LocationDetailMapActivity"
+        <activity android:name=".content.LocationDetailMapActivity"
                   android:label="@string/title_activity_location_detail_map">
 
         </activity>
