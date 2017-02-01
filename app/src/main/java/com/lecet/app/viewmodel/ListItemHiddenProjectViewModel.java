@@ -27,6 +27,7 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
     private final ProjectDomain projectDomain;
 
     private String hideTitle;
+    private boolean isHidden;
 
     @ColorRes
     int hiddenTextViewColor;
@@ -35,8 +36,9 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
         super(project, mapsApiKey);
         this.context = context;
         this.projectDomain = projectDomain;
-        setHideTitle(getProject().isHidden() ? context.getString(R.string.unhide) : context.getString(R.string.hide));
-        setHiddenTextViewColor(getProject().isHidden() ? R.color.lecetHideBlue : R.color.lecetUnhideBlue);
+        this.isHidden = getProject().isHidden();
+        setHideTitle(isHidden ? context.getString(R.string.unhide) : context.getString(R.string.hide));
+        setHiddenTextViewColor(isHidden ? R.color.lecetHideBlue : R.color.lecetUnhideBlue);
     }
 
     @Bindable
@@ -63,12 +65,13 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
 
     public void onHideSelected(View view) {
 
-        if (getProject().isHidden()) {
+        if (isHidden) {
             projectDomain.unhideProject(getProject().getId(), new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        projectDomain.setProjectHidden(getProject(), false);
+                        isHidden = false;
+                        projectDomain.setProjectHidden(getProject(), isHidden);
                         setHideTitle(context.getString(R.string.hide));
                         setHiddenTextViewColor(R.color.lecetHideBlue);
                     }
@@ -86,7 +89,8 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        projectDomain.setProjectHidden(getProject(), true);
+                        isHidden = true;
+                        projectDomain.setProjectHidden(getProject(), isHidden);
                         setHideTitle(context.getString(R.string.unhide));
                         setHiddenTextViewColor(R.color.lecetUnhideBlue);
                     }
