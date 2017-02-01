@@ -89,8 +89,8 @@ public class LoginViewModel extends BaseObservable {
 
     public void onLoginClicked(View view) {
 
-        emailValid = userDomain.isValidEmail(email);
-        passwordValid = userDomain.isValidPassword(password);
+        setEmailValid(userDomain.isValidEmail(email));
+        setPasswordValid(userDomain.isValidPassword(password));
 
         if (emailValid && passwordValid) {
 
