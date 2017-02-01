@@ -118,40 +118,37 @@
                 android:value="@string/google_api_key"/>
 
         <activity
-                android:name=".content.SearchFilterMSEActivity"
-                android:theme="@style/AppTheme"/>
-        <activity
                 android:name=".content.SearchFilterMPSActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFLocationActivity"
+                android:name=".content.SearchFilterLocationActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFTypeActivity"
+                android:name=".content.SearchFilterProjectTypeActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFValueActivity"
+                android:name=".content.SearchFilterValueActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFBiddingWithinActivity"
+                android:name=".content.SearchFilterBiddingWithinActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFUpdatedWithinActivity"
+                android:name=".content.SearchFilterUpdatedWithinActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFJurisdictionActivity"
+                android:name=".content.SearchFilterJurisdictionActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFBHActivity"
+                android:name=".content.SearchFilterBuildingOrHighwayActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFStageActivity"
+                android:name=".content.SearchFilterStageActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFOwnerTypeActivity"
+                android:name=".content.SearchFilterOwnerTypeActivity"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.SearchFilterMPFWorkTypeActivity"
+                android:name=".content.SearchFilterWorkTypeActivity"
                 android:theme="@style/AppTheme"/>
         <activity
                 android:name=".content.CompanyDetailActivity"
