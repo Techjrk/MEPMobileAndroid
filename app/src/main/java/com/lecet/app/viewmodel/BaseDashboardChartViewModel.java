@@ -500,10 +500,17 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             else if(category == RESULT_CODE_UTILITIES) {
                 delegateMBR.bidGroupSelected(BidDomain.UTILITIES);
             }
+            else if (category == CONSOLIDATED_CODE_B) {
+                delegateMBR.bidGroupSelected(BidDomain.CONSOLIDATED_CODE_B);
+            }
+            else if (category == CONSOLIDATED_CODE_H) {
+                delegateMBR.bidGroupSelected(BidDomain.CONSOLIDATED_CODE_H);
+            }
         }
 
         // MRA
         else if(dataSourceType == DATA_SOURCE_TYPE_MRA) {
+
             if (category == RESULT_CODE_HOUSING) {
                 delegateMRA.mraBidGroupSelected(BidDomain.HOUSING);
             }
@@ -515,6 +522,12 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             }
             else if (category == RESULT_CODE_UTILITIES) {
                 delegateMRA.mraBidGroupSelected(BidDomain.UTILITIES);
+            }
+            else if (category == CONSOLIDATED_CODE_B) {
+                delegateMRA.mraBidGroupSelected(BidDomain.CONSOLIDATED_CODE_B);
+            }
+            else if (category == CONSOLIDATED_CODE_H) {
+                delegateMRA.mraBidGroupSelected(BidDomain.CONSOLIDATED_CODE_H);
             }
         }
 
@@ -531,6 +544,12 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             }
             else if(category == RESULT_CODE_UTILITIES) {
                 delegateMRU.mruBidGroupSelected(BidDomain.UTILITIES);
+            }
+            else if (category == CONSOLIDATED_CODE_B) {
+                delegateMRU.mruBidGroupSelected(BidDomain.CONSOLIDATED_CODE_B);
+            }
+            else if (category == CONSOLIDATED_CODE_H) {
+                delegateMRU.mruBidGroupSelected(BidDomain.CONSOLIDATED_CODE_H);
             }
         }
     }

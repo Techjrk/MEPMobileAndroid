@@ -275,6 +275,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mbsItem", true)
                 .between("bidDate", start, end)
                 .findAll();
 
@@ -296,12 +297,45 @@ public class ProjectDomain {
 
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
 
-        RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThanOrEqualTo("firstPublishDate", publishDate)
-                .equalTo("mraItem", true)
-                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("hidden", false)
-                .findAllSorted("firstPublishDate", Sort.DESCENDING);
+        RealmResults<Project> projectsResult;
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                    .equalTo("mraItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                    .equalTo("mraItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+
+        } else {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                    .equalTo("mraItem", true)
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("hidden", false)
+                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+        }
+
+
 
         return projectsResult;
     }
@@ -321,12 +355,44 @@ public class ProjectDomain {
 
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
 
-        RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
-                .equalTo("mruItem", true)
-                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("hidden", false)
-                .findAllSorted("lastPublishDate", Sort.DESCENDING);
+        RealmResults<Project> projectsResult;
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                    .equalTo("mruItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", lastPublishDate)
+                    .equalTo("mruItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+
+        } else {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", lastPublishDate)
+                    .equalTo("mruItem", true)
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("hidden", false)
+                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+        }
+
 
         return projectsResult;
     }
