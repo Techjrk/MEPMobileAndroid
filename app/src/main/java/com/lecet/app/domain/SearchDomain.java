@@ -41,8 +41,24 @@ public class SearchDomain {
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
     private String projectFilter;
+    private String companyFilter="{\"searchFilter\":{}}";
+    private String contactFilter="{\"searchFilter\":{}}";
 
-//// TODO: 1/5/17 getting the nested content items from url to be used for stage, if there's available.
+    public String getCompanyFilter() {
+        return companyFilter;
+    }
+
+    public void setCompanyFilter(String companyFilter) {
+        this.companyFilter = companyFilter;
+    }
+
+    public String getContactFilter() {
+        return contactFilter;
+    }
+
+    public void setContactFilter(String contactFilter) {
+        this.contactFilter = contactFilter;
+    }
 
     public String getProjectFilter() {
         return projectFilter;
@@ -195,7 +211,10 @@ public class SearchDomain {
 
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
-        setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}");
+        setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
+        //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
+        setCompanyFilter("{\"searchFilter\":{}}");
+        setContactFilter("{\"searchFilter\":{}}");
     }
 
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchResult>> callback) {
@@ -225,16 +244,16 @@ public class SearchDomain {
     }
 
     public void getSearchCompanyQuery(String q, Callback<SearchCompany> callback) {
-        String filter = "{}";
+     //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, filter);
+        Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         call.enqueue(callback);
     }
 
     public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
-        String filter = "{}";
+     //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, filter);
+        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
         call.enqueue(callback);
     }
 
