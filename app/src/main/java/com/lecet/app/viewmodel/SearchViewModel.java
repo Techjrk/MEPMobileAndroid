@@ -125,7 +125,7 @@ public class SearchViewModel extends BaseObservable {
     private SearchAllProjectRecyclerViewAdapter searchAdapterProjectAll;          // adapter for Project Query All Results
     private SearchAllCompanyRecyclerViewAdapter searchAdapterCompanyAll;          // adapter for Company Query All Results
     private SearchAllContactRecyclerViewAdapter searchAdapterContactAll;          // adapter for Contact Query All Results
-    private String query;
+    private String query="";
     private String queryProjectTitle;
     private String queryCompanyTitle;
     private String queryContactTitle;
@@ -138,6 +138,12 @@ public class SearchViewModel extends BaseObservable {
 
     public void setProjectSearchFilter(String filter) {
         searchDomain.setProjectFilter(filter);
+    }
+    public void setCompanySearchFilter(String filter) {
+        searchDomain.setCompanyFilter(filter);
+    }
+    public void setContactSearchFilter(String filter) {
+        searchDomain.setContactFilter(filter);
     }
 
     public void setQueryProjectTotal(int queryProjectTotal) {
@@ -202,7 +208,8 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-        if (query == null || query.trim().equals("")) {
+//        if (query == null || query.trim().equals("")) {
+          if (!USING_INSTANT_SEARCH && query.trim().equals("")){
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
             setIsMSR11Visible(false);
@@ -625,7 +632,7 @@ public class SearchViewModel extends BaseObservable {
         } else if (isMSE2SectionVisible) {
             setIsMSE2SectionVisible(false);
             setIsMSE1SectionVisible(true);
-            setQuery("");
+          //  setQuery("");
         } else {
             activity.finish();
         }
@@ -641,6 +648,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setQuery(String query) {
         this.query = query;
+        if (query.trim().equals("")) USING_INSTANT_SEARCH=false;
         notifyPropertyChanged(BR.query);
         updateViewQuery();
     }
@@ -788,8 +796,10 @@ public class SearchViewModel extends BaseObservable {
      **/
 
     public void onClearClicked(View view) {
-        setQuery(null);
         searchDomain.initFilter();
+//        USING_INSTANT_SEARCH=false;
+        setQuery("");
+        setIsMSE1SectionVisible(true);
     }
 
     public void onFilterClicked(View view) {
