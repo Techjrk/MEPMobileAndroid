@@ -71,11 +71,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.realm.RealmChangeListener;
 
 /**
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
@@ -144,8 +140,14 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
 
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         searchDomain = new SearchDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
+            @Override
+            public void onChange(Object element) {
+
+            }
+        });
+
         Calendar calendar = Calendar.getInstance();
         viewModel = new MainViewModel(this, bidDomain, projectDomain, calendar, trackingListDomain);
         binding.setViewModel(viewModel);
@@ -482,6 +484,8 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onProfileClicked() {
 
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -497,16 +501,19 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
         Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
-        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
-        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
-        intent.putExtra(ProjectTrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, projectTrackingList.getName());
         startActivity(intent);
     }
 
     @Override
     public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
-        //TODO open activity?
-        Toast.makeText(this, "Company Tracking List Clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getBaseContext(), CompanyTrackingListActivity.class);
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, companyTrackingList.getId());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, companyTrackingList.getCompanies().size());
+        intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, companyTrackingList.getName());
+        startActivity(intent);
     }
 
     /**

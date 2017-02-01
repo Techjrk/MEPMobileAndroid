@@ -320,13 +320,21 @@ public class MainViewModel {
             @Override
             public void onResponse(Call<List<ProjectTrackingList>> call, Response<List<ProjectTrackingList>> response) {
 
-                List<ProjectTrackingList> data = response.body();
-                projectTrackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
+                if (response.isSuccessful()) {
+
+                    List<ProjectTrackingList> data = response.body();
+                    projectTrackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
+
+                } else {
+
+                    // TODO: Handle error
+                }
+
             }
 
             @Override
             public void onFailure(Call<List<ProjectTrackingList>> call, Throwable t) {
-
+                // TODO: Handle error
             }
         });
     }
@@ -341,17 +349,23 @@ public class MainViewModel {
             @Override
             public void onResponse(Call<List<CompanyTrackingList>> call, Response<List<CompanyTrackingList>> response) {
 
-                List<CompanyTrackingList> data = response.body();
-                projectTrackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
+                if (response.isSuccessful()) {
+
+                    List<CompanyTrackingList> data = response.body();
+                    projectTrackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
+
+                } else {
+
+                    // TODO: Handle error
+                }
             }
 
             @Override
             public void onFailure(Call<List<CompanyTrackingList>> call, Throwable t) {
-
+                // TODO: Handle error
             }
         });
     }
-
 
     /**
      * Persisted
@@ -386,7 +400,6 @@ public class MainViewModel {
         realmResultsMRU = projectDomain.fetchProjectsRecentlyUpdated(lastPublishDate, bidGroup);
         displayAdapter(dashboardPosition);
     }
-
 
 
     /**
@@ -441,10 +454,7 @@ public class MainViewModel {
 
     private RealmResults<Project> fetchProjectsHappeningSoon() {
 
-        calendar.setTime(new Date());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        return projectDomain.fetchProjectsHappeningSoon(calendar.getTime(), DateUtility.getLastDateOfTheCurrentMonth());
+        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
     }
 
     private RealmResults<Project> fetchProjectsRecentlyAdded() {
@@ -521,7 +531,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        dashboardAdapter = new DashboardRecyclerViewAdapter(adapterData, dashboardPosition);
+        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition);
         recyclerView.setAdapter(dashboardAdapter);
     }
 

@@ -74,15 +74,6 @@
                     android:text="@string/login"
                     android:onClick="@{viewModel.onLoginClicked}"/>
 
-            <!-- Forgot Password -->
-            <TextView android:id="@+id/sign_up_text_button"
-                      style="@style/CommonText.Dark.Small"
-                      android:text="@string/sign_up_for_mep_access"
-                      android:textColor="@color/pureBlack"
-                      android:layout_marginTop="32dp"
-                      android:gravity="center"
-                      android:onClick="@{viewModel.onSignUpClicked}"/>
-
         </LinearLayout>
 
 

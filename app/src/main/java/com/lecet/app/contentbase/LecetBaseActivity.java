@@ -115,6 +115,4 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
         networkAlertDialog = builder.show();
     }
-
-
 }

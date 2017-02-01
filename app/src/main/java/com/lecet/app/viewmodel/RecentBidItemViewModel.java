@@ -1,7 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
@@ -24,10 +28,12 @@ public class RecentBidItemViewModel {
 
     private final Bid bid;
     private final String mapsApiKey;
+    private final AppCompatActivity activity;
 
-    public RecentBidItemViewModel(Bid bid, String mapsApiKey) {
+    public RecentBidItemViewModel(Bid bid, String mapsApiKey, AppCompatActivity activity) {
         this.bid = bid;
         this.mapsApiKey = mapsApiKey;
+        this.activity = activity;
     }
 
     public String getBidAmount() {
@@ -58,6 +64,8 @@ public class RecentBidItemViewModel {
 
     public String getProjectName() {
 
+        Log.d("RECENTBID", "BID ID " + bid.getId());
+        Log.d("RECENTBID", "Project ID " + bid.getProject().getId());
         return bid.getProject().getTitle();
     }
 
@@ -102,7 +110,7 @@ public class RecentBidItemViewModel {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
-        return simpleDateFormat.format(bid.getCreateDate());
+        return simpleDateFormat.format(bid.getProject().getBidDate());
     }
 
     public boolean isUnion() {
@@ -112,5 +120,11 @@ public class RecentBidItemViewModel {
         return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
     }
 
+    /** OnClick **/
+    public void onItemClick(View view) {
 
+        Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, bid.getProjectId());
+        activity.startActivity(intent);
+    }
 }

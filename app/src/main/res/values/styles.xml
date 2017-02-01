@@ -10,9 +10,9 @@
         <item name="android:homeAsUpIndicator">@drawable/ic_back_button</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
@@ -358,8 +358,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/lecetTextMediumGray</item>
-        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/lecetProfileTitleGray</item>
+        <item name="android:background">@color/lecetBidGray</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ProfileTextView.Medium">
@@ -369,6 +373,20 @@
 
     <style name="ProfileTextView.Small">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ProfileEditTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
+        <item name="android:background">@color/pureWhite</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:inputType">textNoSuggestions</item>
     </style>
 
 
@@ -411,7 +429,7 @@
     </style>
 
     <style name="ListItemProjectTrackingTextView.Title">
-        <item name="android:paddingTop">14sp</item>
+        <item name="android:paddingTop">4sp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
@@ -447,7 +465,7 @@
         <item name="android:background">@drawable/shape_rect_list_item_expand_2</item>
     </style>
 
-    <style name="ListItemProjectTrackingImage" />
+    <style name="ListItemProjectTrackingImage"/>
 
     <style name="ListItemProjectTrackingImage.DetailMap">
         <item name="android:layout_width">60dp</item>
@@ -565,4 +583,13 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:src">@mipmap/ic_chevron_down_black</item>
     </style>
+
+    <!-- MCT Contact Detail-->
+    <style name="ContactDetailTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
+    </style>
+
 </resources>

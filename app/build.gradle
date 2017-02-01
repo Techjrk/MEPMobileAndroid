@@ -14,7 +14,7 @@ android {
         versionName "0.1.1"
 
         // HockeyApp
-        manifestPlaceholders = [HOCKEY_APP_ID: "bf2b988cbd6245d48903f92ea181b6af"]
+        manifestPlaceholders = [HOCKEY_APP_ID: "505f17e52bfc4a6ca45f31c165ac7cb1"]
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

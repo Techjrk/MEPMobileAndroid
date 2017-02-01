@@ -19,6 +19,7 @@ import java.util.List;
 public class DateUtility {
 
     private static final SimpleDateFormat sBidFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    private static final SimpleDateFormat sDisplayFormat = new SimpleDateFormat("MM/dd/yyyy");
 
     public static Date addDays(int days) {
         Calendar calendar = Calendar.getInstance(); // this would default to now
@@ -63,6 +64,11 @@ public class DateUtility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String formatDateForDisplay(Date date) {
+
+        return sDisplayFormat.format(date);
     }
 
     public static Date setDateToStartOfDate(Date date) {

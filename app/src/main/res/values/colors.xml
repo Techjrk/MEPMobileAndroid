@@ -16,6 +16,12 @@
     <color name="lecetDarkestBlue">#09274E</color>
     <color name="lecetNavyBlueTransp">#AA073064</color>
     <color name="lecetDeepBlueTransp">#88001636</color>
+    <color name="lecetShareBlue">#003872</color>
+    <color name="lacetLightBlueTitleBackground">#8CA8BF</color>
+    <color name="lacetLightBlueTitleColor">#A8C3E6</color>
+    <color name="lecetModifyToolbarBlue">#0a2851</color>
+    <color name="lecetDetailHeaderBlue">#13568D</color>
+    <color name="lecetSpannableBlue">#4C91D1</color>
 
 
     <color name="lecetLightOrange">#FCB76C</color>
@@ -28,6 +34,9 @@
     <color name="lecetLighterGray">#DDDDDD</color>
     <color name="lecetLightGray">#9FA4A6</color>
     <color name="lecetBidGray">#f5f5f5</color>
+    <color name="lecetBorderGray">#c5c5c5</color>
+    <color name="lecetFooterGray">#797878</color>
+    <color name="lecetProfileTitleGray">#959595</color>
 
     <!-- Other Colors -->
     <color name="pureWhite">#ffffff</color>

@@ -4,6 +4,11 @@ import android.support.annotation.IntDef;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Contact;
+import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.Jurisdiction;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
@@ -18,8 +23,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -56,6 +65,18 @@ public class ProjectDomain {
      * API
      **/
 
+    public Call<Project> getProjectDetail(long projectID, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\":[\"company\",\"contact\"]},{\"contacts\":[\"contactType\",\"company\"]}]}";
+
+        Call<Project> call = lecetClient.getProjectService().project(token, projectID, filter);
+        call.enqueue(callback);
+
+        return call;
+    }
+
     public void getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
@@ -79,6 +100,7 @@ public class ProjectDomain {
         Date endDate = DateUtility.addDays(30);
         getProjectsHappeningSoon(current, endDate, limit, callback);
     }
+
 
     public void getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
@@ -113,7 +135,7 @@ public class ProjectDomain {
 
     public void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
-        int limit = 150;
+        int limit = 250;
 
         getProjectsRecentlyAdded(limit, callback);
     }
@@ -141,12 +163,14 @@ public class ProjectDomain {
         getBidsRecentlyAdded(endDate, limit, callback);
     }
 
+
     public void getBidsRecentlyAdded(Callback<List<Project>> callback) {
 
         int limit = 150;
 
         getBidsRecentlyAdded(limit, callback);
     }
+
 
     public void getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
 
@@ -162,11 +186,13 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
+
     public void getProjectsRecentlyUpdated(int limit, Callback<List<Project>> callback) {
 
         Date publishDate = DateUtility.addDays(-30);
         getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
+
 
     public void getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
 
@@ -184,9 +210,45 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
+    public void getProjectJurisdiction(long projectId, Callback<List<Jurisdiction>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Jurisdiction>> call = lecetClient.getProjectService().projectJurisdiction(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void hideProject(long projectId, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<Project> call = lecetClient.getProjectService().hide(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void unhideProject(long projectId, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<Project> call = lecetClient.getProjectService().unhide(token, projectId);
+        call.enqueue(callback);
+    }
+
     /**
      * Persisted
      **/
+
+    public void removeChangeListeners(RealmChangeListener listener) {
+
+        realm.removeChangeListener(listener);
+    }
+
+    public Project fetchProjectById(Realm realm, long id) {
+
+        return realm.where(Project.class).equalTo("id", id).findFirst();
+    }
+
+    public Project fetchProjectById(long id) {
+
+        return fetchProjectById(realm, id);
+    }
 
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
 
@@ -214,8 +276,8 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("firstPublishDate", publishDate)
-                .findAll();
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
         return projectsResult;
     }
@@ -224,7 +286,7 @@ public class ProjectDomain {
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThan("firstPublishDate", publishDate)
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("firstPublishDate", Sort.DESCENDING);
@@ -237,7 +299,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("lastPublishDate", lastPublishDate)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
 
         return projectsResult;
@@ -247,7 +309,7 @@ public class ProjectDomain {
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThan("lastPublishDate", lastPublishDate)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                 .equalTo("hidden", false)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
@@ -255,6 +317,48 @@ public class ProjectDomain {
         return projectsResult;
     }
 
+    public RealmResults<PrimaryProjectType> fetchProjectTypeAsync(long primaryProjectTypeId, RealmChangeListener<RealmResults<PrimaryProjectType>> listener) {
+
+        RealmResults<PrimaryProjectType> result = realm.where(PrimaryProjectType.class).equalTo("id", primaryProjectTypeId).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
+
+    public RealmResults<Contact> fetchProjectContacts(long projectID) {
+
+        RealmResults<Contact> contactsResult = realm.where(Contact.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("contactTypeId", Sort.DESCENDING);
+
+        return contactsResult;
+    }
+
+
+    public RealmResults<Bid> fetchProjectBids(long projectID) {
+
+        RealmResults<Bid> bidsResult = realm.where(Bid.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("amount", Sort.ASCENDING);
+
+        return bidsResult;
+    }
+
+    public RealmResults<ActivityUpdate> fetchProjectActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("projectId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
+
+    public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
+
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        result.addChangeListener(listener);
+
+        return result;
+    }
 
     public Project copyToRealmTransaction(Project project) {
 
