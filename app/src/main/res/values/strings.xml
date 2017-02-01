@@ -303,5 +303,6 @@
     <string name="hidden_projects_title">Hidden Projects</string>
     <string name="hidden_projects_sub_title">%d Hidden Projects</string>
     <string name="unhide">Unhide</string>
+    <string name="title_activity_location_detail_map">LocationDetail</string>
 
 </resources>
