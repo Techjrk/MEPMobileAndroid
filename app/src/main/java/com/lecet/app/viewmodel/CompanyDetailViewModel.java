@@ -162,19 +162,51 @@ public class CompanyDetailViewModel {
 
         String mapStr;
 
+        String generatedAddress = generateCenterPointAddress(company);
+
         StringBuilder sb2 = new StringBuilder();
         sb2.append("https://maps.googleapis.com/maps/api/staticmap");
         sb2.append("?center=");
-        sb2.append(company.getAddress1() + ",");
-        sb2.append(company.getAddress2() + ",");
-        sb2.append(company.getCity() + ",");
-        sb2.append(company.getState());
+        sb2.append(generatedAddress);
         sb2.append("&zoom=16");
-        sb2.append("&size=200x200");
+        sb2.append("&size=800x500");
         sb2.append("&markers=color:blue|");
+        sb2.append(generatedAddress);
         sb2.append("&key=" + activity.getString(R.string.google_maps_key));
         mapStr = String.format((sb2.toString().replace(' ', '+')), null);
 
         return mapStr;
+    }
+
+    private String generateCenterPointAddress(Company company) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (company.getAddress1() != null) {
+            stringBuilder.append(company.getAddress1());
+            stringBuilder.append(",");
+        }
+
+        if (company.getAddress2() != null) {
+            stringBuilder.append(company.getAddress2());
+            stringBuilder.append(",");
+        }
+
+        if (company.getCity() != null) {
+            stringBuilder.append(company.getCity());
+            stringBuilder.append(",");
+        }
+
+        if (company.getState() != null) {
+            stringBuilder.append(company.getState());
+        }
+
+        if (company.getZip5() != null) {
+            stringBuilder.append(",");
+            stringBuilder.append(company.getZipPlus4());
+        }
+
+
+        return stringBuilder.toString();
     }
 }

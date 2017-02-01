@@ -34,13 +34,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     bind:errorText="@{viewModel.emailErrorMessage}"
-                    bind:errorEnabled="@{viewModel.emailValid ? true : false}">
+                    bind:errorEnabled="@{viewModel.emailValid}">
 
                 <android.support.design.widget.TextInputEditText
                         android:id="@+id/email_text_input"
                         style="@style/FormField.EditText.Login"
                         android:hint="@string/email_address"
-                        android:text="@={viewModel.email}"/>
+                        android:text="@={viewModel.email}"
+                        android:imeOptions="actionNext"
+                        android:nextFocusForward="@+id/password_text_input"/>
 
                 <include layout="@layout/rule_horiz_login"/>
 
@@ -51,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    bind:errorEnabled="@{viewModel.passwordValid ? true : false}">
+                    bind:errorEnabled="@{viewModel.passwordValid}">
 
                 <android.support.design.widget.TextInputEditText
                         android:id="@+id/password_text_input"
@@ -75,7 +77,6 @@
                     android:onClick="@{viewModel.onLoginClicked}"/>
 
         </LinearLayout>
-
 
 
     </RelativeLayout>

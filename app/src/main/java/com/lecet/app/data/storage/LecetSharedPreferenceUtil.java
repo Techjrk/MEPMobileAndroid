@@ -79,4 +79,8 @@ public class LecetSharedPreferenceUtil {
     public long getId() {
         return getLongPreferences(ID);
     }
+
+    public void clearPreferences() {
+        mEditor.clear().commit();
+    }
 }
