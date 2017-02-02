@@ -3,11 +3,14 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.lecet.app.BR;
+import com.lecet.app.content.SearchFilterJurisdictionActivity;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 
 import io.realm.Realm;
@@ -27,15 +30,27 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     public static final String BUNDLE_KEY_LONG_NAME = "longName";
 
 
-    private AppCompatActivity activity;
+    private SearchFilterJurisdictionActivity activity;
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
+    private String query;
+
+    @Bindable
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+        notifyPropertyChanged(BR.query);
+        activity.searchItem(this,query);
+    }
 
     /**
      * Constructor
      */
     public SearchFilterJurisdictionViewModel(AppCompatActivity activity) {
-        this.activity = activity;
+        this.activity = (SearchFilterJurisdictionActivity) activity;
         bundle = new Bundle();
         getJurisdictions();
     }

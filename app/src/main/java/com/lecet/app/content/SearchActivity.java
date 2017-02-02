@@ -20,6 +20,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
     private String searchFilter;
+    private SearchDomain searchDomain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +32,14 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
 
     private void setupBinding() {
         com.lecet.app.databinding.ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
-        viewModel = new SearchViewModel(this,
-                new SearchDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
+        searchDomain = new SearchDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
+        viewModel = new SearchViewModel(this, searchDomain);
         binding.setViewModel(viewModel);
     }
 
     @Override
     public void onBackPressed() {
+        searchDomain.initFilter();
         viewModel.checkDisplayMSESectionOrMain();
     }
 
@@ -158,8 +160,14 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
         Log.d(TAG, "onActivityResult: searchStr: " + searchStr);
 
         viewModel.setProjectSearchFilter(searchStr);
+        Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
+        //This area is for setting the filter for Company and Contact..
+//        viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
+//        viewModel.setContactSearchFilter(filter?); //Pls. check what correct filter value should be passed for contact
+
+//Default section page once you clicked the Apply button of the Search Filter section page.
+        viewModel.setIsMSE2SectionVisible(true);
         viewModel.updateViewQuery();
-        viewModel.setSeeAll(viewModel.getSeeAllForResult());
     }
 
     /**
