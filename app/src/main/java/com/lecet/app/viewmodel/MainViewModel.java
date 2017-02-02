@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -162,16 +163,30 @@ public class MainViewModel {
 
                         // Store in Realm
                         List<Project> body = response.body();
-                        projectDomain.copyToRealmTransaction(body);
+                        //projectDomain.copyToRealmTransaction(body);
 
-                        // Fetch Realm managed Projects
-                        realmResultsMHS = fetchProjectsHappeningSoon();
-                        callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
+                        projectDomain.asyncCopyToRealm(body, null, new Boolean(true), null, null, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
 
-                        if (dashboardPosition == DASHBOARD_POSITION_MHS) {
+                                // Fetch Realm managed Projects
+                                realmResultsMHS = fetchProjectsHappeningSoon();
+                                callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
 
-                            setupAdapterWithProjects(realmResultsMHS);
-                        }
+                                if (dashboardPosition == DASHBOARD_POSITION_MHS) {
+
+                                    setupAdapterWithProjects(realmResultsMHS);
+                                }
+
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
+                            }
+                        });
+
 
                     } else {
 
@@ -214,16 +229,29 @@ public class MainViewModel {
 
                         // Store in Realm
                         List<Project> body = response.body();
-                        projectDomain.copyToRealmTransaction(body);
 
-                        // Fetch Realm managed Projects
-                        realmResultsMRA = fetchProjectsRecentlyAdded();
-                        callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
+                        projectDomain.asyncCopyToRealm(body, null, null, new Boolean(true), null, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
 
-                        if (dashboardPosition == DASHBOARD_POSITION_MRA) {
+                                // Fetch Realm managed Projects
+                                realmResultsMRA = fetchProjectsRecentlyAdded();
+                                callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
 
-                            setupAdapterWithProjects(realmResultsMRA);
-                        }
+                                if (dashboardPosition == DASHBOARD_POSITION_MRA) {
+
+                                    setupAdapterWithProjects(realmResultsMRA);
+                                }
+
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
+                            }
+                        });
+
 
                     } else {
 
@@ -266,16 +294,27 @@ public class MainViewModel {
 
                         // Store in Realm
                         List<Project> body = response.body();
-                        projectDomain.copyToRealmTransaction(body);
 
-                        // Fetch Realm managed Projects
-                        realmResultsMRU = fetchProjectsRecentlyUpdated();
-                        callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
+                        projectDomain.asyncCopyToRealm(body, null, null, null, new Boolean(true), new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
 
-                        if (dashboardPosition == DASHBOARD_POSITION_MRU) {
+                                // Fetch Realm managed Projects
+                                realmResultsMRU = fetchProjectsRecentlyUpdated();
+                                callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
 
-                            setupAdapterWithProjects(realmResultsMRU);
-                        }
+                                if (dashboardPosition == DASHBOARD_POSITION_MRU) {
+
+                                    setupAdapterWithProjects(realmResultsMRU);
+                                }
+                            }
+                        }, new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+
+                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
+                            }
+                        });
 
                     } else {
 
@@ -286,7 +325,7 @@ public class MainViewModel {
                 @Override
                 public void onFailure(Call<List<Project>> call, Throwable t) {
 
-                    callback.onFailure(-1, "Network Failure");
+                    callback.onFailure(-1, "Network Failure: " + t.getMessage());
                 }
             });
 
@@ -320,13 +359,21 @@ public class MainViewModel {
             @Override
             public void onResponse(Call<List<ProjectTrackingList>> call, Response<List<ProjectTrackingList>> response) {
 
-                List<ProjectTrackingList> data = response.body();
-                projectTrackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
+                if (response.isSuccessful()) {
+
+                    List<ProjectTrackingList> data = response.body();
+                    projectTrackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
+
+                } else {
+
+                    // TODO: Handle error
+                }
+
             }
 
             @Override
             public void onFailure(Call<List<ProjectTrackingList>> call, Throwable t) {
-
+                // TODO: Handle error
             }
         });
     }
@@ -341,17 +388,23 @@ public class MainViewModel {
             @Override
             public void onResponse(Call<List<CompanyTrackingList>> call, Response<List<CompanyTrackingList>> response) {
 
-                List<CompanyTrackingList> data = response.body();
-                projectTrackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
+                if (response.isSuccessful()) {
+
+                    List<CompanyTrackingList> data = response.body();
+                    projectTrackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
+
+                } else {
+
+                    // TODO: Handle error
+                }
             }
 
             @Override
             public void onFailure(Call<List<CompanyTrackingList>> call, Throwable t) {
-
+                // TODO: Handle error
             }
         });
     }
-
 
     /**
      * Persisted
@@ -386,7 +439,6 @@ public class MainViewModel {
         realmResultsMRU = projectDomain.fetchProjectsRecentlyUpdated(lastPublishDate, bidGroup);
         displayAdapter(dashboardPosition);
     }
-
 
 
     /**
@@ -441,10 +493,7 @@ public class MainViewModel {
 
     private RealmResults<Project> fetchProjectsHappeningSoon() {
 
-        calendar.setTime(new Date());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        return projectDomain.fetchProjectsHappeningSoon(calendar.getTime(), DateUtility.getLastDateOfTheCurrentMonth());
+        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
     }
 
     private RealmResults<Project> fetchProjectsRecentlyAdded() {
@@ -521,7 +570,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        dashboardAdapter = new DashboardRecyclerViewAdapter(adapterData, dashboardPosition);
+        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition);
         recyclerView.setAdapter(dashboardAdapter);
     }
 

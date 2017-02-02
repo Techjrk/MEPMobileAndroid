@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.lecet.app.interfaces.TrackingListObject;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -12,7 +14,7 @@ import io.realm.annotations.PrimaryKey;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectTrackingList extends RealmObject {
+public class ProjectTrackingList extends RealmObject implements TrackingListObject {
 
     @PrimaryKey
     @SerializedName("id")

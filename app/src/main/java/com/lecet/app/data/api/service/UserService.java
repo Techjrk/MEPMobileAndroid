@@ -1,11 +1,10 @@
 package com.lecet.app.data.api.service;
 
-import com.lecet.app.data.api.request.CreateUserRequest;
-import com.lecet.app.data.api.response.UserResponse;
+import com.lecet.app.data.api.request.ChangePasswordRequest;
+import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -45,4 +45,18 @@ public interface UserService {
     })
     @GET("LecetUsers/{userId}")
     Call<User> getUser(@Header("Authorization") String token, @Path("userId") long userId);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("LecetUsers/{userId}")
+    Call<User> updateUser(@Header("Authorization") String token, @Path("userId") long userId, @Body UpdateUserProfileRequest user);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("LecetUsers/{userId}")
+    Call<User> changePassword(@Header("Authorization") String token, @Path("userId") long userId, @Body ChangePasswordRequest body);
 }

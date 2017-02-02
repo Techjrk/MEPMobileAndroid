@@ -73,11 +73,7 @@ public class OverflowMenuAdapter extends BaseAdapter {
             User user = (User) item;
             holder.text1.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
             holder.text2.setText(user.getEmail());
-            if (TextUtils.isEmpty(user.getAvatar())) {
-                Picasso.with(context).load(R.drawable.ic_user_placeholder).into(holder.imageView1);
-            } else {
-                Picasso.with(context).load(user.getAvatar()).into(holder.imageView1);
-            }
+            Picasso.with(context).load(R.drawable.ic_user_placeholder).into(holder.imageView1);
         } else {
             holder.text1.setText(item.toString()); //should be String object
         }

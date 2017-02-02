@@ -3,11 +3,14 @@ package com.lecet.app.data.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.lecet.app.data.api.deserializer.ActivityUpdateDeserializer;
 import com.lecet.app.data.api.service.BidService;
+import com.lecet.app.data.api.service.CompanyService;
 import com.lecet.app.data.api.service.ProjectService;
 import com.lecet.app.data.api.service.SearchService;
 import com.lecet.app.data.api.service.TrackingListService;
 import com.lecet.app.data.api.service.UserService;
+import com.lecet.app.data.models.ActivityUpdate;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,7 +26,7 @@ public class LecetClient {
     private static final boolean IS_PRODUCTION = false;
     private static final String STAGING_ENDPOINT = "http://lecet.dt-staging.com/api/";
     private static final String PRODUCTION_ENDPOINT = "https://mepmobile.lecet.org/";
-    private static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
+    public static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
 
     private static LecetClient ourInstance = new LecetClient();
 
@@ -32,6 +35,7 @@ public class LecetClient {
     private ProjectService projectService;
     private TrackingListService trackingListService;
     private SearchService searchService;
+    private CompanyService companyService;
 
     public static LecetClient getInstance() {
         return ourInstance;
@@ -54,6 +58,7 @@ public class LecetClient {
 
         // Custom GSON for date conversion
         Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ActivityUpdate.class, new ActivityUpdateDeserializer())
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create();
 
@@ -68,6 +73,7 @@ public class LecetClient {
         userService = retrofit.create(UserService.class);
         trackingListService = retrofit.create(TrackingListService.class);
         searchService = retrofit.create(SearchService.class);
+        companyService = retrofit.create(CompanyService.class);
     }
 
 
@@ -88,4 +94,8 @@ public class LecetClient {
     }
 
     public SearchService getSearchService() { return searchService; }
+
+    public CompanyService getCompanyService() {
+        return companyService;
+    }
 }

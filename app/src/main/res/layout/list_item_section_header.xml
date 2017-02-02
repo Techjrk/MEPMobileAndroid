@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.HeaderViewModel"/>
+    </data>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="wrap_content"
+                  android:layout_marginTop="20dp"
+                  android:layout_marginLeft="20dp"
+                  android:layout_marginRight="20dp"
+                  android:layout_marginBottom="10dp"
+                  android:layout_height="30dp">
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="3dp"
+                  android:layout_marginBottom="3dp"
+                  android:gravity="bottom"
+                  android:textColor="@color/lecetTextDarkGray"
+                  android:textSize="14sp"
+                  android:text="@{viewModel.title}"
+                  bind:typeface="@{`Lato-Heavy.ttf`}"
+                  tools:text="County"/>
+
+        <View android:layout_width="match_parent"
+              android:layout_height="2dp"
+              android:layout_marginTop="2dp"
+              android:layout_marginBottom="2dp"
+              android:background="@color/lecetTextDarkGray"/>
+
+    </LinearLayout>
+
+</layout>
+
+

@@ -4,6 +4,7 @@ import android.databinding.BindingAdapter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputLayout;
+import android.text.Spannable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,12 @@ public class LecetBindingAdapter {
     @BindingAdapter("bind:imageUrl")
     public static void loadImage(ImageView view, String url) {
         Picasso.with(view.getContext()).load(url).fit().into(view);
+    }
+
+    @BindingAdapter("bind:spannableString")
+    public static void setTextViewSpannableString(TextView textView, Spannable spannable) {
+
+        textView.setText(spannable, TextView.BufferType.SPANNABLE);
     }
 
 }

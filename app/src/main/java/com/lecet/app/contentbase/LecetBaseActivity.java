@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.lecet.app.R;
 
@@ -74,6 +76,31 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         unregisterReceiver(networkReceiver);
     }
 
+    /** Keyboard management **/
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d("Base", "keycode = " + keyCode);
+        switch (keyCode){
+            case KeyEvent.FLAG_EDITOR_ACTION:
+                onKeyboardEditorActionSelected();
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                onKeyboardEditorActionSelected();
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
+    }
+
+
+    /**
+     *  Override this method to handle a soft keyboards action button
+     *  selection.
+     */
+    public void onKeyboardEditorActionSelected() {}
+
+
     /** Subclasses should override **/
 
     public abstract void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo);
@@ -115,6 +142,4 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
         networkAlertDialog = builder.show();
     }
-
-
 }

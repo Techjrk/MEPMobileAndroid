@@ -31,7 +31,7 @@ import retrofit2.Callback;
 public class BidDomain {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES})
+    @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES, CONSOLIDATED_CODE_B, CONSOLIDATED_CODE_H})
     public @interface BidGroup {
     }
 
@@ -39,6 +39,8 @@ public class BidDomain {
     public static final int BUILDING = 102;
     public static final int HOUSING = 103;
     public static final int UTILITIES = 105;
+    public static final int CONSOLIDATED_CODE_B = 901;
+    public static final int CONSOLIDATED_CODE_H = 902;
 
     private final Realm realm;
     private final LecetClient lecetClient;
@@ -77,7 +79,6 @@ public class BidDomain {
     public void getBidsRecentlyMade(Callback<List<Bid>> callback) {
 
         int limit = 100;
-
         getBidsRecentlyMade(limit, callback);
     }
 
@@ -97,31 +98,118 @@ public class BidDomain {
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
 
-        RealmResults<Bid> bids = realm.where(Bid.class)
-                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("project.hidden", false)
-                .findAllSorted("createDate", Sort.DESCENDING);
+        RealmResults<Bid> bids;
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            bids = realm.where(Bid.class)
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            bids = realm.where(Bid.class)
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .endGroup()
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+
+        } else {
+
+            bids = realm.where(Bid.class)
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+        }
+
+
 
         return bids;
     }
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId, Date cutoffDate) {
 
-        RealmResults<Bid> bids = realm.where(Bid.class)
-                .greaterThan("createDate", cutoffDate)
-                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("project.hidden", false)
-                .findAllSorted("createDate", Sort.DESCENDING);
+
+        RealmResults<Bid> bids;
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            bids = realm.where(Bid.class)
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("project.hidden", false)
+                    .greaterThan("createDate", cutoffDate)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            bids = realm.where(Bid.class)
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .endGroup()
+                    .equalTo("project.hidden", false)
+                    .greaterThan("createDate", cutoffDate)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+
+        } else {
+
+            bids = realm.where(Bid.class)
+                    .greaterThan("createDate", cutoffDate)
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+        }
+
 
         return bids;
     }
 
     public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
 
-        return result.where()
-                .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("project.hidden", false)
-                .findAllSorted("createDate", Sort.DESCENDING);
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            return result.where()
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            return result.where()
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .endGroup()
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+
+        } else {
+
+            return result.where()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("project.hidden", false)
+                    .findAllSorted("createDate", Sort.DESCENDING);
+        }
+
     }
 
     public Bid copyToRealmTransaction(Bid bid) {

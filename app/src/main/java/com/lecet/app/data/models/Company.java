@@ -2,8 +2,11 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.lecet.app.interfaces.TrackedObject;
+
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -13,7 +16,7 @@ import io.realm.annotations.PrimaryKey;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class Company extends RealmObject {
+public class Company extends RealmObject implements TrackedObject {
 
     @SerializedName("name")
     private String name;
@@ -69,6 +72,19 @@ public class Company extends RealmObject {
 
     @SerializedName("updatedAt")
     private Date updatedAt;
+
+    private RealmList<ActivityUpdate> updates;
+
+    private ActivityUpdate recentUpdate;
+
+    @SerializedName("contacts")
+    private RealmList<Contact> contacts;
+
+    @SerializedName("projects")
+    private RealmList<Project> projects;
+
+    @SerializedName("bids")
+    private RealmList<Bid> bids;
 
     public Company() {
     }
@@ -145,6 +161,56 @@ public class Company extends RealmObject {
         return updatedAt;
     }
 
+    public ActivityUpdate getRecentUpdate() {
+        return recentUpdate;
+    }
+
+    public RealmList<Contact> getContacts() {
+        return contacts;
+    }
+
+    public RealmList<Project> getProjects() {
+        return projects;
+    }
+
+    public RealmList<Bid> getBids() {
+        return bids;
+    }
+
+    public String getFullAddress() {
+
+        return address1 + " " + (address2 != null ? address2 : "") + " " + city + " " + state + " " + zipPlus4;
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "name='" + name + '\'' +
+                ", address1='" + address1 + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", county='" + county + '\'' +
+                ", fipsCounty='" + fipsCounty + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip5='" + zip5 + '\'' +
+                ", zipPlus4='" + zipPlus4 + '\'' +
+                ", country='" + country + '\'' +
+                ", ckmsSiteId='" + ckmsSiteId + '\'' +
+                ", cnCompanysiteUrl='" + cnCompanysiteUrl + '\'' +
+                ", wwwUrl='" + wwwUrl + '\'' +
+                ", dcisFactorCntctCode='" + dcisFactorCntctCode + '\'' +
+                ", dcisFactorCode='" + dcisFactorCode + '\'' +
+                ", id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", updates=" + updates +
+                ", recentUpdate=" + recentUpdate +
+                ", contacts=" + contacts +
+                ", projects=" + projects +
+                ", bids=" + bids +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -179,7 +245,17 @@ public class Company extends RealmObject {
             return false;
         if (createdAt != null ? !createdAt.equals(company.createdAt) : company.createdAt != null)
             return false;
-        return updatedAt != null ? updatedAt.equals(company.updatedAt) : company.updatedAt == null;
+        if (updatedAt != null ? !updatedAt.equals(company.updatedAt) : company.updatedAt != null)
+            return false;
+        if (updates != null ? !updates.equals(company.updates) : company.updates != null)
+            return false;
+        if (recentUpdate != null ? !recentUpdate.equals(company.recentUpdate) : company.recentUpdate != null)
+            return false;
+        if (contacts != null ? !contacts.equals(company.contacts) : company.contacts != null)
+            return false;
+        if (projects != null ? !projects.equals(company.projects) : company.projects != null)
+            return false;
+        return bids != null ? bids.equals(company.bids) : company.bids == null;
 
     }
 
@@ -203,30 +279,11 @@ public class Company extends RealmObject {
         result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+        result = 31 * result + (updates != null ? updates.hashCode() : 0);
+        result = 31 * result + (recentUpdate != null ? recentUpdate.hashCode() : 0);
+        result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
+        result = 31 * result + (projects != null ? projects.hashCode() : 0);
+        result = 31 * result + (bids != null ? bids.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Company{" +
-                "name='" + name + '\'' +
-                ", address1='" + address1 + '\'' +
-                ", address2='" + address2 + '\'' +
-                ", county='" + county + '\'' +
-                ", fipsCounty='" + fipsCounty + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zip5='" + zip5 + '\'' +
-                ", zipPlus4='" + zipPlus4 + '\'' +
-                ", country='" + country + '\'' +
-                ", ckmsSiteId='" + ckmsSiteId + '\'' +
-                ", cnCompanysiteUrl='" + cnCompanysiteUrl + '\'' +
-                ", wwwUrl='" + wwwUrl + '\'' +
-                ", dcisFactorCntctCode='" + dcisFactorCntctCode + '\'' +
-                ", dcisFactorCode='" + dcisFactorCode + '\'' +
-                ", id=" + id +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }

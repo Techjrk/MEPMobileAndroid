@@ -16,20 +16,16 @@ public class LecetApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Realm.init(this);
-
-
 
 //TODO: Testing - Deleting existing database - Migration needed for new RealmObject created - Noel
-/*
-     RealmConfiguration config = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
+        Realm.init(this);
 
-      Realm  realm = Realm.getInstance(config);
-*/
-
+//        RealmConfiguration config = new RealmConfiguration
+//                .Builder()
+//                .deleteRealmIfMigrationNeeded()
+//                .build();
+//
+//        Realm realm = Realm.getInstance(config);
     }
 
 }
