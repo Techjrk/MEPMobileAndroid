@@ -112,7 +112,7 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
      * Process the search Item  of thejurisdiction typed by the user
      */
     boolean foundKey1, foundKey2, foundKey3,foundKey4;
-    ArrayList<String> foundMain= new ArrayList<String>();
+    ArrayList<String> foundDistrictLocals= new ArrayList<String>();
     public void searchItem(SearchFilterJurisdictionViewModel viewModel, String key) {
         String searchKey=key;
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.test_recycler_view);
@@ -128,14 +128,16 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
         List<SearchFilterJurisdictionAdapter.Child> children = null;
 
         for (SearchFilterJurisdictionMain jMain : viewModel.getRealmJurisdictions()) {
-            foundKey1=false; foundMain.clear();
+            boolean hasGrandChild=false;
+            boolean hasChild=false;
+            foundKey1=false; foundDistrictLocals.clear();
             SearchFilterJurisdictionAdapter.Parent parent = new SearchFilterJurisdictionAdapter.Parent();
             parent.setId(jMain.getId());
             parent.setName(jMain.getName());
             parent.setAbbreviation(jMain.getAbbreviation());
             parent.setLongName(jMain.getLongName());
             if (parent.getName().contains(searchKey)) {
-                foundKey1=true; foundMain.add("jmain");
+                foundKey1=true; //foundDistrictLocals.add("jmain");
             }
             //  ctr++;
 
@@ -149,9 +151,12 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
                     child.setId(jlocal.getId());
                     child.setName(jlocal.getName());
                     child.setDistrictCouncilId(jlocal.getDistrictCouncilId());
-                    if (child.getName().trim().contains(searchKey)) {foundKey2=true; foundMain.add("jlocal");}
+                    if (child.getName().trim().contains(searchKey)) {
+                        hasChild=true;
+                        foundKey2=true;// foundDistrictLocals.add("jlocal");
+                    }
 
-                    if (foundKey2 || foundMain.contains("jmain")) children.add(child);
+                    if (foundKey2 || foundKey1 ) children.add(child);
 
 
                 }
@@ -162,10 +167,12 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
                 if (dcouncil != null) {
 //                    ctr++;
                     foundKey3=false;
+                    foundDistrictLocals.clear();
                     SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
                     child.setName(dcouncil.getName());
                     if (child.getName().trim().contains(searchKey)) {
-                        foundKey3=true; foundMain.add("dcouncil");
+                        hasChild=true;
+                        foundKey3=true; //foundDistrictLocals.add("dcouncil");
                         Log.d("found3","found3"+child.getName());
                     }
                     if (dcouncil.getLocals() != null) {
@@ -176,31 +183,34 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
                         // Locals
                         for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
                             if (dclocals != null) {
+
                                 foundKey4=false;
                                 SearchFilterJurisdictionAdapter.GrandChild grandChild1 = new SearchFilterJurisdictionAdapter.GrandChild();
                                 grandChild1.setId(dclocals.getId());
                                 grandChild1.setName(dclocals.getName());
-                                if (grandChild1.getName().contains(searchKey)) {foundKey4=true;foundMain.add("dclocal");}
-                                if (foundKey4 || foundKey3 || foundMain.contains("jmain")  ) grandChildren1.add(grandChild1);
+                                if (grandChild1.getName().contains(searchKey)) {
+                                    hasGrandChild=true; foundKey4=true; foundDistrictLocals.add("dclocal");
+                                }
+                                if (foundKey4 || foundKey3 || foundKey1  ) grandChildren1.add(grandChild1);
                             }
 //                        if (dclocals !=null)   Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
                         }
                         if (child !=null && grandChildren1 !=null)  child.setGrandChildren(grandChildren1);
                     }
-                    if (foundKey3 ||  foundMain.contains("jmain") || foundMain.contains("dclocal")  ) {
+                    if ((foundKey3 || foundDistrictLocals.contains("dclocal")   ) || foundKey1  ) {
                         children.add(child);
-                        foundMain.remove("dclocal");
-                       // foundMain.remove("dcouncil");
-                        Log.d("child added","child added");
+                        foundDistrictLocals.remove("dclocal");
+                       // foundDistrictLocals.remove("dcouncil");
+                        Log.d("child1 added","hasgchild"+hasGrandChild+"child1 added"+child.getName()+" f1:"+foundKey1+" f3:"+foundKey3+" fdc:"+foundDistrictLocals.contains("dclocal"));
                     }
                 }
             }
             if (children !=null) {
                 parent.setChildren(children);
-             //   foundMain.remove("dcouncil");
-                Log.d("parent added","parent added");
+             //   foundDistrictLocals.remove("dcouncil");
+                Log.d("parent1 added","parent1 added");
             }
-            if (parent !=null && foundMain.size() > 0) data.add(parent);
+            if (parent !=null && (hasChild || hasGrandChild)) data.add(parent);
         }
 
         SearchFilterJurisdictionAdapter adapter = new SearchFilterJurisdictionAdapter(data, viewModel);
