@@ -216,7 +216,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
-        Toast.makeText(viewModel.getActivity(), "onClick: \nProject saved detail section", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(viewModel.getActivity(), "onClick: \nProject saved detail section", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(viewModel.getActivity(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         viewModel.getActivity().startActivity(intent);
