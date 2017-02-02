@@ -3,30 +3,20 @@ package com.lecet.app.domain;
 import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectStage;
-import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
-import com.lecet.app.data.models.SearchFilter;
-import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
-import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
