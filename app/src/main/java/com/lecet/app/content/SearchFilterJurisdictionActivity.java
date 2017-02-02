@@ -76,20 +76,21 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
 //                    ctr++;
                     SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
                     child.setName(dcouncil.getName());
+                    child.setRegionId(dcouncil.getRegionId());
 
                     if (dcouncil.getLocals() != null) {
                         List<SearchFilterJurisdictionAdapter.GrandChild> grandChildren1 = new ArrayList<>();
 //                        List<SearchFilterJurisdictionAdapter.SubSubtype> subSubtypes = new ArrayList<>();
 
                         // Locals
-                        for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
-                            if (dclocals != null) {
+                        for (SearchFilterJurisdictionLocal local : dcouncil.getLocals()) {
+                            if (local != null) {
                                 SearchFilterJurisdictionAdapter.GrandChild grandChild1 = new SearchFilterJurisdictionAdapter.GrandChild();
-                                grandChild1.setId(dclocals.getId());
-                                grandChild1.setName(dclocals.getName());
+                                grandChild1.setId(local.getId());
+                                grandChild1.setName(local.getName());
                                 grandChildren1.add(grandChild1);
                             }
-//                        if (dclocals !=null)   Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
+//                        if (local !=null)   Log.d("jdcouncillocals","jdcouncillocals = name:"+local.getName()+" id:"+local.getId()+" dcid:"+local.getDistrictCouncilId());
                         }
                         child.setGrandChildren(grandChildren1);
                     }

@@ -169,7 +169,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                             child.setSelected(cb.isChecked());
 
-                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
+                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getRegionId(), child.getName(), child.getAbbreviation(), child.getLongName());
                         }
                     }
 
@@ -302,7 +302,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                             grandChild.setSelected(cb.isChecked());
                             if (grandChild.getSelected())
-                         viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());
+                         viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), -1, grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());    //TODO - check regionId
                         }
                     }
 
@@ -353,7 +353,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         parent.setSelected(cb.isChecked());
 
                      if (parent.getSelected())
-                         viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), parent.getName(), parent.getAbbreviation(), parent.getLongName());
+                         viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //TODO - check regionId
                     }
                 }
         );
@@ -618,6 +618,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     public static class Child {
 
         private int id;
+        private int regionId;
         private String name;
         private String abbreviation;
         private String longName;
@@ -640,6 +641,14 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public int getRegionId() {
+            return regionId;
+        }
+
+        public void setRegionId(int regionId) {
+            this.regionId = regionId;
         }
 
         public void setName(String name) {

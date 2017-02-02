@@ -426,14 +426,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 int jurisdictionViewType = -1;
                 String jurisdictionId = null;
+                String jurisdictionRegionId = null;
                 String jurisdictionName = null;
                 String jurisdictions = "";
 
                 try {
                     jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                    jurisdictionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
-                    jurisdictionName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
-                } catch (Exception e) {
+                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionRegionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_REGION_ID);
+                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                }
+                catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
                 }
                 if (jurisdictionName == null || jurisdictionName.equals("")) {
@@ -448,17 +451,20 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     viewModel.setJurisdiction_select(jurisdictionName);
                 }
 
-                // build the list of IDs for the query, which include ... ?
+                // Build a single-element List based on the Jurisdiction ID passed in the Bundle.
                 List<String> jList = new ArrayList<>();
 
                 List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
                 List<SearchFilterJurisdictionLocal> locals;
 
                 // add the highest-level Jurisdiction ID
-                jList.add(jurisdictionName);
+                //jList.add(jurisdictionId);
                 if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
 
-                    if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
+                    //TODO - look through all nested levels, match the passed bundle Name to an element in a level, and use that item's ID.
+
+
+                    /*if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
                         // add each District Council ID
                         for (SearchFilterJurisdictionMain j : realmJurisdictions) {
                             if (jurisdictionName.equals(j.getName())) {
@@ -506,9 +512,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     //TODO - implement this section
                     else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
 
-                    }
+                    }*/
 
-                    //Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdictionName);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
 
