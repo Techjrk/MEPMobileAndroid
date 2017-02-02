@@ -201,7 +201,7 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
                         children.add(child);
                         foundDistrictLocals.remove("dclocal");
                        // foundDistrictLocals.remove("dcouncil");
-                        Log.d("child1 added","hasgchild"+hasGrandChild+"child1 added"+child.getName()+" f1:"+foundKey1+" f3:"+foundKey3+" fdc:"+foundDistrictLocals.contains("dclocal"));
+                        Log.d("child3 added","haschild3: "+hasChild+"hasgchild"+hasGrandChild+"child1 added"+child.getName()+" f1:"+foundKey1+" f3:"+foundKey3+" fdc:"+foundDistrictLocals.contains("dclocal"));
                     }
                 }
             }

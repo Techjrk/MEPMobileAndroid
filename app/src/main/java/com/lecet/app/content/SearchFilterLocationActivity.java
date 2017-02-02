@@ -20,17 +20,18 @@ public class SearchFilterLocationActivity extends AppCompatActivity {
         ActivitySearchFilterLocationBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_location);
 
         // get Location Extras
-        Intent intent = getIntent();
+       /* Intent intent = getIntent();
         String city   = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY);
         String state  = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE);
         String county = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY);
-        String zip    = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP);
+        String zip    = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP);*/
 
         SearchFilterLocationViewModel viewModel = new SearchFilterLocationViewModel(this);
-        viewModel.setCity(city);
+        /*viewModel.setCity(city);
         viewModel.setState(state);
         viewModel.setCounty(county);
         viewModel.setZipcode(zip);
+        */
         sfilter.setViewModel(viewModel);
     }
 
