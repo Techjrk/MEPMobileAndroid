@@ -4,12 +4,15 @@ import android.app.Application;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lecet.app.R;
+import com.lecet.app.content.CompanyDetailActivity;
+import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
@@ -223,7 +226,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public void onProjectClick(View view) {
-        //TODO - connect to the project detail section
       //  Toast.makeText(viewModel.getActivity(), "onClick: \nProject detail section", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(viewModel.getActivity(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
@@ -234,14 +236,21 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     public void onCompanyClick(View view) {
         //TODO - connect to the company detail section
-        Toast.makeText(viewModel.getActivity(), "onClick: \nCompany detail section", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(viewModel.getActivity(), "onClick: \nCompany detail section", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(viewModel.getActivity(), CompanyDetailActivity.class);
+        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
+        viewModel.getActivity().startActivity(intent);
 
 //        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
     }
 
     public void onContactClick(View view) {
         //TODO - connect to the contact detail section
-        Toast.makeText(viewModel.getActivity(), "onClick: Contact detail section", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(viewModel.getActivity(), "onClick: Contact detail section", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(viewModel.getActivity(), ContactDetailActivity.class);
+        Log.d("Contactid","Contactid"+contact.getId());
+        intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
+        viewModel.getActivity().startActivity(intent);
 //        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
     }
 
