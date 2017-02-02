@@ -17,6 +17,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -85,6 +86,29 @@ public class BidDomain {
     /**
      * Persisted
      **/
+
+    public RealmResults<Bid> fetchBidsByCompany(long companyID, String sortFilter, Sort sort) {
+
+        return realm.where(Bid.class)
+                .equalTo("companyId", companyID)
+                .findAllSorted(sortFilter, sort);
+    }
+
+    public RealmResults<Bid> fetchBidsByCompanyLessThanDate(long companyID, String sortFilter, Sort sort, Date cutoffDate) {
+
+        return realm.where(Bid.class)
+                .lessThan("project.bidDate", cutoffDate)
+                .equalTo("companyId", companyID)
+                .findAllSorted(sortFilter, sort);
+    }
+
+    public RealmResults<Bid> fetchBidsByCompanyGreaterThanDate(long companyID, String sortFilter, Sort sort, Date cutoffDate) {
+
+        return realm.where(Bid.class)
+                .greaterThanOrEqualTo("project.bidDate", cutoffDate)
+                .equalTo("companyId", companyID)
+                .findAllSorted(sortFilter, sort);
+    }
 
     public RealmResults<Bid> fetchBids(Date cutoffDate) {
 

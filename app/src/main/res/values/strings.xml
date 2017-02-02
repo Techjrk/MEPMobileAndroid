@@ -289,6 +289,8 @@
     </string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
+    <string name="bid_tab_title_past">%d Past</string>
+    <string name="bid_tab_title_upcoming">%d Upcoming</string>
 
     <!-- MPR Profile -->
     <string name="my_profile">My Profile</string>
@@ -304,5 +306,7 @@
     <string name="hidden_projects_sub_title">%d Hidden Projects</string>
     <string name="unhide">Unhide</string>
     <string name="title_activity_location_detail_map">LocationDetail</string>
+    <string name="title_activity_company_project_bids">CompanyProjectBidsActivity</string>
+
 
 </resources>

@@ -43,7 +43,6 @@ public class RecentBidItemViewModel {
         return formatter.format(bid.getAmount());
     }
 
-
     public String getBidCompany() {
 
         Contact contact = bid.getContact();
@@ -59,7 +58,7 @@ public class RecentBidItemViewModel {
 
         }
 
-        return "";
+        return "[ not provided ]";
     }
 
     public String getProjectName() {
