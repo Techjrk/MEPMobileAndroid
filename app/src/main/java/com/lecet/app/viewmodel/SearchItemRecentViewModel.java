@@ -224,7 +224,10 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     public void onProjectClick(View view) {
         //TODO - connect to the project detail section
-        Toast.makeText(viewModel.getActivity(), "onClick: \nProject detail section", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(viewModel.getActivity(), "onClick: \nProject detail section", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(viewModel.getActivity(), ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+        viewModel.getActivity().startActivity(intent);
 
 
     }
