@@ -249,8 +249,8 @@ public class SearchItemRecentViewModel extends BaseObservable {
       //  Toast.makeText(viewModel.getActivity(), "onClick: Contact detail section", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(viewModel.getActivity(), ContactDetailActivity.class);
         Log.d("Contactid","Contactid"+contact.getId());
-        intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
-        viewModel.getActivity().startActivity(intent);
+        //intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId()); //TODO - causes crash
+        //viewModel.getActivity().startActivity(intent);
 //        Toast.makeText(viewModel.getActivity(), "onClick: \nProject id: " + project.getId(),Toast.LENGTH_SHORT).show();
     }
 
