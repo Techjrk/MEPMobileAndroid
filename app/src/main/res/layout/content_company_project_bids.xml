@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.CompanyProjectBidsViewModel"/>
+    </data>
+
+    <LinearLayout
+            android:id="@+id/content_company_project_bids"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/transparent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:showIn="@layout/activity_company_project_bids"
+            tools:context="com.lecet.app.content.CompanyProjectBidsActivity">
+
+        <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:tabTextColor="@color/pureWhite"
+                app:tabSelectedTextColor="@color/pureWhite"
+                app:tabIndicatorHeight="3dp"
+                app:tabIndicatorColor="@color/lecetDarkOrange"
+                android:background="@color/lecetDarkestBlue">
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/tracking_list_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/list_item_mcd_bid"/>
+
+
+    </LinearLayout>
+
+</layout>

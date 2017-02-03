@@ -4,25 +4,38 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.lecet.app.viewmodel.MainViewModel" />
+                name="viewModel"
+                type="com.lecet.app.viewmodel.MainViewModel"/>
     </data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        style="@style/FullScreenImageBackground.Gradient1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.MainActivity">
 
-        <!-- App Bar -->
-        <include layout="@layout/include_app_bar_layout" />
+    <ViewSwitcher
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/view_switcher"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <!-- Content -->
-        <include
-            layout="@layout/content_main"
-            bind:viewModel="@{viewModel}" />
+        <include layout="@layout/activity_launcher"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+        <android.support.design.widget.CoordinatorLayout
+
+                style="@style/FullScreenImageBackground.Gradient1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.lecet.app.content.MainActivity">
+
+            <!-- App Bar -->
+            <include layout="@layout/include_app_bar_layout"/>
+
+            <!-- Content -->
+            <include layout="@layout/content_main"
+                     bind:viewModel="@{viewModel}"/>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+
+    </ViewSwitcher>
+
 
 </layout>

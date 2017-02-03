@@ -7,8 +7,8 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.ViewSwitcher;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
@@ -67,6 +67,12 @@ public class MainViewModel {
     @DashboardPosition
     int dashboardPosition;
 
+    private boolean displayContent;
+    private boolean fetchedMBR;
+    private boolean fetchedMHS;
+    private boolean fetchedMRA;
+    private boolean fetchedMRU;
+
     private Date lastFetchedMBR;
     private Date lastFetchedMHS;
     private Date lastFetchedMRA;
@@ -77,6 +83,8 @@ public class MainViewModel {
     private RealmResults<Project> realmResultsMRA;
     private RealmResults<Project> realmResultsMRU;
 
+    private ViewSwitcher viewSwitcher;
+    private LinearLayoutManager layoutManager;
     private DashboardRecyclerViewAdapter dashboardAdapter;
     private List<RealmObject> adapterData;
 
@@ -89,6 +97,7 @@ public class MainViewModel {
         this.projectTrackingListDomain = trackingListDomain;
 
         initializeAdapter();
+        initializeViewSwitcher();
     }
 
 
@@ -106,6 +115,9 @@ public class MainViewModel {
                 public void onResponse(Call<List<Bid>> call, Response<List<Bid>> response) {
                     if (response.isSuccessful()) {
 
+
+                        fetchedMBR = true;
+
                         lastFetchedMBR = new Date();
 
                         // Store in Realm
@@ -121,7 +133,14 @@ public class MainViewModel {
                             setupAdapterWithBids(realmResultsMBR);
                         }
 
+                        // data received, lets see if we should display main content
+                        checkDataDownloaded();
+
                     } else {
+
+                        // data received, lets see if we should display main content
+                        fetchedMBR = true;
+                        checkDataDownloaded();
 
                         callback.onFailure(response.code(), response.message());
                     }
@@ -130,7 +149,9 @@ public class MainViewModel {
                 @Override
                 public void onFailure(Call<List<Bid>> call, Throwable t) {
 
-                    Log.d("MBR", t.getLocalizedMessage());
+                    // data received, lets see if we should display main content
+                    fetchedMBR = true;
+                    checkDataDownloaded();
                     callback.onFailure(-1, getString(R.string.error_network_message));
                 }
             });
@@ -159,6 +180,9 @@ public class MainViewModel {
 
                     if (response.isSuccessful()) {
 
+                        // data received, lets see if we should display main content
+                        fetchedMHS = true;
+
                         lastFetchedMHS = new Date();
 
                         // Store in Realm
@@ -178,10 +202,16 @@ public class MainViewModel {
                                     setupAdapterWithProjects(realmResultsMHS);
                                 }
 
+                                // data received, lets see if we should display main content
+                                checkDataDownloaded();
+
                             }
                         }, new Realm.Transaction.OnError() {
                             @Override
                             public void onError(Throwable error) {
+
+                                // data received, lets see if we should display main content
+                                checkDataDownloaded();
 
                                 callback.onFailure(-1, "Realm Error = " + error.getMessage());
                             }
@@ -190,12 +220,19 @@ public class MainViewModel {
 
                     } else {
 
+                        // data received, lets see if we should display main content
+                        fetchedMHS = true;
+                        checkDataDownloaded();
                         callback.onFailure(response.code(), response.message());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Project>> call, Throwable t) {
+
+                    // data received, lets see if we should display main content
+                    fetchedMHS = true;
+                    checkDataDownloaded();
 
                     callback.onFailure(-1, "Network Failure");
                 }
@@ -225,6 +262,8 @@ public class MainViewModel {
 
                     if (response.isSuccessful()) {
 
+                        // data received, lets see if we should display main content
+                        fetchedMRA = true;
                         lastFetchedMRA = new Date();
 
                         // Store in Realm
@@ -243,10 +282,16 @@ public class MainViewModel {
                                     setupAdapterWithProjects(realmResultsMRA);
                                 }
 
+                                // data received, lets see if we should display main content
+                                checkDataDownloaded();
+
                             }
                         }, new Realm.Transaction.OnError() {
                             @Override
                             public void onError(Throwable error) {
+
+                                // data received, lets see if we should display main content
+                                checkDataDownloaded();
 
                                 callback.onFailure(-1, "Realm Error = " + error.getMessage());
                             }
@@ -255,12 +300,20 @@ public class MainViewModel {
 
                     } else {
 
+                        // data received, lets see if we should display main content
+                        fetchedMRA = true;
+                        checkDataDownloaded();
+
                         callback.onFailure(response.code(), response.message());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Project>> call, Throwable t) {
+
+                    // data received, lets see if we should display main content
+                    fetchedMRA = true;
+                    checkDataDownloaded();
 
                     callback.onFailure(-1, "Network Failure");
                 }
@@ -284,11 +337,14 @@ public class MainViewModel {
         // Check if data has been recently fetched and display those results from Realm
         if (lastFetchedMRU == null || lastFetchedMRU != null && minutesElapsed(new Date(), lastFetchedMRU) > 3) {
 
-            getProjectsRecentlyAdded(new Callback<List<Project>>() {
+            getProjectsRecentlyUpdated(new Callback<List<Project>>() {
                 @Override
                 public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
 
                     if (response.isSuccessful()) {
+
+                        // data received, lets see if we should display main content
+                        fetchedMRU = true;
 
                         lastFetchedMRU = new Date();
 
@@ -307,16 +363,25 @@ public class MainViewModel {
 
                                     setupAdapterWithProjects(realmResultsMRU);
                                 }
+
+                                // data received, lets see if we should display main content
+                                checkDataDownloaded();
                             }
                         }, new Realm.Transaction.OnError() {
                             @Override
                             public void onError(Throwable error) {
 
+                                // data received, lets see if we should display main content
+                                checkDataDownloaded();
                                 callback.onFailure(-1, "Realm Error = " + error.getMessage());
                             }
                         });
 
                     } else {
+
+                        // data received, lets see if we should display main content
+                        fetchedMRU = true;
+                        checkDataDownloaded();
 
                         callback.onFailure(response.code(), response.message());
                     }
@@ -324,6 +389,10 @@ public class MainViewModel {
 
                 @Override
                 public void onFailure(Call<List<Project>> call, Throwable t) {
+
+                    // data received, lets see if we should display main content
+                    fetchedMRU = true;
+                    checkDataDownloaded();
 
                     callback.onFailure(-1, "Network Failure: " + t.getMessage());
                 }
@@ -541,6 +610,10 @@ public class MainViewModel {
 
         if (dashboardPosition == position) return;
 
+        if (layoutManager.findFirstCompletelyVisibleItemPosition() != -1) {
+            layoutManager.scrollToPosition(0);
+        }
+
         dashboardPosition = position;
         displayAdapter(dashboardPosition);
     }
@@ -551,13 +624,36 @@ public class MainViewModel {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
     private RecyclerView getProjectRecyclerView(@IdRes int recyclerView) {
 
         return (RecyclerView) appCompatActivity.findViewById(recyclerView);
+    }
+
+    /**
+     * ViewPager **
+     */
+
+    private void initializeViewSwitcher() {
+
+        viewSwitcher = (ViewSwitcher) appCompatActivity.findViewById(R.id.view_switcher);
+    }
+
+    private void switchPage() {
+
+        viewSwitcher.showNext();
+    }
+
+    private void checkDataDownloaded() {
+
+        if (!displayContent && fetchedMBR && fetchedMHS) {
+
+            displayContent = true;
+            switchPage();
+        }
     }
 
     /**
@@ -570,7 +666,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition);
+        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition, bidDomain);
         recyclerView.setAdapter(dashboardAdapter);
     }
 

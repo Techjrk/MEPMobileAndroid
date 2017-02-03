@@ -1,9 +1,12 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
@@ -11,11 +14,11 @@ import com.lecet.app.adapters.ProjectDetailAdapter;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
-import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.interfaces.ClickableMapInterface;
 import com.lecet.app.utility.DateUtility;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +38,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectDetailViewModel {
+public class ProjectDetailViewModel implements ClickableMapInterface {
 
     private static final String TAG = "ProjectDetailViewModel";
 
@@ -210,4 +213,18 @@ public class ProjectDetailViewModel {
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
+    @Override
+    public void onMapSelected(View view) {
+
+        if (project.getGeocode() == null) return;
+
+        ProjectDetailActivity activity = activityWeakReference.get();
+
+        Uri gmmIntentUri = Uri.parse(String.format("geo:0,0?q=%f,%f", project.getGeocode().getLat(), project.getGeocode().getLng()));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(mapIntent);
+        }
+    }
 }

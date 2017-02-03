@@ -1,5 +1,7 @@
 package com.lecet.app.viewmodel;
 
+import android.support.v7.app.AppCompatActivity;
+
 import com.lecet.app.data.models.Project;
 
 /**
@@ -38,4 +40,5 @@ public class ProjectDetailHeaderViewModel {
 
         return address;
     }
+
 }

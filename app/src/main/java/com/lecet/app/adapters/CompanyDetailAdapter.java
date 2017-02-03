@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.content.CompanyAssociatedProjectsActivity;
+import com.lecet.app.content.CompanyProjectBidsActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
@@ -71,7 +72,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
     private int SECTION_PROJECT = -1;
     private int SECTION_CONTACTS = -1;
-    private int SECTION_BIDDERS = -1;
+    private int SECTION_BIDS = -1;
 
     private AppCompatActivity appCompatActivity;
     private Company company;
@@ -157,15 +158,15 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
         if (!projectsDisplayed && !contactsDisplayed && bidsDisplayed) {
 
-            SECTION_BIDDERS = 3;
+            SECTION_BIDS = 3;
 
         } else if (!projectsDisplayed || !contactsDisplayed && bidsDisplayed) {
 
-            SECTION_BIDDERS = 4;
+            SECTION_BIDS = 4;
 
         } else if (projectsDisplayed || contactsDisplayed && bidsDisplayed) {
 
-            SECTION_BIDDERS = 5;
+            SECTION_BIDS = 5;
 
         }
     }
@@ -202,7 +203,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
             return company.getContacts().size() <= 3 ? company.getContacts().size() : 3;
 
-        } else if (bidsDisplayed && section == SECTION_BIDDERS) {
+        } else if (bidsDisplayed && section == SECTION_BIDS) {
 
             return company.getBids().size() <= 3 ? company.getBids().size() : 3;
         }
@@ -229,7 +230,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
             return CONTACT_VIEW_TYPE;
 
-        } else if (bidsDisplayed && section == SECTION_BIDDERS) {
+        } else if (bidsDisplayed && section == SECTION_BIDS) {
 
             return BID_VIEW_TYPE;
         }
@@ -263,7 +264,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
     @Override
     public boolean enableFooterForSection(int section) {
 
-        if (bidsDisplayed && section == SECTION_BIDDERS) {
+        if (bidsDisplayed && section == SECTION_BIDS) {
 
             if (company.getBids() == null) return false;
 
@@ -304,7 +305,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
                 ((CompanyDetailAdapter.SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel(appCompatActivity.getString(R.string.contacts)));
 
-            } else if (section == SECTION_BIDDERS) {
+            } else if (section == SECTION_BIDS) {
 
                 ((CompanyDetailAdapter.SectionHeaderVH) holder).getBinding().setViewModel(new HeaderViewModel(appCompatActivity.getString(R.string.project_bids)));
             }
@@ -344,7 +345,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
             CompanyDetailContactViewModel viewModel = new CompanyDetailContactViewModel(appCompatActivity, company.getContacts().get(position));
             ((CompanyContactViewHolder) holder).getBinding().setViewModel(viewModel);
 
-        } else if (section == SECTION_BIDDERS) {
+        } else if (section == SECTION_BIDS) {
 
             CompanyDetailBidViewModel viewModel = new CompanyDetailBidViewModel(appCompatActivity, appCompatActivity.getString(R.string.google_maps_key), company.getBids().get(position));
             ((CompanyBidViewHolder) holder).getBinding().setViewModel(viewModel);
@@ -360,9 +361,9 @@ public class CompanyDetailAdapter extends SectionedAdapter {
             DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(company.getContacts().size()), appCompatActivity.getString(R.string.contacts));
             ((FooterViewHolder) holder).getBinding().setViewModel(viewModel);
 
-        } else if (section == SECTION_BIDDERS) {
+        } else if (section == SECTION_BIDS) {
 
-            DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(company.getBids().size()), appCompatActivity.getString(R.string.bidders));
+            DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(company.getBids().size()), appCompatActivity.getString(R.string.bids));
             ((FooterViewHolder) holder).getBinding().setViewModel(viewModel);
 
         } else if (section == SECTION_PROJECT) {
@@ -379,6 +380,12 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
                     Intent intent = new Intent(appCompatActivity, CompanyAssociatedProjectsActivity.class);
                     intent.putExtra(CompanyAssociatedProjectsActivity.COMPANY_ID_EXTRA, company.getId());
+                    appCompatActivity.startActivity(intent);
+
+                } else if (bidsDisplayed && section == SECTION_BIDS) {
+
+                    Intent intent = new Intent(appCompatActivity, CompanyProjectBidsActivity.class);
+                    intent.putExtra(CompanyProjectBidsActivity.COMPANY_ID_EXTRA, company.getId());
                     appCompatActivity.startActivity(intent);
                 }
             }

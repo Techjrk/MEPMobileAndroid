@@ -98,7 +98,7 @@
                       android:textSize="16sp"
                       android:textColor="@color/pureWhite"
                       android:gravity="center"
-                      android:text="@string/union_mark"
+                      android:text="@{viewModel.unionDesignation}"
                       android:visibility="@{viewModel.isUnion ? View.VISIBLE : View.GONE}"
                       android:background="@drawable/shape_rect_union"
                       bind:typeface="@{`Lato-Bold.ttf`}"/>

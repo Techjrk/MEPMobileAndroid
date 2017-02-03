@@ -200,7 +200,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         locationManager.stopLocationUpdates();
     }

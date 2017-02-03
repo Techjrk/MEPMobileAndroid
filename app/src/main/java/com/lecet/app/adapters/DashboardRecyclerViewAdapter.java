@@ -10,6 +10,7 @@ import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemDashboardProjectBinding;
+import com.lecet.app.domain.BidDomain;
 import com.lecet.app.viewmodel.DashboardProjectItemViewModel;
 import com.lecet.app.viewmodel.MainViewModel;
 import com.lecet.app.viewmodel.RecentBidItemViewModel;
@@ -31,12 +32,14 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     private List<RealmObject> data;
     private AppCompatActivity activity;
+    private BidDomain bidDomain;
 
-    public DashboardRecyclerViewAdapter(AppCompatActivity activity, List<RealmObject> data, @MainViewModel.DashboardPosition int adapterType) {
+    public DashboardRecyclerViewAdapter(AppCompatActivity activity, List<RealmObject> data, @MainViewModel.DashboardPosition int adapterType, BidDomain bidDomain) {
 
         this.activity = activity;
         this.data = data;
         this.adapterType = adapterType;
+        this.bidDomain = bidDomain;
     }
 
     @Override
@@ -72,7 +75,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         if (holder instanceof MBRViewHolder) {
 
             MBRViewHolder viewHolder = (MBRViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel((Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", activity));
+            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel(bidDomain, (Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", activity));
 
         } else if (holder instanceof MHSViewHolder) {
 

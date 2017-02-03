@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.lecet.app.content.CompanyDetailActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Bid;
 
 import java.text.DecimalFormat;
@@ -39,7 +40,7 @@ public class CompanyDetailBidViewModel extends BaseObservable {
 
     public String getStartDateString() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
         return simpleDateFormat.format(bid.getProject().getBidDate());
     }
@@ -65,8 +66,8 @@ public class CompanyDetailBidViewModel extends BaseObservable {
 
     public void onBidSelected(View view) {
 
-        Intent intent = new Intent(activity, CompanyDetailActivity.class);
-        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, bid.getCompany().getId());
+        Intent intent = new Intent(activity, ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, bid.getProject().getId());
         activity.startActivity(intent);
     }
 
