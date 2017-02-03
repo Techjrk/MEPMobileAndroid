@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
@@ -7,6 +8,7 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.databinding.ActivityCompanyDetailBinding;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.CompanyDetailViewModel;
@@ -22,7 +24,8 @@ public class CompanyDetailActivity extends LecetBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_company_detail);
+
+        ActivityCompanyDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_company_detail);
 
         long companyId = getIntent().getLongExtra(COMPANY_ID_EXTRA, -1);
 
@@ -30,6 +33,8 @@ public class CompanyDetailActivity extends LecetBaseActivity {
         CompanyDomain companyDomain = new CompanyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         viewModel = new CompanyDetailViewModel(this, companyId, companyDomain, projectDomain);
         viewModel.getCompanyDetail();
+
+        binding.setViewModel(viewModel);
     }
 
     @Override
