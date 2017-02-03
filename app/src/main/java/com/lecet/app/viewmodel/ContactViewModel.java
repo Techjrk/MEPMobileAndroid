@@ -81,7 +81,12 @@ public class ContactViewModel {
         String preCompany = (contact.getTitle() != null ? contact.getTitle() : "[ not given ]") + " " + appCompatActivity.getString(R.string.at) + " ";
         String companyName = company.getName();
         Spannable spannable = new SpannableString(preCompany + companyName);
-        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        int companyNameLength =  companyName.length();
+        if (preCompany.length() > companyNameLength) {
+            companyNameLength = preCompany.length() +1;
+        }
+        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), companyNameLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return spannable;
     }
