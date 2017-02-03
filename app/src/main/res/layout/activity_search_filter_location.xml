@@ -130,6 +130,7 @@
                         style="@style/SearchFilterSectionTextView"
                         android:layout_marginTop="5dp"
                         android:text="@string/zip_postal_code"
+                        android:textAllCaps="true"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <EditText

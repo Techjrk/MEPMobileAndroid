@@ -43,10 +43,14 @@
     <string name="state">State</string>
     <string name="city">City</string>
     <string name="zip">Zip</string>
+    <string name="zip_postal_code">Zip/Postal Code</string>
     <string name="name">Name</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="save">Save</string>
+    <string name="min">MIN</string>
+    <string name="max">MAX</string>
+
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
@@ -118,7 +122,6 @@
     <string name="recent">RECENT</string>
     <string name="last_checked">Last checked</string>
     <string name="search">Search</string>
-    <string name="zip_postal_code">ZIP/POSTAL CODE</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
@@ -244,6 +247,7 @@
     <string name="any">Any</string>
     <string name="msejurisdiction">JURISDICTION</string>
     <string name="msebidding_within">BIDDING WITHIN</string>
+    <string name="msevaluation">Valuation</string>
     <string name="more_options">More Options</string>
     <string name="msecompany_location">COMPANY LOCATION</string>
     <string name="mserelated_projects">Related Projects</string>
