@@ -4,6 +4,8 @@ import android.support.annotation.IntDef;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -199,6 +201,16 @@ public class BidDomain {
 
 
         return bids;
+    }
+
+    public Company getBidCompany(long companyID) {
+
+        return realm.where(Company.class).equalTo("id", companyID).findFirst();
+    }
+
+    public Project getBidProject(long projectID) {
+
+        return realm.where(Project.class).equalTo("id", projectID).findFirst();
     }
 
     public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {

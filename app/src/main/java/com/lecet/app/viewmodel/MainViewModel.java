@@ -77,6 +77,7 @@ public class MainViewModel {
     private RealmResults<Project> realmResultsMRA;
     private RealmResults<Project> realmResultsMRU;
 
+    private LinearLayoutManager layoutManager;
     private DashboardRecyclerViewAdapter dashboardAdapter;
     private List<RealmObject> adapterData;
 
@@ -284,7 +285,7 @@ public class MainViewModel {
         // Check if data has been recently fetched and display those results from Realm
         if (lastFetchedMRU == null || lastFetchedMRU != null && minutesElapsed(new Date(), lastFetchedMRU) > 3) {
 
-            getProjectsRecentlyAdded(new Callback<List<Project>>() {
+            getProjectsRecentlyUpdated(new Callback<List<Project>>() {
                 @Override
                 public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
 
@@ -541,6 +542,10 @@ public class MainViewModel {
 
         if (dashboardPosition == position) return;
 
+        if (layoutManager.findFirstCompletelyVisibleItemPosition() != -1) {
+            layoutManager.scrollToPosition(0);
+        }
+
         dashboardPosition = position;
         displayAdapter(dashboardPosition);
     }
@@ -551,7 +556,7 @@ public class MainViewModel {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
@@ -570,7 +575,7 @@ public class MainViewModel {
 
         RecyclerView recyclerView = getProjectRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);
-        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition);
+        dashboardAdapter = new DashboardRecyclerViewAdapter(appCompatActivity, adapterData, dashboardPosition, bidDomain);
         recyclerView.setAdapter(dashboardAdapter);
     }
 

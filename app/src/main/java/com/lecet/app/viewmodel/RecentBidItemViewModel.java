@@ -10,6 +10,7 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.domain.BidDomain;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -26,14 +27,26 @@ public class RecentBidItemViewModel {
 
     private static final String TAG = "RecentBidItemViewModel";
 
+    private final BidDomain bidDomain;
     private final Bid bid;
     private final String mapsApiKey;
     private final AppCompatActivity activity;
+    private final Project project;
 
-    public RecentBidItemViewModel(Bid bid, String mapsApiKey, AppCompatActivity activity) {
+    public RecentBidItemViewModel(BidDomain bidDomain, Bid bid, String mapsApiKey, AppCompatActivity activity) {
+        this.bidDomain = bidDomain;
         this.bid = bid;
         this.mapsApiKey = mapsApiKey;
         this.activity = activity;
+
+        if (bid.getProject() != null) {
+
+            this.project = bid.getProject();
+
+        } else {
+
+            this.project = bidDomain.getBidProject(bid.getProjectId());
+        }
     }
 
     public String getBidAmount() {
@@ -56,6 +69,14 @@ public class RecentBidItemViewModel {
                 return company.getName();
             }
 
+        } else {
+
+            Company company = bidDomain.getBidCompany(bid.getCompanyId());
+
+            if (company != null) {
+
+                return company.getName();
+            }
         }
 
         return "[ not provided ]";
@@ -63,32 +84,41 @@ public class RecentBidItemViewModel {
 
     public String getProjectName() {
 
-        Log.d("RECENTBID", "BID ID " + bid.getId());
-        Log.d("RECENTBID", "Project ID " + bid.getProject().getId());
-        return bid.getProject().getTitle();
+        if (project != null) {
+
+            return project.getTitle();
+
+        }
+
+        return "[ not provided ]";
     }
 
     public String getClientLocation() {
 
-        return bid.getProject().getCity() + " , " + bid.getProject().getState();
+        if (project != null) {
+
+            return project.getCity() + " , " + project.getState();
+        }
+
+        return "[ not provided ]";
     }
 
     public String getBidType() {
 
         StringBuilder sb = new StringBuilder();
-        if (bid.getProject().getPrimaryProjectType() != null && bid.getProject().getPrimaryProjectType().getTitle() !=null) {
+        if (project != null && project.getPrimaryProjectType() != null && project.getPrimaryProjectType().getTitle() !=null) {
 
-            sb.append(bid.getProject().getPrimaryProjectType().getTitle());
+            sb.append(project.getPrimaryProjectType().getTitle());
 
-            if (bid.getProject().getPrimaryProjectType().getProjectCategory() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getTitle() != null) {
+            if (project.getPrimaryProjectType().getProjectCategory() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getTitle() != null) {
 
                 sb.append(" ");
-                sb.append(bid.getProject().getPrimaryProjectType().getProjectCategory().getTitle());
+                sb.append(project.getPrimaryProjectType().getProjectCategory().getTitle());
 
-                if (bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle() != null) {
+                if (project.getPrimaryProjectType().getProjectCategory().getProjectGroup() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle() != null) {
 
                     sb.append(" ");
-                    sb.append(bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle());
+                    sb.append(project.getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle());
                 }
             }
         }
@@ -98,7 +128,7 @@ public class RecentBidItemViewModel {
 
     public String getMapUrl() {
 
-        if (bid.getProject().getGeocode() == null) return null;
+        if (project == null || project.getGeocode() == null) return null;
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x300&" +
                 "markers=color:blue|%.6f,%.6f&key=%s", bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(),
@@ -107,18 +137,30 @@ public class RecentBidItemViewModel {
 
     public String getStartDateString() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
+        if (project != null) {
 
-        if (bid.getProject().getBidDate() == null) return "";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
-        return simpleDateFormat.format(bid.getProject().getBidDate());
+            if (project.getBidDate() == null) return "[ not provided ]";
+
+            return simpleDateFormat.format(project.getBidDate());
+        }
+
+        return "[ not provided ]";
     }
 
     public boolean isUnion() {
 
-        Project project = bid.getProject();
+        if (project == null) return false;
 
         return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
+    }
+
+    public String getUnionDesignation() {
+
+        if (project == null) return "?";
+
+        return project.getUnionDesignation();
     }
 
     /** OnClick **/

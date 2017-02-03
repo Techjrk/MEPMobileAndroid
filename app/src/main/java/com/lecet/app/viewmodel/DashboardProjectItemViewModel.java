@@ -87,6 +87,13 @@ public class DashboardProjectItemViewModel {
         return project.getUnionDesignation() != null && project.getUnionDesignation().length() > 0;
     }
 
+    public String getUnionDesignation() {
+
+        if (project == null) return "?";
+
+        return project.getUnionDesignation();
+    }
+
     public void onItemClick(View view) {
 
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
