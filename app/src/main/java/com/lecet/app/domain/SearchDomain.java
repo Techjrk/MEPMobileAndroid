@@ -3,30 +3,20 @@ package com.lecet.app.domain;
 import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectStage;
-import com.lecet.app.data.models.ProjectType;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
-import com.lecet.app.data.models.SearchFilter;
-import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
-import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,8 +31,8 @@ public class SearchDomain {
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
     private String projectFilter;
-    private String companyFilter="{\"searchFilter\":{}}";
-    private String contactFilter="{\"include\":[\"company\"],\"searchFilter\":{}}";
+    private String companyFilter = "{\"searchFilter\":{}}";
+    private String contactFilter = "{\"include\":[\"company\"],\"searchFilter\":{}}";
 
     public String getCompanyFilter() {
         return companyFilter;
@@ -78,6 +68,7 @@ public class SearchDomain {
 
     /**
      * To call the retrofit service for the stages list items to be displayed in the UI layout for Stage section.
+     *
      * @param callback
      */
     public void getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
@@ -95,7 +86,7 @@ public class SearchDomain {
         getStagesList(new Callback<List<SearchFilterStagesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
-                Log.d(TAG,"Create List of Project Stages");
+                Log.d(TAG, "Create List of Project Stages");
                 if (response.isSuccessful()) {
                     final List<SearchFilterStagesMain> stageMainList = response.body();
                     Realm realm = Realm.getDefaultInstance();
@@ -104,8 +95,8 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:","stageMainList: size: " + stageMainList.size());
-                            Log.d("SearchDomain:","stageMainList: " + stageMainList);
+                            Log.d("SearchDomain:", "stageMainList: size: " + stageMainList.size());
+                            Log.d("SearchDomain:", "stageMainList: " + stageMainList);
                             realm.copyToRealmOrUpdate(stageMainList);
                         }
                     });
@@ -122,6 +113,7 @@ public class SearchDomain {
 
     /**
      * To call the retrofit service for the project types list items to be displayed in the UI layout for project types section.
+     *
      * @param callback
      */
     public void getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
@@ -139,7 +131,7 @@ public class SearchDomain {
         getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                Log.d(TAG,"Create List of Project Types");
+                Log.d(TAG, "Create List of Project Types");
                 if (response.isSuccessful()) {
                     final List<SearchFilterProjectTypesMain> projectTypesMainList = response.body();
                     Realm realm = Realm.getDefaultInstance();
@@ -148,8 +140,8 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:","projectTypesMainList: size: " + projectTypesMainList.size());
-                            Log.d("SearchDomain:","projectTypesMainList: " + projectTypesMainList);
+                            Log.d("SearchDomain:", "projectTypesMainList: size: " + projectTypesMainList.size());
+                            Log.d("SearchDomain:", "projectTypesMainList: " + projectTypesMainList);
                             realm.copyToRealmOrUpdate(projectTypesMainList);
                         }
                     });
@@ -165,9 +157,9 @@ public class SearchDomain {
     }
 
 
-
     /**
      * To call the retrofit service for the jurisdiction list items to be displayed in the UI layout for jurisdiciton section.
+     *
      * @param callback
      */
     public void getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
@@ -183,7 +175,7 @@ public class SearchDomain {
         getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-                Log.d(TAG,"Create list of Jurisdictions");
+                Log.d(TAG, "Create list of Jurisdictions");
                 if (response.isSuccessful()) {
                     final List<SearchFilterJurisdictionMain> jurisdictionMainList = response.body();
 
@@ -193,8 +185,8 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:","jurisdictionMainList: size: " + jurisdictionMainList.size());
-                            Log.d("SearchDomain:","jurisdictionMainList: " + jurisdictionMainList);
+                            Log.d("SearchDomain:", "jurisdictionMainList: size: " + jurisdictionMainList.size());
+                            Log.d("SearchDomain:", "jurisdictionMainList: " + jurisdictionMainList);
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
                         }
                     });
@@ -215,7 +207,7 @@ public class SearchDomain {
         //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
         setCompanyFilter("{\"searchFilter\":{}}");
         setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
-      //  {\"include\":[\"company\"]}
+        //  {\"include\":[\"company\"]}
     }
 
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchResult>> callback) {
@@ -245,14 +237,14 @@ public class SearchDomain {
     }
 
     public void getSearchCompanyQuery(String q, Callback<SearchCompany> callback) {
-     //   String filter = "{}";
+        //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         call.enqueue(callback);
     }
 
     public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
-     //   String filter = "{}";
+        //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
         call.enqueue(callback);
@@ -265,7 +257,6 @@ public class SearchDomain {
         Call<Project> call = lecetClient.getSearchService().getProjectDetail(token, pId);
         call.enqueue(callback);
     }
-
 
 
 }
