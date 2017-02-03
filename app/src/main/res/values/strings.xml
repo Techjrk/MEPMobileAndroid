@@ -118,6 +118,7 @@
     <string name="recent">RECENT</string>
     <string name="last_checked">Last checked</string>
     <string name="search">Search</string>
+    <string name="zip_postal_code">ZIP/POSTAL CODE</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
