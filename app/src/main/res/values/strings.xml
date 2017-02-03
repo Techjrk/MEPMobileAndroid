@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Lecet</string>
 
+    <!-- API Keyts -->
+    <string name="google_maps_key">AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU</string>
+
     <!-- Common -->
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
@@ -10,7 +13,40 @@
     <string name="phone">Phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
+    <string name="county">County</string>
+    <string name="project_id">Project ID</string>
+    <string name="project_type">Project Type</string>
+    <string name="est_low">Est. Low</string>
+    <string name="stage">Stage</string>
+    <string name="notes">Notes</string>
+    <string name="participants">Participants</string>
+    <string name="architects">Architects</string>
+    <string name="owner">Owner</string>
+    <string name="project_bidders">Project Bidders</string>
+    <string name="architect">Architect</string>
+    <string name="see_all">See All</string>
     <string name="updating">Updating..</string>
+    <string name="est_high">Est. High</string>
+    <string name="date_added">Date Added</string>
+    <string name="bid_date">Bid Date</string>
+    <string name="last_updated">Last Updated</string>
+    <string name="value">Value</string>
+    <string name="jurisdiction">Jurisdiction</string>
+    <string name="b_h">B/H</string>
+    <string name="bidders">Bidders</string>
+    <string name="bids">Bids</string>
+    <string name="at">at</string>
+    <string name="title">Title</string>
+    <string name="organization">Organization</string>
+    <string name="fax">Fax</string>
+    <string name="street_address">Street Address</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="name">Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="save">Save</string>
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
@@ -18,7 +54,9 @@
     <string name="powered_by_domandtom">Powered by Dom &amp; Tom</string>
     <string name="new_create_account">New? Create an Account</string>
     <string name="login">Login</string>
-    <string name="sign_up_for_mep_access"><u>Sign Up for MEP Access</u></string>
+    <string name="sign_up_for_mep_access">
+        <u>Sign Up for MEP Access</u>
+    </string>
 
     <!-- Dashboard -->
     <string name="title_fragment_bids_recently_made">Bids Recently Made</string>
@@ -43,10 +81,21 @@
     <string name="title_activity_update_profile">UpdateProfileActivity</string>
     <string name="create_password">Create Password</string>
 
-    <!-- Change Password -->
+    <!-- MST Change Password -->
     <string name="title_activity_change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="update_password">Update Password</string>
+    <string name="current">Current</string>
+    <string name="new_word">New</string>
+    <string name="your_current">Your current password</string>
+    <string name="confirm_new_pass">Confirm new password</string>
+    <string name="at_least_six_char">At least 6 characters</string>
+    <string name="please_enter_current_password">Please enter your current password.</string>
+    <string name="invalid_password_title">Invalid password</string>
+    <string name="invalid_password_message">Please enter a valid password.</string>
+    <string name="password_mismatch">The entered passwords do not match</string>
+    <string name="password_confirm_message">Are you sure you want to change your password?</string>
+
 
     <!-- Company Detail: Project Bids List -->
     <string name="title_activity_company_detail_project_bids">Company Detail: Project Bids</string>
@@ -62,6 +111,13 @@
     <string name="projects">Projects</string>
     <string name="company">Company</string>
     <string name="companies">Companies</string>
+
+    <!-- MSE: Search Page -->
+    <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
+    <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
+    <string name="recent">RECENT</string>
+    <string name="last_checked">Last checked</string>
+    <string name="search">Search</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
@@ -100,6 +156,11 @@
     <string name="reset_password">Reset Password</string>
     <string name="help">Help</string>
 
+    <!-- Share Toolbar -->
+    <string name="track">Track</string>
+    <string name="share">Share</string>
+    <string name="hide">Hide</string>
+
     <!-- Dialogs and Frequently-Used Button Text-->
     <string name="yes">Yes</string>
     <string name="accept">Accept</string>
@@ -122,9 +183,12 @@
     <string name="error_first_name">Please enter your first name</string>
     <string name="error_last_name">Please enter your last name</string>
     <string name="error_login_title">Login Error</string>
-    <string name="error_login_message">You don\’t have permission to access MEP using your account</string>
+    <string name="error_login_message">Please verify your email and password and try again</string>
+    <string name="error_access_denied">You don\’t have permission to access MEP using your account
+    </string>
     <string name="error_network_title">Network Error</string>
-    <string name="error_network_message">Please check your internet connection and try again</string>
+    <string name="error_network_message">Please check your internet connection and try again
+    </string>
     <string name="error_fetching_address">Address not found.</string>
 
     <!-- Web links -->
@@ -134,15 +198,64 @@
     <string name="get_directions">Get Directions</string>
 
     <!-- Projects Near Me Confirm Dialog Fragment -->
-    <string name="confirm_share_your_location_description">This feature is only available\nwhen you share your location\nwith this app. Please tap OK\nwhen prompted.</string>
-    <string name="confirm_enable_your_location_description">This feature is only available\nwhen you share your location\nwith this app.</string>
+    <string name="confirm_share_your_location_description">This feature is only available\nwhen you
+        share your location\nwith this app. Please tap OK\nwhen prompted.
+    </string>
+    <string name="confirm_enable_your_location_description">This feature is only available\nwhen you
+        share your location\nwith this app.
+    </string>
     <string name="confirm_share_your_location">SHARE MY LOCATION</string>
     <string name="confirm_go_to_settings">GO TO SETTINGS</string>
     <string name="confirm_cancel">CANCEL</string>
 
     <!-- MTM Menu -->
-    <string name="mtm_menu_number_company">%d Companies</string>
-    <string name="mtm_menu_number_projects">%d Projects</string>
+    <string name="mtm_menu_number_company">%s Companies</string>
+    <string name="mtm_menu_number_projects">%s Projects</string>
+    <string name="mse_2_0">MSE 2.0</string>
+    <string name="project_query_searches">PROJECTS</string>
+    <string name="company_query_searches">COMPANIES</string>
+    <string name="title_contacts">CONTACTS</string>
+    <string name="time_any">Any</string>
+    <string name="time_next_24_hours">Next 24 Hours</string>
+    <string name="time_next_7_days">Next 7 Days</string>
+    <string name="time_next_30_days">Next 30 Days</string>
+    <string name="time_next_60_days">Next 60 Days</string>
+    <string name="time_next_90_days">Next 90 Days</string>
+    <string name="time_next_6_months">Next 6 Months</string>
+    <string name="time_next_12_months">Next 12 Months</string>
+    <string name="time_last_24_hours">Last 24 Hours</string>
+    <string name="time_last_7_days">Last 7 Days</string>
+    <string name="time_last_30_days">Last 30 Days</string>
+    <string name="time_last_90_days">Last 90 Days</string>
+    <string name="time_last_6_months">Last 6 Months</string>
+    <string name="time_last_12_months">Last 12 Months</string>
+    <string name="heavy_highway">Heavy-Highway</string>
+    <string name="both">Both</string>
+    <string name="building">Building</string>
+    <string name="msecancel">CANCEL</string>
+    <string name="msefilters">Filters</string>
+    <string name="mseapply">APPLY</string>
+    <string name="mseprojects">Projects</string>
+    <string name="msecompanies">Companies</string>
+    <string name="mselocation">LOCATION</string>
+    <string name="msetype">TYPE</string>
+    <string name="msevalue">VALUE</string>
+    <string name="mseupdated_within">UPDATED WITHIN</string>
+    <string name="any">Any</string>
+    <string name="msejurisdiction">JURISDICTION</string>
+    <string name="msebidding_within">BIDDING WITHIN</string>
+    <string name="more_options">More Options</string>
+    <string name="msecompany_location">COMPANY LOCATION</string>
+    <string name="mserelated_projects">Related Projects</string>
+    <string name="no_min_no_max">No Min - No Max</string>
+    <string name="mseproject_type">PROJECT TYPE</string>
+    <string name="everywhere">Everywhere</string>
+    <string name="all_types">All Types</string>
+    <string name="refine_search">Refine Search</string>
+    <string name="mseb_h">B/H</string>
+    <string name="mseowner_type">OWNER TYPE</string>
+    <string name="msework_type">WORK TYPE</string>
+    <string name="msefewer_options">Fewer Options</string>
 
     <!-- MTM SortBy Menu -->
     <string name="mtm_sort_menu_title">Sort by</string>
@@ -156,5 +269,44 @@
     <!-- MTM Confirmation -->
     <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s</string>
     <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s</string>
+
+    <!-- Share -->
+    <string name="share_project">Share Project Details</string>
+    <string name="share_company">Share Company Details</string>
+    <string name="you_are_about_hide">You are about to hide this %s</string>
+    <string name="you_are_about_unhide">You are about to unhide this %s</string>
+    <string name="hide_blank">HIDE %s</string>
+    <string name="unhide_blank">UNHIDE %s</string>
+
+    <!-- MCD -->
+    <string name="associated_projects">Associated Projects</string>
+    <string name="contacts">Contacts</string>
+    <string name="project_bids">Project Bids</string>
+    <string name="total_projects">Total Projects</string>
+    <string name="total_valuation">Total Valuation</string>
+    <string name="title_activity_company_detail">CompanyDetailActivity</string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
+    </string>
+    <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
+    <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
+    <string name="bid_tab_title_past">%d Past</string>
+    <string name="bid_tab_title_upcoming">%d Upcoming</string>
+
+    <!-- MPR Profile -->
+    <string name="my_profile">My Profile</string>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="logging_out">Logging out...</string>
+    <string name="notifications">Notifications</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="profile_error_message">Please enter your %s</string>
+    <string name="title_activity_hidden_projects">HiddenProjectsActivity</string>
+
+    <!-- MHD Hidden Projects -->
+    <string name="hidden_projects_title">Hidden Projects</string>
+    <string name="hidden_projects_sub_title">%d Hidden Projects</string>
+    <string name="unhide">Unhide</string>
+    <string name="title_activity_location_detail_map">LocationDetail</string>
+    <string name="title_activity_company_project_bids">CompanyProjectBidsActivity</string>
+
 
 </resources>

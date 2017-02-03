@@ -1,10 +1,15 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -25,6 +30,7 @@ import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -60,6 +66,18 @@ public class ProjectDomain {
     /**
      * API
      **/
+
+    public Call<Project> getProjectDetail(long projectID, Callback<Project> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        String filter = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\":[\"company\",\"contact\"]},{\"contacts\":[\"contactType\",\"company\"]}]}";
+
+        Call<Project> call = lecetClient.getProjectService().project(token, projectID, filter);
+        call.enqueue(callback);
+
+        return call;
+    }
 
     public void getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
@@ -119,7 +137,7 @@ public class ProjectDomain {
 
     public void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
-        int limit = 150;
+        int limit = 250;
 
         getProjectsRecentlyAdded(limit, callback);
     }
@@ -163,8 +181,8 @@ public class ProjectDomain {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formattedStart = sdf.format(publishDate);
 
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], \"where\":{\"lastPublishDate\":{\"lte”:”%s”}}," +
-                "\"limit\":%d,\"dashboardTypes\":true,\"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"lastPublishDate\":{\"lte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -194,6 +212,34 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
+    public void getProjectJurisdiction(long projectId, Callback<List<Jurisdiction>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Jurisdiction>> call = lecetClient.getProjectService().projectJurisdiction(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void hideProject(long projectId, Callback<ResponseBody> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ResponseBody> call = lecetClient.getProjectService().hide(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void unhideProject(long projectId, Callback<ResponseBody> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ResponseBody> call = lecetClient.getProjectService().unhide(token, projectId);
+        call.enqueue(callback);
+    }
+
+    public void getHiddenProjects(long userID, Callback<List<Project>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<Project>> call = lecetClient.getProjectService().hiddenProjects(token, userID);
+        call.enqueue(callback);
+    }
+
     /**
      * Persisted
      **/
@@ -217,6 +263,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
                 .findAll();
 
@@ -228,6 +275,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
+                .equalTo("mbsItem", true)
                 .between("bidDate", start, end)
                 .findAll();
 
@@ -239,8 +287,9 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("firstPublishDate", publishDate)
-                .findAll();
+                .equalTo("mraItem", true)
+                .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
         return projectsResult;
     }
@@ -248,11 +297,45 @@ public class ProjectDomain {
 
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
 
-        RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThan("firstPublishDate", publishDate)
-                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("hidden", false)
-                .findAllSorted("firstPublishDate", Sort.DESCENDING);
+        RealmResults<Project> projectsResult;
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                    .equalTo("mraItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                    .equalTo("mraItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+
+        } else {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", publishDate)
+                    .equalTo("mraItem", true)
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("hidden", false)
+                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+        }
+
+
 
         return projectsResult;
     }
@@ -262,7 +345,8 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
-                .greaterThan("lastPublishDate", lastPublishDate)
+                .equalTo("mruItem", true)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
 
         return projectsResult;
@@ -271,11 +355,44 @@ public class ProjectDomain {
 
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
 
-        RealmResults<Project> projectsResult = realm.where(Project.class)
-                .greaterThan("lastPublishDate", lastPublishDate)
-                .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
-                .equalTo("hidden", false)
-                .findAllSorted("lastPublishDate", Sort.DESCENDING);
+        RealmResults<Project> projectsResult;
+
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                    .equalTo("mruItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", lastPublishDate)
+                    .equalTo("mruItem", true)
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .or()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .endGroup()
+                    .equalTo("hidden", false)
+                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+
+        } else {
+
+            projectsResult = realm.where(Project.class)
+                    .greaterThanOrEqualTo("firstPublishDate", lastPublishDate)
+                    .equalTo("mruItem", true)
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
+                    .equalTo("hidden", false)
+                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+        }
+
 
         return projectsResult;
     }
@@ -286,6 +403,25 @@ public class ProjectDomain {
         result.addChangeListener(listener);
 
         return result;
+    }
+
+    public RealmResults<Contact> fetchProjectContacts(long projectID) {
+
+        RealmResults<Contact> contactsResult = realm.where(Contact.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("contactTypeId", Sort.DESCENDING);
+
+        return contactsResult;
+    }
+
+
+    public RealmResults<Bid> fetchProjectBids(long projectID) {
+
+        RealmResults<Bid> bidsResult = realm.where(Bid.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("amount", Sort.ASCENDING);
+
+        return bidsResult;
     }
 
     public RealmResults<ActivityUpdate> fetchProjectActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
@@ -302,6 +438,17 @@ public class ProjectDomain {
         result.addChangeListener(listener);
 
         return result;
+    }
+
+    public RealmResults<Project> fetchHiddenProjects() {
+
+        return realm.where(Project.class).equalTo("hidden", true).findAll();
+    }
+
+    public void setProjectHidden(Project project, boolean hidden) {
+        realm.beginTransaction();
+        project.setHidden(true);
+        realm.commitTransaction();
     }
 
     public Project copyToRealmTransaction(Project project) {
@@ -322,6 +469,93 @@ public class ProjectDomain {
         return persistedProjects;
     }
 
+    public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, storedProject, hidden);
+
+                    } else {
+
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
+    public void asyncCopyToRealm(final List<Project> projects, @Nullable final Boolean isHidden, @Nullable final Boolean mbsItem,
+                                 @Nullable final Boolean mraItem, @Nullable final Boolean mruItem,
+                                 @NonNull Realm.Transaction.OnSuccess onSuccess, @NonNull Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, storedProject, isHidden, mbsItem, mraItem, mruItem);
+
+                    } else {
+
+                        if (isHidden != null) {
+
+                            project.setHidden(isHidden.booleanValue());
+                        }
+
+                        if (mbsItem != null) {
+
+                            project.setMbsItem(mbsItem.booleanValue());
+                        }
+
+                        if (mraItem != null) {
+
+                            project.setMraItem(mraItem.booleanValue());
+                        }
+
+                        if (mruItem != null) {
+
+                            project.setMruItem(mruItem.booleanValue());
+                        }
+
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
+    public void asyncCopyToRealm(final Project project, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                if (storedProject != null) {
+
+                    storedProject.updateProject(realm, project, null, null, null, null);
+
+                } else {
+
+                    realm.copyToRealmOrUpdate(project);
+                }
+            }
+        }, onSuccess, onError);
+    }
 
     public RealmResults<Project> queryResult(@BidGroup int categoryId, RealmResults<Project> result, String sortFieldName) {
 
@@ -330,6 +564,8 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .findAllSorted(sortFieldName, Sort.DESCENDING);
     }
+
+
 
     /**
      * Utility

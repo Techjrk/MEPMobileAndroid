@@ -79,6 +79,10 @@ public class TrackingListDomain {
         realm.removeChangeListener(listener);
     }
 
+    public ProjectDomain getProjectDomain() {
+        return projectDomain;
+    }
+
     // API
 
     public void getUserProjectTrackingLists(Callback<List<ProjectTrackingList>> callback) {
@@ -271,10 +275,19 @@ public class TrackingListDomain {
         return realm.where(ProjectTrackingList.class).equalTo("id", id).findFirst();
     }
 
+    public RealmResults<ProjectTrackingList> fetchProjectTrackingListsContainingProject(long projectId) {
+
+        return realm.where(ProjectTrackingList.class).equalTo("projects.id", projectId).findAll();
+    }
 
     public CompanyTrackingList fetchCompanyTrackingList(long id) {
 
         return realm.where(CompanyTrackingList.class).equalTo("id", id).findFirst();
+    }
+
+    public RealmResults<CompanyTrackingList> fetchCompanyTrackingListsContainingCompany(long companyId) {
+
+        return realm.where(CompanyTrackingList.class).equalTo("companies.id", companyId).findAll();
     }
 
     public void fetchProjectTrackingListAsync(long id, RealmChangeListener<RealmModel> listener) {

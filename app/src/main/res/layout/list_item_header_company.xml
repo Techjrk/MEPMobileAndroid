@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.CompanyDetailHeaderViewModel"/>
+    </data>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingTop="5dp"
+                  android:orientation="vertical"
+                  android:background="@color/lecetDetailHeaderBlue">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lecetDarkOrange">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="10dp"
+                      android:paddingTop="10dp"
+                      android:paddingLeft="10dp"
+                      android:paddingRight="10dp"
+                      android:textSize="20sp"
+                      android:textColor="@color/pureWhite"
+                      android:text="@{viewModel.title}"
+                      android:maxLines="2"
+                      bind:typeface="@{`Lato-Black.ttf`}"
+                      tools:text="Updated Primary Clarifier 1/ Aeration Basin 2 Rehabilitation"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</layout>

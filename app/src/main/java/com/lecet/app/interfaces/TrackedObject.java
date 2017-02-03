@@ -7,4 +7,6 @@ package com.lecet.app.interfaces;
  */
 
 public interface TrackedObject {
+
+    long getId();
 }

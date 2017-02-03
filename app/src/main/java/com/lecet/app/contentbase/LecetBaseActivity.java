@@ -10,8 +10,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.lecet.app.R;
+
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
 
 /**
  * File: LecetBaseActivity Created: 10/20/16 Author: domandtom
@@ -55,6 +60,8 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        checkForUpdates();
+        checkForCrashes();
     }
 
     @Override
@@ -67,12 +74,61 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterManagers();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         unregisterReceiver(networkReceiver);
+        unregisterManagers();
     }
+
+    /** Hockey App **/
+
+    private void checkForCrashes() {
+        CrashManager.register(this);
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this);
+    }
+
+    private void unregisterManagers() {
+        UpdateManager.unregister();
+    }
+
+
+    /** Keyboard management **/
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+        switch (keyCode){
+            case KeyEvent.FLAG_EDITOR_ACTION:
+                onKeyboardEditorActionSelected();
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                onKeyboardEditorActionSelected();
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
+    }
+
+
+    /**
+     *  Override this method to handle a soft keyboards action button
+     *  selection.
+     */
+    public void onKeyboardEditorActionSelected() {}
+
 
     /** Subclasses should override **/
 
@@ -115,6 +171,4 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
         networkAlertDialog = builder.show();
     }
-
-
 }

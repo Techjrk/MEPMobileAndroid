@@ -1,1 +1,1 @@
-{"include":["project"],"where":{"code":{"inq":["VIEW_PROJECT"]}},"limit":10,"order":"updatedAt DESC"}
+{"include":["company"],"where":{"code":{"inq":["VIEW_PROJECT"]}},"limit":10,"order":"updatedAt DESC"}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.CompanyProjectBidsViewModel"/>
+    </data>
+
+
+    <android.support.design.widget.CoordinatorLayout
+            style="@style/FullScreenImageBackground.Gradient1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            tools:context="com.lecet.app.content.CompanyProjectBidsActivity">
+
+        <!-- App Bar -->
+        <include layout="@layout/include_app_bar_layout"/>
+
+        <include layout="@layout/content_company_project_bids"
+                 bind:viewModel="@{viewModel}"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>
+

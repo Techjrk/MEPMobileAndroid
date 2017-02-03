@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <!-- TITLE -  PROJECT QUERY-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{viewModel.onClickSeeAllProject}"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/queryproject_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="2dp"
+                    android:text="@{viewModel.queryProjectTitle}"
+                    android:textSize="14sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    tools:text="Jane Dee in Projects" />
+
+                <!-- TOTAL PROJECT-->
+                <TextView
+                    android:id="@+id/queryproject_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="2dp"
+                    android:text="@{viewModel.queryProjectTotal}"
+                    android:textSize="11sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitXY"
+                bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{viewModel.onClickSeeAllCompany}"
+                android:orientation="vertical">
+                <!-- TITLE - COMPANY-->
+                <TextView
+                    android:id="@+id/querycompany_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="2dp"
+                    android:text="@{viewModel.queryCompanyTitle}"
+                    android:textSize="14sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    tools:text="Jane Doe in Companies" />
+
+                <!-- TOTAL COMPANY-->
+                <TextView
+                    android:id="@+id/querycompany_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="2dp"
+                    android:text="@{viewModel.queryCompanyTotal}"
+                    android:textSize="11sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="0 Company" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitXY"
+                bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{viewModel.onClickSeeAllContact}"
+                android:orientation="vertical">
+                <!-- TITLE - CONTACTS -->
+                <TextView
+                    android:id="@+id/querycontact_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="2dp"
+                    android:text="@{viewModel.queryContactTitle}"
+                    android:textSize="14sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    tools:text="Jane Doe in Contacts" />
+
+                <!-- TOTAL Contacts-->
+                <TextView
+                    android:id="@+id/querycontact_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="2dp"
+                    android:text=""
+                    android:textSize="11sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="@{viewModel.queryContactTotal}" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitXY"
+                bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
+        </LinearLayout>
+
+        <!-- Details Section -->
+        <ScrollView
+            android:id="@+id/mse2sectionquery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp">
+
+
+                <!-- PROJECT Details -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.isQueryProjectTotalZero  ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        style="@style/SearchPageSectionTextView"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/project_query_searches"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_project_query_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        tools:listitem="@layout/list_item_search_query_summary_project" />
+
+                    <!-- SEE ALL PROJECT-->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="@{viewModel.onClickSeeAllProject}">
+
+                        <TextView
+                            android:id="@+id/seeall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_all"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@id/seeall"
+                            android:text="@{viewModel.queryProjectTotal}"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!-- COMPANY Details -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.isQueryCompanyTotalZero  ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        style="@style/SearchPageSectionTextView"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/company_query_searches"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_company_query_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/list_item_search_query_summary_company" />
+
+                    <!-- SEE ALL COMPANIES-->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="@{viewModel.onClickSeeAllCompany}">
+
+                        <TextView
+                            android:id="@+id/seeallcompany"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_all"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@id/seeallcompany"
+                            android:text="@{viewModel.queryCompanyTotal}"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!-- CONTACT Details -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.isQueryContactTotalZero  ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        style="@style/SearchPageSectionTextView"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/title_contacts"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_contact_query_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/list_item_search_query_summary_contact" />
+
+                    <!-- SEE ALL CONTACTS-->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="@{viewModel.onClickSeeAllContact}">
+
+                        <TextView
+                            android:id="@+id/seeallcontacts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_all"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@id/seeallcontacts"
+                            android:text="@{viewModel.queryContactTotal}"
+                            android:textSize="14sp"
+                            bind:typeface="@{`Lato-Bold.ttf`}" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+</layout>
+

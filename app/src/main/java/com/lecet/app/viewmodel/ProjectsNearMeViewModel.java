@@ -1,5 +1,13 @@
 package com.lecet.app.viewmodel;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -13,17 +21,10 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
@@ -184,7 +185,16 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        //TODO open something? Campture the get direction tap?
+        Project project = (Project) marker.getTag();
+
+        Activity context = activity.get();
+
+        if (context != null) {
+
+            Intent intent = new Intent(context, ProjectDetailActivity.class);
+            intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+            context.startActivity(intent);
+        }
     }
 
     @Override

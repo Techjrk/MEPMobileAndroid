@@ -8,4 +8,5 @@ package com.lecet.app.interfaces;
 
 public interface TrackingListObject {
 
+    long getId();
 }

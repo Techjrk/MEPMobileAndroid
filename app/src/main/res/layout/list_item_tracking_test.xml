@@ -25,7 +25,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="-4dp"
                 android:layout_marginRight="8dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:onClick="@{viewModel::onTrackingItemSelected}">
 
             <!-- Map Image -->
             <ImageView
@@ -110,7 +111,7 @@
                     android:orientation="horizontal"
                     android:background="@drawable/shape_rect_list_item_expand_1"
                     android:visibility="@{(viewModel.displayActivityUpdate &amp;&amp; viewModel.activityUpdateAvailable) ? View.VISIBLE : View.GONE}"
-                    android:onClick="@{viewModel.onExpandableViewClick}">
+                    android:onClick="@{viewModel::onExpandableViewClick}">
 
                 <ImageView
                         android:id="@+id/expandable_icon"

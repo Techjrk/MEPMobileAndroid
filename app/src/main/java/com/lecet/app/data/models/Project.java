@@ -2,10 +2,13 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.support.annotation.Nullable;
+
 import com.lecet.app.interfaces.TrackedObject;
 
 import java.util.Date;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -169,12 +172,21 @@ public class Project extends RealmObject implements TrackedObject {
     @SerializedName("contacts")
     private RealmList<Contact> contacts;
 
+    @SerializedName("bids")
+    private RealmList<Bid> bids;
+
     private boolean hidden;
 
     @SerializedName("updates")
     private RealmList<ActivityUpdate> updates;
 
     private ActivityUpdate recentUpdate;
+
+    private boolean mbsItem; // Mobile bids happening soon
+
+    private boolean mraItem; // Mobile projects recently added
+
+    private boolean mruItem; // Mobile projects recently updated
 
     public Project() {
     }
@@ -388,6 +400,83 @@ public class Project extends RealmObject implements TrackedObject {
         this.hidden = hidden;
     }
 
+    public boolean isMbsItem() {
+        return mbsItem;
+    }
+
+    public void setMbsItem(boolean mbsItem) {
+        this.mbsItem = mbsItem;
+    }
+
+    public boolean isMraItem() {
+        return mraItem;
+    }
+
+    public void setMraItem(boolean mraItem) {
+        this.mraItem = mraItem;
+    }
+
+    public boolean isMruItem() {
+        return mruItem;
+    }
+
+    public void setMruItem(boolean mruItem) {
+        this.mruItem = mruItem;
+    }
+
+    public RealmList<Bid> getBids() {
+        return bids;
+    }
+
+    /**
+     * Convenience
+     **/
+
+    public String getFullAddress() {
+
+        String fullAddress = "";
+
+        if (this.address1 != null) {
+
+            fullAddress = this.address1;
+        }
+
+        if (this.state != null) {
+
+            fullAddress = fullAddress + ", " + this.state;
+        }
+
+        if (this.zip5 != null) {
+
+            fullAddress = fullAddress + " " + zip5;
+        }
+
+        return fullAddress;
+    }
+
+
+    public String getProjectTypes() {
+
+        String projectType = "";
+
+        if (this.primaryProjectType != null) {
+
+            projectType = primaryProjectType.getTitle();
+
+            if (this.primaryProjectType.getProjectCategory() != null) {
+
+                projectType = projectType + " " + this.primaryProjectType.getProjectCategory().getTitle();
+
+                if (this.primaryProjectType.getProjectCategory().getProjectGroup() != null) {
+
+                    projectType = projectType + " " + this.primaryProjectType.getProjectCategory().getProjectGroup().getTitle();
+                }
+            }
+        }
+
+        return projectType;
+    }
+
     public RealmList<ActivityUpdate> getUpdates() {
         return updates;
     }
@@ -400,6 +489,174 @@ public class Project extends RealmObject implements TrackedObject {
         this.recentUpdate = recentUpdate;
     }
 
+    public void updateProject(Realm realm, Project project, boolean hidden) {
+
+        this.bidSubmitTo = project.bidSubmitTo;
+        this.state = project.getState();
+        this.address1 = project.address1;
+        this.address2 = project.getAddress2();
+        this.statusText = project.getStatusText();
+        if (project.getProjectStage() != null) {
+            realm.copyToRealmOrUpdate(project.getProjectStage());
+            this.projectStage = project.getProjectStage();
+        }
+        this.estLow = project.getEstLow();
+        this.bidDate = project.getBidDate();
+        this.city = project.getCity();
+        this.primaryProjectTypeId = project.getPrimaryProjectTypeId();
+        this.zip5 = project.getZip5();
+        this.cnProjectUrl = project.getCnProjectUrl();
+        this.title = project.getTitle();
+        this.contractNbr = project.getContractNbr();
+        this.numberOfFloorsAboveGround = project.getNumberOfFloorsAboveGround();
+        this.details = project.getDetails();
+        this.dodgeNumber = project.getDodgeNumber();
+        this.lastPublishDate = project.getLastPublishDate();
+        this.contractType = project.getContractType();
+        this.projDlvrySys = project.getProjDlvrySys();
+        this.planInd = project.getPlanInd();
+        this.dodgeVersion = project.getDodgeVersion();
+        if (project.getPrimaryProjectType() != null) {
+            realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
+            this.primaryProjectType = project.getPrimaryProjectType();
+        }
+        this.specAvailable = project.getSpecAvailable();
+        this.fipsCounty = project.getFipsCounty();
+        this.targetFinishDate = project.getTargetFinishDate();
+        this.priorPublishDate = project.getPriorPublishDate();
+        this.numberOfBuildings = project.getNumberOfBuildings();
+        this.statusProjDlvrySys = project.getStatusProjDlvrySys();
+        this.estHigh = project.getEstHigh();
+        this.stdIncludes = project.getStdIncludes();
+        this.currencyType = project.getCurrencyType();
+        this.country = project.getCountry();
+        if (project.getGeocode() != null) {
+            realm.copyToRealm(project.getGeocode());
+            this.geocode = project.getGeocode();
+        }
+        this.zipPlus4 = project.getZipPlus4();
+        this.projectStageId = project.getProjectStageId();
+        this.projectNotes = project.getProjectNotes();
+        this.targetStartDate = project.getTargetStartDate();
+        this.geoLocationType = project.getGeoLocationType();
+        this.county = project.getCounty();
+        this.firstPublishDate = project.getFirstPublishDate();
+        this.addendaInd = project.getAddendaInd();
+        this.availableFrom = project.getAvailableFrom();
+        this.geoType = project.getGeoType();
+        this.unionDesignation = project.getUnionDesignation();
+        this.bidTimeZone = project.getBidTimeZone();
+        this.bondInformation = project.getBondInformation();
+        this.ownerClass = project.getOwnerClass();
+        if (project.getContacts() != null) {
+            realm.copyToRealmOrUpdate(project.getContacts());
+            this.contacts = project.getContacts();
+        }
+        if (project.getBids() != null) {
+            realm.copyToRealmOrUpdate(project.getBids());
+            this.bids = project.getBids();
+        }
+        if (project.getUpdates() != null) {
+            realm.copyToRealmOrUpdate(project.getUpdates());
+            this.updates = project.getUpdates();
+        }
+        this.hidden = hidden;
+    }
+
+    public void updateProject(Realm realm, Project project, @Nullable Boolean isHidden, @Nullable Boolean mbsItem, @Nullable Boolean mraItem, @Nullable Boolean mruItem) {
+
+        this.bidSubmitTo = project.bidSubmitTo;
+        this.state = project.getState();
+        this.address1 = project.address1;
+        this.address2 = project.getAddress2();
+        this.statusText = project.getStatusText();
+        if (project.getProjectStage() != null) {
+            realm.copyToRealmOrUpdate(project.getProjectStage());
+            this.projectStage = project.getProjectStage();
+        }
+        this.estLow = project.getEstLow();
+        this.bidDate = project.getBidDate();
+        this.city = project.getCity();
+        this.primaryProjectTypeId = project.getPrimaryProjectTypeId();
+        this.zip5 = project.getZip5();
+        this.cnProjectUrl = project.getCnProjectUrl();
+        this.title = project.getTitle();
+        this.contractNbr = project.getContractNbr();
+        this.numberOfFloorsAboveGround = project.getNumberOfFloorsAboveGround();
+        this.details = project.getDetails();
+        this.dodgeNumber = project.getDodgeNumber();
+        this.lastPublishDate = project.getLastPublishDate();
+        this.contractType = project.getContractType();
+        this.projDlvrySys = project.getProjDlvrySys();
+        this.planInd = project.getPlanInd();
+        this.dodgeVersion = project.getDodgeVersion();
+        if (project.getPrimaryProjectType() != null) {
+            realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
+            this.primaryProjectType = project.getPrimaryProjectType();
+        }
+        this.specAvailable = project.getSpecAvailable();
+        this.fipsCounty = project.getFipsCounty();
+        this.targetFinishDate = project.getTargetFinishDate();
+        this.priorPublishDate = project.getPriorPublishDate();
+        this.numberOfBuildings = project.getNumberOfBuildings();
+        this.statusProjDlvrySys = project.getStatusProjDlvrySys();
+        this.estHigh = project.getEstHigh();
+        this.stdIncludes = project.getStdIncludes();
+        this.currencyType = project.getCurrencyType();
+        this.country = project.getCountry();
+        if (project.getGeocode() != null) {
+            realm.copyToRealm(project.getGeocode());
+            this.geocode = project.getGeocode();
+        }
+        this.zipPlus4 = project.getZipPlus4();
+        this.projectStageId = project.getProjectStageId();
+        this.projectNotes = project.getProjectNotes();
+        this.targetStartDate = project.getTargetStartDate();
+        this.geoLocationType = project.getGeoLocationType();
+        this.county = project.getCounty();
+        this.firstPublishDate = project.getFirstPublishDate();
+        this.addendaInd = project.getAddendaInd();
+        this.availableFrom = project.getAvailableFrom();
+        this.geoType = project.getGeoType();
+        this.unionDesignation = project.getUnionDesignation();
+        this.bidTimeZone = project.getBidTimeZone();
+        this.bondInformation = project.getBondInformation();
+        this.ownerClass = project.getOwnerClass();
+        if (project.getContacts() != null) {
+            realm.copyToRealmOrUpdate(project.getContacts());
+            this.contacts = project.getContacts();
+        }
+        if (project.getBids() != null) {
+            realm.copyToRealmOrUpdate(project.getBids());
+            this.bids = project.getBids();
+        }
+        if (project.getUpdates() != null) {
+            realm.copyToRealmOrUpdate(project.getUpdates());
+            this.updates = project.getUpdates();
+        }
+
+        if (isHidden != null) {
+
+            this.hidden = isHidden.booleanValue();
+        }
+
+        if (mbsItem != null) {
+
+            this.mbsItem = mbsItem.booleanValue();
+        }
+
+        if (mraItem != null) {
+
+            this.mraItem = mraItem.booleanValue();
+        }
+
+        if (mruItem != null) {
+
+            this.mruItem = mruItem.booleanValue();
+        }
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -408,102 +665,6 @@ public class Project extends RealmObject implements TrackedObject {
         Project project = (Project) o;
 
         return id != project.id;
-
-//        if (Double.compare(project.estLow, estLow) != 0) return false;
-//        if (primaryProjectTypeId != project.primaryProjectTypeId) return false;
-//        if (id != project.id) return false;
-//        if (Double.compare(project.estHigh, estHigh) != 0) return false;
-//        if (hidden != project.hidden) return false;
-//        if (bidSubmitTo != null ? !bidSubmitTo.equals(project.bidSubmitTo) : project.bidSubmitTo != null)
-//            return false;
-//        if (state != null ? !state.equals(project.state) : project.state != null) return false;
-//        if (address1 != null ? !address1.equals(project.address1) : project.address1 != null)
-//            return false;
-//        if (address2 != null ? !address2.equals(project.address2) : project.address2 != null)
-//            return false;
-//        if (statusText != null ? !statusText.equals(project.statusText) : project.statusText != null)
-//            return false;
-//        if (projectStage != null ? !projectStage.equals(project.projectStage) : project.projectStage != null)
-//            return false;
-//        if (bidDate != null ? !bidDate.equals(project.bidDate) : project.bidDate != null)
-//            return false;
-//        if (city != null ? !city.equals(project.city) : project.city != null) return false;
-//        if (zip5 != null ? !zip5.equals(project.zip5) : project.zip5 != null) return false;
-//        if (cnProjectUrl != null ? !cnProjectUrl.equals(project.cnProjectUrl) : project.cnProjectUrl != null)
-//            return false;
-//        if (title != null ? !title.equals(project.title) : project.title != null) return false;
-//        if (contractNbr != null ? !contractNbr.equals(project.contractNbr) : project.contractNbr != null)
-//            return false;
-//        if (numberOfFloorsAboveGround != null ? !numberOfFloorsAboveGround.equals(project.numberOfFloorsAboveGround) : project.numberOfFloorsAboveGround != null)
-//            return false;
-//        if (details != null ? !details.equals(project.details) : project.details != null)
-//            return false;
-//        if (dodgeNumber != null ? !dodgeNumber.equals(project.dodgeNumber) : project.dodgeNumber != null)
-//            return false;
-//        if (lastPublishDate != null ? !lastPublishDate.equals(project.lastPublishDate) : project.lastPublishDate != null)
-//            return false;
-//        if (contractType != null ? !contractType.equals(project.contractType) : project.contractType != null)
-//            return false;
-//        if (projDlvrySys != null ? !projDlvrySys.equals(project.projDlvrySys) : project.projDlvrySys != null)
-//            return false;
-//        if (planInd != null ? !planInd.equals(project.planInd) : project.planInd != null)
-//            return false;
-//        if (dodgeVersion != null ? !dodgeVersion.equals(project.dodgeVersion) : project.dodgeVersion != null)
-//            return false;
-//        if (primaryProjectType != null ? !primaryProjectType.equals(project.primaryProjectType) : project.primaryProjectType != null)
-//            return false;
-//        if (specAvailable != null ? !specAvailable.equals(project.specAvailable) : project.specAvailable != null)
-//            return false;
-//        if (fipsCounty != null ? !fipsCounty.equals(project.fipsCounty) : project.fipsCounty != null)
-//            return false;
-//        if (targetFinishDate != null ? !targetFinishDate.equals(project.targetFinishDate) : project.targetFinishDate != null)
-//            return false;
-//        if (priorPublishDate != null ? !priorPublishDate.equals(project.priorPublishDate) : project.priorPublishDate != null)
-//            return false;
-//        if (numberOfBuildings != null ? !numberOfBuildings.equals(project.numberOfBuildings) : project.numberOfBuildings != null)
-//            return false;
-//        if (statusProjDlvrySys != null ? !statusProjDlvrySys.equals(project.statusProjDlvrySys) : project.statusProjDlvrySys != null)
-//            return false;
-//        if (stdIncludes != null ? !stdIncludes.equals(project.stdIncludes) : project.stdIncludes != null)
-//            return false;
-//        if (currencyType != null ? !currencyType.equals(project.currencyType) : project.currencyType != null)
-//            return false;
-//        if (country != null ? !country.equals(project.country) : project.country != null)
-//            return false;
-//        if (geocode != null ? !geocode.equals(project.geocode) : project.geocode != null)
-//            return false;
-//        if (zipPlus4 != null ? !zipPlus4.equals(project.zipPlus4) : project.zipPlus4 != null)
-//            return false;
-//        if (projectStageId != null ? !projectStageId.equals(project.projectStageId) : project.projectStageId != null)
-//            return false;
-//        if (projectNotes != null ? !projectNotes.equals(project.projectNotes) : project.projectNotes != null)
-//            return false;
-//        if (targetStartDate != null ? !targetStartDate.equals(project.targetStartDate) : project.targetStartDate != null)
-//            return false;
-//        if (geoLocationType != null ? !geoLocationType.equals(project.geoLocationType) : project.geoLocationType != null)
-//            return false;
-//        if (county != null ? !county.equals(project.county) : project.county != null) return false;
-//        if (firstPublishDate != null ? !firstPublishDate.equals(project.firstPublishDate) : project.firstPublishDate != null)
-//            return false;
-//        if (addendaInd != null ? !addendaInd.equals(project.addendaInd) : project.addendaInd != null)
-//            return false;
-//        if (availableFrom != null ? !availableFrom.equals(project.availableFrom) : project.availableFrom != null)
-//            return false;
-//        if (geoType != null ? !geoType.equals(project.geoType) : project.geoType != null)
-//            return false;
-//        if (unionDesignation != null ? !unionDesignation.equals(project.unionDesignation) : project.unionDesignation != null)
-//            return false;
-//        if (bidTimeZone != null ? !bidTimeZone.equals(project.bidTimeZone) : project.bidTimeZone != null)
-//            return false;
-//        if (bondInformation != null ? !bondInformation.equals(project.bondInformation) : project.bondInformation != null)
-//            return false;
-//        if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
-//            return false;
-//        if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
-//            return false;
-//        if (updates != null ? !updates.equals(project.updates) : project.updates != null)
-//            return false;
-//        return recentUpdate != null ? recentUpdate.getId() != project.getRecentUpdate().getId() : project.recentUpdate == null;
     }
 
     @Override
@@ -562,6 +723,7 @@ public class Project extends RealmObject implements TrackedObject {
         result = 31 * result + (bondInformation != null ? bondInformation.hashCode() : 0);
         result = 31 * result + (ownerClass != null ? ownerClass.hashCode() : 0);
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
+        result = 31 * result + (bids != null ? bids.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (updates != null ? updates.hashCode() : 0);
         result = 31 * result + (recentUpdate != null ? recentUpdate.hashCode() : 0);
@@ -621,9 +783,13 @@ public class Project extends RealmObject implements TrackedObject {
                 ", bondInformation='" + bondInformation + '\'' +
                 ", ownerClass='" + ownerClass + '\'' +
                 ", contacts=" + contacts +
+                ", bids=" + bids +
                 ", hidden=" + hidden +
                 ", updates=" + updates +
                 ", recentUpdate=" + recentUpdate +
+                ", mbsItem=" + mbsItem +
+                ", mraItem=" + mraItem +
+                ", mruItem=" + mruItem +
                 '}';
     }
 }

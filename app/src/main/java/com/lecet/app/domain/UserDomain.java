@@ -3,11 +3,14 @@ package com.lecet.app.domain;
 import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.api.request.ChangePasswordRequest;
+import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -37,7 +40,7 @@ public class UserDomain {
     }
 
     public boolean isValidPassword(CharSequence target) {
-        return !TextUtils.isEmpty(target) && target.length() > 1;
+        return !TextUtils.isEmpty(target) && target.length() >= 6;
     }
 
     public boolean isNameValid(CharSequence target) {
@@ -59,6 +62,32 @@ public class UserDomain {
         String token = sharedPreferenceUtil.getAccessToken();
 
         Call<User> call = lecetClient.getUserService().getUser(token, userId);
+        call.enqueue(callback);
+    }
+
+    public void updateUser(User user, Callback<User> callback) {
+
+        // Passing a Realm object directly doesn't seem to work in Retrofit due to variable
+        // lazy loading.
+        String token = sharedPreferenceUtil.getAccessToken();
+        UpdateUserProfileRequest body = new UpdateUserProfileRequest(user);
+
+        Call<User> call = lecetClient.getUserService().updateUser(token, user.getId(), body);
+        call.enqueue(callback);
+    }
+
+    public void logout(Callback<ResponseBody> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ResponseBody> call = lecetClient.getUserService().logout(token);
+        call.enqueue(callback);
+    }
+
+    public void changePassword(String oldPassword, String newPassword, String confirmPassword, Callback<User> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        ChangePasswordRequest body = new ChangePasswordRequest(oldPassword, newPassword, confirmPassword);
+        Call<User> call = lecetClient.getUserService().changePassword(token, fetchLoggedInUser().getId(), body);
         call.enqueue(callback);
     }
 

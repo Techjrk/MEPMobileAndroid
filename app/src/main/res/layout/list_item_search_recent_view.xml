@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchItemRecentViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/mapsectionview"
+        android:layout_width="108dp"
+        android:layout_height="124dp"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="69"
+            android:onClick="@{viewModel.onProjectSavedClick}">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- CIRCLE MAP VIEW -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/search_item_recent_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+
+                    bind:imageUrl="@{viewModel.mapUrl}" />
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <!-- TITLE -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="31"
+            android:maxLines="2"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@{viewModel.title}"
+            android:textAlignment="center"
+            android:textColor="@color/lecetTextDarkGray"
+            android:textSize="11sp"
+            bind:typeface="@{`Lato-Bold.ttf`}"
+            tools:text="Fulton Center Metro Station" />
+
+    </LinearLayout>
+
+</layout>
+

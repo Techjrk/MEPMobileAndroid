@@ -364,6 +364,7 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
                 toogleMTMMenu();
                 return true;
             case R.id.menu_item_search:
+                startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_item_more:
                 toogleOverflowMenu();
@@ -469,16 +470,22 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
     @Override
     public void onProfileClicked() {
 
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onHiddenObjectsClicked() {
 
+        Intent intent = new Intent(this, HiddenProjectsActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onSettingsClicked() {
 
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override

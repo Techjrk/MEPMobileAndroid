@@ -1,5 +1,9 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.view.View;
+
+import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.domain.ProjectDomain;
@@ -80,24 +84,64 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
         return false;
     }
 
+    @Override
+    public void handleTrackingItemSelected(View view, Company object) {
+
+        Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
+        intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, object.getId());
+        view.getContext().startActivity(intent);
+    }
+
     private String mapUrl(Company company) {
 
         String mapStr;
 
+        String generatedAddress = generateCenterPointAddress(company);
+
         StringBuilder sb2 = new StringBuilder();
         sb2.append("https://maps.googleapis.com/maps/api/staticmap");
         sb2.append("?center=");
-        sb2.append(company.getAddress1() + ",");
-        sb2.append(company.getAddress2() + ",");
-        sb2.append(company.getCity() + ",");
-        sb2.append(company.getState());
+        sb2.append(generatedAddress);
         sb2.append("&zoom=16");
         sb2.append("&size=200x200");
         sb2.append("&markers=color:blue|");
+        sb2.append(generatedAddress);
         sb2.append("&key=" + mapsApiKey);
         mapStr = String.format((sb2.toString().replace(' ', '+')), null);
 
         return mapStr;
+    }
+
+    private String generateCenterPointAddress(Company company) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (company.getAddress1() != null) {
+            stringBuilder.append(company.getAddress1());
+            stringBuilder.append(",");
+        }
+
+        if (company.getAddress2() != null) {
+            stringBuilder.append(company.getAddress2());
+            stringBuilder.append(",");
+        }
+
+        if (company.getCity() != null) {
+            stringBuilder.append(company.getCity());
+            stringBuilder.append(",");
+        }
+
+        if (company.getState() != null) {
+            stringBuilder.append(company.getState());
+        }
+
+        if (company.getZipPlus4() != null) {
+            stringBuilder.append(",");
+            stringBuilder.append(company.getZipPlus4());
+        }
+
+
+        return stringBuilder.toString();
     }
 
 

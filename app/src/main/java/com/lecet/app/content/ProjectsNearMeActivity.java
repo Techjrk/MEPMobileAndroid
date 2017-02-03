@@ -1,5 +1,12 @@
 package com.lecet.app.content;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -16,13 +23,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.content.widget.LacetInfoWindowAdapter;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -36,7 +36,7 @@ import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 import io.realm.Realm;
 
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
-        , LocationManager.LocationManagerListener, LacetConfirmDialogFragment.ConfirmDialogListener {
+        , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
 
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
@@ -200,7 +200,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         locationManager.stopLocationUpdates();
     }
@@ -281,6 +281,11 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         finish();
     }
 
+    @Override
+    public void onDialogCancel(DialogFragment dialog) {
+
+    }
+
     private void checkGps() {
         if (locationManager.isGpsEnabled()) {
             continueSetup();
@@ -291,15 +296,19 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     private void showLocationPermissionRequiredDialog() {
         isAskingForPermission = true;
-        LacetConfirmDialogFragment.newInstance(getString(R.string.confirm_share_your_location_description)
-                , getString(R.string.confirm_share_your_location), getString(R.string.confirm_cancel))
-                .show(getSupportFragmentManager(), LacetConfirmDialogFragment.TAG);
+        LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(getString(R.string.confirm_share_your_location_description)
+                , getString(R.string.confirm_share_your_location), getString(R.string.confirm_cancel));
+
+        dialogFragment.setCallbackListener(this);
+        dialogFragment.show(getSupportFragmentManager(), LecetConfirmDialogFragment.TAG);
     }
 
     private void showLocationEnableRequired() {
-        LacetConfirmDialogFragment.newInstance(getString(R.string.confirm_enable_your_location_description)
-                , getString(R.string.confirm_go_to_settings), getString(R.string.confirm_cancel))
-                .show(getSupportFragmentManager(), LacetConfirmDialogFragment.TAG);
+        LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(getString(R.string.confirm_enable_your_location_description)
+                , getString(R.string.confirm_go_to_settings), getString(R.string.confirm_cancel));
+
+        dialogFragment.setCallbackListener(this);
+        dialogFragment.show(getSupportFragmentManager(), LecetConfirmDialogFragment.TAG);
     }
 
     private void openLocationSettings() {
