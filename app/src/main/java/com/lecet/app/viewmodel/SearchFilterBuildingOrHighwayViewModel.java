@@ -22,10 +22,15 @@ public class SearchFilterBuildingOrHighwayViewModel extends BaseObservable {
         this.activity = activity;
     }
 
-    public void onClicked(View view) {
+    public void onApplyButtonClick(View view) {
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, bh);
         activity.setResult(Activity.RESULT_OK, intent);
+        activity.finish();
+    }
+
+    public void onCancelButtonClick(View view) {
+        activity.setResult(Activity.RESULT_CANCELED);
         activity.finish();
     }
 
