@@ -48,7 +48,6 @@
                     android:background="@null"
                     android:gravity="center_horizontal"
                     android:text="@string/msevaluation"
-                    android:textAllCaps="true"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -60,7 +59,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:onClick="@{viewModel.onApplyButtonClick}"
-                    android:text="APPLY"
+                    android:text="@string/mseapply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
