@@ -110,12 +110,12 @@ public class RecentBidItemViewModel {
 
             sb.append(project.getPrimaryProjectType().getTitle());
 
-            if (project.getPrimaryProjectType().getProjectCategory() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getTitle() != null) {
+            if (project.getPrimaryProjectType().getProjectCategory() != null && project.getPrimaryProjectType().getProjectCategory().getTitle() != null) {
 
                 sb.append(" ");
                 sb.append(project.getPrimaryProjectType().getProjectCategory().getTitle());
 
-                if (project.getPrimaryProjectType().getProjectCategory().getProjectGroup() != null && bid.getProject().getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle() != null) {
+                if (project.getPrimaryProjectType().getProjectCategory().getProjectGroup() != null && project.getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle() != null) {
 
                     sb.append(" ");
                     sb.append(project.getPrimaryProjectType().getProjectCategory().getProjectGroup().getTitle());
@@ -131,8 +131,8 @@ public class RecentBidItemViewModel {
         if (project == null || project.getGeocode() == null) return null;
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x300&" +
-                "markers=color:blue|%.6f,%.6f&key=%s", bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(),
-                bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(), mapsApiKey);
+                "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
     public String getStartDateString() {
