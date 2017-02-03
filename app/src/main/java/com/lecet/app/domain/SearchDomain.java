@@ -42,7 +42,7 @@ public class SearchDomain {
     private final Realm realm;
     private String projectFilter;
     private String companyFilter="{\"searchFilter\":{}}";
-    private String contactFilter="{\"searchFilter\":{}}";
+    private String contactFilter="{\"include\":[\"company\"],\"searchFilter\":{}}";
 
     public String getCompanyFilter() {
         return companyFilter;
@@ -214,7 +214,8 @@ public class SearchDomain {
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
         //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
         setCompanyFilter("{\"searchFilter\":{}}");
-        setContactFilter("{\"searchFilter\":{}}");
+        setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
+      //  {\"include\":[\"company\"]}
     }
 
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchResult>> callback) {
