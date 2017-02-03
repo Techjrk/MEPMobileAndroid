@@ -24,7 +24,6 @@
             android:orientation="vertical">
 
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@color/lecetDarkestBlue">
@@ -34,9 +33,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_margin="15dp"
                     android:background="@null"
-                    android:onClick="@{viewModel.onClicked}"
-                    android:text=""
+                    android:onClick="@{viewModel.onCancelButtonClick}"
+                    android:text="@string/cancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -48,7 +48,7 @@
                     android:layout_weight="2"
                     android:background="@null"
                     android:gravity="center_horizontal"
-                    android:text="WORK TYPES"
+                    android:text="@string/mse_work_types"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -61,12 +61,13 @@
                     android:layout_margin="15dp"
                     android:width="30dp"
                     android:background="@null"
-                    android:onClick="@{viewModel.onClicked}"
+                    android:onClick="@{viewModel.onApplyButtonClick}"
                     android:text="APPLY"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
             </LinearLayout>
+
             <!-- WORK TYPE DETAIL SECTION -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,6 +86,7 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>
+
                 <!-- Horizontal Separator -->
                 <include layout="@layout/rule_horiz_light" />
 
