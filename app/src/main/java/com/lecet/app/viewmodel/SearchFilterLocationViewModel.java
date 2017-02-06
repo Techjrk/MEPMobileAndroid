@@ -26,14 +26,15 @@ public class SearchFilterLocationViewModel extends BaseObservable {
         this.activity = activity;
     }
 
-    public void onClicked(View view) {
+    public void onApplyButtonClick(View view) {
         Intent intent = activity.getIntent();
-       /* if (getCity() == null || getState() == null || getCounty() ==null || getZipcode()== null) {
-            activity.finish();
-            return;
-        }*/
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, new String[]{getCity(), getState(), getCounty(), getZipcode()});
         activity.setResult(Activity.RESULT_OK, intent);
+        activity.finish();
+    }
+
+    public void onCancelButtonClick(View view) {
+        activity.setResult(Activity.RESULT_CANCELED);
         activity.finish();
     }
 

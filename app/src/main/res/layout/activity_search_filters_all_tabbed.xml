@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0dp"
             android:orientation="vertical">
+
             <!-- MENU -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-
                     android:onClick="@{viewModel.onClicked}"
                     android:text="@string/msecancel"
                     android:textColor="@color/lecetTextWhite"
@@ -87,7 +87,6 @@
                             android:id="@+id/btn_project"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:background="@android:drawable/divider_horizontal_bright"
                             android:onClick="@{viewModel.onClickedProjectCompanyTab}"
                             android:padding="10dp"
@@ -143,6 +142,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="@{viewModel.isProjectViewVisible ? View.VISIBLE : View.GONE }">
+
                     <!-- Project and Company SECTION -->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -160,6 +160,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionMPS30"
                                 android:text="@string/mselocation"
+                                android:textAllCaps="true"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -171,6 +172,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionMPS30"
                                 android:text="@string/msetype"
+                                android:textAllCaps="true"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -182,6 +184,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionMPS30"
                                 android:text="@string/msevalue"
+                                android:textAllCaps="true"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -199,6 +202,7 @@
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
                                     android:text="@string/mseupdated_within"
+                                    android:textAllCaps="true"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -206,9 +210,9 @@
                                     android:layout_alignParentRight="true"
                                     android:text="@{viewModel.updated_within_select}"
                                     android:textColor="@color/lecetLightGray"
-
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
                             </RelativeLayout>
+
                             <!-- Horizontal Separator -->
                             <include layout="@layout/rule_horiz_light" />
 
@@ -221,6 +225,7 @@
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
                                     android:text="@string/msejurisdiction"
+                                    android:textAllCaps="true"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -231,6 +236,7 @@
 
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
                             </RelativeLayout>
+
                             <!-- Horizontal Separator -->
                             <include layout="@layout/rule_horiz_light" />
 
@@ -243,6 +249,7 @@
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
                                     android:text="@string/stage"
+                                    android:textAllCaps="true"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -253,6 +260,7 @@
 
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
                             </RelativeLayout>
+
                             <!-- Horizontal Separator -->
                             <include layout="@layout/rule_horiz_light" />
 
@@ -264,8 +272,8 @@
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
-
                                     android:text="@string/msebidding_within"
+                                    android:textAllCaps="true"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                 <TextView
@@ -275,6 +283,7 @@
                                     android:textColor="@color/lecetLightGray"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
                             </RelativeLayout>
+
                             <!-- Horizontal Separator -->
                             <include layout="@layout/rule_horiz_light" />
 
@@ -315,6 +324,7 @@
                                     <TextView
                                         style="@style/SearchFilterSectionTextView"
                                         android:text="@string/mseb_h"
+                                        android:textAllCaps="true"
                                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                     <TextView
@@ -324,6 +334,7 @@
                                         android:textColor="@color/lecetLightGray"
                                         bind:typeface="@{`Lato-Bold.ttf`}" />
                                 </RelativeLayout>
+
                                 <!-- Horizontal Separator -->
                                 <include layout="@layout/rule_horiz_light" />
 
@@ -336,6 +347,7 @@
                                     <TextView
                                         style="@style/SearchFilterSectionTextView"
                                         android:text="@string/mseowner_type"
+                                        android:textAllCaps="true"
                                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                     <TextView
@@ -345,6 +357,7 @@
                                         android:textColor="@color/lecetLightGray"
                                         bind:typeface="@{`Lato-Bold.ttf`}" />
                                 </RelativeLayout>
+
                                 <!-- Horizontal Separator -->
                                 <include layout="@layout/rule_horiz_light" />
 
@@ -357,6 +370,7 @@
                                     <TextView
                                         style="@style/SearchFilterSectionTextView"
                                         android:text="@string/msework_type"
+                                        android:textAllCaps="true"
                                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                                     <TextView
@@ -366,6 +380,7 @@
                                         android:textColor="@color/lecetLightGray"
                                         bind:typeface="@{`Lato-Bold.ttf`}" />
                                 </RelativeLayout>
+
                                 <!-- Horizontal Separator -->
                                 <include layout="@layout/rule_horiz_light" />
 
@@ -410,9 +425,9 @@
                         android:orientation="vertical">
 
                         <TextView
-
                             style="@style/SearchFilterSectionMPS30"
                             android:hint="@string/msecompany_location"
+                            android:textAllCaps="true"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
                         <TextView
@@ -426,6 +441,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/mserelated_projects"
+                            android:textAllCaps="true"
                             android:textColor="@color/lecetDarkestBlue"
                             android:textSize="17sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -435,6 +451,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:text="@string/msevalue"
+                            android:textAllCaps="true"
                             android:textSize="15sp"
                             bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -455,6 +472,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
                                 android:text="@string/msejurisdiction"
+                                android:textAllCaps="true"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -464,6 +482,7 @@
                                 android:textColor="@color/lecetLightGray"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
                         </RelativeLayout>
+
                         <!-- Horizontal Separator -->
                         <include layout="@layout/rule_horiz_light" />
 
@@ -476,6 +495,7 @@
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
                                 android:text="@string/msebidding_within"
+                                android:textAllCaps="true"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -485,6 +505,7 @@
                                 android:textColor="@color/lecetLightGray"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
                         </RelativeLayout>
+
                         <!-- Horizontal Separator -->
                         <include layout="@layout/rule_horiz_light" />
 
@@ -498,6 +519,7 @@
                                 style="@style/SearchFilterSectionTextView"
                                 android:layout_alignParentLeft="true"
                                 android:text="@string/mseproject_type"
+                                android:textAllCaps="true"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -507,6 +529,7 @@
                                 android:textColor="@color/lecetLightGray"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
                         </RelativeLayout>
+
                         <!-- Horizontal Separator -->
                         <include layout="@layout/rule_horiz_light" />
                     </LinearLayout>

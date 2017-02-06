@@ -23,11 +23,14 @@ import java.util.List;
 
 public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int adapterType = SearchViewModel.SEARCH_ADAPTER_TYPE_RECENT;
+    @SearchViewModel.SearchAdapterType
+    private final int adapterType;
+
     private List data = Collections.emptyList();
     private SearchViewModel viewModel;
 
-    public SearchRecentRecyclerViewAdapter(SearchViewModel viewModel, List data) {
+    public SearchRecentRecyclerViewAdapter(int adapterType, SearchViewModel viewModel, List data) {
+        this.adapterType = adapterType;
         this.viewModel = viewModel;
         this.data = data;
     }
