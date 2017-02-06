@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.lecet.app.R;
+import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
 
@@ -381,7 +382,21 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
         showProgressDialog(context, context.getString(R.string.app_name), context.getString(R.string.updating));
 
-        userDomain.updateUser(update, new Callback<User>() {
+        UpdateUserProfileRequest body = new UpdateUserProfileRequest.Builder(update.getId())
+                .firstName(getFirstName())
+                .lastName(getLastName())
+                .email(getEmail())
+                .title(getTitle())
+                .organization(getOrganization())
+                .phoneNumber(getPhone())
+                .fax(getFax())
+                .address(getAddress())
+                .city(getCity())
+                .state(getState())
+                .zip(getZip())
+                .build();
+
+        userDomain.updateUser(update.getId(), body, new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 
