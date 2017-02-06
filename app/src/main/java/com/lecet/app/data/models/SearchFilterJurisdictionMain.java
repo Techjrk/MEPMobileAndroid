@@ -34,7 +34,7 @@ public class SearchFilterJurisdictionMain extends RealmObject {
     private RealmList<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
 
     @SerializedName("localsWithNoDistrict")
-    private RealmList<SearchFilterJurisdictionLocal> localsWithNoDistrict;
+    private RealmList<SearchFilterJurisdictionNoDistrictCouncil> localsWithNoDistrict;
 
     public int getId() {
         return id;
@@ -84,11 +84,11 @@ public class SearchFilterJurisdictionMain extends RealmObject {
         this.districtCouncils = districtCouncils;
     }
 
-    public RealmList<SearchFilterJurisdictionLocal> getLocalsWithNoDistrict() {
+    public RealmList<SearchFilterJurisdictionNoDistrictCouncil> getLocalsWithNoDistrict() {
         return localsWithNoDistrict;
     }
 
-    public void setLocalsWithNoDistrict(RealmList<SearchFilterJurisdictionLocal> localsWithNoDistrict) {
+    public void setLocalsWithNoDistrict(RealmList<SearchFilterJurisdictionNoDistrictCouncil> localsWithNoDistrict) {
         this.localsWithNoDistrict = localsWithNoDistrict;
     }
 
