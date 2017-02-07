@@ -497,8 +497,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.address2 = project.getAddress2();
         this.statusText = project.getStatusText();
         if (project.getProjectStage() != null) {
-            realm.copyToRealmOrUpdate(project.getProjectStage());
-            this.projectStage = project.getProjectStage();
+            this.projectStage = realm.copyToRealmOrUpdate(project.getProjectStage());
         }
         this.estLow = project.getEstLow();
         this.bidDate = project.getBidDate();
@@ -517,8 +516,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.planInd = project.getPlanInd();
         this.dodgeVersion = project.getDodgeVersion();
         if (project.getPrimaryProjectType() != null) {
-            realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
-            this.primaryProjectType = project.getPrimaryProjectType();
+            this.primaryProjectType = realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
         }
         this.specAvailable = project.getSpecAvailable();
         this.fipsCounty = project.getFipsCounty();
@@ -531,8 +529,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.currencyType = project.getCurrencyType();
         this.country = project.getCountry();
         if (project.getGeocode() != null) {
-            realm.copyToRealm(project.getGeocode());
-            this.geocode = project.getGeocode();
+            this.geocode = realm.copyToRealm(project.getGeocode());
         }
         this.zipPlus4 = project.getZipPlus4();
         this.projectStageId = project.getProjectStageId();
@@ -549,15 +546,12 @@ public class Project extends RealmObject implements TrackedObject {
         this.bondInformation = project.getBondInformation();
         this.ownerClass = project.getOwnerClass();
         if (project.getContacts() != null) {
-            realm.copyToRealmOrUpdate(project.getContacts());
             this.contacts = project.getContacts();
         }
         if (project.getBids() != null) {
-            realm.copyToRealmOrUpdate(project.getBids());
             this.bids = project.getBids();
         }
         if (project.getUpdates() != null) {
-            realm.copyToRealmOrUpdate(project.getUpdates());
             this.updates = project.getUpdates();
         }
         this.hidden = hidden;
@@ -571,8 +565,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.address2 = project.getAddress2();
         this.statusText = project.getStatusText();
         if (project.getProjectStage() != null) {
-            realm.copyToRealmOrUpdate(project.getProjectStage());
-            this.projectStage = project.getProjectStage();
+            this.projectStage = realm.copyToRealmOrUpdate(project.getProjectStage());
         }
         this.estLow = project.getEstLow();
         this.bidDate = project.getBidDate();
@@ -591,8 +584,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.planInd = project.getPlanInd();
         this.dodgeVersion = project.getDodgeVersion();
         if (project.getPrimaryProjectType() != null) {
-            realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
-            this.primaryProjectType = project.getPrimaryProjectType();
+             this.primaryProjectType = realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
         }
         this.specAvailable = project.getSpecAvailable();
         this.fipsCounty = project.getFipsCounty();
@@ -605,8 +597,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.currencyType = project.getCurrencyType();
         this.country = project.getCountry();
         if (project.getGeocode() != null) {
-            realm.copyToRealm(project.getGeocode());
-            this.geocode = project.getGeocode();
+            this.geocode = realm.copyToRealm(project.getGeocode());
         }
         this.zipPlus4 = project.getZipPlus4();
         this.projectStageId = project.getProjectStageId();
@@ -623,15 +614,12 @@ public class Project extends RealmObject implements TrackedObject {
         this.bondInformation = project.getBondInformation();
         this.ownerClass = project.getOwnerClass();
         if (project.getContacts() != null) {
-            realm.copyToRealmOrUpdate(project.getContacts());
             this.contacts = project.getContacts();
         }
         if (project.getBids() != null) {
-            realm.copyToRealmOrUpdate(project.getBids());
             this.bids = project.getBids();
         }
         if (project.getUpdates() != null) {
-            realm.copyToRealmOrUpdate(project.getUpdates());
             this.updates = project.getUpdates();
         }
 
@@ -654,6 +642,7 @@ public class Project extends RealmObject implements TrackedObject {
 
             this.mruItem = mruItem.booleanValue();
         }
+
     }
 
 

@@ -194,6 +194,7 @@
     <string name="error_network_message">Please check your internet connection and try again
     </string>
     <string name="error_fetching_address">Address not found.</string>
+    <string name="error_unauthorized_user">Invalid Session. Please login again.</string>
 
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>

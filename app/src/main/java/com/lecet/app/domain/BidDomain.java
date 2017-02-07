@@ -60,7 +60,7 @@ public class BidDomain {
      * API
      **/
 
-    public void getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
+    public Call<List<Bid>> getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -70,19 +70,21 @@ public class BidDomain {
 
         Call<List<Bid>> call = lecetClient.getBidService().bids(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
 
-    public void getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
+    public Call<List<Bid>> getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
 
         Date startDate = DateUtility.addDays(-30);
-        getBidsRecentlyMade(startDate, limit, callback);
+        return getBidsRecentlyMade(startDate, limit, callback);
     }
 
-    public void getBidsRecentlyMade(Callback<List<Bid>> callback) {
+    public Call<List<Bid>> getBidsRecentlyMade(Callback<List<Bid>> callback) {
 
         int limit = 100;
-        getBidsRecentlyMade(limit, callback);
+        return getBidsRecentlyMade(limit, callback);
     }
 
     /**
@@ -263,6 +265,17 @@ public class BidDomain {
         List<Bid> persistedBids = realm.copyToRealmOrUpdate(bids);
         realm.commitTransaction();
         return persistedBids;
+    }
+
+    public void asyncCopyToRealm(final List<Bid> bids, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                realm.copyToRealmOrUpdate(bids);
+            }
+        }, onSuccess, onError);
     }
 
     /**
