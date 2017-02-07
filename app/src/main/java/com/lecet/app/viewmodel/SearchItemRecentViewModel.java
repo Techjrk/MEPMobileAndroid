@@ -230,8 +230,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         Intent intent = new Intent(viewModel.getActivity(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         viewModel.getActivity().startActivity(intent);
-
-
     }
 
     public void onCompanyClick(View view) {
@@ -245,6 +243,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public void onContactClick(View view) {
+
         //TODO - connect to the contact detail section
       //  Toast.makeText(viewModel.getActivity(), "onClick: Contact detail section", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(viewModel.getActivity(), ContactDetailActivity.class);
