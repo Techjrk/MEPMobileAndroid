@@ -28,6 +28,5 @@ public class SearchFilterStageActivity extends AppCompatActivity {
         ActivitySearchFilterStageBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_stage);
         SearchFilterStageViewModel viewModel = new SearchFilterStageViewModel(this);
         sfilter.setViewModel(viewModel);
-     //   initRecycleView(viewModel);
     }
 }
