@@ -79,6 +79,7 @@ public class ActivityUpdateDeserializer implements JsonDeserializer<ActivityUpda
                         break;
                     case "WorkType":
                     case "ProjectType":
+                        break;
                     default:
                         break;
                 }

@@ -3,6 +3,7 @@ package com.lecet.app.domain;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
@@ -42,6 +43,8 @@ import retrofit2.Callback;
 
 public class ProjectDomain {
 
+    private static final String TAG = "ProjectDomain";
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES})
     public @interface BidGroup {
@@ -79,7 +82,7 @@ public class ProjectDomain {
         return call;
     }
 
-    public void getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -93,27 +96,29 @@ public class ProjectDomain {
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
 
-    public void getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
 
         Date current = new Date();
         Date endDate = DateUtility.addDays(30);
-        getProjectsHappeningSoon(current, endDate, limit, callback);
+        return getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
 
-    public void getProjectsHappeningSoon(Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
         Date current = new Date();
         Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
         int limit = 150;
 
-        getProjectsHappeningSoon(current, endDate, limit, callback);
+        return getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
-    public void getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
+    public  Call<List<Project>> getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -125,21 +130,23 @@ public class ProjectDomain {
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
 
-    public void getProjectsRecentlyAdded(int limit, Callback<List<Project>> callback) {
+    public  Call<List<Project>> getProjectsRecentlyAdded(int limit, Callback<List<Project>> callback) {
 
         Date endDate = DateUtility.addDays(-30);
 
-        getProjectsRecentlyAdded(endDate, limit, callback);
+        return getProjectsRecentlyAdded(endDate, limit, callback);
     }
 
-    public void getProjectsRecentlyAdded(Callback<List<Project>> callback) {
+    public  Call<List<Project>> getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
         int limit = 250;
 
-        getProjectsRecentlyAdded(limit, callback);
+        return getProjectsRecentlyAdded(limit, callback);
     }
 
 
@@ -174,7 +181,7 @@ public class ProjectDomain {
     }
 
 
-    public void getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -186,21 +193,23 @@ public class ProjectDomain {
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
 
-    public void getProjectsRecentlyUpdated(int limit, Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsRecentlyUpdated(int limit, Callback<List<Project>> callback) {
 
         Date publishDate = DateUtility.addDays(-30);
-        getProjectsRecentlyUpdated(publishDate, limit, callback);
+        return getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
 
 
-    public void getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
 
         int limit = 150;
         Date publishDate = DateUtility.addDays(-30);
-        getProjectsRecentlyUpdated(publishDate, limit, callback);
+        return getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
 
     public void getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
@@ -346,7 +355,7 @@ public class ProjectDomain {
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mruItem", true)
-                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAll();
 
         return projectsResult;
@@ -360,7 +369,7 @@ public class ProjectDomain {
         if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
-                    .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                    .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .beginGroup()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
@@ -373,7 +382,7 @@ public class ProjectDomain {
         } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
-                    .greaterThanOrEqualTo("firstPublishDate", lastPublishDate)
+                    .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .beginGroup()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
@@ -386,7 +395,7 @@ public class ProjectDomain {
         } else {
 
             projectsResult = realm.where(Project.class)
-                    .greaterThanOrEqualTo("firstPublishDate", lastPublishDate)
+                    .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("hidden", false)
@@ -481,7 +490,8 @@ public class ProjectDomain {
 
                     if (storedProject != null) {
 
-                        storedProject.updateProject(realm, storedProject, hidden);
+                        storedProject.updateProject(realm, project, hidden);
+                        realm.copyToRealmOrUpdate(storedProject);
 
                     } else {
 
@@ -506,7 +516,8 @@ public class ProjectDomain {
 
                     if (storedProject != null) {
 
-                        storedProject.updateProject(realm, storedProject, isHidden, mbsItem, mraItem, mruItem);
+                        storedProject.updateProject(realm, project, isHidden, mbsItem, mraItem, mruItem);
+                        realm.copyToRealmOrUpdate(storedProject);
 
                     } else {
 
@@ -548,6 +559,7 @@ public class ProjectDomain {
                 if (storedProject != null) {
 
                     storedProject.updateProject(realm, project, null, null, null, null);
+                    realm.copyToRealmOrUpdate(storedProject);
 
                 } else {
 
@@ -564,7 +576,6 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .findAllSorted(sortFieldName, Sort.DESCENDING);
     }
-
 
 
     /**
@@ -642,6 +653,23 @@ public class ProjectDomain {
 
 
     public TreeMap<Long, TreeSet<Project>> sortRealmResultsByLastPublished(RealmResults<Project> result) {
+
+//        for (Project project : result) {
+//
+//            if (project.getPrimaryProjectType() == null) {
+//
+//                Log.d(TAG, "Project: " + project.getId() + " Project Type Null");
+//
+//            } else if (project.getPrimaryProjectType().getProjectCategory() == null) {
+//
+//                Log.d(TAG, "Project: " + project.getId() + " Project Category Null");
+//
+//            } else {
+//
+//                Log.d(TAG, "Project: " + project.getId() + " GroupID: " + project.getPrimaryProjectType().getProjectCategory().getProjectGroupId());
+//            }
+//
+//        }
 
         Comparator<Project> projectComparator = new Comparator<Project>() {
             @Override

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.lecet.app.R;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityLauncherBinding;
+import com.lecet.app.viewmodel.DashboardIntermediaryViewModel;
 import com.lecet.app.viewmodel.LauncherViewModel;
 
 
@@ -25,12 +26,9 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        Log.d(TAG, "onCreate");
-
         setContentView(R.layout.activity_launcher);
         setupBinding();
-        initTimerDelay(5000);
+        initTimerDelay(250);
     }
 
     private void setupBinding() {
@@ -61,15 +59,10 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void routeUser(boolean isAuthenticated) {
 
-        //isAuthenticated = true; // DEBUG
-       // isAuthenticated = false; // DEBUG
-
-        Log.d(TAG, "routeUser: isAuthenticated? " + isAuthenticated);
-
         // if the user is authenticated, start the Main Activity
         if (isAuthenticated) {
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, DashboardIntermediaryActivity.class);
             startActivity(intent);
             finish();
         }

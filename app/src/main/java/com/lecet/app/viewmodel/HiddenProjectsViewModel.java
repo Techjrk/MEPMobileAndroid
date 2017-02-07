@@ -80,7 +80,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
                 if (response.isSuccessful()) {
 
-                    projectDomain.asyncCopyToRealm(response.body(), true, new Realm.Transaction.OnSuccess() {
+                    projectDomain.asyncCopyToRealm(response.body(), new Boolean(true), new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
 

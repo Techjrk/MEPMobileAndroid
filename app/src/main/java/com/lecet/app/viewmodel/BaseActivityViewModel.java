@@ -31,6 +31,7 @@ public class BaseActivityViewModel extends BaseObservable {
 
     public void showProgressDialog(AppCompatActivity appCompatActivity, String title, String message) {
 
+        dismissAlertDialog();
         dismissProgressDialog();
 
         progressDialog = ProgressDialog.show(appCompatActivity, title, message, true, false);
@@ -43,6 +44,9 @@ public class BaseActivityViewModel extends BaseObservable {
 
     public void showCancelAlertDialog(AppCompatActivity appCompatActivity, String title, String message) {
 
+        dismissProgressDialog();
+        dismissAlertDialog();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(appCompatActivity);
         builder.setTitle(title);
         builder.setMessage(message);
@@ -53,6 +57,9 @@ public class BaseActivityViewModel extends BaseObservable {
 
     public void showTwoButtonAlertDialog(AppCompatActivity appCompatActivity, String title, String message, String negativeTitle, DialogInterface.OnClickListener negativeListener,
                                           String positiveTitle, DialogInterface.OnClickListener positiveListener) {
+
+        dismissProgressDialog();
+        dismissAlertDialog();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(appCompatActivity);
         builder.setTitle(title);

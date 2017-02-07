@@ -194,6 +194,9 @@
                 android:label="@string/title_activity_company_project_bids"
                 android:theme="@style/AppTheme">
         </activity>
+        <activity android:name=".content.DashboardIntermediaryActivity"
+                  android:theme="@style/AppTheme.FullScreen">
+        </activity>
     </application>
 
 </manifest>

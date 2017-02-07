@@ -68,10 +68,6 @@ public class MainViewModel {
     int dashboardPosition;
 
     private boolean displayContent;
-    private boolean fetchedMBR;
-    private boolean fetchedMHS;
-    private boolean fetchedMRA;
-    private boolean fetchedMRU;
 
     private Date lastFetchedMBR;
     private Date lastFetchedMHS;
@@ -108,371 +104,53 @@ public class MainViewModel {
     public void getBidsRecentlyMade(@NonNull final Date cutoffDate, @NonNull final LecetCallback<TreeMap<Long, TreeSet<Bid>>> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
-        if (lastFetchedMBR == null || lastFetchedMBR != null && minutesElapsed(new Date(), lastFetchedMBR) > 3) {
+        realmResultsMBR = bidDomain.fetchBids(cutoffDate);
+        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
 
-            getBidsRecentlyMade(new Callback<List<Bid>>() {
-                @Override
-                public void onResponse(Call<List<Bid>> call, Response<List<Bid>> response) {
-                    if (response.isSuccessful()) {
+        if (dashboardPosition == DASHBOARD_POSITION_MBR) {
 
-
-                        fetchedMBR = true;
-
-                        lastFetchedMBR = new Date();
-
-                        // Store in Realm
-                        bidDomain.copyToRealmTransaction(response.body());
-
-                        // Fetch Realm managed Projects
-                        realmResultsMBR = bidDomain.fetchBids(cutoffDate);
-                        callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
-
-                        // Display all Bids until set is selected
-                        if (dashboardPosition == DASHBOARD_POSITION_MBR) {
-
-                            setupAdapterWithBids(realmResultsMBR);
-                        }
-
-                        // data received, lets see if we should display main content
-                        checkDataDownloaded();
-
-                    } else {
-
-                        // data received, lets see if we should display main content
-                        fetchedMBR = true;
-                        checkDataDownloaded();
-
-                        callback.onFailure(response.code(), response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Bid>> call, Throwable t) {
-
-                    // data received, lets see if we should display main content
-                    fetchedMBR = true;
-                    checkDataDownloaded();
-                    callback.onFailure(-1, getString(R.string.error_network_message));
-                }
-            });
-
-        } else {
-
-            // Fetch Realm managed Projects
-            realmResultsMBR = bidDomain.fetchBids(cutoffDate);
-            callback.onSuccess(bidDomain.sortRealmResults(realmResultsMBR));
-
-            if (dashboardPosition == DASHBOARD_POSITION_MBR) {
-
-                setupAdapterWithBids(realmResultsMBR);
-            }
+            setupAdapterWithBids(realmResultsMBR);
         }
     }
 
     public void getProjectsHappeningSoon(@NonNull final LecetCallback<Project[]> callback) {
 
+
         // Check if data has been recently fetched and display those results from Realm
-        if (lastFetchedMHS == null || lastFetchedMHS != null && minutesElapsed(new Date(), lastFetchedMHS) > 3) {
+        realmResultsMHS = fetchProjectsHappeningSoon();
+        callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
 
-            getProjectsHappeningSoon(new Callback<List<Project>>() {
-                @Override
-                public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+        if (dashboardPosition == DASHBOARD_POSITION_MHS) {
 
-                    if (response.isSuccessful()) {
-
-                        // data received, lets see if we should display main content
-                        fetchedMHS = true;
-
-                        lastFetchedMHS = new Date();
-
-                        // Store in Realm
-                        List<Project> body = response.body();
-                        //projectDomain.copyToRealmTransaction(body);
-
-                        projectDomain.asyncCopyToRealm(body, null, new Boolean(true), null, null, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-
-                                // Fetch Realm managed Projects
-                                realmResultsMHS = fetchProjectsHappeningSoon();
-                                callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
-
-                                if (dashboardPosition == DASHBOARD_POSITION_MHS) {
-
-                                    setupAdapterWithProjects(realmResultsMHS);
-                                }
-
-                                // data received, lets see if we should display main content
-                                checkDataDownloaded();
-
-                            }
-                        }, new Realm.Transaction.OnError() {
-                            @Override
-                            public void onError(Throwable error) {
-
-                                // data received, lets see if we should display main content
-                                checkDataDownloaded();
-
-                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
-                            }
-                        });
-
-
-                    } else {
-
-                        // data received, lets see if we should display main content
-                        fetchedMHS = true;
-                        checkDataDownloaded();
-                        callback.onFailure(response.code(), response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Project>> call, Throwable t) {
-
-                    // data received, lets see if we should display main content
-                    fetchedMHS = true;
-                    checkDataDownloaded();
-
-                    callback.onFailure(-1, "Network Failure");
-                }
-            });
-
-        } else {
-
-            // Fetch Realm managed Projects
-            realmResultsMHS = fetchProjectsHappeningSoon();
-            callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
-
-            if (dashboardPosition == DASHBOARD_POSITION_MHS) {
-
-                setupAdapterWithProjects(realmResultsMHS);
-            }
+            setupAdapterWithProjects(realmResultsMHS);
         }
+
     }
 
     public void getProjectsRecentlyAdded(@NonNull final LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
-        if (lastFetchedMRA == null || lastFetchedMRA != null && minutesElapsed(new Date(), lastFetchedMRA) > 3) {
+        realmResultsMRA = fetchProjectsRecentlyAdded();
+        callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
 
-            getProjectsRecentlyAdded(new Callback<List<Project>>() {
-                @Override
-                public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+        if (dashboardPosition == DASHBOARD_POSITION_MRA) {
 
-                    if (response.isSuccessful()) {
-
-                        // data received, lets see if we should display main content
-                        fetchedMRA = true;
-                        lastFetchedMRA = new Date();
-
-                        // Store in Realm
-                        List<Project> body = response.body();
-
-                        projectDomain.asyncCopyToRealm(body, null, null, new Boolean(true), null, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-
-                                // Fetch Realm managed Projects
-                                realmResultsMRA = fetchProjectsRecentlyAdded();
-                                callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
-
-                                if (dashboardPosition == DASHBOARD_POSITION_MRA) {
-
-                                    setupAdapterWithProjects(realmResultsMRA);
-                                }
-
-                                // data received, lets see if we should display main content
-                                checkDataDownloaded();
-
-                            }
-                        }, new Realm.Transaction.OnError() {
-                            @Override
-                            public void onError(Throwable error) {
-
-                                // data received, lets see if we should display main content
-                                checkDataDownloaded();
-
-                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
-                            }
-                        });
-
-
-                    } else {
-
-                        // data received, lets see if we should display main content
-                        fetchedMRA = true;
-                        checkDataDownloaded();
-
-                        callback.onFailure(response.code(), response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Project>> call, Throwable t) {
-
-                    // data received, lets see if we should display main content
-                    fetchedMRA = true;
-                    checkDataDownloaded();
-
-                    callback.onFailure(-1, "Network Failure");
-                }
-            });
-
-        } else {
-
-            // Fetch Realm managed Projects
-            realmResultsMRA = fetchProjectsRecentlyAdded();
-            callback.onSuccess(projectDomain.sortRealmResultsByFirstPublished(realmResultsMRA));
-
-            if (dashboardPosition == DASHBOARD_POSITION_MRA) {
-
-                setupAdapterWithProjects(realmResultsMRA);
-            }
+            setupAdapterWithProjects(realmResultsMRA);
         }
+
     }
 
     public void getProjectsRecentlyUpdated(@NonNull final LecetCallback<TreeMap<Long, TreeSet<Project>>> callback) {
 
         // Check if data has been recently fetched and display those results from Realm
-        if (lastFetchedMRU == null || lastFetchedMRU != null && minutesElapsed(new Date(), lastFetchedMRU) > 3) {
+        //if (lastFetchedMRU == null || lastFetchedMRU != null && minutesElapsed(new Date(), lastFetchedMRU) > 3)
+        realmResultsMRU = fetchProjectsRecentlyUpdated();
+        callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
 
-            getProjectsRecentlyUpdated(new Callback<List<Project>>() {
-                @Override
-                public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+        if (dashboardPosition == DASHBOARD_POSITION_MRU) {
 
-                    if (response.isSuccessful()) {
-
-                        // data received, lets see if we should display main content
-                        fetchedMRU = true;
-
-                        lastFetchedMRU = new Date();
-
-                        // Store in Realm
-                        List<Project> body = response.body();
-
-                        projectDomain.asyncCopyToRealm(body, null, null, null, new Boolean(true), new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-
-                                // Fetch Realm managed Projects
-                                realmResultsMRU = fetchProjectsRecentlyUpdated();
-                                callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
-
-                                if (dashboardPosition == DASHBOARD_POSITION_MRU) {
-
-                                    setupAdapterWithProjects(realmResultsMRU);
-                                }
-
-                                // data received, lets see if we should display main content
-                                checkDataDownloaded();
-                            }
-                        }, new Realm.Transaction.OnError() {
-                            @Override
-                            public void onError(Throwable error) {
-
-                                // data received, lets see if we should display main content
-                                checkDataDownloaded();
-                                callback.onFailure(-1, "Realm Error = " + error.getMessage());
-                            }
-                        });
-
-                    } else {
-
-                        // data received, lets see if we should display main content
-                        fetchedMRU = true;
-                        checkDataDownloaded();
-
-                        callback.onFailure(response.code(), response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Project>> call, Throwable t) {
-
-                    // data received, lets see if we should display main content
-                    fetchedMRU = true;
-                    checkDataDownloaded();
-
-                    callback.onFailure(-1, "Network Failure: " + t.getMessage());
-                }
-            });
-
-        } else {
-
-            // Fetch Realm managed Projects
-            realmResultsMRU = fetchProjectsRecentlyUpdated();
-            callback.onSuccess(projectDomain.sortRealmResultsByLastPublished(realmResultsMRU));
-
-            if (dashboardPosition == DASHBOARD_POSITION_MRU) {
-
-                setupAdapterWithProjects(realmResultsMRU);
-            }
+            setupAdapterWithProjects(realmResultsMRU);
         }
-    }
-
-
-    public void getTrackingLists() {
-
-        getUserProjectTrackingList();
-        getUserCompanyTrackingList();
-    }
-
-
-    public void getUserProjectTrackingList() {
-
-        // First lets delete any existing data
-        projectTrackingListDomain.deleteAllProjectTrackingLists();
-
-        projectTrackingListDomain.getUserProjectTrackingLists(new Callback<List<ProjectTrackingList>>() {
-            @Override
-            public void onResponse(Call<List<ProjectTrackingList>> call, Response<List<ProjectTrackingList>> response) {
-
-                if (response.isSuccessful()) {
-
-                    List<ProjectTrackingList> data = response.body();
-                    projectTrackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
-
-                } else {
-
-                    // TODO: Handle error
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<ProjectTrackingList>> call, Throwable t) {
-                // TODO: Handle error
-            }
-        });
-    }
-
-
-    public void getUserCompanyTrackingList() {
-
-        // First lets delete any existing data
-        projectTrackingListDomain.deleteAllCompanyTrackingLists();
-
-        projectTrackingListDomain.getUserCompanyTrackingLists(new Callback<List<CompanyTrackingList>>() {
-            @Override
-            public void onResponse(Call<List<CompanyTrackingList>> call, Response<List<CompanyTrackingList>> response) {
-
-                if (response.isSuccessful()) {
-
-                    List<CompanyTrackingList> data = response.body();
-                    projectTrackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
-
-                } else {
-
-                    // TODO: Handle error
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CompanyTrackingList>> call, Throwable t) {
-                // TODO: Handle error
-            }
-        });
     }
 
     /**
@@ -640,6 +318,7 @@ public class MainViewModel {
     private void initializeViewSwitcher() {
 
         viewSwitcher = (ViewSwitcher) appCompatActivity.findViewById(R.id.view_switcher);
+        switchPage();
     }
 
     private void switchPage() {
@@ -649,7 +328,7 @@ public class MainViewModel {
 
     private void checkDataDownloaded() {
 
-        if (!displayContent && fetchedMBR && fetchedMHS) {
+        if (!displayContent) {
 
             displayContent = true;
             switchPage();
