@@ -85,8 +85,7 @@ public class UserDomain {
     public void changePassword(String oldPassword, String newPassword, String confirmPassword, Callback<User> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-        ChangePasswordRequest body = new ChangePasswordRequest(oldPassword, newPassword, confirmPassword);
-        Call<User> call = lecetClient.getUserService().changePassword(token, fetchLoggedInUser().getId(), body);
+        Call<User> call = lecetClient.getUserService().changePassword(token, fetchLoggedInUser().getId(), oldPassword, newPassword, confirmPassword);
         call.enqueue(callback);
     }
 
