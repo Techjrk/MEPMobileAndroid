@@ -38,6 +38,8 @@ public class BidDomain {
     public @interface BidGroup {
     }
 
+    private static final int DASHBOARD_CALL_LIMIT = 250;
+
     public static final int ENGINEERING = 101;
     public static final int BUILDING = 102;
     public static final int HOUSING = 103;
@@ -83,7 +85,7 @@ public class BidDomain {
 
     public Call<List<Bid>> getBidsRecentlyMade(Callback<List<Bid>> callback) {
 
-        int limit = 100;
+        int limit = DASHBOARD_CALL_LIMIT;
         return getBidsRecentlyMade(limit, callback);
     }
 

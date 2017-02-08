@@ -55,8 +55,9 @@ public interface UserService {
 
     @Headers({
             "Accept: application/json",
-            "Content-Type: application/json"
+            "Content-Type: application/x-www-form-urlencoded"
     })
     @PUT("LecetUsers/{userId}")
-    Call<User> changePassword(@Header("Authorization") String token, @Path("userId") long userId, @Body ChangePasswordRequest body);
+    @FormUrlEncoded
+    Call<User> changePassword(@Header("Authorization") String token, @Path("userId") long userId, @Field("oldPassword") String oldPassword, @Field("password") String password, @Field("confirmation") String confirmation);
 }
