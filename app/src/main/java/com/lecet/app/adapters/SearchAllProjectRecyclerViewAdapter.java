@@ -4,13 +4,11 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding;
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -27,11 +25,9 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private final int adapterType;
 
     private List data = Collections.emptyList();
-    private SearchViewModel viewModel;
 
-    public SearchAllProjectRecyclerViewAdapter(int adapterType, SearchViewModel viewModel, List data) {
+    public SearchAllProjectRecyclerViewAdapter(int adapterType, List data) {
         this.adapterType = adapterType;
-        this.viewModel = viewModel;
         this.data = data;
     }
 
@@ -53,7 +49,7 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         ProjectQuerySearchViewHolder viewHolder = (ProjectQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel(viewModel, (Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
         viewHolder.getBinding().setViewModel(vm);
     }
 
