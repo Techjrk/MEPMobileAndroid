@@ -137,6 +137,8 @@ public class SearchViewModel extends BaseObservable {
     private boolean isQueryProjectTotalZero;
     private boolean isQueryCompanyTotalZero;
     private boolean isQueryContactTotalZero;
+    private boolean queryEmpty;
+
 
     public void setProjectSearchFilter(String filter) {
         searchDomain.setProjectFilter(filter);
@@ -207,7 +209,7 @@ public class SearchViewModel extends BaseObservable {
         initializeAdapterProjectQueryAll();
         initializeAdapterCompanyQueryAll();
         initializeAdapterContactQueryAll();
-
+        setQueryEmpty(true);
     }
 
     public void updateViewQuery(/*String query*/) {
@@ -264,7 +266,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectAll.clear();
         int ctr = 0;
         for (Project s : slist) {
-            try {
+         //   try {
                 if (s != null) {
                     adapterDataProjectAll.add(s);
                     if (ctr < CONTENT_MAX_SIZE) adapterDataProjectSummary.add(s);
@@ -272,10 +274,10 @@ public class SearchViewModel extends BaseObservable {
                     ctr++;
 
                 }
-            } catch (Exception e) {
+           /* } catch (Exception e) {
                 //if no project is found, just do nothing...
                 Log.w("No project", "No project in the list");
-            }
+            }*/
         }
         searchAdapterProjectSummary.notifyDataSetChanged();
         searchAdapterProjectAll.notifyDataSetChanged();
@@ -296,18 +298,17 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanyAll.clear();
         int ctr = 0;
         for (Company s : slist) {
-            try {
-
+           // try {
                 if (s != null) {
                     adapterDataCompanyAll.add(s);
                     if (ctr < CONTENT_MAX_SIZE) adapterDataCompanySummary.add(s);
                     ctr++;
 
                 }
-            } catch (Exception e) {
+           /* } catch (Exception e) {
                 //if no company is found, just do nothing...
                 Log.w("No company", "No company in the list");
-            }
+            }*/
         }
 
         searchAdapterCompanySummary.notifyDataSetChanged();
@@ -327,7 +328,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataContactAll.clear();
         int ctr = 0;
         for (Contact s : slist) {
-            try {
+           // try {
 
                 if (s != null) {
                     adapterDataContactAll.add(s);
@@ -335,10 +336,10 @@ public class SearchViewModel extends BaseObservable {
                     ctr++;
 
                 }
-            } catch (Exception e) {
+           /* } catch (Exception e) {
                 //if no contact object is found, just do nothing...
                 Log.w("No contact", "No contact in the list");
-            }
+            }*/
         }
 
         searchAdapterContactSummary.notifyDataSetChanged();
@@ -359,15 +360,17 @@ public class SearchViewModel extends BaseObservable {
                     adapterDataRecentlyViewed.clear();
                     int ctr = 0;
                     for (SearchResult s : slist) {
-                        try {
+                    //    try {
                             ctr++;
-                            if (s.getProject() != null) {
+                        if (s !=null)    {
+                        //    if (s.getProject() != null)
                                 adapterDataRecentlyViewed.add(s);
                             }
+        /*
                         } catch (Exception e) {
                             //Log.e("UserRecentlyViewed", "Exception in getUserRecentlyViewed" + e.getMessage());
                             errorDisplayMsg("Problem in retrieving user Recently viewed" + e.getMessage());
-                        }
+                        }*/
                     }
 
                     searchAdapterRecentlyViewed.notifyDataSetChanged();
@@ -518,7 +521,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataContactAll = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, this, adapterDataContactAll);
+        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, adapterDataContactAll);
         recyclerView.setAdapter(searchAdapterContactAll);
     }
 
@@ -529,7 +532,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanyAll = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, this, adapterDataCompanyAll);
+        searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, adapterDataCompanyAll);
         recyclerView.setAdapter(searchAdapterCompanyAll);
     }
 
@@ -540,7 +543,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectAll = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, this, adapterDataProjectAll);
+        searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, adapterDataProjectAll);
         recyclerView.setAdapter(searchAdapterProjectAll);
     }
 
@@ -551,7 +554,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectSummary = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterProjectSummary = new SearchSummaryProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY, this, adapterDataProjectSummary);
+        searchAdapterProjectSummary = new SearchSummaryProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY, adapterDataProjectSummary);
         recyclerView.setAdapter(searchAdapterProjectSummary);
     }
 
@@ -562,7 +565,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanySummary = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterCompanySummary = new SearchSummaryCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY, this, adapterDataCompanySummary);
+        searchAdapterCompanySummary = new SearchSummaryCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY, adapterDataCompanySummary);
         recyclerView.setAdapter(searchAdapterCompanySummary);
     }
 
@@ -573,7 +576,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataContactSummary = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, this, adapterDataContactSummary);
+        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, adapterDataContactSummary);
         recyclerView.setAdapter(searchAdapterContactSummary);
     }
 
@@ -584,7 +587,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataRecentlyViewed = new ArrayList<SearchResult>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerView, LinearLayoutManager.HORIZONTAL);
-        searchAdapterRecentlyViewed = new SearchRecentRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_RECENT, this, adapterDataRecentlyViewed);
+        searchAdapterRecentlyViewed = new SearchRecentRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_RECENT, adapterDataRecentlyViewed);
         recyclerView.setAdapter(searchAdapterRecentlyViewed);
     }
 
@@ -611,7 +614,6 @@ public class SearchViewModel extends BaseObservable {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, int orientation) {
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, orientation, false);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -650,6 +652,14 @@ public class SearchViewModel extends BaseObservable {
 
     ///////////////////////////////////
     // BINDABLE
+@Bindable
+    public boolean getQueryEmpty() {
+        return queryEmpty;
+    }
+
+    public void setQueryEmpty(boolean queryEmpty) {
+        this.queryEmpty = queryEmpty;
+    }
 
     @Bindable
     public String getQuery() {
@@ -658,9 +668,13 @@ public class SearchViewModel extends BaseObservable {
 
     public void setQuery(String query) {
         this.query = query;
-        if (query.trim().equals("")) USING_INSTANT_SEARCH = false;
+        if (query.trim().equals("")) {
+            USING_INSTANT_SEARCH = false;
+            setQueryEmpty(true);
+        } else setQueryEmpty(false);
         notifyPropertyChanged(BR.query);
         updateViewQuery();
+        notifyPropertyChanged(BR.queryEmpty);
     }
 
     @Bindable
