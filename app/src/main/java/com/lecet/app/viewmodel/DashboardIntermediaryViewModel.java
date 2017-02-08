@@ -74,12 +74,15 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     /* Navigation Logic */
     private void checkDataDownloaded() {
 
-        if (fetchedJurisdiction && fetchedProjectType && fetchedStageList && fetchedMBR && fetchedMHS && fetchedMRA && fetchedMRU) {
+        if (fetchedJurisdiction && fetchedProjectType && fetchedStageList && fetchedMBR && fetchedMHS && fetchedMRA && fetchedMRU && fetchedCompTracking && fetchedProjTracking) {
 
             AppCompatActivity appCompatActivity = getActivityWeakReference().get();
-            Intent intent = new Intent(appCompatActivity, MainActivity.class);
-            appCompatActivity.startActivity(intent);
-            appCompatActivity.finish();
+            if (appCompatActivity != null) {
+
+                Intent intent = new Intent(appCompatActivity, MainActivity.class);
+                appCompatActivity.startActivity(intent);
+                appCompatActivity.finish();
+            }
         }
     }
 
