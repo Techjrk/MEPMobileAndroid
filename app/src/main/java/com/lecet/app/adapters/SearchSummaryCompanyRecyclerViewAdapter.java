@@ -25,13 +25,11 @@ public class SearchSummaryCompanyRecyclerViewAdapter extends RecyclerView.Adapte
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
-
     private List data = Collections.emptyList();
-    private SearchViewModel viewModel;
 
-    public SearchSummaryCompanyRecyclerViewAdapter(int adapterType, SearchViewModel viewModel, List data) {
+
+    public SearchSummaryCompanyRecyclerViewAdapter(int adapterType,List data) {
         this.adapterType = adapterType;
-        this.viewModel = viewModel;
         this.data = data;
     }
 
@@ -53,7 +51,7 @@ public class SearchSummaryCompanyRecyclerViewAdapter extends RecyclerView.Adapte
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         CompanyQuerySearchViewHolder viewHolder = (CompanyQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel(viewModel, (Company) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
         viewHolder.getBinding().setViewModel(vm);
     }
 
