@@ -27,11 +27,9 @@ public class SearchSummaryProjectRecyclerViewAdapter extends RecyclerView.Adapte
     private final int adapterType;
 
     private List data = Collections.emptyList();
-    private SearchViewModel viewModel;
 
-    public SearchSummaryProjectRecyclerViewAdapter(int adapterType, SearchViewModel viewModel, List data) {
+    public SearchSummaryProjectRecyclerViewAdapter(int adapterType, List data) {
         this.adapterType = adapterType;
-        this.viewModel = viewModel;
         this.data = data;
     }
 
@@ -53,7 +51,7 @@ public class SearchSummaryProjectRecyclerViewAdapter extends RecyclerView.Adapte
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         ProjectQuerySearchViewHolder viewHolder = (ProjectQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel(viewModel, (Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel( (Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
         viewHolder.getBinding().setViewModel(vm);
     }
 
