@@ -65,13 +65,13 @@ public class UserDomain {
         call.enqueue(callback);
     }
 
-    public void updateUser(long userID, UpdateUserProfileRequest body, Callback<User> callback) {
+    public void updateUser(UpdateUserProfileRequest user, Callback<User> callback) {
 
         // Passing a Realm object directly doesn't seem to work in Retrofit due to variable
         // lazy loading.
         String token = sharedPreferenceUtil.getAccessToken();
 
-        Call<User> call = lecetClient.getUserService().updateUser(token, userID, body);
+        Call<User> call = lecetClient.getUserService().updateUser(token, user.getId(), user);
         call.enqueue(callback);
     }
 
