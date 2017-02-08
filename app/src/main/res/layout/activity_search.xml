@@ -59,7 +59,8 @@
                         android:onClick="@{viewModel.onClearClicked}"
                         android:paddingEnd="1dp"
                         android:paddingStart="1dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="fitCenter"
+                        android:visibility="@{viewModel.queryEmpty ? View.GONE : View.VISIBLE }"
                         android:src="@mipmap/ic_clear_text" />
 
                     <EditText
