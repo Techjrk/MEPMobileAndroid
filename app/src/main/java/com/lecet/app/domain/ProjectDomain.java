@@ -45,6 +45,8 @@ public class ProjectDomain {
 
     private static final String TAG = "ProjectDomain";
 
+    private static final int DASHBOARD_CALL_LIMIT = 250;
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES})
     public @interface BidGroup {
@@ -64,6 +66,10 @@ public class ProjectDomain {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
+    }
+
+    public Realm getRealm() {
+        return realm;
     }
 
     /**
@@ -113,7 +119,7 @@ public class ProjectDomain {
 
         Date current = new Date();
         Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
-        int limit = 150;
+        int limit = DASHBOARD_CALL_LIMIT;
 
         return getProjectsHappeningSoon(current, endDate, limit, callback);
     }
@@ -144,7 +150,7 @@ public class ProjectDomain {
 
     public  Call<List<Project>> getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
-        int limit = 250;
+        int limit = DASHBOARD_CALL_LIMIT;
 
         return getProjectsRecentlyAdded(limit, callback);
     }
@@ -175,7 +181,7 @@ public class ProjectDomain {
 
     public void getBidsRecentlyAdded(Callback<List<Project>> callback) {
 
-        int limit = 150;
+        int limit = DASHBOARD_CALL_LIMIT;
 
         getBidsRecentlyAdded(limit, callback);
     }
@@ -207,7 +213,7 @@ public class ProjectDomain {
 
     public Call<List<Project>> getProjectsRecentlyUpdated(Callback<List<Project>> callback) {
 
-        int limit = 150;
+        int limit = DASHBOARD_CALL_LIMIT;
         Date publishDate = DateUtility.addDays(-30);
         return getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
@@ -456,7 +462,7 @@ public class ProjectDomain {
 
     public void setProjectHidden(Project project, boolean hidden) {
         realm.beginTransaction();
-        project.setHidden(true);
+        project.setHidden(hidden);
         realm.commitTransaction();
     }
 
@@ -653,23 +659,6 @@ public class ProjectDomain {
 
 
     public TreeMap<Long, TreeSet<Project>> sortRealmResultsByLastPublished(RealmResults<Project> result) {
-
-//        for (Project project : result) {
-//
-//            if (project.getPrimaryProjectType() == null) {
-//
-//                Log.d(TAG, "Project: " + project.getId() + " Project Type Null");
-//
-//            } else if (project.getPrimaryProjectType().getProjectCategory() == null) {
-//
-//                Log.d(TAG, "Project: " + project.getId() + " Project Category Null");
-//
-//            } else {
-//
-//                Log.d(TAG, "Project: " + project.getId() + " GroupID: " + project.getPrimaryProjectType().getProjectCategory().getProjectGroupId());
-//            }
-//
-//        }
 
         Comparator<Project> projectComparator = new Comparator<Project>() {
             @Override

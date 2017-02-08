@@ -18,6 +18,7 @@ import com.lecet.app.domain.ProjectDomain;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +41,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
     private RecyclerView recyclerView;
     private HiddenProjectsAdapter listAdapter;
+    private RealmResults<Project> results;
 
     private TextView titleTextView;
     private TextView subtitleTextView;
@@ -53,6 +55,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
         getHiddenProjects();
     }
+
 
     @Bindable
     public String getSubTitle() {
@@ -70,6 +73,14 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
         setSubTitle(title);
     }
 
+    /** Activity Lifecycle **/
+    public void onActivityDestroy() {
+
+        removeHiddenProjectsResultsListener();
+    }
+
+    /** Networking **/
+
     private void getHiddenProjects() {
 
         showProgressDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
@@ -84,7 +95,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
                         @Override
                         public void onSuccess() {
 
-                            RealmResults<Project> results = projectDomain.fetchHiddenProjects();
+                            results = projectDomain.fetchHiddenProjects();
                             projectsCount = results.size();
                             initializeAdapter(results);
                             updateSubTitle();
@@ -128,6 +139,24 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
         setupRecyclerView(recyclerView);
         listAdapter = new HiddenProjectsAdapter(projectDomain, hiddenProjects, appCompatActivity.getString(R.string.google_maps_key));
         recyclerView.setAdapter(listAdapter);
+    }
+
+    private void addHiddenProjectsResultsListener(RealmResults<Project> realmResults) {
+
+        realmResults.addChangeListener(new RealmChangeListener<RealmResults<Project>>() {
+            @Override
+            public void onChange(RealmResults<Project> element) {
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void removeHiddenProjectsResultsListener() {
+
+        if (results != null) {
+
+            results.removeChangeListeners();
+        }
     }
 
     /**

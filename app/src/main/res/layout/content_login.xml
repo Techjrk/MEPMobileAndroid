@@ -42,6 +42,7 @@
                         android:hint="@string/email_address"
                         android:text="@={viewModel.email}"
                         android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
                         android:nextFocusForward="@+id/password_text_input"/>
 
                 <include layout="@layout/rule_horiz_login"/>
