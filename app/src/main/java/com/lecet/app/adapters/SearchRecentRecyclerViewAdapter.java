@@ -25,13 +25,10 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
-
     private List data = Collections.emptyList();
-    private SearchViewModel viewModel;
 
-    public SearchRecentRecyclerViewAdapter(int adapterType, SearchViewModel viewModel, List data) {
+    public SearchRecentRecyclerViewAdapter(int adapterType, List data) {
         this.adapterType = adapterType;
-        this.viewModel = viewModel;
         this.data = data;
     }
 
@@ -52,7 +49,11 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         RecentViewHolder viewHolder = (RecentViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel(viewModel, ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        SearchItemRecentViewModel vm=null;
+if (((SearchResult) data.get(position)).getProject() !=null) {
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        } else
+        vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
         viewHolder.getBinding().setViewModel(vm);
     }
 
