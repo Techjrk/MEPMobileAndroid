@@ -45,6 +45,16 @@ public class SearchResult {
     @SerializedName("project")
     private Project project;
 
+    @SerializedName("company")
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public boolean isAction() {
         return action;
