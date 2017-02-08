@@ -25,13 +25,10 @@ public class SearchSummaryContactRecyclerViewAdapter extends RecyclerView.Adapte
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
-
     private List data = Collections.emptyList();
-    private SearchViewModel viewModel;
 
-    public SearchSummaryContactRecyclerViewAdapter(int adapterType, SearchViewModel viewModel, List data) {
+    public SearchSummaryContactRecyclerViewAdapter(int adapterType, List data) {
         this.adapterType = adapterType;
-        this.viewModel = viewModel;
         this.data = data;
     }
 
@@ -53,7 +50,7 @@ public class SearchSummaryContactRecyclerViewAdapter extends RecyclerView.Adapte
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         ContactQuerySearchViewHolder viewHolder = (ContactQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel(viewModel, (Contact) data.get(position));
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Contact) data.get(position));
         viewHolder.getBinding().setViewModel(vm);
     }
 
