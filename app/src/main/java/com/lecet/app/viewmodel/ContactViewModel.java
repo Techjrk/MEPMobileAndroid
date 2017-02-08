@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
@@ -81,7 +82,7 @@ public class ContactViewModel {
         String preCompany = (contact.getTitle() != null ? contact.getTitle() : "[ not given ]") + " " + appCompatActivity.getString(R.string.at) + " ";
         String companyName = company.getName();
         Spannable spannable = new SpannableString(preCompany + companyName);
-        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), preCompany.length() + companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return spannable;
     }
@@ -113,6 +114,50 @@ public class ContactViewModel {
 
     public void onAddressSelected(View View) {
 
+        String mapPoint = generateCenterPointAddress(company, "+");
+
+        Uri gmmIntentUri = Uri.parse(String.format("geo:0,0?q=%s", mapPoint));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(appCompatActivity.getPackageManager()) != null) {
+            appCompatActivity.startActivity(mapIntent);
+        }
     }
+
+    /** Maps **/
+
+
+    private String generateCenterPointAddress(Company company, String bindingCharacter) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (company.getAddress1() != null) {
+            stringBuilder.append(company.getAddress1());
+            stringBuilder.append(bindingCharacter);
+        }
+
+        if (company.getAddress2() != null) {
+            stringBuilder.append(company.getAddress2());
+            stringBuilder.append(bindingCharacter);
+        }
+
+        if (company.getCity() != null) {
+            stringBuilder.append(company.getCity());
+            stringBuilder.append(bindingCharacter);
+        }
+
+        if (company.getState() != null) {
+            stringBuilder.append(company.getState());
+        }
+
+        if (company.getZip5() != null) {
+            stringBuilder.append(bindingCharacter);
+            stringBuilder.append(company.getZipPlus4());
+        }
+
+
+        return stringBuilder.toString();
+    }
+
 
 }
