@@ -426,14 +426,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 int jurisdictionViewType = -1;
                 String jurisdictionId = null;
+                String jurisdictionRegionId = null;
                 String jurisdictionName = null;
                 String jurisdictions = "";
 
                 try {
                     jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                    jurisdictionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
-                    jurisdictionName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
-                } catch (Exception e) {
+                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionRegionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_REGION_ID);
+                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                }
+                catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
                 }
                 if (jurisdictionName == null || jurisdictionName.equals("")) {
@@ -448,17 +451,20 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     viewModel.setJurisdiction_select(jurisdictionName);
                 }
 
-                // build the list of IDs for the query, which include ... ?
+                // Build a single-element List based on the Jurisdiction ID passed in the Bundle.
                 List<String> jList = new ArrayList<>();
 
                 List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
                 List<SearchFilterJurisdictionLocal> locals;
 
                 // add the highest-level Jurisdiction ID
-                jList.add(jurisdictionName);
+                //jList.add(jurisdictionId);
                 if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
 
-                    if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
+                    //TODO - look through all nested levels, match the passed bundle Name to an element in a level, and use that item's ID.
+
+
+                    /*if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
                         // add each District Council ID
                         for (SearchFilterJurisdictionMain j : realmJurisdictions) {
                             if (jurisdictionName.equals(j.getName())) {
@@ -506,9 +512,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     //TODO - implement this section
                     else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
 
-                    }
+                    }*/
 
-                    //Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdictionName);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
 
@@ -523,7 +529,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
 
     /**
-     * Process the Stage input data based on the received list of Stages persisted in Realm     //TODO - NO LONGER VALID
+     * Process the Stage input data based on the received list of Stages persisted in Realm
      */
     private void processStage(final Bundle bundle) {
 
@@ -537,8 +543,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 Log.d("processStage: ", "realmStages size: " + realmStages.size());
                 Log.d("processStage: ", "realmStages: " + realmStages);
 
-                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);     // text display
-                String stageId = SearchFilterStageViewModel.BUNDLE_KEY_ID;                          // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String viewType = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE);  // view type (parent, child, grandchild)
+                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);       // text display
+                String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);         // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String stages = "";
                 if (stageStr == null || stageStr.equals("")) stageStr = "Any";
                 viewModel.setPersistedStage(stageStr);
@@ -549,8 +556,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 sList.add(stageId);
                 if (stageStr != null && !stageStr.trim().equals("")) {
 
-                    // add each child Stage ID
-                    for (ProjectStage parentStage : realmStages) {
+                    // add each child Stage ID  // removed: only support single selection of Stage type
+                    /*for (ProjectStage parentStage : realmStages) {
                         if (stageStr.equals(parentStage.getName())) {
                             List<ProjectStage> childStages = parentStage.getChildStages();
                             for (ProjectStage childStage : childStages) {
@@ -560,7 +567,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                             }
                             break;
                         }
-                    }
+                    }*/
                     Log.d("SearchFilterMPSAct", "processStage: input Stage name: " + stageStr);
                     Log.d("SearchFilterMPSAct", "processStage: parent and child Stage IDs: " + sList);
 

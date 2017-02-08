@@ -202,7 +202,6 @@
                           app:typeface="@{`Lato-Regular.ttf`}"
                           android:text="@={viewModel.zip}"
                           android:hint="@string/zip"
-                          android:imeOptions="actionDone"
                           tools:text="20006"/>
 
             </LinearLayout>

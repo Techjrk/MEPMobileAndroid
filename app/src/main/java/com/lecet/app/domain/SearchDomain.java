@@ -1,5 +1,6 @@
 package com.lecet.app.domain;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
@@ -13,6 +14,7 @@ import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.interfaces.LecetCallback;
 
 import java.util.List;
 
@@ -71,44 +73,53 @@ public class SearchDomain {
      *
      * @param callback
      */
-    public void getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
+    public Call<List<SearchFilterStagesMain>> getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
         //if (SearchViewModel.stageMainList !=null) return;
         String filter = "stages";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterStagesMain>> call = lecetClient.getSearchService().getSearchFilterStagesItems(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
     /**
      * Retrieve the list of Project Stages and store them, along with their child Project Stages, in a Realm list.
      */
-    public void generateRealmStageList() {
-        getStagesList(new Callback<List<SearchFilterStagesMain>>() {
+    public Call<List<SearchFilterStagesMain>> generateRealmStageList(@NonNull final LecetCallback<List<SearchFilterStagesMain>> callback) {
+
+        Call<List<SearchFilterStagesMain>> call = getStagesList(new Callback<List<SearchFilterStagesMain>>() {
             @Override
-            public void onResponse(Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
-                Log.d(TAG, "Create List of Project Stages");
+            public void onResponse(final Call<List<SearchFilterStagesMain>> call, Response<List<SearchFilterStagesMain>> response) {
+                Log.d(TAG,"Create List of Project Stages");
                 if (response.isSuccessful()) {
                     final List<SearchFilterStagesMain> stageMainList = response.body();
                     Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransaction(new Realm.Transaction() {
-
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:", "stageMainList: size: " + stageMainList.size());
-                            Log.d("SearchDomain:", "stageMainList: " + stageMainList);
+                            Log.d("SearchDomain:","stageMainList: size: " + stageMainList.size());
+                            Log.d("SearchDomain:","stageMainList: " + stageMainList);
                             realm.copyToRealmOrUpdate(stageMainList);
+                            callback.onSuccess(stageMainList);
                         }
                     });
 
+                } else {
+
+                    callback.onFailure(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
-                Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
+
+                callback.onFailure(-999, "Please check your internet connection and try again");
             }
         });
+
+        return call;
     }
 
     /**
@@ -116,19 +127,20 @@ public class SearchDomain {
      *
      * @param callback
      */
-    public void getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
-        //if (SearchViewModel.typeMainList !=null) return;
+    public Call<List<SearchFilterProjectTypesMain>> getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
         String filter = "projectTypes";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterProjectTypesMain>> call = lecetClient.getSearchService().getSearchFilterProjectTypesItems(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
     /**
      * Retrieve the list of Project Types and store them, along with their child Project Types and grandchild Project Types, in a Realm list.
      */
-    public void generateRealmProjectTypesList() {
-        getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
+    public Call<List<SearchFilterProjectTypesMain>> generateRealmProjectTypesList(@NonNull final LecetCallback<List<SearchFilterProjectTypesMain>> callback) {
+        Call<List<SearchFilterProjectTypesMain>> call = getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
                 Log.d(TAG, "Create List of Project Types");
@@ -140,20 +152,28 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:", "projectTypesMainList: size: " + projectTypesMainList.size());
-                            Log.d("SearchDomain:", "projectTypesMainList: " + projectTypesMainList);
+                            Log.d("SearchDomain:","projectTypesMainList: size: " + projectTypesMainList.size());
+                            Log.d("SearchDomain:","projectTypesMainList: " + projectTypesMainList);
                             realm.copyToRealmOrUpdate(projectTypesMainList);
+
+                            callback.onSuccess(projectTypesMainList);
                         }
                     });
 
+                } else {
+
+                    callback.onFailure(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SearchFilterProjectTypesMain>> call, Throwable t) {
-                Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
+
+                callback.onFailure(-999, "Please check your internet connection and try again");
             }
         });
+
+        return call;
     }
 
 
@@ -162,17 +182,20 @@ public class SearchDomain {
      *
      * @param callback
      */
-    public void getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
+    public Call<List<SearchFilterJurisdictionMain>> getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
         //if (SearchViewModel.jurisdictionMainList !=null) return;
         Call<List<SearchFilterJurisdictionMain>> call = lecetClient.getSearchService().getSearchFilterJurisdictionItems();
         call.enqueue(callback);
+
+        return call;
     }
 
     /**
      * Retrieve the list of Jurisdictions and store them, along with their children and grandchild object, in a Realm list.
      */
-    public void generateRealmJurisdictionList() {
-        getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
+    public Call<List<SearchFilterJurisdictionMain>> generateRealmJurisdictionList(@NonNull final LecetCallback<List<SearchFilterJurisdictionMain>> callback) {
+
+        Call<List<SearchFilterJurisdictionMain>> call = getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
                 Log.d(TAG, "Create list of Jurisdictions");
@@ -185,20 +208,26 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:", "jurisdictionMainList: size: " + jurisdictionMainList.size());
-                            Log.d("SearchDomain:", "jurisdictionMainList: " + jurisdictionMainList);
+                            Log.d("SearchDomain:","jurisdictionMainList: size: " + jurisdictionMainList.size());
+                            Log.d("SearchDomain:","jurisdictionMainList: " + jurisdictionMainList);
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
+                            callback.onSuccess(jurisdictionMainList);
                         }
                     });
 
+                } else {
+
+                    callback.onFailure(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SearchFilterJurisdictionMain>> call, Throwable t) {
-                Log.e("onFailure: ", "Network is busy. Pls. try again. ");  //TODO - handle error
+                callback.onFailure(-999, "Please check your internet connection and try again");
             }
         });
+
+        return call;
     }
 
     public void initFilter() {

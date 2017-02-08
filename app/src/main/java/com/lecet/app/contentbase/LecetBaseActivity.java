@@ -15,6 +15,9 @@ import android.view.KeyEvent;
 
 import com.lecet.app.R;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 /**
  * File: LecetBaseActivity Created: 10/20/16 Author: domandtom
  *
@@ -57,6 +60,8 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        checkForUpdates();
+        checkForCrashes();
     }
 
     @Override
@@ -69,18 +74,42 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterManagers();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         unregisterReceiver(networkReceiver);
+        unregisterManagers();
     }
+
+    /** Hockey App **/
+
+    private void checkForCrashes() {
+        CrashManager.register(this);
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this);
+    }
+
+    private void unregisterManagers() {
+        UpdateManager.unregister();
+    }
+
 
     /** Keyboard management **/
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d("Base", "keycode = " + keyCode);
+
         switch (keyCode){
             case KeyEvent.FLAG_EDITOR_ACTION:
                 onKeyboardEditorActionSelected();

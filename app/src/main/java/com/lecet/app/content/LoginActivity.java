@@ -23,6 +23,8 @@ public class LoginActivity extends LecetBaseActivity {
 
     private final String TAG = "LoginActivity";
 
+    private LoginViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class LoginActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        LoginViewModel viewModel = new LoginViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
+        viewModel = new LoginViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance()));
         binding.setViewModel(viewModel);
     }
 
@@ -66,4 +68,9 @@ public class LoginActivity extends LecetBaseActivity {
         animView.startAnimation(animation);
     }
 
+    @Override
+    public void onKeyboardEditorActionSelected() {
+
+        viewModel.onLoginClicked(null);
+    }
 }

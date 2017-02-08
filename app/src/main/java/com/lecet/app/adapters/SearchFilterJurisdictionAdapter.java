@@ -137,6 +137,44 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             childViewHolder.imgView.setVisibility(View.GONE);
             childViewHolder.checkView.setChecked(false);
             if (child.getGrandChildren()!=null )             childViewHolder.imgView.setVisibility(View.VISIBLE);
+            childViewHolder.checkView.setText(child.name);
+
+            childViewHolder.checkView.setChecked(child.getSelected());
+            childViewHolder.checkView.setTag(new Integer(truePosition));
+            // checkView.setChecked(child.isSelected);
+            // checkView.setTag(new Integer(truePosition));
+
+            if(truePosition == 0 && child.isSelected && childViewHolder.checkView.isChecked()){
+                //               if(truePosition == 0 && child.isSelected && checkView.isChecked()){
+                lastChecked = childViewHolder.checkView;
+//                  lastChecked = checkView;
+                lastCheckedPos =0;
+            }
+
+            childViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            CheckBox cb = (CheckBox) view;
+ //                           RadioButton cb = (RadioButton) view;
+                            int clickedPos = ((Integer) cb.getTag()).intValue();
+                            if (cb.isChecked()){
+                                if (lastChecked !=null) {
+                                    lastChecked.setChecked(false);
+                                    child.setSelected(false);
+                                }
+                                lastChecked=cb;
+                                lastCheckedPos = clickedPos;
+                            } else lastChecked=null;
+
+                            child.setSelected(cb.isChecked());
+
+                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getRegionId(), child.getName(), child.getAbbreviation(), child.getLongName());
+                        }
+                    }
+
+            );
+
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -255,7 +293,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                             child.setSelected(cb.isChecked());
 
-                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getName(), child.getAbbreviation(), child.getLongName());
+                            if (child.getSelected()) viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getRegionId(), child.getName(), child.getAbbreviation(), child.getLongName());
                         }
                     }
 
@@ -306,7 +344,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                             grandChild.setSelected(cb.isChecked());
                             if (grandChild.getSelected())
-                         viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());
+                         viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), -1, grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());    //TODO - check regionId
                         }
                     }
 
@@ -376,7 +414,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         parent.setSelected(cb.isChecked());
 
                      if (parent.getSelected())
-                         viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), parent.getName(), parent.getAbbreviation(), parent.getLongName());
+                         viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //TODO - check regionId
                     }
                 }
         );
@@ -638,6 +676,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     public static class Child {
 
         private int id;
+        private int regionId;
         private String name;
         private String abbreviation;
         private String longName;
@@ -661,6 +700,14 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public int getRegionId() {
+            return regionId;
+        }
+
+        public void setRegionId(int regionId) {
+            this.regionId = regionId;
         }
 
         public void setName(String name) {

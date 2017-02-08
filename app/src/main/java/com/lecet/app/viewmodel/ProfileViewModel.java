@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.lecet.app.R;
+import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
 
@@ -195,10 +196,6 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
             return false;
         }
-        if (TextUtils.isEmpty(fax)) {
-
-            return false;
-        }
         if (TextUtils.isEmpty(address)) {
 
             return false;
@@ -257,12 +254,6 @@ public class ProfileViewModel extends BaseActivityViewModel {
             showCancelAlertDialog(context, context.getString(R.string.app_name), message);
             return;
         }
-        if (TextUtils.isEmpty(fax)) {
-
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.fax));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
-            return;
-        }
         if (TextUtils.isEmpty(address)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.address));
@@ -299,12 +290,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         saveButton = (TextView) toolbar.findViewById(R.id.save_text_view);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClick(v);
-            }
-        });
+        backButton.setVisibility(View.INVISIBLE);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -327,7 +313,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
         if (isFormsValid()) {
 
-            updateUser(user);
+            updateUser();
 
         } else {
 
@@ -377,11 +363,24 @@ public class ProfileViewModel extends BaseActivityViewModel {
         });
     }
 
-    private void updateUser(User update) {
+    private void updateUser() {
 
         showProgressDialog(context, context.getString(R.string.app_name), context.getString(R.string.updating));
 
-        userDomain.updateUser(update, new Callback<User>() {
+        UpdateUserProfileRequest.Builder builder = new UpdateUserProfileRequest.Builder(user.getId())
+                .firstName(getFirstName())
+                .lastName(getLastName())
+                .email(getEmail())
+                .title(getTitle())
+                .organization(getOrganization())
+                .phoneNumber(getPhone())
+                .fax(getFax())
+                .address(getAddress())
+                .city(getCity())
+                .state(getState())
+                .zip(getZip());
+
+        userDomain.updateUser(builder.build(), new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 

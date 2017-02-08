@@ -23,8 +23,23 @@
         <!-- HockeyApp Integration -->
         <meta-data
                 android:name="net.hockeyapp.android.appIdentifier"
-                android:value="bf2b988cbd6245d48903f92ea181b6af"/> <!-- TODO: update with current app id -->
+                android:value="${HOCKEY_APP_ID}"/>
+        <!--
+                 The API key for Google Maps-based APIs is defined as a string resource.
+                 (See the file "res/values/google_maps_api.xml").
+                 Note that the API key is linked to the encryption key used to sign the APK.
+                 You need a different API key for each encryption key, including the release key that is used to
+                 sign the APK for publishing.
+                 You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_maps_key"/>
 
+        <!-- Metadata -->
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
 
         <!-- Activities -->
         <activity
@@ -124,15 +139,6 @@
                 android:theme="@style/AppTheme"
                 android:screenOrientation="portrait">
         </activity>
-
-        <!-- Metadata -->
-        <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version"/>
-        <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_api_key"/>
-
         <activity
                 android:name=".content.SearchFilterMPSActivity"
                 android:theme="@style/AppTheme"
@@ -211,6 +217,18 @@
                 android:label="@string/title_activity_hidden_projects"
                 android:theme="@style/AppTheme"
                 android:screenOrientation="portrait">
+        </activity>
+        <activity
+                android:name=".content.LocationDetailMapActivity"
+                android:label="@string/title_activity_location_detail_map">
+        </activity>
+        <activity
+                android:name=".content.CompanyProjectBidsActivity"
+                android:label="@string/title_activity_company_project_bids"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".content.DashboardIntermediaryActivity"
+                  android:theme="@style/AppTheme.FullScreen">
         </activity>
     </application>
 

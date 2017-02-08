@@ -187,12 +187,14 @@
     <string name="error_first_name">Please enter your first name</string>
     <string name="error_last_name">Please enter your last name</string>
     <string name="error_login_title">Login Error</string>
-    <string name="error_login_message">You don\’t have permission to access MEP using your account
+    <string name="error_login_message">Please verify your email and password and try again</string>
+    <string name="error_access_denied">You don\’t have permission to access MEP using your account
     </string>
     <string name="error_network_title">Network Error</string>
     <string name="error_network_message">Please check your internet connection and try again
     </string>
     <string name="error_fetching_address">Address not found.</string>
+    <string name="error_unauthorized_user">Invalid Session. Please login again.</string>
 
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
@@ -295,6 +297,8 @@
     </string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
+    <string name="bid_tab_title_past">%d Past</string>
+    <string name="bid_tab_title_upcoming">%d Upcoming</string>
 
     <!-- MPR Profile -->
     <string name="my_profile">My Profile</string>
@@ -309,5 +313,8 @@
     <string name="hidden_projects_title">Hidden Projects</string>
     <string name="hidden_projects_sub_title">%d Hidden Projects</string>
     <string name="unhide">Unhide</string>
+    <string name="title_activity_location_detail_map">LocationDetail</string>
+    <string name="title_activity_company_project_bids">CompanyProjectBidsActivity</string>
+
 
 </resources>

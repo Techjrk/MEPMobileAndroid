@@ -37,6 +37,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private static final String TAG = "SearchFilterMPFJurisVM";
     public static final String BUNDLE_KEY_VIEW_TYPE = "viewType";
     public static final String BUNDLE_KEY_ID = "id";
+    public static final String BUNDLE_KEY_REGION_ID = "regionId";
     public static final String BUNDLE_KEY_NAME = "name";
     public static final String BUNDLE_KEY_ABBREVIATION = "abbreviation";
     public static final String BUNDLE_KEY_LONG_NAME = "longName";
@@ -75,7 +76,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(Realm realm) {  //TODO - the region IDs are not appearing in the stored realmJurisdictions list
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
                 Log.d(TAG, "realmJurisdictions size: " + realmJurisdictions.size());
                 Log.d(TAG, "realmJurisdictions list: " + realmJurisdictions);
@@ -94,19 +95,19 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     }
 
     /**
-     * Set the selected Jurisdiction data in the bundle based on the checked selection.
-     *
+     * Set the selected Jurisdiction data in the bundle based on the checked selection. Support single selection, not multiple.
      * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, or 2=grandchild)
-     * Each has its own ID starting at 0.
+     * @id The Jurisdiction ID. Each has its own ID starting at 0.
      * Note: While 'name' usually looks like an int, it needs to be a String to support variant names like '18A'
      */
-    public void setJurisdictionData(int viewType, int id, String name, String abbreviation, String longName) {
-        Log.d(TAG, "setJurisdictionData: viewType: " + viewType + ", id: " + id + ", name: " + name + ", abbreviation: " + abbreviation + ", longName: " + longName);
+    public void setJurisdictionData(int viewType, int id, int regionId, String name, String abbreviation, String longName) {
+        Log.d(TAG, "setJurisdictionData: viewType: " + viewType + ", id: " + id + ", regionId: " + regionId + ", name: " + name + ", abbreviation: " + abbreviation + ", longName: " + longName);
 
         // overwrite the Bundle instance with each selection since Jurisdiction only supports single-selection
         bundle = new Bundle();
         setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
         setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
+        setBundleData(BUNDLE_KEY_REGION_ID, Integer.toString(regionId));
         setBundleData(BUNDLE_KEY_NAME, name);
         setBundleData(BUNDLE_KEY_ABBREVIATION, abbreviation);
         setBundleData(BUNDLE_KEY_LONG_NAME, longName);

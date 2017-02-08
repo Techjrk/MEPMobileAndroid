@@ -1,16 +1,21 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyDetailAdapter;
 import com.lecet.app.content.CompanyDetailActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
@@ -25,7 +30,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class CompanyDetailViewModel {
+public class CompanyDetailViewModel implements ClickableMapInterface {
 
     private static final String TAG = "CompanyDetailViewModel";
 
@@ -162,19 +167,66 @@ public class CompanyDetailViewModel {
 
         String mapStr;
 
+        String generatedAddress = generateCenterPointAddress(company, ",");
+
         StringBuilder sb2 = new StringBuilder();
         sb2.append("https://maps.googleapis.com/maps/api/staticmap");
         sb2.append("?center=");
-        sb2.append(company.getAddress1() + ",");
-        sb2.append(company.getAddress2() + ",");
-        sb2.append(company.getCity() + ",");
-        sb2.append(company.getState());
+        sb2.append(generatedAddress);
         sb2.append("&zoom=16");
-        sb2.append("&size=200x200");
+        sb2.append("&size=800x500");
         sb2.append("&markers=color:blue|");
+        sb2.append(generatedAddress);
         sb2.append("&key=" + activity.getString(R.string.google_maps_key));
         mapStr = String.format((sb2.toString().replace(' ', '+')), null);
 
         return mapStr;
+    }
+
+    private String generateCenterPointAddress(Company company, String bindingCharacter) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (company.getAddress1() != null) {
+            stringBuilder.append(company.getAddress1());
+            stringBuilder.append(bindingCharacter);
+        }
+
+        if (company.getAddress2() != null) {
+            stringBuilder.append(company.getAddress2());
+            stringBuilder.append(bindingCharacter);
+        }
+
+        if (company.getCity() != null) {
+            stringBuilder.append(company.getCity());
+            stringBuilder.append(bindingCharacter);
+        }
+
+        if (company.getState() != null) {
+            stringBuilder.append(company.getState());
+        }
+
+        if (company.getZip5() != null) {
+            stringBuilder.append(bindingCharacter);
+            stringBuilder.append(company.getZipPlus4());
+        }
+
+
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public void onMapSelected(View view) {
+
+        CompanyDetailActivity activity = activityWeakReference.get();
+
+        String mapPoint = generateCenterPointAddress(company, "+");
+
+        Uri gmmIntentUri = Uri.parse(String.format("geo:0,0?q=%s", mapPoint));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(mapIntent);
+        }
     }
 }

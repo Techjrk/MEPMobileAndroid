@@ -4,6 +4,8 @@ import android.support.annotation.IntDef;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -17,6 +19,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -57,7 +60,7 @@ public class BidDomain {
      * API
      **/
 
-    public void getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
+    public Call<List<Bid>> getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -67,24 +70,49 @@ public class BidDomain {
 
         Call<List<Bid>> call = lecetClient.getBidService().bids(token, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
 
-    public void getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
+    public Call<List<Bid>> getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
 
         Date startDate = DateUtility.addDays(-30);
-        getBidsRecentlyMade(startDate, limit, callback);
+        return getBidsRecentlyMade(startDate, limit, callback);
     }
 
-    public void getBidsRecentlyMade(Callback<List<Bid>> callback) {
+    public Call<List<Bid>> getBidsRecentlyMade(Callback<List<Bid>> callback) {
 
         int limit = 100;
-        getBidsRecentlyMade(limit, callback);
+        return getBidsRecentlyMade(limit, callback);
     }
 
     /**
      * Persisted
      **/
+
+    public RealmResults<Bid> fetchBidsByCompany(long companyID, String sortFilter, Sort sort) {
+
+        return realm.where(Bid.class)
+                .equalTo("companyId", companyID)
+                .findAllSorted(sortFilter, sort);
+    }
+
+    public RealmResults<Bid> fetchBidsByCompanyLessThanDate(long companyID, String sortFilter, Sort sort, Date cutoffDate) {
+
+        return realm.where(Bid.class)
+                .lessThan("project.bidDate", cutoffDate)
+                .equalTo("companyId", companyID)
+                .findAllSorted(sortFilter, sort);
+    }
+
+    public RealmResults<Bid> fetchBidsByCompanyGreaterThanDate(long companyID, String sortFilter, Sort sort, Date cutoffDate) {
+
+        return realm.where(Bid.class)
+                .greaterThanOrEqualTo("project.bidDate", cutoffDate)
+                .equalTo("companyId", companyID)
+                .findAllSorted(sortFilter, sort);
+    }
 
     public RealmResults<Bid> fetchBids(Date cutoffDate) {
 
@@ -177,6 +205,16 @@ public class BidDomain {
         return bids;
     }
 
+    public Company getBidCompany(long companyID) {
+
+        return realm.where(Company.class).equalTo("id", companyID).findFirst();
+    }
+
+    public Project getBidProject(long projectID) {
+
+        return realm.where(Project.class).equalTo("id", projectID).findFirst();
+    }
+
     public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
 
 
@@ -227,6 +265,17 @@ public class BidDomain {
         List<Bid> persistedBids = realm.copyToRealmOrUpdate(bids);
         realm.commitTransaction();
         return persistedBids;
+    }
+
+    public void asyncCopyToRealm(final List<Bid> bids, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                realm.copyToRealmOrUpdate(bids);
+            }
+        }, onSuccess, onError);
     }
 
     /**

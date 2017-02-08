@@ -8,19 +8,19 @@
         <item name="colorAccent">@color/lecetLightBlue</item>
         <item name="android:windowBackground">@color/pureWhite</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back_button</item>
+        <item name="android:configChanges">orientation</item>
+        <item name="android:screenOrientation">portrait</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light">
+    <style name="AppTheme.FullScreen" parent="AppTheme">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:screenOrientation">portrait</item>
     </style>
 
 

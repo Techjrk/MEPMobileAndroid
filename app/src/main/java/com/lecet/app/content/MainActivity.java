@@ -113,13 +113,9 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         setupToolbar();
 
         if (isNetworkConnected()) {
-            searchDomain.generateRealmStageList();
-            searchDomain.generateRealmProjectTypesList();
-            searchDomain.generateRealmJurisdictionList();
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
-            viewModel.getTrackingLists();
         }
     }
 
@@ -131,7 +127,6 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
-            viewModel.getTrackingLists();
         }
     }
 

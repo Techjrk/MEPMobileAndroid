@@ -67,7 +67,7 @@ public class ChangePasswordViewModel extends BaseObservable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-        notifyPropertyChanged(BR.currentPassword);
+        notifyPropertyChanged(BR.newPassword);
     }
 
     @Bindable
@@ -77,7 +77,7 @@ public class ChangePasswordViewModel extends BaseObservable {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-        notifyPropertyChanged(BR.currentPassword);
+        notifyPropertyChanged(BR.confirmPassword);
     }
 
 
@@ -89,12 +89,7 @@ public class ChangePasswordViewModel extends BaseObservable {
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         saveButton = (TextView) toolbar.findViewById(R.id.save_text_view);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClick(v);
-            }
-        });
+        backButton.setVisibility(View.INVISIBLE);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +136,7 @@ public class ChangePasswordViewModel extends BaseObservable {
 
         dismissAlertDialog();
 
-        boolean confirmedPassword = isConfirmPasswordValid(newPassword, currentPassword);
+        boolean confirmedPassword = isConfirmPasswordValid(newPassword, confirmPassword);
 
         if (isCurrentPasswordValid() && isNewPasswordValid() && confirmedPassword) {
 
