@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
-
-import com.lecet.app.R;
 import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
@@ -25,39 +23,25 @@ public class SearchItemRecentViewModel extends BaseObservable {
     private Company company;
     private Contact contact;
     private String mapsApiKey;
-//    private SearchViewModel viewModel;
     private boolean isClientLocation2;
 
-    /**
-     * old code - for reference
-     * public SearchItemRecentViewModel(Project project, String mapsApiKey) {
-     * this.project = project;
-     * this.mapsApiKey = mapsApiKey;
-     * }
-     */
     public SearchItemRecentViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
-    //    this.viewModel = viewModel;
-        // this.company=null;
     }
 
     public SearchItemRecentViewModel(Company company, String mapsApiKey) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
-    //    this.viewModel = viewModel;
-        //   this.project =null;
     }
 
     public SearchItemRecentViewModel(Contact contact) {
         this.contact = contact;
-     //   this.viewModel = viewModel;
+        //   this.viewModel = viewModel;
     }
-
 
     ////////////////////////////////////
     // PROJECT
-
 
     public String getTitle() {
         //    if (project == null) return "Unknown";
@@ -87,8 +71,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
     @Bindable
     public void setIsClientLocation2(boolean clientLocation2) {
         isClientLocation2 = clientLocation2;
-//    notifyPropertyChanged(isClientLocation2);
-
     }
 ////////////////////////////////////
     // COMPANY
@@ -205,64 +187,36 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
         return null;
     }
-/*    public String getMapUrl(Company company) {
-        CompanyDetailActivity activity = activityWeakReference.get();
-        String mapStr;
-        StringBuilder sb2 = new StringBuilder();
-        sb2.append("https://maps.googleapis.com/maps/api/staticmap");
-        sb2.append("?center=");
-        sb2.append(company.getAddress1() + ",");
-        sb2.append(company.getAddress2() + ",");
-        sb2.append(company.getCity() + ",");
-        sb2.append(company.getState());
-        sb2.append("&zoom=16");
-        sb2.append("&size=200x200");
-        sb2.append("&markers=color:blue|");
-        sb2.append("&key=" + activity.getString(R.string.google_maps_key));
-        mapStr = String.format((sb2.toString().replace(' ', '+')), null);
-        return mapStr;
-    }*/
 
     ////////////////////////////////////
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
-//           Toast.makeText(viewModel.getActivity(), "onClick: \nProject saved detail section", Toast.LENGTH_SHORT).show();
         if (project == null) {
-            onCompanyClick(view); return;
+            onCompanyClick(view);
+            return;
         }
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
-//        viewModel.getActivity().startActivity(intent);
         view.getContext().startActivity(intent);
     }
 
     public void onProjectClick(View view) {
-        //  Toast.makeText(viewModel.getActivity(), "onClick: \nProject detail section", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
-        //       viewModel.getActivity().startActivity(intent);
         view.getContext().startActivity(intent);
-
     }
 
     public void onCompanyClick(View view) {
-
-        // Toast.makeText(viewModel.getActivity(), "onClick: \nCompany detail section", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
-//        viewModel.getActivity().startActivity(intent);
         view.getContext().startActivity(intent);
     }
 
     public void onContactClick(View view) {
         Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
         intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
-//        viewModel.getActivity().startActivity(intent);
         view.getContext().startActivity(intent);
-        //   Log.d("Contact id","Contact id"+contact.getId());
-        //   Log.d("cid","cid"+contact.getCompanyId());
-        //    Toast.makeText(viewModel.getActivity(), "onClick: Contact detail section"+contact.getId(), Toast.LENGTH_SHORT).show();
     }
 
 }
