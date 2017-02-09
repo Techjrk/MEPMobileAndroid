@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -76,10 +75,8 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {  //TODO - the region IDs are not appearing in the stored realmJurisdictions list
+            public void execute(Realm realm) {
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d(TAG, "realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d(TAG, "realmJurisdictions list: " + realmJurisdictions);
             }
         });
     }
@@ -96,13 +93,12 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
     /**
      * Set the selected Jurisdiction data in the bundle based on the checked selection. Support single selection, not multiple.
+     *
      * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, or 2=grandchild)
      * @id The Jurisdiction ID. Each has its own ID starting at 0.
      * Note: While 'name' usually looks like an int, it needs to be a String to support variant names like '18A'
      */
     public void setJurisdictionData(int viewType, int id, int regionId, String name, String abbreviation, String longName) {
-        Log.d(TAG, "setJurisdictionData: viewType: " + viewType + ", id: " + id + ", regionId: " + regionId + ", name: " + name + ", abbreviation: " + abbreviation + ", longName: " + longName);
-
         // overwrite the Bundle instance with each selection since Jurisdiction only supports single-selection
         bundle = new Bundle();
         setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
@@ -181,7 +177,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
             if (children != null) {
                 parent.setChildren(children);
-                Log.d("parent1 added", "parent1 added");
             }
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
@@ -203,7 +198,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
                     hasChild = true;
                     foundChild = true;
-                    Log.d("foundChild", "foundChild" + child.getName());
                 }
                 if (dcouncil.getLocals() != null) {
 
@@ -224,7 +218,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                             if (foundGrandChild || foundChild || foundParent)
                                 grandChildren1.add(grandChild1);
                         }
-//                        if (dclocals !=null)   Log.d("jdcouncillocals","jdcouncillocals = name:"+dclocals.getName()+" id:"+dclocals.getId()+" dcid:"+dclocals.getDistrictCouncilId());
                     }
                     if (child != null && grandChildren1 != null)
                         child.setGrandChildren(grandChildren1);
@@ -232,7 +225,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 if ((foundChild || containGrandChild.contains(true)) || foundParent) {
                     children.add(child);
                     containGrandChild.remove(true);
-                    Log.d("child3 added", "haschild3: " + hasChild + "hasgchild" + hasGrandChild + "child1 added" + child.getName() + " f1:" + foundParent + " f3:" + foundChild + " fdc:" + containGrandChild.contains("dclocal"));
                 }
             }
         }
@@ -251,12 +243,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
                     hasChild = true;
                     foundChild = true;
-                    Log.d("foundChildJurisdiction", "foundChildJurisdiction" + child.getName());
                 }
 
                 if ((foundChild || containGrandChild.contains(true)) || foundParent) {
                     children.add(child);
-                    Log.d("child3 added", "hasndcchild3: " + hasChild + "hasgchild" + hasGrandChild + "child1 added" + child.getName() + " f1:" + foundParent + " f3:" + foundChild + " fdc:" + containGrandChild.contains(true));
                 }
             }
         }
