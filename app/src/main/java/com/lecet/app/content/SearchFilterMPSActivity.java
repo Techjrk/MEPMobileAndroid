@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -291,7 +290,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 if (displayStr != null && displayStr.length() > MAXCHARFIELD)
                     displayStr = "\r\n" + displayStr;
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
-                    if (displayStr == null || displayStr.equals("")) displayStr = "Any";  //default value in Companies project type field
+                    if (displayStr == null || displayStr.equals(""))
+                        displayStr = "Any";  //default value in Companies project type field
                     viewModel.setCtypeSelect(displayStr);
                 } else {
                     viewModel.setPersistedProjectTypeId(displayStr);
@@ -432,11 +432,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 try {
                     jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
                     jurisdictionRegionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_REGION_ID);
-                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
-                }
-                catch (Exception e) {
+                    jurisdictionName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                } catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
                 }
                 if (jurisdictionName == null || jurisdictionName.equals("")) {
@@ -457,62 +456,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
                 List<SearchFilterJurisdictionLocal> locals;
 
-                // add the highest-level Jurisdiction ID
-                //jList.add(jurisdictionId);
                 if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
-
-                    //TODO - look through all nested levels, match the passed bundle Name to an element in a level, and use that item's ID.
-
-
-                    /*if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
-                        // add each District Council ID
-                        for (SearchFilterJurisdictionMain j : realmJurisdictions) {
-                            if (jurisdictionName.equals(j.getName())) {
-                                jList.add(j.getName());
-                                districtCouncils = j.getDistrictCouncils();
-
-                                // add each Local ID
-                                for (SearchFilterJurisdictionDistrictCouncil dc : districtCouncils) {
-                                    if (dc != null) {
-                                        jList.add(dc.getName());
-                                        locals = dc.getLocals();
-                                        for (SearchFilterJurisdictionLocal local : locals) {
-                                            if (local != null) {
-                                                jList.add(local.getName());
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-
-                    //TODO - correct this section
-                    else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
-                        // look for matching District Council ID
-                        for (SearchFilterJurisdictionMain j : realmJurisdictions) {
-                            districtCouncils = j.getDistrictCouncils();
-                            for (SearchFilterJurisdictionDistrictCouncil dc : districtCouncils) {
-                                if (dc != null) {
-                                    jList.add(dc.getName());
-                                    if (jurisdictionName.equals(dc.getName())) {
-                                        locals = dc.getLocals();
-                                        for (SearchFilterJurisdictionLocal local : locals) {
-                                            if (local != null) {
-                                                jList.add(local.getName());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    //TODO - implement this section
-                    else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
-
-                    }*/
 
                     Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
                     Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdictionName);
@@ -545,7 +489,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 String viewType = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE);  // view type (parent, child, grandchild)
                 String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);       // text display
-                String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);         // ID                   //TODO - use this ID for name/id lookup rather than name?
+                String stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);         // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String stages = "";
                 if (stageStr == null || stageStr.equals("")) stageStr = "Any";
                 viewModel.setPersistedStage(stageStr);
@@ -556,18 +500,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 sList.add(stageId);
                 if (stageStr != null && !stageStr.trim().equals("")) {
 
-                    // add each child Stage ID  // removed: only support single selection of Stage type
-                    /*for (ProjectStage parentStage : realmStages) {
-                        if (stageStr.equals(parentStage.getName())) {
-                            List<ProjectStage> childStages = parentStage.getChildStages();
-                            for (ProjectStage childStage : childStages) {
-                                if (childStage != null) {
-                                    sList.add(Long.toString(childStage.getId()));
-                                }
-                            }
-                            break;
-                        }
-                    }*/
                     Log.d("SearchFilterMPSAct", "processStage: input Stage name: " + stageStr);
                     Log.d("SearchFilterMPSAct", "processStage: parent and child Stage IDs: " + sList);
 
