@@ -23,13 +23,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
 import com.lecet.app.adapters.MTMMenuAdapter;
 import com.lecet.app.adapters.OverflowMenuAdapter;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.CompanyTrackingList;
@@ -66,7 +65,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -77,7 +75,7 @@ import io.realm.RealmChangeListener;
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
  */
-public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
+public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivitySettingsBinding;
@@ -22,7 +22,7 @@ import io.realm.Realm;
  * SettingsActivity Created by jasonm on 8/17/16.
  */
 
-public class SettingsActivity extends NavigationBaseActivity {
+public class SettingsActivity extends LecetBaseActivity {
 
     private final String TAG = "SettingsActivity";
 

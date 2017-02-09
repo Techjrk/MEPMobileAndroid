@@ -14,7 +14,4 @@
     <!-- Content -->
     <include layout="@layout/content_company_detail_project_bids"/>
 
-    <!-- Sliding Drawer Menu -->
-    <include layout="@layout/include_menu_drawer_layout"/>
-
 </android.support.design.widget.CoordinatorLayout>

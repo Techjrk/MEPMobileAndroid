@@ -2,16 +2,13 @@ package com.lecet.app.content;
 
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -20,7 +17,7 @@ import com.lecet.app.viewmodel.ProjectsBiddersViewModel;
 
 import io.realm.Realm;
 
-public class ProjectBiddersActivity extends NavigationBaseActivity {
+public class ProjectBiddersActivity extends LecetBaseActivity {
 
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectBiddersActivity.project.id.extra";
 

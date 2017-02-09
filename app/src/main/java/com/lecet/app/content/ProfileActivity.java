@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProfileBinding;
@@ -24,7 +24,7 @@ import io.realm.Realm;
  * Created by jasonm on 8/18/16.
  */
 
-public class ProfileActivity extends NavigationBaseActivity {
+public class ProfileActivity extends LecetBaseActivity {
 
     private final String TAG = "ProfileActivity";
 

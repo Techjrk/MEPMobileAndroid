@@ -13,7 +13,4 @@
     <!-- Content -->
     <include layout="@layout/content_update_profile"/>
 
-    <!-- Sliding Drawer Menu -->
-    <include layout="@layout/include_menu_drawer_layout"/>
-
 </android.support.design.widget.CoordinatorLayout>
