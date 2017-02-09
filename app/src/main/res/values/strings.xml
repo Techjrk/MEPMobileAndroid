@@ -96,9 +96,10 @@
     <string name="at_least_six_char">At least 6 characters</string>
     <string name="please_enter_current_password">Please enter your current password.</string>
     <string name="invalid_password_title">Invalid password</string>
-    <string name="invalid_password_message">Please enter a valid password.</string>
+    <string name="invalid_password_message">Please enter a valid password</string>
     <string name="password_mismatch">The entered passwords do not match</string>
     <string name="password_confirm_message">Are you sure you want to change your password?</string>
+    <string name="change_password_success">Change password has been successful</string>
 
 
     <!-- Company Detail: Project Bids List -->

@@ -184,6 +184,8 @@ public class ChangePasswordViewModel extends BaseObservable {
 
                     dismissProgressDialog();
 
+                    showCancelAlertDialog(context.getString(R.string.app_name), context.getString(R.string.change_password_success));
+
                 } else {
 
                     dismissProgressDialog();
