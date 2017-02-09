@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.DetailFooterViewModel"/>
+    </data>
+
+    <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerInParent="true">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@{viewModel.title}"
+                      android:textColor="@color/lecetFooterGray"
+                      tools:text="See all 34 Bids"
+                      bind:typeface="@{`Lato-Black.ttf`}"/>
+
+            <ImageView android:layout_width="8dp"
+                       android:layout_height="12dp"
+                       android:layout_gravity="center"
+                       android:layout_marginLeft="5dp"
+                       android:src="@drawable/down_chevron"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>
+

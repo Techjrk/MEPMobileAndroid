@@ -1,13 +1,16 @@
 package com.lecet.app.domain;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.api.request.CreateUserRequest;
-import com.lecet.app.data.api.response.UserResponse;
+import com.lecet.app.data.api.request.ChangePasswordRequest;
+import com.lecet.app.data.api.request.UpdateUserProfileRequest;
+import com.lecet.app.data.models.Access;
+import com.lecet.app.data.models.User;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
+import io.realm.Realm;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -18,35 +21,96 @@ import retrofit2.Callback;
  */
 public class UserDomain {
 
-    private final Context context;
     private final LecetClient lecetClient;
+    private final LecetSharedPreferenceUtil sharedPreferenceUtil;
+    private final Realm realm;
 
-    public UserDomain(Context context, LecetClient lecetClient) {
-        this.context = context;
+    public UserDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
+        this.sharedPreferenceUtil = sharedPreferenceUtil;
+        this.realm = realm;
     }
+
+    /**
+     * VALIDATION
+     **/
 
     public boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     public boolean isValidPassword(CharSequence target) {
-        return !TextUtils.isEmpty(target) && target.length() > 1;
+        return !TextUtils.isEmpty(target) && target.length() >= 6;
     }
 
     public boolean isNameValid(CharSequence target) {
         return !TextUtils.isEmpty(target) && target.length() > 1;
     }
 
-    public void postUser(@NonNull CreateUserRequest user, Callback<UserResponse> callback) {
+    /**
+     * API
+     **/
 
-        Call<UserResponse> call = lecetClient.getUserService().create(user);
+    public void login(String email, String password, Callback<Access> callback) {
+
+        Call<Access> call = lecetClient.getUserService().login(email, password);
         call.enqueue(callback);
     }
 
-    public void getUserByEmail(@NonNull String token, @NonNull String email, Callback<UserResponse> callback) {
+    public void getUser(long userId, Callback<User> callback) {
 
-        Call<UserResponse> call = lecetClient.getUserService().userByEmail(token, email);
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        Call<User> call = lecetClient.getUserService().getUser(token, userId);
         call.enqueue(callback);
+    }
+
+    public void updateUser(UpdateUserProfileRequest user, Callback<User> callback) {
+
+        // Passing a Realm object directly doesn't seem to work in Retrofit due to variable
+        // lazy loading.
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        Call<User> call = lecetClient.getUserService().updateUser(token, user.getId(), user);
+        call.enqueue(callback);
+    }
+
+    public void logout(Callback<ResponseBody> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ResponseBody> call = lecetClient.getUserService().logout(token);
+        call.enqueue(callback);
+    }
+
+    public void changePassword(String oldPassword, String newPassword, String confirmPassword, Callback<User> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<User> call = lecetClient.getUserService().changePassword(token, fetchLoggedInUser().getId(), oldPassword, newPassword, confirmPassword);
+        call.enqueue(callback);
+    }
+
+    /**
+     * Persisted
+     **/
+
+    public User copyToRealmTransaction(User user) {
+
+        realm.beginTransaction();
+        User persistedUser = realm.copyToRealmOrUpdate(user);
+        realm.commitTransaction();
+
+        return persistedUser;
+    }
+
+    public User fetchUser(long userID) {
+
+        return realm.where(User.class).equalTo("id", userID).findFirst();
+    }
+
+    public User fetchLoggedInUser() {
+
+        long userId = sharedPreferenceUtil.getId();
+
+        return fetchUser(userId);
     }
 }

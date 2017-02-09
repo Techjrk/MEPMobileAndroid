@@ -1,14 +1,56 @@
 <resources>
     <string name="app_name">Lecet</string>
 
+    <!-- API Keyts -->
+    <string name="google_maps_key">AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU</string>
+
     <!-- Common -->
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="add_photo">Add Photo</string>
     <string name="email">Email</string>
+    <string name="email_address">Email Address</string>
     <string name="phone">Phone</string>
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
+    <string name="county">County</string>
+    <string name="project_id">Project ID</string>
+    <string name="project_type">Project Type</string>
+    <string name="est_low">Est. Low</string>
+    <string name="stage">STAGE</string>
+    <string name="notes">Notes</string>
+    <string name="participants">Participants</string>
+    <string name="architects">Architects</string>
+    <string name="owner">Owner</string>
+    <string name="project_bidders">Project Bidders</string>
+    <string name="architect">Architect</string>
+    <string name="see_all">See All</string>
+    <string name="updating">Updating..</string>
+    <string name="est_high">Est. High</string>
+    <string name="date_added">Date Added</string>
+    <string name="bid_date">Bid Date</string>
+    <string name="last_updated">Last Updated</string>
+    <string name="value">Value</string>
+    <string name="jurisdiction">Jurisdiction</string>
+    <string name="b_h">B/H</string>
+    <string name="bidders">Bidders</string>
+    <string name="bids">Bids</string>
+    <string name="at">at</string>
+    <string name="title">Title</string>
+    <string name="organization">Organization</string>
+    <string name="fax">Fax</string>
+    <string name="street_address">Street Address</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="zip_postal_code">Zip/Postal Code</string>
+    <string name="name">Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="save">Save</string>
+    <string name="min">MIN</string>
+    <string name="max">MAX</string>
+
 
     <!-- Splash, Login & Navigation Base -->
     <string name="title_activity_navigation">Navigation</string>
@@ -16,16 +58,26 @@
     <string name="powered_by_domandtom">Powered by Dom &amp; Tom</string>
     <string name="new_create_account">New? Create an Account</string>
     <string name="login">Login</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up_for_mep_access">
+        <u>Sign Up for MEP Access</u>
+    </string>
 
-    <!-- Create Account -->
-    <string name="title_activity_create_account">Create Account</string>
-    <string name="what_is_your_name">What is your name and email address?</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="email_address">Email Address</string>
-    <string name="this_isnt_correct">This isn\'t correct</string>
-    <string name="we_found_your_account_info">Hi %s, We found your account.</string>
+    <!-- Dashboard -->
+    <string name="title_fragment_bids_recently_made">Bids Recently Made</string>
+    <string name="title_fragment_bids_happening_soon">Bids Happening Soon</string>
+    <string name="title_fragment_projects_recently_added">Projects Recently Added</string>
+    <string name="title_fragment_projects_recently_updated">Projects Recently Updated</string>
+    <!--string name="dashboard_bids">BIDS</string-->
+    <string name="dashboard_projects">PROJECTS</string>
+    <string name="dashboard_recently_made">PROJECTS RECENTLY BID</string>
+    <string name="dashboard_happening_soon">PROJECTS BIDDING SOON</string>
+    <string name="dashboard_recently_added">PROJECTS RECENTLY ADDED</string>
+    <string name="dashboard_recently_updated">PROJECTS RECENTLY UPDATED</string>
+    <string name="dashboard_housing">HOUSING</string>
+    <string name="dashboard_engineering">ENGINEERING</string>
+    <string name="dashboard_building">BUILDING</string>
+    <string name="dashboard_utilities">UTILITIES</string>
+    <string name="dashboard_heavy_highway">HEAVY HIGHWAY</string>
 
     <!-- Create Password -->
     <string name="title_activity_create_password">Create Password</string>
@@ -33,24 +85,43 @@
     <string name="title_activity_update_profile">UpdateProfileActivity</string>
     <string name="create_password">Create Password</string>
 
-    <!-- Change Password -->
+    <!-- MST Change Password -->
     <string name="title_activity_change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="update_password">Update Password</string>
+    <string name="current">Current</string>
+    <string name="new_word">New</string>
+    <string name="your_current">Your current password</string>
+    <string name="confirm_new_pass">Confirm new password</string>
+    <string name="at_least_six_char">At least 6 characters</string>
+    <string name="please_enter_current_password">Please enter your current password.</string>
+    <string name="invalid_password_title">Invalid password</string>
+    <string name="invalid_password_message">Please enter a valid password.</string>
+    <string name="password_mismatch">The entered passwords do not match</string>
+    <string name="password_confirm_message">Are you sure you want to change your password?</string>
 
-    <!-- Selection Activity -->
-    <string name="title_activity_selection">Selections</string>
-    <string name="selections_header">Select an Option</string>
-    <string name="selection_item_1_desc">Description for button 1</string>
-    <string name="selection_item_2_desc">Description for button 2</string>
-    <string name="selection_item_3_desc">Description for button 3</string>
-    <string name="selection_bottom_button_1">Bottom Button</string>
 
-    <!-- List 1 -->
-    <string name="title_activity_list_1">List 1</string>
+    <!-- Company Detail: Project Bids List -->
+    <string name="title_activity_company_detail_project_bids">Company Detail: Project Bids</string>
 
-    <!-- List 2 -->
-    <string name="title_activity_list_2">List 2</string>
+    <!-- MPL Project Tracking List -->
+    <string name="title_activity_project_tracking_list">Project Tracking List</string>
+    <string name="new_bid_placed">A new bid has been placed</string>
+    <string name="bid_placed_at">A bid was placed at</string>
+    <string name="new_note_added">A new note has been added</string>
+    <string name="show_updates">Show Updates</string>
+    <string name="edit">EDIT</string>
+    <string name="project">Project</string>
+    <string name="projects">Projects</string>
+    <string name="company">Company</string>
+    <string name="companies">Companies</string>
+
+    <!-- MSE: Search Page -->
+    <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
+    <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
+    <string name="recent">RECENT</string>
+    <string name="last_checked">Last checked</string>
+    <string name="search">Search</string>
 
     <!-- Geofencing -->
     <string name="geofence_transition_invalid_type">Invalid geofence</string>
@@ -58,13 +129,6 @@
     <string name="geofence_too_many_geofences">Too many geofences</string>
     <string name="geofence_too_many_pending_intents">Too many pending intents</string>
     <string name="geofence_unknown_error">Unknown geofence error</string>
-
-    <!-- Add Payment -->
-    <string name="title_activity_add_payment">Add Payment</string>
-    <string name="add_payment_info">Add Payment Info</string>
-    <string name="add_payment_option">Add Payment Option</string>
-    <string name="add_payment_info_details">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="ill_do_this_later">I\'ll do this later</string>
 
     <!-- Settings -->
     <string name="title_activity_settings">Settings</string>
@@ -74,6 +138,8 @@
     <!-- Profile -->
     <string name="title_activity_profile">Profile</string>
     <string name="edit_profile">Edit Profile</string>
+
+    <!-- Projects Near Me -->
 
     <!-- Home Fragment -->
     <string name="title_activity_main">Main</string>
@@ -87,14 +153,17 @@
     <!-- Nav Menu -->
     <string name="home">Home</string>
     <string name="profile">Profile</string>
-    <string name="selection">Selection</string>
     <string name="list1">List 1</string>
     <string name="list2">List 2</string>
     <string name="calendar">Calendar</string>
-    <string name="payment">Payment</string>
     <string name="settings">Settings</string>
     <string name="reset_password">Reset Password</string>
     <string name="help">Help</string>
+
+    <!-- Share Toolbar -->
+    <string name="track">Track</string>
+    <string name="share">Share</string>
+    <string name="hide">Hide</string>
 
     <!-- Dialogs and Frequently-Used Button Text-->
     <string name="yes">Yes</string>
@@ -104,9 +173,13 @@
     <string name="no">No</string>
     <string name="decline">Decline</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
     <string name="continue_str">Continue</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
+
+    <!-- Dashboard -->
+    <string name="union_mark">N</string>
 
     <!-- Errors -->
     <string name="error_invalid_email">Invalid email</string>
@@ -114,8 +187,134 @@
     <string name="error_first_name">Please enter your first name</string>
     <string name="error_last_name">Please enter your last name</string>
     <string name="error_login_title">Login Error</string>
-    <string name="error_login_message">Please try logging in again.</string>
+    <string name="error_login_message">Please verify your email and password and try again</string>
+    <string name="error_access_denied">You don\’t have permission to access MEP using your account
+    </string>
     <string name="error_network_title">Network Error</string>
-    <string name="error_network_message">Please try again</string>
+    <string name="error_network_message">Please check your internet connection and try again
+    </string>
+    <string name="error_fetching_address">Address not found.</string>
+    <string name="error_unauthorized_user">Invalid Session. Please login again.</string>
+
+    <!-- Web links -->
+    <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
+
+    <!-- Info Window -->
+    <string name="get_directions">Get Directions</string>
+
+    <!-- Projects Near Me Confirm Dialog Fragment -->
+    <string name="confirm_share_your_location_description">This feature is only available\nwhen you
+        share your location\nwith this app. Please tap OK\nwhen prompted.
+    </string>
+    <string name="confirm_enable_your_location_description">This feature is only available\nwhen you
+        share your location\nwith this app.
+    </string>
+    <string name="confirm_share_your_location">SHARE MY LOCATION</string>
+    <string name="confirm_go_to_settings">GO TO SETTINGS</string>
+    <string name="confirm_cancel">CANCEL</string>
+
+    <!-- MTM Menu -->
+    <string name="mtm_menu_number_company">%s Companies</string>
+    <string name="mtm_menu_number_projects">%s Projects</string>
+    <string name="mse_2_0">MSE 2.0</string>
+    <string name="project_query_searches">PROJECTS</string>
+    <string name="company_query_searches">COMPANIES</string>
+    <string name="title_contacts">CONTACTS</string>
+    <string name="time_any">Any</string>
+    <string name="time_next_24_hours">Next 24 Hours</string>
+    <string name="time_next_7_days">Next 7 Days</string>
+    <string name="time_next_30_days">Next 30 Days</string>
+    <string name="time_next_60_days">Next 60 Days</string>
+    <string name="time_next_90_days">Next 90 Days</string>
+    <string name="time_next_6_months">Next 6 Months</string>
+    <string name="time_next_12_months">Next 12 Months</string>
+    <string name="time_last_24_hours">Last 24 Hours</string>
+    <string name="time_last_7_days">Last 7 Days</string>
+    <string name="time_last_30_days">Last 30 Days</string>
+    <string name="time_last_90_days">Last 90 Days</string>
+    <string name="time_last_6_months">Last 6 Months</string>
+    <string name="time_last_12_months">Last 12 Months</string>
+    <string name="heavy_highway">Heavy-Highway</string>
+    <string name="both">Both</string>
+    <string name="building">Building</string>
+    <string name="msecancel">Cancel</string>
+    <string name="msefilters">Filters</string>
+    <string name="mse_bh">B/H</string>
+    <string name="mseapply">Apply</string>
+    <string name="mseprojects">Projects</string>
+    <string name="msecompanies">Companies</string>
+    <string name="mselocation">Location</string>
+    <string name="msetype">Type</string>
+    <string name="msevalue">Value</string>
+    <string name="mseupdated_within">Updated Within</string>
+    <string name="any">Any</string>
+    <string name="msejurisdiction">Jurisdiction</string>
+    <string name="msebidding_within">Bidding Within</string>
+    <string name="msevaluation">Valuation</string>
+    <string name="mse_work_types">Work Types</string>
+    <string name="more_options">More Options</string>
+    <string name="msecompany_location">Company Location</string>
+    <string name="mserelated_projects">Related Projects</string>
+    <string name="no_min_no_max">No Min - No Max</string>
+    <string name="mseproject_type">Project Type</string>
+    <string name="everywhere">Everywhere</string>
+    <string name="all_types">All Types</string>
+    <string name="refine_search">Refine Search</string>
+    <string name="mseb_h">B/H</string>
+    <string name="mseowner_type">Owner Type</string>
+    <string name="msework_type">Work Type</string>
+    <string name="msefewer_options">Fewer Options</string>
+
+    <!-- MTM SortBy Menu -->
+    <string name="mtm_sort_menu_title">Sort by</string>
+
+    <!-- MTM SortBy Activity -->
+    <string name="remove">REMOVE</string>
+    <string name="move">MOVE</string>
+    <string name="x_selected">%s Selected</string>
+    <string name="move_to">Move to</string>
+
+    <!-- MTM Confirmation -->
+    <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s</string>
+    <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s</string>
+
+    <!-- Share -->
+    <string name="share_project">Share Project Details</string>
+    <string name="share_company">Share Company Details</string>
+    <string name="you_are_about_hide">You are about to hide this %s</string>
+    <string name="you_are_about_unhide">You are about to unhide this %s</string>
+    <string name="hide_blank">HIDE %s</string>
+    <string name="unhide_blank">UNHIDE %s</string>
+
+    <!-- MCD -->
+    <string name="associated_projects">Associated Projects</string>
+    <string name="contacts">Contacts</string>
+    <string name="project_bids">Project Bids</string>
+    <string name="total_projects">Total Projects</string>
+    <string name="total_valuation">Total Valuation</string>
+    <string name="title_activity_company_detail">CompanyDetailActivity</string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
+    </string>
+    <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
+    <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
+    <string name="bid_tab_title_past">%d Past</string>
+    <string name="bid_tab_title_upcoming">%d Upcoming</string>
+
+    <!-- MPR Profile -->
+    <string name="my_profile">My Profile</string>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="logging_out">Logging out...</string>
+    <string name="notifications">Notifications</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="profile_error_message">Please enter your %s</string>
+    <string name="title_activity_hidden_projects">HiddenProjectsActivity</string>
+
+    <!-- MHD Hidden Projects -->
+    <string name="hidden_projects_title">Hidden Projects</string>
+    <string name="hidden_projects_sub_title">%d Hidden Projects</string>
+    <string name="unhide">Unhide</string>
+    <string name="title_activity_location_detail_map">LocationDetail</string>
+    <string name="title_activity_company_project_bids">CompanyProjectBidsActivity</string>
+
 
 </resources>

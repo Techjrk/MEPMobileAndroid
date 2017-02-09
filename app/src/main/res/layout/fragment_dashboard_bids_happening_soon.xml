@@ -1,0 +1,69 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.CalendarViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context="com.lecet.app.content.CalendarFragment">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/bids_happening_soon_text_view"
+                style="@style/DashboardText.Subtitle"
+                android:text="@={viewModel.bidsHappeningSoon}"
+                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+            <TextView
+                style="@style/DashboardText.Subtitle"
+                android:layout_marginLeft="8dp"
+                android:text="@string/dashboard_happening_soon" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/calendar_width"
+            android:layout_height="@dimen/calendar_height"
+            android:layout_marginTop="21dp"
+            android:background="@drawable/calendar_days_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/month_text_view"
+                style="@style/CommonText.Light.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/calendar_month_container_height"
+                android:background="@drawable/calendar_month_background"
+                android:gravity="center"
+                android:text="@={viewModel.month}"
+                android:textColor="@color/lecetTextWhite"
+                bind:typeface="@{`Lato-Regular.ttf`}" />
+
+            <com.lecet.app.content.widget.LecetCalendar
+                android:id="@+id/calendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:monthDayHorizontalSpacing="@dimen/calendar_horizontal_spacing"
+                app:monthDayVerticalSpacing="@dimen/calendar_vertical_spacing"
+                app:showDatesOutsideMonth="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

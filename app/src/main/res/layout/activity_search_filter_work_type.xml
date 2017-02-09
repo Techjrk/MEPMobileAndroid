@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchFilterWorkTypeViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lecet.app.content.SearchFilterWorkTypeActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/lecetDarkestBlue">
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="15dp"
+                    android:background="@null"
+                    android:onClick="@{viewModel.onCancelButtonClick}"
+                    android:text="@string/cancel"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="2"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:text="@string/mse_work_types"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <Button
+                    android:id="@+id/apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:width="30dp"
+                    android:background="@null"
+                    android:onClick="@{viewModel.onApplyButtonClick}"
+                    android:text="APPLY"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="15sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+            </LinearLayout>
+
+            <!-- WORK TYPE DETAIL SECTION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+                        android:id="@+id/workadditions"
+                        style="@style/SearchFilterSectionButton"
+                        android:text="Additions"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                </RelativeLayout>
+
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+                        android:id="@+id/workalterations"
+                        style="@style/SearchFilterSectionButton"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="Alterations"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                </RelativeLayout>
+
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+                        android:id="@+id/workinteriors"
+                        style="@style/SearchFilterSectionButton"
+                        android:text="Interiors"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+                </RelativeLayout>
+
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+                        android:id="@+id/worknewproject"
+                        style="@style/SearchFilterSectionButton"
+                        android:text="New Project"
+                        android:onClick="@{viewModel.onSelected}"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                </RelativeLayout>
+
+                <!-- Horizontal Separator -->
+                <include layout="@layout/rule_horiz_light" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

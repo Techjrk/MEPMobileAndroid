@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <!-- GRANDCHILD ITEM SECTION -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/j_grandchild"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                bind:typeface="@{`Lato-Bold.ttf`}" />
+
+            <ImageView
+                style="@style/ImageDownArrow"
+                android:visibility="gone" />
+        </RelativeLayout>
+        <!-- Horizontal Separator -->
+        <include layout="@layout/rule_horiz_light" />
+    </LinearLayout>
+
+</layout>

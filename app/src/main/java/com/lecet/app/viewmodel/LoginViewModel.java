@@ -5,15 +5,18 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.content.CreateAccountActivity;
+import com.lecet.app.content.DashboardIntermediaryActivity;
 import com.lecet.app.content.MainActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Access;
+import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.domain.LoginDomain;
+import com.lecet.app.domain.UserDomain;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,20 +27,20 @@ import retrofit2.Response;
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class LoginViewModel extends BaseObservable {
+public class LoginViewModel extends BaseObservableViewModel {
 
-    private final AppCompatActivity activity;
-    private final LoginDomain loginDomain;
+    private static final String TAG = "LoginViewModel";
+
+    private final UserDomain userDomain;
 
     private String email;
     private String password;
     private boolean emailValid;
     private boolean passwordValid;
 
-    public LoginViewModel(AppCompatActivity activity, LoginDomain ld) {
-
-        this.activity = activity;
-        this.loginDomain = ld;
+    public LoginViewModel(AppCompatActivity activity, UserDomain ld) {
+        super(activity);
+        this.userDomain = ld;
     }
 
     @Bindable
@@ -86,61 +89,133 @@ public class LoginViewModel extends BaseObservable {
 
     public void onLoginClicked(View view) {
 
-        emailValid = loginDomain.isValidEmail(email);
-        passwordValid = loginDomain.isValidPassword(password);
+        setEmailValid(userDomain.isValidEmail(email));
+        setPasswordValid(userDomain.isValidPassword(password));
 
         if (emailValid && passwordValid) {
 
-            loginDomain.login(email, password, new Callback<Access>() {
+            userDomain.login(email, password, new Callback<Access>() {
                 @Override
                 public void onResponse(Call<Access> call, Response<Access> response) {
 
                     if (response.isSuccessful()) {
 
-                        Access r = response.body();
-                        LecetSharedPreferenceUtil.getInstance(activity).setAccessToken(r.getAccessToken());
-                        LecetSharedPreferenceUtil.getInstance(activity).setRefreshToken(r.getRefreshToken());
+                        if (isActivityAlive()) {
 
-                        Intent intent = new Intent(activity, MainActivity.class);
-                        activity.startActivity(intent);
-                        activity.finish();
+                            Access r = response.body();
+
+                            AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+
+                            // Store "ID" variable as session token and "userID" as
+                            LecetSharedPreferenceUtil sharedPreferenceUtil = LecetSharedPreferenceUtil.getInstance(appCompatActivity.getApplication());
+                            sharedPreferenceUtil.setAccessToken(r.getId());
+                            sharedPreferenceUtil.setId(r.getUserId());
+
+                            getUser(r.getUserId());
+                        }
 
                     } else {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(activity.getString(R.string.error_login_title));
-                        builder.setMessage(activity.getString(R.string.error_login_message));
-                        builder.setNegativeButton(activity.getString(R.string.ok), null);
+                        if (isActivityAlive()) {
 
-                        builder.show();
+                            AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+                            String title = appCompatActivity.getString(R.string.error_login_title);
+                            String message = appCompatActivity.getString(R.string.error_login_message);
+                            showCancelAlertDialog(title, message);
+                        }
+
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Access> call, Throwable t) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(activity.getString(R.string.error_network_title));
-                    builder.setMessage(activity.getString(R.string.error_network_message));
-                    builder.setNegativeButton(activity.getString(R.string.ok), null);
+                    if (isActivityAlive()) {
 
-                    builder.show();
+                        AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+                        String title = appCompatActivity.getString(R.string.error_network_title);
+                        String message = appCompatActivity.getString(R.string.error_network_message);
+                        showCancelAlertDialog(title, message);
+                    }
+
                 }
             });
+        } else {
+
+            if (isActivityAlive()) {
+
+                if (!emailValid) {
+
+                    AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+                    String title = appCompatActivity.getString(R.string.error_login_title);
+                    String message = appCompatActivity.getString(R.string.error_invalid_email);
+                    showCancelAlertDialog(title, message);
+
+                } else if (!passwordValid) {
+
+                    AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+                    String title = appCompatActivity.getString(R.string.error_login_title);
+                    String message = appCompatActivity.getString(R.string.error_invalid_password_length);
+                    showCancelAlertDialog(title, message);
+                }
+
+            }
         }
     }
 
     public String emailErrorMessage() {
-        return activity.getString(R.string.error_invalid_email);
+        return getActivityWeakReference().get().getString(R.string.error_invalid_email);
     }
 
-    public void onForgotPasswordClicked(View view) {
+    public void getUser(long userId) {
 
-    }
+        userDomain.getUser(userId, new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
 
-    public void onCreateAccountClicked(View view) {
+                if (response.isSuccessful()) {
 
-        Intent intent = new Intent(activity, CreateAccountActivity.class);
-        activity.startActivity(intent);
+                    if (isActivityAlive()) {
+
+                        AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+
+                        User r = response.body();
+                        userDomain.copyToRealmTransaction(r);
+
+                        Intent intent = new Intent(appCompatActivity, DashboardIntermediaryActivity.class);
+                        appCompatActivity.startActivity(intent);
+                        appCompatActivity.finish();
+                    }
+
+                } else {
+
+                    if (isActivityAlive()) {
+
+                        if (isSessionUnauthorized(response)) {
+
+                            displayUnauthorizedUserDialog();
+                        }
+
+                        AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+                        String title = appCompatActivity.getString(R.string.error_login_title);
+                        String message = appCompatActivity.getString(R.string.error_access_denied);
+                        showCancelAlertDialog(title, message);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+                if (isActivityAlive()) {
+
+                    AppCompatActivity appCompatActivity = getActivityWeakReference().get();
+                    String title = appCompatActivity.getString(R.string.error_login_title);
+                    String message = appCompatActivity.getString(R.string.error_network_message);
+                    showCancelAlertDialog(title, message);
+                }
+            }
+        });
     }
 }

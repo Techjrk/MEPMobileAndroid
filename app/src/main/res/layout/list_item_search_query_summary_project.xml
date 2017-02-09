@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchItemRecentViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="6dp"
+                  android:layout_marginRight="6dp"
+                  android:layout_marginTop="6dp"
+                  android:paddingBottom="6dp"
+                  android:background="@drawable/shape_rect_list_item_bg_1">
+
+        <!-- Details Map and Text Layout -->
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:onClick="@{viewModel.onProjectClick}">
+
+            <!-- Map Image -->
+            <ImageView
+                    android:id="@+id/query_map_section_view"
+                    style="@style/ListItemProjectTrackingImage.DetailMap"
+                    bind:imageUrl="@{viewModel.mapUrl}"/>
+
+            <!-- Details -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="12dp">
+
+                <TextView
+                        android:id="@+id/project_name"
+                        tools:text="Parks Building"
+                        style="@style/ListItemProjectTrackingTextView.Title"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        android:text="@{viewModel.title}"/>
+
+                <!-- Location -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:orientation="horizontal">
+
+                    <ImageView
+                            style="@style/ListItemProjectTrackingImage.DetailIcon"
+                            android:src="@mipmap/ic_bid_location"/>
+
+                    <TextView
+                            android:id="@+id/location"
+                            tools:text="Tampa, FL"
+                            style="@style/ListItemProjectTrackingTextView.Detail1"
+                            bind:typeface="@{`Lato-Regular.ttf`}"
+                            android:text="@{viewModel.clientLocation}"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Horizontal Separator -->
+        <include layout="@layout/rule_horiz_light"/>
+
+    </LinearLayout>
+
+</layout>
+

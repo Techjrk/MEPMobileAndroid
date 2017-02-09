@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.BaseDashboardChartViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        >
+
+        <!-- H -->
+        <LinearLayout
+            android:id="@+id/button_h"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/dashboard_button_left_background_selector"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:onClick="@{viewModel.onButtonClickH}">
+
+            <ImageView
+                style="@style/DashboardChartButtonImage"
+                android:src="@drawable/ic_engineering" />
+
+            <TextView
+                style="@style/DashboardChartButtonText"
+                android:text="@string/dashboard_heavy_highway"
+                android:textColor="@color/lecetDarkOrange"/>
+        </LinearLayout>
+
+        <!-- B -->
+        <LinearLayout
+            android:id="@+id/button_b"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/dashboard_button_right_background_selector"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:onClick="@{viewModel.onButtonClickB}">
+
+            <ImageView
+                style="@style/DashboardChartButtonImage"
+                android:src="@drawable/ic_building" />
+
+            <TextView
+                style="@style/DashboardChartButtonText"
+                android:text="@string/dashboard_building"
+                android:textColor="@color/lecetLightBlue"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

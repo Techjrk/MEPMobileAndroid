@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.BaseDashboardChartViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        tools:context="com.lecet.app.content.MainActivity">
+
+        <LinearLayout
+            android:id="@+id/chart_layout"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <include layout="@layout/include_dashboard_titles"
+                     bind:viewModel="@{viewModel}"/>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pie_chart_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include layout="@layout/include_dashboard_chart_buttons"
+                     bind:viewModel="@{viewModel}"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="108dp">
+
+            <include layout="@layout/include_dashboard_chart_icons"
+                     bind:viewModel="@{viewModel}"/>
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+</layout>

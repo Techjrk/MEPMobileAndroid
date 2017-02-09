@@ -2,34 +2,54 @@
 <resources>
 
     <!-- Brand Color Palette -->
-    <color name="lecetWhite">#ffffff</color>
-    <color name="lecetLightGray">#d1d2d4</color>
-    <color name="lecetMediumGray">#939599</color>
-    <color name="lecetDarkGray">#48484a</color>
-    <color name="lecetBlack">#000000</color>
-    <color name="lecetLightOrange">#fcbc6c</color>
-    <color name="lecetMediumOrange">#f6882f</color>
-    <color name="lecetDarkOrange">#f26b2a</color>
+    <color name="lecetTextWhite">#ffffff</color>
+    <color name="lecetTextLightGray">#939599</color>
+    <color name="lecetTextMediumGray">#48484a</color>
+    <color name="lecetTextDarkGray">#222222</color>
 
+    <color name="lecetLightBlue">#A8C3E6</color>
+    <color name="lecetLightBlueTransp">#88A8C3E6</color>
+    <color name="lecetMediumBlue">#4C91D1</color>
+    <color name="lecetButtonDarkBlue">#08497C</color>
+    <color name="lecetButtonDarkerBlue">#08497C</color>
+    <color name="lecetNavyBlue">#073064</color>
+    <color name="lecetDarkestBlue">#09274E</color>
+    <color name="lecetNavyBlueTransp">#AA073064</color>
+    <color name="lecetDeepBlueTransp">#88001636</color>
+    <color name="lecetShareBlue">#003872</color>
+    <color name="lacetLightBlueTitleBackground">#8CA8BF</color>
+    <color name="lacetLightBlueTitleColor">#A8C3E6</color>
+    <color name="lecetModifyToolbarBlue">#0a2851</color>
+    <color name="lecetDetailHeaderBlue">#13568D</color>
+    <color name="lecetSpannableBlue">#4C91D1</color>
+    <color name="lecetUnhideBlue">#003F72</color>
+    <color name="lecetHideBlue">#A8C3E6</color>
+
+
+    <color name="lecetLightOrange">#FCB76C</color>
+    <color name="lecetMediumOrange">#F8AD40</color>
+    <color name="lecetDarkOrange">#F8981C</color>
+
+    <color name="lecetMapRed">#C30A0A</color>
+    <color name="lecetMapGreen">#4D870A</color>
+
+    <color name="lecetLighterGray">#DDDDDD</color>
+    <color name="lecetLightGray">#9FA4A6</color>
+    <color name="lecetBidGray">#f5f5f5</color>
+    <color name="lecetBorderGray">#c5c5c5</color>
+    <color name="lecetFooterGray">#797878</color>
+    <color name="lecetProfileTitleGray">#959595</color>
 
     <!-- Other Colors -->
-    <!--color name="colorWhite">#FFFFFF</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorMineShaft">#2C2C2C</color>
-    <color name="colorChristie">#57B116</color>
-    <color name="colorSilver">#cdcdcd</color>
-    <color name="colorGray">#888686</color>
-    <color name="colorWildSand">#F6F6F6</color>
-    <color name="colorHintOfRed">#FCFAFA</color>
-    <color name="colorTuatara">#3A3A39</color>
-    <color name="colorAthensGrey">#F9FAFB</color>
-    <color name="colorGorse">#F7FC52</color>
-    <color name="colorDoveGray">#737373</color>
-    <color name="colorLima">#75eb1f</color>
-    <color name="colorSeashell">#f1f0f0</color>
-    <color name="colorMercury">#e7e6e6</color>
-    <color name="colorDustyGray">#9b9a9a</color>
-    <color name="colorBlack">#000000</color-->
+    <color name="pureWhite">#ffffff</color>
+    <color name="pureBlack">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Calendar Colors -->
+    <color name="calendar_center_color">#0F3C6D</color>
+    <color name="calendar_end_color">#05224A</color>
+
+    <!-- Near Me Bar Colors -->
+    <color name="near_me_bar_end_color">#516A89</color>
+    <color name="near_me_bar_start_color">#557292</color>
 </resources>

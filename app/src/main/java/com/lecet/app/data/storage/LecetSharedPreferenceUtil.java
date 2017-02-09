@@ -12,15 +12,12 @@ import android.util.Log;
 public class LecetSharedPreferenceUtil {
 
     private static final String NAME = "AppSharedPreference";
-    private static final String OAUTH_HEADER_NAME = "oAuthHeader";
     private static final String ACCESS_TOKEN = "accessToken";
-    private static final String REFRESH_TOKEN = "refreshToken";
 
     private static final String ID = "id";
     private static LecetSharedPreferenceUtil mInstance;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private String accesToken;
 
     public static LecetSharedPreferenceUtil getInstance(Context context) {
         if (!(mInstance instanceof LecetSharedPreferenceUtil)) {
@@ -61,13 +58,11 @@ public class LecetSharedPreferenceUtil {
         mEditor.putInt(name, value).apply();
     }
 
-    public void setAuthorization(String value) {
-        putStringPreferences(OAUTH_HEADER_NAME, value);
+    private void putLongPreferences(String name, long value) {
+        mEditor.putLong(name, value).apply();
     }
 
-    public String getAuthorization() {
-        return getStringPreferences(OAUTH_HEADER_NAME);
-    }
+    private long getLongPreferences(String name) { return mSharedPreferences.getLong(name, -1);}
 
     public void setAccessToken(String value) {
         putStringPreferences(ACCESS_TOKEN, value);
@@ -77,19 +72,15 @@ public class LecetSharedPreferenceUtil {
         return getStringPreferences(ACCESS_TOKEN);
     }
 
-    public void setRefreshToken(String value) {
-        putStringPreferences(REFRESH_TOKEN, value);
+    public void setId(long value) {
+        putLongPreferences(ID, value);
     }
 
-    public String getRefreshToken() {
-        return getStringPreferences(REFRESH_TOKEN);
+    public long getId() {
+        return getLongPreferences(ID);
     }
 
-    public void setId(Integer value) {
-        putIntPreferences(ID, value);
-    }
-
-    public Integer getId() {
-        return getIntPreferences(ID);
+    public void clearPreferences() {
+        mEditor.clear().commit();
     }
 }

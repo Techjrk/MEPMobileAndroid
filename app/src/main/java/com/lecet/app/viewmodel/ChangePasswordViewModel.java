@@ -1,145 +1,246 @@
 package com.lecet.app.viewmodel;
 
-import android.content.Context;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lecet.app.BR;
-import com.lecet.app.data.api.request.SetPasswordRequest;
-import com.lecet.app.domain.SettingsDomain;
+import com.lecet.app.R;
+import com.lecet.app.data.models.User;
+import com.lecet.app.domain.UserDomain;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * File: ChangePasswordViewModel Created: 8/25/16 Author: domandtom
+ * File: ChangePasswordViewModel Created: 1/30/17 Author: domandtom
  *
- * This code is copyright (c) 2016 Dom & Tom Inc.
+ * This code is copyright (c) 2017 Dom & Tom Inc.
  */
+
 public class ChangePasswordViewModel extends BaseObservable {
 
-    private static final String TAG = "ChangePasswordViewModel";
+    private TextView titleTextView;
+    private TextView subtitleTextView;
+    private ImageView backButton;
+    private TextView saveButton;
 
-    private final Context context;
-    private final SettingsDomain settingsDomain;
+    private ProgressDialog progressDialog;
+    private Dialog alertDialog;
 
-    private String newPasswordEntry;                  // first entry of new password
-    private String newPasswordConfirm;                // confirmation entry of new password
-    private boolean newPasswordEntryValid;            // first entry is valid?
-    private boolean newPasswordConfirmValid;          // confirmation entry is valid?
-    private boolean passwordsMatch;                   // first entry and confirmation passwords match?
+    private final AppCompatActivity context;
+    private final UserDomain userDomain;
+
+    private String currentPassword;
+    private String newPassword;
+    private String confirmPassword;
 
 
-    public ChangePasswordViewModel(Context context, SettingsDomain sd) {        //TODO - is this the correct domain? or UserDomain?
 
+    public ChangePasswordViewModel(AppCompatActivity context, UserDomain userDomain) {
         this.context = context;
-        this.settingsDomain = sd;
-
-        Log.d(TAG, "Constructor");
+        this.userDomain = userDomain;
     }
 
     @Bindable
-    public String getNewPasswordEntry() {
-        return newPasswordEntry;
+    public String getCurrentPassword() {
+        return currentPassword;
     }
 
-    public void setNewPasswordEntry(String newPasswordEntry) {
-        this.newPasswordEntry = newPasswordEntry;
-        notifyPropertyChanged(BR.email);
-    }
-
-    @Bindable
-    public String getNewPasswordConfirm() {
-        return newPasswordConfirm;
-    }
-
-    public void setNewPasswordConfirm(String newPasswordConfirm) {
-        this.newPasswordConfirm = newPasswordConfirm;
-        notifyPropertyChanged(BR.password);
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+        notifyPropertyChanged(BR.currentPassword);
     }
 
     @Bindable
-    public boolean getNewPasswordEntryValid() {
-        return newPasswordEntryValid;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setNewPasswordEntryValid(boolean newPasswordEntryValid) {
-        this.newPasswordEntryValid = newPasswordEntryValid;
-        notifyPropertyChanged(BR.emailValid);
-    }
-
-    @Bindable
-    public boolean isNewPasswordConfirmValid() {
-        return newPasswordConfirmValid;
-    }
-
-    public void setNewPasswordConfirmValid(boolean newPasswordConfirmValid) {
-        this.newPasswordConfirmValid = newPasswordConfirmValid;
-        notifyPropertyChanged(BR.emailValid);
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+        notifyPropertyChanged(BR.newPassword);
     }
 
     @Bindable
-    public boolean getPasswordsMatch() {
-        return passwordsMatch;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setPasswordsMatch(boolean passwordsMatch) {
-        this.passwordsMatch = passwordsMatch;
-        notifyPropertyChanged(BR.passwordValid);
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+        notifyPropertyChanged(BR.confirmPassword);
     }
 
 
-    ///////////////////////////////////////////////////
+    /** Toolbar **/
 
-    private void resetPasswordValues() {
-        newPasswordEntry   = "";
-        newPasswordConfirm = "";
-    }
+    public void setToolbar(View toolbar, String title, String subtitle) {
+        titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
+        subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
+        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
+        saveButton = (TextView) toolbar.findViewById(R.id.save_text_view);
 
-    private void sendPasswordChangeRequest(String password) {
-        settingsDomain.setNewPassword(newPasswordEntry, new Callback<SetPasswordRequest>() {
+        backButton.setVisibility(View.INVISIBLE);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<SetPasswordRequest> call, Response<SetPasswordRequest> response) {
+            public void onClick(View view) {
+                onSaveClicked(view);
+            }
+        });
+
+        titleTextView.setText(title);
+        subtitleTextView.setText(subtitle);
+    }
+
+    /** Password Logic **/
+
+    private boolean isCurrentPasswordValid() {
+        return userDomain.isValidPassword(currentPassword);
+    }
+
+    private boolean isConfirmPasswordValid(String password, String confirm) {
+
+        return confirm != null && password.equals(confirm);
+    }
+
+    private boolean isNewPasswordValid() {
+        return userDomain.isValidPassword(newPassword);
+    }
+
+    /**
+     * OnClick handlers
+     **/
+
+    @SuppressWarnings("unused")
+    public void onSaveClicked(View view) {
+
+        validateFormFields();
+    }
+
+    public void onBackButtonClick(View view) {
+
+        context.onBackPressed();
+    }
+
+    public void validateFormFields() {
+
+        dismissAlertDialog();
+
+        boolean confirmedPassword = isConfirmPasswordValid(newPassword, confirmPassword);
+
+        if (isCurrentPasswordValid() && isNewPasswordValid() && confirmedPassword) {
+
+            showTwoButtonAlertDialog(context.getString(R.string.title_activity_change_password), context.getString(R.string.password_confirm_message),
+                    context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    }, context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            postNewPassword();
+                        }
+                    });
+
+        } else if (!isCurrentPasswordValid()) {
+
+            showCancelAlertDialog(context.getString(R.string.invalid_password_title), context.getString(R.string.please_enter_current_password));
+
+        } else if (!isNewPasswordValid()) {
+
+            showCancelAlertDialog(context.getString(R.string.invalid_password_title), context.getString(R.string.invalid_password_message));
+
+        } else if (!confirmedPassword) {
+
+            showCancelAlertDialog(context.getString(R.string.invalid_password_title), context.getString(R.string.password_mismatch));
+        }
+    }
+
+    /** Networking **/
+
+    private void postNewPassword() {
+
+        showProgressDialog(context.getString(R.string.app_name), context.getString(R.string.updating));
+
+        userDomain.changePassword(currentPassword, newPassword, confirmPassword, new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
 
                 if (response.isSuccessful()) {
 
-                    //TODO - fill in
-                } else {
-                    //TODO - fill in
+                    User r = response.body();
+                    userDomain.copyToRealmTransaction(r);
 
+                    dismissProgressDialog();
+
+                } else {
+
+                    dismissProgressDialog();
+
+                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
                 }
             }
 
             @Override
-            public void onFailure(Call<SetPasswordRequest> call, Throwable t) {
-                //TODO - fill in
+            public void onFailure(Call<User> call, Throwable t) {
+
+                dismissProgressDialog();
+
+                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
             }
         });
     }
 
-    /** OnClick handlers **/
 
-    @SuppressWarnings("unused")
-    public void onPasswordEntryClicked(View view) {
+    /** Dialogs **/
 
-        Log.d(TAG, "onPasswordEntryClicked **************");
-        resetPasswordValues();
+    private void showProgressDialog(String title, String message) {
 
-        //TODO show keyboard
-        InputMethodManager imm = (InputMethodManager) this.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        dismissProgressDialog();
+
+        progressDialog = ProgressDialog.show(context, title, message, true, false);
     }
 
-    @SuppressWarnings("unused")
-    public void onUpdatePasswordButtonClicked(View view) {
+    private void dismissProgressDialog() {
 
-        Log.d(TAG, "onUpdatePasswordButtonClicked **************");
-
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 
+    private void dismissAlertDialog() {
 
+        if (alertDialog != null && alertDialog.isShowing()) alertDialog.dismiss();;
+    }
+
+    private void showCancelAlertDialog(String title, String message) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(context.getString(R.string.ok), null);
+
+        alertDialog = builder.show();
+    }
+
+    private void showTwoButtonAlertDialog(String title, String message, String negativeTitle, DialogInterface.OnClickListener negativeListener,
+                                          String positiveTitle, DialogInterface.OnClickListener positiveListener) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(negativeTitle, negativeListener);
+        builder.setPositiveButton(positiveTitle, positiveListener);
+
+        alertDialog = builder.show();
+    }
 }

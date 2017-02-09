@@ -3,8 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/FullScreenImageBackground.Gradient1"
         android:fitsSystemWindows="true"
         tools:context="com.lecet.app.content.UpdateProfileActivity">
 
@@ -13,8 +12,5 @@
 
     <!-- Content -->
     <include layout="@layout/content_update_profile"/>
-
-    <!-- Sliding Drawer Menu -->
-    <include layout="@layout/include_menu_drawer_layout"/>
 
 </android.support.design.widget.CoordinatorLayout>

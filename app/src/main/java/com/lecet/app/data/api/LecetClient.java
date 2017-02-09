@@ -1,11 +1,16 @@
 package com.lecet.app.data.api;
 
-import com.lecet.app.data.api.service.AssetService;
-import com.lecet.app.data.api.service.AuthService;
-import com.lecet.app.data.api.service.CheckInService;
-import com.lecet.app.data.api.service.DeviceService;
-import com.lecet.app.data.api.service.List1Service;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import com.lecet.app.data.api.deserializer.ActivityUpdateDeserializer;
+import com.lecet.app.data.api.service.BidService;
+import com.lecet.app.data.api.service.CompanyService;
+import com.lecet.app.data.api.service.ProjectService;
+import com.lecet.app.data.api.service.SearchService;
+import com.lecet.app.data.api.service.TrackingListService;
 import com.lecet.app.data.api.service.UserService;
+import com.lecet.app.data.models.ActivityUpdate;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,21 +24,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LecetClient {
 
     private static final boolean IS_PRODUCTION = false;
-    private static final String STAGING_ENDPOINT = "http://looplinkapi.dt-staging.com/api/";     // TODO: CHANGE TO LECET ENDPOINT
-    private static final String PRODUCTION_ENDPOINT = "TBD";
-    private static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
-
-    public static final String CLIENT_ID = "KGOjT2B1QsZ5EXnpWPF6ekBexqXRiB6F";
-    public static final String CLIENT_SECRET = "q1smKhVW2d6yTnbxml17Nuuf2E7YgiXM";
+    private static final String STAGING_ENDPOINT = "http://lecet.dt-staging.com/api/";
+    private static final String PRODUCTION_ENDPOINT = "https://mepmobile.lecet.org/";
+    public static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
 
     private static LecetClient ourInstance = new LecetClient();
 
-    private AssetService assetService;
-    private AuthService authService;
-    private CheckInService checkInService;
-    private DeviceService deviceService;
-    private List1Service list1Service;
+    private BidService bidService;
     private UserService userService;
+    private ProjectService projectService;
+    private TrackingListService trackingListService;
+    private SearchService searchService;
+    private CompanyService companyService;
 
     public static LecetClient getInstance() {
         return ourInstance;
@@ -54,42 +56,46 @@ public class LecetClient {
         // Add loggin interceptor
         httpClient.addInterceptor(logging);
 
+        // Custom GSON for date conversion
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ActivityUpdate.class, new ActivityUpdateDeserializer())
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(ENDPOINT)
                 .client(httpClient.build())
                 .build();
 
-        authService = retrofit.create(AuthService.class);
-        assetService = retrofit.create(AssetService.class);
-        checkInService = retrofit.create(CheckInService.class);
-        deviceService = retrofit.create(DeviceService.class);
-        list1Service = retrofit.create(List1Service.class);
+        bidService = retrofit.create(BidService.class);
+        projectService = retrofit.create(ProjectService.class);
         userService = retrofit.create(UserService.class);
+        trackingListService = retrofit.create(TrackingListService.class);
+        searchService = retrofit.create(SearchService.class);
+        companyService = retrofit.create(CompanyService.class);
     }
 
-    public AuthService getAuthService() {
-        return authService;
+
+    public BidService getBidService() {
+        return bidService;
     }
 
-    public AssetService getAssetService() {
-        return assetService;
-    }
-
-    public DeviceService getDeviceService() {
-        return deviceService;
-    }
-
-    public CheckInService getCheckInService() {
-        return checkInService;
-    }
-
-    public List1Service getList1Service() {
-        return list1Service;
+    public ProjectService getProjectService() {
+        return projectService;
     }
 
     public UserService getUserService() {
         return userService;
     }
 
+    public TrackingListService getTrackingListService() {
+        return trackingListService;
+    }
+
+    public SearchService getSearchService() { return searchService; }
+
+    public CompanyService getCompanyService() {
+        return companyService;
+    }
 }

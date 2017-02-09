@@ -1,30 +1,44 @@
 <resources xmlns:android="http://schemas.android.com/tools">
 
-    <!-- Base application theme -->
+
+    <!-- Application theme -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/lecetMediumOrange</item>
-        <item name="colorPrimaryDark">@color/lecetDarkOrange</item>
-        <item name="colorAccent">@color/lecetLightOrange</item>
+        <item name="colorPrimary">@color/lecetMediumBlue</item>
+        <item name="colorPrimaryDark">@color/lecetButtonDarkBlue</item>
+        <item name="colorAccent">@color/lecetLightBlue</item>
+        <item name="android:windowBackground">@color/pureWhite</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_button</item>
+        <item name="android:configChanges">orientation</item>
+        <item name="android:screenOrientation">portrait</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="AppTheme.PopupOverlay"  parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.FullScreen" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 
     <!-- Navigation -->
     <style name="CustomToolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
-    <style name="FloatingActionButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">bottom|end</item>
-        <item name="android:layout_margin">@dimen/fab_margin</item>
-        <item name="android:src">@mipmap/ic_add_black</item>
+    <style name="LacetToolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@drawable/activity_bar_background</item>
+        <item name="popupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
+
 
     <!-- Common -->
     <style name="FullScreenImageBackground">
@@ -33,21 +47,45 @@
         <item name="android:scaleType">fitXY</item>
     </style>
 
+    <style name="FullScreenImageBackground.Gradient1">
+        <item name="android:background">@drawable/content_bg_gradient_1</item>
+    </style>
+
     <style name="CommonText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
-    <style name="CommonText.Large">
+    <style name="CommonText.Light">
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
+    </style>
+
+    <style name="CommonText.Light.Large">
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="CommonText.Medium">
+    <style name="CommonText.Light.Medium">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="CommonText.Small">
+    <style name="CommonText.Light.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CommonText.Dark">
+        <item name="android:textColor">@color/pureBlack</item>
+    </style>
+
+    <style name="CommonText.Dark.Large">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="CommonText.Dark.Medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="CommonText.Dark.Small">
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -57,14 +95,14 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/lecetLightOrange</item>
-        <item name="android:textColorHint">@color/lecetLightGray</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:background">@color/lecetButtonDarkerBlue</item>
+        <item name="android:textColorHint">@color/lecetTextLightGray</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_marginEnd">16dp</item>
     </style>
 
     <style name="CommonButton.TranspWithBorder">
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:background">@drawable/shape_rect_transp_border_2</item>
     </style>
 
@@ -90,16 +128,26 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/lecetLightOrange</item>
-        <item name="android:textColorHint">@color/lecetLightGray</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:background">@color/lecetLightBlue</item>
+        <item name="android:textColorHint">@color/lecetTextMediumGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
         <item name="android:layout_marginEnd">16dp</item>
     </style>
 
     <style name="FormField.EditText">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/pureBlack</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
         <item name="android:editable">true</item>
+    </style>
+
+    <style name="FormField.EditText.Login">
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColorHint">@color/lecetTextMediumGray</item>
+        <item name="android:textColor">@color/pureBlack</item>
     </style>
 
     <style name="FormField.EditText.Secure">
@@ -117,21 +165,23 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+
     <!-- Help -->
     <style name="HelpAnchorTextView">
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
     </style>
 
+
     <!-- Logo -->
     <style name="LogoImage">
-        <item name="android:layout_width">96dp</item>
-        <item name="android:layout_height">96dp</item>
+        <item name="android:layout_width">192dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:src">@drawable/product_logo</item>
+        <item name="android:src">@drawable/logo_mep</item>
     </style>
 
     <style name="LogoImage.Medium">
@@ -148,17 +198,18 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
     </style>
 
     <style name="LecetLogoTextView.Small">
         <item name="android:textSize">10sp</item>
     </style>
 
+
     <!-- Onboarding -->
     <style name="OnboardingTitleTextView">
         <item name="android:textSize">26sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">16dp</item>
@@ -181,18 +232,81 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/lecetWhite</item>
+        <item name="android:textColor">@color/pureWhite</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">8dp</item>
     </style>
+
+
+    <!-- Dashboard -->
+    <style name="ViewPagerArrowButton">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">36dp</item>
+    </style>
+
+    <style name="ViewPagerArrowButton.Left">
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:background">@drawable/button_arrow_left_selector</item>
+    </style>
+
+    <style name="ViewPagerArrowButton.Right">
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:background">@drawable/button_arrow_right_selector</item>
+    </style>
+
+    <style name="DashboardChartCenterIcon">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+
+    <style name="DashboardPageIndicatorDot">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:background">@drawable/shape_dot_unselected</item>
+    </style>
+
+    <style name="DashboardText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/lecetTextWhite</item>
+    </style>
+
+    <style name="DashboardText.Subtitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginLeft">16sp</item>
+    </style>
+
+    <style name="DashboardChartButtonImage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/strip_vertical_spacing</item>
+    </style>
+
+    <style name="DashboardChartButtonText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
     <!-- Change Password -->
     <style name="ChangePasswordTextViewSmall">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
+
 
     <!-- Settings -->
     <style name="SettingsItemRelativeLayout" parent="android:style/Widget">
@@ -224,7 +338,7 @@
         <item name="android:layout_marginLeft">60dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">8dp</item>
     </style>
@@ -239,13 +353,18 @@
         <item name="android:textSize">30sp</item>
     </style>
 
+
     <!-- Profile -->
     <style name="ProfileTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
-        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/lecetProfileTitleGray</item>
+        <item name="android:background">@color/lecetBidGray</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ProfileTextView.Medium">
@@ -257,38 +376,235 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- List Item 1 -->
-    <style name="ListItem1DetailTextView">
+    <style name="ProfileEditTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
+        <item name="android:background">@color/pureWhite</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:inputType">textNoSuggestions</item>
+    </style>
+
+    <style name="PasswordEditTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
+        <item name="android:background">@color/pureWhite</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:inputType">textPassword|textNoSuggestions</item>
+    </style>
+
+
+    <!-- Company Detail Project Bids List Item -->
+    <style name="ListItemCompanyDetailProjectBidsTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:paddingBottom">6dp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/lecetDarkGray</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
-    <style name="ListItem1DetailTextView.Medium">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ListItemCompanyDetailProjectBidsTextView.Detail1">
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextLightGray</item>
     </style>
 
-    <style name="ListItem1DetailTextView.Small">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Detail2">
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- List Item 2 -->
-    <style name="ListItem2DetailTextView">
+    <style name="ListItemCompanyDetailProjectBidsTextView.Detail3">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/lecetTextLightGray</item>
+    </style>
+
+
+    <!-- Project Tracking List Item -->
+    <style name="ListItemProjectTrackingTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/lecetMediumGray</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/lecetTextMediumGray</item>
     </style>
 
-    <style name="ListItem2DetailTextView.Medium">
+    <style name="ListItemProjectTrackingTextView.Title">
+        <item name="android:paddingTop">4sp</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
 
-    <style name="ListItem2DetailTextView.Small">
+    <style name="ListItemProjectTrackingTextView.Detail1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextLightGray</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.Detail2">
         <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/lecetTextLightGray</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.Expandable">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/pureWhite</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.ExpandableBody">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/pureWhite</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:minLines">2</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:background">@drawable/shape_rect_list_item_expand_2</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage"/>
+
+    <style name="ListItemProjectTrackingImage.DetailMap">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage.DetailIcon">
+        <item name="android:layout_width">9dp</item>
+        <item name="android:layout_height">13dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage.ExpandableIcon">
+        <item name="android:layout_width">14dp</item>
+        <item name="android:layout_height">14dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="ListItemProjectTrackingImage.ExpandableCaret">
+        <item name="android:layout_width">11dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <!-- MSE: Search Page -->
+    <style name="SearchPageSectionTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/lecetButtonDarkBlue</item>
+
+    </style>
+
+    <style name="SearchPageSectionImageContactQuery">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="SearchPageSectionImageContactQuery1">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:src">@mipmap/ic_image_placeholder</item>
+    </style>
+
+    <style name="SearchPageSectionImageContactQuery2">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:src">@mipmap/ic_image_placeholder</item>
+    </style>
+
+    <style name="SearchFilterSectionTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetButtonDarkBlue</item>
+
+    </style>
+    <style name="SearchFilterSectionButton">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="SearchFilterSectionDownArrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:src">@android:drawable/arrow_down_float</item>
+    </style>
+    <style name="SearchFilterSectionMPS30">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetDarkestBlue</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+    <style name="SearchFilterSectionFieldValue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/shape_rect_solid_border_1</item>
+        <item name="android:padding">11dp</item>
+    </style>
+    <style name="ImageDownArrow">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:src">@mipmap/ic_chevron_down_black</item>
+    </style>
+
+    <!-- MCT Contact Detail-->
+    <style name="ContactDetailTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
 
 </resources>

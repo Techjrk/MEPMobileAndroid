@@ -13,7 +13,12 @@
             android:fitsSystemWindows="true"
             tools:context="com.lecet.app.content.LoginActivity">
 
+        <ImageView style="@style/FullScreenImageBackground"
+                   android:src="@drawable/content_bg_login"
+                   android:alpha=".3"/>
+
         <include layout="@layout/content_login"
+                 android:id="@+id/login_layout"
                  bind:viewModel="@{viewModel}"/>
 
     </android.support.design.widget.CoordinatorLayout>

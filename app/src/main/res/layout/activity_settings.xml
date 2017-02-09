@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="viewModel" type="com.lecet.app.viewmodel.SettingsViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             tools:context="com.lecet.app.content.SettingsActivity">
 
         <!-- App Bar -->
-        <include layout="@layout/include_app_bar_layout"/>
+        <include layout="@layout/include_activity_bar_layout"/>
 
         <!-- Content -->
         <include layout="@layout/content_settings"
                  bind:viewModel="@{viewModel}"/>
-
-        <!-- Sliding Drawer Menu -->
-        <include layout="@layout/include_menu_drawer_layout"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

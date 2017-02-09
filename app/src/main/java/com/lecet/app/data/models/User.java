@@ -2,12 +2,19 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * File: User Created: 8/16/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public class User {
+public class User extends RealmObject {
+
+    @PrimaryKey
+    @SerializedName("id")
+    private long id;
 
     @SerializedName("first_name")
     private String firstName;
@@ -15,14 +22,20 @@ public class User {
     @SerializedName("last_name")
     private String lastName;
 
-    @SerializedName("phone_number")
+    @SerializedName("phoneNumber")
     private String phoneNumber;
 
     @SerializedName("email")
     private String email;
 
-    @SerializedName("street_address")
-    private String streetAddress;
+    @SerializedName("fax")
+    private String fax;
+
+    @SerializedName("address")
+    private String address;
+
+    @SerializedName("address2")
+    private String address2;
 
     @SerializedName("city")
     private String city;
@@ -33,49 +46,21 @@ public class User {
     @SerializedName("zip")
     private String zip;
 
-    @SerializedName("rank")
-    private String rank;
+    @SerializedName("organization")
+    private String organization;
 
-    @SerializedName("group")
-    private String group;
-
-    @SerializedName("avatar")
-    private String avatar;
-
-    @SerializedName("created_at")
-    private String createdAt;
-
-    @SerializedName("updated_at")
-    private String updatedAt;
+    @SerializedName("title")
+    private String title;
 
     public User() {
     }
 
-    private User(Builder builder) {
-
-        this.firstName = builder.firstName;
-        this.lastName = builder.lastName;
-        this.phoneNumber = builder.phoneNumber;
-        this.email = builder.email;
-        this.streetAddress = builder.streetAddress;
-        this.city = builder.city;
-        this.state = builder.state;
-        this.zip = builder.zip;
-        this.rank = builder.rank;
-        this.group = builder.group;
-        this.avatar = builder.avatar;
-    }
-
-    public String getAvatar() {
-        return avatar;
+    public long getId() {
+        return id;
     }
 
     public String getCity() {
         return city;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
     }
 
     public String getEmail() {
@@ -86,8 +71,8 @@ public class User {
         return firstName;
     }
 
-    public String getGroup() {
-        return group;
+    public String getFax() {
+        return fax;
     }
 
     public String getLastName() {
@@ -98,113 +83,92 @@ public class User {
         return phoneNumber;
     }
 
-    public String getRank() {
-        return rank;
+    public String getOrganization() {
+        return organization;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getState() {
         return state;
     }
 
-    public String getStreetAddress() {
-        return streetAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getAddress2() {
+        return address2;
     }
 
     public String getZip() {
         return zip;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", fax='" + fax + '\'' +
+                ", address='" + address + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                ", organization='" + organization + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 
-    public static class Builder {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
 
-        private String firstName;
-        private String lastName;
-        private String phoneNumber;
-        private String email;
-        private String streetAddress;
-        private String city;
-        private String state;
-        private String zip;
-        private String rank;
-        private String group;
-        private String avatar;
+        User user = (User) o;
 
-        public Builder() {
-        }
+        if (id != user.id) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null)
+            return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null)
+            return false;
+        if (phoneNumber != null ? !phoneNumber.equals(user.phoneNumber) : user.phoneNumber != null)
+            return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (fax != null ? !fax.equals(user.fax) : user.fax != null) return false;
+        if (address != null ? !address.equals(user.address) : user.address != null) return false;
+        if (address2 != null ? !address2.equals(user.address2) : user.address2 != null)
+            return false;
+        if (city != null ? !city.equals(user.city) : user.city != null) return false;
+        if (state != null ? !state.equals(user.state) : user.state != null) return false;
+        if (zip != null ? !zip.equals(user.zip) : user.zip != null) return false;
+        if (organization != null ? !organization.equals(user.organization) : user.organization != null)
+            return false;
+        return title != null ? title.equals(user.title) : user.title == null;
 
-        Builder firstName(String firstName) {
+    }
 
-            this.firstName = firstName;
-            return this;
-        }
-
-        Builder lastName(String lastName) {
-
-            this.lastName = lastName;
-            return this;
-        }
-
-        Builder phoneNumber(String phoneNumber) {
-
-            this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        Builder email(String email) {
-
-            this.email = email;
-            return this;
-        }
-
-        Builder streetAddress(String streetAddress) {
-
-            this.streetAddress = streetAddress;
-            return this;
-        }
-
-        Builder city(String city) {
-
-            this.city = city;
-            return this;
-        }
-
-        Builder state(String state) {
-
-            this.state = state;
-            return this;
-        }
-
-        Builder zip(String zip) {
-
-            this.zip = zip;
-            return this;
-        }
-
-        Builder rank(String rank) {
-
-            this.rank = rank;
-            return this;
-        }
-
-        Builder group(String group) {
-
-            this.group = group;
-            return this;
-        }
-
-        Builder avatar(String avatar) {
-
-            this.avatar = avatar;
-            return this;
-        }
-
-        User build() {
-
-            return new User(this);
-        }
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (fax != null ? fax.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (address2 != null ? address2.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (zip != null ? zip.hashCode() : 0);
+        result = 31 * result + (organization != null ? organization.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        return result;
     }
 }
