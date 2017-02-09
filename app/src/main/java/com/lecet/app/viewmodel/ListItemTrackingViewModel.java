@@ -233,7 +233,6 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
     }
 
     public void onClick(View view) {
-        //TODO - fill in
         Log.d(TAG, "onClick: " + view);
     }
 

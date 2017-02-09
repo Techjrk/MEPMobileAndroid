@@ -388,7 +388,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             }
             else
             {
-                Log.d(TAG, "refreshContent: WARNING *** Highlight Y is NaN");   //TODO - handle
+                Log.w(TAG, "refreshContent: WARNING *** Highlight Y is NaN");   //NOTE - this may be the root cause issues with value display offset
                 origXPx = 0;
                 origYPx = 0;
             }
@@ -450,7 +450,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 //        dataSet.setValueFormatter(new CustomValueFormatter());
 
 
-        // custom dynamic chart value marker view - TODO - these next three lines enable/disable the custom value highlighting. iOS does not use it.
+        // custom dynamic chart value marker view - NOTE - these next three lines enable/disable the custom value highlighting. iOS does not use it.
         /*CustomMarkerView mv = new CustomMarkerView (fragment.getContext(), R.layout.dashboard_chart_marker_view);
         pieChartView.setDrawMarkerViews(true);
         pieChartView.setMarkerView(mv);*/
@@ -484,7 +484,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         iconToShow.setVisibility(View.VISIBLE);
     }
 
-    public void notifyDelegateOfSelection(Long category) {      //TODO - update to new B and H system
+    public void notifyDelegateOfSelection(Long category) {
 
         // MBR
         if(dataSourceType == DATA_SOURCE_TYPE_MBR) {
