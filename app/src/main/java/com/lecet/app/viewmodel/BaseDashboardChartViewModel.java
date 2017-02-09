@@ -164,7 +164,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
      * Heavy-Highway will include Engineering (101) and Utilities (105).
      * Building will include Housing (103) and Building (102).
      */
-    public void fetchData(final PieChart pieChartView) {    //TODO - this arg is not used
+    public void fetchData() {
 
         if (this.dataSourceType == DATA_SOURCE_TYPE_MBR) {
             dataSourceMBR.refreshRecentlyMadeBids(new LecetCallback<TreeMap<Long, TreeSet<Bid>>>() {
