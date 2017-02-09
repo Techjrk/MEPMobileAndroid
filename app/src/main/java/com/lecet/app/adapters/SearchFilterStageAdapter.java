@@ -2,7 +2,6 @@ package com.lecet.app.adapters;
 
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,8 +90,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     grandChildrenSize = grandChildrenSize + size;
                 }
 
-                Log.d("SubTypeExample", "section = " + section + ", children = " + childrenSize + ", grandChildren = " + grandChildrenSize);
-
                 return childrenSize + grandChildrenSize;
             }
 
@@ -136,13 +133,10 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
-                        //viewModel.setStageName(childViewHolder.checkView.getText().toString());
                         viewModel.setStageData(CHILD_VIEW_TYPE, child.getId(), child.getName());
-                        //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
             });
-//            childViewHolder.checkView.setText("ch sect: " + section + ", pos: " + position + ", name:" + child.name);
 
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -236,21 +230,17 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
             final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
-//          grandChildViewHolder.textView.setText("GrandChild section : " + section + ", position : " + position + " name: " + grandChild.getName());
             grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
                         viewModel.setStageData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName());
-                        //viewModel.setStageName(grandChildViewHolder.checkView.getText().toString());
-                        //  Log.d("check","check"+childViewHolder.checkView.getText().toString());
                     }
                 }
             });
         }
     }
 
-    // int gsize=0;
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
 
@@ -264,8 +254,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     viewModel.setStageData(PARENT_VIEW_TYPE, parent.getId(), parent.getName());
-                    //viewModel.setStageName(parentViewHolder.checkView.getText().toString());
-                    Log.d("check", "check" + parentViewHolder.checkView.getText().toString());
                 }
             }
         });
@@ -478,7 +466,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         private int id;
         private String name;
         private List<Child> children;
-        public boolean isSelected=false;
+        public boolean isSelected = false;
 
         public int getId() {
             return id;
@@ -519,7 +507,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         private int id;
         private String name;
         private List<GrandChild> grandChildren;
-        public boolean isSelected=false;
+        public boolean isSelected = false;
 
         public int getId() {
             return id;
@@ -558,7 +546,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
         private int id = -1;
         private String name;
-        public boolean isSelected=false;
+        public boolean isSelected = false;
 
         public int getId() {
             return id;
