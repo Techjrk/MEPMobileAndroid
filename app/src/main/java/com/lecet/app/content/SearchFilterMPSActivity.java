@@ -547,6 +547,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);       // text display
                 String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);         // ID                   //TODO - use this ID for name/id lookup rather than name?
                 String stages = "";
+                if (stageStr == null || stageStr.equals("")) stageStr = "Any";
                 viewModel.setPersistedStage(stageStr);
                 viewModel.setStage_select(stageStr);
 

@@ -31,13 +31,13 @@ public class SearchFilterProjectTypeActivity extends AppCompatActivity {
         ActivitySearchFilterProjectTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_project_type);
         SearchFilterProjectTypeViewModel viewModel = new SearchFilterProjectTypeViewModel(this);
         sfilter.setViewModel(viewModel);
-        initRecycleView(viewModel);
+     //   initRecycleView(viewModel);
     }
 
     /**
      * Process the multi-level display item of the Project Type with adapter
      */
-    public void initRecycleView(SearchFilterProjectTypeViewModel viewModel) {
+  /*  public void initRecycleView(SearchFilterProjectTypeViewModel viewModel) {
         Log.d("typeinit","typeinit");
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -74,5 +74,7 @@ public class SearchFilterProjectTypeActivity extends AppCompatActivity {
         }
         SearchFilterProjectTypeAdapter adapter = new SearchFilterProjectTypeAdapter(data, viewModel);
         recyclerView.setAdapter(adapter);
-    }
+    }*/
+
+
 }

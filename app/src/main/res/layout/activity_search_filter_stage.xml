@@ -49,7 +49,7 @@
                         android:drawableStart="@drawable/ic_action_search"
                         android:hint="Search for stages"
                         android:inputType="textPersonName"
-                        android:text=""
+                        android:text="@={viewModel.query}"
                         android:textColor="@color/lecetTextWhite"
                         android:textSize="15sp"
                         bind:typeface="@{`Lato-Bold.ttf`}" />

@@ -9,7 +9,6 @@ import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
@@ -34,8 +33,8 @@ public class SearchDomain {
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
     private String projectFilter;
-    private String companyFilter="{\"searchFilter\":{}}";
-    private String contactFilter="{\"searchFilter\":{}}";
+    private String companyFilter = "{\"searchFilter\":{}}";
+    private String contactFilter = "{\"include\":[\"company\"],\"searchFilter\":{}}";
 
     public String getCompanyFilter() {
         return companyFilter;
@@ -71,6 +70,7 @@ public class SearchDomain {
 
     /**
      * To call the retrofit service for the stages list items to be displayed in the UI layout for Stage section.
+     *
      * @param callback
      */
     public Call<List<SearchFilterStagesMain>> getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
@@ -124,6 +124,7 @@ public class SearchDomain {
 
     /**
      * To call the retrofit service for the project types list items to be displayed in the UI layout for project types section.
+     *
      * @param callback
      */
     public Call<List<SearchFilterProjectTypesMain>> getProjectTypesList(Callback<List<SearchFilterProjectTypesMain>> callback) {
@@ -142,7 +143,7 @@ public class SearchDomain {
         Call<List<SearchFilterProjectTypesMain>> call = getProjectTypesList(new Callback<List<SearchFilterProjectTypesMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterProjectTypesMain>> call, Response<List<SearchFilterProjectTypesMain>> response) {
-                Log.d(TAG,"Create List of Project Types");
+                Log.d(TAG, "Create List of Project Types");
                 if (response.isSuccessful()) {
                     final List<SearchFilterProjectTypesMain> projectTypesMainList = response.body();
                     Realm realm = Realm.getDefaultInstance();
@@ -176,9 +177,9 @@ public class SearchDomain {
     }
 
 
-
     /**
      * To call the retrofit service for the jurisdiction list items to be displayed in the UI layout for jurisdiciton section.
+     *
      * @param callback
      */
     public Call<List<SearchFilterJurisdictionMain>> getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
@@ -197,7 +198,7 @@ public class SearchDomain {
         Call<List<SearchFilterJurisdictionMain>> call = getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-                Log.d(TAG,"Create list of Jurisdictions");
+                Log.d(TAG, "Create list of Jurisdictions");
                 if (response.isSuccessful()) {
                     final List<SearchFilterJurisdictionMain> jurisdictionMainList = response.body();
 
@@ -234,12 +235,13 @@ public class SearchDomain {
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
         //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
         setCompanyFilter("{\"searchFilter\":{}}");
-        setContactFilter("{\"searchFilter\":{}}");
+        setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
+        //  {\"include\":[\"company\"]}
     }
 
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchResult>> callback) {
         String token = sharedPreferenceUtil.getAccessToken();
-        String filter = "{\"include\":[\"project\",\"company\"],\"where\":{\"code\":{\"inq\":[\"VIEW_PROJECT\",\"VIEW_COMPANY\"]}},\"limit\":30,\"order\":\"updatedAt DESC\"}";
+        String filter = "{\"include\":[\"project\",\"company\"],\"where\":{\"code\":{\"inq\":[\"VIEW_PROJECT\",\"VIEW_COMPANY\"]}},\"limit\":10,\"order\":\"updatedAt DESC\"}";
         Call<List<SearchResult>> call = lecetClient.getSearchService().getSearchRecentlyViewedWithFilter(token, userId, filter);
 //        Call<List<SearchResult>> call = lecetClient.getSearchService().getSearchRecentlyViewed(token, userId);
         call.enqueue(callback);
@@ -264,14 +266,14 @@ public class SearchDomain {
     }
 
     public void getSearchCompanyQuery(String q, Callback<SearchCompany> callback) {
-     //   String filter = "{}";
+        //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         call.enqueue(callback);
     }
 
     public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
-     //   String filter = "{}";
+        //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
         call.enqueue(callback);
@@ -284,7 +286,6 @@ public class SearchDomain {
         Call<Project> call = lecetClient.getSearchService().getProjectDetail(token, pId);
         call.enqueue(callback);
     }
-
 
 
 }
