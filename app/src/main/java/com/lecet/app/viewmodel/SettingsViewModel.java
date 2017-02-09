@@ -33,6 +33,7 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
     private final AppCompatActivity appCompatActivity;
     private final UserDomain userDomain;
+    private final LecetSharedPreferenceUtil sharedPreferenceUtil;
 
     private TextView titleTextView;
     private TextView subtitleTextView;
@@ -41,9 +42,11 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
     private boolean enableNotifications;
 
-    public SettingsViewModel(AppCompatActivity appCompatActivity, UserDomain userDomain) {
+    public SettingsViewModel(AppCompatActivity appCompatActivity, UserDomain userDomain, LecetSharedPreferenceUtil sharedPreferenceUtil) {
         this.appCompatActivity = appCompatActivity;
         this.userDomain = userDomain;
+        this.sharedPreferenceUtil = sharedPreferenceUtil;
+        setEnableNotifications(sharedPreferenceUtil.getNotificationsSetting());
     }
 
     @Bindable
@@ -53,6 +56,7 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
     public void setEnableNotifications(boolean enableNotifications) {
         this.enableNotifications = enableNotifications;
+        this.sharedPreferenceUtil.setNotificationSetting(enableNotifications);
         notifyPropertyChanged(BR.enableNotifications);
     }
 

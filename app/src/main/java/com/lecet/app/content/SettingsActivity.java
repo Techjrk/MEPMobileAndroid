@@ -33,7 +33,8 @@ public class SettingsActivity extends NavigationBaseActivity {
         super.onCreate(savedInstanceState);
 
         ActivitySettingsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
-        viewModel = new SettingsViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance()));
+        LecetSharedPreferenceUtil pref = LecetSharedPreferenceUtil.getInstance(this);
+        viewModel = new SettingsViewModel(this, new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance()), pref);
         binding.setViewModel(viewModel);
         setupToolbar(viewModel, getString(R.string.title_activity_settings), "");
     }

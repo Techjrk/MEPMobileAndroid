@@ -13,8 +13,10 @@ public class LecetSharedPreferenceUtil {
 
     private static final String NAME = "AppSharedPreference";
     private static final String ACCESS_TOKEN = "accessToken";
-
     private static final String ID = "id";
+    private static final String NOTIFICATIONS = "notification_settings";
+
+
     private static LecetSharedPreferenceUtil mInstance;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
@@ -50,12 +52,12 @@ public class LecetSharedPreferenceUtil {
         mEditor.putString(name, value).apply();
     }
 
-    private Integer getIntPreferences(String name) {
-        return mSharedPreferences.getInt(name, -1);
+    private Boolean getBooleanPreferences(String name) {
+        return mSharedPreferences.getBoolean(name, false);
     }
 
-    private void putIntPreferences(String name, Integer value) {
-        mEditor.putInt(name, value).apply();
+    private void putBooleanPreferences(String name, Boolean value) {
+        mEditor.putBoolean(name, value).apply();
     }
 
     private void putLongPreferences(String name, long value) {
@@ -78,6 +80,14 @@ public class LecetSharedPreferenceUtil {
 
     public long getId() {
         return getLongPreferences(ID);
+    }
+
+    public void setNotificationSetting(boolean value) {
+        putBooleanPreferences(NOTIFICATIONS, value);
+    }
+
+    public Boolean getNotificationsSetting() {
+        return getBooleanPreferences(NOTIFICATIONS);
     }
 
     public void clearPreferences() {
