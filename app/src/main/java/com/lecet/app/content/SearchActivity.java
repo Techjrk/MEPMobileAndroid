@@ -52,8 +52,6 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-  //      Toast.makeText(this, "Search Activity Result request 1: " + requestCode + "  result: " + resultCode, Toast.LENGTH_SHORT).show();    //TODO - Toast
-
         String locationFilter = "";
         String primaryProjectTypeFilter = "";
         String projectTypeIdFilter = "";

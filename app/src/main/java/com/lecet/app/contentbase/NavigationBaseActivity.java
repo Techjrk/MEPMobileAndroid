@@ -23,7 +23,7 @@ public abstract class NavigationBaseActivity extends LecetBaseActivity {
      * Menu Navigation Click Handler
      * @param item
      */
-    public void onMenuItemClicked(MenuItem item) {
+    public void onMenuItemClicked(MenuItem item) {  //TODO - remove this and the main_navigation_items layout, and use LecetBaseActivity only
         Log.d(TAG, "onMenuItemClicked: Title: " + item.getTitle());
 
         Intent intent = null;

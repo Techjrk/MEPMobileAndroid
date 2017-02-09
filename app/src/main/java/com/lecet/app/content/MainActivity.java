@@ -515,26 +515,4 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         startActivity(intent);
     }
 
-    /**
-     * Display error message - TODO - replace?
-     */
-    public void errorDisplayMsg(String message) {
-        if (errorMessage != null) return;
-        errorMessage = message + "\r\n";
-        try {
-            if (dialogBuilder == null) dialogBuilder = new AlertDialog.Builder(this); //Applying singleton;
-            dialogBuilder.setTitle(this.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
-            Log.e("Error:", "Error " + errorMessage);
-            dialogBuilder.setMessage(errorMessage);
-            dialogBuilder.setNegativeButton(this.getString(R.string.ok), null);
-            Log.e("onFailure", "onFailure: " + errorMessage);
-            dialogBuilder.show();
-        } catch (Exception e) {
-            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
-
-            Toast.makeText(this, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
-        }
-    }
-
-
 }

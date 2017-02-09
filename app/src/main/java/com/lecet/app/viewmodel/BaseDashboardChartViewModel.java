@@ -147,7 +147,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         pieChartView.setTransparentCircleRadius(0);
         pieChartView.setTransparentCircleAlpha(0);
         pieChartView.setHoleRadius(CHART_HOLE_RADIUS_UNSELECTED);
-        pieChartView.setHoleColor(ContextCompat.getColor(this.fragment.getContext(), R.color.transparent)); //TODO - update?
+        pieChartView.setHoleColor(ContextCompat.getColor(this.fragment.getContext(), R.color.transparent));
         pieChartView.setDrawMarkerViews(false);
         pieChartView.setDrawEntryLabels(false);
         pieChartView.setCenterText("");
