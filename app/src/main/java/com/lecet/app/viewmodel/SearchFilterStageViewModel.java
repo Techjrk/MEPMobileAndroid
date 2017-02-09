@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -72,8 +71,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmStages = realm.where(SearchFilterStagesMain.class).findAll();
-                Log.d("SearchFilterMPFStageVM:", "realmStages size: " + realmStages.size());
-                Log.d("SearchFilterMPFStageVM:", "realmStages list: " + realmStages);
             }
         });
     }
@@ -96,8 +93,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
      * Note: While 'name' usually looks like an int, it needs to be a String to support variant names like '18A'
      */
     public void setStageData(int viewType, int id, String name) {
-        Log.d(TAG, "setStageData: viewType: " + viewType + ", id: " + id + ", name: " + name);
-
         // overwrite the Bundle instance with each selection since Stage only supports single-selection
         bundle = new Bundle();
         setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
@@ -132,7 +127,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
             hasChild = false;
             foundParent = false;
             foundChild = false;
-            //         Log.d("SearchFilterMPFStageAct", "stagelist: name: " + parentStage.getName());
             SearchFilterStageAdapter.Parent parent = new SearchFilterStageAdapter.Parent();
             parent.setId(parentStage.getId());
             parent.setName(parentStage.getName());
@@ -149,7 +143,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
                     if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
                         hasChild = true;
                         foundChild = true;
-                        Log.d("foundChild", "foundChild" + child.getName());
                     }
                     if (foundChild || foundParent) {
                         children.add(child);
@@ -159,13 +152,10 @@ public class SearchFilterStageViewModel extends BaseObservable {
             //parent.setChildren(children);
             if (children != null) {
                 parent.setChildren(children);
-                Log.d("parent1 added", "parent1 added");
             }
             // data.add(parent);
             if (parent != null && (hasChild || foundParent)) data.add(parent);
         }
-
-        Log.d("SearchFilterMPFStageAct", "stagemain size: " + getRealmStages().size());
         SearchFilterStageAdapter adapter = new SearchFilterStageAdapter(data, this);
         recyclerView.setAdapter(adapter);
     }
