@@ -17,16 +17,7 @@ public class BaseDashboardChartFragment extends Fragment {
     public static final String ARG_SUBTITLE = "subtitle";
 
     protected String subtitle = "Subtitle";
-    protected PieChart pieChart;  //TODO - check
-
-    /*public static BaseDashboardChartFragment newInstance(String subtitle) {
-        Log.d(TAG, "newInstance");
-        BaseDashboardChartFragment fragmentInstance = new BaseDashboardChartFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_SUBTITLE, subtitle);
-        fragmentInstance.setArguments(args);
-        return fragmentInstance;
-    }*/
+    protected PieChart pieChart;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

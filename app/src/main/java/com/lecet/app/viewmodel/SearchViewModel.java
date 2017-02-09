@@ -86,7 +86,9 @@ public class SearchViewModel extends BaseObservable {
     @IntDef({SEARCH_ADAPTER_TYPE_RECENT, SEARCH_ADAPTER_TYPE_PROJECTS, SEARCH_ADAPTER_TYPE_COMPANIES,
             SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY,
             SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL})
-    public @interface SearchAdapterType {}
+    public @interface SearchAdapterType {
+    }
+
     public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
     public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
     public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
@@ -231,23 +233,19 @@ public class SearchViewModel extends BaseObservable {
         checkTotal();
         /** For Project query total view
          */
-        //  getQueryProjectTotal();
         getProjectQuery(query);
 
         /**
          * For Company query total view
          */
-        //  getQueryCompanyTotal();
         getCompanyQuery(query);
 
         /**
          * For Contact query total view
          */
-        // getQueryContactTotal();
         getContactQuery(query);
 
     }
-
 
     /**
      * Get the list of Project in Query Search Summary
@@ -266,18 +264,13 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectAll.clear();
         int ctr = 0;
         for (Project s : slist) {
-         //   try {
-                if (s != null) {
-                    adapterDataProjectAll.add(s);
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataProjectSummary.add(s);
-                    //else break;
-                    ctr++;
+            if (s != null) {
+                adapterDataProjectAll.add(s);
+                if (ctr < CONTENT_MAX_SIZE) adapterDataProjectSummary.add(s);
+                //else break;
+                ctr++;
 
-                }
-           /* } catch (Exception e) {
-                //if no project is found, just do nothing...
-                Log.w("No project", "No project in the list");
-            }*/
+            }
         }
         searchAdapterProjectSummary.notifyDataSetChanged();
         searchAdapterProjectAll.notifyDataSetChanged();
@@ -298,17 +291,12 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanyAll.clear();
         int ctr = 0;
         for (Company s : slist) {
-           // try {
-                if (s != null) {
-                    adapterDataCompanyAll.add(s);
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataCompanySummary.add(s);
-                    ctr++;
+            if (s != null) {
+                adapterDataCompanyAll.add(s);
+                if (ctr < CONTENT_MAX_SIZE) adapterDataCompanySummary.add(s);
+                ctr++;
 
-                }
-           /* } catch (Exception e) {
-                //if no company is found, just do nothing...
-                Log.w("No company", "No company in the list");
-            }*/
+            }
         }
 
         searchAdapterCompanySummary.notifyDataSetChanged();
@@ -328,18 +316,11 @@ public class SearchViewModel extends BaseObservable {
         adapterDataContactAll.clear();
         int ctr = 0;
         for (Contact s : slist) {
-           // try {
-
-                if (s != null) {
-                    adapterDataContactAll.add(s);
-                    if (ctr < CONTENT_MAX_SIZE) adapterDataContactSummary.add(s);
-                    ctr++;
-
-                }
-           /* } catch (Exception e) {
-                //if no contact object is found, just do nothing...
-                Log.w("No contact", "No contact in the list");
-            }*/
+            if (s != null) {
+                adapterDataContactAll.add(s);
+                if (ctr < CONTENT_MAX_SIZE) adapterDataContactSummary.add(s);
+                ctr++;
+            }
         }
 
         searchAdapterContactSummary.notifyDataSetChanged();
@@ -360,17 +341,10 @@ public class SearchViewModel extends BaseObservable {
                     adapterDataRecentlyViewed.clear();
                     int ctr = 0;
                     for (SearchResult s : slist) {
-                    //    try {
-                            ctr++;
-                        if (s !=null)    {
-                        //    if (s.getProject() != null)
-                                adapterDataRecentlyViewed.add(s);
-                            }
-        /*
-                        } catch (Exception e) {
-                            //Log.e("UserRecentlyViewed", "Exception in getUserRecentlyViewed" + e.getMessage());
-                            errorDisplayMsg("Problem in retrieving user Recently viewed" + e.getMessage());
-                        }*/
+                        ctr++;
+                        if (s != null) {
+                            adapterDataRecentlyViewed.add(s);
+                        }
                     }
 
                     searchAdapterRecentlyViewed.notifyDataSetChanged();
@@ -401,17 +375,14 @@ public class SearchViewModel extends BaseObservable {
                     if (adapterDataProjectSearchSaved == null) new ArrayList<SearchSaved>();
                     adapterDataProjectSearchSaved.clear();
                     adapterDataCompanySearchSaved.clear();
-                    int projectCounter = 0, companyCounter = 0;
 
                     for (SearchSaved s : slist) {
                         if (s != null) {
                             if (s.getModelName().equalsIgnoreCase("Project")) {
                                 adapterDataProjectSearchSaved.add(s);
 
-                                projectCounter++;
                             } else if (s.getModelName().equalsIgnoreCase("Company")) {
                                 adapterDataCompanySearchSaved.add(s);
-                                companyCounter++;
                             }
                         }
                     }
@@ -427,7 +398,6 @@ public class SearchViewModel extends BaseObservable {
                 errorDisplayMsg(t.getLocalizedMessage());
             }
         });
-
     }
 
     public void getProjectQuery(String q) {
@@ -508,8 +478,6 @@ public class SearchViewModel extends BaseObservable {
             Log.e("onFailure", "onFailure: " + errorMessage);
             dialogBuilder.show();
         } catch (Exception e) {
-            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
-
             Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
         }
     }
@@ -652,7 +620,7 @@ public class SearchViewModel extends BaseObservable {
 
     ///////////////////////////////////
     // BINDABLE
-@Bindable
+    @Bindable
     public boolean getQueryEmpty() {
         return queryEmpty;
     }
@@ -821,7 +789,6 @@ public class SearchViewModel extends BaseObservable {
 
     public void onClearClicked(View view) {
         searchDomain.initFilter();
-//        USING_INSTANT_SEARCH=false;
         setQuery("");
         setIsMSE1SectionVisible(true);
     }

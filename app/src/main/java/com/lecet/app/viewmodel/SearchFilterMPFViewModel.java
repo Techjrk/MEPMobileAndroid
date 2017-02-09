@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -54,11 +53,14 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String EXTRA_BUILDING_OR_HIGHWAY = "persistedBuildingOrHighway";
     public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
+    private static final String ANY = "Any";
 
     private AppCompatActivity activity;
     private static int id;
     private Intent intent;
     private boolean isProjectViewVisible = true;
+    private boolean moreOption;
+
 
     /**
      * User's selected filter item - values for Project display
@@ -213,8 +215,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public void setPersistedWorkType(String persistedWorkType) {
         this.persistedWorkType = persistedWorkType;
     }
-
-    static final String ANY = "Any";
 
     /**
      * getter and setter
@@ -404,19 +404,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         intent = activity.getIntent();
     }
 
-    /**
-     * Display error message
-     */
-    public void errorDisplayMsg(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + message + "\r\n");
-        Log.e("Error:", "Error " + message);
-        builder.setMessage(message);
-        builder.setNegativeButton(activity.getString(R.string.ok), null);
-        Log.e("onFailure", "onFailure: " + message);
-        builder.show();
-    }
-
     public AppCompatActivity getActivity() {
         return activity;
     }
@@ -424,7 +411,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     /**
      * OnClick handlers
      **/
-
 
     public void onClicked(View view) {
         Intent i = null;
@@ -436,6 +422,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 section = LOCATION;
                 i = new Intent(activity, SearchFilterLocationActivity.class);
                 break;
+
             case R.id.location:
                 section = LOCATION;
                 i = new Intent(activity, SearchFilterLocationActivity.class);
@@ -465,10 +452,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
                 break;
+
             case R.id.cjurisdiction:
             case R.id.jurisdiction:
                 section = JURISDICTION;
-//                i = new Intent(activity, SearchFilterMPFJurisdictionActivity.class);
                 i = new Intent(activity, SearchFilterJurisdictionActivity.class);
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
@@ -519,8 +506,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 return;
         }
 
-//        activity.startActivityForResult(i, id & 0xfff); //mark
-        activity.startActivityForResult(i, section); //mark
+        activity.startActivityForResult(i, section);
     }
 
     public void onClickedProjectCompanyTab(View view) {
@@ -543,10 +529,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
 
     public void saveResult() {
         activity.setResult(Activity.RESULT_OK, intent);
-//        activity.setResult(1, intent);
     }
-
-    private boolean moreOption; //TODO - move to top of class
 
     @Bindable
     public boolean getMoreOption() {

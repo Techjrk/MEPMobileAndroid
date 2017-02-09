@@ -415,7 +415,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     }
 
     public Integer grandChildIndexInParent(Integer parentPosition, Integer adapterPosition) {
-
         // If parent is 5, and adapter position is 7. Then we know the grand child is in index position
         // 1.
         return adapterPosition - parentPosition - 1;
@@ -430,22 +429,17 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
         public ParentViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_parent);
             imgView = (ImageView) itemView.findViewById(R.id.j_parent_img);
         }
     }
 
     public class ChildViewHolder extends RecyclerView.ViewHolder {
-        //        public TextView textView;
         public CheckBox checkView;
         public ImageView imgView;
 
         public ChildViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_child);
             imgView = (ImageView) itemView.findViewById(R.id.j_child_img);
         }
@@ -457,8 +451,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
         public GrandChildTypeViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_grandchild);
         }
     }

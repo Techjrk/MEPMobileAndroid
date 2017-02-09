@@ -6,13 +6,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 
 /**
  * CompanyDetailProjectBidsActivity
  * Created by jasonm on 8/15/16.
  */
-public class CompanyDetailProjectBidsActivity extends NavigationBaseActivity {
+public class CompanyDetailProjectBidsActivity extends LecetBaseActivity {
 
     private final String TAG = "CompanyDetailPrjBidsAct";
 

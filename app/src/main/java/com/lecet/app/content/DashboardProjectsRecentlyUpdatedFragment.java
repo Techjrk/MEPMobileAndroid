@@ -64,7 +64,7 @@ public class DashboardProjectsRecentlyUpdatedFragment extends BaseDashboardChart
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.getViewModel().fetchData(binding.pieChartView);
+        binding.getViewModel().fetchData();
     }
 
     @Override

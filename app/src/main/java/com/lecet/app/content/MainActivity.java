@@ -23,13 +23,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
 import com.lecet.app.adapters.MTMMenuAdapter;
 import com.lecet.app.adapters.OverflowMenuAdapter;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.CompanyTrackingList;
@@ -66,7 +65,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -77,7 +75,7 @@ import io.realm.RealmChangeListener;
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
  */
-public class MainActivity extends NavigationBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
+public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";
@@ -514,27 +512,5 @@ public class MainActivity extends NavigationBaseActivity implements MHSDelegate,
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, companyTrackingList.getName());
         startActivity(intent);
     }
-
-    /**
-     * Display error message - TODO - replace?
-     */
-    public void errorDisplayMsg(String message) {
-        if (errorMessage != null) return;
-        errorMessage = message + "\r\n";
-        try {
-            if (dialogBuilder == null) dialogBuilder = new AlertDialog.Builder(this); //Applying singleton;
-            dialogBuilder.setTitle(this.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
-            Log.e("Error:", "Error " + errorMessage);
-            dialogBuilder.setMessage(errorMessage);
-            dialogBuilder.setNegativeButton(this.getString(R.string.ok), null);
-            Log.e("onFailure", "onFailure: " + errorMessage);
-            dialogBuilder.show();
-        } catch (Exception e) {
-            Log.d("Dialog Error", "try-catch.. Error in displaying Dialog Builder" + e.getMessage());
-
-            Toast.makeText(this, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
-        }
-    }
-
 
 }

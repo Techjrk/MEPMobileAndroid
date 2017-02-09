@@ -147,7 +147,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         pieChartView.setTransparentCircleRadius(0);
         pieChartView.setTransparentCircleAlpha(0);
         pieChartView.setHoleRadius(CHART_HOLE_RADIUS_UNSELECTED);
-        pieChartView.setHoleColor(ContextCompat.getColor(this.fragment.getContext(), R.color.transparent)); //TODO - update?
+        pieChartView.setHoleColor(ContextCompat.getColor(this.fragment.getContext(), R.color.transparent));
         pieChartView.setDrawMarkerViews(false);
         pieChartView.setDrawEntryLabels(false);
         pieChartView.setCenterText("");
@@ -164,7 +164,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
      * Heavy-Highway will include Engineering (101) and Utilities (105).
      * Building will include Housing (103) and Building (102).
      */
-    public void fetchData(final PieChart pieChartView) {    //TODO - this arg is not used
+    public void fetchData() {
 
         if (this.dataSourceType == DATA_SOURCE_TYPE_MBR) {
             dataSourceMBR.refreshRecentlyMadeBids(new LecetCallback<TreeMap<Long, TreeSet<Bid>>>() {
@@ -388,7 +388,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             }
             else
             {
-                Log.d(TAG, "refreshContent: WARNING *** Highlight Y is NaN");   //TODO - handle
+                Log.w(TAG, "refreshContent: WARNING *** Highlight Y is NaN");   //NOTE - this may be the root cause issues with value display offset
                 origXPx = 0;
                 origYPx = 0;
             }
@@ -450,7 +450,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 //        dataSet.setValueFormatter(new CustomValueFormatter());
 
 
-        // custom dynamic chart value marker view - TODO - these next three lines enable/disable the custom value highlighting. iOS does not use it.
+        // custom dynamic chart value marker view - NOTE - these next three lines enable/disable the custom value highlighting. iOS does not use it.
         /*CustomMarkerView mv = new CustomMarkerView (fragment.getContext(), R.layout.dashboard_chart_marker_view);
         pieChartView.setDrawMarkerViews(true);
         pieChartView.setMarkerView(mv);*/
@@ -484,7 +484,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         iconToShow.setVisibility(View.VISIBLE);
     }
 
-    public void notifyDelegateOfSelection(Long category) {      //TODO - update to new B and H system
+    public void notifyDelegateOfSelection(Long category) {
 
         // MBR
         if(dataSourceType == DATA_SOURCE_TYPE_MBR) {

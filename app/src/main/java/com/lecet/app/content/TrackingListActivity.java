@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.lecet.app.R;
-import com.lecet.app.contentbase.NavigationBaseActivity;
+import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityTrackingListBinding;
@@ -28,7 +28,7 @@ import io.realm.RealmChangeListener;
  * TrackingListActivity Created by jasonm on 11/2/16.
  */
 
-public abstract class TrackingListActivity extends NavigationBaseActivity {
+public abstract class TrackingListActivity extends LecetBaseActivity {
 
     private final String TAG = "ProjectTrackingListAct";
 

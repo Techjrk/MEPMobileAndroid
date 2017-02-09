@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -68,8 +67,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             @Override
             public void execute(Realm realm) {
                 realmProjectTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
-                Log.d(TAG, "realmProjectTypes size: " + realmProjectTypes.size());
-                Log.d(TAG, "realmProjectTypes list: " + realmProjectTypes);
             }
         });
     }
@@ -103,8 +100,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         hasChild = false;
         hasGrandChild = false;
         String searchKey = key;
-
-        Log.d("typeinit", "typeinit");
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -135,7 +130,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                     if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
                         hasChild = true;
                         foundChild = true;
-                        Log.d("foundChild", "foundChild" + child.getName());
                     }
                     List<PrimaryProjectType> gchildTypes = ptpc.getProjectTypes();
                     List<SearchFilterProjectTypeAdapter.GrandChild> grandChildren = new ArrayList<>();
@@ -161,16 +155,13 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                     if ((foundChild || containGrandChild.contains(true)) || foundParent) {
                         children.add(child);
                         containGrandChild.remove(true);
-                        Log.d("child3 added", "haschild3: " + hasChild + "hasgchild" + hasGrandChild + "child1 added" + child.getName() + " f1:" + foundParent + " f3:" + foundChild + " fdc:" + containGrandChild.contains(true));
                     }
                 }
 
             }
             // parent.setChildren(children);
-            // data.add(parent);
             if (children != null) {
                 parent.setChildren(children);
-                Log.d("parent1 added", "parent1 added");
             }
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
