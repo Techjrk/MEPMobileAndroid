@@ -25,7 +25,6 @@
 
             <!-- SEARCH FIELD -->
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@color/lecetDarkestBlue">
@@ -34,7 +33,6 @@
                     android:layout_width="280dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rounded_edittext">
 
@@ -47,7 +45,7 @@
                         android:layout_toStartOf="@id/close_image_button"
                         android:background="@null"
                         android:drawableStart="@drawable/ic_action_search"
-                        android:hint="Search for jurisdiction"
+                        android:hint="Search for Jurisdiction"
                         android:inputType="textPersonName"
                         android:text="@={viewModel.query}"
                         android:textColor="@color/lecetTextWhite"
@@ -58,17 +56,19 @@
 
                 <!-- APPLY BUTTON -->
                 <Button
-                    android:id="@+id/apply_button"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/apply"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:width="30dp"
+                    android:layout_marginTop="15dp"
                     android:background="@null"
                     android:onClick="@{viewModel.onApplyButtonClicked}"
-                    android:text="APPLY"
+                    android:text="@string/mseapply"
+                    android:textAllCaps="true"
+                    android:lines="1"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
+
             </LinearLayout>
 
                 <!-- JURISDICTION ITEM SECTION -->

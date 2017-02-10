@@ -86,18 +86,8 @@
                 android:theme="@style/AppTheme"
                 android:screenOrientation="portrait"/>
         <activity
-                android:name=".content.CreatePasswordActivity"
-                android:label="@string/title_activity_create_password"
-                android:theme="@style/AppTheme"
-                android:screenOrientation="portrait"/>
-        <activity
                 android:name=".content.ContactDetailActivity"
                 android:label="@string/title_activity_change_password"
-                android:theme="@style/AppTheme"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".content.UpdateProfileActivity"
-                android:label="@string/title_activity_update_profile"
                 android:theme="@style/AppTheme"
                 android:screenOrientation="portrait"/>
         <activity
