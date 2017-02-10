@@ -25,7 +25,7 @@ public class UpdateUserProfileRequest {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("fax")
+    @SerializedName("faxNumber")
     private String fax;
 
     @SerializedName("address")

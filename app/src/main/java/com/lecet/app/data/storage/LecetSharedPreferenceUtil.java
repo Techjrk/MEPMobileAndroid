@@ -53,7 +53,7 @@ public class LecetSharedPreferenceUtil {
     }
 
     private Boolean getBooleanPreferences(String name) {
-        return mSharedPreferences.getBoolean(name, false);
+        return mSharedPreferences.getBoolean(name, true);
     }
 
     private void putBooleanPreferences(String name, Boolean value) {

@@ -392,6 +392,8 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
+                    showCancelAlertDialog(context, context.getString(R.string.app_name), context.getString(R.string.successfully_updated));
+
                 } else {
 
                     dismissProgressDialog();

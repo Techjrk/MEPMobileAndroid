@@ -309,6 +309,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="profile_error_message">Please enter your %s</string>
     <string name="title_activity_hidden_projects">HiddenProjectsActivity</string>
+    <string name="successfully_updated">Successfully updated</string>
 
     <!-- MHD Hidden Projects -->
     <string name="hidden_projects_title">Hidden Projects</string>

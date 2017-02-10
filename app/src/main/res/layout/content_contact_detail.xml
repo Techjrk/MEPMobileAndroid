@@ -41,7 +41,8 @@
 
                 <TextView style="@style/ContactDetailTextView"
                           android:layout_width="0dp"
-                          android:layout_height="45dp"
+                          android:layout_height="wrap_content"
+                          android:minHeight="45dp"
                           android:layout_weight="70"
                           android:layout_marginLeft="20dp"
                           android:gravity="left|center_vertical"
@@ -84,8 +85,9 @@
 
                 <TextView style="@style/ContactDetailTextView"
                           android:layout_width="0dp"
-                          android:layout_height="45dp"
+                          android:layout_height="wrap_content"
                           android:layout_weight="70"
+                          android:minHeight="45dp"
                           android:layout_marginLeft="20dp"
                           android:gravity="left|center_vertical"
                           android:text="@{viewModel.address}"
@@ -169,7 +171,8 @@
 
                 <TextView style="@style/ContactDetailTextView"
                           android:layout_width="0dp"
-                          android:layout_height="45dp"
+                          android:layout_height="wrap_content"
+                          android:minHeight="45dp"
                           android:layout_weight="70"
                           android:layout_marginLeft="15dp"
                           android:gravity="left|center_vertical"
