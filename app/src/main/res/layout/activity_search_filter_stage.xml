@@ -34,7 +34,6 @@
                     android:layout_width="280dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rounded_edittext">
 
@@ -60,16 +59,18 @@
                 <!-- APPLY BUTTON -->
                 <Button
                     android:id="@+id/apply"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:width="30dp"
+                    android:layout_marginTop="15dp"
                     android:background="@null"
                     android:onClick="@{viewModel.onApplyButtonClicked}"
-                    android:text="APPLY"
+                    android:text="@string/mseapply"
+                    android:textAllCaps="true"
+                    android:lines="1"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
+
             </LinearLayout>
 
             <!-- STAGE DETAIL SECTION -->
