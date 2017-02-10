@@ -45,7 +45,7 @@
                         android:layout_toStartOf="@id/close_image_button"
                         android:background="@null"
                         android:drawableStart="@drawable/ic_action_search"
-                        android:hint="Search for jurisdiction"
+                        android:hint="Search for Jurisdiction"
                         android:inputType="textPersonName"
                         android:text="@={viewModel.query}"
                         android:textColor="@color/lecetTextWhite"
