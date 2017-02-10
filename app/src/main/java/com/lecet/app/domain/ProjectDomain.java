@@ -280,7 +280,7 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-                .findAll();
+                .findAllSorted("bidDate", Sort.DESCENDING);
 
         return projectsResult;
     }
@@ -292,7 +292,7 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", start, end)
-                .findAll();
+                .findAllSorted("bidDate", Sort.DESCENDING);
 
         return projectsResult;
     }
@@ -362,7 +362,7 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mruItem", true)
                 .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
-                .findAll();
+                .findAllSorted("lastPublishDate", Sort.DESCENDING);
 
         return projectsResult;
     }

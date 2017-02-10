@@ -1,6 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
@@ -127,7 +126,6 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                             networkAlertDialog = builder.show();
                         }
                     });
-
 
 
                 } else {
