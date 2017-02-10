@@ -13,6 +13,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.utility.DateUtility;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -123,7 +124,9 @@ public class TrackingListDomain {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
-        String filter = "{\"include\":[\"updates\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
+        String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtility.addDays(-1));
+        String unFormattedFilter = "{\"include\":[{\"relation\":\"updates\", \"scope\":{\"where\":{\"updatedAt\":{\"gte\":\"%s\"}}}},{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
+        String filter = String.format(unFormattedFilter, formattedDate);
 
         Call<List<Project>> call = lecetClient.getTrackingListService().getProjectTrackingListDetail(token, projectTrackingListID, filter);
         call.enqueue(callback);

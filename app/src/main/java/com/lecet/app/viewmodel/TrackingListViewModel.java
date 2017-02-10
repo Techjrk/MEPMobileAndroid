@@ -22,6 +22,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.TrackingListAdapter;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 
 import io.realm.RealmResults;
 
@@ -30,7 +31,7 @@ import io.realm.RealmResults;
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
-public abstract class TrackingListViewModel<T extends RealmResults> extends BaseObservable {
+public abstract class TrackingListViewModel<T extends RealmResults> extends BaseObservableViewModel {
 
     private final static String TAG = "ProjectTrackingListVM";
 
@@ -56,7 +57,7 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     private boolean showUpdates = true;
 
     public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId) {
-
+        super(appCompatActivity);
         this.appCompatActivity = appCompatActivity;
         this.listItemId = listItemId;
         init();
@@ -266,4 +267,7 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     public void onSortButtonClick(View view) {
         toogleMTMSortMenu();
     }
+
+    /** Dialogs **/
+
 }

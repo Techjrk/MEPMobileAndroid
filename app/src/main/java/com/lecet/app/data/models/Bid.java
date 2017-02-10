@@ -63,6 +63,7 @@ public class Bid extends RealmObject {
     public Bid() {
     }
 
+
     public boolean isAwardInd() {
         return awardInd;
     }

@@ -31,6 +31,9 @@ public class ActivityUpdateDeserializer implements JsonDeserializer<ActivityUpda
 
         final ActivityUpdate projectUpdate = new ActivityUpdate();
 
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+
         final Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create();
@@ -145,14 +148,12 @@ public class ActivityUpdateDeserializer implements JsonDeserializer<ActivityUpda
 
         }
 
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
         final JsonElement jsonCreatedAt = jsonObject.get("createdAt");
         if (jsonCreatedAt != null && !jsonCreatedAt.isJsonNull()) {
 
             try {
 
-                final Date createdAt = format.parse(jsonCreatedAt.getAsString());
+                final Date createdAt = dateFormat.parse(jsonCreatedAt.getAsString());
                 projectUpdate.setCreatedAt(createdAt);
 
             } catch (ParseException e) {
@@ -165,7 +166,7 @@ public class ActivityUpdateDeserializer implements JsonDeserializer<ActivityUpda
 
             try {
 
-                final Date updatedAt = format.parse(jsonUpdatedAt.getAsString());
+                final Date updatedAt = dateFormat.parse(jsonUpdatedAt.getAsString());
                 projectUpdate.setUpdatedAt(updatedAt);
 
             } catch (ParseException e) {

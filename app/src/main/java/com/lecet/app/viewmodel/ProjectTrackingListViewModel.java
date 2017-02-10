@@ -63,6 +63,8 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
     public void getProjectTrackingListUpdates(final long projectTrackingListId) {
 
+        showProgressDialog(getAppCompatActivity().getString(R.string.updating), "");
+
         trackingListDomain.getProjectTrackingListDetails(projectTrackingListId, new Callback<List<Project>>() {
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
@@ -77,27 +79,30 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
                         public void onSuccess() {
 
                             initProjectTrackingList(projectTrackingListId);
+                            dismissProgressDialog();
                         }
 
                     }, new Realm.Transaction.OnError() {
                         @Override
                         public void onError(Throwable error) {
 
-                            Log.d(TAG, "Realm Failed: " + error.getMessage());
+                            dismissProgressDialog();
+                            showCancelAlertDialog(getAppCompatActivity().getString(R.string.app_name), error.getMessage());
                         }
                     });
 
-
                 } else {
 
-                    Log.d(TAG, "Response Failed: " + response.message());
+                    dismissProgressDialog();
+                    showCancelAlertDialog(getAppCompatActivity().getString(R.string.app_name), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Project>> call, Throwable t) {
 
-                Log.d(TAG, t.toString());
+                dismissProgressDialog();
+                showCancelAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), getAppCompatActivity().getString(R.string.error_network_message));
             }
         });
     }
