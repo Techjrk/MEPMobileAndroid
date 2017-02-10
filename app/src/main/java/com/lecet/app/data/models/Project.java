@@ -2,11 +2,13 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.lecet.app.interfaces.TrackedObject;
 
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -489,7 +491,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.recentUpdate = recentUpdate;
     }
 
-    public void updateProject(Realm realm, Project project, boolean hidden) {
+    public void updateProject(Realm realm, Project project, Boolean hidden) {
 
         this.bidSubmitTo = project.bidSubmitTo;
         this.state = project.getState();
@@ -546,15 +548,31 @@ public class Project extends RealmObject implements TrackedObject {
         this.bondInformation = project.getBondInformation();
         this.ownerClass = project.getOwnerClass();
         if (project.getContacts() != null) {
-            this.contacts = project.getContacts();
+
+            List<Contact> managedContacts = realm.copyToRealmOrUpdate(project.getContacts());
+            for (Contact contact : managedContacts) {
+                this.contacts.add(contact);
+            }
         }
         if (project.getBids() != null) {
-            this.bids = project.getBids();
+
+            List<Bid> managedBids = realm.copyToRealmOrUpdate(project.getBids());
+            for (Bid bid : managedBids) {
+                this.bids.add(bid);
+            }
         }
         if (project.getUpdates() != null) {
-            this.updates = project.getUpdates();
+
+            List<ActivityUpdate> managedUpdates = realm.copyToRealmOrUpdate(project.getUpdates());
+            for (ActivityUpdate update : managedUpdates) {
+                this.updates.add(update);
+            }
         }
-        this.hidden = hidden;
+
+        if (hidden != null) {
+
+            this.hidden = hidden.booleanValue();
+        }
     }
 
     public void updateProject(Realm realm, Project project, @Nullable Boolean isHidden, @Nullable Boolean mbsItem, @Nullable Boolean mraItem, @Nullable Boolean mruItem) {
@@ -614,13 +632,25 @@ public class Project extends RealmObject implements TrackedObject {
         this.bondInformation = project.getBondInformation();
         this.ownerClass = project.getOwnerClass();
         if (project.getContacts() != null) {
-            this.contacts = project.getContacts();
+
+            List<Contact> managedContacts = realm.copyToRealmOrUpdate(project.getContacts());
+            for (Contact contact : managedContacts) {
+                this.contacts.add(contact);
+            }
         }
         if (project.getBids() != null) {
-            this.bids = project.getBids();
+
+            List<Bid> managedBids = realm.copyToRealmOrUpdate(project.getBids());
+            for (Bid bid : managedBids) {
+                this.bids.add(bid);
+            }
         }
         if (project.getUpdates() != null) {
-            this.updates = project.getUpdates();
+
+            List<ActivityUpdate> managedUpdates = realm.copyToRealmOrUpdate(project.getUpdates());
+            for (ActivityUpdate update : managedUpdates) {
+                this.updates.add(update);
+            }
         }
 
         if (isHidden != null) {

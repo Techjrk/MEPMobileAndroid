@@ -88,23 +88,47 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
             @Override
             public void onResponse(Call<Project> call, Response<Project> response) {
 
-                ProjectDetailActivity activity = activityWeakReference.get();
+                final ProjectDetailActivity activity = activityWeakReference.get();
 
                 if (activity == null) return;
 
                 if (response.isSuccessful()) {
 
                     Project responseProject = response.body();
-                    projectDomain.copyToRealmTransaction(responseProject);
 
-                    // Fetch updated project
-                    project = projectDomain.fetchProjectById(projectID);
+                    projectDomain.asyncCopyToRealm(responseProject, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
 
-                    // Setup RecyclerView
-                    initProjectDetailAdapter(activity, project, activity);
+                            // Fetch updated project
+                            project = projectDomain.fetchProjectById(projectID);
 
-                    // Setup paralax imageview
-                    initMapImageView(activity, getMapUrl(project));
+                            // Setup RecyclerView
+                            initProjectDetailAdapter(activity, project);
+
+                            // Setup paralax imageview
+                            initMapImageView(activity, getMapUrl(project));
+
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+
+                            activity.hideNetworkAlert();
+
+                            if (networkAlertDialog != null && networkAlertDialog.isShowing())
+                                networkAlertDialog.dismiss();
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                            builder.setTitle(activity.getString(R.string.error_network_title));
+                            builder.setMessage(error.getMessage());
+                            builder.setNegativeButton(activity.getString(R.string.ok), null);
+
+                            networkAlertDialog = builder.show();
+                        }
+                    });
+
+
 
                 } else {
 
@@ -144,24 +168,24 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     /**
      * View management
      **/
-    private void initProjectDetailAdapter(ProjectDetailActivity activity, Project project, Context context) {
+    private void initProjectDetailAdapter(ProjectDetailActivity activity, Project project) {
 
         // Build Project Details
         List<ProjDetailItemViewModel> details = new ArrayList<>();
 
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.stage), project.getProjectStage().getName()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.value), "$ 0"));
-        details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(context), Realm.getDefaultInstance()), projectID, context.getString(R.string.jurisdiction)));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.county), project.getCounty()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_id), project.getDodgeNumber()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.address), project.getFullAddress()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_type), project.getProjectTypes()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage), project.getProjectStage().getName()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), "$ 0"));
+        details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance()), projectID, activity.getString(R.string.jurisdiction)));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
 
         // Notes
         String notes = null;

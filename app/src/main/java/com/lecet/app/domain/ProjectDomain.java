@@ -508,6 +508,30 @@ public class ProjectDomain {
         }, onSuccess, onError);
     }
 
+    public void asyncCopyToRealm(final List<Project> projects, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, project, null);
+                        realm.copyToRealmOrUpdate(storedProject);
+
+                    } else {
+
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, onSuccess, onError);
+    }
+
     public void asyncCopyToRealm(final List<Project> projects, @Nullable final Boolean isHidden, @Nullable final Boolean mbsItem,
                                  @Nullable final Boolean mraItem, @Nullable final Boolean mruItem,
                                  @NonNull Realm.Transaction.OnSuccess onSuccess, @NonNull Realm.Transaction.OnError onError) {
@@ -564,7 +588,7 @@ public class ProjectDomain {
 
                 if (storedProject != null) {
 
-                    storedProject.updateProject(realm, project, null, null, null, null);
+                    storedProject.updateProject(realm, project, null);
                     realm.copyToRealmOrUpdate(storedProject);
 
                 } else {

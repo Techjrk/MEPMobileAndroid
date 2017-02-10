@@ -3,6 +3,7 @@ package com.lecet.app.viewmodel;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.graphics.Point;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.domain.TrackingListDomain;
@@ -40,11 +42,12 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
     private final AppCompatActivity appCompatActivity;
     private final TrackingListDomain trackingListDomain;
-    private final T trackedObject;
+    private T trackedObject;
 
     private ProgressDialog progressDialog;
     private ListPopupWindow mtmPopupWindow;
     private MoveToAdapter mtmAdapter;
+    private String hideButtonTitle;
 
     private Dialog hideDialog;
     private AlertDialog alertDialog;
@@ -87,6 +90,9 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
         return trackedObject;
     }
 
+    public void setTrackedObject(T trackedObject) {
+        this.trackedObject = trackedObject;
+    }
 
     @SuppressWarnings("unused")
     public void onTrackSelected(View view) {
@@ -259,6 +265,18 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
 
         dismissWindow();
         handleTrackingListSelected(trackedObject, trackingList);
+    }
+
+    /* Hide Button **/
+    @Bindable
+    public String getHideButtonTitle() {
+
+        return hideButtonTitle;
+    }
+
+    public void setHideButtonTitle(String hideButtonTitle) {
+        this.hideButtonTitle = hideButtonTitle;
+        notifyPropertyChanged(BR.hideButtonTitle);
     }
 
     /* Tracking List Management */

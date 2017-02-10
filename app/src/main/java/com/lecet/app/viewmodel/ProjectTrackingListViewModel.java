@@ -18,6 +18,7 @@ import com.lecet.app.domain.TrackingListDomain;
 
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -70,8 +71,22 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
                     List<Project> data = response.body();
 
-                    projectDomain.copyToRealmTransaction(data);
-                    initProjectTrackingList(projectTrackingListId);
+                    projectDomain.asyncCopyToRealm(data, new Realm.Transaction.OnSuccess() {
+
+                        @Override
+                        public void onSuccess() {
+
+                            initProjectTrackingList(projectTrackingListId);
+                        }
+
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+
+                            Log.d(TAG, "Realm Failed: " + error.getMessage());
+                        }
+                    });
+
 
                 } else {
 

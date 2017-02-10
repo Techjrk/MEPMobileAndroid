@@ -36,6 +36,7 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
     public ProjectShareToolbarViewModel(AppCompatActivity appCompatActivity, TrackingListDomain trackingListDomain, Project trackedObject) {
         super(appCompatActivity, trackingListDomain, trackedObject);
+        setHideButtonTitle(getTrackedObject().isHidden() ? getAppCompatActivity().getString(R.string.unhide) : getAppCompatActivity().getString(R.string.hide));
     }
 
     @Override
@@ -194,8 +195,9 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
                     if (response.isSuccessful()) {
 
-                        dismissProgressDialog();
                         getTrackingListDomain().getProjectDomain().setProjectHidden(project, false);
+                        setHideButtonTitle(getAppCompatActivity().getString(R.string.hide));
+                        dismissProgressDialog();
 
                     } else {
 
@@ -220,8 +222,9 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
                     if (response.isSuccessful()) {
 
-                        dismissProgressDialog();
                         getTrackingListDomain().getProjectDomain().setProjectHidden(project, true);
+                        setHideButtonTitle(getAppCompatActivity().getString(R.string.unhide));
+                        dismissProgressDialog();
 
                     } else {
 
@@ -252,4 +255,5 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
         clearRadioGroup();
     }
+
 }
