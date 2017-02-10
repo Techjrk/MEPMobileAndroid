@@ -68,23 +68,31 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
     private void getUpdates(long listId) {
 
+        showProgressDialog(getAppCompatActivity().getString(R.string.updating), "");
+
         trackingListDomain.getCompanyTrackingListUpdates(listId, DateUtility.addDays(-1), new Callback<List<ActivityUpdate>>() {
             @Override
             public void onResponse(Call<List<ActivityUpdate>> call, Response<List<ActivityUpdate>> response) {
 
                 if (response.isSuccessful()) {
 
+                    dismissProgressDialog();
+
                     trackingListDomain.copyActivityUpdatesToRealmTransaction(response.body());
                     getListAdapter().notifyDataSetChanged();
 
                 } else {
 
+                    dismissProgressDialog();
+                    showCancelAlertDialog(getAppCompatActivity().getString(R.string.app_name), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<ActivityUpdate>> call, Throwable t) {
 
+                dismissProgressDialog();
+                showCancelAlertDialog(getAppCompatActivity().getString(R.string.error_network_title), getAppCompatActivity().getString(R.string.error_network_message));
             }
         });
     }
