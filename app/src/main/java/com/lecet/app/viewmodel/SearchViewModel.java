@@ -355,13 +355,13 @@ public class SearchViewModel extends BaseObservable {
                     searchAdapterRecentlyViewed.notifyDataSetChanged();
 
                 } else {
-                    errorDisplayMsg(response.message());
+                    handleError(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SearchResult>> call, Throwable t) {
-                errorDisplayMsg(t.getLocalizedMessage());
+                handleError(t.getLocalizedMessage());
             }
         });
     }
@@ -394,13 +394,13 @@ public class SearchViewModel extends BaseObservable {
                     searchAdapterProject.notifyDataSetChanged();
                     searchAdapterCompany.notifyDataSetChanged();
                 } else {
-                    errorDisplayMsg(response.message());
+                    handleError(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SearchSaved>> call, Throwable t) {
-                errorDisplayMsg(t.getLocalizedMessage());
+                handleError(t.getLocalizedMessage());
             }
         });
     }
@@ -415,13 +415,13 @@ public class SearchViewModel extends BaseObservable {
                     getProjectQueryListSummary(searchproject);
 
                 } else {
-                    errorDisplayMsg("Unsuccessful Query. " + response.message());
+                    handleError("Unsuccessful Query. " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<SearchProject> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
+                handleError("Network is busy. Pls. try again. ");
             }
         });
     }
@@ -436,13 +436,13 @@ public class SearchViewModel extends BaseObservable {
                     getCompanyQueryListSummary(searchcompany);
 
                 } else {
-                    errorDisplayMsg("Unsuccessful Query. " + response.message());
+                    handleError("Unsuccessful Query. " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<SearchCompany> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
+                handleError("Network is busy. Pls. try again. ");
             }
         });
     }
@@ -456,13 +456,13 @@ public class SearchViewModel extends BaseObservable {
                     setQueryContactTotal(searchcontact.getTotal());
                     getContactQueryListSummary(searchcontact);
                 } else {
-                    errorDisplayMsg("Unsuccessful Query. " + response.message());
+                    handleError("Unsuccessful Query. " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<SearchContact> call, Throwable t) {
-                errorDisplayMsg("Network is busy. Pls. try again. ");
+                handleError("Network is busy. Pls. try again. ");
             }
         });
     }
@@ -480,11 +480,18 @@ public class SearchViewModel extends BaseObservable {
             Log.e("Error:", "Error " + errorMessage);
             dialogBuilder.setMessage(errorMessage);
             dialogBuilder.setNegativeButton(activity.getString(R.string.ok), null);
-            Log.e("onFailure", "onFailure: " + errorMessage);
+            Log.e("SearchViewModel", "onFailure: " + errorMessage);
             dialogBuilder.show();
         } catch (Exception e) {
-            Toast.makeText(activity, "Error in displaying Dialog" + e.getMessage(), Toast.LENGTH_SHORT);        //TODO - Toast
+            handleError(message);
         }
+    }
+
+    /**
+     * Handle error
+     */
+    private void handleError(String errMsg) {
+        Log.e("SearchViewModel", "ERROR: " + errMsg);
     }
 
     /**
