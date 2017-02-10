@@ -59,7 +59,6 @@ public class ContactViewModel {
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
         sortButton.setVisibility(View.INVISIBLE);
 
-        //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +85,9 @@ public class ContactViewModel {
         if (preCompany.length() > companyNameLength) {
             companyNameLength = preCompany.length() +1;
         }
-        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+        spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(appCompatActivity, R.color.lecetSpannableBlue)), preCompany.length(), preCompany.length() + companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return spannable;
     }

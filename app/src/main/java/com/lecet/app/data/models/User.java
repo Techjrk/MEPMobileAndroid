@@ -28,7 +28,7 @@ public class User extends RealmObject {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("fax")
+    @SerializedName("faxNumber")
     private String fax;
 
     @SerializedName("address")
