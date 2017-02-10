@@ -81,6 +81,7 @@ public class SearchViewModel extends BaseObservable {
     private static AlertDialog.Builder dialogBuilder;
     private String errorMessage = null;
 
+
     // Adapter types
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SEARCH_ADAPTER_TYPE_RECENT, SEARCH_ADAPTER_TYPE_PROJECTS, SEARCH_ADAPTER_TYPE_COMPANIES,
@@ -115,7 +116,10 @@ public class SearchViewModel extends BaseObservable {
     private final int CONTENT_MAX_SIZE = 4;
 
     //For MSE 2.0
-    //private static EditText searchfield;
+    private boolean displaySeeAllProject;
+    private boolean displaySeeAllCompany;
+    private boolean displaySeeAllContact;
+
     private List<Project> adapterDataProjectAll;
     private List<Company> adapterDataCompanyAll;
     private List<Contact> adapterDataContactAll;
@@ -254,6 +258,7 @@ public class SearchViewModel extends BaseObservable {
         getQueryProjectTotal();
         getQueryCompanyTotal();
         getQueryContactTotal();
+
     }
 
 
@@ -618,8 +623,36 @@ public class SearchViewModel extends BaseObservable {
         }
     }
 
+    public void setDisplaySeeAllProject(boolean displaySeeAllProject) {
+        this.displaySeeAllProject = displaySeeAllProject;
+        notifyPropertyChanged(BR.displaySeeAllProject);
+    }
+
+    public void setDisplaySeeAllCompany(boolean displaySeeAllCompany) {
+        this.displaySeeAllCompany = displaySeeAllCompany;
+        notifyPropertyChanged(BR.displaySeeAllCompany);
+    }
+
+    public void setDisplaySeeAllContact(boolean displaySeeAllContact) {
+        this.displaySeeAllContact = displaySeeAllContact;
+        notifyPropertyChanged(BR.displaySeeAllContact);
+    }
+
     ///////////////////////////////////
     // BINDABLE
+    @Bindable
+    public boolean getDisplaySeeAllProject() {
+        return displaySeeAllProject;
+    }
+    @Bindable
+    public boolean getDisplaySeeAllCompany() {
+        return displaySeeAllCompany;
+    }
+    @Bindable
+    public boolean getDisplaySeeAllContact() {
+        return displaySeeAllContact;
+    }
+
     @Bindable
     public boolean getQueryEmpty() {
         return queryEmpty;
@@ -715,7 +748,8 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public boolean getIsQueryProjectTotalZero() {
-        return queryProjectTotal <= 0;
+       // return queryProjectTotal <= 0;
+        return isQueryProjectTotalZero;
     }
 
     @Bindable
@@ -726,7 +760,8 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public boolean getIsQueryCompanyTotalZero() {
-        return queryCompanyTotal <= 0;
+        //return queryCompanyTotal <= 0;
+        return isQueryCompanyTotalZero;
     }
 
     @Bindable
@@ -738,7 +773,8 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public boolean getIsQueryContactTotalZero() {
-        return queryContactTotal <= 0;
+        //return queryContactTotal <= 0;
+        return  isQueryContactTotalZero;
     }
 
     @Bindable
@@ -764,23 +800,26 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public String getQueryProjectTotal() {
-        boolean notzerovalue = (queryProjectTotal > 0);
-        setIsQueryProjectTotalZero(notzerovalue);
-        return queryProjectTotal + (notzerovalue ? PROJECT_TEXT + "s" : PROJECT_TEXT);
+        boolean moreThanOneTotal = (queryProjectTotal > 1);
+        setDisplaySeeAllProject(queryProjectTotal > 4);
+        setIsQueryProjectTotalZero(queryProjectTotal <= 0);
+        return queryProjectTotal + (moreThanOneTotal ? PROJECT_TEXT + "s" : PROJECT_TEXT);
     }
 
     @Bindable
     public String getQueryCompanyTotal() {
-        boolean notzerovalue = (queryCompanyTotal > 0);
-        setIsQueryCompanyTotalZero(notzerovalue);
-        return queryCompanyTotal + (notzerovalue ? " Companies" : COMPANY_TEXT);
+        boolean moreThanOneTotal = (queryCompanyTotal > 1);
+        setDisplaySeeAllCompany(queryCompanyTotal > 4);
+        setIsQueryCompanyTotalZero(queryCompanyTotal <= 0);
+        return queryCompanyTotal + (moreThanOneTotal ? " Companies" : COMPANY_TEXT);
     }
 
     @Bindable
     public String getQueryContactTotal() {
-        boolean notzerovalue = (queryContactTotal > 0);
-        setIsQueryContactTotalZero(notzerovalue);
-        return queryContactTotal + (notzerovalue ? CONTACT_TEXT + "s" : CONTACT_TEXT);
+        boolean moreThanOneTotal = (queryContactTotal > 1);
+        setDisplaySeeAllContact(queryContactTotal > 4);
+        setIsQueryContactTotalZero(queryContactTotal <= 0);
+        return queryContactTotal + (moreThanOneTotal ? CONTACT_TEXT + "s" : CONTACT_TEXT);
     }
 
     /**
