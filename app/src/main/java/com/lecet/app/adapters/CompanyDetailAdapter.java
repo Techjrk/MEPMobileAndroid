@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.lecet.app.R;
 import com.lecet.app.content.CompanyAssociatedProjectsActivity;
+import com.lecet.app.content.CompanyContactsActivity;
 import com.lecet.app.content.CompanyProjectBidsActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
@@ -386,6 +387,13 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
                     Intent intent = new Intent(appCompatActivity, CompanyProjectBidsActivity.class);
                     intent.putExtra(CompanyProjectBidsActivity.COMPANY_ID_EXTRA, company.getId());
+                    appCompatActivity.startActivity(intent);
+                } else if (contactsDisplayed && section == SECTION_CONTACTS) {
+
+                    Intent intent = new Intent(appCompatActivity, CompanyContactsActivity.class);
+                    intent.putExtra(CompanyContactsActivity.COMPANY_ID_EXTRA, company.getId());
+                    intent.putExtra(CompanyContactsActivity.COMPANY_NAME_EXTRA, company.getName());
+                    intent.putExtra(CompanyContactsActivity.COMPANY_CONTACTS_COUNT_EXTRA, company.getContacts().size());
                     appCompatActivity.startActivity(intent);
                 }
             }

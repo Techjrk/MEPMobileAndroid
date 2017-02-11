@@ -318,5 +318,7 @@
     <string name="title_activity_location_detail_map">LocationDetail</string>
     <string name="title_activity_company_project_bids">CompanyProjectBidsActivity</string>
 
+    <!-- Company Contacts -->
+    <string name="contacts_count">%d contacts</string>
 
 </resources>
