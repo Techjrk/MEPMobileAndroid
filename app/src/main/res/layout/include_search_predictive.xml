@@ -192,7 +192,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="@{viewModel.onClickSeeAllProject}">
+                        android:onClick="@{viewModel.onClickSeeAllProject}"
+                        android:visibility="@{viewModel.displaySeeAllProject  ? View.VISIBLE : View.GONE}">>
 
                         <TextView
                             android:id="@+id/seeall"
@@ -237,7 +238,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="@{viewModel.onClickSeeAllCompany}">
+                        android:onClick="@{viewModel.onClickSeeAllCompany}"
+                        android:visibility="@{viewModel.displaySeeAllCompany  ? View.VISIBLE : View.GONE}">
+                        >
 
                         <TextView
                             android:id="@+id/seeallcompany"
@@ -282,7 +285,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="@{viewModel.onClickSeeAllContact}">
+                        android:onClick="@{viewModel.onClickSeeAllContact}"
+                        android:visibility="@{viewModel.displaySeeAllContact  ? View.VISIBLE : View.GONE}">
+                        >
 
                         <TextView
                             android:id="@+id/seeallcontacts"
