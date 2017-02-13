@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -49,7 +50,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
     public static final String EXTRA_JURISDICTION = "persistedJurisdiction";
     public static final String EXTRA_STAGE = "persistedStage";
-    public static final String EXTRA_BIDDING_WITHIN = "persistedBiddingWithin";
+    public static final String EXTRA_BIDDING_WITHIN_DISPLAY_STR = "persistedBiddingWithinDisplayStr";
+    public static final String EXTRA_BIDDING_WITHIN_DAYS_INT = "persistedBiddingWithinDaysInt";
     public static final String EXTRA_BUILDING_OR_HIGHWAY = "persistedBuildingOrHighway";
     public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
@@ -95,10 +97,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private String persistedProjectTypeId;
     private String persistedValueMin;
     private String persistedValueMax;
-    private String[] persistedUpdatedWithin;
+    private String persistedUpdatedWithin;
     private String persistedJurisdiction;
     private String persistedStage;
-    private String[] persistedBiddingWithin;
+    private String persistedBiddingWithin;
     private String[] persistedBuildingOrHighway;
     private String persistedOwnerType;
     private String persistedWorkType;
@@ -160,11 +162,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         this.persistedValueMax = persistedValueMax;
     }
 
-    public String[] getPersistedUpdatedWithin() {
+    public String getPersistedUpdatedWithin() {
         return persistedUpdatedWithin;
     }
 
-    public void setPersistedUpdatedWithin(String[] persistedUpdatedWithin) {
+    public void setPersistedUpdatedWithin(String persistedUpdatedWithin) {
         this.persistedUpdatedWithin = persistedUpdatedWithin;
     }
 
@@ -184,11 +186,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         this.persistedStage = persistedStage;
     }
 
-    public String[] getPersistedBiddingWithin() {
+    public String getPersistedBiddingWithin() {
         return persistedBiddingWithin;
     }
 
-    public void setPersistedBiddingWithin(String[] persistedBiddingWithin) {
+    public void setPersistedBiddingWithin(String persistedBiddingWithin) {
         this.persistedBiddingWithin = persistedBiddingWithin;
     }
 
@@ -470,7 +472,8 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.bidding_within:
                 section = BIDDING_WITHIN;
                 i = new Intent(activity, SearchFilterBiddingWithinActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN, getPersistedBiddingWithin());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
                 break;
 
             case R.id.bh:

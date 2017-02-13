@@ -16,6 +16,7 @@ import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
 import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
+import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
@@ -94,11 +95,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         processUpdatedWithin(extrasArr);
                         break;
 
-                    // Bidding Within
-                    case SearchFilterMPFViewModel.BIDDING_WITHIN:
-                        processBiddingWithin(extrasArr);
-                        break;
-
                     // Building / Highway
                     case SearchFilterMPFViewModel.BH:
                         processBuildingOrHighway(extrasArr);
@@ -137,6 +133,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     // Project Stage
                     case SearchFilterMPFViewModel.STAGE:
                         processStage(bundle);
+                        break;
+
+                    // Bidding Within
+                    case SearchFilterMPFViewModel.BIDDING_WITHIN:
+                        processBiddingWithin(bundle);
                         break;
 
                     default:
@@ -338,7 +339,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String updatedWithinInt = arr[1];   // int for query
         String[] updatedWithinArr = {updatedWithinStr, updatedWithinInt};
         String projectUpdatedWithin = "";
-        viewModel.setPersistedUpdatedWithin(updatedWithinArr);
+        viewModel.setPersistedUpdatedWithin(updatedWithinStr);
         viewModel.setUpdated_within_select(updatedWithinStr);
         if (updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
@@ -453,19 +454,18 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     /**
      * Process the Bidding Within input data, which is an int, # of days
      */
-    private void processBiddingWithin(String[] arr) {
-        String biddingWithinStr = arr[0];   // text for display
-        String biddingWithinInt = arr[1];   // int for query
-        String[] updatedWithinArr = {biddingWithinStr, biddingWithinInt};
+    private void processBiddingWithin(final Bundle bundle) {
+        String biddingWithinStr = bundle.getString(SearchFilterBiddingWithinViewModel.BUNDLE_KEY_DISPLAY_STR); // text for display
+        String biddingWithinInt = bundle.getString(SearchFilterBiddingWithinViewModel.BUNDLE_KEY_DAYS_INT);    // int for query
         String projectBiddingWithin = "";
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
             viewModel.setCbiddingWithinSelect(biddingWithinStr);
         } else {
-            viewModel.setPersistedBiddingWithin(updatedWithinArr);
+            viewModel.setPersistedBiddingWithin(biddingWithinInt);
             viewModel.setBidding_within_select(biddingWithinStr);
         }
 
-        if (biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
+        if (biddingWithinInt != null && !biddingWithinInt.trim().equals("")) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
