@@ -99,7 +99,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private String persistedJurisdiction;
     private String persistedStage;
     private String[] persistedBiddingWithin;
-    private String persistedBuildingOrHighway;
+    private String[] persistedBuildingOrHighway;
     private String persistedOwnerType;
     private String persistedWorkType;
 
@@ -192,11 +192,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         this.persistedBiddingWithin = persistedBiddingWithin;
     }
 
-    public String getPersistedBuildingOrHighway() {
+    public String[] getPersistedBuildingOrHighway() {
         return persistedBuildingOrHighway;
     }
 
-    public void setPersistedBuildingOrHighway(String persistedBuildingOrHighway) {
+    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
         this.persistedBuildingOrHighway = persistedBuildingOrHighway;
     }
 

@@ -475,21 +475,25 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Process the Building-or-Highway input data, which is an array of one or two elements
      */
     private void processBuildingOrHighway(String[] arr) {
-        String bhStr = arr[0];      // could come in as "Both", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
-        String bh = "";
-        viewModel.setPersistedBuildingOrHighway(bhStr);
-        viewModel.setBh_select(bhStr);
-        if (bhStr != null && !bhStr.trim().equals("")) {
+
+        final String BUILDING      = getApplicationContext().getResources().getString(R.string.building);
+        final String HEAVY_HIGHWAY = getApplicationContext().getResources().getString(R.string.heavy_highway);
+
+        String bhDisplayStr = arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+        String bhChar = arr[1];
+        viewModel.setPersistedBuildingOrHighway(arr);
+        viewModel.setBh_select(bhDisplayStr);
+        if (bhDisplayStr != null && !bhDisplayStr.trim().equals("")) {
             List<String> bhList = new ArrayList<>();
-            if (bhStr.equals("Building")) bhList.add("\"B\"");
-            else if (bhStr.equals("Heavy-Highway")) bhList.add("\"H\"");
+            if (bhDisplayStr.equals(BUILDING)) bhList.add("\"B\"");
+            else if (bhDisplayStr.equals(HEAVY_HIGHWAY)) bhList.add("\"H\"");
             else {
                 bhList.add("\"B\"");
                 bhList.add("\"H\"");
             }
-            bh = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
+            bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
         }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bh);
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
     }
 
     /**

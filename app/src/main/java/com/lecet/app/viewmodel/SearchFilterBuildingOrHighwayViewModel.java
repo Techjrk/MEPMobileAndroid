@@ -3,6 +3,7 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
@@ -13,7 +14,8 @@ import android.widget.RadioButton;
 
 public class SearchFilterBuildingOrHighwayViewModel extends BaseObservable {
     private AppCompatActivity activity;
-    private String[] bh = {"Any", "0"};
+
+    private String[] bh = {"Any", "A"};
 
     /**
      * Constructor
@@ -36,6 +38,17 @@ public class SearchFilterBuildingOrHighwayViewModel extends BaseObservable {
 
     public void onSelected(View view) {
         bh[0] = ((RadioButton) view).getText().toString();
-
+        bh[1] = (String) view.getTag();
     }
+
+    @Bindable
+    public String[] getBh() {
+        return bh;
+    }
+
+    public void setBh(String[] bh) {
+        this.bh = bh;
+    }
+
+
 }

@@ -81,6 +81,7 @@
                         android:id="@+id/both"
                         style="@style/SearchFilterSectionButton"
                         android:checked="true"
+                        android:tag="A"
                         android:onClick="@{viewModel.onSelected}"
                         android:text="@string/both" />
 
@@ -93,7 +94,9 @@
                         android:id="@+id/building"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
-                        android:text="@string/building" />
+                        android:text="@string/building"
+                        android:tag="B"
+                        android:checked="@{(viewModel.bh[1]).equals(`B`)}"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -104,7 +107,9 @@
                         android:id="@+id/heavyhighway"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
-                        android:text="@string/heavy_highway" />
+                        android:text="@string/heavy_highway"
+                        android:tag="H"
+                        android:checked="@{(viewModel.bh[1]).equals(`H`)}"/>
 
                     <View
                         android:layout_width="match_parent"
