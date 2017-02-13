@@ -13,7 +13,6 @@ public class SearchFilterBuildingOrHighwayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_filter_building_or_highway);
         ActivitySearchFilterBuildingOrHighwayBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_building_or_highway);
         SearchFilterBuildingOrHighwayViewModel viewModel = new SearchFilterBuildingOrHighwayViewModel(this);
         sfilter.setViewModel(viewModel);
