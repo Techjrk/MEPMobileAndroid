@@ -34,12 +34,12 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private ArrayList<Boolean> containGrandChild = new ArrayList<Boolean>();
 
     private static final String TAG = "SearchFilterMPFJurisVM";
-    public static final String BUNDLE_KEY_VIEW_TYPE = "viewType";
-    public static final String BUNDLE_KEY_ID = "id";
-    public static final String BUNDLE_KEY_REGION_ID = "regionId";
-    public static final String BUNDLE_KEY_NAME = "name";
-    public static final String BUNDLE_KEY_ABBREVIATION = "abbreviation";
-    public static final String BUNDLE_KEY_LONG_NAME = "longName";
+    public static final String BUNDLE_KEY_VIEW_TYPE    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
+    public static final String BUNDLE_KEY_ID           = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
+    public static final String BUNDLE_KEY_REGION_ID    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.regionId";
+    public static final String BUNDLE_KEY_NAME         = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.name";
+    public static final String BUNDLE_KEY_ABBREVIATION = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.abbreviation";
+    public static final String BUNDLE_KEY_LONG_NAME    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.longName";
     private SearchFilterJurisdictionActivity activity;
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
