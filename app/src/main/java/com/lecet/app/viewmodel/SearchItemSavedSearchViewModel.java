@@ -3,11 +3,8 @@ package com.lecet.app.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
-import com.lecet.app.R;
 import com.lecet.app.data.models.SearchSaved;
 
 /**
@@ -44,9 +41,11 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
     // CLICK HANDLERS
 
     public void onClick(View view) {
-        viewModel.setQuery(searchSaved.getQuery().trim());
-        viewModel.setIsMSE1SectionVisible(false);
-        viewModel.setIsMSE2SectionVisible(true);
+        String query = searchSaved.getQuery();
+        if (query != null && query.length() > 0) {
+            viewModel.setQuery(searchSaved.getQuery().trim());
+            viewModel.setIsMSE1SectionVisible(false);
+            viewModel.setIsMSE2SectionVisible(true);
+        }
     }
-
 }
