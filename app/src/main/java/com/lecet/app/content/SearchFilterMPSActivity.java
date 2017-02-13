@@ -63,9 +63,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (data == null)
-            return;   //TODO - handle case of no String[] data for Activities which pass it
+        if (data == null) {
+            return;
+        }
 
         Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);      //TODO - handle case of no Bundle for Activities which pass it
         String[] extrasArr = null;
@@ -238,9 +238,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<SearchFilterProjectTypesMain> realmTypes;
                 realmTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
-                //Log.d("processProjectType", "realmTypes size: " + realmTypes.size());
-                //Log.d("processProjectType", "realmTypes: " + realmTypes);
-
                 String displayStr = ""; // = "\r\n"; //bundle[0];   // text display     //removed line break as it was unnecessary
                 //    String typeId = bundle[1];   // ID
                 String types = "";
@@ -305,60 +302,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Process the Project Type Id code based on input data from list
-     */
-    /*private void processProjectTypeId(final String[] arr) {
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<ProjectType> realmTypes;
-                realmTypes = realm.where(ProjectType.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectTypes, which each contain a list of child ProjectTypes
-                Log.d("processProjectTypeId: ", "realmTypes size: " + realmTypes.size());
-                Log.d("processProjectTypeId: ", "realmTypes: " + realmTypes);
-
-                String typeStr = arr[0];   // text display
-                String typeId = arr[1];   // ID
-                String types = "";
-
-
-                // build the list of IDs for the query, which include the parent ID and any of its child IDs
-                List<String> tList = new ArrayList<>();
-                tList.add(typeId);
-                if (typeStr != null && !typeStr.trim().equals("")) {
-                    // add each child Type ID
-                    for (ProjectType parentType : realmTypes) {
-                        if (typeStr.equals(parentType.getName())) {
-                            List<ProjectType> childTypes = parentType.getChildTypes();
-                            for (ProjectType childType : childTypes) {
-                                if (childType != null) {
-                                    tList.add(Long.toString(childType.getId()));
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    if (instantSearch && !viewModel.getIsProjectViewVisible()) {
-                        viewModel.setCtypeSelect(typeStr);
-                    } else {
-                        viewModel.setPersistedProjectTypeId(typeStr);
-                        viewModel.setType_select(typeStr);
-                    }
-                    Log.d("SearchFilterMPSAct", "processType: input Type name: " + typeStr);
-                    Log.d("SearchFilterMPSAct", "processType: parent and child Type IDs: " + tList);
-
-//                    String ids = idList.toString();
-//                    projectTypeId = "\"projectTypeId\":{\"inq\":" + ids + "}";         // square brackets [ ] come for free when the list is converted to a String
-
-
-                    types = "\"projectTypeId\":{\"inq\":" + tList.toString() + "}";
-                }
-                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
-            }
-        });
-    }*/
 
     /**
      * Process the dollar Value from input data
@@ -421,9 +364,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
                 realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
-                Log.d("processJurisdiction: ", "realmJurisdictions size: " + realmJurisdictions.size());
-                Log.d("processJurisdiction: ", "realmJurisdictions: " + realmJurisdictions);
-
                 int jurisdictionViewType = -1;
                 String jurisdictionId = null;
                 String jurisdictionRegionId = null;
