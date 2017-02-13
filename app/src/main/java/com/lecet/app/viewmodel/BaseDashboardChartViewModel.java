@@ -318,23 +318,27 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         float xValue = -1;
 
         // for any result category that contains data, add a pie chart Entry and add the corresponding color for the chart segment
-        if(b_setSize > 0) {
-            entry = new PieEntry(b_setSize, Long.toString(CONSOLIDATED_CODE_B));      // B - light blue
-            entries.add(entry);
-            b_chartX = ++xValue;
-            colorsList.add(R.color.lecetLightBlue);
-            b_button.setVisibility(View.VISIBLE);
+        if(b_button != null) {
+            if (b_setSize > 0) {
+                entry = new PieEntry(b_setSize, Long.toString(CONSOLIDATED_CODE_B));      // B - light blue
+                entries.add(entry);
+                b_chartX = ++xValue;
+                colorsList.add(R.color.lecetLightBlue);
+                b_button.setVisibility(View.VISIBLE);
+            }
+            else b_button.setVisibility(View.GONE);
         }
-        else b_button.setVisibility(View.GONE);
 
-        if(h_setSize > 0) {
-            entry = new PieEntry(h_setSize, Long.toString(CONSOLIDATED_CODE_H));      // H - dark orange
-            entries.add(entry);
-            h_chartX = ++xValue;
-            colorsList.add(R.color.lecetDarkOrange);
-            h_button.setVisibility(View.VISIBLE);
+        if(h_button != null) {
+            if (h_setSize > 0) {
+                entry = new PieEntry(h_setSize, Long.toString(CONSOLIDATED_CODE_H));      // H - dark orange
+                entries.add(entry);
+                h_chartX = ++xValue;
+                colorsList.add(R.color.lecetDarkOrange);
+                h_button.setVisibility(View.VISIBLE);
+            }
+            else h_button.setVisibility(View.GONE);
         }
-        else h_button.setVisibility(View.GONE);
 
         int[] colorsArr = new int[colorsList.size()];
         for(int i=0; i<colorsList.size(); i++) {
