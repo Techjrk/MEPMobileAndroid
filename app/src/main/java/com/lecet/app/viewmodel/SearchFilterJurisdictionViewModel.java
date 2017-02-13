@@ -40,23 +40,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     public static final String BUNDLE_KEY_NAME = "name";
     public static final String BUNDLE_KEY_ABBREVIATION = "abbreviation";
     public static final String BUNDLE_KEY_LONG_NAME = "longName";
-
-
     private SearchFilterJurisdictionActivity activity;
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
     private String query;
-
-    @Bindable
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
-        notifyPropertyChanged(BR.query);
-        searchItem(query);
-    }
 
     /**
      * Constructor
@@ -121,8 +108,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      * Process the multi-level display item of the jurisdiction with adapter
      * and Process the search Item  of the jurisdiction typed by the user
      */
-
-
     public void searchItem(String key) {
         foundParent = false;
         foundChild = false;
@@ -151,23 +136,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 foundParent = true;
             }
             children = new ArrayList<>();
-           /* Removing the local main display of Jurisdiction. No need anymore. This will be deleted.
-
-           for (SearchFilterJurisdictionLocal jlocal : jMain.getLocals()) {
-                if (jlocal != null) {
-                    foundKey2=false;
-                    SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
-                    child.setId(jlocal.getId());
-                    child.setName(jlocal.getName());
-                    child.setDistrictCouncilId(jlocal.getDistrictCouncilId());
-                    if (child.getName().trim().contains(searchKey)) {
-                        hasChild=true;
-                        foundKey2=true;// containGrandChild.add("jlocal");
-                    }
-                 //   if (foundKey2 || foundParent ) children.add(child);
-                }
-            }
-            */
 
             /*** For processing the No DistrictCouncil */
             processNoDistrict(jMain, children, searchKey);
@@ -250,5 +218,16 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 }
             }
         }
+    }
+
+    @Bindable
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+        notifyPropertyChanged(BR.query);
+        searchItem(query);
     }
 }

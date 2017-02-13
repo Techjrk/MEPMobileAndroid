@@ -17,7 +17,6 @@ import com.lecet.app.data.models.SearchSaved;
  */
 
 public class SearchItemSavedSearchViewModel extends BaseObservable {
-
     private SearchSaved searchSaved;
     private String title;
     private SearchViewModel viewModel;
@@ -48,7 +47,6 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
         viewModel.setQuery(searchSaved.getQuery().trim());
         viewModel.setIsMSE1SectionVisible(false);
         viewModel.setIsMSE2SectionVisible(true);
-//        Toast.makeText(viewModel.getActivity(), "onClick: \nProject MSE1 detail section", Toast.LENGTH_SHORT).show();
     }
 
 }
