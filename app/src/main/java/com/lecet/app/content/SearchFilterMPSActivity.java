@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -16,6 +17,7 @@ import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
 import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
+import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
@@ -94,11 +96,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         processUpdatedWithin(extrasArr);
                         break;
 
-                    // Bidding Within
-                    case SearchFilterMPFViewModel.BIDDING_WITHIN:
-                        processBiddingWithin(extrasArr);
-                        break;
-
                     // Building / Highway
                     case SearchFilterMPFViewModel.BH:
                         processBuildingOrHighway(extrasArr);
@@ -137,6 +134,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     // Project Stage
                     case SearchFilterMPFViewModel.STAGE:
                         processStage(bundle);
+                        break;
+
+                    // Bidding Within
+                    case SearchFilterMPFViewModel.BIDDING_WITHIN:
+                        processBiddingWithin(bundle);
                         break;
 
                     default:
@@ -338,7 +340,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String updatedWithinInt = arr[1];   // int for query
         String[] updatedWithinArr = {updatedWithinStr, updatedWithinInt};
         String projectUpdatedWithin = "";
-        viewModel.setPersistedUpdatedWithin(updatedWithinArr);
+        viewModel.setPersistedUpdatedWithin(updatedWithinStr);
         viewModel.setUpdated_within_select(updatedWithinStr);
         if (updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
@@ -355,7 +357,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * "jurisdictions": { "inq": [3] }
      * "deepJurisdictionId": ["3-3_2-1_1"]
      */
-    private void processJurisdiction(final Bundle bundle) {          //TODO - NO LONGER VALID
+    private void processJurisdiction(final Bundle bundle) {          //TODO - CHECK IDs passed in filter
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -368,19 +370,80 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 String jurisdictionId = null;
                 String jurisdictionRegionId = null;
                 String jurisdictionName = null;
+                String jurisdictionAbbrev = null;
+                String jurisdictionLongName = null;
                 String jurisdictions = "";
 
                 try {
                     jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                    jurisdictionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
                     jurisdictionRegionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_REGION_ID);
-                    jurisdictionName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);  //TODO: ABBREVIATION AND LONGNAME ARE ALSO AVAILABLE. USEFUL?
+                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);
+                    jurisdictionAbbrev   = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ABBREVIATION);
+                    jurisdictionLongName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_LONG_NAME);
                 } catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
+                    return;
                 }
+
+                // Build a single-element List based on the Jurisdiction ID passed in the Bundle.
+                List<String> jList = new ArrayList<>();
+                //List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
+                //List<SearchFilterJurisdictionLocal> locals;
+
+                // for a grandchild selection type (0), just use the name
+                if(jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE && jurisdictionName != null && jurisdictionName.length() > 0) {
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: GrandChild Type Selected.");
+                    jList.add(jurisdictionName);
+                }
+                // for a child selection type (1), search though Main Jurisdictions and their nested District Councils until a DC's name matches the jurisdictionName and use the DC's ID
+                else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: Child Type Selected.");
+                    boolean matchFound = false;
+                    for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
+                        for (SearchFilterJurisdictionDistrictCouncil districtCouncil : mainJurisdiction.getDistrictCouncils()) {
+                            if (jurisdictionName.equals(districtCouncil.getName())) {
+                                Log.d("SearchFilterMPSAct", "processJurisdiction: District Council found for: " + jurisdictionName + ", id: " + districtCouncil.getId() + ", regionId: " + districtCouncil.getRegionId());
+                                jList.add(Integer.toString(districtCouncil.getId()));   //TODO - check if this is a valid ID
+                                matchFound = true;
+                                break;
+                            }
+                        }
+                        if(matchFound) break;
+                    }
+                }
+                // for a parent selection type (2), search though Main Jurisdictions until a name matches the jurisdictionName and use the main's ID
+                else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: Parent Type Selected.");
+                    for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
+                        if (jurisdictionName.equals(mainJurisdiction.getName())) {
+                            Log.d("SearchFilterMPSAct", "processJurisdiction: Main Jurisdiction found for: " + jurisdictionName + ", id: " + mainJurisdiction.getId());
+                            jList.add(Integer.toString(mainJurisdiction.getId()));   //TODO - check if this is a valid ID
+                            break;
+                        }
+                    }
+                }
+
+                if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
+
+                    String js = jList.toString();
+                    jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
+
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionViewType: " + jurisdictionViewType);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionId: " + jurisdictionId);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionRegionId: " + jurisdictionRegionId);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionName: " + jurisdictionName);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionAbbrev: " + jurisdictionAbbrev);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionLongName: " + jurisdictionLongName);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: jList for filter: " + jList);
+                    Log.d("SearchFilterMPSAct", "processJurisdiction: final filter for jurisdictions: " + jurisdictions);
+                }
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
+
+                // display
                 if (jurisdictionName == null || jurisdictionName.equals("")) {
                     jurisdictionName = "Any";
-                } else if (jurisdictionName.length() > MAXCHARFIELD)
+                } else if (jurisdictionName.length() > MAXCHARFIELD)    //moved this below the filter construction so as not to check against the altered jurisdictionName
                     jurisdictionName = "\r\n" + jurisdictionName;
 
                 if (instantSearch && !viewModel.getIsProjectViewVisible()) {
@@ -389,23 +452,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     viewModel.setPersistedJurisdiction(jurisdictionName);
                     viewModel.setJurisdiction_select(jurisdictionName);
                 }
-
-                // Build a single-element List based on the Jurisdiction ID passed in the Bundle.
-                List<String> jList = new ArrayList<>();
-
-                List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
-                List<SearchFilterJurisdictionLocal> locals;
-
-                if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
-
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction id: " + jurisdictionId);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: input Jurisdiction name: " + jurisdictionName);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: list: " + jList);
-
-                    String js = jList.toString();
-                    jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
-                }
-                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
             }
         });
 
@@ -453,19 +499,18 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     /**
      * Process the Bidding Within input data, which is an int, # of days
      */
-    private void processBiddingWithin(String[] arr) {
-        String biddingWithinStr = arr[0];   // text for display
-        String biddingWithinInt = arr[1];   // int for query
-        String[] updatedWithinArr = {biddingWithinStr, biddingWithinInt};
+    private void processBiddingWithin(final Bundle bundle) {
+        String biddingWithinStr = bundle.getString(SearchFilterBiddingWithinViewModel.BUNDLE_KEY_DISPLAY_STR); // text for display
+        String biddingWithinInt = bundle.getString(SearchFilterBiddingWithinViewModel.BUNDLE_KEY_DAYS_INT);    // int for query
         String projectBiddingWithin = "";
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
             viewModel.setCbiddingWithinSelect(biddingWithinStr);
         } else {
-            viewModel.setPersistedBiddingWithin(updatedWithinArr);
+            viewModel.setPersistedBiddingWithin(biddingWithinInt);
             viewModel.setBidding_within_select(biddingWithinStr);
         }
 
-        if (biddingWithinStr != null && !biddingWithinStr.trim().equals("")) {
+        if (biddingWithinInt != null && !biddingWithinInt.trim().equals("")) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
