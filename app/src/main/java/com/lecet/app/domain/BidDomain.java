@@ -38,7 +38,7 @@ public class BidDomain {
     public @interface BidGroup {
     }
 
-    private static final int DASHBOARD_CALL_LIMIT = 250;
+    private static final int DASHBOARD_CALL_LIMIT = 100;
 
     public static final int ENGINEERING = 101;
     public static final int BUILDING = 102;
