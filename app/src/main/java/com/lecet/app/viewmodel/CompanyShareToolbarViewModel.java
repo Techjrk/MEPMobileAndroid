@@ -99,6 +99,8 @@ public class CompanyShareToolbarViewModel extends ShareToolbarViewModel<Company,
 
                 if (response.isSuccessful()) {
 
+                    getTrackingListDomain().copyToRealmTransaction(response.body());
+
                     List<Long> selectedItems = new ArrayList<>();
                     selectedItems.add(getTrackedObject().getId());
 
@@ -130,6 +132,7 @@ public class CompanyShareToolbarViewModel extends ShareToolbarViewModel<Company,
 
                 if (response.isSuccessful()) {
 
+                    getTrackingListDomain().copyToRealmTransaction(response.body());
                     dismissProgressDialog();
 
                 } else {
