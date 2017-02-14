@@ -14,10 +14,14 @@ import com.lecet.app.data.models.SearchSaved;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -101,5 +105,12 @@ public interface SearchService {
     @GET("ProjectParentStages")
     Call<List<SearchFilterStagesMain>> getSearchFilterStagesItems(@Header("Authorization") String token, @Query("filter[include]") String filter);
 
-
+    //*** Save User recently viewed
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @POST("Activities")
+//    Call<String> saveRecent(@Header("Authorization") String token, @Body String body);
+    Call<ResponseBody> saveRecent(@Header("Authorization") String token, @Body RequestBody body);
 }
