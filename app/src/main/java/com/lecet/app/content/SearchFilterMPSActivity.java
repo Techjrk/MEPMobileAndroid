@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
+import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
@@ -15,6 +16,8 @@ import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
+import com.lecet.app.data.models.SearchFilterStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
 import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
 import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
@@ -34,6 +37,7 @@ import io.realm.RealmResults;
 import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
 public class SearchFilterMPSActivity extends AppCompatActivity {
+    private static final String TAG = "SearchFilterMPSActivity";
     SearchFilterMPFViewModel viewModel;
     boolean instantSearch;
     int MAXCHARFIELD = 16;
@@ -112,7 +116,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         break;
 
                     default:
-                        Log.w("SearchFilterMPSAct", "onActivityResult: WARNING: no case for request code " + requestCode);
+                        Log.w(TAG, "onActivityResult: WARNING: no case for request code " + requestCode);
                         break;
                 }
             }
@@ -142,7 +146,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         break;
 
                     default:
-                        Log.w("SearchFilterMPSAct", "onActivityResult: WARNING: no case for request code " + requestCode);
+                        Log.w(TAG, "onActivityResult: WARNING: no case for request code " + requestCode);
                         break;
                 }
             }
@@ -183,7 +187,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             viewModel.setPersistedLocationZip(zip);
             viewModel.setLocation_select(locationText);
         }
-        Log.d("SearchFilterMPSAct", "location: " + locationText);
+        Log.d(TAG, "location: " + locationText);
 
 
         // StringBuilder used for generating query with commas as appropriate
@@ -393,17 +397,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 // for a grandchild selection type (0), just use the name
                 if(jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE && jurisdictionName != null && jurisdictionName.length() > 0) {
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: GrandChild Type Selected.");
+                    Log.d(TAG, "processJurisdiction: GrandChild Type Selected.");
                     jList.add(jurisdictionName);
                 }
                 // for a child selection type (1), search though Main Jurisdictions and their nested District Councils until a DC's name matches the jurisdictionName and use the DC's ID
                 else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: Child Type Selected.");
+                    Log.d(TAG, "processJurisdiction: Child Type Selected.");
                     boolean matchFound = false;
                     for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
                         for (SearchFilterJurisdictionDistrictCouncil districtCouncil : mainJurisdiction.getDistrictCouncils()) {
                             if (jurisdictionName.equals(districtCouncil.getName())) {
-                                Log.d("SearchFilterMPSAct", "processJurisdiction: District Council found for: " + jurisdictionName + ", id: " + districtCouncil.getId() + ", regionId: " + districtCouncil.getRegionId());
+                                Log.d(TAG, "processJurisdiction: District Council found for: " + jurisdictionName + ", id: " + districtCouncil.getId() + ", regionId: " + districtCouncil.getRegionId());
                                 jList.add(Integer.toString(districtCouncil.getId()));   //TODO - check if this is a valid ID
                                 matchFound = true;
                                 break;
@@ -414,10 +418,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 }
                 // for a parent selection type (2), search though Main Jurisdictions until a name matches the jurisdictionName and use the main's ID
                 else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: Parent Type Selected.");
+                    Log.d(TAG, "processJurisdiction: Parent Type Selected.");
                     for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
                         if (jurisdictionName.equals(mainJurisdiction.getName())) {
-                            Log.d("SearchFilterMPSAct", "processJurisdiction: Main Jurisdiction found for: " + jurisdictionName + ", id: " + mainJurisdiction.getId());
+                            Log.d(TAG, "processJurisdiction: Main Jurisdiction found for: " + jurisdictionName + ", id: " + mainJurisdiction.getId());
                             jList.add(Integer.toString(mainJurisdiction.getId()));   //TODO - check if this is a valid ID
                             break;
                         }
@@ -429,14 +433,14 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     String js = jList.toString();
                     jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
 
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionViewType: " + jurisdictionViewType);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionId: " + jurisdictionId);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionRegionId: " + jurisdictionRegionId);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionName: " + jurisdictionName);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionAbbrev: " + jurisdictionAbbrev);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jurisdictionLongName: " + jurisdictionLongName);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: jList for filter: " + jList);
-                    Log.d("SearchFilterMPSAct", "processJurisdiction: final filter for jurisdictions: " + jurisdictions);
+                    Log.d(TAG, "processJurisdiction: jurisdictionViewType: " + jurisdictionViewType);
+                    Log.d(TAG, "processJurisdiction: jurisdictionId: " + jurisdictionId);
+                    Log.d(TAG, "processJurisdiction: jurisdictionRegionId: " + jurisdictionRegionId);
+                    Log.d(TAG, "processJurisdiction: jurisdictionName: " + jurisdictionName);
+                    Log.d(TAG, "processJurisdiction: jurisdictionAbbrev: " + jurisdictionAbbrev);
+                    Log.d(TAG, "processJurisdiction: jurisdictionLongName: " + jurisdictionLongName);
+                    Log.d(TAG, "processJurisdiction: jList for filter: " + jList);
+                    Log.d(TAG, "processJurisdiction: final filter for jurisdictions: " + jurisdictions);
                 }
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
 
@@ -460,6 +464,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Stage input data based on the received list of Stages persisted in Realm
+     * Ex: "projectStageId":{"inq":[208,209,210,211]}}
      */
     private void processStage(final Bundle bundle) {
 
@@ -469,29 +474,50 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 RealmResults<ProjectStage> realmStages;
-                realmStages = realm.where(ProjectStage.class).equalTo("parentId", 0).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
+                realmStages = realm.where(ProjectStage.class).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
                 Log.d("processStage: ", "realmStages size: " + realmStages.size());
                 Log.d("processStage: ", "realmStages: " + realmStages);
 
-                String viewType = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE);  // view type (parent, child, grandchild)
-                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);       // text display
-                String stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);         // ID                   //TODO - use this ID for name/id lookup rather than name?
+                int viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
+                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                     // text display
+                String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                       // ID
                 String stages = "";
-                if (stageStr == null || stageStr.equals("")) stageStr = "Any";
-                viewModel.setPersistedStage(stageStr);
-                viewModel.setStage_select(stageStr);
 
                 // build the list of IDs for the query, which include the parent ID and any of its child IDs
                 List<String> sList = new ArrayList<>();
-                sList.add(stageId);
+
+                // GrandChild view type (2): should not occur since Stage does not have grandchild list view items
+                if(viewType == SearchFilterStageAdapter.GRAND_CHILD_VIEW_TYPE) {
+                    Log.w(TAG, "processStage: Warning: GrandChild Type Selected. Not Supported.");
+                }
+                // Child view type (1): just use the selected child's ID
+                else if(viewType == SearchFilterStageAdapter.CHILD_VIEW_TYPE) {
+                    Log.d(TAG, "processStage: Child Type Selected.");
+                    sList.add(stageId);
+                }
+                // Parent view type (0): build a list of all child types under that parent ID
+                else if(viewType == SearchFilterStageAdapter.PARENT_VIEW_TYPE) {
+                    Log.d(TAG, "processStage: Parent Type Selected.");
+                    SearchFilterStagesMain selectedParentStage = realm.where(SearchFilterStagesMain.class).equalTo("id", Integer.valueOf(stageId)).findFirst();
+                    for(SearchFilterStage childStage : selectedParentStage.getStages()) {
+                        sList.add(Integer.toString(childStage.getId()));
+                    }
+                }
+
                 if (stageStr != null && !stageStr.trim().equals("")) {
 
-                    Log.d("SearchFilterMPSAct", "processStage: input Stage name: " + stageStr);
-                    Log.d("SearchFilterMPSAct", "processStage: parent and child Stage IDs: " + sList);
+                    Log.d(TAG, "processStage: viewType: " + viewType);
+                    Log.d(TAG, "processStage: input Stage name: " + stageStr);
+                    Log.d(TAG, "processStage: IDs: " + sList);
 
                     stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
                 }
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
+
+                // display
+                if (stageStr == null || stageStr.equals("")) stageStr = "Any";
+                viewModel.setPersistedStage(stageStr);
+                viewModel.setStage_select(stageStr);
             }
         });
     }

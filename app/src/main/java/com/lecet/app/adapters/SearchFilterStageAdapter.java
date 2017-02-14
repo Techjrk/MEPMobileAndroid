@@ -36,9 +36,9 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     @interface ViewTypes {
     }
 
-    private static final int PARENT_VIEW_TYPE = 0;
-    private static final int CHILD_VIEW_TYPE = 1;
-    private static final int GRAND_CHILD_VIEW_TYPE = 2;
+    public static final int PARENT_VIEW_TYPE = 0;
+    public static final int CHILD_VIEW_TYPE = 1;
+    public static final int GRAND_CHILD_VIEW_TYPE = 2;
 
     private List<Parent> data;
     private SearchFilterStageViewModel viewModel;

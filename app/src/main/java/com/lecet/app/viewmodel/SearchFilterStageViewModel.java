@@ -30,9 +30,9 @@ public class SearchFilterStageViewModel extends BaseObservable {
 
     private boolean foundParent, foundChild, hasChild;
 
-    public static final String BUNDLE_KEY_VIEW_TYPE = "viewType";
-    public static final String BUNDLE_KEY_ID = "id";
-    public static final String BUNDLE_KEY_NAME = "name";
+    public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterStageViewModel.viewType";
+    public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterStageViewModel.id";
+    public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterStageViewModel.name";
 
     private AppCompatActivity activity;
 
