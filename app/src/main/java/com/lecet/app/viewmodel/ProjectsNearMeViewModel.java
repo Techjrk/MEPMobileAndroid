@@ -122,6 +122,11 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
 
     }
 
+    public boolean isMapReady() {
+
+        return map != null;
+    }
+
     public void fetchProjectsNearMe(LatLng location) {
         projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
