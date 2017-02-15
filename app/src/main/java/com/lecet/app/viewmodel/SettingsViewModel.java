@@ -19,6 +19,7 @@ import com.lecet.app.content.LauncherActivity;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.UserDomain;
 
+import io.realm.Realm;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,15 +97,7 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
                 if (response.isSuccessful()) {
 
-                    LecetSharedPreferenceUtil.getInstance(appCompatActivity).clearPreferences();
-
-                    dismissProgressDialog();
-
-                    Intent i = new Intent(appCompatActivity, LauncherActivity.class);
-                    // Clear activity stack
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    appCompatActivity.startActivity(i);
-                    appCompatActivity.finish();
+                    clearSessionData();
 
                 } else {
 
@@ -122,6 +115,33 @@ public class SettingsViewModel extends BaseActivityViewModel {
                 showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
             }
         });
+    }
+
+    /** Session management **/
+    private void clearSessionData() {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                // Delete all data in realm and clear shard preferences
+                realm.deleteAll();
+                LecetSharedPreferenceUtil.getInstance(appCompatActivity).clearPreferences();
+                rerouteLoggedOutUser();
+            }
+        });
+    }
+
+    private void rerouteLoggedOutUser() {
+
+        dismissProgressDialog();
+
+        Intent i = new Intent(appCompatActivity, LauncherActivity.class);
+        // Clear activity stack
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        appCompatActivity.startActivity(i);
+        appCompatActivity.finish();
+
     }
 
     /** Toolbar **/

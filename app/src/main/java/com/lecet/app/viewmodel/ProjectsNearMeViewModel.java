@@ -15,6 +15,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
@@ -43,14 +45,13 @@ import retrofit2.Response;
  * Created by Josué Rodríguez on 5/10/2016.
  */
 
-public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap.OnMarkerClickListener
+public class ProjectsNearMeViewModel extends BaseObservableViewModel implements GoogleMap.OnMarkerClickListener
         , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener
         , View.OnClickListener, GoogleMap.OnCameraMoveListener {
 
     private static final int DEFAULT_DISTANCE = 3;
     private static final int DEFAULT_ZOOM = 12;
 
-    private WeakReference<Activity> activity;
     private ProjectDomain projectDomain;
     private GoogleMap map;
     private Marker lastMarkerTapped;
@@ -67,8 +68,8 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
 
     private Handler timer;
 
-    public ProjectsNearMeViewModel(Activity activity, ProjectDomain projectDomain, Handler timer) {
-        this.activity = new WeakReference<>(activity);
+    public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer) {
+        super(activity);
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
@@ -128,15 +129,38 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     }
 
     public void fetchProjectsNearMe(LatLng location) {
+
+        showProgressDialog("", getActivityWeakReference().get().getString(R.string.updating));
+
         projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
             public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
-                populateMap(response.body().getResults());
+
+                // Activity dead
+                if (!isActivityAlive()) return;
+
+                if (response.isSuccessful()) {
+
+                    populateMap(response.body().getResults());
+
+                    dismissProgressDialog();
+
+                } else {
+
+                    dismissAlertDialog();
+                    showCancelAlertDialog(getActivityWeakReference().get().getString(R.string.app_name), response.message());
+                }
+
             }
 
             @Override
             public void onFailure(Call<ProjectsNearResponse> call, Throwable t) {
 
+                // Activity dead
+                if (!isActivityAlive()) return;
+
+                dismissProgressDialog();
+                showCancelAlertDialog(getActivityWeakReference().get().getString(R.string.error_network_title), getActivityWeakReference().get().getString(R.string.error_network_message));
             }
         });
     }
@@ -150,7 +174,7 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
     }
 
     private void populateMap(List<Project> projects) {
-        if (activity.get() != null && !activity.get().isFinishing() && !activity.get().isDestroyed()) {
+        if (isActivityAlive()) {
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
                     BitmapDescriptor icon = project.getProjectStage().getId() == 102 ? redMarker : greenMarker;
@@ -185,14 +209,14 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
                 , lastMarkerTapped.getPosition().latitude, lastMarkerTapped.getPosition().longitude));
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
-        activity.get().startActivity(mapIntent);
+        getActivityWeakReference().get().startActivity(mapIntent);
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
         Project project = (Project) marker.getTag();
 
-        Activity context = activity.get();
+        Activity context = getActivityWeakReference().get();
 
         if (context != null) {
 
@@ -238,7 +262,7 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
         if (!TextUtils.isEmpty(query)) {
             LatLng location = getLocationFromAddress(query);
             if (location == null) {
-                Toast.makeText(activity.get(), R.string.error_fetching_address, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivityWeakReference().get(), R.string.error_fetching_address, Toast.LENGTH_SHORT).show();
             } else {
                 moveMapCamera(location); //this will move and handle the download of projects
                 fetchProjectsNearMe(location);
@@ -248,7 +272,7 @@ public class ProjectsNearMeViewModel extends BaseObservable implements GoogleMap
 
     public LatLng getLocationFromAddress(String strAddress) {
 
-        Geocoder coder = new Geocoder(activity.get(), Locale.US);
+        Geocoder coder = new Geocoder(getActivityWeakReference().get(), Locale.US);
         List<Address> address;
         LatLng p1 = null;
 
