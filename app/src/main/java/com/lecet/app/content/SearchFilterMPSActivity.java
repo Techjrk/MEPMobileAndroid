@@ -10,7 +10,6 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
@@ -28,12 +27,11 @@ import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
@@ -220,21 +218,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     }
 
     /**
-     * Process the Primary Project Type input data
-     * TODO: Use in conjunction with processProjectTypeId() ?
-     */
-    /*private void processPrimaryProjectType(String[] arr) {
-        String typeStr = arr[0];
-        String projectType = "";
-        viewModel.setType_select(typeStr);
-        if (typeStr != null && !typeStr.trim().equals("")) {
-            projectType = "\"primaryProjectType\":{" + typeStr + "}";
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, projectType);
-    }*/
-
-    /**
      * Process the Project Type Bundle extra data
+     * Single type grandchild selection (500-level): projectTypeId":{"inq":[503]}
+     * Multiple type grandchild selection (500-level) in different categories: projectTypeId":{"inq":[503,508]}
+     * Multiple type grandchild selection (500-level) in single category: projectTypeId":{"inq":[503,504,505]}
+     * Single type child subcategory selection Engineering:Dams: projectTypeId":{"inq":[503,504,505]}
+     * Single type parent category selection Engineering: projectTypeId":{"inq":[501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530]}
      */
     private void processProjectType(final Bundle bundle) {
 
@@ -243,43 +232,46 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<SearchFilterProjectTypesMain> realmTypes;
-                realmTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
-                String displayStr = ""; // = "\r\n"; //bundle[0];   // text display     //removed line break as it was unnecessary
-                //    String typeId = bundle[1];   // ID
+                String displayStr = ""; // = "\r\n";          // text display - removed line break as it was unnecessary
                 String types = "";
-                Set<Integer> idSet = new HashSet<Integer>();        // using a Set to prevent dupes
+                Set<Integer> idSet = new TreeSet<Integer>();        // using a Set to prevent dupes and maintain ascending order
                 List<Integer> idList;
-
-                //TODO - VALIDITY INCOMPLETE. The final ID list should be all 500-level IDs, meaning only Primary Project Type IDs. Currently that works only if the top-level category is selected.
 
                 // add each parent type ID
                 for (String key : bundle.keySet()) {
 
                     Object value = bundle.get(key);
-                    Log.d("processProjectType", key + "=" + value.toString());
+                    Log.d("processProjectType: ", key + ": " + value);
                     displayStr += value + ", ";
 
-                    // add each child Type ID (District Council)
-                    for (SearchFilterProjectTypesMain mainType : realmTypes) {
-                        if (value.equals(mainType.getTitle())) {
-                            //idSet.add(Integer.valueOf(mainType.getId()));
+                    // check the grandchild-level (primary type) for a matching ID
+                    PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                    if(primaryType != null) {
+                        Log.d("processProjectType: ", key + " is a Primary Type ID.");
+                        idSet.add(primaryType.getId());
+                    }
 
-                            // add each grandchild Type ID (Primary Type)
-                            for (SearchFilterProjectTypesProjectCategory category : mainType.getProjectCategories()) {
-                                if (category != null) {
-                                    //idSet.add(Integer.valueOf(category.getId()));
-                                    //displayStr += category.getTitle() + ", ";
+                    // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
+                    else {
+                        SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                        if (category != null) {
+                            Log.d("processProjectType: ", key + " is a Category ID.");
+                            for (PrimaryProjectType primaryProjectType : category.getProjectTypes()) {
+                                idSet.add(primaryProjectType.getId());
+                            }
+                        }
 
-                                    for (PrimaryProjectType primaryType : category.getProjectTypes()) {
-                                        if (primaryType != null) {
-                                            idSet.add(Integer.valueOf(primaryType.getId()));
-                                            //displayStr += primaryType.getTitle() + ", ";
-                                        }
+                        // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
+                        else {
+                            SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                            if(mainType != null) {
+                                Log.d("processProjectType: ", key + " is a Main Type ID.");
+                                for(SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
+                                    for(PrimaryProjectType primary : projectCategory.getProjectTypes()) {
+                                        idSet.add(primary.getId());
                                     }
                                 }
                             }
-                            break;
                         }
                     }
                 }
@@ -479,11 +471,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<ProjectStage> realmStages;
-                realmStages = realm.where(ProjectStage.class).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
-                Log.d("processStage: ", "realmStages size: " + realmStages.size());
-                Log.d("processStage: ", "realmStages: " + realmStages);
-
                 int viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
                 String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                     // text display
                 String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                       // ID
@@ -575,7 +562,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Owner Type input data, which is a String array with one element
-     * TODO - make sure UI only allows single selection, as per iOS
      */
     private void processOwnerType(String[] arr) {
         String ownerTypeStr = arr[0];
@@ -595,7 +581,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Work Type input data, which is a String array with one element
-     * TODO - make sure UI only allows single selection, as per iOS
      * TODO - work types need to be mapped to integer IDs
      */
     private void processWorkType(String[] arr) {
