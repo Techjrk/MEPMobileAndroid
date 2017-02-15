@@ -25,9 +25,15 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Log.d(TAG, "onCreate");
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setupBinding();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        viewModel.init();
+        viewModel.updateViewQuery();
     }
 
     private void setupBinding() {
