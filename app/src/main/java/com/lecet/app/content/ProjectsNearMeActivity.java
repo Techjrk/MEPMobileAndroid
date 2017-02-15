@@ -115,6 +115,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     }
 
     private void fetchProjects(boolean animateCamera) {
+
+        if (!viewModel.isMapReady()) return;
+
         if (lastKnowLocation != null) {
             LatLng location = new LatLng(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
             if (animateCamera) {

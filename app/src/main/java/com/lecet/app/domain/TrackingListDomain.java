@@ -532,6 +532,14 @@ public class TrackingListDomain {
         return persistedTrackingList;
     }
 
+    public CompanyTrackingList copyToRealmTransaction(CompanyTrackingList trackingList) {
+
+        realm.beginTransaction();
+        CompanyTrackingList persistedTrackingList = realm.copyToRealmOrUpdate(trackingList);
+        realm.commitTransaction();
+
+        return persistedTrackingList;
+    }
 
     public List<CompanyTrackingList> copyCompanyTrackingListsToRealmTransaction(List<CompanyTrackingList> trackingLists) {
 

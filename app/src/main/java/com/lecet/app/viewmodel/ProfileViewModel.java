@@ -192,7 +192,11 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
             return false;
         }
-        if (TextUtils.isEmpty(phone)) {
+        if (TextUtils.isEmpty(phone) || !phone.matches("[0-9]+")) {
+
+            return false;
+        }
+        if (!TextUtils.isEmpty(fax) && !fax.matches("[0-9]+")) {
 
             return false;
         }
@@ -208,7 +212,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
             return false;
         }
-        if (TextUtils.isEmpty(zip)) {
+        if (TextUtils.isEmpty(zip) || !zip.matches("[0-9]+")) {
 
             return false;
         }
@@ -242,15 +246,15 @@ public class ProfileViewModel extends BaseActivityViewModel {
             showCancelAlertDialog(context, context.getString(R.string.app_name), message);
             return;
         }
-        if (TextUtils.isEmpty(title)) {
+        if (TextUtils.isEmpty(phone) || !phone.matches("[0-9]+")) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.title));
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.phone));
             showCancelAlertDialog(context, context.getString(R.string.app_name), message);
             return;
         }
-        if (TextUtils.isEmpty(phone)) {
+        if (!TextUtils.isEmpty(fax) && !fax.matches("[0-9]+")) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.phone));
+            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.fax));
             showCancelAlertDialog(context, context.getString(R.string.app_name), message);
             return;
         }
@@ -272,7 +276,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
             showCancelAlertDialog(context, context.getString(R.string.app_name), message);
             return;
         }
-        if (TextUtils.isEmpty(zip)) {
+        if (TextUtils.isEmpty(zip) || !zip.matches("[0-9]+")) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.zip));
             showCancelAlertDialog(context, context.getString(R.string.app_name), message);

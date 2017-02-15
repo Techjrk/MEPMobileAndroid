@@ -82,6 +82,8 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
                 if (response.isSuccessful()) {
 
+                    getTrackingListDomain().copyToRealmTransaction(response.body());
+
                     List<Long> selectedItems = new ArrayList<>();
                     selectedItems.add(getTrackedObject().getId());
 
@@ -113,6 +115,7 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
 
                 if (response.isSuccessful()) {
 
+                    getTrackingListDomain().copyToRealmTransaction(response.body());
                     dismissProgressDialog();
 
                 } else {

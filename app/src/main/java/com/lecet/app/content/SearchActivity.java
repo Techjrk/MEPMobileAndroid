@@ -58,7 +58,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String locationFilter = "";
+        String locationFilter = "";             //TODO - consider moving these declarations into next block
         String primaryProjectTypeFilter = "";
         String projectTypeIdFilter = "";
         String valueFilter = "";
