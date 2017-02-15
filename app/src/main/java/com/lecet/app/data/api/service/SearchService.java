@@ -108,7 +108,7 @@ public interface SearchService {
     //*** Save User recently viewed
     @Headers({
             "Accept: application/json",
-            "Content-Type: application/x-www-form-urlencoded"
+            "Content-Type: application/json"
     })
     @POST("Activities")
 //    Call<String> saveRecent(@Header("Authorization") String token, @Body String body);
