@@ -288,15 +288,24 @@ public class SearchDomain {
         call.enqueue(callback);
     }
 
+/*
     public void getProjectDetail(long pId, Callback<Project> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         Call<Project> call = lecetClient.getSearchService().getProjectDetail(token, pId);
         call.enqueue(callback);
     }
+*/
 
     public void saveRecentProject(long projId, Callback<ResponseBody> callback) {
         String bodyContent ="{ \"code\" : \"VIEW_PROJECT\" , \"projectId\" : "+projId+" }";
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+        Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
+      //  Log.d("body","body "+bodyContent);
+        call.enqueue(callback);
+    }
+    public void saveRecentCompany(long companyId, Callback<ResponseBody> callback) {
+        String bodyContent ="{ \"code\" : \"VIEW_COMPANY\" , \"companyId\" : "+companyId+" }";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
         Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
         Log.d("body","body "+bodyContent);
