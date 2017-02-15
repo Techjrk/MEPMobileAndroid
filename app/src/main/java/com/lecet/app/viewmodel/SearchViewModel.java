@@ -195,12 +195,13 @@ public class SearchViewModel extends BaseObservable {
         this.activity = activity;
         this.searchDomain = sd;
         //  projectmodel = new SearchProjectViewModel(this,activity,sd);
-        init();
+        setErrorMessage(null);
+        seeAllForResult = -1;
+        //init();
     }
 
     public void init() {
-        setErrorMessage(null);
-        seeAllForResult = -1;
+
         // Init the Recently Viewed Items adapter and fetch its data
         initializeAdapterRecentlyViewed();
         getUserRecentlyViewed(LecetSharedPreferenceUtil.getInstance(activity.getApplication()).getId());
