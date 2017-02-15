@@ -73,6 +73,7 @@
                     android:id="@+id/contact_detail2"
                     android:layout_width="wrap_content"
                     android:layout_height="22dp"
+                    android:lines="1"
                     android:layout_below="@id/contact_name"
                     android:layout_toRightOf="@id/contact_detail"
                     android:text="@{viewModel.contactDetail2}"
