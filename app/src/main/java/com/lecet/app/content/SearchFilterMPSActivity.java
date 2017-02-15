@@ -356,10 +356,17 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Process the Jurisdiction input data
      * TODO - jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
      * TODO - also we need to map input to jurisdiction codes
-     * ex:
-     * "jurisdiction": true
-     * "jurisdictions": { "inq": [3] }
-     * "deepJurisdictionId": ["3-3_2-1_1"]
+     * Local (GrandChild) selection ex:
+     *  "jurisdiction": true
+     *  "jurisdictions": { "inq": [3] }
+     *  "deepJurisdictionId": ["3-3_2-1_1"]
+     * District Council (Child) selection ex:
+     *  "jurisdiction": true
+     *  "jurisdictions": { "inq": [3,4] }
+     *  "deepJurisdictionId": ["3-3_2-1_1","4-3_2-1_1"]
+     * Orphan Local (Child) selection ex:
+     *  "jurisdiction": true
+     *  "jurisdictions": { "inq": [8] }
      */
     private void processJurisdiction(final Bundle bundle) {          //TODO - CHECK IDs passed in filter
 
@@ -395,30 +402,29 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 //List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
                 //List<SearchFilterJurisdictionLocal> locals;
 
-                // for a grandchild selection type (0), just use the name
+                // for a grandchild (Local) selection type (0), just use the ID
                 if(jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE && jurisdictionName != null && jurisdictionName.length() > 0) {
-                    Log.d(TAG, "processJurisdiction: GrandChild Type Selected.");
-                    jList.add(jurisdictionName);
+                    Log.d(TAG, "processJurisdiction: GrandChild (Local) Type Selected.");
+                    jList.add(jurisdictionId);
                 }
-                // for a child selection type (1), search though Main Jurisdictions and their nested District Councils until a DC's name matches the jurisdictionName and use the DC's ID
-                else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
-                    Log.d(TAG, "processJurisdiction: Child Type Selected.");
-                    boolean matchFound = false;
-                    for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
-                        for (SearchFilterJurisdictionDistrictCouncil districtCouncil : mainJurisdiction.getDistrictCouncils()) {
-                            if (jurisdictionName.equals(districtCouncil.getName())) {
-                                Log.d(TAG, "processJurisdiction: District Council found for: " + jurisdictionName + ", id: " + districtCouncil.getId() + ", regionId: " + districtCouncil.getRegionId());
-                                jList.add(Integer.toString(districtCouncil.getId()));   //TODO - check if this is a valid ID
-                                matchFound = true;
-                                break;
-                            }
+                // for a child (District Council) selection type (1), get the District Council which name matches the jurisdictionName and only add Local IDs within that DC
+                else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE && jurisdictionName != null && jurisdictionName.length() > 0) {
+                    SearchFilterJurisdictionDistrictCouncil selectedDistrictCouncil = realm.where(SearchFilterJurisdictionDistrictCouncil.class).equalTo("name", jurisdictionName).findFirst();
+                    if(selectedDistrictCouncil != null) {
+                        Log.d(TAG, "processJurisdiction: Child Type (District Council) Selected: " + selectedDistrictCouncil);
+                        for (SearchFilterJurisdictionLocal local : selectedDistrictCouncil.getLocals()) {
+                            jList.add(Integer.toString(local.getId()));
                         }
-                        if(matchFound) break;
+                    }
+                    else {
+                        Log.d(TAG, "processJurisdiction: Child Type (Orphan Local with no District Council) Selected: " + jurisdictionName);
+                        SearchFilterJurisdictionLocal selectedOrphanLocal = realm.where(SearchFilterJurisdictionLocal.class).equalTo("name", jurisdictionName).findFirst();
+                        jList.add(Integer.toString(selectedOrphanLocal.getId()));
                     }
                 }
-                // for a parent selection type (2), search though Main Jurisdictions until a name matches the jurisdictionName and use the main's ID
+                // for a parent (Region) selection type (2), search though Main Jurisdictions until a name matches the jurisdictionName and use the main's ID
                 else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
-                    Log.d(TAG, "processJurisdiction: Parent Type Selected.");
+                    Log.d(TAG, "processJurisdiction: Parent Type (Region) Selected.");
                     for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
                         if (jurisdictionName.equals(mainJurisdiction.getName())) {
                             Log.d(TAG, "processJurisdiction: Main Jurisdiction found for: " + jurisdictionName + ", id: " + mainJurisdiction.getId());
