@@ -581,19 +581,20 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Work Type input data, which is a String array with one element
-     * TODO - work types need to be mapped to integer IDs
      */
-    private void processWorkType(String[] arr) {
+    private void processWorkType(final String[] arr) {
         String workTypeStr = arr[0];
+        String workTypeInt = arr[1];
         String workType = "";
         if (workTypeStr == null || workTypeStr.equals("")) {
             workTypeStr = "Any";
         }
         viewModel.setPersistedWorkType(workTypeStr);
         viewModel.setWork_type_select(workTypeStr);
-        if (workTypeStr != null && !workTypeStr.trim().equals("")) {
-            List<String> wList = new ArrayList<>();
-            wList.add("\"" + workTypeStr + "\"");
+
+        List<String> wList = new ArrayList<>();
+        if (workTypeInt != null && !workTypeInt.trim().equals("")) {
+            wList.add(workTypeInt);
             workType = "\"workTypeId\":{\"inq\":" + wList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, workType);

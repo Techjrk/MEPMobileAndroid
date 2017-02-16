@@ -503,7 +503,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 return;
 
             default:
-                //TODO: return all filter data in Intent back to MSE
                 saveResult();
                 activity.finish();  // includes Cancel and Apply buttons
                 return;
