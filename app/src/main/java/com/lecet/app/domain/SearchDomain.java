@@ -19,6 +19,9 @@ import com.lecet.app.interfaces.LecetCallback;
 import java.util.List;
 
 import io.realm.Realm;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,11 +33,12 @@ import retrofit2.Response;
 public class SearchDomain {
     private final String TAG = "SearchDomain";
     private final LecetClient lecetClient;
-    private final LecetSharedPreferenceUtil sharedPreferenceUtil;
+    private LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
     private String projectFilter;
     private String companyFilter = "{\"searchFilter\":{}}";
     private String contactFilter = "{\"include\":[\"company\"],\"searchFilter\":{}}";
+    private static String recentToken;
 
     public String getCompanyFilter() {
         return companyFilter;
@@ -64,10 +68,15 @@ public class SearchDomain {
     public SearchDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
+        recentToken = sharedPreferenceUtil.getAccessToken();
         this.realm = realm;
         initFilter();
     }
-
+    public SearchDomain(LecetClient lecetClient,  Realm realm) {
+        this.lecetClient = lecetClient;
+        this.realm = realm;
+        initFilter();
+    }
     /**
      * To call the retrofit service for the stages list items to be displayed in the UI layout for Stage section.
      *
@@ -279,13 +288,27 @@ public class SearchDomain {
         call.enqueue(callback);
     }
 
+/*
     public void getProjectDetail(long pId, Callback<Project> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-
         Call<Project> call = lecetClient.getSearchService().getProjectDetail(token, pId);
         call.enqueue(callback);
     }
+*/
 
-
+    public void saveRecentProject(long projId, Callback<ResponseBody> callback) {
+        String bodyContent ="{ \"code\" : \"VIEW_PROJECT\" , \"projectId\" : "+projId+" }";
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+        Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
+      //  Log.d("body","body "+bodyContent);
+        call.enqueue(callback);
+    }
+    public void saveRecentCompany(long companyId, Callback<ResponseBody> callback) {
+        String bodyContent ="{ \"code\" : \"VIEW_COMPANY\" , \"companyId\" : "+companyId+" }";
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+        Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
+        Log.d("body","body "+bodyContent);
+        call.enqueue(callback);
+    }
 }

@@ -10,10 +10,10 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.ProjectStage;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
+import com.lecet.app.data.models.SearchFilterJurisdictionNoDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.models.SearchFilterStage;
@@ -27,12 +27,11 @@ import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
@@ -219,21 +218,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     }
 
     /**
-     * Process the Primary Project Type input data
-     * TODO: Use in conjunction with processProjectTypeId() ?
-     */
-    /*private void processPrimaryProjectType(String[] arr) {
-        String typeStr = arr[0];
-        String projectType = "";
-        viewModel.setType_select(typeStr);
-        if (typeStr != null && !typeStr.trim().equals("")) {
-            projectType = "\"primaryProjectType\":{" + typeStr + "}";
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, projectType);
-    }*/
-
-    /**
      * Process the Project Type Bundle extra data
+     * Single type grandchild selection (500-level): projectTypeId":{"inq":[503]}
+     * Multiple type grandchild selection (500-level) in different categories: projectTypeId":{"inq":[503,508]}
+     * Multiple type grandchild selection (500-level) in single category: projectTypeId":{"inq":[503,504,505]}
+     * Single type child subcategory selection Engineering:Dams: projectTypeId":{"inq":[503,504,505]}
+     * Single type parent category selection Engineering: projectTypeId":{"inq":[501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530]}
      */
     private void processProjectType(final Bundle bundle) {
 
@@ -242,43 +232,46 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<SearchFilterProjectTypesMain> realmTypes;
-                realmTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
-                String displayStr = ""; // = "\r\n"; //bundle[0];   // text display     //removed line break as it was unnecessary
-                //    String typeId = bundle[1];   // ID
+                String displayStr = ""; // = "\r\n";          // text display - removed line break as it was unnecessary
                 String types = "";
-                Set<Integer> idSet = new HashSet<Integer>();        // using a Set to prevent dupes
+                Set<Integer> idSet = new TreeSet<Integer>();        // using a Set to prevent dupes and maintain ascending order
                 List<Integer> idList;
-
-                //TODO - VALIDITY INCOMPLETE. The final ID list should be all 500-level IDs, meaning only Primary Project Type IDs. Currently that works only if the top-level category is selected.
 
                 // add each parent type ID
                 for (String key : bundle.keySet()) {
 
                     Object value = bundle.get(key);
-                    Log.d("processProjectType", key + "=" + value.toString());
+                    Log.d("processProjectType: ", key + ": " + value);
                     displayStr += value + ", ";
 
-                    // add each child Type ID (District Council)
-                    for (SearchFilterProjectTypesMain mainType : realmTypes) {
-                        if (value.equals(mainType.getTitle())) {
-                            //idSet.add(Integer.valueOf(mainType.getId()));
+                    // check the grandchild-level (primary type) for a matching ID
+                    PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                    if(primaryType != null) {
+                        Log.d("processProjectType: ", key + " is a Primary Type ID.");
+                        idSet.add(primaryType.getId());
+                    }
 
-                            // add each grandchild Type ID (Primary Type)
-                            for (SearchFilterProjectTypesProjectCategory category : mainType.getProjectCategories()) {
-                                if (category != null) {
-                                    //idSet.add(Integer.valueOf(category.getId()));
-                                    //displayStr += category.getTitle() + ", ";
+                    // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
+                    else {
+                        SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                        if (category != null) {
+                            Log.d("processProjectType: ", key + " is a Category ID.");
+                            for (PrimaryProjectType primaryProjectType : category.getProjectTypes()) {
+                                idSet.add(primaryProjectType.getId());
+                            }
+                        }
 
-                                    for (PrimaryProjectType primaryType : category.getProjectTypes()) {
-                                        if (primaryType != null) {
-                                            idSet.add(Integer.valueOf(primaryType.getId()));
-                                            //displayStr += primaryType.getTitle() + ", ";
-                                        }
+                        // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
+                        else {
+                            SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                            if(mainType != null) {
+                                Log.d("processProjectType: ", key + " is a Main Type ID.");
+                                for(SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
+                                    for(PrimaryProjectType primary : projectCategory.getProjectTypes()) {
+                                        idSet.add(primary.getId());
                                     }
                                 }
                             }
-                            break;
                         }
                     }
                 }
@@ -354,22 +347,18 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Jurisdiction input data
-     * TODO - jurisdiction search may require "jurisdiction":true as well as "jurisdictions":{"inq":[array]} and "deepJurisdictionId":[ids]
-     * TODO - also we need to map input to jurisdiction codes
-     * ex:
-     * "jurisdiction": true
-     * "jurisdictions": { "inq": [3] }
-     * "deepJurisdictionId": ["3-3_2-1_1"]
+     * Local (GrandChild) selection ex: "jurisdictions": { "inq": [3] }
+     * District Council (Child) selection ex: "jurisdictions": { "inq": [3,4] }
+     * Orphan Local (Child) selection ex: "jurisdictions": { "inq": [8] }
+     * Region (Parent) selection ex with IDs of Locals with and without District Councils: "jurisdictions": { "inq": [8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 1, 2, 3, 4, 5, 6] }
      */
-    private void processJurisdiction(final Bundle bundle) {          //TODO - CHECK IDs passed in filter
+    private void processJurisdiction(final Bundle bundle) {
 
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
-                realmJurisdictions = realm.where(SearchFilterJurisdictionMain.class).findAll();
                 int jurisdictionViewType = -1;
                 String jurisdictionId = null;
                 String jurisdictionRegionId = null;
@@ -390,44 +379,53 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Build a single-element List based on the Jurisdiction ID passed in the Bundle.
+                // Build a single-element List based on the Jurisdiction ID and Name passed in the Bundle.
                 List<String> jList = new ArrayList<>();
-                //List<SearchFilterJurisdictionDistrictCouncil> districtCouncils;
-                //List<SearchFilterJurisdictionLocal> locals;
 
-                // for a grandchild selection type (0), just use the name
-                if(jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE && jurisdictionName != null && jurisdictionName.length() > 0) {
-                    Log.d(TAG, "processJurisdiction: GrandChild Type Selected.");
-                    jList.add(jurisdictionName);
-                }
-                // for a child selection type (1), search though Main Jurisdictions and their nested District Councils until a DC's name matches the jurisdictionName and use the DC's ID
-                else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
-                    Log.d(TAG, "processJurisdiction: Child Type Selected.");
-                    boolean matchFound = false;
-                    for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
-                        for (SearchFilterJurisdictionDistrictCouncil districtCouncil : mainJurisdiction.getDistrictCouncils()) {
-                            if (jurisdictionName.equals(districtCouncil.getName())) {
-                                Log.d(TAG, "processJurisdiction: District Council found for: " + jurisdictionName + ", id: " + districtCouncil.getId() + ", regionId: " + districtCouncil.getRegionId());
-                                jList.add(Integer.toString(districtCouncil.getId()));   //TODO - check if this is a valid ID
-                                matchFound = true;
-                                break;
+                // for a grandchild (Local) selection type (0), just use the ID
+                if (jurisdictionName != null && jurisdictionName.length() > 0) {
+
+                    // for a Local within a District Council which was selected directly
+                    if (jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
+                        Log.d(TAG, "processJurisdiction: GrandChild (Local) Type Selected.");
+                        jList.add(jurisdictionId);
+                    }
+                    // for a child (District Council) selection type (1), get the District Council which name matches the jurisdictionName and only add Local IDs within that DC
+                    else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
+                        SearchFilterJurisdictionDistrictCouncil selectedDistrictCouncil = realm.where(SearchFilterJurisdictionDistrictCouncil.class).equalTo("name", jurisdictionName).findFirst();
+                        if (selectedDistrictCouncil != null) {
+                            Log.d(TAG, "processJurisdiction: Child Type (District Council) Selected: " + selectedDistrictCouncil);
+                            for (SearchFilterJurisdictionLocal local : selectedDistrictCouncil.getLocals()) {
+                                jList.add(Integer.toString(local.getId()));
                             }
                         }
-                        if(matchFound) break;
+                        // or if an orphaned Local with no District Council was selected
+                        else {
+                            Log.d(TAG, "processJurisdiction: Child Type (Orphan Local with no District Council) Selected: " + jurisdictionName);
+                            SearchFilterJurisdictionLocal selectedOrphanLocal = realm.where(SearchFilterJurisdictionLocal.class).equalTo("name", jurisdictionName).findFirst();
+                            jList.add(Integer.toString(selectedOrphanLocal.getId()));
+                        }
                     }
-                }
-                // for a parent selection type (2), search though Main Jurisdictions until a name matches the jurisdictionName and use the main's ID
-                else if(jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
-                    Log.d(TAG, "processJurisdiction: Parent Type Selected.");
-                    for (SearchFilterJurisdictionMain mainJurisdiction : realmJurisdictions) {
-                        if (jurisdictionName.equals(mainJurisdiction.getName())) {
-                            Log.d(TAG, "processJurisdiction: Main Jurisdiction found for: " + jurisdictionName + ", id: " + mainJurisdiction.getId());
-                            jList.add(Integer.toString(mainJurisdiction.getId()));   //TODO - check if this is a valid ID
-                            break;
+                    // for a parent (Region) selection type (2), search though Main Jurisdictions until a name matches the jurisdictionName and use the main's ID
+                    else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
+                        SearchFilterJurisdictionMain mainJurisdiction = realm.where(SearchFilterJurisdictionMain.class).equalTo("name", jurisdictionName).findFirst();
+                        if (mainJurisdiction != null) {
+                            Log.d(TAG, "processJurisdiction: Parent Type (Region) Selected: " + mainJurisdiction);
+
+                            // first add any orphan Locals which are part of this parent Region but have no District Council
+                            for (SearchFilterJurisdictionNoDistrictCouncil orphanLocal : mainJurisdiction.getLocalsWithNoDistrict()) {
+                                jList.add(Integer.toString(orphanLocal.getId()));
+                            }
+
+                            // then look through all of the Region's District Councils and get any Local IDs belonging to those DCs
+                            for (SearchFilterJurisdictionDistrictCouncil districtCouncil : mainJurisdiction.getDistrictCouncils()) {
+                                for (SearchFilterJurisdictionLocal local : districtCouncil.getLocals()) {
+                                    jList.add(Integer.toString(local.getId()));
+                                }
+                            }
                         }
                     }
                 }
-
                 if (jurisdictionName != null && !jurisdictionName.trim().equals("")) {
 
                     String js = jList.toString();
@@ -473,11 +471,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<ProjectStage> realmStages;
-                realmStages = realm.where(ProjectStage.class).findAll();     // parentId = 0 should be all parent ProjectStages, which each contain a list of child ProjectStages
-                Log.d("processStage: ", "realmStages size: " + realmStages.size());
-                Log.d("processStage: ", "realmStages: " + realmStages);
-
                 int viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
                 String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                     // text display
                 String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                       // ID
@@ -569,7 +562,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Owner Type input data, which is a String array with one element
-     * TODO - make sure UI only allows single selection, as per iOS
      */
     private void processOwnerType(String[] arr) {
         String ownerTypeStr = arr[0];
@@ -589,7 +581,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     /**
      * Process the Work Type input data, which is a String array with one element
-     * TODO - make sure UI only allows single selection, as per iOS
      * TODO - work types need to be mapped to integer IDs
      */
     private void processWorkType(String[] arr) {
