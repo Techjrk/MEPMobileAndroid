@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -34,12 +35,12 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private ArrayList<Boolean> containGrandChild = new ArrayList<Boolean>();
 
     private static final String TAG = "SearchFilterMPFJurisVM";
-    public static final String BUNDLE_KEY_VIEW_TYPE    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
-    public static final String BUNDLE_KEY_ID           = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
-    public static final String BUNDLE_KEY_REGION_ID    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.regionId";
-    public static final String BUNDLE_KEY_NAME         = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.name";
+    public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
+    public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
+    public static final String BUNDLE_KEY_REGION_ID = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.regionId";
+    public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.name";
     public static final String BUNDLE_KEY_ABBREVIATION = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.abbreviation";
-    public static final String BUNDLE_KEY_LONG_NAME    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.longName";
+    public static final String BUNDLE_KEY_LONG_NAME = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.longName";
     private SearchFilterJurisdictionActivity activity;
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
@@ -72,9 +73,16 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
+        SearchFilterJurisdictionAdapter.clear();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-        activity.setResult(Activity.RESULT_OK, intent);
+        if (!bundle.isEmpty()) {
+            activity.setResult(Activity.RESULT_OK, intent);
+        } else {
+            activity.setResult(Activity.RESULT_CANCELED);
+            Log.d("nodata","nodata");
+        }
+
         activity.finish();
     }
 
@@ -98,6 +106,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
     private void setBundleData(String key, String value) {
         bundle.putString(key, value);
+    }
+
+    public void clearBundle() {
+        bundle.clear();
     }
 
     public RealmResults<SearchFilterJurisdictionMain> getRealmJurisdictions() {
@@ -150,6 +162,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         }
         SearchFilterJurisdictionAdapter adapter = new SearchFilterJurisdictionAdapter(data, this);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void processDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.Child> children, String searchKey) {
