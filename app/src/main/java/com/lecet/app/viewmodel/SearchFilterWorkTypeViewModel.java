@@ -37,5 +37,6 @@ public class SearchFilterWorkTypeViewModel extends BaseObservable {
 
     public void onSelected(View view) {
         worktype[0] = ((CheckBox) view).getText().toString();
+        worktype[1] = ((CheckBox) view).getTag().toString();
     }
 }
