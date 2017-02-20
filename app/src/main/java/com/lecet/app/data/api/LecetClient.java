@@ -12,6 +12,8 @@ import com.lecet.app.data.api.service.TrackingListService;
 import com.lecet.app.data.api.service.UserService;
 import com.lecet.app.data.models.ActivityUpdate;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -26,7 +28,10 @@ public class LecetClient {
     private static final boolean IS_PRODUCTION = false;
     private static final String STAGING_ENDPOINT = "http://lecet.dt-staging.com/api/";
     private static final String PRODUCTION_ENDPOINT = "https://mepmobile.lecet.org/";
+    private static final int NETWORK_TIMEOUT = 30;
+
     public static final String ENDPOINT = IS_PRODUCTION ? PRODUCTION_ENDPOINT : STAGING_ENDPOINT;
+
 
     private static LecetClient ourInstance = new LecetClient();
 
@@ -52,9 +57,10 @@ public class LecetClient {
         // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        // Add loggin interceptor
-        httpClient.addInterceptor(logging);
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
+                .readTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+                .connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(logging);
 
         // Custom GSON for date conversion
         Gson gson = new GsonBuilder()
@@ -65,7 +71,7 @@ public class LecetClient {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(ENDPOINT)
-                .client(httpClient.build())
+                .client(httpClientBuilder.build())
                 .build();
 
         bidService = retrofit.create(BidService.class);

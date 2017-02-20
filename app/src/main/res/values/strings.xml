@@ -141,6 +141,7 @@
     <string name="edit_profile">Edit Profile</string>
 
     <!-- Projects Near Me -->
+    <string name="no_projects_found">No projects found near your location</string>
 
     <!-- Home Fragment -->
     <string name="title_activity_main">Main</string>
