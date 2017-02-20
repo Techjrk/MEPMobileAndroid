@@ -421,7 +421,6 @@ public class CompanyDetailAdapter extends SectionedAdapter {
             case HEADER_SHARE_VIEW_TYPE: {
 
                 ListItemCompHeaderShareBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_comp_header_share, parent, false);
-
                 return new CompanyDetailAdapter.ShareViewHolder(binding);
             }
 
