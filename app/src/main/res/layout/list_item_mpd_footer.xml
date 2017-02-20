@@ -27,6 +27,7 @@
                        android:layout_height="12dp"
                        android:layout_gravity="center"
                        android:layout_marginLeft="5dp"
+                       android:rotation="@{viewModel.expanded ? 180 : 0}"
                        android:src="@drawable/down_chevron"/>
 
         </LinearLayout>

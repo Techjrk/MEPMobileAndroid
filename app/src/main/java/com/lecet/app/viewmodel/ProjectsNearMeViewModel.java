@@ -8,17 +8,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.BaseObservable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -49,8 +53,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener
         , View.OnClickListener, GoogleMap.OnCameraMoveListener {
 
+    private static final String TAG = "ProjectsNearMeViewModel";
+
     private static final int DEFAULT_DISTANCE = 3;
-    private static final int DEFAULT_ZOOM = 12;
+    private static final int DEFAULT_ZOOM = 15;
 
     private ProjectDomain projectDomain;
     private GoogleMap map;
@@ -84,6 +90,13 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.map.setOnInfoWindowClickListener(this);
         this.map.setOnInfoWindowCloseListener(this);
         this.map.setOnCameraMoveListener(this);
+
+        AppCompatActivity activity = getActivityWeakReference().get();
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        this.map.setMyLocationEnabled(true);
     }
 
     public void setToolbar(View toolbar) {
@@ -141,9 +154,16 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                 if (response.isSuccessful()) {
 
-                    populateMap(response.body().getResults());
+                    List<Project> projects = response.body().getResults();
+
+                    populateMap(projects);
 
                     dismissProgressDialog();
+
+                    if (projects == null || projects.size() == 0) {
+
+                        showCancelAlertDialog("", getActivityWeakReference().get().getString(R.string.no_projects_found));
+                    }
 
                 } else {
 
@@ -177,7 +197,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         if (isActivityAlive()) {
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
-                    BitmapDescriptor icon = project.getProjectStage().getId() == 102 ? redMarker : greenMarker;
+
+                    BitmapDescriptor icon;
+
+                    if (project.getProjectStage() == null) {
+                        icon = greenMarker;
+                    } else {
+                        icon = project.getProjectStage().getId() == 102 ? greenMarker : redMarker;
+                    }
+
                     Marker marker = map.addMarker(new MarkerOptions()
                             .infoWindowAnchor(5.4f, 5f)
                             .icon(icon)
@@ -192,7 +220,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (lastMarkerTapped != null) {
-            BitmapDescriptor icon = ((Project) lastMarkerTapped.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
+
+            Project project = (Project) lastMarkerTapped.getTag();
+
+            BitmapDescriptor icon;
+
+            if (project.getProjectStage() == null) {
+                icon = greenMarker;
+            } else {
+                icon = project.getProjectStage().getId() == 102 ? greenMarker : redMarker;
+            }
+
             lastMarkerTapped.setIcon(icon);
         }
 
@@ -229,7 +267,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onInfoWindowClose(Marker marker) {
         if (lastMarkerTapped != null) {
-            BitmapDescriptor icon = ((Project) lastMarkerTapped.getTag()).getProjectStage().getId() == 102 ? redMarker : greenMarker;
+
+            Project project = (Project) lastMarkerTapped.getTag();
+
+            BitmapDescriptor icon;
+
+            if (project.getProjectStage() == null) {
+                icon = greenMarker;
+            } else {
+                icon = project.getProjectStage().getId() == 102 ? greenMarker : redMarker;
+            }
+
             lastMarkerTapped.setIcon(icon);
         }
         lastMarkerTapped = null;

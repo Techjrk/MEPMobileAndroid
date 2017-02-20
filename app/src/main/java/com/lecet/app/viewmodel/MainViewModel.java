@@ -167,7 +167,8 @@ public class MainViewModel {
     public void fetchProjectsByBidDate(Date bidDate) {
 
         Date start = DateUtility.setDateToStartOfDate(bidDate);
-        Date end = DateUtility.addDays(start, 1);
+        Date nextDay = DateUtility.addDays(start, 1);
+        Date end = DateUtility.addMinutes(nextDay, -1);
 
         realmResultsMHS = projectDomain.fetchProjectsByBidDate(start, end);
         displayAdapter(dashboardPosition);

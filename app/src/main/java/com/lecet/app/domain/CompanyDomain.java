@@ -39,7 +39,7 @@ public class CompanyDomain {
     public Call<Company> getCompanyDetails(long companyId, Callback<Company> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-        String filter = "{\"include\":[\"contacts\",{\"projects\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}},{\"bids\":[\"company\",\"contact\",\"project\"]}]}";
+        String filter = "{\"include\":[{\"contacts\":[\"company\"]},{\"projects\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}},{\"bids\":[\"company\",\"contact\",\"project\"]}]}";
 
         Call<Company> call = lecetClient.getCompanyService().company(token, companyId, filter);
         call.enqueue(callback);

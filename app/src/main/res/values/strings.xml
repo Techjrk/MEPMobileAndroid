@@ -58,16 +58,13 @@
     <string name="powered_by_domandtom">Powered by Dom &amp; Tom</string>
     <string name="new_create_account">New? Create an Account</string>
     <string name="login">Login</string>
-    <string name="sign_up_for_mep_access">
-        <u>Sign Up for MEP Access</u>
-    </string>
+    <string name="sign_up_for_mep_access"><u>Sign Up for MEP Access</u></string>
 
     <!-- Dashboard -->
     <string name="title_fragment_bids_recently_made">Bids Recently Made</string>
     <string name="title_fragment_bids_happening_soon">Bids Happening Soon</string>
     <string name="title_fragment_projects_recently_added">Projects Recently Added</string>
     <string name="title_fragment_projects_recently_updated">Projects Recently Updated</string>
-    <!--string name="dashboard_bids">BIDS</string-->
     <string name="dashboard_projects">PROJECTS</string>
     <string name="dashboard_recently_made">PROJECTS RECENTLY BID</string>
     <string name="dashboard_happening_soon">PROJECTS BIDDING SOON</string>
@@ -141,6 +138,7 @@
     <string name="edit_profile">Edit Profile</string>
 
     <!-- Projects Near Me -->
+    <string name="no_projects_found">No projects found near your location</string>
 
     <!-- Home Fragment -->
     <string name="title_activity_main">Main</string>
@@ -294,8 +292,7 @@
     <string name="total_projects">Total Projects</string>
     <string name="total_valuation">Total Valuation</string>
     <string name="title_activity_company_detail">CompanyDetailActivity</string>
-    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
-    </string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity</string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
     <string name="bid_tab_title_past">%d Past</string>

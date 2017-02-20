@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,10 +24,14 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
 import com.lecet.app.service.GeofenceTransitionsIntentService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * File: LocationManager Created: 8/26/16 Author: domandtom
@@ -112,6 +118,29 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         ActivityCompat.requestPermissions(context,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                 LECET_LOCATION_PERMISSION_REQUEST);
+    }
+
+    /** Reverse Address
+     */
+
+    public LatLng getLocationFromAddress(String strAddress) {
+
+        Geocoder coder = new Geocoder(context, Locale.US);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 1);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        } catch (IOException e) {
+        }
+        return p1;
     }
 
     /**

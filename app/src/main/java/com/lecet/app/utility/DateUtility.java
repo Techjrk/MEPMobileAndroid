@@ -37,6 +37,14 @@ public class DateUtility {
         return calendar.getTime();
     }
 
+    public static Date addMinutes(Date date, int minutes) {
+        Calendar calendar = Calendar.getInstance(); // this would default to now
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+
+        return calendar.getTime();
+    }
+
     public static Date addMinutes(int minutes) {
         Calendar calendar = Calendar.getInstance(); // this would default to now
         calendar.add(Calendar.MINUTE, minutes);

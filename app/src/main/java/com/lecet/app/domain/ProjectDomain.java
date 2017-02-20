@@ -434,7 +434,7 @@ public class ProjectDomain {
 
         RealmResults<Bid> bidsResult = realm.where(Bid.class)
                 .equalTo("projectId", projectID)
-                .findAllSorted("amount", Sort.ASCENDING);
+                .findAllSorted("amount", Sort.DESCENDING);
 
         return bidsResult;
     }

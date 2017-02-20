@@ -29,6 +29,7 @@ import com.lecet.app.databinding.ListItemProjectNoteBinding;
 import com.lecet.app.databinding.ListItemSectionHeaderBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
+import com.lecet.app.viewmodel.DetailExpandedFooterViewModel;
 import com.lecet.app.viewmodel.DetailFooterViewModel;
 import com.lecet.app.viewmodel.HeaderViewModel;
 import com.lecet.app.viewmodel.ProjDetailItemViewModel;
@@ -242,6 +243,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         if (holder instanceof ProjectHeaderViewHolder) {
 
             ((ProjectHeaderViewHolder) holder).getBinding().setViewModel(headerViewModel);
+
         } else if (holder instanceof SectionHeaderVH) {
 
             if (section == SECTION_NOTES) {
@@ -299,8 +301,10 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
         if (section == SECTION_DETAILS) {
 
-            DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, "", "");
+            DetailFooterViewModel viewModel = new DetailExpandedFooterViewModel(appCompatActivity, "", "");
+            viewModel.setExpanded(isDetailsExpanded());
             ((FooterViewHolder) holder).getBinding().setViewModel(viewModel);
+
         } else if (section == SECTION_PARTICIPANTS) {
 
             DetailFooterViewModel viewModel = new DetailFooterViewModel(appCompatActivity, String.valueOf(projectParticipants.size()), appCompatActivity.getString(R.string.participants));
