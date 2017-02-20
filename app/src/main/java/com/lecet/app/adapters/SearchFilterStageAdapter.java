@@ -873,8 +873,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         private String longName;
         private boolean isExpanded;
         private List<GrandChild> grandChildren;
-        private Integer districtCouncilId;
-
         public boolean isSelected = false;
 
         public boolean getSelected() {
@@ -933,13 +931,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             return grandChildren;
         }
 
-        public void setDistrictCouncilId(Integer districtCouncilId) {
-            this.districtCouncilId = districtCouncilId;
-        }
-
-        public Integer getDistrictCouncilId() {
-            return districtCouncilId;
-        }
     }
 
     public static class GrandChild {

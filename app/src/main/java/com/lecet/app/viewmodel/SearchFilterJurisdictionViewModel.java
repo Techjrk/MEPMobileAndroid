@@ -80,7 +80,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             activity.setResult(Activity.RESULT_OK, intent);
         } else {
             activity.setResult(Activity.RESULT_CANCELED);
-            Log.d("nodata","nodata");
+           // Log.d("nodata","nodata");
         }
 
         activity.finish();

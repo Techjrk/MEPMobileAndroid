@@ -47,6 +47,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private static int lastPosition; //keep track of last position used by the selected item
     private static int lastChildParentPosition; //keep track of last child parent used by the selected item
     private static String lastName;
+    private CheckBox cb = null;
 
     private List<Parent> data;
     private SearchFilterJurisdictionViewModel viewModel;
@@ -232,8 +233,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         return 0;
     }
 
-    CheckBox cb = null;
-    //  Integer truePositionLastCheckedChild = null;
 
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
@@ -331,6 +330,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                                 lastChecked = null;
                                 lastFamilyChecked = NO_TYPE;
                                 lastName = "";
+                                viewModel.clearBundle();
                             }
 
                             child.setSelected(cb.isChecked());
@@ -500,6 +500,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                             } else {
                                 lastChecked = null;
                                 lastFamilyChecked = NO_TYPE;
+                                viewModel.clearBundle();
                             }
 
                             grandChild.setSelected(cb.isChecked());
