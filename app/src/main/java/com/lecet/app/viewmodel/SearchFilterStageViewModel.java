@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -63,6 +64,12 @@ public class SearchFilterStageViewModel extends BaseObservable {
     }
 
     /**
+     * Clear the Stage bundle
+      */
+    public void clearBundle() {
+        bundle.clear();
+    }
+    /**
      * Read Realm ProjectStage data
      */
     private void getProjectStages() {
@@ -79,9 +86,16 @@ public class SearchFilterStageViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
+        SearchFilterStageAdapter.clear();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-        activity.setResult(Activity.RESULT_OK, intent);
+        if (!bundle.isEmpty()) {
+            activity.setResult(Activity.RESULT_OK, intent);
+        } else {
+            activity.setResult(Activity.RESULT_CANCELED);
+         //   Log.d("nodata","nodata");
+        }
+
         activity.finish();
     }
 
