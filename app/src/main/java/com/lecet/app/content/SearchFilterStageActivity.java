@@ -29,4 +29,10 @@ public class SearchFilterStageActivity extends AppCompatActivity {
         SearchFilterStageViewModel viewModel = new SearchFilterStageViewModel(this);
         sfilter.setViewModel(viewModel);
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SearchFilterStageAdapter.clear();
+        setResult(RESULT_CANCELED);
+    }
 }
