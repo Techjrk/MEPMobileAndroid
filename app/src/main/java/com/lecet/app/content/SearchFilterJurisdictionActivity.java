@@ -27,7 +27,7 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SearchFilterJurisdictionAdapter.clear();
+        SearchFilterJurisdictionAdapter.clearLast();
         setResult(RESULT_CANCELED);
     }
 }
