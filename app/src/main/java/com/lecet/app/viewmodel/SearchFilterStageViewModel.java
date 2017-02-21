@@ -10,16 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -28,18 +25,13 @@ import io.realm.RealmResults;
  */
 public class SearchFilterStageViewModel extends BaseObservable {
     private static final String TAG = "SearchFilterStageVM";
-
     private boolean foundParent, foundChild, hasChild;
-
     public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterStageViewModel.viewType";
     public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterStageViewModel.id";
     public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterStageViewModel.name";
-
     private AppCompatActivity activity;
-
     private Bundle bundle;
     private RealmResults<SearchFilterStagesMain> realmStages;
-
     private String query;
 
     @Bindable
@@ -86,7 +78,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-        SearchFilterStageAdapter.clear();
+        SearchFilterStageAdapter.clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         if (!bundle.isEmpty()) {
@@ -135,7 +127,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
         recyclerView.setLayoutManager(mLayoutManager);
 
         List<SearchFilterStageAdapter.Parent> data = new ArrayList<>();
-
         List<SearchFilterStageAdapter.Child> children = null;
         for (SearchFilterStagesMain parentStage : getRealmStages()) {
             hasChild = false;

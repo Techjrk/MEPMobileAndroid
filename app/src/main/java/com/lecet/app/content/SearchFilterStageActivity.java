@@ -32,7 +32,7 @@ public class SearchFilterStageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SearchFilterStageAdapter.clear();
+        SearchFilterStageAdapter.clearLast();
         setResult(RESULT_CANCELED);
     }
 }
