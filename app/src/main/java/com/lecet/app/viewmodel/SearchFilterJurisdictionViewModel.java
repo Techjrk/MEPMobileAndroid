@@ -3,14 +3,11 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
@@ -19,12 +16,12 @@ import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterJurisdictionNoDistrictCouncil;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import android.databinding.Bindable;
+import android.util.Log;
 
 /**
  * View Model for Search Filter Activity: Jurisdiction
@@ -73,7 +70,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-        SearchFilterJurisdictionAdapter.clear();
+        SearchFilterJurisdictionAdapter.clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         if (!bundle.isEmpty()) {

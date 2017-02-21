@@ -1,6 +1,5 @@
 package com.lecet.app.adapters;
 
-import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,11 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-
 import com.lecet.app.R;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
-
-import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +18,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
+import android.support.annotation.IntDef;
+import java.lang.annotation.Retention;
 /**
  * File: SearchFilterJurisdictionAdapter Created: 1/11/17 Author: domandtom
  * <p>
@@ -66,9 +63,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         checkLastSelect(true);
     }
 
-    public static void clear() {
+    public static void clearLast() {
         lastChecked = null;
         lastFamilyChecked = NO_TYPE;
+        lastName = "";
     }
 
     private void checkLastSelect(boolean selected) {
@@ -84,32 +82,22 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                 }
 
-                //   Log.d("lsec", "lsec:" + lastSection + " lparentposition:" + lastChildParentPosition + " lgcpos:" + lastPosition);
-
             } else if (lastFamilyChecked == CHILD_VIEW_TYPE) {
                 if (data != null && lastSection < data.size() && data.get(lastSection) != null
-                        && data.get(lastSection).getChildren().size() > lastPosition
-                    //&& data.get(lastSection).getChildren() != null
-                    //&& data.get(lastSection).getChildren().get(lastPosition) != null
-                    //&& data.get(lastSection).getChildren().get(lastPosition).getGrandChildren() !=null
-                    //&& lastPosition < data.get(lastSection).getChildren().get(lastPosition).getGrandChildren().size()
-                        ) {
+                        && data.get(lastSection).getChildren().size() > lastPosition) {
                     data.get(lastSection).getChildren().get(lastPosition).setSelected(selected);
                 }
 
             } else if (lastFamilyChecked == PARENT_VIEW_TYPE) {
                 if (data != null && lastSection < data.size())
                     data.get(lastSection).setSelected(selected);
-
             }
-//            notifyDataSetChanged();
         }
     }
 
     private void checkLastGChildSelectName(boolean selected, GrandChild gcname, GrandChildTypeViewHolder  vholder, int section, int grandChildParentIndex, int grandChildIndex ) {
 
         if (lastFamilyChecked != NO_TYPE) {
-            // lastChecked.setChecked(false);
             if (lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
                 if (data != null && gcname != null) {
                     if (lastName.equals(gcname.getName().trim())) {
@@ -119,12 +107,9 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         lastPosition = Integer.valueOf(grandChildIndex);
                         lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
                         lastSection = section;
-                        //lastName = gcname.getName().trim();
-                       // notifyDataSetChanged();
                     } else
                         if (gcname.getSelected() == true) gcname.setSelected(false);
                 }
-
             }
         }
     }
@@ -136,18 +121,14 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 if (data != null && cname != null) {
                     if (lastName.equals(cname.getName().trim())) {
                         checkLastSelect(false);
-
                         cname.setSelected(selected);
                         vholder.checkView.setSelected(selected);
                         lastPosition = Integer.valueOf(truePosition);
                         lastSection = section;
-
-                       // notifyDataSetChanged();
                     } else
                     if (cname.getSelected() == true) cname.setSelected(false);
                 }
             }
-
         }
     }
 
@@ -158,16 +139,13 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 if (data != null && pname != null) {
                     if (lastName.equals(pname.getName().trim())) {
                         checkLastSelect(false);
-
                         pname.setSelected(selected);
                         checkLastSelect(true);
                         vholder.checkView.setSelected(selected);
                         lastSection=section;
-                        //lastPosition=section;
                     }
                     else
                     if (pname.getSelected() == true) pname.setSelected(false);
-                    //  data.get(lastSection).setSelected(selected);
                 }
 
             }
@@ -327,9 +305,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                                 lastSection = section;
                                 lastName = cb.getText().toString().trim();
                             } else {
-                                lastChecked = null;
-                                lastFamilyChecked = NO_TYPE;
-                                lastName = "";
+                                clearLast();
                                 viewModel.clearBundle();
                             }
 
@@ -498,8 +474,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                                 lastName = cb.getText().toString().trim();
 
                             } else {
-                                lastChecked = null;
-                                lastFamilyChecked = NO_TYPE;
+                                clearLast();
                                 viewModel.clearBundle();
                             }
 
@@ -551,15 +526,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
         checkLastParentSelectName(true,parent,parentViewHolder,section);
         parentViewHolder.checkView.setChecked(parent.getSelected());
-      //  parentViewHolder.checkView.setTag(Integer.valueOf(section));
-
-      /*  if (section == 0 && parent.isSelected && parentViewHolder.checkView.isChecked()) {
-            lastChecked = parentViewHolder.checkView;
-            lastFamilyChecked = PARENT_VIEW_TYPE;
-            lastSection = section;
-            lastName = parent.getName().trim();
-        }*/
-
 
         parentViewHolder.checkView.setOnClickListener(
                 new View.OnClickListener() {
@@ -570,27 +536,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                             if (lastChecked != null) {
                                 lastChecked.setChecked(false);
                                 checkLastSelect(false);
-                               /*   //temporarily commented this original code. If problem occurred, it will be uncommented.
-                               if (lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
-                                    if (data != null && lastSection < data.size() &&  data.get(lastSection).getChildren() !=null
-                                            && lastChildParentPosition < data.get(lastSection).getChildren().size() &&  data.get(lastSection).getChildren().get(lastChildParentPosition) !=null
-                                            &&  data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren() !=null
-                                            && lastPosition < data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren().size())
-                                    {
-                                        data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren().get(lastPosition).setSelected(false);
-                                    }
-                                    //       Log.d("lsec", "lsec:" + lastSection + " lparentposition:" + lastChildParentPosition + " lgcpos:" + lastPosition);
-                                } else if (lastFamilyChecked == CHILD_VIEW_TYPE) {
-                                    //          truePositionLastCheckedChild = (Integer) lastChecked.getTag();
-                                    if (data != null && lastSection < data.size() &&  data.get(lastSection).getChildren() !=null &&  data.get(lastSection).getChildren().get(lastPosition) !=null
-                                            && lastPosition < data.get(lastSection).getChildren().get(lastPosition).getGrandChildren().size())
-                                    {
-                                        data.get(lastSection).getChildren().get(lastPosition).setSelected(false);
-                                    }
-                                } else if (lastFamilyChecked == PARENT_VIEW_TYPE) {
-                                    if (data != null && lastSection < data.size())
-                                        data.get(lastSection).setSelected(false);
-                                }*/
                             }
                             lastChecked = cb;
                             lastChecked = parentViewHolder.checkView;
@@ -599,9 +544,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                             lastName = cb.getText().toString().trim();
 
                         } else {
-                            lastChecked = null;
-                            lastFamilyChecked = NO_TYPE;
-                            lastName = "";
+                            clearLast();
                             viewModel.clearBundle();
                         }
 
@@ -609,12 +552,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                         if (parent.getSelected())
                             viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //TODO - check regionId
-
                         notifyDataSetChanged();
                     }
                 }
         );
-      //  checkLastParentSelectName(true,parent,parentViewHolder);
     }
 
     @Override
