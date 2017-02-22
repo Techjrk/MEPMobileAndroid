@@ -480,7 +480,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                             grandChild.setSelected(cb.isChecked());
                             if (grandChild.getSelected())
-                                viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), -1, grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());    //TODO - check regionId
+                                viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), -1, grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());    //NOTE - we are not using regionId as it is not easily avail from here. we look up regionId in the main activity's processing function.
                             notifyDataSetChanged();
                         }
 
@@ -551,7 +551,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         parent.setSelected(cb.isChecked());
 
                         if (parent.getSelected())
-                            viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //TODO - check regionId
+                            viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //NOTE - we are not using regionId as it is not easily avail from here. we look up regionId in the main activity's processing function.
                         notifyDataSetChanged();
                     }
                 }
