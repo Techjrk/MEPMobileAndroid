@@ -12,7 +12,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.BaseObservable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -22,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -36,7 +34,6 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -295,8 +292,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onCameraMove() {
-        timer.removeCallbacks(fetchProjectsOnMapStopMoving);
-        timer.postDelayed(fetchProjectsOnMapStopMoving, 1000); //this is to prevent downloading projects while the user is moving the map
+        //timer.removeCallbacks(fetchProjectsOnMapStopMoving);
+        //timer.postDelayed(fetchProjectsOnMapStopMoving, 1000); //this is to prevent downloading projects while the user is moving the map
     }
 
     private Runnable fetchProjectsOnMapStopMoving = new Runnable() {

@@ -24,7 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.lecet.app.R;
-import com.lecet.app.content.widget.LacetInfoWindowAdapter;
+import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -108,7 +108,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap map) {
         MapsInitializer.initialize(this);
-        map.setInfoWindowAdapter(new LacetInfoWindowAdapter(this));
+        map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));
         viewModel.setMap(map);
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
