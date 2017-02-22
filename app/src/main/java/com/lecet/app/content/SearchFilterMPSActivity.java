@@ -471,10 +471,21 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                int viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
-                String stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                     // text display
-                String stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                       // ID
-                String stages = "";
+                int viewType = -1;
+                String stageStr;
+                String stageId;
+                String stages;
+
+                try {
+                    viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
+                    stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
+                    stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
+                    stages = "";
+                }
+                catch (Exception e) {
+                    Log.e("processJurisdiction: ", "Error parsing bundle.");
+                    return;
+                }
 
                 // build the list of IDs for the query, which include the parent ID and any of its child IDs
                 List<String> sList = new ArrayList<>();
@@ -495,6 +506,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     for(SearchFilterStage childStage : selectedParentStage.getStages()) {
                         sList.add(Integer.toString(childStage.getId()));
                     }
+                }
+                else {
+                    Log.e("processJurisdiction: ", "Unsupported viewType: " + viewType);
                 }
 
                 if (stageStr != null && !stageStr.trim().equals("")) {
