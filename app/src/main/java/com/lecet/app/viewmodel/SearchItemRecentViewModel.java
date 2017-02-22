@@ -189,7 +189,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
                 return null;
             }
 
-            //TODO - external
             String mapStr = null;
             StringBuilder sb = new StringBuilder();
             sb.append("https://maps.googleapis.com/maps/api/staticmap");

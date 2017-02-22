@@ -107,7 +107,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
             // Stage Update Mode
             else if (update.getModelType().matches(EXPANDABLE_MODE_STAGE)) {
                 setExpandableMode(EXPANDABLE_MODE_STAGE);
-                setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'stage' icon, TBD
+                setExpandableViewIconId(R.drawable.ic_update_stage);
                 setExpandableViewTitle(STAGE_UPDATED);
                 setExpandableViewMessage(update.getStageUpdate().getName());
             }
@@ -115,7 +115,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
             // Stage Contact Mode
             else if (update.getModelType().matches(EXPANDABLE_MODE_CONTACT)) {
                 setExpandableMode(EXPANDABLE_MODE_CONTACT);
-                setExpandableViewIconId(R.drawable.ic_add_note);    //TODO - change to a 'contact' icon, TBD
+                setExpandableViewIconId(R.drawable.ic_update_contact);
                 setExpandableViewTitle(update.getSummary());
                 setExpandableViewMessage(update.getContactUpdate().getCompany().getName());
             }

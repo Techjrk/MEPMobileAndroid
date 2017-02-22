@@ -170,7 +170,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
         // comma-separated constructed String for UI display
         String cityStr = city;
-        String stateStr = !state.equals("") ? (!city.equals("") ? "," + state : " " + state) : "";       //TODO - any validation here? compare iOS version
+        String stateStr = !state.equals("") ? (!city.equals("") ? "," + state : " " + state) : "";       //NOTE - no validation
         String countyStr = !county.equals("") ? (!state.equals("") ? "," + county : " " + county) : "";
         String zipStr = !zip.equals("") ? (!zip.equals("") ? "," + zip : " " + zip) : "";
 
