@@ -12,6 +12,8 @@ import com.lecet.app.viewmodel.CompanyDetailProjectViewModel;
 
 import io.realm.RealmResults;
 
+import static com.lecet.app.R.string.google_api_key;
+
 /**
  * File: CompanyAssociatedProjectAdapter Created: 1/25/17 Author: domandtom
  *
@@ -37,7 +39,7 @@ public class CompanyAssociatedProjectAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        CompanyDetailProjectViewModel viewModel = new CompanyDetailProjectViewModel(data.get(position), holder.itemView.getContext().getString(R.string.google_maps_key));
+        CompanyDetailProjectViewModel viewModel = new CompanyDetailProjectViewModel(data.get(position), holder.itemView.getResources().getString(google_api_key));
         ((CompanyProjectViewHolder) holder).getBinding().setViewModel(viewModel);
     }
 

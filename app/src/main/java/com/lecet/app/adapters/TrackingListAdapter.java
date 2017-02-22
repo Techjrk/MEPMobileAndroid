@@ -26,6 +26,7 @@ import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
+import static com.lecet.app.R.string.google_api_key;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
@@ -70,7 +71,7 @@ public abstract class TrackingListAdapter<T extends RealmResults> extends Recycl
     @Override
     public void onBindViewHolder(TrackingListViewHolderNew holder, int position) {
 
-        final String mapsApiKey = "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU";    //TODO - externalize?
+        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
 
         holder.getBinding().setViewModel(viewModelForPosition(mapsApiKey, position, showUpdates));
     }

@@ -1,6 +1,7 @@
 package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.lecet.app.viewmodel.SearchViewModel;
 import java.util.Collections;
 import java.util.List;
 
+import static com.lecet.app.R.string.google_api_key;
+
 
 /**
  * File: SearchRecentRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -25,9 +28,11 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
+    private AppCompatActivity appCompatActivity;
     private List data = Collections.emptyList();
 
-    public SearchRecentRecyclerViewAdapter(int adapterType, List data) {
+    public SearchRecentRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
+        this.appCompatActivity = appCompatActivity;
         this.adapterType = adapterType;
         this.data = data;
     }
@@ -48,12 +53,17 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
+
         RecentViewHolder viewHolder = (RecentViewHolder) holder;
-        SearchItemRecentViewModel vm=null;
-if (((SearchResult) data.get(position)).getProject() !=null) {
-            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
-        } else
-        vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        SearchItemRecentViewModel vm = null;
+
+        if (((SearchResult) data.get(position)).getProject() != null) {
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), mapsApiKey);
+        }
+        else
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey);
+
         viewHolder.getBinding().setViewModel(vm);
     }
 

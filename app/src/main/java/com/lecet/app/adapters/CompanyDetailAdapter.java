@@ -45,6 +45,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 
+import static com.lecet.app.R.string.google_api_key;
+
 /**
  * File: CompanyDetailAdapter Created: 1/23/17 Author: domandtom
  *
@@ -348,7 +350,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
         } else if (section == SECTION_BIDS) {
 
-            CompanyDetailBidViewModel viewModel = new CompanyDetailBidViewModel(appCompatActivity, appCompatActivity.getString(R.string.google_maps_key), company.getBids().get(position));
+            CompanyDetailBidViewModel viewModel = new CompanyDetailBidViewModel(appCompatActivity, appCompatActivity.getResources().getString(google_api_key), company.getBids().get(position));
             ((CompanyBidViewHolder) holder).getBinding().setViewModel(viewModel);
         }
 

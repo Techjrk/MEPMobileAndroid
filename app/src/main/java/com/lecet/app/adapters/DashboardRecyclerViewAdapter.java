@@ -19,6 +19,8 @@ import java.util.List;
 
 import io.realm.RealmObject;
 
+import static com.lecet.app.R.string.google_api_key;
+
 /**
  * File: DashboardRecyclerViewAdapter Created: 10/21/16 Author: domandtom
  *
@@ -72,20 +74,22 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
+
         if (holder instanceof MBRViewHolder) {
 
             MBRViewHolder viewHolder = (MBRViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel(bidDomain, (Bid) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU", activity));
+            viewHolder.getBinding().setViewModel(new RecentBidItemViewModel(bidDomain, (Bid) data.get(position), mapsApiKey, activity));
 
         } else if (holder instanceof MHSViewHolder) {
 
             MHSViewHolder viewHolder = (MHSViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), mapsApiKey));
 
         } else if (holder instanceof MRAViewHolder) {
 
             MRAViewHolder viewHolder = (MRAViewHolder) holder;
-            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU"));
+            viewHolder.getBinding().setViewModel(new DashboardProjectItemViewModel((Project) data.get(position), mapsApiKey));
         }
     }
 

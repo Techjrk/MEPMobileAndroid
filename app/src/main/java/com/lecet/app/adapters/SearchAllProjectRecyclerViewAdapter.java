@@ -1,6 +1,7 @@
 package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import com.lecet.app.viewmodel.SearchItemRecentViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 import java.util.Collections;
 import java.util.List;
+
+import static com.lecet.app.R.string.google_api_key;
 
 
 /**
@@ -23,10 +26,12 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
+    private AppCompatActivity appCompatActivity;
 
     private List data = Collections.emptyList();
 
-    public SearchAllProjectRecyclerViewAdapter(int adapterType, List data) {
+    public SearchAllProjectRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
+        this.appCompatActivity = appCompatActivity;
         this.adapterType = adapterType;
         this.data = data;
     }
@@ -48,8 +53,10 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
+
         ProjectQuerySearchViewHolder viewHolder = (ProjectQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Project) data.get(position), "AIzaSyBP3MAIoz2P2layYXrWMRO6o1SgHR8dBWU");
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Project) data.get(position), mapsApiKey);
         viewHolder.getBinding().setViewModel(vm);
     }
 

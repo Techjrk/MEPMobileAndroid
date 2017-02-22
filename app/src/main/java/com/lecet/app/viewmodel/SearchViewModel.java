@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -517,7 +516,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanyAll = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, adapterDataCompanyAll);
+        searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, adapterDataCompanyAll);
         recyclerView.setAdapter(searchAdapterCompanyAll);
     }
 
@@ -528,7 +527,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectAll = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, adapterDataProjectAll);
+        searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, adapterDataProjectAll);
         recyclerView.setAdapter(searchAdapterProjectAll);
     }
 
@@ -539,7 +538,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataProjectSummary = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterProjectSummary = new SearchSummaryProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY, adapterDataProjectSummary);
+        searchAdapterProjectSummary = new SearchSummaryProjectRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY, adapterDataProjectSummary);
         recyclerView.setAdapter(searchAdapterProjectSummary);
     }
 
@@ -550,7 +549,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataCompanySummary = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterCompanySummary = new SearchSummaryCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY, adapterDataCompanySummary);
+        searchAdapterCompanySummary = new SearchSummaryCompanyRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY, adapterDataCompanySummary);
         recyclerView.setAdapter(searchAdapterCompanySummary);
     }
 
@@ -572,7 +571,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataRecentlyViewed = new ArrayList<SearchResult>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerView, LinearLayoutManager.HORIZONTAL);
-        searchAdapterRecentlyViewed = new SearchRecentRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_RECENT, adapterDataRecentlyViewed);
+        searchAdapterRecentlyViewed = new SearchRecentRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_RECENT, adapterDataRecentlyViewed);
         recyclerView.setAdapter(searchAdapterRecentlyViewed);
     }
 
