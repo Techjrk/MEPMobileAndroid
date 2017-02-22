@@ -220,7 +220,10 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-//        if (query == null || query.trim().equals("")) {
+        if (SearchDomain.callProjectService !=null) SearchDomain.callProjectService.cancel();
+        if (SearchDomain.callCompanyService !=null) SearchDomain.callCompanyService.cancel();
+        if (SearchDomain.callContactService !=null) SearchDomain.callContactService.cancel();
+
         if (!USING_INSTANT_SEARCH && query.trim().equals("")) {
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
@@ -235,7 +238,7 @@ public class SearchViewModel extends BaseObservable {
         setQueryCompanyTitle(query + " in Companies");
         setQueryContactTitle(query + " in Contacts");
 
-        checkTotal();
+      //  checkTotal();
         /** For Project query total view
          */
         getProjectQuery(query);
@@ -249,6 +252,7 @@ public class SearchViewModel extends BaseObservable {
          * For Contact query total view
          */
         getContactQuery(query);
+        checkTotal();
 
     }
 
