@@ -200,6 +200,8 @@
 
     <!-- Info Window -->
     <string name="get_directions">Get Directions</string>
+    <string name="post_bid">POST BID</string>
+    <string name="pre_bid">PRE BID</string>
 
     <!-- Projects Near Me Confirm Dialog Fragment -->
     <string name="confirm_share_your_location_description">This feature is only available\nwhen you
