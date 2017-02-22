@@ -17,8 +17,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
+                android:layout_marginRight="10dp"
+                android:paddingRight="8dp"
                 bind:typeface="@{`Lato-Bold.ttf`}" />
-
             <ImageView
                 style="@style/ImageDownArrow"
                 android:visibility="gone" />
@@ -26,5 +27,4 @@
         <!-- Horizontal Separator -->
         <include layout="@layout/rule_horiz_light" />
     </LinearLayout>
-
 </layout>

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import com.lecet.app.R;
+import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.databinding.ActivitySearchFilterJurisdictionBinding;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 
@@ -13,7 +14,7 @@ import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
  * Activity for Search Filter: Jurisdiction
  */
 public class SearchFilterJurisdictionActivity extends AppCompatActivity {
-
+    // SearchFilterJurisdictionViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,4 +24,10 @@ public class SearchFilterJurisdictionActivity extends AppCompatActivity {
         sfilter.setViewModel(viewModel);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SearchFilterJurisdictionAdapter.clearLast();
+        setResult(RESULT_CANCELED);
+    }
 }

@@ -9,22 +9,26 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/child_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <CheckBox
-                android:id="@+id/j_child"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="10dp"
-                android:paddingRight="5dp"
-                bind:typeface="@{`Lato-Bold.ttf`}" />
 
             <ImageView
                 android:id="@+id/j_child_img"
                 style="@style/ImageDownArrow"
+                android:paddingLeft="5dp"
                 android:visibility="invisible" />
+            <CheckBox
+                android:id="@+id/j_child"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/j_child_img"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:paddingRight="8dp"
+                bind:typeface="@{`Lato-Bold.ttf`}" />
+
         </RelativeLayout>
         <!-- Horizontal Separator -->
         <include layout="@layout/rule_horiz_light" />

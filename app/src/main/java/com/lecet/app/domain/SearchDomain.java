@@ -39,6 +39,9 @@ public class SearchDomain {
     private String companyFilter = "{\"searchFilter\":{}}";
     private String contactFilter = "{\"include\":[\"company\"],\"searchFilter\":{}}";
     private static String recentToken;
+    public static Call<SearchProject> callProjectService;
+    public static Call<SearchCompany> callCompanyService;
+    public static Call<SearchContact> callContactService;
 
     public String getCompanyFilter() {
         return companyFilter;
@@ -108,22 +111,20 @@ public class SearchDomain {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:","stageMainList: size: " + stageMainList.size());
-                            Log.d("SearchDomain:","stageMainList: " + stageMainList);
+                        //    Log.d("SearchDomain:","stageMainList: size: " + stageMainList.size());
+                        //    Log.d("SearchDomain:","stageMainList: " + stageMainList);
                             realm.copyToRealmOrUpdate(stageMainList);
                             callback.onSuccess(stageMainList);
                         }
                     });
 
                 } else {
-
                     callback.onFailure(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SearchFilterStagesMain>> call, Throwable t) {
-
                 callback.onFailure(-999, "Please check your internet connection and try again");
             }
         });
@@ -161,8 +162,8 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:","projectTypesMainList: size: " + projectTypesMainList.size());
-                            Log.d("SearchDomain:","projectTypesMainList: " + projectTypesMainList);
+                          //  Log.d("SearchDomain:","projectTypesMainList: size: " + projectTypesMainList.size());
+                          //  Log.d("SearchDomain:","projectTypesMainList: " + projectTypesMainList);
                             realm.copyToRealmOrUpdate(projectTypesMainList);
 
                             callback.onSuccess(projectTypesMainList);
@@ -207,7 +208,7 @@ public class SearchDomain {
         Call<List<SearchFilterJurisdictionMain>> call = getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-                Log.d(TAG, "Create list of Jurisdictions");
+               // Log.d(TAG, "Create list of Jurisdictions");
                 if (response.isSuccessful()) {
                     final List<SearchFilterJurisdictionMain> jurisdictionMainList = response.body();
 
@@ -217,8 +218,8 @@ public class SearchDomain {
 
                         @Override
                         public void execute(Realm realm) {
-                            Log.d("SearchDomain:","jurisdictionMainList: size: " + jurisdictionMainList.size());
-                            Log.d("SearchDomain:","jurisdictionMainList: " + jurisdictionMainList);
+                          //  Log.d("SearchDomain:","jurisdictionMainList: size: " + jurisdictionMainList.size());
+                          //  Log.d("SearchDomain:","jurisdictionMainList: " + jurisdictionMainList);
                             realm.copyToRealmOrUpdate(jurisdictionMainList);
                             callback.onSuccess(jurisdictionMainList);
                         }
@@ -268,24 +269,25 @@ public class SearchDomain {
     public void getSearchProjectQuery(String q, Callback<SearchProject> callback) {
         //  String filter="{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Log.d("Project Domain", "Project Domain: " + getProjectFilter());
-        Call<SearchProject> call = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
-//        Call<SearchProject> call = lecetClient.getSearchService().getSearchProjectQuery(token,q,filter );
-        call.enqueue(callback);
+//        Call<SearchProject> call = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
+        callProjectService = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
+        callProjectService.enqueue(callback);
     }
 
     public void getSearchCompanyQuery(String q, Callback<SearchCompany> callback) {
         //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
-        call.enqueue(callback);
+//        Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
+        callCompanyService = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
+        callCompanyService.enqueue(callback);
     }
 
     public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
         //   String filter = "{}";
         String token = sharedPreferenceUtil.getAccessToken();
-        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
-        call.enqueue(callback);
+//        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
+        callContactService = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
+        callContactService.enqueue(callback);
     }
 
 /*
@@ -308,7 +310,7 @@ public class SearchDomain {
         String bodyContent ="{ \"code\" : \"VIEW_COMPANY\" , \"companyId\" : "+companyId+" }";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
         Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
-        Log.d("body","body "+bodyContent);
+        //Log.d("body","body "+bodyContent);
         call.enqueue(callback);
     }
 }

@@ -8,17 +8,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -27,18 +25,13 @@ import io.realm.RealmResults;
  */
 public class SearchFilterStageViewModel extends BaseObservable {
     private static final String TAG = "SearchFilterStageVM";
-
     private boolean foundParent, foundChild, hasChild;
-
     public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterStageViewModel.viewType";
     public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterStageViewModel.id";
     public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterStageViewModel.name";
-
     private AppCompatActivity activity;
-
     private Bundle bundle;
     private RealmResults<SearchFilterStagesMain> realmStages;
-
     private String query;
 
     @Bindable
@@ -63,6 +56,12 @@ public class SearchFilterStageViewModel extends BaseObservable {
     }
 
     /**
+     * Clear the Stage bundle
+      */
+    public void clearBundle() {
+        bundle.clear();
+    }
+    /**
      * Read Realm ProjectStage data
      */
     private void getProjectStages() {
@@ -79,9 +78,16 @@ public class SearchFilterStageViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
+        SearchFilterStageAdapter.clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-        activity.setResult(Activity.RESULT_OK, intent);
+        if (!bundle.isEmpty()) {
+            activity.setResult(Activity.RESULT_OK, intent);
+        } else {
+            activity.setResult(Activity.RESULT_CANCELED);
+         //   Log.d("nodata","nodata");
+        }
+
         activity.finish();
     }
 
@@ -89,8 +95,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
      * Set the selected Stage data in the bundle based on the checked selection.
      *
      * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, 2=grandchild)
-     * Each has its own ID starting at 0.
-     * Note: While 'name' usually looks like an int, it needs to be a String to support variant names like '18A'
      */
     public void setStageData(int viewType, int id, String name) {
         // overwrite the Bundle instance with each selection since Stage only supports single-selection
@@ -121,7 +125,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
         recyclerView.setLayoutManager(mLayoutManager);
 
         List<SearchFilterStageAdapter.Parent> data = new ArrayList<>();
-
         List<SearchFilterStageAdapter.Child> children = null;
         for (SearchFilterStagesMain parentStage : getRealmStages()) {
             hasChild = false;

@@ -3,13 +3,11 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
@@ -18,12 +16,12 @@ import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterJurisdictionNoDistrictCouncil;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import android.databinding.Bindable;
+import android.util.Log;
 
 /**
  * View Model for Search Filter Activity: Jurisdiction
@@ -34,12 +32,12 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private ArrayList<Boolean> containGrandChild = new ArrayList<Boolean>();
 
     private static final String TAG = "SearchFilterMPFJurisVM";
-    public static final String BUNDLE_KEY_VIEW_TYPE    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
-    public static final String BUNDLE_KEY_ID           = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
-    public static final String BUNDLE_KEY_REGION_ID    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.regionId";
-    public static final String BUNDLE_KEY_NAME         = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.name";
+    public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
+    public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
+    public static final String BUNDLE_KEY_REGION_ID = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.regionId";
+    public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.name";
     public static final String BUNDLE_KEY_ABBREVIATION = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.abbreviation";
-    public static final String BUNDLE_KEY_LONG_NAME    = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.longName";
+    public static final String BUNDLE_KEY_LONG_NAME = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.longName";
     private SearchFilterJurisdictionActivity activity;
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
@@ -72,9 +70,16 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
+        SearchFilterJurisdictionAdapter.clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-        activity.setResult(Activity.RESULT_OK, intent);
+        if (!bundle.isEmpty()) {
+            activity.setResult(Activity.RESULT_OK, intent);
+        } else {
+            activity.setResult(Activity.RESULT_CANCELED);
+           // Log.d("nodata","nodata");
+        }
+
         activity.finish();
     }
 
@@ -98,6 +103,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
     private void setBundleData(String key, String value) {
         bundle.putString(key, value);
+    }
+
+    public void clearBundle() {
+        bundle.clear();
     }
 
     public RealmResults<SearchFilterJurisdictionMain> getRealmJurisdictions() {
@@ -150,6 +159,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         }
         SearchFilterJurisdictionAdapter adapter = new SearchFilterJurisdictionAdapter(data, this);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void processDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.Child> children, String searchKey) {
