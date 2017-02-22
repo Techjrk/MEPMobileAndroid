@@ -58,93 +58,81 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String locationFilter = "";             //TODO - consider moving these declarations into next block
-        String primaryProjectTypeFilter = "";
-        String projectTypeIdFilter = "";
-        String valueFilter = "";
-        String updatedWithinFilter = "";
-        String jurisdictionFilter = "";
-        String stageFilter = "";
-        String biddingWithinFilter = "";
-        String buildingOrHighwayFilter = "";
-        String ownerTypeFilter = "";
-        String workTypeFilter = "";
-
         StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
 
         if (data != null) {
 
-            // Location Filter (valid) - {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
-            locationFilter = (processLocationFilter(data));
+            // Location Filter e.g. {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
+            String locationFilter = processLocationFilter(data);
             if(locationFilter.length() > 0) {
                 sb.append(locationFilter);
             }
 
-            // Primary Project Type Filter (valid?) {"type": {Engineering}}
-            primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
+            // Primary Project Type Filter e.g. {"type": {Engineering}}
+            String primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
             if(primaryProjectTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(primaryProjectTypeFilter);
             }
 
-            // Project ID Type Filter (valid)
-            projectTypeIdFilter = processProjectTypeIdFilter(data);
+            // Project ID Type Filter
+            String projectTypeIdFilter = processProjectTypeIdFilter(data);
             if(projectTypeIdFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(projectTypeIdFilter);
             }
 
-            // Value Filter (valid)
-            valueFilter = processValueFilter(data);
+            // Value Filter
+            String valueFilter = processValueFilter(data);
             if(valueFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(valueFilter);
             }
 
-            // Updated Within Filter (valid)
-            updatedWithinFilter = processUpdatedWithinFilter(data);
+            // Updated Within Filter
+            String updatedWithinFilter = processUpdatedWithinFilter(data);
             if(updatedWithinFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(updatedWithinFilter);
             }
 
-            // Jurisdiction Filter (valid)
-            jurisdictionFilter = processJurisdictionFilter(data);
+            // Jurisdiction Filter
+            String jurisdictionFilter = processJurisdictionFilter(data);
             if(jurisdictionFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(jurisdictionFilter);
             }
 
-            // Stage Filter (valid)
-            stageFilter = processStageFilter(data);
+            // Stage Filter
+            String stageFilter = processStageFilter(data);
             if(stageFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(stageFilter);
             }
 
-            // Bidding Within Filter (valid)
-            biddingWithinFilter = processBiddingWithinFilter(data);
+            // Bidding Within Filter
+            String biddingWithinFilter = processBiddingWithinFilter(data);
             if(biddingWithinFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(biddingWithinFilter);
             }
 
-            // Building-or-Highway Filter (valid)
-            buildingOrHighwayFilter = processBuildingOrHighwayFilter(data);
+            // Building-or-Highway Filter
+            String buildingOrHighwayFilter = processBuildingOrHighwayFilter(data);
             if(buildingOrHighwayFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(buildingOrHighwayFilter);
             }
 
-            // Owner Type Filter (valid)
-            ownerTypeFilter = processOwnerTypeFilter(data);
+            // Owner Type Filter
+            String ownerTypeFilter = processOwnerTypeFilter(data);
             if(ownerTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(ownerTypeFilter);
             }
 
-            // Work Type Filter (valid)
-            workTypeFilter = processWorkTypeFilter(data);
+            // Work Type Filter
+            String workTypeFilter = processWorkTypeFilter(data);
             if(workTypeFilter.length() > 0) {
                 if(sb.length() > 0) sb.append(",");
                 sb.append(workTypeFilter);
