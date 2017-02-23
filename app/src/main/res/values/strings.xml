@@ -316,5 +316,19 @@
 
     <!-- Company Contacts -->
     <string name="contacts_count">%d contacts</string>
+    <string name="to">to</string>
+    <string name="search_for_jurisdiction">Search for Jurisdiction</string>
+    <string name="city_all_caps">CITY</string>
+    <string name="apply">APPLY</string>
+    <string name="federal">Federal</string>
+    <string name="local_government">Local Government</string>
+    <string name="military">Military</string>
+    <string name="private_name">Private</string>
+    <string name="search_for_project_types">Search for Project Types</string>
+    <string name="search_for_stages">Search for Stages</string>
+    <string name="additions">Additions</string>
+    <string name="alterations">Alterations</string>
+    <string name="interiors">Interiors</string>
+    <string name="new_project">New Project</string>
 
 </resources>
