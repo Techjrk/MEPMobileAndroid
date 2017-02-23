@@ -117,7 +117,7 @@
                         style="@style/SearchFilterSectionTextView"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="to"
+                        android:text="@string/to"
                         android:textAlignment="center"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 

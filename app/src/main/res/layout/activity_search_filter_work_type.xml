@@ -62,7 +62,7 @@
                     android:width="30dp"
                     android:background="@null"
                     android:onClick="@{viewModel.onApplyButtonClick}"
-                    android:text="APPLY"
+                    android:text="@string/apply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -81,7 +81,7 @@
                     <CheckBox
                         android:id="@+id/workadditions"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Additions"
+                        android:text="@string/additions"
                         android:tag="1"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -100,7 +100,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="Alterations"
+                        android:text="@string/alterations"
                         android:tag="2"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -116,7 +116,7 @@
                     <CheckBox
                         android:id="@+id/workinteriors"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Interiors"
+                        android:text="@string/interiors"
                         android:tag="3"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -132,7 +132,7 @@
                     <CheckBox
                         android:id="@+id/worknewproject"
                         style="@style/SearchFilterSectionButton"
-                        android:text="New Project"
+                        android:text="@string/new_project"
                         android:tag="4"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />

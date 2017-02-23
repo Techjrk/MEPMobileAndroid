@@ -237,7 +237,7 @@ public class SearchViewModel extends BaseObservable {
         setQueryCompanyTitle(query + " in Companies");
         setQueryContactTitle(query + " in Contacts");
 
-      //  checkTotal();
+        checkTotal();
         /** For Project query total view
          */
         getProjectQuery(query);
@@ -251,7 +251,7 @@ public class SearchViewModel extends BaseObservable {
          * For Contact query total view
          */
         getContactQuery(query);
-        checkTotal();
+        //checkTotal();
 
     }
 
