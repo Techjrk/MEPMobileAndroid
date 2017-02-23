@@ -67,12 +67,6 @@
             </LinearLayout>
 
             <!-- LOCATION DETAIL SECTION -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
                 <!-- *** Fields -->
                 <!-- CITY Fields -->
                 <LinearLayout
@@ -83,8 +77,7 @@
 
                     <TextView
                         style="@style/SearchFilterSectionTextView"
-                        android:text="CITY"
-                        android:textSize="16sp"
+                        android:text="@string/city_all_caps"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <EditText
@@ -92,7 +85,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint=""
                         android:padding="12dp"
                         android:text="@={viewModel.city}" />
 
@@ -107,7 +99,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
-                        android:hint=""
                         android:padding="12dp"
                         android:text="@={viewModel.state}" />
 
@@ -142,7 +133,7 @@
                         android:text="@={viewModel.zipcode}" />
 
                 </LinearLayout>
-            </LinearLayout>
+
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>
