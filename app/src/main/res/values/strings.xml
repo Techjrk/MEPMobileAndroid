@@ -330,5 +330,6 @@
     <string name="alterations">Alterations</string>
     <string name="interiors">Interiors</string>
     <string name="new_project">New Project</string>
+    <string name="down_arrow">down arrow</string>
 
 </resources>

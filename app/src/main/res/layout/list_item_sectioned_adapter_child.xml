@@ -17,7 +17,8 @@
                 android:id="@+id/j_child_img"
                 style="@style/ImageDownArrow"
                 android:paddingLeft="5dp"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:contentDescription="@string/down_arrow" />
             <CheckBox
                 android:id="@+id/j_child"
                 android:layout_width="wrap_content"
