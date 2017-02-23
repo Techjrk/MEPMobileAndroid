@@ -158,7 +158,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
         if (contact == null) return "Unknown";
         if (contact.getTitle() != null) title = contact.getTitle().trim();
         if (contact.getCompany() != null) company = contact.getCompany().getName().trim();
-        return title + ((title != "" && company != "") ? "," : " ");
+        return title + ((!title.equals("") && company.equals("")) ? "," : " ");
     }
 
     public String getContactDetail2() {

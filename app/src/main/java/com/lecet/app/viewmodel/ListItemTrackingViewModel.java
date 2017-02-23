@@ -128,7 +128,7 @@ public abstract class ListItemTrackingViewModel extends BaseObservable {
         }
 
         // set the showExpandableView to true if this item is in a mode such as Bid, Note, or Stage
-        setShowExpandableView(expandableMode == EXPANDABLE_MODE_BID || expandableMode == EXPANDABLE_MODE_NOTE || expandableMode == EXPANDABLE_MODE_STAGE);
+        setShowExpandableView(expandableMode.equals(EXPANDABLE_MODE_BID) || expandableMode.equals(EXPANDABLE_MODE_NOTE) || expandableMode.equals(EXPANDABLE_MODE_STAGE));
     }
 
     @Bindable
