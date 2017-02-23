@@ -1,85 +1,162 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
+import android.view.View;
+
+import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectCategory;
 import com.lecet.app.data.models.ProjectGroup;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.DateUtility;
 
 import io.realm.RealmChangeListener;
-import io.realm.RealmModel;
+import io.realm.RealmResults;
 
 /**
- * File: ListItemProjectTrackingViewModel Created: 11/29/16 Author: domandtom
+ * File: ListItemProjectTrackingViewModel Created: 12/2/16 Author: domandtom
  *
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ListItemProjectTrackingViewModel extends ListItemTrackingViewModel {
+public class ListItemProjectTrackingViewModel extends TrackingListItem<Project> {
 
-    private Project project;
     private ProjectDomain projectDomain;
+    private String mapApiKey;
 
-    @Deprecated
-    public ListItemProjectTrackingViewModel(Project project, String mapsApiKey, boolean showUpdates) {
-        super(mapsApiKey, showUpdates, project.getRecentUpdate());
-
-        this.project = project;
-
-        init();
-    }
-
-    public ListItemProjectTrackingViewModel(ProjectDomain projectDomain , Project project, String mapsApiKey, boolean showUpdates) {
-        super(mapsApiKey, showUpdates, project.getRecentUpdate());
-
+    public ListItemProjectTrackingViewModel(ProjectDomain projectDomain, Project object, String mapApiKey, boolean displayUpdate) {
+        super(object, displayUpdate);
         this.projectDomain = projectDomain;
-        this.project = project;
-
-        init();
+        this.mapApiKey = mapApiKey;
+        init(object);
     }
 
     @Override
-    public String getItemName() {
-        return project.getTitle();
+    public String generateTitle(Project object) {
+        return object.getTitle();
     }
 
     @Override
-    public String generateDetailPrimary() {
-        return generateAddress();
+    public String generatePrimaryDetail(Project object) {
+        return generateAddress(object);
     }
 
     @Override
-    public String generateDetailSecondary() {
+    public String generateSecondaryDetail(final Project object) {
 
-        return generateProjectKeywords();
+        String keywords = generateProjectKeywords(object.getPrimaryProjectType());
+
+        if (keywords == null) {
+
+            if (keywords == null) {
+
+                final RealmChangeListener<RealmResults<PrimaryProjectType>> listener = new RealmChangeListener<RealmResults<PrimaryProjectType>>() {
+                    @Override
+                    public void onChange(RealmResults<PrimaryProjectType> element) {
+
+                        if (element.size() > 0) {
+                            PrimaryProjectType result = element.first();
+                            String keywords = generateProjectKeywords(result);
+                            secondaryDetail.set(keywords);
+                            element.removeChangeListeners();
+                        }
+                    }
+                };
+
+                projectDomain.fetchProjectTypeAsync(object.getPrimaryProjectTypeId(), listener);
+            }
+
+        }
+
+        return keywords;
     }
 
-
     @Override
-    public String getMapUrl() {
-
-        if (project.getGeocode() == null) return null;
+    public String generateMapUrl(Project object) {
+        if (object.getGeocode() == null) return null;
 
         String mapStr = String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=200x200&" +
-                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
-                project.getGeocode().getLat(), project.getGeocode().getLng(), getMapsApiKey());
+                        "markers=color:blue|%.6f,%.6f&key=%s", object.getGeocode().getLat(), object.getGeocode().getLng(),
+                object.getGeocode().getLat(), object.getGeocode().getLng(), mapApiKey);
 
         return mapStr;
     }
 
     @Override
-    public boolean displaySecondaryDetail() {
+    public boolean showActivityUpdate(Project object) {
+
+        if (object.getRecentUpdate() != null) {
+
+            return true;
+
+        } else {
+
+            // Run an async fetch to see if there are any updates that might be available
+            projectDomain.fetchProjectActivityUpdates(object.getId(), DateUtility.addDays(-1), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
+                @Override
+                public void onChange(RealmResults<ActivityUpdate> element) {
+
+                    if (element.size() > 0) {
+
+                        ActivityUpdate update = element.first();
+                        refreshActivityUpdateDisplay(update);
+                        element.removeChangeListeners();
+                    }
+
+                }
+            });
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean showSecondaryDetailIcon() {
         return true;
+    }
+
+    @Override
+    public void handleTrackingItemSelected(View view, Project object) {
+
+        Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, object.getId());
+        view.getContext().startActivity(intent);
+    }
+
+    @Override
+    public String activityTitle() {
+        return getObject().getRecentUpdate().getModelTitle();
+    }
+
+    @Override
+    public String activityMessage() {
+        return getObject().getRecentUpdate().getSummary();
+    }
+
+    @Override
+    public int activityUpdateIconResourceId() {
+        return super.activityUpdateIconResourceId();
+    }
+
+    private String generateAddress(Project project) {
+
+        StringBuilder sb = new StringBuilder();
+        if (project.getCity() != null) sb.append(project.getCity());
+        if (project.getCity() != null && project.getState() != null) sb.append(", ");
+        if (project.getState() != null) sb.append(project.getState());
+
+        return sb.toString();
     }
 
     /**
      * Return a String built from a list of the project's PrimaryProjectType, ProjectCategory, and
      * ProjectGroup
      **/
-    private String generateProjectKeywords() {
+    private String generateProjectKeywords(PrimaryProjectType primaryProjectType) {
         StringBuilder sb = new StringBuilder();
-        long id = project.getPrimaryProjectTypeId();
-        PrimaryProjectType primaryProjectType = project.getPrimaryProjectType();
+
         if (primaryProjectType != null) {
             String pptTitle = primaryProjectType.getTitle();
             if (pptTitle != null) sb.append(pptTitle);
@@ -104,16 +181,5 @@ public class ListItemProjectTrackingViewModel extends ListItemTrackingViewModel 
         String str = sb.toString();
         if (str.length() == 0) return null;
         return str;
-    }
-
-    private String generateAddress() {
-
-        StringBuilder sb = new StringBuilder();
-        if (project.getCity() != null) sb.append(project.getCity());
-        if (project.getCity() != null && project.getState() != null) sb.append(", ");
-        if (project.getState() != null) sb.append(project.getState());
-        setDetail1(sb.toString());
-
-        return sb.toString();
     }
 }
