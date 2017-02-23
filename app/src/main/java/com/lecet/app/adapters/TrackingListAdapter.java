@@ -1,33 +1,19 @@
 package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
-import android.support.annotation.IntDef;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.Company;
-import com.lecet.app.data.models.Project;
-import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+
 import com.lecet.app.databinding.ListItemTrackingBinding;
-import com.lecet.app.databinding.ListItemTrackingTestBinding;
-import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.viewmodel.ListItemCompanyTrackingViewModel;
-import com.lecet.app.viewmodel.NewListItemProjectTrackingViewModel;
 import com.lecet.app.viewmodel.TrackingListItem;
-import com.lecet.app.viewmodel.TrackingListViewModel;
 
-import java.lang.annotation.Retention;
-
-import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 import static com.lecet.app.R.string.google_api_key;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * File: TrackingListRecyclerViewAdapter Created: 10/21/16 Author: domandtom
@@ -62,7 +48,7 @@ public abstract class TrackingListAdapter<T extends RealmResults> extends Recycl
     @Override
     public TrackingListViewHolderNew onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ListItemTrackingTestBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_tracking_test, parent, false);
+        ListItemTrackingBinding projectBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_tracking, parent, false);
         TrackingListViewHolderNew viewHolder = new TrackingListViewHolderNew(projectBinding);
 
         return viewHolder;
@@ -97,16 +83,16 @@ public abstract class TrackingListAdapter<T extends RealmResults> extends Recycl
 
     public class TrackingListViewHolderNew extends RecyclerView.ViewHolder {
 
-        private ListItemTrackingTestBinding binding;
+        private ListItemTrackingBinding binding;
 
-        public TrackingListViewHolderNew(ListItemTrackingTestBinding binding) {
+        public TrackingListViewHolderNew(ListItemTrackingBinding binding) {
 
             super(binding.getRoot());
 
             this.binding = binding;
         }
 
-        public ListItemTrackingTestBinding getBinding() {
+        public ListItemTrackingBinding getBinding() {
             return binding;
         }
     }
