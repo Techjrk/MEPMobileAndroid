@@ -32,7 +32,8 @@ public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
     }
 
     public void onCancelButtonClick(View view) {
-        activity.setResult(Activity.RESULT_CANCELED);   //TODO - add reset of selection
+        activity.setResult(Activity.RESULT_CANCELED);
+        time[0]="Any"; time[1]="0";   //reset the selection
         activity.finish();
     }
 
