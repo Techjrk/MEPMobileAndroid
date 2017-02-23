@@ -52,7 +52,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="2dp"
                     android:text="@{viewModel.queryProjectTotal}"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     bind:typeface="@{`Lato-Regular.ttf`}" />
             </LinearLayout>
 
@@ -93,7 +93,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="2dp"
                     android:text="@{viewModel.queryCompanyTotal}"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="0 Company" />
             </LinearLayout>
@@ -135,7 +135,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="2dp"
                     android:text=""
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="@{viewModel.queryContactTotal}" />
             </LinearLayout>
@@ -193,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:onClick="@{viewModel.onClickSeeAllProject}"
-                        android:visibility="@{viewModel.displaySeeAllProject  ? View.VISIBLE : View.GONE}">>
+                        android:visibility="@{viewModel.displaySeeAllProject  ? View.VISIBLE : View.GONE}" >
 
                         <TextView
                             android:id="@+id/seeall"
@@ -239,8 +239,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:onClick="@{viewModel.onClickSeeAllCompany}"
-                        android:visibility="@{viewModel.displaySeeAllCompany  ? View.VISIBLE : View.GONE}">
-                        >
+                        android:visibility="@{viewModel.displaySeeAllCompany  ? View.VISIBLE : View.GONE}" >
 
                         <TextView
                             android:id="@+id/seeallcompany"
@@ -286,8 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:onClick="@{viewModel.onClickSeeAllContact}"
-                        android:visibility="@{viewModel.displaySeeAllContact  ? View.VISIBLE : View.GONE}">
-                        >
+                        android:visibility="@{viewModel.displaySeeAllContact  ? View.VISIBLE : View.GONE}" >
 
                         <TextView
                             android:id="@+id/seeallcontacts"
