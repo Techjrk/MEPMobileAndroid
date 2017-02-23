@@ -63,7 +63,7 @@
                     android:width="30dp"
                     android:background="@null"
                     android:onClick="@{viewModel.onApplyButtonClick}"
-                    android:text="APPLY"
+                    android:text="@string/apply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -82,7 +82,7 @@
                     <CheckBox
                         android:id="@+id/ownerfederal"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Federal"
+                        android:text="@string/federal"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -97,7 +97,7 @@
                     <CheckBox
                         android:id="@+id/ownerlocalgovt"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Local Government"
+                        android:text="@string/local_government"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
@@ -112,7 +112,7 @@
                     <CheckBox
                         android:id="@+id/ownermilitary"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Military"
+                        android:text="@string/military"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
@@ -127,7 +127,7 @@
                     <CheckBox
                         android:id="@+id/ownerprivate"
                         style="@style/SearchFilterSectionButton"
-                        android:text="Private"
+                        android:text="@string/private_name"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
@@ -143,10 +143,9 @@
                     <CheckBox
                         android:id="@+id/ownerstate"
                         style="@style/SearchFilterSectionButton"
-                        android:text="State"
+                        android:text="@string/state"
                         android:onClick="@{viewModel.onSelected}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
-
                 </RelativeLayout>
 
                 <!-- Horizontal Separator -->

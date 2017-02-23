@@ -44,7 +44,7 @@
                         android:layout_toStartOf="@id/close_image_button"
                         android:background="@null"
                         android:drawableStart="@drawable/ic_action_search"
-                        android:hint="Search for Project Types"
+                        android:hint="@string/search_for_project_types"
                         android:inputType="textPersonName"
                         android:text="@={viewModel.query}"
                         android:textColor="@color/lecetTextWhite"
