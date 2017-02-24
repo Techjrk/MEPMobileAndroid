@@ -23,7 +23,9 @@ public class SearchFilterBuildingOrHighwayActivity extends AppCompatActivity {
 
         SearchFilterBuildingOrHighwayViewModel viewModel = new SearchFilterBuildingOrHighwayViewModel(this);
         if(bhArr != null) {
-            viewModel.setBh(bhArr);
+         //   viewModel.setBh(bhArr);
+            viewModel.setStrBH(bhArr[0]);
+            viewModel.setTagBH(bhArr[1]);
         }
         sfilter.setViewModel(viewModel);
 
