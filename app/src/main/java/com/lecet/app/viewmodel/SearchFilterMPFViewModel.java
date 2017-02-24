@@ -55,7 +55,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String EXTRA_BUILDING_OR_HIGHWAY = "persistedBuildingOrHighway";
     public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
-    private static final String ANY = "Any";
+    public static final String ANY = "Any";
 
     private AppCompatActivity activity;
     private static int id;
@@ -198,8 +198,12 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         return persistedBuildingOrHighway;
     }
 
-    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
-        this.persistedBuildingOrHighway = persistedBuildingOrHighway;
+//    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
+        public void setPersistedBuildingOrHighway(Bundle bundle) {
+            String arr [] = {"",""};
+            arr[0]=  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+            arr[1] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DAYS_TAG);
+        this.persistedBuildingOrHighway = arr;
     }
 
     public String getPersistedOwnerType() {
