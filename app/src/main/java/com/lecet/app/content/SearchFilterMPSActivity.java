@@ -21,6 +21,7 @@ import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
 import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
 import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
+import com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
@@ -74,7 +75,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
         Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);      //TODO - handle case of no Bundle for Activities which pass it
         String[] extrasArr = null;
-
+        // Log.d("bundle","bundle : "+bundle);
         if (bundle == null) {
             extrasArr = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
         }
@@ -99,10 +100,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         processUpdatedWithin(extrasArr);
                         break;
 
-                    // Building / Highway
+                 /*   // Building / Highway
                     case SearchFilterMPFViewModel.BH:
                         processBuildingOrHighway(extrasArr);
                         break;
+                        */
 
                     // Owner Type
                     case SearchFilterMPFViewModel.OWNER_TYPE:
@@ -143,7 +145,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     case SearchFilterMPFViewModel.BIDDING_WITHIN:
                         processBiddingWithin(bundle);
                         break;
-
+                    case SearchFilterMPFViewModel.BH:
+                        processBuildingOrHighway(bundle);
+                        break;
                     default:
                         Log.w(TAG, "onActivityResult: WARNING: no case for request code " + requestCode);
                         break;
@@ -552,6 +556,29 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     /**
      * Process the Building-or-Highway input data, which is an array of one or two elements
      */
+    private void processBuildingOrHighway(Bundle bundle) {
+
+        final String BUILDING      = getApplicationContext().getResources().getString(R.string.building);
+        final String HEAVY_HIGHWAY = getApplicationContext().getResources().getString(R.string.heavy_highway);
+
+        String bhDisplayStr =  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+        String bhChar = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DAYS_TAG); // arr[1];
+        viewModel.setPersistedBuildingOrHighway(bundle);
+        viewModel.setBh_select(bhDisplayStr);
+        if (bhDisplayStr != null && !bhDisplayStr.trim().equals("")) {
+            List<String> bhList = new ArrayList<>();
+            if (bhDisplayStr.equals(BUILDING)) bhList.add("\"B\"");
+            else if (bhDisplayStr.equals(HEAVY_HIGHWAY)) bhList.add("\"H\"");
+            else {
+                bhList.add("\"B\"");
+                bhList.add("\"H\"");
+            }
+            bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
+    }
+
+/*
     private void processBuildingOrHighway(String[] arr) {
 
         final String BUILDING      = getApplicationContext().getResources().getString(R.string.building);
@@ -573,6 +600,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
     }
+*/
 
     /**
      * Process the Owner Type input data, which is a String array with one element
