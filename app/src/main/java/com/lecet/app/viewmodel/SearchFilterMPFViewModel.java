@@ -47,12 +47,14 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
     public static final String EXTRA_VALUE_MIN = "persistedValueMin";
     public static final String EXTRA_VALUE_MAX = "persistedValueMax";
-    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
+//    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
     public static final String EXTRA_JURISDICTION = "persistedJurisdiction";
     public static final String EXTRA_STAGE = "persistedStage";
     public static final String EXTRA_BIDDING_WITHIN_DISPLAY_STR = "persistedBiddingWithinDisplayStr";
     public static final String EXTRA_BIDDING_WITHIN_DAYS_INT = "persistedBiddingWithinDaysInt";
     public static final String EXTRA_BUILDING_OR_HIGHWAY = "persistedBuildingOrHighway";
+    public static final String EXTRA_UPDATED_WITHIN_DISPLAY_STR = "persistedUpdatedWithinDisplayStr";
+    public static final String EXTRA_UPDATED_WITHIN_DAYS_INT = "persistedUpdatedWithinDaysInt";
     public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
     public static final String ANY = "Any";
@@ -456,7 +458,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.updated_within:
                 section = UPDATED_WITHIN;
                 i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
+//                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
+
                 break;
 
             case R.id.cjurisdiction:
