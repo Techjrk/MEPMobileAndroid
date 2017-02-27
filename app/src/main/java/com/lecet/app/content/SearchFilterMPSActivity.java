@@ -25,6 +25,7 @@ import com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
 import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
+import com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
@@ -96,10 +97,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         break;
 
                     // Updated Within
-                    case SearchFilterMPFViewModel.UPDATED_WITHIN:
+      /*              case SearchFilterMPFViewModel.UPDATED_WITHIN:
                         processUpdatedWithin(extrasArr);
                         break;
-
+*/
                  /*   // Building / Highway
                     case SearchFilterMPFViewModel.BH:
                         processBuildingOrHighway(extrasArr);
@@ -145,9 +146,16 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     case SearchFilterMPFViewModel.BIDDING_WITHIN:
                         processBiddingWithin(bundle);
                         break;
+
+                    // Updated Within
+                    case SearchFilterMPFViewModel.UPDATED_WITHIN:
+                        processUpdatedWithin(bundle);
+                        break;
+
                     case SearchFilterMPFViewModel.BH:
                         processBuildingOrHighway(bundle);
                         break;
+
                     default:
                         Log.w(TAG, "onActivityResult: WARNING: no case for request code " + requestCode);
                         break;
@@ -336,7 +344,22 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     /**
      * Process the Updated Within input data
      */
-    private void processUpdatedWithin(String[] arr) {
+    private void processUpdatedWithin(final Bundle bundle) {
+        String updatedWithinStr = bundle.getString(SearchFilterUpdatedWithinViewModel.BUNDLE_KEY_DISPLAY_STR); // text for display
+        String updatedWithinInt = bundle.getString(SearchFilterUpdatedWithinViewModel.BUNDLE_KEY_DAYS_INT);    // int for query
+        String projectUpdatedWithin = "";
+        if (instantSearch && !viewModel.getIsProjectViewVisible()) {
+            viewModel.setUpdated_within_select(updatedWithinStr);
+        } else {
+            viewModel.setPersistedUpdatedWithin(updatedWithinInt);
+            viewModel.setUpdated_within_select(updatedWithinStr);
+        }
+        if (updatedWithinInt != null && !updatedWithinInt.trim().equals("")) {
+            projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
+        }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
+    }
+ /*   private void processUpdatedWithin(String[] arr) {
         String updatedWithinStr = arr[0];   // text for display
         String updatedWithinInt = arr[1];   // int for query
         String[] updatedWithinArr = {updatedWithinStr, updatedWithinInt};
@@ -347,7 +370,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
-    }
+    }*/
 
     /**
      * Process the Jurisdiction input data
