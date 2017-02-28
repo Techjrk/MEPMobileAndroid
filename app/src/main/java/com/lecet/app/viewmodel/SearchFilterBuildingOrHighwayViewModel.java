@@ -17,7 +17,7 @@ import android.widget.RadioButton;
 public class SearchFilterBuildingOrHighwayViewModel extends BaseObservable {
     private AppCompatActivity activity;
     public static final String BUNDLE_KEY_DISPLAY_STR = "com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel.displayText.extra";
-    public static final String BUNDLE_KEY_DAYS_TAG    = "com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel.tag.extra";
+    public static final String BUNDLE_KEY_TAG    = "com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel.tag.extra";
     private String strBH;
     private String tagBH;
 
@@ -58,7 +58,7 @@ public class SearchFilterBuildingOrHighwayViewModel extends BaseObservable {
     public void setBHData(String str, String tag) {
         bundle = new Bundle();
         setBundleData(BUNDLE_KEY_DISPLAY_STR, str);
-        setBundleData(BUNDLE_KEY_DAYS_TAG, tag);
+        setBundleData(BUNDLE_KEY_TAG, tag);
     }
 
     private void setBundleData(String key, String value) {

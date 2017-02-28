@@ -585,7 +585,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         final String HEAVY_HIGHWAY = getApplicationContext().getResources().getString(R.string.heavy_highway);
 
         String bhDisplayStr =  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
-        String bhChar = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DAYS_TAG); // arr[1];
+        String bhChar = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG); // arr[1];
         viewModel.setPersistedBuildingOrHighway(bundle);
         viewModel.setBh_select(bhDisplayStr);
         if (bhDisplayStr != null && !bhDisplayStr.trim().equals("")) {
