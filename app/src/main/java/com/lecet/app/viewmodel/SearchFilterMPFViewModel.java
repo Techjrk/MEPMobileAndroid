@@ -204,7 +204,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         public void setPersistedBuildingOrHighway(Bundle bundle) {
             String arr [] = {"",""};
             arr[0]=  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
-            arr[1] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DAYS_TAG);
+            arr[1] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG);
         this.persistedBuildingOrHighway = arr;
     }
 
@@ -494,6 +494,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.ownertype:
                 section = OWNER_TYPE;
                 i = new Intent(activity, SearchFilterOwnerTypeActivity.class);
+                setPersistedOwnerType(getOwner_type_select());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 
