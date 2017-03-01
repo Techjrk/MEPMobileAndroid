@@ -1,25 +1,36 @@
 package com.lecet.app.content;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.viewmodel.SearchViewModel;
 
-import io.realm.Realm;
+import java.util.Random;
 
-public class SearchActivity extends AppCompatActivity { //test comment - ignore
+import io.realm.Realm;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
     private String searchFilter;
+    //private AlertDialog saveSearchDialog = null;
     private SearchDomain searchDomain;
 
     @Override
@@ -153,6 +164,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
 
         viewModel.setProjectSearchFilter(searchStr);
         Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
+        //TODO - Noel, do we need to take care of Company and Contact?
         //This area is for setting the filter for Company and Contact..
 //        viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
 //        viewModel.setContactSearchFilter(filter?); //Pls. check what correct filter value should be passed for contact
@@ -160,7 +172,58 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
 //Default section page once you clicked the Apply button of the Search Filter section page.
         viewModel.setIsMSE2SectionVisible(true);
         viewModel.updateViewQuery();
+
+        //showSaveSearchDialog();
     }
+    
+    /*public void showSaveSearchDialog() {
+        if (saveSearchDialog != null && saveSearchDialog.isShowing()) {
+            saveSearchDialog.dismiss();
+        }
+        saveSearchDialog = new AlertDialog.Builder(this).create();
+        saveSearchDialog.setTitle("Save Search");
+        saveSearchDialog.setMessage("Would you like to save this search?");
+
+        saveSearchDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+        saveSearchDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    saveCurrentProjectSearch();
+                }
+            });
+
+        saveSearchDialog.show();
+    }
+
+    private void saveCurrentProjectSearch() {
+        Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
+        Random r = new Random();
+        int suffix = r.nextInt(1000 - 1) + 1;
+        String title = "savedSearch_" + suffix; //TODO - temporary. update with user-input title
+
+        searchDomain.saveCurrentProjectSearch(title, viewModel.getQuery(), new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "saveCurrentProjectSearch: onResponse: success: Project search saved.");
+                } else {
+                    Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "saveCurrentProjectSearch: onFailure: Network is busy. Pls. try again. ");
+            }
+        });
+    }*/
 
     /**
      * Process the Location filter data
@@ -170,7 +233,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
         String filter = "";
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
         if (projectLocation != null && !projectLocation.equals("")) {
-            Log.d("projectLocation", "projectLocation = " + projectLocation);
+            Log.d("SearchActivity", "projectLocation = " + projectLocation);
             filter = projectLocation;
         }
         return filter;

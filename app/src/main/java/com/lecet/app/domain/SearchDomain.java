@@ -42,6 +42,7 @@ public class SearchDomain {
     public static Call<SearchProject> callProjectService;
     public static Call<SearchCompany> callCompanyService;
     public static Call<SearchContact> callContactService;
+    private String savedSearchFilter = "{\"include\":[\"company\"],\"searchFilter\":{}}";
 
     public String getCompanyFilter() {
         return companyFilter;
@@ -306,11 +307,28 @@ public class SearchDomain {
       //  Log.d("body","body "+bodyContent);
         call.enqueue(callback);
     }
+
     public void saveRecentCompany(long companyId, Callback<ResponseBody> callback) {
         String bodyContent ="{ \"code\" : \"VIEW_COMPANY\" , \"companyId\" : "+companyId+" }";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
         Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
         //Log.d("body","body "+bodyContent);
         call.enqueue(callback);
+    }
+
+    public void saveCurrentProjectSearch(String title, String query, Callback<ResponseBody> callback) {
+        String searchFilter =  getProjectFilter();
+        if(searchFilter !=  null && searchFilter.length() > 0) {
+            Log.d(TAG, "saveCurrentProjectSearch: title: " + title + ", query: " + query + ", searchFilter: " + searchFilter);
+
+            //works String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"apartment\",\"filter\":{\"include\":[{\"bids\":[\"company\",{\"project\":[\"projectStage\"]}]},{\"contacts\":[\"company\",\"contact\",\"contactType\"]},\"csiCodes\",{\"primaryProjectType\":[\"projectCategory\"]},\"projectStage\",\"secondaryProjectTypes\",\"specAlerts\",\"userNotes\",\"workTypes\"],\"jurisdiction\":true,\"limit\":28,\"searchFilter\":{\"projectValue\":{\"min\":333,\"max\":9999999},\"projectLocation\":{\"city\":\"Brookfield\"}},\"skip\":0}}";
+            String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"" + query + "\",\"filter\":" + searchFilter + "}";
+            //String bodyContent ="{ \"title\" : " + title + " , \"modelName\" : " + "project" + " }";
+            RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+            Call<ResponseBody> call = lecetClient.getSearchService().saveProjectSearch(recentToken, body);
+            Log.d(TAG,"saveCurrentProjectSearch: bodyContent: " + bodyContent);
+            call.enqueue(callback);
+
+        }
     }
 }

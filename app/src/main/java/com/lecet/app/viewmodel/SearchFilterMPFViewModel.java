@@ -39,7 +39,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final int WORK_TYPE = 9;
 
 
-    private static final String TAG = "SearchFilterMPFViewModel";
+    private static final String TAG = "SearchFilterMPFVM";
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
@@ -513,9 +513,17 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 setMoreOption(false);
                 return;
 
-            default:
+            case R.id.apply_button:
                 saveResult();
-                activity.finish();  // includes Cancel and Apply buttons
+                activity.finish();
+                return;
+
+            case R.id.cancel_button:
+                activity.finish();
+                return;
+
+            default:
+                Log.w(TAG, "onClicked: Warning: Unsupported view id clicked: " + id);
                 return;
         }
 

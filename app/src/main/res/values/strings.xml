@@ -258,6 +258,8 @@
     <string name="everywhere">Everywhere</string>
     <string name="all_types">All Types</string>
     <string name="refine_search">Refine Search</string>
+    <string name="save_search">Save Search</string>
+    <string name="save_search_option">Would you like to save this search?</string>
     <string name="mseb_h">B/H</string>
     <string name="mseowner_type">Owner Type</string>
     <string name="msework_type">Work Type</string>

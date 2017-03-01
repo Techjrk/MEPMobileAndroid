@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -9,8 +10,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -39,9 +42,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,6 +112,8 @@ public class SearchViewModel extends BaseObservable {
     private SearchRecentRecyclerViewAdapter searchAdapterRecentlyViewed;
     private SearchProjectRecyclerViewAdapter searchAdapterProject;
     private SearchCompanyRecyclerViewAdapter searchAdapterCompany;
+    private AlertDialog saveSearchDialog = null;
+    private boolean saveSearchHeaderVisible = true;
     private boolean isMSE1SectionVisible = true;
     private boolean isMSE2SectionVisible = false;
     private boolean isMSR11Visible = false;
@@ -471,6 +478,62 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
+    public void showSaveSearchDialog() {
+        if (saveSearchDialog != null && saveSearchDialog.isShowing()) {
+            saveSearchDialog.dismiss();
+        }
+
+        final EditText nameInput = new EditText(this.activity);
+        nameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        saveSearchDialog = new AlertDialog.Builder(this.activity).create();
+        saveSearchDialog.setTitle("Saved Search Name");
+        saveSearchDialog.setMessage("Please enter a name for this search.");
+        saveSearchDialog.setView(nameInput);
+
+        saveSearchDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        saveSearchDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String title = nameInput.getText().toString();
+                        if(title != null && title.length() > 0) {
+                            Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
+                            saveCurrentProjectSearch(title);
+                        }
+                        dialog.dismiss();
+                        setSaveSearchHeaderVisible(false);
+                    }
+                });
+
+        saveSearchDialog.show();
+    }
+
+    private void saveCurrentProjectSearch(String title) {
+        Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
+
+        searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "saveCurrentProjectSearch: onResponse: success: Project search saved.");
+                } else {
+                    Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "saveCurrentProjectSearch: onFailure: Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
     /**
      * Display error message
      */
@@ -690,6 +753,16 @@ public class SearchViewModel extends BaseObservable {
     }
 
     @Bindable
+    public boolean getSaveSearchHeaderVisible() {
+        return this.saveSearchHeaderVisible;
+    }
+
+    public void setSaveSearchHeaderVisible(boolean saveSearchHeaderVisible) {
+        this.saveSearchHeaderVisible = saveSearchHeaderVisible;
+        notifyPropertyChanged(BR.saveSearchHeaderVisible);
+    }
+
+    @Bindable
     public boolean getIsMSE1SectionVisible() {
         return isMSE1SectionVisible;
     }
@@ -848,6 +921,14 @@ public class SearchViewModel extends BaseObservable {
         USING_INSTANT_SEARCH = getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
         intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
         activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
+    }
+
+    public void onCancelSaveSearchClicked(View view) {
+        setSaveSearchHeaderVisible(false);
+    }
+
+    public void onSaveSearchClicked(View view) {
+        showSaveSearchDialog();
     }
 
     public int getSeeAllForResult() {
