@@ -84,6 +84,52 @@
                 </RelativeLayout>
             </LinearLayout>
 
+            <!-- SAVE SEARCH HEADER -->
+            <LinearLayout android:orientation="vertical"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:visibility="@{viewModel.saveSearchHeaderVisible ? View.VISIBLE : View.GONE }">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginTop="20dp"
+                          android:textColor="@color/pureBlack"
+                          android:textAlignment="center"
+                          bind:typeface="@{`Lato-Bold.ttf`}"
+                          android:text="@string/save_search_option"/>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lecetButtonDarkBlue"
+                            android:textAllCaps="true"
+                            bind:typeface="@{`Lato-Bold.ttf`}"
+                            android:text="@string/cancel"
+                            android:onClick="@{viewModel.onCancelSaveSearchClicked}"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lecetButtonDarkBlue"
+                            android:textAllCaps="true"
+                            bind:typeface="@{`Lato-Bold.ttf`}"
+                            android:text="@string/save_search"
+                            android:onClick="@{viewModel.onSaveSearchClicked}"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <!-- MSE 1 SECTION -->
             <ScrollView
                 android:id="@+id/mse1section"
@@ -98,53 +144,6 @@
                     android:orientation="vertical"
                     android:paddingBottom="4dp"
                     android:paddingTop="0dp">
-
-                    <!-- SAVE SEARCH HEADER -->
-                    <LinearLayout android:orientation="vertical"
-                                  android:layout_width="match_parent"
-                                  android:layout_height="wrap_content"
-                                  android:visibility="@{viewModel.saveSearchHeaderVisible ? View.VISIBLE : View.GONE }">
-
-                        <TextView android:layout_width="match_parent"
-                                  android:layout_height="wrap_content"
-                                  android:layout_marginTop="20dp"
-                                  android:textColor="@color/pureBlack"
-                                  android:textAlignment="center"
-                                  bind:typeface="@{`Lato-Bold.ttf`}"
-                                  android:text="@string/save_search_option"/>
-
-                        <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_gravity="center_horizontal">
-
-                            <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="20dp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/lecetButtonDarkBlue"
-                                    android:textAllCaps="true"
-                                    bind:typeface="@{`Lato-Bold.ttf`}"
-                                    android:text="@string/cancel"
-                                    android:onClick="@{viewModel.onCancelSaveSearchClicked}"/>
-
-                            <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="20dp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/lecetButtonDarkBlue"
-                                    android:textAllCaps="true"
-                                    bind:typeface="@{`Lato-Bold.ttf`}"
-                                    android:text="@string/save_search"
-                                    android:onClick="@{viewModel.onSaveSearchClicked}"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
 
                     <!-- RECENT with MAP -->
                     <TextView

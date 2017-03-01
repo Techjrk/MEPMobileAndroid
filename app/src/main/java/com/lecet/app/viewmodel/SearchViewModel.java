@@ -42,7 +42,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -113,7 +112,7 @@ public class SearchViewModel extends BaseObservable {
     private SearchProjectRecyclerViewAdapter searchAdapterProject;
     private SearchCompanyRecyclerViewAdapter searchAdapterCompany;
     private AlertDialog saveSearchDialog = null;
-    private boolean saveSearchHeaderVisible = true;
+    private boolean saveSearchHeaderVisible = false;
     private boolean isMSE1SectionVisible = true;
     private boolean isMSE2SectionVisible = false;
     private boolean isMSR11Visible = false;
@@ -478,6 +477,9 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
+    /**
+     * Show the Saved Search Dialog for user to confirm saving of the current search query and filter.
+     */
     public void showSaveSearchDialog() {
         if (saveSearchDialog != null && saveSearchDialog.isShowing()) {
             saveSearchDialog.dismiss();
@@ -487,18 +489,18 @@ public class SearchViewModel extends BaseObservable {
         nameInput.setInputType(InputType.TYPE_CLASS_TEXT);
 
         saveSearchDialog = new AlertDialog.Builder(this.activity).create();
-        saveSearchDialog.setTitle("Saved Search Name");
-        saveSearchDialog.setMessage("Please enter a name for this search.");
+        saveSearchDialog.setTitle(this.activity.getResources().getString(R.string.save_search_dialog_title));
+        saveSearchDialog.setMessage(this.activity.getResources().getString(R.string.save_search_dialog_msg));
         saveSearchDialog.setView(nameInput);
 
-        saveSearchDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+        saveSearchDialog.setButton(AlertDialog.BUTTON_NEGATIVE, this.activity.getResources().getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
 
-        saveSearchDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
+        saveSearchDialog.setButton(AlertDialog.BUTTON_POSITIVE, this.activity.getResources().getString(R.string.save),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = nameInput.getText().toString();
@@ -514,6 +516,9 @@ public class SearchViewModel extends BaseObservable {
         saveSearchDialog.show();
     }
 
+    /**
+     * Make the save search call and handle its callback
+     */
     private void saveCurrentProjectSearch(String title) {
         Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 

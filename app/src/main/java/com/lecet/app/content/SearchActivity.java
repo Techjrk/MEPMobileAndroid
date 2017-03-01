@@ -1,41 +1,30 @@
 package com.lecet.app.content;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.viewmodel.SearchViewModel;
 
-import java.util.Random;
-
 import io.realm.Realm;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
     private String searchFilter;
-    //private AlertDialog saveSearchDialog = null;
     private SearchDomain searchDomain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setupBinding();
     }
 
@@ -43,6 +32,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Log.d(TAG, "onResume");
         viewModel.init();
         viewModel.updateViewQuery();
     }
@@ -56,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed");
         searchDomain.initFilter();
         viewModel.checkDisplayMSESectionOrMain();
     }
@@ -173,58 +164,12 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.setIsMSE2SectionVisible(true);
         viewModel.updateViewQuery();
 
-        //showSaveSearchDialog();
+        // if there were any filters applied, show the Save Search? header
+        if(sb.length() > 0) {
+            viewModel.setSaveSearchHeaderVisible(true);
+        }
     }
     
-    /*public void showSaveSearchDialog() {
-        if (saveSearchDialog != null && saveSearchDialog.isShowing()) {
-            saveSearchDialog.dismiss();
-        }
-        saveSearchDialog = new AlertDialog.Builder(this).create();
-        saveSearchDialog.setTitle("Save Search");
-        saveSearchDialog.setMessage("Would you like to save this search?");
-
-        saveSearchDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-        saveSearchDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    saveCurrentProjectSearch();
-                }
-            });
-
-        saveSearchDialog.show();
-    }
-
-    private void saveCurrentProjectSearch() {
-        Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
-        Random r = new Random();
-        int suffix = r.nextInt(1000 - 1) + 1;
-        String title = "savedSearch_" + suffix; //TODO - temporary. update with user-input title
-
-        searchDomain.saveCurrentProjectSearch(title, viewModel.getQuery(), new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "saveCurrentProjectSearch: onResponse: success: Project search saved.");
-                } else {
-                    Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "saveCurrentProjectSearch: onFailure: Network is busy. Pls. try again. ");
-            }
-        });
-    }*/
-
     /**
      * Process the Location filter data
      * Ex: "projectLocation":{"city":"Brooklyn","county":"Kings","zip5":"11215"}
