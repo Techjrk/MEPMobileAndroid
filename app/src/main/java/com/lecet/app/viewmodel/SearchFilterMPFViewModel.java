@@ -501,6 +501,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.worktype:
                 section = WORK_TYPE;
                 i = new Intent(activity, SearchFilterWorkTypeActivity.class);
+                setPersistedWorkType(getWork_type_select());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
 
