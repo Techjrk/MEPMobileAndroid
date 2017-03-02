@@ -39,7 +39,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private static final int PARENT_VIEW_TYPE = 0;
     private static final int CHILD_VIEW_TYPE = 1;
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
-
+    public static boolean customSearch;
     private List<Parent> data;
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
@@ -70,7 +70,25 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         // Expanded scenario, where subtype and subsub are expanded
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
+        if (customSearch)  {
+            expandedParents.add(section);   ///*** expanded
+            /*TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
+            if (expanded == null) {
+                expanded = new TreeMap<>();
+                expandedChildren.put(section, expanded);
+            }*/
+            parent.isExpanded=true;
 
+          /*  //  parentViewHolder.imgView.performClick();
+            if (expandedParents.contains(section)) {
+                parent.isExpanded=false;
+                expandedParents.remove(Integer.valueOf(section));
+                expandedChildren.remove(Integer.valueOf(section));
+            } else {
+                parent.isExpanded=true;
+                expandedParents.add(section);
+            }*/
+        }
         if (children == null) return 0;
 
         // Do we need to expand, if so check children size and if a child has been selected
@@ -114,7 +132,93 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     public int getFooterViewType(int section) {
         return 0;
     }
+    private void expandItem(int section, Child child, int position) {
+        ///
+        if (customSearch) {
+            // cv.imgView.setVisibility(View.GONE);
+            child.isExpanded=true;
+            TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
+            if (expanded == null) {
+                expanded = new TreeMap<>();
+                expandedChildren.put(section, expanded);
+                //parent.isExpanded=true;
 
+            }
+
+///
+            // If the position is already in the expanded list, then we need to remove it
+ /*           if (expanded.containsKey(position)) {
+
+                // Keep track of what needs to be added and removed.
+                List<Integer> toBeRemoved = new ArrayList<>();
+                TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
+
+                // We need to find any selected positions that will be affected by the
+                // new child selection. If the previously selected child's position is in a position
+                // greater than selected position, we need to decrease previous selection by
+                // selected grand child count.
+                SortedMap<Integer, Integer> tailMap = expanded.tailMap(position, false);
+
+                // Increase every child position, by the count of the grandchildren in the set. We also need to keep
+                // track of the keys that need to be removed from the expandedChildren.
+                for (Iterator<Map.Entry<Integer, Integer>> it = tailMap.entrySet().iterator(); it.hasNext(); ) {
+                    Map.Entry<Integer, Integer> entry = it.next();
+
+                    Integer key = entry.getKey();
+                    Integer value = entry.getValue();
+
+                    toBeRemoved.add(key);
+
+                    Integer newKey = key - (child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
+                    toBeAdded.put(newKey, value);
+                }
+
+                for (Integer integer : toBeRemoved) {
+                    expanded.remove(integer);
+                }
+
+                expanded.remove(Integer.valueOf(position));
+                expanded.putAll(toBeAdded);
+
+            } else */
+            {
+
+                // Keep track of what needs to be added and removed.
+                List<Integer> toBeRemoved = new ArrayList<>();
+                TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
+
+                // We need to find any selected positions that will be affected by the
+                // new child selection. If the previously selected child's position is in a position
+                // greater than selected position, we need to increase previous selection by
+                // selected grand child count.
+                SortedMap<Integer, Integer> tailMap = expanded.tailMap(position);
+
+                // Increase every child position, by the count of the grandchildren in the set. We also need to keep
+                // track of the keys that need to be removed from the expandedChildren.
+                for (Iterator<Map.Entry<Integer, Integer>> it = tailMap.entrySet().iterator(); it.hasNext(); ) {
+                    Map.Entry<Integer, Integer> entry = it.next();
+
+                    Integer key = entry.getKey();
+                    Integer value = entry.getValue();
+
+                    toBeRemoved.add(key);
+
+                    Integer newKey = key + (child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
+                    toBeAdded.put(newKey, value);
+                }
+
+               /* for (Integer integer : toBeRemoved) {
+                    expanded.remove(integer);
+                }*/
+
+                expanded.put(position, child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
+                expanded.putAll(toBeAdded);
+            }
+            ///
+
+        }
+
+    }
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
@@ -126,12 +230,19 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.imgView.setVisibility(View.GONE);
+            expandItem(section,child,position);
             if (child.getGrandChildren() != null)
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
+            if (child.isExpanded)
+                childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+            else
+                childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+
             childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    customSearch=false;
                     if (b) {
                         viewModel.addProjectTypeData(child.getId(), childViewHolder.checkView.getText().toString());
                     } else {
@@ -143,7 +254,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    customSearch=false;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -255,6 +366,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                customSearch=false;
                 if (b) {
                     viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
                 } else {
@@ -265,7 +377,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                customSearch=false;
                 if (expandedParents.contains(section)) {
 
                     expandedParents.remove(Integer.valueOf(section));
@@ -460,6 +572,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         private String name;
         private String id;
         private List<Child> children;
+        public boolean isExpanded;
 
         public String getId() {
             return id;
@@ -490,7 +603,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         private String name;
         private String id;
         private List<SearchFilterProjectTypeAdapter.GrandChild> grandChildren;
-
+        public boolean isExpanded;
         public String getId() {
             return id;
         }
