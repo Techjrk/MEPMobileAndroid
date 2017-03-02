@@ -14,9 +14,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.models.Bid;
-import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
@@ -31,12 +29,9 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * File: MainViewModel Created: 10/6/16 Author: domandtom
@@ -370,11 +365,10 @@ public class MainViewModel {
         }
     }
 
-    private void setupAdapterWithBids(RealmResults<Bid> realmResults) {
+    private void setupAdapterWithBids(List<Bid> realmResults) {
 
-        Bid[] data = realmResults != null ? realmResults.toArray(new Bid[realmResults.size()]) : new Bid[0];
         adapterData.clear();
-        adapterData.addAll(Arrays.asList(data));
+        adapterData.addAll(realmResults);
         dashboardAdapter.setAdapterType(dashboardPosition);
         dashboardAdapter.notifyDataSetChanged();
     }
