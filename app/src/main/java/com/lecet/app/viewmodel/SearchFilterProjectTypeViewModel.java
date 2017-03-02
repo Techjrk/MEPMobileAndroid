@@ -100,6 +100,12 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         hasChild = false;
         hasGrandChild = false;
         String searchKey = key;
+        if (!searchKey.equals("")) {
+            SearchFilterProjectTypeAdapter.customSearch=true;
+        } else {
+            SearchFilterProjectTypeAdapter.customSearch=false;
+           // if (adapter !=null)  adapter.notifyDataSetChanged();
+        }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
