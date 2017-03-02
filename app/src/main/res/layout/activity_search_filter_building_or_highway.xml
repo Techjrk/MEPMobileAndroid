@@ -96,7 +96,8 @@
                         android:onClick="@{viewModel.onSelected}"
                         android:text="@string/building"
                         android:tag="B"
-                        android:checked="@{(viewModel.bh[1]).equals(`B`)}"/>
+                        android:checked="@{viewModel.tagBH.equals(`B`)}"/>
+                    <!--    android:checked="@{(viewModel.bh[1]).equals(`B`)}"/>  -->
 
                     <View
                         android:layout_width="match_parent"
@@ -109,7 +110,8 @@
                         android:onClick="@{viewModel.onSelected}"
                         android:text="@string/heavy_highway"
                         android:tag="H"
-                        android:checked="@{(viewModel.bh[1]).equals(`H`)}"/>
+                        android:checked="@{viewModel.tagBH.equals(`H`)}"/>
+                 <!--   android:checked="@{(viewModel.bh[1]).equals(`H`)}"/>  -->
 
                     <View
                         android:layout_width="match_parent"

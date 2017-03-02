@@ -19,7 +19,7 @@ public class Filter
     private int limit;
 
     @SerializedName("include")
-    private List<String> include;
+    private List<Object> include;
 
     public SearchFilter getSearchFilter() {
         return searchFilter;
@@ -45,11 +45,11 @@ public class Filter
         this.limit = limit;
     }
 
-    public List<String> getInclude() {
+    public List<Object> getInclude() {
         return include;
     }
 
-    public void setInclude(List<String> include) {
+    public void setInclude(List<Object> include) {
         this.include = include;
     }
 

@@ -39,7 +39,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final int WORK_TYPE = 9;
 
 
-    private static final String TAG = "SearchFilterMPFViewModel";
+    private static final String TAG = "SearchFilterMPFVM";
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
@@ -47,15 +47,17 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
     public static final String EXTRA_VALUE_MIN = "persistedValueMin";
     public static final String EXTRA_VALUE_MAX = "persistedValueMax";
-    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
+//    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
     public static final String EXTRA_JURISDICTION = "persistedJurisdiction";
     public static final String EXTRA_STAGE = "persistedStage";
     public static final String EXTRA_BIDDING_WITHIN_DISPLAY_STR = "persistedBiddingWithinDisplayStr";
     public static final String EXTRA_BIDDING_WITHIN_DAYS_INT = "persistedBiddingWithinDaysInt";
     public static final String EXTRA_BUILDING_OR_HIGHWAY = "persistedBuildingOrHighway";
+    public static final String EXTRA_UPDATED_WITHIN_DISPLAY_STR = "persistedUpdatedWithinDisplayStr";
+    public static final String EXTRA_UPDATED_WITHIN_DAYS_INT = "persistedUpdatedWithinDaysInt";
     public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
-    private static final String ANY = "Any";
+    public static final String ANY = "Any";
 
     private AppCompatActivity activity;
     private static int id;
@@ -198,8 +200,12 @@ public class SearchFilterMPFViewModel extends BaseObservable {
         return persistedBuildingOrHighway;
     }
 
-    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
-        this.persistedBuildingOrHighway = persistedBuildingOrHighway;
+//    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
+        public void setPersistedBuildingOrHighway(Bundle bundle) {
+            String arr [] = {"",""};
+            arr[0]=  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+            arr[1] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG);
+        this.persistedBuildingOrHighway = arr;
     }
 
     public String getPersistedOwnerType() {
@@ -452,7 +458,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.updated_within:
                 section = UPDATED_WITHIN;
                 i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
+//                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
+                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
+
                 break;
 
             case R.id.cjurisdiction:
@@ -485,12 +494,14 @@ public class SearchFilterMPFViewModel extends BaseObservable {
             case R.id.ownertype:
                 section = OWNER_TYPE;
                 i = new Intent(activity, SearchFilterOwnerTypeActivity.class);
+                setPersistedOwnerType(getOwner_type_select());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 
             case R.id.worktype:
                 section = WORK_TYPE;
                 i = new Intent(activity, SearchFilterWorkTypeActivity.class);
+                setPersistedWorkType(getWork_type_select());
                 i.putExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
 
@@ -502,9 +513,17 @@ public class SearchFilterMPFViewModel extends BaseObservable {
                 setMoreOption(false);
                 return;
 
-            default:
+            case R.id.apply_button:
                 saveResult();
-                activity.finish();  // includes Cancel and Apply buttons
+                activity.finish();
+                return;
+
+            case R.id.cancel_button:
+                activity.finish();
+                return;
+
+            default:
+                Log.w(TAG, "onClicked: Warning: Unsupported view id clicked: " + id);
                 return;
         }
 

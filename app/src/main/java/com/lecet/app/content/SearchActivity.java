@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
@@ -16,7 +15,7 @@ import com.lecet.app.viewmodel.SearchViewModel;
 
 import io.realm.Realm;
 
-public class SearchActivity extends AppCompatActivity { //test comment - ignore
+public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
     private String searchFilter;
@@ -25,6 +24,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setupBinding();
     }
 
@@ -32,6 +32,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
     protected void onResume() {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Log.d(TAG, "onResume");
         viewModel.init();
         viewModel.updateViewQuery();
     }
@@ -45,6 +46,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed");
         searchDomain.initFilter();
         viewModel.checkDisplayMSESectionOrMain();
     }
@@ -153,6 +155,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
 
         viewModel.setProjectSearchFilter(searchStr);
         Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
+        //TODO - Noel, do we need to take care of Company and Contact?
         //This area is for setting the filter for Company and Contact..
 //        viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
 //        viewModel.setContactSearchFilter(filter?); //Pls. check what correct filter value should be passed for contact
@@ -160,8 +163,13 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
 //Default section page once you clicked the Apply button of the Search Filter section page.
         viewModel.setIsMSE2SectionVisible(true);
         viewModel.updateViewQuery();
-    }
 
+        // if there were any filters applied, show the Save Search? header
+        if(sb.length() > 0) {
+            viewModel.setSaveSearchHeaderVisible(true);
+        }
+    }
+    
     /**
      * Process the Location filter data
      * Ex: "projectLocation":{"city":"Brooklyn","county":"Kings","zip5":"11215"}
@@ -170,7 +178,7 @@ public class SearchActivity extends AppCompatActivity { //test comment - ignore
         String filter = "";
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
         if (projectLocation != null && !projectLocation.equals("")) {
-            Log.d("projectLocation", "projectLocation = " + projectLocation);
+            Log.d("SearchActivity", "projectLocation = " + projectLocation);
             filter = projectLocation;
         }
         return filter;

@@ -111,6 +111,14 @@ public interface SearchService {
             "Content-Type: application/json"
     })
     @POST("Activities")
-//    Call<String> saveRecent(@Header("Authorization") String token, @Body String body);
     Call<ResponseBody> saveRecent(@Header("Authorization") String token, @Body RequestBody body);
+
+    // Save Search
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("Searches")
+    Call<ResponseBody> saveProjectSearch(@Header("Authorization") String token, @Body RequestBody body);
+
 }
