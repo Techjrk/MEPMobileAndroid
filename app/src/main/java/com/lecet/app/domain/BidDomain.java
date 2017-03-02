@@ -12,6 +12,9 @@ import com.lecet.app.utility.DateUtility;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -67,8 +70,14 @@ public class BidDomain {
         String token = sharedPreferenceUtil.getAccessToken();
 
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
-        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
-                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
+
+//        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
+//                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
+
+        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
+                ", \"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardType\":true}";
+
+        String filter = String.format(rawQuery, limit, formattedDate);
 
         Call<List<Bid>> call = lecetClient.getBidService().bids(token, filter);
         call.enqueue(callback);
@@ -126,6 +135,16 @@ public class BidDomain {
         return bids;
     }
 
+    public List<Bid> fetchBidsSortedByProjectBidDate(Date cutoffDate) {
+
+        RealmResults<Bid> results = fetchBids(cutoffDate);
+
+        List<Bid> convertedList = convertRealmResultsToList(results);
+        Collections.sort(convertedList, new BidDateComparator());
+
+        return convertedList;
+    }
+
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
 
         RealmResults<Bid> bids;
@@ -164,6 +183,17 @@ public class BidDomain {
 
         return bids;
     }
+
+    public List<Bid> fetchBidsSortedByProjectBidDate(@BidGroup int categoryId) {
+
+        RealmResults<Bid> results = fetchBids(categoryId);
+
+        List<Bid> convertedList = convertRealmResultsToList(results);
+        Collections.sort(convertedList, new BidDateComparator());
+
+        return convertedList;
+    }
+
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId, Date cutoffDate) {
 
@@ -206,6 +236,17 @@ public class BidDomain {
 
         return bids;
     }
+
+    public List<Bid> fetchBidsSortedByProjectBidDate(@BidGroup int categoryId, Date cutoffDate) {
+
+        RealmResults<Bid> results = fetchBids(categoryId, cutoffDate);
+
+        List<Bid> convertedList = convertRealmResultsToList(results);
+        Collections.sort(convertedList, new BidDateComparator());
+
+        return convertedList;
+    }
+
 
     public Company getBidCompany(long companyID) {
 
@@ -278,6 +319,27 @@ public class BidDomain {
                 realm.copyToRealmOrUpdate(bids);
             }
         }, onSuccess, onError);
+    }
+
+    /** RealmList Conversion **/
+
+    private List<Bid> convertRealmResultsToList(RealmResults<Bid> results) {
+
+        List<Bid> data = new ArrayList<>();
+        Bid[] bids = new Bid[results.size()];
+        results.toArray(bids);
+        data.addAll(new ArrayList<>(Arrays.asList(bids)));
+
+        return data;
+    }
+
+    /** Sorting **/
+
+    private class BidDateComparator implements Comparator<Bid> {
+        @Override
+        public int compare(Bid a, Bid b) {
+            return a.getProject().getBidDate().after(b.getProject().getBidDate()) ? 1 : -1;
+        }
     }
 
     /**
