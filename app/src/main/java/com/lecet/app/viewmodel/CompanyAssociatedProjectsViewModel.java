@@ -75,7 +75,7 @@ public class CompanyAssociatedProjectsViewModel {
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
-        //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
+        //Check the binding in the layout, which is not triggering the button clicks in this VM
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

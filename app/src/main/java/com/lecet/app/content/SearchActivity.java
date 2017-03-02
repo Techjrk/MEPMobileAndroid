@@ -155,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
 
         viewModel.setProjectSearchFilter(searchStr);
         Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
-        //TODO - Noel, do we need to take care of Company and Contact?
+        //Revisit this:
         //This area is for setting the filter for Company and Contact..
 //        viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
 //        viewModel.setContactSearchFilter(filter?); //Pls. check what correct filter value should be passed for contact

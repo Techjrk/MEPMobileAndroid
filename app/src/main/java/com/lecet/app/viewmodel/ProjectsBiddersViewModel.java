@@ -53,7 +53,7 @@ public class ProjectsBiddersViewModel {
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
         sortButton.setVisibility(View.INVISIBLE);
 
-        //TODO - check the binding in the layout, which is not triggering the button clicks in this VM
+        //Check the binding in the layout, which is not triggering the button clicks in this VM
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
