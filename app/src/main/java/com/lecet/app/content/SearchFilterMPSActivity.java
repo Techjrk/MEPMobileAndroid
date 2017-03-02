@@ -49,7 +49,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         viewModel = new SearchFilterMPFViewModel(this);
         Intent i = getIntent();
         instantSearch = i.getBooleanExtra(FILTER_INSTANT_SEARCH, true);
-        //Log.d("SearchFilterMPSActivity", "onCreate: instantSearch: " + instantSearch);
+        //Log.d(TAG, "onCreate: instantSearch: " + instantSearch);
 
         // if coming from Search Activity when no text has been input or Saved Search used, use the tabbed Projects/Companies filter layout
         if (instantSearch) {
@@ -74,15 +74,18 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             return;
         }
 
-        Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);      //TODO - handle case of no Bundle for Activities which pass it
-        String[] extrasArr = null;
-        // Log.d("bundle","bundle : "+bundle);
-        if (bundle == null) {
-            extrasArr = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
-        }
-
         // Activities which return result in String[] format
         if (resultCode == RESULT_OK) {
+
+            Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);
+            String[] extrasArr = null;
+            if (bundle == null) {
+                extrasArr = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
+                if(extrasArr == null || extrasArr.length == 0) {
+                    Log.w(TAG, "onActivityResult: WARNING: no valid Bundle or String extras was received from the exiting activity.");
+                }
+            }
+
             if (extrasArr != null) {
                 switch (requestCode) {
 
@@ -96,17 +99,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         processValue(extrasArr);
                         break;
 
-                    // Updated Within
-      /*              case SearchFilterMPFViewModel.UPDATED_WITHIN:
-                        processUpdatedWithin(extrasArr);
-                        break;
-*/
-                 /*   // Building / Highway
-                    case SearchFilterMPFViewModel.BH:
-                        processBuildingOrHighway(extrasArr);
-                        break;
-                        */
-
                     // Owner Type
                     case SearchFilterMPFViewModel.OWNER_TYPE:
                         processOwnerType(extrasArr);
@@ -118,13 +110,14 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         break;
 
                     default:
-                        Log.w(TAG, "onActivityResult: WARNING: no case for request code " + requestCode);
+                        Log.w(TAG, "onActivityResult: using String[] extras: WARNING: no case for request code: " + requestCode);
                         break;
                 }
             }
 
             // Activities which return result in Bundle format
             else if (bundle != null) {
+                Log.d(TAG, "onActivityResult: using Bundle");
                 switch (requestCode) {
 
                     // Project Type
@@ -152,12 +145,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         processUpdatedWithin(bundle);
                         break;
 
+                    // Building / Highway
                     case SearchFilterMPFViewModel.BH:
                         processBuildingOrHighway(bundle);
                         break;
 
                     default:
-                        Log.w(TAG, "onActivityResult: WARNING: no case for request code " + requestCode);
+                        Log.w(TAG, "onActivityResult: using Bundle: WARNING: no case for request code: " + requestCode);
                         break;
                 }
             }
@@ -359,18 +353,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
     }
- /*   private void processUpdatedWithin(String[] arr) {
-        String updatedWithinStr = arr[0];   // text for display
-        String updatedWithinInt = arr[1];   // int for query
-        String[] updatedWithinArr = {updatedWithinStr, updatedWithinInt};
-        String projectUpdatedWithin = "";
-        viewModel.setPersistedUpdatedWithin(updatedWithinStr);
-        viewModel.setUpdated_within_select(updatedWithinStr);
-        if (updatedWithinStr != null && !updatedWithinStr.trim().equals("")) {
-            projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
-    }*/
 
     /**
      * Process the Jurisdiction input data
@@ -600,30 +582,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
     }
-
-/*
-    private void processBuildingOrHighway(String[] arr) {
-
-        final String BUILDING      = getApplicationContext().getResources().getString(R.string.building);
-        final String HEAVY_HIGHWAY = getApplicationContext().getResources().getString(R.string.heavy_highway);
-
-        String bhDisplayStr = arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
-        String bhChar = arr[1];
-        viewModel.setPersistedBuildingOrHighway(arr);
-        viewModel.setBh_select(bhDisplayStr);
-        if (bhDisplayStr != null && !bhDisplayStr.trim().equals("")) {
-            List<String> bhList = new ArrayList<>();
-            if (bhDisplayStr.equals(BUILDING)) bhList.add("\"B\"");
-            else if (bhDisplayStr.equals(HEAVY_HIGHWAY)) bhList.add("\"H\"");
-            else {
-                bhList.add("\"B\"");
-                bhList.add("\"H\"");
-            }
-            bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
-        }
-        viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
-    }
-*/
 
     /**
      * Process the Owner Type input data, which is a String array with one element
