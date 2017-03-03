@@ -40,7 +40,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
     public static final int NO_TYPE = -1;
 
-    public static CheckBox lastChecked;
+   // public static  CheckBox lastChecked;
     public static int lastFamilyChecked = NO_TYPE;
     private static int lastSection; //keep track of last section used by the selected item
     private static int lastPosition; //keep track of last position used by the selected item
@@ -64,8 +64,9 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         checkLastSelect(true);
     }
 
-    public static void clearLast() {
-        lastChecked = null;
+    public void clearLast() {
+        //lastChecked = null;
+        viewModel.setLastChecked(null);
         lastFamilyChecked = NO_TYPE;
         lastName = "";
     }
@@ -242,12 +243,13 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                         public void onClick(View view) {
                             cb = (CheckBox) view;
                             if (cb.isChecked()) {
-                                if (lastChecked != null) {
-                                    lastChecked.setChecked(false);
+                                if (viewModel.getLastChecked() != null) {
+                                    viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
-                                lastChecked = cb;
-                                lastChecked = childViewHolder.checkView;
+                               // lastChecked = cb;
+                               // lastChecked = childViewHolder.checkView;
+                                viewModel.setLastChecked(childViewHolder.checkView);
                                 lastFamilyChecked = CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(truePosition);
                                 lastSection = section;
@@ -371,12 +373,13 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                             CheckBox cb = (CheckBox) view;
 
                             if (cb.isChecked()) {
-                                if (lastChecked != null) {
-                                    lastChecked.setChecked(false);
+                                if (viewModel.getLastChecked() != null) {
+                                    viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
-                                lastChecked = cb;
-                                lastChecked = grandChildViewHolder.checkView;
+                                //lastChecked = cb;
+                                //lastChecked = grandChildViewHolder.checkView;
+                                viewModel.setLastChecked(grandChildViewHolder.checkView);
                                 lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(grandChildIndex);
                                 lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
@@ -442,12 +445,13 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     public void onClick(View view) {
                         CheckBox cb = (CheckBox) view;
                         if (cb.isChecked()) {
-                            if (lastChecked != null) {
-                                lastChecked.setChecked(false);
+                            if (viewModel.getLastChecked() != null) {
+                                viewModel.getLastChecked().setChecked(false);
                                 checkLastSelect(false);
                             }
-                            lastChecked = cb;
-                            lastChecked = parentViewHolder.checkView;
+                           // lastChecked = cb;
+                           // lastChecked = parentViewHolder.checkView;
+                            viewModel.setLastChecked(parentViewHolder.checkView);
                             lastFamilyChecked = PARENT_VIEW_TYPE;
                             lastSection = section;
                             lastName = cb.getText().toString().trim();

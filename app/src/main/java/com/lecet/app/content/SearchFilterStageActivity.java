@@ -21,18 +21,18 @@ import java.util.List;
  * Activity for Search Filter: Stage
  */
 public class SearchFilterStageActivity extends AppCompatActivity {
-
+private SearchFilterStageViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySearchFilterStageBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_stage);
-        SearchFilterStageViewModel viewModel = new SearchFilterStageViewModel(this);
+         viewModel = new SearchFilterStageViewModel(this);
         sfilter.setViewModel(viewModel);
     }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SearchFilterStageAdapter.clearLast();
+        viewModel.clearLast();
         setResult(RESULT_CANCELED);
     }
 }

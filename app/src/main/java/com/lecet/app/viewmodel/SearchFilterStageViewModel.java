@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
@@ -33,6 +35,16 @@ public class SearchFilterStageViewModel extends BaseObservable {
     private Bundle bundle;
     private RealmResults<SearchFilterStagesMain> realmStages;
     private String query;
+    private CheckBox lastChecked;
+    private SearchFilterStageAdapter adapter;
+
+    public CheckBox getLastChecked() {
+        return lastChecked;
+    }
+
+    public void setLastChecked(CheckBox lastChecked) {
+        this.lastChecked = lastChecked;
+    }
 
     @Bindable
     public String getQuery() {
@@ -73,12 +85,14 @@ public class SearchFilterStageViewModel extends BaseObservable {
             }
         });
     }
-
+public void clearLast(){
+    adapter.clearLast();
+}
     /**
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-        SearchFilterStageAdapter.clearLast();
+        clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         if (!bundle.isEmpty()) {
@@ -159,7 +173,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
             // data.add(parent);
             if (parent != null && (hasChild || foundParent)) data.add(parent);
         }
-        SearchFilterStageAdapter adapter = new SearchFilterStageAdapter(data, this);
+         adapter = new SearchFilterStageAdapter(data, this);
         recyclerView.setAdapter(adapter);
     }
 
