@@ -130,7 +130,7 @@
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_90d"
+                        android:id="@+id/time_last_14d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="90"
@@ -143,7 +143,7 @@
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_6m"
+                        android:id="@+id/time_last_21d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="180"
@@ -156,7 +156,7 @@
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_12m"
+                        android:id="@+id/time_last_30d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="360"

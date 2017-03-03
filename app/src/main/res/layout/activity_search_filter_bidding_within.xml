@@ -89,19 +89,7 @@
                         android:layout_height="1dp"
                         android:background="@color/lecetLighterGray" />
 
-                    <RadioButton
-                        android:id="@+id/time_24h"
-                        style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
-                        android:tag="1"
-                        android:checked="@{viewModel.daysInt.equals(`1`)}"
-                        android:text="@string/time_next_24_hours" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lecetLighterGray" />
-
+                    <!-- Future Dates Use Positive Days e.g. 7 -->
                     <RadioButton
                         android:id="@+id/time_7d"
                         style="@style/SearchFilterSectionButton"
@@ -109,6 +97,32 @@
                         android:tag="7"
                         android:checked="@{viewModel.daysInt.equals(`7`)}"
                         android:text="@string/time_next_7_days" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/lecetLighterGray" />
+
+                    <RadioButton
+                        android:id="@+id/time_14d"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:tag="14"
+                        android:checked="@{viewModel.daysInt.equals(`14`)}"
+                        android:text="@string/time_next_14_days" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/lecetLighterGray" />
+
+                    <RadioButton
+                        android:id="@+id/time_21d"
+                        style="@style/SearchFilterSectionButton"
+                        android:onClick="@{viewModel.onSelected}"
+                        android:tag="21"
+                        android:checked="@{viewModel.daysInt.equals(`21`)}"
+                        android:text="@string/time_next_21_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -128,13 +142,14 @@
                         android:layout_height="1dp"
                         android:background="@color/lecetLighterGray" />
 
+                    <!-- Past Dates Use Negtive Days e.g. -7 -->
                     <RadioButton
-                        android:id="@+id/time_60d"
+                        android:id="@+id/time_last_7d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
-                        android:tag="60"
-                        android:checked="@{viewModel.daysInt.equals(`60`)}"
-                        android:text="@string/time_next_60_days" />
+                        android:tag="-7"
+                        android:checked="@{viewModel.daysInt.equals(`-7`)}"
+                        android:text="@string/time_last_7_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -142,12 +157,12 @@
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_90d"
+                        android:id="@+id/time_last_14d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
-                        android:tag="90"
-                        android:checked="@{viewModel.daysInt.equals(`90`)}"
-                        android:text="@string/time_next_90_days" />
+                        android:tag="-14"
+                        android:checked="@{viewModel.daysInt.equals(`-14`)}"
+                        android:text="@string/time_last_14_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -155,12 +170,12 @@
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_6m"
+                        android:id="@+id/time_last_21d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
-                        android:tag="180"
-                        android:checked="@{viewModel.daysInt.equals(`180`)}"
-                        android:text="@string/time_next_6_months" />
+                        android:tag="-21"
+                        android:checked="@{viewModel.daysInt.equals(`-21`)}"
+                        android:text="@string/time_last_21_days" />
 
                     <View
                         android:layout_width="match_parent"
@@ -168,12 +183,12 @@
                         android:background="@color/lecetLighterGray" />
 
                     <RadioButton
-                        android:id="@+id/time_12m"
+                        android:id="@+id/time_last_30d"
                         style="@style/SearchFilterSectionButton"
                         android:onClick="@{viewModel.onSelected}"
-                        android:tag="360"
-                        android:checked="@{viewModel.daysInt.equals(`360`)}"
-                        android:text="@string/time_next_12_months" />
+                        android:tag="-30"
+                        android:checked="@{viewModel.daysInt.equals(`-30`)}"
+                        android:text="@string/time_last_30_days" />
                 </RadioGroup>
 
                 <!-- Horizontal Separator -->

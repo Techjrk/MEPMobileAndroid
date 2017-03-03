@@ -221,6 +221,8 @@
     <string name="time_any">Any</string>
     <string name="time_next_24_hours">Next 24 Hours</string>
     <string name="time_next_7_days">Next 7 Days</string>
+    <string name="time_next_14_days">Next 14 Days</string>
+    <string name="time_next_21_days">Next 21 Days</string>
     <string name="time_next_30_days">Next 30 Days</string>
     <string name="time_next_60_days">Next 60 Days</string>
     <string name="time_next_90_days">Next 90 Days</string>
@@ -228,6 +230,8 @@
     <string name="time_next_12_months">Next 12 Months</string>
     <string name="time_last_24_hours">Last 24 Hours</string>
     <string name="time_last_7_days">Last 7 Days</string>
+    <string name="time_last_14_days">Last 14 Days</string>
+    <string name="time_last_21_days">Last 21 Days</string>
     <string name="time_last_30_days">Last 30 Days</string>
     <string name="time_last_90_days">Last 90 Days</string>
     <string name="time_last_6_months">Last 6 Months</string>
