@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{viewModel.onClickSeeAllProject}"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="@{viewModel.hideProjectSummary}">
 
                 <TextView
                     android:id="@+id/queryproject_title"
@@ -54,22 +55,23 @@
                     android:text="@{viewModel.queryProjectTotal}"
                     android:textSize="12sp"
                     bind:typeface="@{`Lato-Regular.ttf`}" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="fitXY"
+                    bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
-                bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{viewModel.onClickSeeAllCompany}"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="@{viewModel.hideCompanySummary}">
+
                 <!-- TITLE - COMPANY-->
                 <TextView
                     android:id="@+id/querycompany_title"
@@ -96,8 +98,6 @@
                     android:textSize="12sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="0 Company" />
-            </LinearLayout>
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,11 +107,16 @@
                 android:scaleType="fitXY"
                 bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
 
+        </LinearLayout>
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{viewModel.onClickSeeAllContact}"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="@{viewModel.hideContactSummary}">>
                 <!-- TITLE - CONTACTS -->
                 <TextView
                     android:id="@+id/querycontact_title"
@@ -138,16 +143,16 @@
                     android:textSize="12sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="@{viewModel.queryContactTotal}" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="fitXY"
+                    bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
-                bind:srcCompat="@android:drawable/divider_horizontal_textfield" />
         </LinearLayout>
 
         <!-- Details Section -->

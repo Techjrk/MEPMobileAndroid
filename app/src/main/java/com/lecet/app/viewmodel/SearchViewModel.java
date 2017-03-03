@@ -149,7 +149,36 @@ public class SearchViewModel extends BaseObservable {
     private boolean isQueryCompanyTotalZero;
     private boolean isQueryContactTotalZero;
     private boolean queryEmpty;
+    private int hideProjectSummary;
+    private int hideCompanySummary;
+    private int hideContactSummary;
+    @Bindable
+    public int getHideProjectSummary() {
+        return hideProjectSummary;
+    }
 
+    public void setHideProjectSummary(int hideProjectSummary) {
+        this.hideProjectSummary = hideProjectSummary;
+        notifyPropertyChanged(BR.hideProjectSummary);
+    }
+    @Bindable
+    public int getHideCompanySummary() {
+        return hideCompanySummary;
+    }
+
+    public void setHideCompanySummary(int hideCompanySummary) {
+        this.hideCompanySummary = hideCompanySummary;
+        notifyPropertyChanged(BR.hideCompanySummary);
+    }
+    @Bindable
+    public int getHideContactSummary() {
+        return hideContactSummary;
+    }
+
+    public void setHideContactSummary(int hideContactSummary) {
+        this.hideContactSummary = hideContactSummary;
+        notifyPropertyChanged(BR.hideContactSummary);
+    }
 
     public void setProjectSearchFilter(String filter) {
         searchDomain.setProjectFilter(filter);
@@ -225,9 +254,6 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-        if (SearchDomain.callProjectService !=null) SearchDomain.callProjectService.cancel();
-        if (SearchDomain.callCompanyService !=null) SearchDomain.callCompanyService.cancel();
-        if (SearchDomain.callContactService !=null) SearchDomain.callContactService.cancel();
 
         if (!USING_INSTANT_SEARCH && query.trim().equals("")) {
             setIsMSE1SectionVisible(true);
@@ -237,38 +263,51 @@ public class SearchViewModel extends BaseObservable {
             setIsMSR13Visible(false);
             return;
         }
+        setHideProjectSummary(View.GONE);
+        setHideCompanySummary(View.GONE);
+        setHideContactSummary(View.GONE);
+        if (SearchDomain.callProjectService !=null) {
+            setQueryProjectTotal(0); setIsQueryProjectTotalZero(true);
+            SearchDomain.callProjectService.cancel();
+        }
+        if (SearchDomain.callCompanyService !=null) {
+            setQueryCompanyTotal(0); setIsQueryCompanyTotalZero(true);
+            SearchDomain.callCompanyService.cancel();
+        }
+        if (SearchDomain.callContactService !=null) {
+            setQueryContactTotal(0); setIsQueryContactTotalZero(true);
+            SearchDomain.callContactService.cancel();
+        }
+        checkQueryAndTotal();
         setIsMSE2SectionVisible(true);
         setIsMSE1SectionVisible(false);
         setQueryProjectTitle(query + " in Projects");
         setQueryCompanyTitle(query + " in Companies");
         setQueryContactTitle(query + " in Contacts");
 
-        checkTotal();
-        /** For Project query total view
-         */
-        getProjectQuery(query);
-
-        /**
-         * For Company query total view
-         */
-        getCompanyQuery(query);
-
-        /**
-         * For Contact query total view
-         */
-        getContactQuery(query);
-        //checkTotal();
-
     }
 
     /**
      * Get the list of Project in Query Search Summary
      */
-    private void checkTotal() {
+    private void checkQueryAndTotal() {
+        /** For Project query total view
+         */
+        getProjectQuery(query);
         getQueryProjectTotal();
+        setHideProjectSummary(View.VISIBLE);
+        /**
+         * For Company query total view
+         */
+        getCompanyQuery(query);
         getQueryCompanyTotal();
+        setHideCompanySummary(View.VISIBLE);
+        /**
+         * For Contact query total view
+         */
+        getContactQuery(query);
         getQueryContactTotal();
-
+        setHideContactSummary(View.VISIBLE);
     }
 
 
