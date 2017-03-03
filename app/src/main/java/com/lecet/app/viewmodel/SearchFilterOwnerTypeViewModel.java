@@ -16,7 +16,7 @@ import android.widget.CheckBox;
 public class SearchFilterOwnerTypeViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String displayStr = "Any";
-    public static CheckBox lastChecked;
+    private CheckBox lastChecked;
 
     private String[] ownertype = {"", ""};
     //private CheckBox checkView;
@@ -63,8 +63,13 @@ public class SearchFilterOwnerTypeViewModel extends BaseObservable {
             }
             lastChecked = cb;
         }
+    }
 
+    public CheckBox getLastChecked() {
+        return lastChecked;
+    }
 
-
+    public void setLastChecked(CheckBox lastChecked) {
+        this.lastChecked = lastChecked;
     }
 }
