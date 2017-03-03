@@ -93,6 +93,12 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
         calls.add(getSearchStageList());
         calls.add(getJurisdictionList());
         calls.add(getProjectTypeList());
+        calls.add(getBidsRecentlyMade());
+        calls.add(getProjectsHappeningSoon());
+        calls.add(getProjectsRecentlyAdded());
+        calls.add(getProjectsRecentlyUpdated());
+        calls.add(getUserProjectTrackingList());
+        calls.add(getUserCompanyTrackingList());
     }
 
     public void cancelDataDownload() {
@@ -139,7 +145,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
             public void onSuccess(List<SearchFilterProjectTypesMain> result) {
 
                 fetchedProjectType = true;
-                getTrackingLists();
+                checkDataDownloaded();
             }
 
             @Override
@@ -183,14 +189,6 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     }
 
     /* Dashboard */
-
-    private void getDashboardData() {
-
-        getBidsRecentlyMade();
-        getProjectsHappeningSoon();
-        getProjectsRecentlyAdded();
-        getProjectsRecentlyUpdated();
-    }
 
     private Call<List<Bid>> getBidsRecentlyMade() {
 
@@ -236,6 +234,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
             public void onFailure(Call<List<Bid>> call, Throwable t) {
 
                 fetchedMBR = true;
+                checkDataDownloaded();
             }
         });
     }
@@ -265,6 +264,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                         @Override
                         public void onError(Throwable error) {
 
+                            Log.e(TAG, "getProjectsHappeningSoon Failed: "  + error.getMessage());
+
                             // data received, lets see if we should display main content
                             fetchedMHS = true;
 
@@ -275,6 +276,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
 
 
                 } else {
+
+                    Log.e(TAG, "getProjectsHappeningSoon Failed: "  + response.message());
 
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {
@@ -299,9 +302,9 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
         });
     }
 
-    private void getProjectsRecentlyAdded() {
+    private Call<List<Project>> getProjectsRecentlyAdded() {
 
-        projectDomain.getProjectsRecentlyAdded(new Callback<List<Project>>() {
+        return projectDomain.getProjectsRecentlyAdded(new Callback<List<Project>>() {
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
 
@@ -335,6 +338,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
 
                 } else {
 
+                    Log.e(TAG, "getProjectsRecentlyAdded Failed: "  + response.message());
+
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {
 
@@ -351,6 +356,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
             @Override
             public void onFailure(Call<List<Project>> call, Throwable t) {
 
+                Log.e(TAG, "getProjectsRecentlyAdded Failed: "  + t.getMessage());
+
                 // data received, lets see if we should display main content
                 fetchedMRA = true;
                 checkDataDownloaded();
@@ -358,9 +365,9 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
         });
     }
 
-    private void getProjectsRecentlyUpdated() {
+    private Call<List<Project>> getProjectsRecentlyUpdated() {
 
-        projectDomain.getProjectsRecentlyUpdated(new Callback<List<Project>>() {
+        return projectDomain.getProjectsRecentlyUpdated(new Callback<List<Project>>() {
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
 
@@ -384,13 +391,15 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                         @Override
                         public void onError(Throwable error) {
 
-                            Log.e(TAG, error.getMessage());
+                            Log.e(TAG, "getProjectsRecentlyUpdated : " + error.getMessage());
                             // data received, lets see if we should display main content
                             checkDataDownloaded();
                         }
                     });
 
                 } else {
+
+                    Log.e(TAG, "getProjectsRecentlyUpdated : " + response.message());
 
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {
@@ -408,6 +417,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
             @Override
             public void onFailure(Call<List<Project>> call, Throwable t) {
 
+                Log.e(TAG, "getProjectsRecentlyUpdated : " + t.getMessage());
+
                 // data received, lets see if we should display main content
                 fetchedMRU = true;
                 checkDataDownloaded();
@@ -417,16 +428,10 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
 
     /* Tracking List */
 
-    public void getTrackingLists() {
 
-        getUserProjectTrackingList();
-        getUserCompanyTrackingList();
-    }
+    public Call<List<ProjectTrackingList>> getUserProjectTrackingList() {
 
-
-    public void getUserProjectTrackingList() {
-
-        trackingListDomain.getUserProjectTrackingLists(new Callback<List<ProjectTrackingList>>() {
+        return trackingListDomain.getUserProjectTrackingLists(new Callback<List<ProjectTrackingList>>() {
             @Override
             public void onResponse(Call<List<ProjectTrackingList>> call, Response<List<ProjectTrackingList>> response) {
 
@@ -435,9 +440,10 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                     fetchedProjTracking = true;
                     List<ProjectTrackingList> data = response.body();
                     trackingListDomain.copyProjectTrackingListsToRealmTransaction(data);
-                    getDashboardData();
 
                 } else {
+
+                    Log.e(TAG, "getUserProjectTrackingList : " + response.message());
 
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {
@@ -456,6 +462,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
             @Override
             public void onFailure(Call<List<ProjectTrackingList>> call, Throwable t) {
 
+                Log.e(TAG, "getUserProjectTrackingList : " + t.getMessage());
+
                 fetchedProjTracking = true;
                 checkDataDownloaded();
             }
@@ -463,9 +471,9 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     }
 
 
-    public void getUserCompanyTrackingList() {
+    public Call<List<CompanyTrackingList>> getUserCompanyTrackingList() {
 
-        trackingListDomain.getUserCompanyTrackingLists(new Callback<List<CompanyTrackingList>>() {
+        return trackingListDomain.getUserCompanyTrackingLists(new Callback<List<CompanyTrackingList>>() {
             @Override
             public void onResponse(Call<List<CompanyTrackingList>> call, Response<List<CompanyTrackingList>> response) {
 
@@ -476,6 +484,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                     trackingListDomain.copyCompanyTrackingListsToRealmTransaction(data);
 
                 } else {
+
+                    Log.e(TAG, "getUserCompanyTrackingList : " + response.message());
 
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {
@@ -492,6 +502,8 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
 
             @Override
             public void onFailure(Call<List<CompanyTrackingList>> call, Throwable t) {
+
+                Log.e(TAG, "getUserCompanyTrackingList : " + t.getMessage());
 
                 fetchedCompTracking = true;
                 checkDataDownloaded();

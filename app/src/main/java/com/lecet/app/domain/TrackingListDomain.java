@@ -86,7 +86,7 @@ public class TrackingListDomain {
 
     // API
 
-    public void getUserProjectTrackingLists(Callback<List<ProjectTrackingList>> callback) {
+    public Call<List<ProjectTrackingList>> getUserProjectTrackingLists(Callback<List<ProjectTrackingList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         long userID = sharedPreferenceUtil.getId();
@@ -95,10 +95,12 @@ public class TrackingListDomain {
 
         Call<List<ProjectTrackingList>> call = lecetClient.getTrackingListService().getUserProjectTrackingList(token, userID, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
 
-    public void getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
+    public  Call<List<CompanyTrackingList>> getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         long userID = sharedPreferenceUtil.getId();
@@ -107,6 +109,8 @@ public class TrackingListDomain {
 
         Call<List<CompanyTrackingList>> call = lecetClient.getTrackingListService().getUserCompanyTrackingList(token, userID, filter);
         call.enqueue(callback);
+
+        return call;
     }
 
     public void getCompanyTrackingListUpdates(long companyTrackingListId, Date updateCutoffDate, Callback<List<ActivityUpdate>> callback) {
