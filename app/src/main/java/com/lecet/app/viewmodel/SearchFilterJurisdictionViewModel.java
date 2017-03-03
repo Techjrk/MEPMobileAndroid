@@ -12,6 +12,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
+import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
@@ -22,6 +23,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import android.databinding.Bindable;
 import android.util.Log;
+import android.widget.CheckBox;
 
 /**
  * View Model for Search Filter Activity: Jurisdiction
@@ -30,7 +32,7 @@ import android.util.Log;
 public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private boolean foundParent, foundChild, foundGrandChild, hasChild, hasGrandChild;
     private ArrayList<Boolean> containGrandChild = new ArrayList<Boolean>();
-
+    private  CheckBox lastChecked;
     private static final String TAG = "SearchFilterMPFJurisVM";
     public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
     public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
@@ -42,7 +44,8 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
     private String query;
-
+    private List<SearchFilterJurisdictionAdapter.Parent> data;
+    private SearchFilterJurisdictionAdapter adapter;
     /**
      * Constructor
      */
@@ -51,6 +54,14 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         bundle = new Bundle();
         getJurisdictions();
         searchItem("");
+    }
+
+    public CheckBox getLastChecked() {
+        return lastChecked;
+    }
+
+    public void setLastChecked(CheckBox lastChecked) {
+        this.lastChecked = lastChecked;
     }
 
     /**
@@ -65,12 +76,14 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             }
         });
     }
-
+   public void clearLast(){
+       adapter.clearLast();
+   }
     /**
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-        SearchFilterJurisdictionAdapter.clearLast();
+        clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         if (!bundle.isEmpty()) {
@@ -124,11 +137,19 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         hasChild = false;
         hasGrandChild = false;
         String searchKey = key;
+        if (!searchKey.equals("")) {
+            SearchFilterJurisdictionAdapter.customSearch=true;
+        } else {
+            SearchFilterJurisdictionAdapter.customSearch=false;
+          if (adapter !=null)  adapter.notifyDataSetChanged();
+        }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
+        if (data !=null) data.clear();
+        else
+            data = new ArrayList<>();
 
-        List<SearchFilterJurisdictionAdapter.Parent> data = new ArrayList<>();
         List<SearchFilterJurisdictionAdapter.Child> children = null;
 
         for (SearchFilterJurisdictionMain jMain : getRealmJurisdictions()) {
@@ -157,9 +178,13 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             }
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
-        SearchFilterJurisdictionAdapter adapter = new SearchFilterJurisdictionAdapter(data, this);
+
+       adapter = new SearchFilterJurisdictionAdapter(data, this);
+
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+
     }
 
     private void processDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.Child> children, String searchKey) {
@@ -237,7 +262,9 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
     public void setQuery(String query) {
         this.query = query;
-        notifyPropertyChanged(BR.query);
         searchItem(query);
+        notifyPropertyChanged(BR.query);
+       // adapter.notifyDataSetChanged();
+
     }
 }

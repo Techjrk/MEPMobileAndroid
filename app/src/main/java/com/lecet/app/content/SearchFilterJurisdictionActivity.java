@@ -14,20 +14,20 @@ import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
  * Activity for Search Filter: Jurisdiction
  */
 public class SearchFilterJurisdictionActivity extends AppCompatActivity {
-    // SearchFilterJurisdictionViewModel viewModel;
+    private SearchFilterJurisdictionViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ActivitySearchFilterJurisdictionBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_jurisdiction);
-        SearchFilterJurisdictionViewModel viewModel = new SearchFilterJurisdictionViewModel(this);
+         viewModel = new SearchFilterJurisdictionViewModel(this);
         sfilter.setViewModel(viewModel);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SearchFilterJurisdictionAdapter.clearLast();
+        viewModel.clearLast();
         setResult(RESULT_CANCELED);
     }
 }
