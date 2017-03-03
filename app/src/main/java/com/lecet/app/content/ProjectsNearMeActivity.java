@@ -300,7 +300,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     private void showLocationPermissionRequiredDialog() {
         isAskingForPermission = true;
         LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(getString(R.string.confirm_share_your_location_description)
-                , getString(R.string.confirm_share_your_location), getString(R.string.confirm_cancel));
+                , getString(R.string.confirm_share_your_location), getString(android.R.string.cancel));
 
         dialogFragment.setCallbackListener(this);
         dialogFragment.show(getSupportFragmentManager(), LecetConfirmDialogFragment.TAG);
@@ -308,7 +308,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     private void showLocationEnableRequired() {
         LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(getString(R.string.confirm_enable_your_location_description)
-                , getString(R.string.confirm_go_to_settings), getString(R.string.confirm_cancel));
+                , getString(R.string.confirm_go_to_settings), getString(android.R.string.cancel));
 
         dialogFragment.setCallbackListener(this);
         dialogFragment.show(getSupportFragmentManager(), LecetConfirmDialogFragment.TAG);

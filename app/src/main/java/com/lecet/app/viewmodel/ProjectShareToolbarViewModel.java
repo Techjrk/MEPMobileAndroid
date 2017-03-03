@@ -175,7 +175,7 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
         String message = String.format(trackedObject.isHidden() ? getAppCompatActivity().getString(R.string.you_are_about_unhide) : getAppCompatActivity().getString(R.string.you_are_about_hide), getAppCompatActivity().getString(R.string.project));
         String positive = String.format(trackedObject.isHidden() ? getAppCompatActivity().getString(R.string.unhide_blank) :  getAppCompatActivity().getString(R.string.hide_blank), getAppCompatActivity().getString(R.string.project));
 
-        LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(message, positive, getAppCompatActivity().getString(R.string.confirm_cancel));
+        LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(message, positive, getAppCompatActivity().getString(android.R.string.cancel));
 
         dialogFragment.setCallbackListener(this);
         dialogFragment.show(getAppCompatActivity().getSupportFragmentManager(), LecetConfirmDialogFragment.TAG);

@@ -63,6 +63,7 @@
 
             <EditText android:id="@+id/email_edit_text"
                       style="@style/ProfileEditTextView"
+                      android:inputType="textEmailAddress"
                       app:typeface="@{`Lato-Regular.ttf`}"
                       android:text="@={viewModel.email}"
                       android:hint="@string/email"
@@ -118,6 +119,7 @@
 
                 <EditText android:id="@+id/phone_edit_text"
                           style="@style/ProfileEditTextView"
+                          android:inputType="phone"
                           android:layout_weight="1"
                           app:typeface="@{`Lato-Regular.ttf`}"
                           android:text="@={viewModel.phone}"
@@ -128,6 +130,7 @@
 
                 <EditText android:id="@+id/fax_edit_text"
                           style="@style/ProfileEditTextView"
+                          android:inputType="phone"
                           android:layout_weight="1"
                           android:layout_marginLeft="3dp"
                           app:typeface="@{`Lato-Regular.ttf`}"

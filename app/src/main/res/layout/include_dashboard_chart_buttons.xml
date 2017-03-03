@@ -13,7 +13,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        >
+        android:baselineAligned="false">
 
         <!-- H -->
         <LinearLayout

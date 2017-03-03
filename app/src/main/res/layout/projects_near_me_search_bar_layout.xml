@@ -15,7 +15,6 @@
         android:maxLines="1"
         android:paddingLeft="45dp"
         android:paddingRight="45dp"
-        android:singleLine="true"
         android:textColor="@color/lecetTextWhite"
         android:textSize="17sp" />
 
