@@ -14,7 +14,7 @@ import android.widget.CheckBox;
 public class SearchFilterWorkTypeViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String displayStr = "Any";
-    public static CheckBox lastChecked;
+    private CheckBox lastChecked;
 
     private String[] worktype = {"", ""};
 
@@ -56,5 +56,13 @@ public class SearchFilterWorkTypeViewModel extends BaseObservable {
             }
             lastChecked = cb;
         }
+    }
+
+    public CheckBox getLastChecked() {
+        return lastChecked;
+    }
+
+    public void setLastChecked(CheckBox lastChecked) {
+        this.lastChecked = lastChecked;
     }
 }
