@@ -173,9 +173,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             /*** For processing the DistrictCouncil */
             processDistrict(jMain, children, searchKey);
 
-            if (children != null) {
+            if (!children.isEmpty()) {
                 parent.setChildren(children);
             }
+
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
 
