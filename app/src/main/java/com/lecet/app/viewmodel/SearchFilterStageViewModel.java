@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.adapters.SearchFilterProjectTypeAdapter;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
@@ -134,6 +135,12 @@ public void clearLast(){
         foundChild = false;
         hasChild = false;
         String searchKey = key;
+        if (!searchKey.equals("")) {
+            SearchFilterStageAdapter.customSearch=true;
+        } else {
+            SearchFilterStageAdapter.customSearch=false;
+            // if (adapter !=null)  adapter.notifyDataSetChanged();
+        }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);

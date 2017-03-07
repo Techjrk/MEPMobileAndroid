@@ -42,6 +42,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
    // public static  CheckBox lastChecked;
     public static int lastFamilyChecked = NO_TYPE;
+    public static boolean customSearch;
+
     private static int lastSection; //keep track of last section used by the selected item
     private static int lastPosition; //keep track of last position used by the selected item
     private static int lastChildParentPosition; //keep track of last child parent used by the selected item
@@ -161,7 +163,10 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         // Expanded scenario, where subtype and subsub are expanded
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
-
+        if (customSearch)  {
+            expandedParents.add(section);   ///*** expanded
+            parent.isExpanded=true;
+        }
         if (children == null) return 0;
 
         // Do we need to expand, if so check children size and if a child has been selected
@@ -241,6 +246,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            customSearch=false;
                             cb = (CheckBox) view;
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
@@ -275,8 +281,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    child.isExpanded = !child.isExpanded;
+                    customSearch=false;
+                   // child.isExpanded = !child.isExpanded;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -285,6 +291,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
                     // If the position is already in the expanded list, then we need to remove it
                     if (expanded.containsKey(position)) {
+                        child.isExpanded = false;
 
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
@@ -318,7 +325,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                         expanded.putAll(toBeAdded);
 
                     } else {
-
+                        child.isExpanded=true;
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
                         TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
@@ -370,8 +377,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            customSearch=false;
                             CheckBox cb = (CheckBox) view;
-
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);
@@ -418,11 +425,14 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parent.isExpanded = !parent.isExpanded;
+                customSearch=false;
+              //  parent.isExpanded = !parent.isExpanded;
                 if (expandedParents.contains(section)) {
+                    parent.isExpanded=false;
                     expandedParents.remove(Integer.valueOf(section));
                     expandedChildren.remove(Integer.valueOf(section));
                 } else {
+                    parent.isExpanded=true;
                     expandedParents.add(section);
                 }
 
@@ -443,6 +453,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        customSearch=false;
                         CheckBox cb = (CheckBox) view;
                         if (cb.isChecked()) {
                             if (viewModel.getLastChecked() != null) {

@@ -2,6 +2,7 @@ package com.lecet.app.adapters;
 
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,13 +47,13 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private static int lastPosition; //keep track of last position used by the selected item
     private static int lastChildParentPosition; //keep track of last child parent used by the selected item
     private static String lastName;
+    private static int NO_IMAGE = 0;
     private CheckBox cb = null;
-
     private List<Parent> data;
     private SearchFilterJurisdictionViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
-
+    //private List<String> noChildren;
     public SearchFilterJurisdictionAdapter(List<Parent> data, SearchFilterJurisdictionViewModel viewModel) {
 
         this.data = data;
@@ -513,85 +514,140 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
             );
 
-        }
+        } /*else {
+            final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
+            parentViewHolder.imgView.setVisibility(View.VISIBLE);
+            if (parent.isExpanded)
+                parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+            else
+                parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+            if (viewModel.hasNoChild.trim().equals(parentViewHolder.checkView.getText().toString().trim()))
+            {
+                //parentViewHolder.checkView.setVisibility(View.GONE);
+                parentViewHolder.imgView.setVisibility(View.GONE);
+                Log.d("parent","parent:"+parentViewHolder.checkView.getText().toString());
+            }
+        }*/
         // expandItem(section,child,position);
     }
-
+  //  boolean runonce;
     /**
      * Top-level categories (regions of the country such as Eastern)
      */
+  //   ParentViewHolder parentViewHolder;
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
+        if (holder instanceof ParentViewHolder) {
+             final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
+          //  parentViewHolder = (ParentViewHolder) holder;
+            // Parent denoted by section number
 
-        final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
+            final Parent parent = data.get(section);
+            if (parent == null) return;
+           // parentViewHolder.imgView.setVisibility(View.GONE);
 
-        // Parent denoted by section number
-        final Parent parent = data.get(section);
+           /*     parentViewHolder.imgView.setVisibility(View.VISIBLE);
+                if (parent.isExpanded)
+                    parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+                else
+                    parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+            if (viewModel.hasNoChild.trim().equals(parentViewHolder.checkView.getText().toString().trim()))
+            {
+                //parentViewHolder.checkView.setVisibility(View.GONE);
+                parentViewHolder.imgView.setVisibility(View.GONE);
+                Log.d("parent","parent:"+parentViewHolder.checkView.getText().toString());
+            }*/
 
-        parentViewHolder.imgView.setOnClickListener(null);
-        parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                customSearch = false;
-                // parent.isExpanded = !parent.isExpanded;
-                if (expandedParents.contains(section)) {
-                    parent.isExpanded = false;
-                    expandedParents.remove(Integer.valueOf(section));
-                    expandedChildren.remove(Integer.valueOf(section));
-                } else {
-                    parent.isExpanded = true;
-                    expandedParents.add(section);
-                }
 
-                notifyDataSetChanged();
-                // checkLastSelect(true);
+           /* if (!runonce)
+            { runonce=true;
+                 if (noChildren == -1) noChildren=section;
+                if (noChildren == section) parentViewHolder.imgView.setVisibility(View.GONE);
+            }*/
+            parentViewHolder.checkView.setText(parent.getName());
+        //    if (viewModel.hasNoChild.trim().equals(parentViewHolder.checkView.getText().toString().trim()))
+          if (parent.getChildren() == null)
+            {
+                parentViewHolder.imgView.setImageResource(NO_IMAGE);
+               // parentViewHolder.imgView.setVisibility(View.GONE);
+                Log.d("parent","parent:"+parentViewHolder.checkView.getText().toString());
+            } else {
+                if (parent.isExpanded)
+                    parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+                else
+                    parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
             }
-        });
+            checkLastParentSelectName(true, parent, parentViewHolder, section);
+            parentViewHolder.imgView.setOnClickListener(null);
+            parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customSearch = false;
+                    // parent.isExpanded = !parent.isExpanded;
 
-
-        parentViewHolder.checkView.setText(parent.getName());
-
-        if (parent.isExpanded)
-            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
-        else
-            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-
-        checkLastParentSelectName(true, parent, parentViewHolder, section);
-        parentViewHolder.checkView.setChecked(parent.getSelected());
-
-        parentViewHolder.checkView.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customSearch = false;
-                        CheckBox cb = (CheckBox) view;
-                        if (cb.isChecked()) {
-                            if (viewModel.getLastChecked() != null) {
-                                viewModel.getLastChecked().setChecked(false);
-                                checkLastSelect(false);
-                            }
-                            //lastChecked = cb;
-                            //lastChecked = parentViewHolder.checkView;
-                            viewModel.setLastChecked(parentViewHolder.checkView);
-                            lastFamilyChecked = PARENT_VIEW_TYPE;
-                            lastSection = section;
-                            lastName = cb.getText().toString().trim();
-
+                    if (parent.getChildren() != null) {
+                        if (expandedParents.contains(section)) {
+                            parent.isExpanded = false;
+                            expandedParents.remove(Integer.valueOf(section));
+                            expandedChildren.remove(Integer.valueOf(section));
                         } else {
-                            clearLast();
-                            viewModel.clearBundle();
+                            parent.isExpanded = true;
+                            expandedParents.add(section);
                         }
-
-                        parent.setSelected(cb.isChecked());
-
-                        if (parent.getSelected())
-                            viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //NOTE - we are not using regionId as it is not easily avail from here. we look up regionId in the main activity's processing function.
-                        notifyDataSetChanged();
+                    } else {
+                       // parent.setHasNoChild(parent.getName());
                     }
+               /* if (parent.getChildren() != null ) {
+                    if (parent.isExpanded)
+                        parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+                    else
+                        parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+                } else  {
+                        parentViewHolder.imgView.setVisibility(View.GONE);
+                    }*/
+                    notifyDataSetChanged();
+                    // checkLastSelect(true);
                 }
-        );
+            });
 
 
+            ////***
+            parentViewHolder.checkView.setChecked(parent.getSelected());
+            // if (parent.getChildren() == null || parent.getChildren().isEmpty())
+            //     parentViewHolder.imgView.setVisibility(View.GONE);
+            parentViewHolder.checkView.setOnClickListener(null);
+            parentViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customSearch = false;
+                            CheckBox cb = (CheckBox) view;
+                            if (cb.isChecked()) {
+                                if (viewModel.getLastChecked() != null) {
+                                    viewModel.getLastChecked().setChecked(false);
+                                    checkLastSelect(false);
+                                }
+                                //lastChecked = cb;
+                                //lastChecked = parentViewHolder.checkView;
+                                viewModel.setLastChecked(parentViewHolder.checkView);
+                                lastFamilyChecked = PARENT_VIEW_TYPE;
+                                lastSection = section;
+                                lastName = cb.getText().toString().trim();
+
+                            } else {
+                                clearLast();
+                                viewModel.clearBundle();
+                            }
+
+                            parent.setSelected(cb.isChecked());
+                            if (parent.getSelected())
+                                viewModel.setJurisdictionData(PARENT_VIEW_TYPE, parent.getId(), -1, parent.getName(), parent.getAbbreviation(), parent.getLongName()); //NOTE - we are not using regionId as it is not easily avail from here. we look up regionId in the main activity's processing function.
+                            notifyDataSetChanged();
+                        }
+                    }
+            );
+
+        }
     }
 
     @Override
@@ -769,7 +825,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     }
 
     public static class Parent {
-
+       // private String hasNoChild;
         private int id;
         private String name;
         private String abbreviation;
@@ -777,6 +833,14 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private List<Child> children;
         private boolean isExpanded;
         private boolean isSelected = false;
+
+      /*  public String getHasNoChild() {
+            return hasNoChild;
+        }
+
+        public void setHasNoChild(String hasNoChild) {
+            this.hasNoChild = hasNoChild;
+        }*/
 
         public boolean isExpanded() {
             return isExpanded;
