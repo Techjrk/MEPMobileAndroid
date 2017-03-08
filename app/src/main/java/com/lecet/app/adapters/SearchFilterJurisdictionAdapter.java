@@ -166,13 +166,16 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
         if (customSearch) {
-            expandedParents.add(section);   ///*** expanded
+          if (!expandedParents.contains(section)) {
+              expandedParents.add(section);   ///*** expanded
+              parent.isExpanded = true;
+          }
             /*TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
             if (expanded == null) {
                 expanded = new TreeMap<>();
                 expandedChildren.put(section, expanded);
             }*/
-            parent.isExpanded = true;
+
 
           /*  //  parentViewHolder.imgView.performClick();
             if (expandedParents.contains(section)) {
@@ -185,6 +188,26 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             }*/
         }
         if (children == null) return 0;
+        if (customSearch) {
+            TreeMap<Integer, Integer> expanded = new TreeMap<>();
+           /* if (expanded == null) {
+                expanded = new TreeMap<>();
+                expandedChildren.put(section, expanded);
+            } else
+                */
+          //  int k=0;
+            //  if (gcb)   {
+
+            for (Child child: children) {
+                if (children.get(0).getGrandChildren() !=null) {
+                    children.get(0).isExpanded=true;
+                    expanded.put(0, children.get(0).getGrandChildren().size());
+                    expandedChildren.put(section, expanded);
+                }
+                // k++;
+            }
+            // }
+        }
 
         // Do we need to expand, if so check children size and if a child has been selected
         // if so we need to display the grand children too.
