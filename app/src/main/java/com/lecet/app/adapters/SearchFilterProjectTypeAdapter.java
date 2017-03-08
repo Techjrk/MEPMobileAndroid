@@ -71,7 +71,10 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
         if (customSearch)  {
-            expandedParents.add(section);   ///*** expanded
+            if (!expandedParents.contains(section)) {
+                expandedParents.add(section);   ///*** expanded
+                parent.isExpanded = true;
+            }
             /*TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
             if (expanded == null) {
                 expanded = new TreeMap<>();
@@ -90,7 +93,26 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             }*/
         }
         if (children == null) return 0;
+        if (customSearch) {
+            TreeMap<Integer, Integer> expanded = new TreeMap<>();
+           /* if (expanded == null) {
+                expanded = new TreeMap<>();
+                expandedChildren.put(section, expanded);
+            } else
+                */
+            //  int k=0;
+            //  if (gcb)   {
 
+            for (Child child: children) {
+                if (children.get(0).getGrandChildren() !=null) {
+                    children.get(0).isExpanded=true;
+                    expanded.put(0, children.get(0).getGrandChildren().size());
+                    expandedChildren.put(section, expanded);
+                }
+                // k++;
+            }
+            // }
+        }
         // Do we need to expand, if so check children size and if a child has been selected
         // if so we need to display the grand children too.
         if (expandedParents.contains(section)) {
@@ -132,7 +154,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     public int getFooterViewType(int section) {
         return 0;
     }
-    private void expandItem(int section, Child child, int position) {
+   /* private void expandItem(int section, Child child, int position) {
         ///
         if (customSearch) {
             // cv.imgView.setVisibility(View.GONE);
@@ -147,7 +169,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
 ///
             // If the position is already in the expanded list, then we need to remove it
- /*           if (expanded.containsKey(position)) {
+ *//*           if (expanded.containsKey(position)) {
 
                 // Keep track of what needs to be added and removed.
                 List<Integer> toBeRemoved = new ArrayList<>();
@@ -180,7 +202,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 expanded.remove(Integer.valueOf(position));
                 expanded.putAll(toBeAdded);
 
-            } else */
+            } else *//*
             {
 
                 // Keep track of what needs to be added and removed.
@@ -207,9 +229,9 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                     toBeAdded.put(newKey, value);
                 }
 
-               /* for (Integer integer : toBeRemoved) {
+               *//* for (Integer integer : toBeRemoved) {
                     expanded.remove(integer);
-                }*/
+                }*//*
 
                 expanded.put(position, child.getGrandChildren() != null ? child.getGrandChildren().size() : 0);
                 expanded.putAll(toBeAdded);
@@ -218,7 +240,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
         }
 
-    }
+    }*/
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
@@ -230,7 +252,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.imgView.setVisibility(View.GONE);
-            expandItem(section,child,position);
+          //  expandItem(section,child,position);
             if (child.getGrandChildren() != null)
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);
