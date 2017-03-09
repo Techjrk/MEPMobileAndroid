@@ -8,18 +8,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.adapters.SearchFilterProjectTypeAdapter;
 import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -70,10 +70,11 @@ public class SearchFilterStageViewModel extends BaseObservable {
 
     /**
      * Clear the Stage bundle
-      */
+     */
     public void clearBundle() {
         bundle.clear();
     }
+
     /**
      * Read Realm ProjectStage data
      */
@@ -86,9 +87,11 @@ public class SearchFilterStageViewModel extends BaseObservable {
             }
         });
     }
-public void clearLast(){
-    adapter.clearLast();
-}
+
+    public void clearLast() {
+        adapter.clearLast();
+    }
+
     /**
      * Apply the filter and return to the main Search activity
      */
@@ -100,7 +103,6 @@ public void clearLast(){
             activity.setResult(Activity.RESULT_OK, intent);
         } else {
             activity.setResult(Activity.RESULT_CANCELED);
-         //   Log.d("nodata","nodata");
         }
 
         activity.finish();
@@ -136,10 +138,9 @@ public void clearLast(){
         hasChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterStageAdapter.customSearch=true;
+            SearchFilterStageAdapter.customSearch = true;
         } else {
-            SearchFilterStageAdapter.customSearch=false;
-            // if (adapter !=null)  adapter.notifyDataSetChanged();
+            SearchFilterStageAdapter.customSearch = false;
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
@@ -173,14 +174,14 @@ public void clearLast(){
                     }
                 }
             }
-            //parent.setChildren(children);
+
             if (children != null) {
                 parent.setChildren(children);
             }
-            // data.add(parent);
+
             if (parent != null && (hasChild || foundParent)) data.add(parent);
         }
-         adapter = new SearchFilterStageAdapter(data, this);
+        adapter = new SearchFilterStageAdapter(data, this);
         recyclerView.setAdapter(adapter);
     }
 

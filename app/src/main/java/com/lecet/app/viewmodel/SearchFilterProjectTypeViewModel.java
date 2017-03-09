@@ -101,10 +101,10 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         hasGrandChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterProjectTypeAdapter.customSearch=true;
+            SearchFilterProjectTypeAdapter.customSearch = true;
         } else {
-            SearchFilterProjectTypeAdapter.customSearch=false;
-           // if (adapter !=null)  adapter.notifyDataSetChanged();
+            SearchFilterProjectTypeAdapter.customSearch = false;
+
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
@@ -157,7 +157,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                     }
                     if (child != null && grandChildren != null)
                         child.setGrandChildren(grandChildren);
-                    //   children.add(child);
                     if ((foundChild || containGrandChild.contains(true)) || foundParent) {
                         children.add(child);
                         containGrandChild.remove(true);
@@ -165,7 +164,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                 }
 
             }
-            // parent.setChildren(children);
             if (children != null) {
                 parent.setChildren(children);
             }
