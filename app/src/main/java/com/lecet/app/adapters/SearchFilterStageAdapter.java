@@ -40,7 +40,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
     public static final int NO_TYPE = -1;
 
-   // public static  CheckBox lastChecked;
+    // public static  CheckBox lastChecked;
     public static int lastFamilyChecked = NO_TYPE;
     public static boolean customSearch;
 
@@ -163,9 +163,9 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         // Expanded scenario, where subtype and subsub are expanded
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
-        if (customSearch)  {
+        if (customSearch) {
             expandedParents.add(section);   ///*** expanded
-            parent.isExpanded=true;
+            parent.isExpanded = true;
         }
         if (children == null) return 0;
 
@@ -246,15 +246,15 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customSearch=false;
+                            customSearch = false;
                             cb = (CheckBox) view;
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
-                               // lastChecked = cb;
-                               // lastChecked = childViewHolder.checkView;
+                                // lastChecked = cb;
+                                // lastChecked = childViewHolder.checkView;
                                 viewModel.setLastChecked(childViewHolder.checkView);
                                 lastFamilyChecked = CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(truePosition);
@@ -281,8 +281,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    customSearch=false;
-                   // child.isExpanded = !child.isExpanded;
+                    customSearch = false;
+                    // child.isExpanded = !child.isExpanded;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -325,7 +325,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                         expanded.putAll(toBeAdded);
 
                     } else {
-                        child.isExpanded=true;
+                        child.isExpanded = true;
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
                         TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
@@ -377,7 +377,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customSearch=false;
+                            customSearch = false;
                             CheckBox cb = (CheckBox) view;
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
@@ -425,14 +425,14 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                customSearch=false;
-              //  parent.isExpanded = !parent.isExpanded;
+                customSearch = false;
+                //  parent.isExpanded = !parent.isExpanded;
                 if (expandedParents.contains(section)) {
-                    parent.isExpanded=false;
+                    parent.isExpanded = false;
                     expandedParents.remove(Integer.valueOf(section));
                     expandedChildren.remove(Integer.valueOf(section));
                 } else {
-                    parent.isExpanded=true;
+                    parent.isExpanded = true;
                     expandedParents.add(section);
                 }
 
@@ -453,15 +453,15 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        customSearch=false;
+                        customSearch = false;
                         CheckBox cb = (CheckBox) view;
                         if (cb.isChecked()) {
                             if (viewModel.getLastChecked() != null) {
                                 viewModel.getLastChecked().setChecked(false);
                                 checkLastSelect(false);
                             }
-                           // lastChecked = cb;
-                           // lastChecked = parentViewHolder.checkView;
+                            // lastChecked = cb;
+                            // lastChecked = parentViewHolder.checkView;
                             viewModel.setLastChecked(parentViewHolder.checkView);
                             lastFamilyChecked = PARENT_VIEW_TYPE;
                             lastSection = section;
@@ -625,50 +625,37 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
     //***
     public class ParentViewHolder extends RecyclerView.ViewHolder {
-
-        //        public TextView textView;
         public CheckBox checkView;
         public ImageView imgView;
 
         public ParentViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_parent);
             imgView = (ImageView) itemView.findViewById(R.id.j_parent_img);
         }
     }
 
     public class ChildViewHolder extends RecyclerView.ViewHolder {
-
-        //        public TextView textView;
         public CheckBox checkView;
         public ImageView imgView;
 
         public ChildViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_child);
             imgView = (ImageView) itemView.findViewById(R.id.j_child_img);
         }
     }
 
     public class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
-
-        //        public TextView textView;
         public CheckBox checkView;
 
         public GrandChildTypeViewHolder(View itemView) {
             super(itemView);
-
-//            textView = (TextView) itemView.findViewById(R.id.name_text_view);
             checkView = (CheckBox) itemView.findViewById(R.id.j_grandchild);
         }
     }
 
     public static class Parent {
-
         private int id;
         private String name;
         private String abbreviation;
