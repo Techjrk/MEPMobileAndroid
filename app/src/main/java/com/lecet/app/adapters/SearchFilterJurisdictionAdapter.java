@@ -2,7 +2,6 @@ package com.lecet.app.adapters;
 
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +52,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private SearchFilterJurisdictionViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
+
     //private List<String> noChildren;
     public SearchFilterJurisdictionAdapter(List<Parent> data, SearchFilterJurisdictionViewModel viewModel) {
 
@@ -166,53 +166,27 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
         if (customSearch) {
-          if (!expandedParents.contains(section)) {
-              expandedParents.add(section);   ///*** expanded
-              parent.isExpanded = true;
-          }
-            /*TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
-            if (expanded == null) {
-                expanded = new TreeMap<>();
-                expandedChildren.put(section, expanded);
-            }*/
-
-
-          /*  //  parentViewHolder.imgView.performClick();
-            if (expandedParents.contains(section)) {
-                parent.isExpanded=false;
-                expandedParents.remove(Integer.valueOf(section));
-                expandedChildren.remove(Integer.valueOf(section));
-            } else {
-                parent.isExpanded=true;
-                expandedParents.add(section);
-            }*/
+            if (!expandedParents.contains(section)) {
+                expandedParents.add(section);   ///*** expanded
+                parent.isExpanded = true;
+            }
         }
         if (children == null) return 0;
         if (customSearch) {
             TreeMap<Integer, Integer> expanded = new TreeMap<>();
-           /* if (expanded == null) {
-                expanded = new TreeMap<>();
-                expandedChildren.put(section, expanded);
-            } else
-                */
-          //  int k=0;
-            //  if (gcb)   {
 
-            for (Child child: children) {
-                if (children.get(0).getGrandChildren() !=null) {
-                    children.get(0).isExpanded=true;
+            for (Child child : children) {
+                if (children.get(0).getGrandChildren() != null) {
+                    children.get(0).isExpanded = true;
                     expanded.put(0, children.get(0).getGrandChildren().size());
                     expandedChildren.put(section, expanded);
                 }
-                // k++;
             }
-            // }
         }
 
         // Do we need to expand, if so check children size and if a child has been selected
         // if so we need to display the grand children too.
         if (expandedParents.contains(section)) {
-
             int childrenSize = children.size();
 
             if (expandedChildren.containsKey(section)) {
@@ -225,8 +199,17 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                     Integer size = entry.getValue();
                     grandChildrenSize = grandChildrenSize + size;
                 }
-                //  Log.d("SubTypeExample", "section = " + section + ", children = " + childrenSize + ", grandChildren = " + grandChildrenSize);
                 return childrenSize + grandChildrenSize;
+            } else {
+                /**
+                 * When the parent is no longer expanded, the children of this parent should be also in the mode of not be expanded.
+                 */
+                int k = 0;
+                if (children != null)
+                    for (Child child : children) {
+                        children.get(k).isExpanded = false;
+                        k++;
+                    }
             }
 
             return childrenSize;
@@ -260,11 +243,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         if (holder instanceof ChildViewHolder && isChild) {
             final Integer truePosition = childPositionInIndex(section, position);
-            // if (truePosition < 0) return;
             final Child child = parent.getChildren().get(truePosition);
-            // expandItem(section,child,position);
-            // final Integer truePosition = childPositionInIndex(section, position);
-            // final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
 
             childViewHolder.imgView.setVisibility(View.GONE);
@@ -277,19 +256,11 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             childViewHolder.checkView.setChecked(child.getSelected());
             childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
-            ///
             if (child.isExpanded)
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
             else
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-/*
-            if (truePosition == 0 && child.isSelected && childViewHolder.checkView.isChecked()) {
-                lastChecked = childViewHolder.checkView;
-                lastFamilyChecked = CHILD_VIEW_TYPE;
-                lastSection = section;
-                lastPosition = Integer.valueOf(truePosition);
-                lastName = child.getName().trim();
-            }*/
+
             /**
              * Checkbox OnClickListener for Child
              */
@@ -306,45 +277,8 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
-
-                                    //    child.setSelected(false);
-                                    // truePositionLastCheckedChild = (Integer) lastChecked.getTag();
-
-                                    /*
-                                    if (lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
-                                        if (data != null && lastSection < data.size() &&  data.get(lastSection).getChildren() !=null
-                                                && lastChildParentPosition < data.get(lastSection).getChildren().size() &&  data.get(lastSection).getChildren().get(lastChildParentPosition) !=null
-                                                &&  data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren() !=null
-                                                && lastPosition < data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren().size())
-                                        {
-                                            data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren().get(lastPosition).setSelected(false);
-                                        }
-//                                        Log.d("lsec", "lsec:" + lastSection + " lparentposition:" + lastChildParentPosition + " lgcpos:" + lastPosition);
-                                    } else if (lastFamilyChecked == CHILD_VIEW_TYPE) {
-//                                        parent.getChildren().get(truePositionLastCheckedChild.intValue()).setSelected(false);
-                                        // parent.getChildren().get(lastPosition).setSelected(false);
-                  //                      if (data != null && lastSection < data.size() &&  data.get(lastSection).getChildren() !=null &&  data.get(lastSection).getChildren().get(lastPosition) !=null
-                  //                              && lastPosition < data.get(lastSection).getChildren().get(lastPosition).getGrandChildren().size())
-                                        if (data != null && lastSection < data.size() && data.get(lastSection) !=null
-                                                && data.get(lastSection).getChildren().get(lastPosition) != null)
-                                        {
-                                            data.get(lastSection).getChildren().get(lastPosition).setSelected(false);
-                                        }
-                                    } else if (lastFamilyChecked == PARENT_VIEW_TYPE) {
-                                        if (data != null && lastSection < data.size())
-                                            data.get(lastSection).setSelected(false);
-                                        *//*lastChecked = childViewHolder.checkView;
-                                        lastFamilyChecked =CHILD_VIEW_TYPE;
-                                        lastSection=section;*//*
-                                    }
-                                    */
-                                    // notifyItemChanged(truePositionLastCheckedChild.intValue());
-                                    //  Log.d("lasttruepos", "lasttruepos" + truePositionLastCheckedChild.intValue());
-                                    // Log.d("truepos", "truepos" + truePosition);
-                                    // Log.d("position", "position" + position);
                                 }
-                                //    viewModel.setLastChecked(cb);
-                                //     lastChecked = childViewHolder.checkView;
+
                                 viewModel.setLastChecked(childViewHolder.checkView);
                                 lastFamilyChecked = CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(truePosition);
@@ -450,10 +384,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                     }
 
                     notifyDataSetChanged();
-                    // checkLastSelect(true);
+
                 }
             });
-            //    expandItem(section,child,position,childViewHolder);
+
         }
 
         // Locals which are part of a District Council
@@ -471,14 +405,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
             grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
 
-          /*  if (grandChildIndex == 0 && grandChild.isSelected && grandChildViewHolder.checkView.isChecked()) {
-                lastChecked = grandChildViewHolder.checkView;
-                lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
-                lastSection = section;
-                lastPosition = Integer.valueOf(grandChildIndex);
-                lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
-                lastName = grandChild.getName().trim();
-            }*/
             grandChildViewHolder.checkView.setOnClickListener(null);
             grandChildViewHolder.checkView.setOnClickListener(
                     new View.OnClickListener() {
@@ -488,33 +414,12 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                             CheckBox cb = (CheckBox) view;
 
                             if (cb.isChecked()) {
-                                // Log.d("grandc", "grandc:" + grandChildIndex + " position:" + position + " parentindex:" + grandChildParentIndex);
+
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);
-                                    // truePositionLastCheckedChild=(Integer) lastChecked.getTag();
                                     checkLastSelect(false);
-                                    /*if (lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
-                                        if (data != null && lastSection < data.size() &&  data.get(lastSection).getChildren() !=null
-                                                && lastChildParentPosition < data.get(lastSection).getChildren().size() &&  data.get(lastSection).getChildren().get(lastChildParentPosition) !=null
-                                                &&  data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren() !=null
-                                                && lastPosition < data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren().size())
-                                        {
-                                            data.get(lastSection).getChildren().get(lastChildParentPosition).getGrandChildren().get(lastPosition).setSelected(false);
-                                        }
-                                        //    Log.d("lsec", "lsec:" + lastSection + " lparentposition:" + lastChildParentPosition + " lgcpos:" + lastPosition);
-                                    } else if (lastFamilyChecked == CHILD_VIEW_TYPE) {
-                                        if (data != null && lastSection < data.size() &&  data.get(lastSection).getChildren() !=null &&  data.get(lastSection).getChildren().get(lastPosition) !=null
-                                                && lastPosition < data.get(lastSection).getChildren().get(lastPosition).getGrandChildren().size())
-                                        {
-                                            data.get(lastSection).getChildren().get(lastPosition).setSelected(false);
-                                        }
-                                    } else if (lastFamilyChecked == PARENT_VIEW_TYPE) {
-                                        if (data != null && lastSection < data.size())
-                                            data.get(lastSection).setSelected(false);
-                                    }*/
                                 }
-                                // lastChecked = cb;
-                                // lastChecked = grandChildViewHolder.checkView;
+
                                 viewModel.setLastChecked(grandChildViewHolder.checkView);
                                 lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(grandChildIndex);
@@ -537,63 +442,23 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
             );
 
-        } /*else {
-            final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
-            parentViewHolder.imgView.setVisibility(View.VISIBLE);
-            if (parent.isExpanded)
-                parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
-            else
-                parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-            if (viewModel.hasNoChild.trim().equals(parentViewHolder.checkView.getText().toString().trim()))
-            {
-                //parentViewHolder.checkView.setVisibility(View.GONE);
-                parentViewHolder.imgView.setVisibility(View.GONE);
-                Log.d("parent","parent:"+parentViewHolder.checkView.getText().toString());
-            }
-        }*/
-        // expandItem(section,child,position);
+        }
     }
-  //  boolean runonce;
+
     /**
      * Top-level categories (regions of the country such as Eastern)
      */
-  //   ParentViewHolder parentViewHolder;
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
         if (holder instanceof ParentViewHolder) {
-             final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
-          //  parentViewHolder = (ParentViewHolder) holder;
+            final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
             // Parent denoted by section number
 
             final Parent parent = data.get(section);
             if (parent == null) return;
-           // parentViewHolder.imgView.setVisibility(View.GONE);
-
-           /*     parentViewHolder.imgView.setVisibility(View.VISIBLE);
-                if (parent.isExpanded)
-                    parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
-                else
-                    parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-            if (viewModel.hasNoChild.trim().equals(parentViewHolder.checkView.getText().toString().trim()))
-            {
-                //parentViewHolder.checkView.setVisibility(View.GONE);
-                parentViewHolder.imgView.setVisibility(View.GONE);
-                Log.d("parent","parent:"+parentViewHolder.checkView.getText().toString());
-            }*/
-
-
-           /* if (!runonce)
-            { runonce=true;
-                 if (noChildren == -1) noChildren=section;
-                if (noChildren == section) parentViewHolder.imgView.setVisibility(View.GONE);
-            }*/
             parentViewHolder.checkView.setText(parent.getName());
-        //    if (viewModel.hasNoChild.trim().equals(parentViewHolder.checkView.getText().toString().trim()))
-          if (parent.getChildren() == null)
-            {
+            if (parent.getChildren() == null) {
                 parentViewHolder.imgView.setImageResource(NO_IMAGE);
-               // parentViewHolder.imgView.setVisibility(View.GONE);
-                Log.d("parent","parent:"+parentViewHolder.checkView.getText().toString());
             } else {
                 if (parent.isExpanded)
                     parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
@@ -606,7 +471,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 @Override
                 public void onClick(View view) {
                     customSearch = false;
-                    // parent.isExpanded = !parent.isExpanded;
 
                     if (parent.getChildren() != null) {
                         if (expandedParents.contains(section)) {
@@ -617,27 +481,12 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                             parent.isExpanded = true;
                             expandedParents.add(section);
                         }
-                    } else {
-                       // parent.setHasNoChild(parent.getName());
                     }
-               /* if (parent.getChildren() != null ) {
-                    if (parent.isExpanded)
-                        parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
-                    else
-                        parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-                } else  {
-                        parentViewHolder.imgView.setVisibility(View.GONE);
-                    }*/
                     notifyDataSetChanged();
-                    // checkLastSelect(true);
                 }
             });
 
-
-            ////***
             parentViewHolder.checkView.setChecked(parent.getSelected());
-            // if (parent.getChildren() == null || parent.getChildren().isEmpty())
-            //     parentViewHolder.imgView.setVisibility(View.GONE);
             parentViewHolder.checkView.setOnClickListener(null);
             parentViewHolder.checkView.setOnClickListener(
                     new View.OnClickListener() {
@@ -650,8 +499,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                                     viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
-                                //lastChecked = cb;
-                                //lastChecked = parentViewHolder.checkView;
+
                                 viewModel.setLastChecked(parentViewHolder.checkView);
                                 lastFamilyChecked = PARENT_VIEW_TYPE;
                                 lastSection = section;
@@ -848,7 +696,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     }
 
     public static class Parent {
-       // private String hasNoChild;
         private int id;
         private String name;
         private String abbreviation;
@@ -856,14 +703,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private List<Child> children;
         private boolean isExpanded;
         private boolean isSelected = false;
-
-      /*  public String getHasNoChild() {
-            return hasNoChild;
-        }
-
-        public void setHasNoChild(String hasNoChild) {
-            this.hasNoChild = hasNoChild;
-        }*/
 
         public boolean isExpanded() {
             return isExpanded;
