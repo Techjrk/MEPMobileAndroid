@@ -4,4 +4,3 @@
     android:layout_height="3dp"
     android:background="@color/lecetDeepBlue"
     xmlns:android="http://schemas.android.com/apk/res/android"/>
-    <!--TODO: Alert Jason/Dushawn of new color-->

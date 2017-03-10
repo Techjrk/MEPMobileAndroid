@@ -7,111 +7,118 @@
     </data>
     <!--TODO: Add Elevation-->
     <LinearLayout
-        android:elevation="6dp"
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_holo_light_frame"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:onClick="@{viewModel::onClick}">
-        <!--TODO: add Note onCLick Method-->
+        android:layout_marginBottom="5dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:textSize="18sp"
-                android:maxLines="1"
-                android:textColor="@color/pureBlack"
-                android:gravity="bottom"
-                android:text="@{viewmodel.NoteTitle}"
-                bind:typeface="@{`Lato-Regular.ttf`}"
-                tools:text="Note Title Placeholder"/>
-            <!--TODO: Get Title of Note Reference-->
-
-            <ImageView
-                android:scaleType="fitStart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:visibility="@{viewModel::canEditNote(position)}"
-                android:padding="3dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ic_pencil_blue"/>
-            <!--TODO: get actual penice image from presentation-->
-            <!--TODO: Make logic for visibility-->
-
-        </LinearLayout>
-
-        <include layout="@layout/rule_horiz_blue"/>
-
-        <TextView
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="14dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="1dp"
-            android:textColor="@color/pureBlack"
-            android:textSize="16dp"
-            android:text="@{viewmodel.Notes}"
-            android:maxLines="8"
-            android:ellipsize="end"
-            bind:typeface="@{`Lato-Regular.ttf`}"
-            tools:text="@string/testing_purposes_lorem_ipsum"/>
-        <!--TODO:get actual reference for data from VM -->
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@color/pureWhite"
+            android:onClick="@{viewModel::onClick}">
+            <!--TODO: add Note onCLick Method-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_marginBottom="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:scaleType="fitStart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/ic_image_placeholder"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:textSize="18sp"
+                    android:maxLines="1"
+                    android:textColor="@color/pureBlack"
+                    android:gravity="bottom"
+                    android:text="@{viewmodel.noteTitle}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="Note Title Placeholder"/>
+                <!--TODO: Get Title of Note Reference-->
+
+                <ImageView
+                    android:scaleType="fitCenter"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="@{viewModel::canEditNote(position)}"
+                    android:padding="5dp"
+                    android:adjustViewBounds="false"
+                    android:src="@drawable/ic_pencil_blue"/>
+                <!--TODO: get actual penice image from presentation-->
+                <!--TODO: Make logic for visibility-->
+
+            </LinearLayout>
+
+            <include layout="@layout/rule_horiz_blue"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:maxLines="1"
-                android:textSize="14sp"
-                android:textColor="@color/lecetMediumBlue"
-                android:gravity="center_vertical"
-                android:layout_gravity="center"
-                android:text="@{viewmodel.CreatorName}"
-                bind:typeface="@{`Lato-Regular.ttf`}"
-                android:id="@+id/textView"
-                tools:text="Erin Bernardin"/>
-            <!--TODO: refer actual Note Creator name -->
-
-            <TextView
-                android:layout_marginRight="10dp"
-                android:layout_width="0dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="3"
-                android:maxLines="1"
-                android:textSize="12sp"
-                android:textColor="@color/lecetLightGray"
-                android:gravity="right"
-                android:text="@{viewModel::TimeDifference()}"
+                android:lineSpacingExtra="1dp"
+                android:textColor="@color/pureBlack"
+                android:textSize="16dp"
+                android:text="@{viewmodel.Notes}"
+                android:maxLines="8"
+                android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
-                tools:text="30 minutes ago"/>
-            <!--TODO: set equation for getting the time difference-->
+                tools:text="@string/testing_purposes_lorem_ipsum"/>
+            <!--TODO:get actual reference for data from VM -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:scaleType="fitStart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/ic_image_placeholder"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    android:textColor="@color/lecetMediumBlue"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:text="@{viewmodel.CreatorName}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:id="@+id/textView"
+                    tools:text="Erin Bernardin"/>
+                <!--TODO: refer actual Note Creator name -->
+
+                <TextView
+                    android:layout_marginRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:maxLines="1"
+                    android:textSize="12sp"
+                    android:textColor="@color/lecetLightGray"
+                    android:gravity="right"
+                    android:text="@{viewModel::TimeDifference()}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="30 minutes ago"/>
+                <!--TODO: set equation for getting the time difference-->
 
 
+            </LinearLayout>
 
         </LinearLayout>
 

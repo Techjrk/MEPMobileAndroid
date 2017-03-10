@@ -5,31 +5,24 @@
     <data>
         <!--TODO: add in VM/M that data is pulled from -->
     </data>
-    <!--TODO: Add Elevation-->
     <LinearLayout
-        android:elevation="6dp"
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_holo_light_frame"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:onClick="@{viewmodel::onClickSeeMore}">
-        <!--TODO:Set onClick method-->
-
-
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
                 android:src="@{viewmodel.imageUri}"
@@ -52,81 +45,96 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_height="30dp"
-            android:textSize="16sp"
-            android:textColor="@color/pureBlack"
-            android:gravity="bottom"
-            android:text="@{viewmodel.title}"
-            android:maxLines="1"
-            bind:typeface="@{`Lato-Regular.ttf`}"
-            tools:text="Photo Title"/>
-        <!--TODO: Add actual text reference-->
-
-        <include layout="@layout/rule_horiz_blue"/>
-
-        <TextView
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="14dp"
-
-            android:textSize="16dp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="1dp"
-            android:textColor="@color/pureBlack"
-            android:text="@{viewmodel.noteText}"
-            android:maxLines="4"
-            android:ellipsize="end"
-            bind:typeface="@{`Lato-Regular.ttf`}"
-            android:id="@+id/textView2"
-            tools:text="@string/testing_purposes_lorem_ipsum"/>
-        <!--TODO: add note reference-->
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@color/pureWhite"
+            android:onClick="@{viewModel::onClick}">
+            <!--TODO:Set onClick method-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="18dp"
-            android:layout_marginBottom="10dp">
 
-            <ImageView
-                android:scaleType="fitStart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/ic_image_placeholder"/>
+
+
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:textSize="14sp"
-                android:textColor="@color/lecetMediumBlue"
-                android:gravity="center_vertical"
-                android:layout_gravity="center"
-                android:text="@{viewModel.creator}"
-                bind:typeface="@{`Lato-Regular.ttf`}"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_height="30dp"
+                android:textSize="16sp"
+                android:textColor="@color/pureBlack"
+                android:gravity="bottom"
+                android:text="@{viewmodel.title}"
                 android:maxLines="1"
-                tools:text="Erin Bernardin"/>
-            <!--TODO: getActual user reference-->
+                bind:typeface="@{`Lato-Regular.ttf`}"
+                tools:text="Photo Title"/>
+            <!--TODO: Add actual text reference-->
+
+            <include layout="@layout/rule_horiz_blue"/>
 
             <TextView
-                android:layout_marginRight="10dp"
-                android:layout_width="0dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+
+                android:textSize="16dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="3"
-                android:textSize="12sp"
-                android:textColor="@color/lecetLightGray"
-                android:gravity="right"
-                android:text="@{viewmodel::timeDiference()}"
+                android:lineSpacingExtra="1dp"
+                android:textColor="@color/pureBlack"
+                android:text="@{viewmodel.noteText}"
+                android:maxLines="4"
+                android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
-                android:maxLines="1"
-                tools:text="1 day ago"/>
-            <!--TODO: set equation to get time-->
+                android:id="@+id/textView2"
+                tools:text="@string/testing_purposes_lorem_ipsum"/>
+            <!--TODO: add note reference-->
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:scaleType="fitStart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/ic_image_placeholder"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:textSize="14sp"
+                    android:textColor="@color/lecetMediumBlue"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:text="@{viewModel.creator}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:maxLines="1"
+                    tools:text="Erin Bernardin"/>
+                <!--TODO: getActual user reference-->
+
+                <TextView
+                    android:layout_marginRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:textSize="12sp"
+                    android:textColor="@color/lecetLightGray"
+                    android:gravity="right"
+                    android:text="@{viewmodel::timeDiference()}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:maxLines="1"
+                    tools:text="1 day ago"/>
+                <!--TODO: set equation to get time-->
+
+            </LinearLayout>
 
         </LinearLayout>
 
