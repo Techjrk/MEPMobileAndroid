@@ -42,6 +42,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     private static final String TAG = "ProjectDetailViewModel";
 
     private final long projectID;
+    private double bidAmount;
     private final String mapsApiKey;
 
     private final WeakReference<ProjectDetailActivity> activityWeakReference;
@@ -54,10 +55,11 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     // Retrofit calls
     private Call<Project> projectDetailCall;
 
-    public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, String mapsApiKey, ProjectDomain projectDomain) {
+    public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, double bidAmount, String mapsApiKey, ProjectDomain projectDomain) {
 
         this.activityWeakReference = new WeakReference<>(activity);
         this.projectID = projectID;
+        this.bidAmount = bidAmount;
         this.mapsApiKey = mapsApiKey;
         this.projectDomain = projectDomain;
     }
@@ -181,7 +183,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), "$ 0"));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", this.bidAmount)));
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance()), projectID, activity.getString(R.string.jurisdiction)));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
 

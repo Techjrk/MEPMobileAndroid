@@ -19,6 +19,7 @@ import static com.lecet.app.R.string.google_api_key;
 public class ProjectDetailActivity extends LecetBaseActivity {
 
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
+    public static final String PROJECT_VALUE_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.value.extra";
 
     private ProjectDetailViewModel viewModel;
 
@@ -28,10 +29,11 @@ public class ProjectDetailActivity extends LecetBaseActivity {
 
         ActivityProjectDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_detail);
 
-        long projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
+        long projectId   = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
+        double bidAmount = getIntent().getDoubleExtra(PROJECT_VALUE_EXTRA, -1);
 
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-        viewModel = new ProjectDetailViewModel(this, projectId, getResources().getString(google_api_key), projectDomain);
+        viewModel = new ProjectDetailViewModel(this, projectId, bidAmount, getResources().getString(google_api_key), projectDomain);
         viewModel.getProjectDetail();
 
         binding.setViewModel(viewModel);
