@@ -350,8 +350,8 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         for (Integer integer : toBeRemoved) {
                             expanded.remove(integer);
                         }
-                        expanded.remove(position);
-                        //expanded.remove(Integer.valueOf(position));
+                       // expanded.remove(position);
+                        expanded.remove(Integer.valueOf(position));
                         expanded.putAll(toBeAdded);
 
                     } else {
@@ -479,10 +479,11 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                     if (parent.getChildren() != null) {
                         if (expandedParents.contains(section)) {
                             parent.isExpanded = false;
-                            expandedParents.remove(section);
-                            expandedChildren.remove(section);
-            /*              expandedParents.remove(Integer.valueOf(section));
-                            expandedChildren.remove(Integer.valueOf(section)); */
+
+                          //  expandedParents.remove(section);
+                          //  expandedChildren.remove(section);
+                            expandedParents.remove(Integer.valueOf(section));
+                            expandedChildren.remove(Integer.valueOf(section));
                         } else {
                             parent.isExpanded = true;
                             expandedParents.add(section);
