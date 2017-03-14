@@ -327,15 +327,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         if (valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
         }
-       /* if (min == null || max == null) {
-            valueStr = "";
-        }*/
 
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
             viewModel.setCvalueSelect(valueStr);
         } else {
             viewModel.setPersistedValueMin(min);
-           // viewModel.setPersistedValueMax(max);
             if (!max.equals("MAX"))  viewModel.setPersistedValueMax(max); else {
                 viewModel.setPersistedValueMax("");
                 valueStr = "$" + min + " - " + max;
