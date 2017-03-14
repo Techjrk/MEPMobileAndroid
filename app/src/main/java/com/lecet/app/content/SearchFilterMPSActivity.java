@@ -314,21 +314,32 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processValue(String[] arr) {
         String min = arr[0];                          // int for query
         String max = arr[1];                          // int for query
+        if (max.trim().equals(String.valueOf(viewModel.VALUE_MAX))) {
+            max = "MAX";
+        }
+
         String valueStr = "$" + min + " - $" + max;   // text for display
         String projectValue = "";
+        if ((min == null || min.equals(""))&& (max == null|| max.equals(""))) {
+            valueStr = "";
+        }
 
         if (valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
         }
-        if (min == null || max == null) {
+       /* if (min == null || max == null) {
             valueStr = "";
-        }
+        }*/
 
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
             viewModel.setCvalueSelect(valueStr);
         } else {
             viewModel.setPersistedValueMin(min);
-            viewModel.setPersistedValueMax(max);
+           // viewModel.setPersistedValueMax(max);
+            if (!max.equals("MAX"))  viewModel.setPersistedValueMax(max); else {
+                viewModel.setPersistedValueMax("");
+                valueStr = "$" + min + " - " + max;
+            }
             viewModel.setValue_select(valueStr);
         }
 
