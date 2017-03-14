@@ -38,7 +38,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final int OWNER_TYPE = 8;
     public static final int WORK_TYPE = 9;
 
-
+    public static int VALUE_MAX=999999999;
     private static final String TAG = "SearchFilterMPFVM";
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
