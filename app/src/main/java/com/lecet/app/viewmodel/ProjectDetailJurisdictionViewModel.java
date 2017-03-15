@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.lecet.app.data.models.DistrictCouncil;
 import com.lecet.app.data.models.Jurisdiction;
+import com.lecet.app.data.models.Region;
 import com.lecet.app.domain.ProjectDomain;
 
 import java.util.List;
@@ -48,16 +49,30 @@ public class ProjectDetailJurisdictionViewModel extends ProjDetailItemViewModel 
                         Jurisdiction jurisdiction = jurisdictions.get(i);
                         if (jurisdiction != null && jurisdiction.getDistrictCouncil() != null) {
 
+                            // local
+                            String jName = jurisdiction.getName().trim();
+                            if(jName != null && !jName.isEmpty()) {
+                                jurString = jurString + "Local: " + jName + "\n";
+                            }
+
+                            // council
                             DistrictCouncil districtCouncil = jurisdiction.getDistrictCouncil();
-                            String abbreviation = districtCouncil.getAbbreviation();
+                            String dcName = districtCouncil.getName().trim();
+                            if(dcName != null && !dcName.isEmpty()) {
+                                jurString = jurString + "District: " + dcName + "\n";
+                            }
 
-                            if (abbreviation != null && abbreviation.length() > 0) {
-
-                                jurString = jurString + " " + abbreviation;
+                            // region
+                            List<Region> regions = jurisdiction.getRegions();
+                            for(Region region : regions) {
+                                String rName = region.getName();
+                                if (rName != null && !rName.isEmpty()) {
+                                    jurString = jurString + "Region: " + rName + "\n";
+                                }
                             }
 
                             if (i != (jurisdictions.size() - 1)) {
-                                jurString = jurString + ", ";
+                                jurString = jurString + "\n";
                             }
                         }
 

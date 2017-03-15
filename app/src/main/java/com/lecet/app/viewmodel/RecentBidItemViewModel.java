@@ -168,6 +168,7 @@ public class RecentBidItemViewModel {
 
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, bid.getProjectId());
+        intent.putExtra(ProjectDetailActivity.PROJECT_VALUE_EXTRA, bid.getAmount());
         activity.startActivity(intent);
     }
 }
