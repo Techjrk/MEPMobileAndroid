@@ -174,12 +174,13 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.county), project.getCounty()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_id), project.getDodgeNumber()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.address), project.getFullAddress()));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_type), project.getProjectTypes()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_types), project.getProjectTypes()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage), project.getProjectStage().getName()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage_normal), project.getProjectStage().getName()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.start_date), project.getTargetStartDate() != null ? DateUtility.formatDateForDisplay(project.getTargetStartDate()) : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), "$ 0"));
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance()), projectID, activity.getString(R.string.jurisdiction)));
