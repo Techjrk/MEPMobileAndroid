@@ -39,7 +39,7 @@ public class CompanyContactsAdapter extends RecyclerView.Adapter<CompanyContacts
     @Override
     public void onBindViewHolder(CompanyContactsViewHolder holder, int position) {
 
-        CompanyDetailContactViewModel viewModel = new CompanyDetailContactViewModel(appCompatActivity, data.get(position));
+        CompanyDetailContactViewModel viewModel = new CompanyDetailContactViewModel(appCompatActivity, null, data.get(position));   //TODO - check null
         holder.getBinding().setViewModel(viewModel);
 
     }
