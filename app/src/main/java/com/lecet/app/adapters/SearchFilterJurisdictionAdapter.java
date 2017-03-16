@@ -40,7 +40,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
     private static final int NO_TYPE = -1;
     public static boolean customSearch;
-    // public static CheckBox lastChecked;
     private static int lastFamilyChecked = NO_TYPE;
     private static int lastSection; //keep track of last section used by the selected item
     private static int lastPosition; //keep track of last position used by the selected item
@@ -53,7 +52,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    //private List<String> noChildren;
     public SearchFilterJurisdictionAdapter(List<Parent> data, SearchFilterJurisdictionViewModel viewModel) {
 
         this.data = data;
@@ -63,7 +61,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         // Expanded grandChildrens, we need to keep track of section and then subtype position
         expandedChildren = new HashMap<>();
         checkLastSelect(true);
-        // notifyDataSetChanged();
     }
 
     public void clearLast() {
@@ -129,7 +126,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         lastSection = section;
                     } else
                     if (cname.getSelected()) cname.setSelected(false);
-                   // if (cname.getSelected() == true) cname.setSelected(false);
                 }
             }
         }
@@ -148,7 +144,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         lastSection = section;
                     } else
                     if (pname.getSelected()) pname.setSelected(false);
-//                    if (pname.getSelected() == true) pname.setSelected(false);
                 }
 
             }
@@ -211,7 +206,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
               //  if (children != null)
                     for (int k = 0; k<children.size();k++ ) {
-//                        for (Child child : children) {
                         children.get(k).isExpanded = false;
                     }
             }
@@ -259,7 +253,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
             childViewHolder.checkView.setChecked(child.getSelected());
             childViewHolder.checkView.setTag(truePosition);
-//            childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
             if (child.isExpanded)
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
@@ -276,8 +269,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         public void onClick(View view) {
                             customSearch = false;
                             cb = (CheckBox) view;
-
-                            // int clickedPos = ((Integer) cb.getTag()).intValue();
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);
@@ -286,7 +277,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                                 viewModel.setLastChecked(childViewHolder.checkView);
                                 lastFamilyChecked = CHILD_VIEW_TYPE;
-                                lastPosition = truePosition; //Integer.valueOf(truePosition);
+                                lastPosition = Integer.valueOf(truePosition);
                                 lastSection = section;
                                 lastName = cb.getText().toString().trim();
                             } else {
@@ -313,7 +304,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 @Override
                 public void onClick(View view) {
                     customSearch = false;
-                    // child.isExpanded = !child.isExpanded;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -479,9 +469,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                     if (parent.getChildren() != null) {
                         if (expandedParents.contains(section)) {
                             parent.isExpanded = false;
-
-                          //  expandedParents.remove(section);
-                          //  expandedChildren.remove(section);
                             expandedParents.remove(Integer.valueOf(section));
                             expandedChildren.remove(Integer.valueOf(section));
                         } else {
@@ -541,18 +528,12 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_sectioned_adapter_child, parent, false);
             return new ChildViewHolder(v);
- /*           ChildViewHolder vh = new ChildViewHolder(v);
-            return vh;*/
 
         } else if (viewType == GRAND_CHILD_VIEW_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_sectioned_adapter_grandchild, parent, false);
             return new GrandChildTypeViewHolder(v);
-/*
-            GrandChildTypeViewHolder vh = new GrandChildTypeViewHolder(v);
-            return vh;
-*/
 
         } else {
 
@@ -560,10 +541,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_sectioned_adapter_parent, parent, false);
             return new ParentViewHolder(v);
-/*
-            ParentViewHolder vh = new ParentViewHolder(v);
-            return vh;
-*/
         }
     }
 
@@ -656,7 +633,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         return position;
     }
 
-    //***
     private Integer grandChildParentIndex(Integer section, Integer adapterPosition) {
 
         if (expandedChildren.get(section).floorKey(adapterPosition) == null)
@@ -672,8 +648,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         return adapterPosition - parentPosition - 1;
     }
 
-
-    //***
 private  class ParentViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkView;
         ImageView imgView;
