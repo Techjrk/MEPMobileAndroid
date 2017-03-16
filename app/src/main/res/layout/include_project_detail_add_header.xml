@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <data>
-        <!--Add Some Variables here from the VM-->
-    </data>
+    >
 
     <!--TODO: Add Elevation-->
     <LinearLayout
@@ -31,15 +28,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginRight="1dp"
+                    android:layout_marginEnd="1dp"
                     android:gravity="center"
                     android:text="@string/add_note"
-                    android:button="null"
+                    android:button="@null"
                     android:textColor="@color/lecetNavyBlue"
                     android:textSize="14sp"
                     android:background="@drawable/share_radio_background"
-                    bind:typeface="@{`Lato-Regular.ttf`}"
-                    android:onClick="@{viewmode.addNoteButtonPressed}"/>
+                    bind:typeface="@{`Lato-Regular.ttf`}"/>
                 <!--TODO: set onClick for the addNote button-->
 
                 <RadioButton
@@ -49,13 +45,12 @@
                     android:layout_weight="1"
                     android:layout_marginLeft="1dp"
                     android:gravity="center"
-                    android:button="null"
+                    android:button="@null"
                     android:text="@string/add_image"
                     android:textColor="@color/lecetNavyBlue"
                     android:textSize="14sp"
                     android:background="@drawable/share_radio_background"
-                    bind:typeface="@{`Lato-Regular.ttf`}"
-                    android:onClick="@{viewModel::addImageButtonPressed}"/>
+                    bind:typeface="@{`Lato-Regular.ttf`}"/>
                     <!--TODO: set reference for onCLick-->
 
             </RadioGroup>

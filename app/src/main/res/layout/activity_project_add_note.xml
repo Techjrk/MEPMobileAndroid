@@ -31,7 +31,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onCancelButtonClick}"
                     android:text="@string/cancel"
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
@@ -54,7 +53,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onApplyButtonClick}"
                     android:text="@string/add"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
@@ -102,7 +100,6 @@
                         android:textColorHint="@color/lecetTextLightGray"
                         android:background="@drawable/shape_rect_solid_border_1"
                         android:padding="12dp"
-                        android:text="@={viewModel.title}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                     <!--TODO: Add Setter for post title entries-->
 
@@ -135,7 +132,6 @@
                         android:hint="@string/post_body"
                         android:textColorHint="@color/lecetTextLightGray"
                         android:gravity="start"
-                        android:text="@={viewModel.postBody}"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                     <!--TODO: Add Setter for post body binding-->
 

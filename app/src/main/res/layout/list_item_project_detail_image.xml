@@ -25,9 +25,10 @@
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
-                android:src="@{viewmodel.imageUri}"
+                android:src="@drawable/sample_construction_site"
                 android:id="@+id/imageView"
-                tools:src="@drawable/sample_construction_site"/><!--TODO: add actual image reference -->
+                tools:src="@drawable/sample_construction_site"/>
+            <!--TODO: add actual image reference -->
             <!--TODO: Set Method path for getting images-->
 
             <ImageView
@@ -37,7 +38,6 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:visibility="@{viewmodel.canEdit(pos)}"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_pencil_white"/>
             <!--TODO: get actual pencil image-->
@@ -51,8 +51,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:background="@color/pureWhite"
-            android:onClick="@{viewModel::onClick}">
+            android:background="@color/pureWhite">
             <!--TODO:Set onClick method-->
 
 
@@ -67,7 +66,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/pureBlack"
                 android:gravity="bottom"
-                android:text="@{viewmodel.title}"
+                android:text="Photo Title"
                 android:maxLines="1"
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 tools:text="Photo Title"/>
@@ -84,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1dp"
                 android:textColor="@color/pureBlack"
-                android:text="@{viewmodel.noteText}"
+                android:text="@string/testing_purposes_lorem_ipsum"
                 android:maxLines="4"
                 android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
@@ -113,7 +112,7 @@
                     android:textColor="@color/lecetMediumBlue"
                     android:gravity="center_vertical"
                     android:layout_gravity="center"
-                    android:text="@{viewModel.creator}"
+                    android:text="Erin Bernardin"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
                     tools:text="Erin Bernardin"/>
@@ -127,8 +126,8 @@
                     android:layout_weight="3"
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
-                    android:gravity="right"
-                    android:text="@{viewmodel::timeDiference()}"
+                    android:gravity="end"
+                    android:text="1 day ago"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
                     tools:text="1 day ago"/>
