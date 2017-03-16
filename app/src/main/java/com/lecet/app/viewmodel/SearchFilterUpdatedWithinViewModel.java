@@ -18,10 +18,9 @@ import com.lecet.app.BR;
 public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
     private AppCompatActivity activity;
     public static final String BUNDLE_KEY_DISPLAY_STR = "com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel.display.displayText.extra";
-    public static final String BUNDLE_KEY_DAYS_INT    = "com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel.display.daysInt.extra";
+    public static final String BUNDLE_KEY_DAYS_INT = "com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel.display.daysInt.extra";
     private String displayStr = "Any";
     private String daysInt = "0";
-   // private String[] time = {"Any", "0"};
     private Bundle bundle;
 
     /**
@@ -34,7 +33,6 @@ public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
 
     public void onApplyButtonClick(View view) {
         Intent intent = activity.getIntent();
-//        intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, time);
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         activity.setResult(Activity.RESULT_OK, intent);
         activity.finish();
@@ -42,22 +40,18 @@ public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
 
     public void onCancelButtonClick(View view) {
         activity.setResult(Activity.RESULT_CANCELED);
-        //time[0]="Any"; time[1]="0";   //reset the selection
         activity.finish();
     }
 
     public void onSelected(View view) {
         String displayStr = ((RadioButton) view).getText().toString();
         String daysInt = (String) view.getTag();
-        setUpdatedWithinData(displayStr,daysInt);
-        //time[0] = ((RadioButton) view).getText().toString();
-        //time[1] = (String) view.getTag();
+        setUpdatedWithinData(displayStr, daysInt);
     }
 
     public void setUpdatedWithinData(String displayStr, String daysInt) {
         setDisplayStr(displayStr);
         setDaysInt(daysInt);
-
         // overwrite the Bundle instance with each selection since Bidding Within only supports single-selection
         bundle = new Bundle();
         setBundleData(BUNDLE_KEY_DISPLAY_STR, this.displayStr);
@@ -86,14 +80,4 @@ public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
         this.daysInt = daysInt;
         notifyPropertyChanged(BR.daysInt);
     }
-  /*  @Bindable
-    public String[] getTime() {
-        return time;
-    }
-
-    public void setTime(String[] time) {
-        this.time = time;
-    }*/
-
-
 }
