@@ -13,6 +13,7 @@ import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -453,6 +454,15 @@ public class ProjectDomain {
         result.addChangeListener(listener);
 
         return result;
+    }
+
+    public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
+
+        RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("amount", Sort.DESCENDING);
+
+        return notesResult;
     }
 
     public RealmResults<Project> fetchHiddenProjects() {

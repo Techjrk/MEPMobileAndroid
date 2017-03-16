@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -60,6 +61,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         this.projectID = projectID;
         this.mapsApiKey = mapsApiKey;
         this.projectDomain = projectDomain;
+
+        Log.d(TAG, "ProjectDetailViewModel: projectId: " + projectID);
     }
 
     /**

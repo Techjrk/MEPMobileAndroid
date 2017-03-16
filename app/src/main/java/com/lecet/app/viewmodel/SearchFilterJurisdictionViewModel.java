@@ -3,27 +3,28 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CheckBox;
+
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
-import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterJurisdictionNoDistrictCouncil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
-import android.databinding.Bindable;
-import android.util.Log;
-import android.widget.CheckBox;
 
 /**
  * View Model for Search Filter Activity: Jurisdiction
@@ -32,7 +33,7 @@ import android.widget.CheckBox;
 public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private boolean foundParent, foundChild, foundGrandChild, hasChild, hasGrandChild;
     private ArrayList<Boolean> containGrandChild = new ArrayList<Boolean>();
-    private  CheckBox lastChecked;
+    private CheckBox lastChecked;
     private static final String TAG = "SearchFilterMPFJurisVM";
     public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.viewType";
     public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.id";
@@ -46,6 +47,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private String query;
     private List<SearchFilterJurisdictionAdapter.Parent> data;
     private SearchFilterJurisdictionAdapter adapter;
+
     /**
      * Constructor
      */
@@ -76,9 +78,11 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             }
         });
     }
-   public void clearLast(){
-       adapter.clearLast();
-   }
+
+    public void clearLast() {
+        adapter.clearLast();
+    }
+
     /**
      * Apply the filter and return to the main Search activity
      */
@@ -90,7 +94,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             activity.setResult(Activity.RESULT_OK, intent);
         } else {
             activity.setResult(Activity.RESULT_CANCELED);
-           // Log.d("nodata","nodata");
         }
 
         activity.finish();
@@ -138,15 +141,15 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         hasGrandChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterJurisdictionAdapter.customSearch=true;
+            SearchFilterJurisdictionAdapter.customSearch = true;
         } else {
-            SearchFilterJurisdictionAdapter.customSearch=false;
-          if (adapter !=null)  adapter.notifyDataSetChanged();
+            SearchFilterJurisdictionAdapter.customSearch = false;
+            if (adapter != null) adapter.notifyDataSetChanged();
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
-        if (data !=null) data.clear();
+        if (data != null) data.clear();
         else
             data = new ArrayList<>();
 
@@ -180,7 +183,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
 
-       adapter = new SearchFilterJurisdictionAdapter(data, this);
+        adapter = new SearchFilterJurisdictionAdapter(data, this);
 
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -265,7 +268,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         this.query = query;
         searchItem(query);
         notifyPropertyChanged(BR.query);
-       // adapter.notifyDataSetChanged();
 
     }
 }

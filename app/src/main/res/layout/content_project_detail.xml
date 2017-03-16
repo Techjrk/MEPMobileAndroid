@@ -8,6 +8,26 @@
               app:layout_behavior="@string/appbar_scrolling_view_behavior"
               tools:context="com.lecet.app.content.ProjectDetailActivity">
 
+    <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout_project_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:tabTextColor="@color/pureWhite"
+            app:tabMode="fixed"
+            app:tabIndicatorHeight="3dp"
+            app:tabGravity="center"
+            app:tabSelectedTextColor="@color/pureWhite"
+            app:tabIndicatorColor="@color/lecetMediumOrange">
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_project_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </android.support.v4.view.ViewPager>
+
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
