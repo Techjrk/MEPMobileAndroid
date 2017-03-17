@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.Bitmap;
+import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -177,7 +180,8 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
                 trackingLists = getUserTrackingListsExcludingCurrentList(currentTrackingList);
             }
 
-            mtmAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, trackingLists);
+            mtmAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.select_tracking_list), this, trackingLists);
+//            mtmAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, trackingLists);
 
             Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -187,10 +191,17 @@ public abstract class ShareToolbarViewModel<T extends RealmObject & TrackedObjec
             anchor.getLocationOnScreen(coordinates);
             int offset = (int) (coordinates[0]
                     - (appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space) / 2.0));
-            mtmPopupWindow.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.more_menu_upsidedown_background));
+
+            Drawable d1 = ContextCompat.getDrawable(appCompatActivity, R.drawable.overflow_menu_background);
+           // d1.setBounds(-30,0,40,40);
+            mtmPopupWindow.setBackgroundDrawable(d1);
+//            mtmPopupWindow.setBackgroundDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.more_menu_upsidedown_background));
             mtmPopupWindow.setAnchorView(anchor);
             mtmPopupWindow.setModal(true);
+//            mtmPopupWindow.setWidth(appCompatActivity.getResources().getDimensionPixelSize(R.dimen.mtm_sort_menu_space));
             mtmPopupWindow.setWidth(width);
+
+//            mtmPopupWindow.setHorizontalOffset(-8000);
             mtmPopupWindow.setHorizontalOffset(-offset);
             mtmPopupWindow.setAdapter(mtmAdapter);
             mtmPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
