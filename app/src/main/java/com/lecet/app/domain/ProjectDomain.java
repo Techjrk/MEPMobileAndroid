@@ -314,7 +314,8 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+//        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+            if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -327,7 +328,8 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+//        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+            } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -372,7 +374,8 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+//        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+            if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
@@ -385,7 +388,8 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
 
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+//        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+            } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
