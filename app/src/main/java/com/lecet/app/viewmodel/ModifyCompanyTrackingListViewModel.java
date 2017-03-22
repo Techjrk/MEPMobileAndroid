@@ -109,7 +109,7 @@ public class ModifyCompanyTrackingListViewModel extends ModifyTrackingListViewMo
     public void handleRemoveItemsClicked(final List<Company> selectedItems) {
 
         String listName = getTrackingList().getName();
-        String message = String.format(getAppCompatActivity().getString(R.string.move_selected_item_from_list_message), getAppCompatActivity().getString(R.string.companies), listName);
+        String message = String.format(getAppCompatActivity().getString(R.string.remove_selected_item_from_list_message), getAppCompatActivity().getString(R.string.companies), listName);
         showConfirmationDialog(message, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
