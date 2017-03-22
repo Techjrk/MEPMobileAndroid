@@ -219,7 +219,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         if (lastMarkerTapped != null) {
 
             Project project = (Project) lastMarkerTapped.getTag();
-
+            if (project == null) return false;
             BitmapDescriptor icon;
 
             if (project.getProjectStage() == null) {
@@ -229,8 +229,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             }
 
             lastMarkerTapped.setIcon(icon);
-        }
-
+        } else return false;
+        if (marker == null) return false;
         lastMarkerTapped = marker;
         lastMarkerTapped.setIcon(yellowMarker);
 
@@ -250,7 +250,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onInfoWindowClick(Marker marker) {
         Project project = (Project) marker.getTag();
-
+        if (project == null) return;
         Activity context = getActivityWeakReference().get();
 
         if (context != null) {
@@ -263,10 +263,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onInfoWindowClose(Marker marker) {
+        if (marker == null) return;
         if (lastMarkerTapped != null) {
 
             Project project = (Project) lastMarkerTapped.getTag();
-
+            if (project == null) return;
             BitmapDescriptor icon;
 
             if (project.getProjectStage() == null) {
