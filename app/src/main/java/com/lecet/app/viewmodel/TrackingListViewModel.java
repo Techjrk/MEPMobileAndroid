@@ -97,12 +97,12 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
 
             //TODO: Need better solution
             // Reinitialize adapter
-            initializeAdapter();
 
         } else {
 
             this.adapterData = adapterData;
         }
+        initializeAdapter();
     }
 
     public RecyclerView getRecyclerView() {
