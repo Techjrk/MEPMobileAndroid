@@ -2,13 +2,9 @@ package com.lecet.app.content;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DrawableUtils;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.ProjectNotesAdapter;
 import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.models.ProjectAdditionalInfo;
 import com.lecet.app.data.models.ProjectNote;
-import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.FragmentProjectNotesBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ProjectNotesViewModel;
 
-import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -41,7 +33,7 @@ public class ProjectNotesFragment extends Fragment {
 
     public static String PROJECT_ID = "com.lecet.app.content.ProjectNotesFragment.projectId";
 
-    private List<ProjectAdditionalInfo> notes;
+    private List<ProjectNote> notes;
     private FragmentProjectNotesBinding binding;
     private long projectId;
 
@@ -80,13 +72,10 @@ public class ProjectNotesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = initDataBinding(inflater, container);
-        getSomeData();
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapter = new ProjectNotesAdapter(notes);
-        recyclerView.setAdapter(adapter);
 
         //TODO: Create A ProjectNotesAdapter, The Adapter will take a ProjectNotes or ProjectPhotos objects.
         // Have the two objects implement a custom interface "ProjectAdditionalInfo"
@@ -104,18 +93,5 @@ public class ProjectNotesFragment extends Fragment {
         View view = binding.getRoot();
         //binding.getViewModel().initiNoteView();
         return view;
-    }
-
-    private void getSomeData(){
-        notes.add(new ProjectNote(1L,"Random House",
-                "I Really Like this Project, ITS SO AWESOME!", false, 35L, 32L, 68L,
-                new Date(291156831000L),new Date(291156831000L)));
-        notes.add(new ProjectNote(2L, "I Hate Construction",
-                "It takes forever, enough said", false, 35L, 32L, 69L, new Date(1490388831000L),
-                new Date(1490388831000L)));
-        notes.add(new ProjectPhoto(3L, "I Snagged A Picture",
-                "The Project has been going, I really like the new windows they put in, and the toilet. Very toilety",
-                35L, 32L, 70L, new Date(System.currentTimeMillis() - 30000L),
-                "drawable://" + R.drawable.sample_construction_site));
     }
 }

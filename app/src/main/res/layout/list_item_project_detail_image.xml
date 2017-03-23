@@ -3,8 +3,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <!--TODO: add in proper VM-->
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectImagesViewModel" />
+        <!--TODO: add in VM/M that data is pulled from -->
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +20,18 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:maxHeight="200dp"
+                android:src="@drawable/sample_construction_site"
+                android:id="@+id/imageView"
+                tools:src="@drawable/sample_construction_site"/>
+            <!--TODO: add actual image reference -->
+            <!--TODO: Set Method path for getting images-->
+
+            <ImageView
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:scaleType="fitEnd"
@@ -29,20 +40,8 @@
                 android:layout_alignParentEnd="true"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_pencil_white"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:maxHeight="200dp"
-                android:src="@{viewModel.note.src}"
-                android:id="@+id/imageView"
-                tools:src="@drawable/sample_construction_site"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
             <!--TODO: get actual pencil image-->
+            <!--TODO: Set visibility equation-->
 
         </RelativeLayout>
 
@@ -56,6 +55,9 @@
             <!--TODO:Set onClick method-->
 
 
+
+
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_marginBottom="2dp"
@@ -64,11 +66,11 @@
                 android:textSize="16sp"
                 android:textColor="@color/pureBlack"
                 android:gravity="bottom"
-                android:text="@{viewModel.note.title}"
+                android:text="Photo Title"
                 android:maxLines="1"
                 bind:typeface="@{`Lato-Regular.ttf`}"
-                tools:text="Photo Title"
-                android:id="@+id/textView3" />
+                tools:text="Photo Title"/>
+            <!--TODO: Add actual text reference-->
 
             <include layout="@layout/rule_horiz_blue"/>
 
@@ -81,13 +83,13 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1dp"
                 android:textColor="@color/pureBlack"
-                android:text="@{viewModel.note.text}"
+                android:text="@string/testing_purposes_lorem_ipsum"
                 android:maxLines="4"
                 android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 android:id="@+id/textView2"
                 tools:text="@string/testing_purposes_lorem_ipsum"/>
-
+            <!--TODO: add note reference-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,10 +112,11 @@
                     android:textColor="@color/lecetMediumBlue"
                     android:gravity="center_vertical"
                     android:layout_gravity="center"
-                    android:text="@{viewModel.authorName}"
+                    android:text="Erin Bernardin"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
                     tools:text="Erin Bernardin"/>
+                <!--TODO: getActual user reference-->
 
                 <TextView
                     android:layout_marginRight="10dp"
@@ -124,10 +127,11 @@
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
                     android:gravity="end"
-                    android:text="@{viewModel.timeDifference}"
+                    android:text="1 day ago"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
                     tools:text="1 day ago"/>
+                <!--TODO: set equation to get time-->
 
             </LinearLayout>
 

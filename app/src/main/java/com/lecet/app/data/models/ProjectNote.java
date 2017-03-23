@@ -12,55 +12,108 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNote extends ProjectAdditionalInfo {
-    //VARIABLES
-    @SerializedName("isPublic")
-    private boolean isPublic = true;
+public class ProjectNote extends RealmObject {
 
-    public ProjectNote(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt) {
-        super(id, title, text, pending, companyId, projectId, authorId, createdAt, updatedAt);
+    @PrimaryKey
+    @SerializedName("id")
+    private long id;
+
+    @SerializedName("text")
+    private String text;
+
+    @SerializedName("isPublic")
+    private boolean isPublic;
+
+    @SerializedName("pending")
+    private boolean pending;
+
+    @SerializedName("companyId")
+    private long companyId;
+
+    @SerializedName("projectId")
+    private long projectId;
+
+    @SerializedName("authorId")
+    private long authorId;
+
+    @SerializedName("createdAt")
+    private Date createdAt;
+
+    @SerializedName("updatedAt")
+    private Date updatedAt;
+
+
+    public long getId() {
+        return id;
     }
 
-    //VARIABLES
-    public boolean isPublic() {return isPublic;}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    public void setPublic(boolean aPublic) {isPublic = aPublic;}
+    public String getText() {
+        return text;
+    }
 
-    public long getId() {return id;}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-    public void setId(long id) {this.id = id;}
+    public boolean isPublic() {
+        return isPublic;
+    }
 
-    public String getTitle(){return title;}
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
 
-    public void setTitle(String title){this.title = title;}
+    public boolean isPending() {
+        return pending;
+    }
 
-    public String getText() {return text;}
+    public void setPending(boolean pending) {
+        this.pending = pending;
+    }
 
-    public void setText(String text) {this.text = text;}
+    public long getCompanyId() {
+        return companyId;
+    }
 
-    public boolean isPending() {return pending;}
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
 
-    public void setPending(boolean pending) {this.pending = pending;}
+    public long getProjectId() {
+        return projectId;
+    }
 
-    public long getCompanyId() {return companyId;}
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
 
-    public void setCompanyId(long companyId) {this.companyId = companyId;}
+    public long getAuthorId() {
+        return authorId;
+    }
 
-    public long getProjectId() {return projectId;}
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
+    }
 
-    public void setProjectId(long projectId) {this.projectId = projectId;}
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
-    public long getAuthorId() {return authorId;}
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    public void setAuthorId(long authorId) {this.authorId = authorId;}
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 
-    public Date getCreatedAt() {return createdAt;}
-
-    public void setCreatedAt(Date createdAt) {this.createdAt = createdAt;}
-
-    public Date getUpdatedAt() {return updatedAt;}
-
-    public void setUpdatedAt(Date updatedAt) {this.updatedAt = updatedAt;}
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     @Override
     public String toString() {

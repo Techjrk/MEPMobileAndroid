@@ -3,11 +3,9 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <!--TODO: Add Proper VM -->
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectNoteViewModel" />
+        <!--TODO: add VM/M for data binding -->
     </data>
-
-
+    <!--TODO: Add Elevation-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,9 +38,10 @@
                     android:maxLines="1"
                     android:textColor="@color/pureBlack"
                     android:gravity="bottom"
-                    android:text="@{viewModel.note.title}"
+                    android:text="Note Title Placeholder"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="Note Title Placeholder"/>
+                <!--TODO: Get Title of Note Reference-->
 
                 <ImageView
                     android:scaleType="fitCenter"
@@ -52,7 +51,7 @@
                     android:padding="5dp"
                     android:adjustViewBounds="false"
                     android:src="@drawable/ic_pencil_blue"/>
-                <!--TODO: get actual pencil image from presentation-->
+                <!--TODO: get actual penice image from presentation-->
                 <!--TODO: Make logic for visibility-->
 
             </LinearLayout>
@@ -67,11 +66,12 @@
                 android:lineSpacingExtra="1dp"
                 android:textColor="@color/pureBlack"
                 android:textSize="16dp"
-                android:text="@{viewModel.note.text}"
+                android:text="@string/testing_purposes_lorem_ipsum"
                 android:maxLines="8"
                 android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 tools:text="@string/testing_purposes_lorem_ipsum"/>
+            <!--TODO:get actual reference for data from VM -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,10 +95,11 @@
                     android:textColor="@color/lecetMediumBlue"
                     android:gravity="center_vertical"
                     android:layout_gravity="center"
-                    android:text="@{viewModel.authorName}"
+                    android:text="Erin Bernardin"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:id="@+id/textView"
                     tools:text="Erin Bernardin"/>
+                <!--TODO: refer actual Note Creator name -->
 
                 <TextView
                     android:layout_marginRight="10dp"
@@ -110,9 +111,10 @@
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
                     android:gravity="right"
-                    android:text="@{viewModel.timeDifference}"
+                    android:text="30 minutes ago"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="30 minutes ago"/>
+                <!--TODO: set equation for getting the time difference-->
 
 
             </LinearLayout>

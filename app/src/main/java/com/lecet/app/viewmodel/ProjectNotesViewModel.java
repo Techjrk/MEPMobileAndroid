@@ -2,7 +2,6 @@ package com.lecet.app.viewmodel;
 
 import android.support.v4.app.Fragment;
 
-import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.domain.ProjectDomain;
 
 /**
@@ -14,7 +13,6 @@ public class ProjectNotesViewModel {
     private final Fragment fragment;
     private final long projectId;
     private final ProjectDomain projectDomain;
-
 
     public ProjectNotesViewModel(Fragment fragment, long projectId, ProjectDomain projectDomain) {
         this.fragment = fragment;
