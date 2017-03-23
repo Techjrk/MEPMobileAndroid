@@ -1,6 +1,7 @@
 package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.lecet.app.interfaces.ProjectAdditionalData;
 
 import java.util.Date;
 
@@ -12,13 +13,19 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNote extends RealmObject {
+public class ProjectNote extends RealmObject implements ProjectAdditionalData{
 
     @PrimaryKey
     @SerializedName("id")
     private long id;
 
+    @SerializedName("title")
+    private String title;
+
+
+
     @SerializedName("text")
+
     private String text;
 
     @SerializedName("isPublic")
@@ -43,6 +50,7 @@ public class ProjectNote extends RealmObject {
     private Date updatedAt;
 
 
+    //Getters And Setters
     public long getId() {
         return id;
     }
@@ -50,6 +58,10 @@ public class ProjectNote extends RealmObject {
     public void setId(long id) {
         this.id = id;
     }
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
 
     public String getText() {
         return text;

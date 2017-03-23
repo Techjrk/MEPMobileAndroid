@@ -3,7 +3,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <!--TODO: add VM/M for data binding -->
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectNoteViewModel"/>
     </data>
     <!--TODO: Add Elevation-->
     <LinearLayout

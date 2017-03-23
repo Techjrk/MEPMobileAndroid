@@ -20,7 +20,7 @@
         <include layout="@layout/include_project_detail_add_header"/>
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/recycler_view_project_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

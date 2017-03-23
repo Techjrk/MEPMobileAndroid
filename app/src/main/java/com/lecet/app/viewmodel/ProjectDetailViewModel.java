@@ -216,7 +216,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
 
-        RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_location_detail);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }

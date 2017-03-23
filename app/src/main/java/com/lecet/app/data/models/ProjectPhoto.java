@@ -1,6 +1,7 @@
 package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.lecet.app.interfaces.ProjectAdditionalData;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectPhoto extends RealmObject {
+public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
 
     @PrimaryKey
     @SerializedName("id")
@@ -45,4 +46,43 @@ public class ProjectPhoto extends RealmObject {
     @SerializedName("src")
     private String src;
 
+    public long getId() {return id;}
+
+    public void setId(long id) {this.id = id;}
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
+
+    public boolean isText() {return text;}
+
+    public void setText(boolean text) {this.text = text;}
+
+    public boolean isPending() {return pending;}
+
+    public void setPending(boolean pending) {this.pending = pending;}
+
+    public long getCompanyId() {return companyId;}
+
+    public void setCompanyId(long companyId) {this.companyId = companyId;}
+
+    public long getProjectId() {return projectId;}
+
+    public void setProjectId(long projectId) {this.projectId = projectId;}
+
+    public long getAuthorId() {return authorId;}
+
+    public void setAuthorId(long authorId) {this.authorId = authorId;}
+
+    public Date getCreatedAt() {return createdAt;}
+
+    public void setCreatedAt(Date createdAt) {this.createdAt = createdAt;}
+
+    public Date getUpdatedAt() {return updatedAt;}
+
+    public void setUpdatedAt(Date updatedAt) {this.updatedAt = updatedAt;}
+
+    public String getSrc() {return src;}
+
+    public void setSrc(String src) {this.src = src;}
 }
