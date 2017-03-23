@@ -13,7 +13,6 @@ import com.lecet.app.content.TrackingListActivity;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.CompanyTrackingList;
-import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.utility.DateUtility;
