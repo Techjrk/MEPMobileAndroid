@@ -23,7 +23,7 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     private String title;
 
     @SerializedName("text")
-    private boolean text;
+    private String text;
 
     @SerializedName("pending")
     private boolean pending;
@@ -54,9 +54,9 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
 
     public void setTitle(String title) {this.title = title;}
 
-    public boolean isText() {return text;}
+    public String getText() {return text;}
 
-    public void setText(boolean text) {this.text = text;}
+    public void setText(String text) {this.text = text;}
 
     public boolean isPending() {return pending;}
 
