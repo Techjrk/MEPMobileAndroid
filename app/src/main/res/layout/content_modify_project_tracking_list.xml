@@ -61,11 +61,13 @@
             tools:listitem="@layout/modify_list_item_project" />
 
         <RelativeLayout
+            android:id="@+id/project_track_footer"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/activity_bar_background"
             android:paddingLeft="8dp"
+            android:visibility="gone"
             android:paddingRight="8dp">
 
 
