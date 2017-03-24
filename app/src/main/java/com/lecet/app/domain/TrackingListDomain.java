@@ -392,8 +392,8 @@ public class TrackingListDomain {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm asyncRealm) {
-
                 CompanyTrackingList threadSafeTrackingList = asyncRealm.where(CompanyTrackingList.class).equalTo("id", trackingListId).findFirst();
+                if (threadSafeTrackingList !=null) {
                 RealmList<Company> trackedCompanies = threadSafeTrackingList.getCompanies();
 
                 Iterator<Company> projectIterator = trackedCompanies.iterator();
@@ -401,10 +401,11 @@ public class TrackingListDomain {
 
                     Company company = projectIterator.next();
 
-                    if (toBeDeleted.contains(company.getId())){
+                    if (toBeDeleted.contains(company.getId())) {
                         projectIterator.remove();
                     }
                 }
+            }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
