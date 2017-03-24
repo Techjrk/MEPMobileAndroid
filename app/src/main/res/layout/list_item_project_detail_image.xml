@@ -66,7 +66,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/pureBlack"
                 android:gravity="bottom"
-                android:text="Photo Title"
+                android:text="@{viewModel.title}"
                 android:maxLines="1"
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 tools:text="Photo Title"/>
@@ -78,12 +78,12 @@
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="14dp"
 
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1dp"
                 android:textColor="@color/pureBlack"
-                android:text="@string/testing_purposes_lorem_ipsum"
+                android:text="@{viewModel.text}"
                 android:maxLines="4"
                 android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
@@ -112,11 +112,10 @@
                     android:textColor="@color/lecetMediumBlue"
                     android:gravity="center_vertical"
                     android:layout_gravity="center"
-                    android:text="Erin Bernardin"
+                    android:text="@{viewModel.authorName}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
                     tools:text="Erin Bernardin"/>
-                <!--TODO: getActual user reference-->
 
                 <TextView
                     android:layout_marginRight="10dp"
@@ -127,7 +126,7 @@
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
                     android:gravity="end"
-                    android:text="1 day ago"
+                    android:text="@{viewModel.timeDifference}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
                     tools:text="1 day ago"/>

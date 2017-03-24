@@ -455,7 +455,7 @@ public class ProjectDomain {
 
         return result;
     }
-/*
+/* TODO: Remove after Project Notes can extend RealmObject
     public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
 
         RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
