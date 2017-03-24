@@ -16,7 +16,9 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.FragmentProjectNotesBinding;
+import com.lecet.app.databinding.IncludeProjectDetailAddHeaderBinding;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.viewmodel.IncludeProjectDetailAddHeaderViewModel;
 import com.lecet.app.viewmodel.ProjectNotesViewModel;
 
 import java.util.List;
@@ -73,6 +75,7 @@ public class ProjectNotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
         View view = initDataBinding(inflater, container);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -85,6 +88,9 @@ public class ProjectNotesFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_notes, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
+
+        IncludeProjectDetailAddHeaderBinding binding2 = DataBindingUtil.inflate(inflater,R.layout.include_project_detail_add_header, container, false);
+        binding2.setViewModel(new IncludeProjectDetailAddHeaderViewModel());//TODO: Setup Button Functionality.
         //binding.getViewModel().initiNoteView();
         return view;
     }

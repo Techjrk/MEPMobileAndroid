@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailAddNoteViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.SearchFilterLocationActivity">
+        tools:context="com.lecet.app.content.ProjectDetailAddNoteActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,6 +34,7 @@
                     android:text="@string/cancel"
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
+                    android:onClick="@{viewModel.onClickCancel}"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <TextView
@@ -59,94 +60,92 @@
                     bind:typeface="@{`Lato-Bold.ttf`}" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp">
-
-                        <TextView
-                            android:layout_height="match_parent"
-                            android:layout_width="55dp"
-                            android:text="@string/title_all_caps"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/lecetDarkestBlue"
-                            android:gravity="center_vertical"
-                            bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textColor="@color/lecetTextLightGray"
-                            android:textSize="14sp"
-                            android:text="@string/optional"
-                            android:textStyle="italic"
-                            bind:typeface="@{`Lato-Bold.ttf`}"/>
-
-                    </LinearLayout>
-
-
-                    <EditText
-                        android:id="@+id/titleEntry"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/post_title"
-                        android:textColorHint="@color/lecetTextLightGray"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:padding="12dp"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-                    <!--TODO: Add Setter for post title entries-->
-
-                    <TextView
-                        android:layout_width="70dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="end"
-                        android:textColor="@color/lecetTextLightGray"
-                        android:gravity="end"
-                        android:textSize="14sp"
-                        android:text="0/55" />
-                    <!--TODO: Add Reference to char size-->
+                    android:layout_height="25dp">
 
                     <TextView
                         android:layout_height="match_parent"
                         android:layout_width="55dp"
-                        android:text="@string/body_all_caps"
+                        android:text="@string/title_all_caps"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/lecetDarkestBlue"
                         android:gravity="center_vertical"
-                        bind:typeface="@{`Lato-Bold.ttf`}"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_rect_solid_border_1"
-                        android:padding="12dp"
-                        android:lines="8"
-                        android:hint="@string/post_body"
-                        android:textColorHint="@color/lecetTextLightGray"
-                        android:gravity="start"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
-                    <!--TODO: Add Setter for post body binding-->
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/post_visibility_warning"
-                        android:gravity="center_horizontal"
-                        android:textStyle="bold"
-                        android:textColor="@color/lecetTextLightGray"/>
-
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/lecetTextLightGray"
+                        android:textSize="14sp"
+                        android:text="@string/optional"
+                        android:textStyle="italic"
+                        bind:typeface="@{`Lato-Bold.ttf`}"/>
 
                 </LinearLayout>
+
+
+                <EditText
+                    android:id="@+id/titleEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/post_title"
+                    android:textColorHint="@color/lecetTextLightGray"
+                    android:background="@drawable/shape_rect_solid_border_1"
+                    android:padding="12dp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                <!--TODO: Add Setter for post title entries-->
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/lecetTextLightGray"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:text="0/55" />
+                <!--TODO: Add Reference to char size-->
+
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="55dp"
+                    android:text="@string/body_all_caps"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lecetDarkestBlue"
+                    android:gravity="center_vertical"
+                    bind:typeface="@{`Lato-Bold.ttf`}"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_rect_solid_border_1"
+                    android:padding="12dp"
+                    android:lines="8"
+                    android:hint="@string/post_body"
+                    android:textColorHint="@color/lecetTextLightGray"
+                    android:gravity="start"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                <!--TODO: Add Setter for post body binding-->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/post_visibility_warning"
+                    android:gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:textColor="@color/lecetTextLightGray"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>

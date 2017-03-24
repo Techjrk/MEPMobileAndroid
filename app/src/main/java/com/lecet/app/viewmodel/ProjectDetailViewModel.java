@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.databinding.IncludeProjectDetailAddHeaderBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.lecet.app.interfaces.ProjectAdditionalData;
@@ -215,11 +217,10 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         // Bidders
         RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
 
-
         projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
         initLocationRecyclerView(activity, projectDetailAdapter);
 
-        initAdditionalNotes();
+        initAdditionalNotes();//TODO:This is where the fake call is used
         projectNotesAdapter = new ProjectNotesAdapter(additonalNotes);
         initNotesRecyclerView(activity, projectNotesAdapter);
 
