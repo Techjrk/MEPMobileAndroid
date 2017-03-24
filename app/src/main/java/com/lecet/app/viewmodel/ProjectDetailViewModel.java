@@ -266,6 +266,17 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                 "The Project has been going, I really like the new windows they put in, and the toilet. Very toilety",
                 35L, 32L, 70L, new Date(System.currentTimeMillis() - 30000L),
                 ("drawable://" + R.drawable.sample_construction_site)));
+        additonalNotes.add(new ProjectNote(4L, "How is it going?",
+                "I was born and raised here, and they closed it down so im sad now, im not stalling " +
+                        "just to get a longer line count. Im not trying to get cut off by the Line limit, "+
+                        "Makeing an elipses which causes you to close out the application and i might copy and paste" +
+                        "just to get a longer line count. Im not trying to get cut off by the Line limit, "+
+                        "Makeing an elipses which causes you to close out the application and i might copy and paste" +
+                        "just to get a longer line count. Im not trying to get cut off by the Line limit, "+
+                        "Makeing an elipses which causes you to close out the application and i might copy and paste",
+                35L, 32L, 70L, new Date(1490376557736L)));
+        additonalNotes.add(new ProjectNote(5L, "This isn't facebook?", "I thought this was Facebook," +
+                "Well you guys are making great progress. Carry on.", 35L, 32L, 70L, new Date(System.currentTimeMillis() - 120000L)));
 
     }
 
