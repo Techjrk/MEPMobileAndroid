@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
+public class ProjectPhoto implements ProjectAdditionalData {
 
     @PrimaryKey
     @SerializedName("id")
@@ -46,6 +46,30 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     @SerializedName("src")
     private String src;
 
+    public ProjectPhoto(){}//TODO: Understand why this is not working.
+
+    public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src) {
+        this.id = id;
+        this.title = title;
+        this.text = text;
+        this.pending = pending;
+        this.companyId = companyId;
+        this.projectId = projectId;
+        this.authorId = authorId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.src = src;
+    }
+
+    public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt, String src) {
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src);
+    }
+
+    public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt) {
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, null);
+    }
+
+    //GETTERS AND SETTERS
     public long getId() {return id;}
 
     public void setId(long id) {this.id = id;}

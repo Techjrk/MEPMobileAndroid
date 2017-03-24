@@ -68,7 +68,6 @@ public class ProjectLocationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = initDataBinding(inflater, container);
         return view;
     }

@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNote extends RealmObject implements ProjectAdditionalData{
+public class ProjectNote implements ProjectAdditionalData{
 
     @PrimaryKey
     @SerializedName("id")
@@ -48,6 +48,26 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
 
     @SerializedName("updatedAt")
     private Date updatedAt;
+
+    public ProjectNote(){}
+
+    public ProjectNote(long id, String title, String text, boolean isPublic, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.text = text;
+        this.isPublic = isPublic;
+        this.pending = pending;
+        this.companyId = companyId;
+        this.projectId = projectId;
+        this.authorId = authorId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public ProjectNote(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt) {
+        this(id, title, text, true, false, companyId, projectId, authorId, createdAt, createdAt);
+
+    }
 
 
     //Getters And Setters

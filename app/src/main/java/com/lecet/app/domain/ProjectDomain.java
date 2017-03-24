@@ -455,7 +455,7 @@ public class ProjectDomain {
 
         return result;
     }
-
+/*
     public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
 
         RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
@@ -464,7 +464,7 @@ public class ProjectDomain {
 
         return notesResult;
     }
-
+*/
     public RealmResults<Project> fetchHiddenProjects() {
 
         return realm.where(Project.class).equalTo("hidden", true).findAll();

@@ -59,31 +59,33 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()){
-            case NOTE_VIEW_TYPE:
-                ((ProjectNoteViewHolder) holder).binding.setViewModel(
-                        new ProjectNoteViewModel((ProjectNote)data.get(position))
-                );
-                break;
+        switch (getItemViewType(position)){
             case PHOTO_VIEW_TYPE:
                 ((ProjectImageViewHolder) holder).binding.setViewModel(
                         new ProjectPhotoViewModel((ProjectPhoto)data.get(position))
                 );
                 break;
+            case NOTE_VIEW_TYPE:
+                ((ProjectNoteViewHolder) holder).binding.setViewModel(
+                        new ProjectNoteViewModel((ProjectNote)data.get(position))
+                );
+                break;
             default:
                 Log.e(TAG, "onBindViewHolder: Not Type of View");
+                break;
 
         }
     }
 
-
-    public int getImageViewType(int position){
+    @Override
+    public int getItemViewType(int position){
         if(data.get(position) instanceof ProjectPhoto){
             return PHOTO_VIEW_TYPE;
         }
         if(data.get(position) instanceof ProjectNote) {
             return NOTE_VIEW_TYPE;
         }
+        Log.e(TAG, "getImageViewType: Not Photo or Note");
         return -1;//if -1 then something snuck in that wasn't supposed to be here.
     }
 

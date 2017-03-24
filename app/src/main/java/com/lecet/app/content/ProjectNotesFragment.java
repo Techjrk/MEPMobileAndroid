@@ -76,7 +76,6 @@ public class ProjectNotesFragment extends Fragment {
         View view = initDataBinding(inflater, container);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-
         //TODO: Create A ProjectNotesAdapter, The Adapter will take a ProjectNotes or ProjectPhotos objects.
         // Have the two objects implement a custom interface "ProjectAdditionalInfo"
         // ProjectNotes implements ProjectAdditionalInfo

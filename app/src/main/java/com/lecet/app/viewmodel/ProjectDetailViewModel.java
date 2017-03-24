@@ -11,22 +11,28 @@ import android.widget.ImageView;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectDetailAdapter;
+import com.lecet.app.adapters.ProjectNotesAdapter;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
+import com.lecet.app.interfaces.ProjectAdditionalData;
 import com.lecet.app.utility.DateUtility;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,9 +57,12 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     private Project project;
     private AlertDialog networkAlertDialog;
     private ProjectDetailAdapter projectDetailAdapter;
+    private ProjectNotesAdapter projectNotesAdapter;
 
     // Retrofit calls
     private Call<Project> projectDetailCall;
+    private List<ProjectAdditionalData> additonalNotes; //TODO: Remove/Replace with Proper call for notes
+
 
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, String mapsApiKey, ProjectDomain projectDomain) {
 
@@ -208,19 +217,36 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
 
         projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
-        initRecyclerView(activity, projectDetailAdapter);
+        initLocationRecyclerView(activity, projectDetailAdapter);
+
+        initAdditionalNotes();
+        projectNotesAdapter = new ProjectNotesAdapter(additonalNotes);
+        initNotesRecyclerView(activity, projectNotesAdapter);
+
     }
 
 
-    private void initRecyclerView(ProjectDetailActivity activity, ProjectDetailAdapter adapter) {
+    private void initLocationRecyclerView(ProjectDetailActivity activity, ProjectDetailAdapter adapter) {
 
+        //Scope Limit the Location Recycler View
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
 
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_location_detail);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
     }
 
+    private void initNotesRecyclerView(ProjectDetailActivity activity, ProjectNotesAdapter adapter) {
+
+        //Scope Limit the Location Recycler View
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
+
+        RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_project_notes);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+    }
 
     private void initMapImageView(ProjectDetailActivity activity, String mapUrl) {
 
@@ -228,6 +254,20 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         Picasso.with(imageView.getContext()).load(mapUrl).fit().into(imageView);
     }
 
+
+    private void initAdditionalNotes(){//TODO: Change with actual call for project Notes
+        additonalNotes = new ArrayList<ProjectAdditionalData>();
+        additonalNotes.add(new ProjectNote(1L,"Random House",
+                "I Really Like this Project, ITS SO AWESOME!", 35L, 32L, 68L,
+                new Date(291156831000L)));
+        additonalNotes.add(new ProjectNote(2L, "I Hate Construction",
+                "It takes forever, enough said", 35L, 32L, 69L, new Date(1490388831000L)));
+        additonalNotes.add(new ProjectPhoto(3L, "I Snagged A Picture",
+                "The Project has been going, I really like the new windows they put in, and the toilet. Very toilety",
+                35L, 32L, 70L, new Date(System.currentTimeMillis() - 30000L),
+                ("drawable://" + R.drawable.sample_construction_site)));
+
+    }
 
     public String getMapUrl(Project project) {
 
