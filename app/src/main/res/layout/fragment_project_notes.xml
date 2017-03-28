@@ -15,9 +15,49 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context="com.lecet.app.content.ProjectNotesFragment"
-    android:background="@color/pureWhite">
+        android:background="@color/pureWhite">
 
-        <include layout="@layout/include_project_detail_add_header"/>
+        <!-- Header -->
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:padding="5dp"
+                android:background="@android:drawable/dialog_holo_light_frame">
+
+            <Button
+                    android:id="@+id/add_note_button"
+                    android:layout_width="0dp"
+                    android:onClick="@{viewModel::onClickAddNote}"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="1dp"
+                    android:gravity="center"
+                    android:text="@string/add_note"
+                    android:textColor="@color/lecetNavyBlue"
+                    android:textSize="14sp"
+                    android:background="@drawable/share_radio_background"
+                    bind:typeface="@{`Lato-Regular.ttf`}"/>
+
+            <Button
+                    android:id="@+id/add_image_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="1dp"
+                    android:gravity="center"
+                    android:text="@string/add_image"
+                    android:textColor="@color/lecetNavyBlue"
+                    android:textSize="14sp"
+                    android:background="@drawable/share_radio_background"
+                    bind:typeface="@{`Lato-Regular.ttf`}"/>
+            <!--TODO: set reference for onCLick-->
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_project_notes"

@@ -18,7 +18,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.FragmentProjectNotesBinding;
 import com.lecet.app.databinding.IncludeProjectDetailAddHeaderBinding;
 import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.viewmodel.IncludeProjectDetailAddHeaderViewModel;
+import com.lecet.app.viewmodel.ProjectDetailAddHeaderViewModel;
 import com.lecet.app.viewmodel.ProjectNotesViewModel;
 
 import java.util.List;
@@ -89,8 +89,8 @@ public class ProjectNotesFragment extends Fragment {
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
 
-        IncludeProjectDetailAddHeaderBinding binding2 = DataBindingUtil.inflate(inflater,R.layout.include_project_detail_add_header, container, false);
-        binding2.setViewModel(new IncludeProjectDetailAddHeaderViewModel());//TODO: Setup Button Functionality.
+        //IncludeProjectDetailAddHeaderBinding binding2 = DataBindingUtil.inflate(inflater,R.layout.include_project_detail_add_header, container, false);
+        //binding2.setViewModel(new ProjectDetailAddHeaderViewModel());//TODO: Setup Button Functionality.
         //binding.getViewModel().initiNoteView();
         return view;
     }
