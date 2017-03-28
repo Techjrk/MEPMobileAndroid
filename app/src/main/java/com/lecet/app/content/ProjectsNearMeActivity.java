@@ -82,7 +82,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupToolbar();
         setupLocationManager();
         checkPermissions();
-        //showCurrentMarker();
     }
 
     void showCurrentMarker(GoogleMap map) {
@@ -183,7 +182,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         viewModel.setMap(map);
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
-        showCurrentMarker(map);
+
+        // TODO: Undoing fix for case 7321. Causes major crashes
+        //showCurrentMarker(map);
     }
 
     private void fetchProjects(boolean animateCamera) {
