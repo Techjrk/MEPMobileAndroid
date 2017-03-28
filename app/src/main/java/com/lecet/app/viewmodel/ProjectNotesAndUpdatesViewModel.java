@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 
+import com.lecet.app.content.ProjectDetailAddImageActivity;
 import com.lecet.app.content.ProjectDetailAddNoteActivity;
 import com.lecet.app.domain.ProjectDomain;
 
@@ -34,14 +35,14 @@ public class ProjectNotesAndUpdatesViewModel {
 
     public void onClickAddImage(View view){
         Log.e(TAG, "onClickAddImage: Launch Add Image Activity");
-       // Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
-        //fragment.getActivity().startActivity(intent);
+        Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddImageActivity.class);
+        fragment.getActivity().startActivity(intent);
     }
 
 
-    //TODO - call
-    public void fetchProjectNotes() {
-        projectDomain.fetchProjectBids(projectId);
+    //TODO - call & fill in
+    public void fetchProjectImages() {
+        //
     }
 }
 
