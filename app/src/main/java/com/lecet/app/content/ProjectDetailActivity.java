@@ -17,7 +17,6 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectDetailBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ProjectDetailViewModel;
-import com.p_v.flexiblecalendar.MonthViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class ProjectDetailActivity extends LecetBaseActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ProjectLocationFragment(),"Location Info");
-        adapter.addFragment(new ProjectNotesFragment(),"Notes & Updates");
+        adapter.addFragment(new ProjectNotesAndUpdatesFragment(),"Notes & Updates");
         viewPager.setAdapter(adapter);
     }
 

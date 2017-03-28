@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.ProjectNotesViewModel" />
+            type="com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:context="com.lecet.app.content.ProjectNotesFragment"
+        tools:context="com.lecet.app.content.ProjectNotesAndUpdatesFragment"
         android:background="@color/pureWhite">
 
         <!-- Header -->
@@ -54,7 +54,8 @@
                     android:textColor="@color/lecetNavyBlue"
                     android:textSize="14sp"
                     android:background="@drawable/share_radio_background"
-                    bind:typeface="@{`Lato-Regular.ttf`}"/>
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:onClick="@{viewModel::onClickAddImage}"/>
             <!--TODO: set reference for onCLick-->
 
         </LinearLayout>

@@ -12,15 +12,15 @@ import com.lecet.app.domain.ProjectDomain;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNotesViewModel {
+public class ProjectNotesAndUpdatesViewModel {
 
-    private static final String TAG = "ProjectNotesViewModel";
+    private static final String TAG = "ProjectNotesUpdatesVM";
 
     private final Fragment fragment;
     private final long projectId;
     private final ProjectDomain projectDomain;
 
-    public ProjectNotesViewModel(Fragment fragment, long projectId, ProjectDomain projectDomain) {
+    public ProjectNotesAndUpdatesViewModel(Fragment fragment, long projectId, ProjectDomain projectDomain) {
         this.fragment = fragment;
         this.projectId = projectId;
         this.projectDomain = projectDomain;
@@ -30,6 +30,12 @@ public class ProjectNotesViewModel {
         Log.e(TAG, "onClickAddNote: Launch Add Note Activity");
         Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
         fragment.getActivity().startActivity(intent);
+    }
+
+    public void onClickAddImage(View view){
+        Log.e(TAG, "onClickAddImage: Launch Add Image Activity");
+       // Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
+        //fragment.getActivity().startActivity(intent);
     }
 
 

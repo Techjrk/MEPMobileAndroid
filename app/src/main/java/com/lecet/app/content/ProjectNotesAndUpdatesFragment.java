@@ -15,11 +15,9 @@ import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.FragmentProjectNotesBinding;
-import com.lecet.app.databinding.IncludeProjectDetailAddHeaderBinding;
+import com.lecet.app.databinding.FragmentProjectNotesAndUpdatesBinding;
 import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.viewmodel.ProjectDetailAddHeaderViewModel;
-import com.lecet.app.viewmodel.ProjectNotesViewModel;
+import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
 
 import java.util.List;
 
@@ -29,32 +27,32 @@ import io.realm.Realm;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNotesFragment extends Fragment {
+public class ProjectNotesAndUpdatesFragment extends Fragment {
 
-    private static final String TAG = "ProjectNotesFragment";
+    private static final String TAG = "ProjectNotesUpdatesFrag";
 
-    public static String PROJECT_ID = "com.lecet.app.content.ProjectNotesFragment.projectId";
+    public static String PROJECT_ID = "com.lecet.app.content.ProjectNotesAndUpdatesFragment.projectId";
 
     private List<ProjectNote> notes;
-    private FragmentProjectNotesBinding binding;
+    private FragmentProjectNotesAndUpdatesBinding binding;
     private long projectId;
 
-    public static ProjectNotesFragment newInstance(long projectId) {
-        ProjectNotesFragment fragmentInstance = new ProjectNotesFragment();
+    public static ProjectNotesAndUpdatesFragment newInstance(long projectId) {
+        ProjectNotesAndUpdatesFragment fragmentInstance = new ProjectNotesAndUpdatesFragment();
         Bundle args = new Bundle();
-        args.putLong(ProjectNotesFragment.PROJECT_ID, projectId);
+        args.putLong(ProjectNotesAndUpdatesFragment.PROJECT_ID, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
-    public ProjectNotesFragment() {
+    public ProjectNotesAndUpdatesFragment() {
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            projectId = getArguments().getLong(ProjectNotesFragment.PROJECT_ID);
+            projectId = getArguments().getLong(ProjectNotesAndUpdatesFragment.PROJECT_ID);
         }
 
         Log.d(TAG, "onCreate: projectId: " + projectId);
@@ -84,8 +82,8 @@ public class ProjectNotesFragment extends Fragment {
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this.getContext()), Realm.getDefaultInstance());
-        ProjectNotesViewModel viewModel = new ProjectNotesViewModel(this, projectId, projectDomain);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_notes, container, false);
+        ProjectNotesAndUpdatesViewModel viewModel = new ProjectNotesAndUpdatesViewModel(this, projectId, projectDomain);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_notes_and_updates, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
 

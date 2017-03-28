@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:context="com.lecet.app.content.ProjectNotesFragment"
+        tools:context="com.lecet.app.content.ProjectNotesAndUpdatesFragment"
         android:background="@color/pureWhite">
 
         <android.support.v7.widget.RecyclerView
