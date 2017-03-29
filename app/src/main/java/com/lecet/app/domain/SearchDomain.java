@@ -44,13 +44,34 @@ public class SearchDomain {
     private String savedSearchFilter = "{\"include\":[\"company\"],\"searchFilter\":{}}";
 
     public String getCompanyFilter() {
+
         return companyFilter;
     }
 
-    public void setCompanyFilter(String companyFilter) {
+   /* public void setCompanyFilter(String companyFilter) {
         this.companyFilter = companyFilter;
     }
+   */
+   public void setCompanyFilter(String xfilter) {
+//        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
+       String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
+       if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
+       this.companyFilter = sCompanyFilter;
+      // setCompanyFilter(sCompanyFilter);
+       Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
 
+    }
+    public void initFilter() {
+        //This is the default search filter for Project filter when no custom search filter occurs.
+        setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
+        //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
+        setCompanyFilter("{\"searchFilter\":{}}");
+        //***
+
+
+        setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
+        //  {\"include\":[\"company\"]}
+    }
     public String getContactFilter() {
         return contactFilter;
     }
@@ -66,7 +87,10 @@ public class SearchDomain {
     public void setProjectFilter(String projectFilter) {
         this.projectFilter = projectFilter;
     }
-
+    public void setProjectFilter2(String filter) {
+        String pfilter = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{"+filter+"}}";
+        this.projectFilter = pfilter;
+    }
 
     public SearchDomain(LecetClient lecetClient, LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
         this.lecetClient = lecetClient;
@@ -80,6 +104,7 @@ public class SearchDomain {
         this.realm = realm;
         initFilter();
     }
+
     /**
      * To call the retrofit service for the stages list items to be displayed in the UI layout for Stage section.
      *
@@ -240,14 +265,7 @@ public class SearchDomain {
         return call;
     }
 
-    public void initFilter() {
-        //This is the default search filter for Project filter when no custom search filter occurs.
-        setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
-        //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
-        setCompanyFilter("{\"searchFilter\":{}}");
-        setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
-        //  {\"include\":[\"company\"]}
-    }
+
 
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchResult>> callback) {
         String token = sharedPreferenceUtil.getAccessToken();
@@ -270,20 +288,25 @@ public class SearchDomain {
         //  String filter="{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}";
         String token = sharedPreferenceUtil.getAccessToken();
 //        Call<SearchProject> call = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
+  //      if (q !=null && q.equals("")) q="{}";
         callProjectService = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
         callProjectService.enqueue(callback);
     }
 
     public void getSearchCompanyQuery(String q, Callback<SearchCompany> callback) {
         //   String filter = "{}";
+//        if (q !=null && q.equals("")) q="{}";
         String token = sharedPreferenceUtil.getAccessToken();
 //        Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         callCompanyService = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         callCompanyService.enqueue(callback);
+        Log.d("companyfilter3","companyfilter3"+getCompanyFilter());
+        Log.d("query1","query1:"+q+":filter:"+getCompanyFilter());
     }
 
     public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
         //   String filter = "{}";
+    //    if (q !=null && q.equals("")) q="{}";
         String token = sharedPreferenceUtil.getAccessToken();
 //        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
         callContactService = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
@@ -326,6 +349,21 @@ public class SearchDomain {
             RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
             Call<ResponseBody> call = lecetClient.getSearchService().saveProjectSearch(recentToken, body);
             Log.d(TAG,"saveCurrentProjectSearch: bodyContent: " + bodyContent);
+            call.enqueue(callback);
+
+        }
+    }
+    public void saveCurrentCompanySearch(String title, String query, Callback<ResponseBody> callback) {
+        String searchFilter =  getCompanyFilter();
+        if(searchFilter !=  null && searchFilter.length() > 0) {
+            Log.d(TAG, "saveCurrentCompanySearch: title: " + title + ", query: " + query + ", searchFilter: " + searchFilter);
+
+            //works String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"apartment\",\"filter\":{\"include\":[{\"bids\":[\"company\",{\"project\":[\"projectStage\"]}]},{\"contacts\":[\"company\",\"contact\",\"contactType\"]},\"csiCodes\",{\"primaryProjectType\":[\"projectCategory\"]},\"projectStage\",\"secondaryProjectTypes\",\"specAlerts\",\"userNotes\",\"workTypes\"],\"jurisdiction\":true,\"limit\":28,\"searchFilter\":{\"projectValue\":{\"min\":333,\"max\":9999999},\"projectLocation\":{\"city\":\"Brookfield\"}},\"skip\":0}}";
+            String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"company\",\"query\":\"" + query + "\",\"filter\":" + searchFilter + "}";
+            //String bodyContent ="{ \"title\" : " + title + " , \"modelName\" : " + "project" + " }";
+            RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+            Call<ResponseBody> call = lecetClient.getSearchService().saveProjectSearch(recentToken, body);
+            Log.d(TAG,"saveCurrentCompanySearch: bodyContent: " + bodyContent);
             call.enqueue(callback);
 
         }
