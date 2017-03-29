@@ -74,9 +74,9 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_OWNER_TYPE = "ownerType";
     public static final String FILTER_PROJECT_WORK_TYPE = "workType";
     public static final String FILTER_INSTANT_SEARCH = "instantSearch";
-    public static boolean USING_INSTANT_SEARCH = false;
+    public static boolean USING_INSTANT_SEARCH = false;     //TODO - convert to a private var with accessors
     public static final int REQUEST_CODE_ZERO = 0;
-    public static boolean INIT_SEARCH=true;
+    public static boolean INIT_SEARCH=true;                 //TODO - convert to a private var with accessors
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
