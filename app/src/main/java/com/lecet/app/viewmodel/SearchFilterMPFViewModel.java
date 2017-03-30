@@ -62,7 +62,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private static int id;
     private Intent intent;
-    private boolean isProjectViewVisible = true;
+    public static boolean isProjectViewVisible = true;
     private boolean moreOption;
 
 
@@ -533,6 +533,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public void onClickedProjectCompanyTab(View view) {
         isProjectViewVisible = view.getId() == R.id.btn_project;
 //        isProjectViewVisible = !isProjectViewVisible;
+        if (getIsProjectViewVisible()) {
+            Log.d("project view","project view");
+        } else {
+            Log.d("company view","company view");
+        }
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
 
