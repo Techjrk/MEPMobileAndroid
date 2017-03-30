@@ -91,6 +91,8 @@ public class CompanyShareToolbarViewModel extends ShareToolbarViewModel<Company,
     @Override
     public void removeTrackedObjectFromTrackingList(long trackingListId, List<Long> trackedIds) {
 
+        final CompanyTrackingList prevList = getAssociatedTrackingList(getTrackedObject());
+
         showProgressDialog(getAppCompatActivity().getString(R.string.app_name), getAppCompatActivity().getString(R.string.updating));
 
         getTrackingListDomain().syncCompanyTrackingList(trackingListId, trackedIds, new Callback<CompanyTrackingList>() {
@@ -105,7 +107,10 @@ public class CompanyShareToolbarViewModel extends ShareToolbarViewModel<Company,
                     selectedItems.add(getTrackedObject().getId());
 
                     // Remove items from Tracking list relationship
-                    asyncDeleteCompanies(getTrackedObject().getId(), selectedItems);
+                    if (prevList != null) {
+
+                        asyncDeleteCompanies(prevList.getId(), selectedItems);
+                    }
 
                 } else {
 
