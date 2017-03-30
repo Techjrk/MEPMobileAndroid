@@ -43,7 +43,7 @@ public class MapInfoWindowViewModel extends BaseObservable {
         if (project.getProjectStage() == null) {
             setPostBid(false);
         } else {
-            setPostBid(project.getProjectStage().getId() != 102);
+            setPostBid(project.getProjectStage().getParentId() != 102);
         }
 
         setBidStatus(isPostBid() ? context.getString(R.string.post_bid) : context.getString(R.string.pre_bid));

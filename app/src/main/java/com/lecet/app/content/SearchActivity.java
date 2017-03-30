@@ -56,6 +56,7 @@ public class SearchActivity extends AppCompatActivity {
      * Handle the result of all filters being applied, returning to this main
      * Search Activity with the relevant filters, and make the filtered query.
      */
+    public String companyFilter;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -69,6 +70,11 @@ public class SearchActivity extends AppCompatActivity {
             if(locationFilter.length() > 0) {
                 sb.append(locationFilter);
             }
+            companyFilter = processCompanyLocationFilter(data);
+           /* if(companyFilter.length() > 0) {
+                if(sb.length() > 0) sb.append(",");
+                sb.append(companyFilter);
+            }*/
 
             // Primary Project Type Filter e.g. {"type": {Engineering}}
             String primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
@@ -157,7 +163,7 @@ public class SearchActivity extends AppCompatActivity {
         Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
         //Revisit this:
         //This area is for setting the filter for Company and Contact..
-//        viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
+      //  viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
 //        viewModel.setContactSearchFilter(filter?); //Pls. check what correct filter value should be passed for contact
 
 //Default section page once you clicked the Apply button of the Search Filter section page.
@@ -177,13 +183,32 @@ public class SearchActivity extends AppCompatActivity {
     private String processLocationFilter(Intent data) {
         String filter = "";
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
+        /*String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
+        if (companyLocation !=null) {
+            viewModel.setCompanySearchFilter(companyLocation); //Pls. check what correct filter value should be passed for company
+            Log.d("companyfilter","companyfilter:"+companyLocation);
+            filter = companyLocation;
+        }*/
         if (projectLocation != null && !projectLocation.equals("")) {
             Log.d("SearchActivity", "projectLocation = " + projectLocation);
             filter = projectLocation;
+            Log.d("projectfilter","projectfilter:"+projectLocation);
         }
+
         return filter;
     }
+    private String processCompanyLocationFilter(Intent data) {
+        String filter = "";
+        String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
+        if (companyLocation !=null) {
+            Log.d("companyfilter","companyfilter:"+companyLocation);
+            viewModel.setCompanySearchFilter(companyLocation); //Pls. check what correct filter value should be passed for company
 
+            filter = companyLocation;
+        }
+
+        return filter;
+    }
     /**
      * Process the Primary Project Type filter data
      */

@@ -26,12 +26,15 @@ import com.lecet.app.adapters.SearchRecentRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchSummaryCompanyRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchSummaryContactRecyclerViewAdapter;
 import com.lecet.app.adapters.SearchSummaryProjectRecyclerViewAdapter;
+import com.lecet.app.content.SearchActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
+import com.lecet.app.data.models.Filter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
+import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
@@ -59,6 +62,7 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_EXTRA_DATA = "data";
     public static final String FILTER_EXTRA_DATA_BUNDLE = "data_result";
     public static final String FILTER_PROJECT_LOCATION = "projectLocation";
+    public static final String FILTER_COMPANY_LOCATION = "companyLocation";
     public static final String FILTER_PROJECT_TYPE = "projectType";
     public static final String FILTER_PROJECT_TYPE_ID = "projectTypeId";
     public static final String FILTER_PROJECT_VALUE = "projectValue";
@@ -70,9 +74,9 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_OWNER_TYPE = "ownerType";
     public static final String FILTER_PROJECT_WORK_TYPE = "workType";
     public static final String FILTER_INSTANT_SEARCH = "instantSearch";
-    public static boolean USING_INSTANT_SEARCH = false;
+    public static boolean USING_INSTANT_SEARCH = false;     //TODO - convert to a private var with accessors
     public static final int REQUEST_CODE_ZERO = 0;
-
+    public static boolean INIT_SEARCH=true;                 //TODO - convert to a private var with accessors
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
@@ -83,7 +87,24 @@ public class SearchViewModel extends BaseObservable {
     private int seeAllForResult = SEE_ALL_NO_RESULT;
     private static AlertDialog.Builder dialogBuilder;
     private String errorMessage = null;
+    private Filter filterSearchSaved;
+    private SearchFilter searchFilterSearchSaved;
 
+    public Filter getFilterSearchSaved() {
+        return filterSearchSaved;
+    }
+
+    public void setFilterSearchSaved(Filter filterSearchSaved) {
+        this.filterSearchSaved = filterSearchSaved;
+    }
+
+    public SearchFilter getSearchFilterSearchSaved() {
+        return searchFilterSearchSaved;
+    }
+
+    public void setSearchFilterSearchSaved(SearchFilter searchFilterSearchSaved) {
+        this.searchFilterSearchSaved = searchFilterSearchSaved;
+    }
 
     // Adapter types
     @Retention(RetentionPolicy.SOURCE)
@@ -152,6 +173,7 @@ public class SearchViewModel extends BaseObservable {
     private int hideProjectSummary;
     private int hideCompanySummary;
     private int hideContactSummary;
+
     @Bindable
     public int getHideProjectSummary() {
         return hideProjectSummary;
@@ -161,6 +183,7 @@ public class SearchViewModel extends BaseObservable {
         this.hideProjectSummary = hideProjectSummary;
         notifyPropertyChanged(BR.hideProjectSummary);
     }
+
     @Bindable
     public int getHideCompanySummary() {
         return hideCompanySummary;
@@ -170,6 +193,7 @@ public class SearchViewModel extends BaseObservable {
         this.hideCompanySummary = hideCompanySummary;
         notifyPropertyChanged(BR.hideCompanySummary);
     }
+
     @Bindable
     public int getHideContactSummary() {
         return hideContactSummary;
@@ -184,8 +208,14 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.setProjectFilter(filter);
     }
 
+    public void setProjectSearchFilter2(String filter) {
+        searchDomain.setProjectFilter2(filter);
+    }
+
     public void setCompanySearchFilter(String filter) {
         searchDomain.setCompanyFilter(filter);
+        Log.d("setcompanyfilter","setcompanyfilter"+filter);
+
     }
 
     public void setContactSearchFilter(String filter) {
@@ -254,8 +284,17 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-
-        if (!USING_INSTANT_SEARCH && query.trim().equals("")) {
+        //  Log.d("updateviewquery1","updateviewquery1");
+      /* if (!USING_INSTANT_SEARCH && query.equals("")) {
+            setIsMSE1SectionVisible(true);
+            setIsMSE2SectionVisible(false);
+            setIsMSR11Visible(false);
+            setIsMSR12Visible(false);
+            setIsMSR13Visible(false);
+            return;
+        }*/
+        if (INIT_SEARCH) {
+            INIT_SEARCH = false;
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
             setIsMSR11Visible(false);
@@ -266,16 +305,19 @@ public class SearchViewModel extends BaseObservable {
         setHideProjectSummary(View.GONE);
         setHideCompanySummary(View.GONE);
         setHideContactSummary(View.GONE);
-        if (SearchDomain.callProjectService !=null) {
-            setQueryProjectTotal(0); setIsQueryProjectTotalZero(true);
+        if (SearchDomain.callProjectService != null) {
+            setQueryProjectTotal(0);
+            setIsQueryProjectTotalZero(true);
             SearchDomain.callProjectService.cancel();
         }
-        if (SearchDomain.callCompanyService !=null) {
-            setQueryCompanyTotal(0); setIsQueryCompanyTotalZero(true);
+        if (SearchDomain.callCompanyService != null) {
+            setQueryCompanyTotal(0);
+            setIsQueryCompanyTotalZero(true);
             SearchDomain.callCompanyService.cancel();
         }
-        if (SearchDomain.callContactService !=null) {
-            setQueryContactTotal(0); setIsQueryContactTotalZero(true);
+        if (SearchDomain.callContactService != null) {
+            setQueryContactTotal(0);
+            setIsQueryContactTotalZero(true);
             SearchDomain.callContactService.cancel();
         }
         checkQueryAndTotal();
@@ -543,9 +585,18 @@ public class SearchViewModel extends BaseObservable {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = nameInput.getText().toString();
-                        if(title != null && title.length() > 0) {
+                        if (title != null && title.length() > 0) {
                             Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
-                            saveCurrentProjectSearch(title);
+                            // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
+                            String saveCompany = ((SearchActivity) getActivity()).companyFilter;
+                            if (saveCompany != null && !saveCompany.equals("")) {
+
+                                saveCurrentCompanySearch(title, saveCompany);
+                            } else {
+                                saveCurrentProjectSearch(title);
+                            }
+                          //  init();
+                          //  updateViewQuery();
                         }
                         dialog.dismiss();
                         setSaveSearchHeaderVisible(false);
@@ -569,11 +620,36 @@ public class SearchViewModel extends BaseObservable {
                 } else {
                     Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
                 }
+                init();
+                updateViewQuery();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, "saveCurrentProjectSearch: onFailure: Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
+    private void saveCurrentCompanySearch(String title, String filter) {
+        searchDomain.setCompanyFilter(filter);
+        Log.d("SearchActivity", "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
+
+        searchDomain.saveCurrentCompanySearch(title, this.getQuery(), new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "saveCurrentCompanySearch: onResponse: success: Company search saved.");
+                } else {
+                    Log.e(TAG, "saveCurrentCompanySearch: onResponse: Company search save unsuccessful. " + response.message());
+                }
+                init();
+                updateViewQuery();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "saveCurrentCompanySearch: onFailure: Network is busy. Pls. try again. ");
             }
         });
     }
@@ -762,10 +838,12 @@ public class SearchViewModel extends BaseObservable {
     public boolean getDisplaySeeAllProject() {
         return displaySeeAllProject;
     }
+
     @Bindable
     public boolean getDisplaySeeAllCompany() {
         return displaySeeAllCompany;
     }
+
     @Bindable
     public boolean getDisplaySeeAllContact() {
         return displaySeeAllContact;
@@ -787,7 +865,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setQuery(String query) {
         this.query = query;
-        if (query.trim().equals("")) {
+        if (query.equals("")) {
             USING_INSTANT_SEARCH = false;
             setQueryEmpty(true);
         } else setQueryEmpty(false);
@@ -876,7 +954,7 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public boolean getIsQueryProjectTotalZero() {
-       // return queryProjectTotal <= 0;
+        // return queryProjectTotal <= 0;
         return isQueryProjectTotalZero;
     }
 
@@ -902,7 +980,7 @@ public class SearchViewModel extends BaseObservable {
     @Bindable
     public boolean getIsQueryContactTotalZero() {
         //return queryContactTotal <= 0;
-        return  isQueryContactTotalZero;
+        return isQueryContactTotalZero;
     }
 
     @Bindable
@@ -1020,6 +1098,25 @@ public class SearchViewModel extends BaseObservable {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String parseSearchFilter(String parse1) {
+        parse1 = parse1.replace("{", "").replace("}", "");
+        Log.d("companysearchfilter2", "companysearchfilter2" + parse1);
+        String parseLoc[] = parse1.split(",");
+        Log.d("parseLength", "parseLength: " + parseLoc.length);
+        if (parseLoc == null) return null;
+        String st = "";
+        int j = 0;
+        for (int i = 0; ; ++i) {
+            String[] parseEach = parseLoc[i].split("=");
+            st += "\"" + parseEach[0].trim() + "\":" + "\"" + parseEach[1].trim() + "\"";
+            ++j;
+            if (i == (parseLoc.length - 1)) break;
+            st += ",";
+        }
+        Log.d("st", "st:" + st);
+        return st;
     }
 
 }

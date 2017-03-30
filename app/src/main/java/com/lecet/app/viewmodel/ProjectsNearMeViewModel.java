@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -200,7 +201,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     if (project.getProjectStage() == null) {
                         icon = greenMarker;
                     } else {
-                        icon = project.getProjectStage().getId() == 102 ? greenMarker : redMarker;
+                        icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
                     }
 
                     Marker marker = map.addMarker(new MarkerOptions()
@@ -225,7 +226,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             if (project.getProjectStage() == null) {
                 icon = greenMarker;
             } else {
-                icon = project.getProjectStage().getId() == 102 ? greenMarker : redMarker;
+                icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
             }
 
             lastMarkerTapped.setIcon(icon);
@@ -273,7 +274,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             if (project.getProjectStage() == null) {
                 icon = greenMarker;
             } else {
-                icon = project.getProjectStage().getId() == 102 ? greenMarker : redMarker;
+                icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
             }
 
             lastMarkerTapped.setIcon(icon);

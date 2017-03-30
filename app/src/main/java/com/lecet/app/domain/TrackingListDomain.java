@@ -17,7 +17,6 @@ import com.lecet.app.utility.DateUtility;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -28,14 +27,13 @@ import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * File: TrackingListDomain Created: 11/3/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -100,7 +98,7 @@ public class TrackingListDomain {
     }
 
 
-    public  Call<List<CompanyTrackingList>> getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
+    public Call<List<CompanyTrackingList>> getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         long userID = sharedPreferenceUtil.getId();
@@ -349,17 +347,22 @@ public class TrackingListDomain {
             public void execute(Realm asyncRealm) {
 
                 ProjectTrackingList threadSafeTrackingList = asyncRealm.where(ProjectTrackingList.class).equalTo("id", trackingListId).findFirst();
-                RealmList<Project> trackedProjects = threadSafeTrackingList.getProjects();
+                try {
+                    RealmList<Project> trackedProjects = threadSafeTrackingList.getProjects();
 
-                Iterator<Project> projectIterator = trackedProjects.iterator();
-                while (projectIterator.hasNext()) {
+                    Iterator<Project> projectIterator = trackedProjects.iterator();
+                    while (projectIterator.hasNext()) {
 
-                    Project project = projectIterator.next();
+                        Project project = projectIterator.next();
 
-                    if (toBeDeleted.contains(project.getId())){
-                        projectIterator.remove();
+                        if (toBeDeleted.contains(project.getId())) {
+                            projectIterator.remove();
+                        }
                     }
+                } catch (Exception e) {
+                    Log.d("getProject() is null", "getProjects() is null"); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
                 }
+
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -392,19 +395,24 @@ public class TrackingListDomain {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm asyncRealm) {
-
                 CompanyTrackingList threadSafeTrackingList = asyncRealm.where(CompanyTrackingList.class).equalTo("id", trackingListId).findFirst();
-                RealmList<Company> trackedCompanies = threadSafeTrackingList.getCompanies();
+                try {
+              //  if (threadSafeTrackingList != null) {
+                    RealmList<Company> trackedCompanies = threadSafeTrackingList.getCompanies();
 
-                Iterator<Company> projectIterator = trackedCompanies.iterator();
-                while (projectIterator.hasNext()) {
+                    Iterator<Company> projectIterator = trackedCompanies.iterator();
+                    while (projectIterator.hasNext()) {
 
-                    Company company = projectIterator.next();
+                        Company company = projectIterator.next();
 
-                    if (toBeDeleted.contains(company.getId())){
-                        projectIterator.remove();
+                        if (toBeDeleted.contains(company.getId())) {
+                            projectIterator.remove();
+                        }
                     }
-                }
+                } catch (Exception e) {
+                        Log.d("getProject() is null", "getProjects() is null"); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
+                    }
+            //}
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
