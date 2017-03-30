@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailTakePhotoViewModel"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lecet.app.content.ProjectDetailTakePhotoActivity">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:orientation="vertical">
+
+            <!-- MENU -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@color/lecetButtonDarkBlue"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:text="@string/cancel"
+                    android:textColor="@color/lecetLightBlue"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                <!--TODO: Add OnClick Method for post cancel -->
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:text="@string/add_photo"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <!-- TEMP -->
+                <Button
+                    android:id="@+id/use_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:textColor="@color/lecetLightBlue"
+                    android:text="Use"
+                    android:textSize="16sp"
+                    android:onClick="@{viewModel::onClickUsePhoto}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- BOTTOM VIEWPAGER -->
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+            <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager_take_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/lecetDarkestBlue"
+                    android:layout_alignParentBottom="true">
+            </android.support.v4.view.ViewPager>
+
+            <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_layout_take_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/lecetLightOrange"
+                    android:layout_alignParentBottom="true"
+                    app:tabTextColor="@color/pureWhite"
+                    app:tabMode="fixed"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabGravity="center"
+                    app:tabSelectedTextColor="@color/pureWhite"
+                    app:tabIndicatorColor="@color/lecetMediumOrange">
+            </android.support.design.widget.TabLayout>
+
+
+        </RelativeLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

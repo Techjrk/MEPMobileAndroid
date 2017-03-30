@@ -1,19 +1,21 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.databinding.BaseObservable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailAddImageActivity;
 import com.lecet.app.content.ProjectDetailAddNoteActivity;
+import com.lecet.app.content.ProjectDetailTakePhotoActivity;
 import com.lecet.app.domain.ProjectDomain;
 
 /**
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNotesAndUpdatesViewModel {
+public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectNotesUpdatesVM";
 
@@ -34,8 +36,8 @@ public class ProjectNotesAndUpdatesViewModel {
     }
 
     public void onClickAddImage(View view){
-        Log.e(TAG, "onClickAddImage: Launch Add Image Activity");
-        Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddImageActivity.class);
+        Log.e(TAG, "onClickAddImage: Launch Take Photo Activity");
+        Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailTakePhotoActivity.class);
         fragment.getActivity().startActivity(intent);
     }
 
