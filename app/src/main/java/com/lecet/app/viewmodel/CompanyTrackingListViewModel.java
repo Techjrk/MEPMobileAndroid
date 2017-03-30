@@ -48,10 +48,10 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
         this.trackingListDomain = trackingListDomain;
         this.companyDomain = companyDomain;
-        getCompanies(listItemId);
+        //getCompanies(listItemId);
     }
 
-    private void getCompanies(long listId) {
+    public void getCompanies(long listId) {
 
         CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listId);
         if (companyList != null) {

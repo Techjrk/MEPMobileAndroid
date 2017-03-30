@@ -28,7 +28,7 @@ import io.realm.RealmChangeListener;
  * TrackingListActivity Created by jasonm on 11/2/16.
  */
 
-public abstract class TrackingListActivity extends LecetBaseActivity {
+public abstract class TrackingListActivity<T extends TrackingListViewModel> extends LecetBaseActivity {
 
     private final String TAG = "ProjectTrackingListAct";
 
@@ -37,10 +37,10 @@ public abstract class TrackingListActivity extends LecetBaseActivity {
     public static final String PROJECT_LIST_ITEM_SIZE = "listItemSize";
     public static final String PROJECT_LIST_ITEM_TITLE = "listItemTitle";
 
-    private TrackingListViewModel viewModel;
+    private T viewModel;
+    private long listItemId;
 
-
-    public abstract TrackingListViewModel buildViewModel(long listItemId);
+    public abstract T buildViewModel(long listItemId);
     public abstract String getActionBarSubtitle(int dataSize);
 
     @Override
@@ -50,7 +50,7 @@ public abstract class TrackingListActivity extends LecetBaseActivity {
         Log.d(TAG, "onCreate");
 
         // get extras from Intent
-        long listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
+        listItemId = getIntent().getLongExtra(PROJECT_LIST_ITEM_ID, -1);
         int listItemSize = getIntent().getIntExtra(PROJECT_LIST_ITEM_SIZE, 0);
         String listItemTitle = getIntent().getStringExtra(PROJECT_LIST_ITEM_TITLE);
 
@@ -63,6 +63,14 @@ public abstract class TrackingListActivity extends LecetBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         viewModel.handleOnActivityResult(requestCode, resultCode, data);
+    }
+
+    public T getViewModel() {
+        return viewModel;
+    }
+
+    public long getListItemId() {
+        return listItemId;
     }
 
     private void setupBinding(long listItemId) {
