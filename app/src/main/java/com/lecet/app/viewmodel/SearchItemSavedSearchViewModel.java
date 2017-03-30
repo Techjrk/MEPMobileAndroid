@@ -41,15 +41,10 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
 
     ////////////////////////////////////
     // CLICK HANDLERS
-//TODO:
 
-   public String  parseSearchFilter(String parse1) {
-       parse1 = parse1.replace("{", "").replace("}", "");
-       Log.d("companysearchfilter2","companysearchfilter2"+parse1);
-       String parseCity[] = parse1.split("=");
-       if (parseCity == null) return null;
-       return "\"" + parseCity[0] + "\":" + "\"" + parseCity[1] + "\"";
-   }
+//TODO: Filter Parsing Process
+
+
     public void onClick(View view) {
         String query = searchSaved.getQuery();
         viewModel.setFilterSearchSaved(searchSaved.getFilter());
@@ -60,7 +55,7 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
         Log.d("bh","bh"+sf.getBuildingOrHighway());
         if (sf.getProjectLocation() != null) {
           //  String st = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{\"projectLocation\":{\"city\":\"Annapolis\"}}}";
-            String parseFilter = parseSearchFilter(sf.getProjectLocation().toString());
+            String parseFilter = viewModel.parseSearchFilter(sf.getProjectLocation().toString());
             if (parseFilter !=null) {
                 st = "\"projectLocation\":{" + parseFilter + "}";
                 viewModel.setProjectSearchFilter2(st);
@@ -79,7 +74,8 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
         //   String st = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{\"projectLocation\":{\"city\":\"Annapolis\"}}}";
             //String companyLocation = "\"city\":\"Annapolis\"";
             //String st = "\"companyLocation\":{" + companyLocation + "}";
-            String parseFilter = parseSearchFilter(sf.getCompanyLocation().toString());
+            String parseFilter = viewModel.parseSearchFilter(sf.getCompanyLocation().toString());
+            Log.d("companyparse","companyparse:"+parseFilter);
 
             if (parseFilter !=null) {
                 /* parse1 = parse1.replace("{", "").replace("}", "");
@@ -96,9 +92,10 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
                 //end for project filtering
 
             }
-            Log.d("companysearchfilter","companysearchfilter"+sf.getCompanyLocation().toString());
-            Log.d("companysearchfilter3","companysearchfilter3"+st);
+          //  Log.d("companysearchfilter","companysearchfilter"+sf.getCompanyLocation().toString());
+          //  Log.d("companysearchfilter3","companysearchfilter3"+st);
         }
+        //Setting the query will refresh the display of the summary section for projects, companies and contacts
         if (query != null && query.length() > 0) {
             viewModel.setQuery(searchSaved.getQuery());
             /*viewModel.setIsMSE1SectionVisible(false);
@@ -107,7 +104,7 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
             viewModel.setQuery("");
         }
 
-        Log.d("searchfilter","searchfilter:"+searchSaved.getFilter().getSearchFilter());
+        //Log.d("searchfilter","searchfilter:"+searchSaved.getFilter().getSearchFilter());
         viewModel.setIsMSE1SectionVisible(false);
         viewModel.setIsMSE2SectionVisible(true);
     }

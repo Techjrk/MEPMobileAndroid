@@ -173,6 +173,7 @@ public class SearchViewModel extends BaseObservable {
     private int hideProjectSummary;
     private int hideCompanySummary;
     private int hideContactSummary;
+
     @Bindable
     public int getHideProjectSummary() {
         return hideProjectSummary;
@@ -182,6 +183,7 @@ public class SearchViewModel extends BaseObservable {
         this.hideProjectSummary = hideProjectSummary;
         notifyPropertyChanged(BR.hideProjectSummary);
     }
+
     @Bindable
     public int getHideCompanySummary() {
         return hideCompanySummary;
@@ -191,6 +193,7 @@ public class SearchViewModel extends BaseObservable {
         this.hideCompanySummary = hideCompanySummary;
         notifyPropertyChanged(BR.hideCompanySummary);
     }
+
     @Bindable
     public int getHideContactSummary() {
         return hideContactSummary;
@@ -204,9 +207,11 @@ public class SearchViewModel extends BaseObservable {
     public void setProjectSearchFilter(String filter) {
         searchDomain.setProjectFilter(filter);
     }
+
     public void setProjectSearchFilter2(String filter) {
         searchDomain.setProjectFilter2(filter);
     }
+
     public void setCompanySearchFilter(String filter) {
         searchDomain.setCompanyFilter(filter);
         Log.d("setcompanyfilter","setcompanyfilter"+filter);
@@ -279,7 +284,7 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void updateViewQuery(/*String query*/) {
-      //  Log.d("updateviewquery1","updateviewquery1");
+        //  Log.d("updateviewquery1","updateviewquery1");
       /* if (!USING_INSTANT_SEARCH && query.equals("")) {
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
@@ -289,7 +294,7 @@ public class SearchViewModel extends BaseObservable {
             return;
         }*/
         if (INIT_SEARCH) {
-            INIT_SEARCH=false;
+            INIT_SEARCH = false;
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
             setIsMSR11Visible(false);
@@ -300,16 +305,19 @@ public class SearchViewModel extends BaseObservable {
         setHideProjectSummary(View.GONE);
         setHideCompanySummary(View.GONE);
         setHideContactSummary(View.GONE);
-        if (SearchDomain.callProjectService !=null) {
-            setQueryProjectTotal(0); setIsQueryProjectTotalZero(true);
+        if (SearchDomain.callProjectService != null) {
+            setQueryProjectTotal(0);
+            setIsQueryProjectTotalZero(true);
             SearchDomain.callProjectService.cancel();
         }
-        if (SearchDomain.callCompanyService !=null) {
-            setQueryCompanyTotal(0); setIsQueryCompanyTotalZero(true);
+        if (SearchDomain.callCompanyService != null) {
+            setQueryCompanyTotal(0);
+            setIsQueryCompanyTotalZero(true);
             SearchDomain.callCompanyService.cancel();
         }
-        if (SearchDomain.callContactService !=null) {
-            setQueryContactTotal(0); setIsQueryContactTotalZero(true);
+        if (SearchDomain.callContactService != null) {
+            setQueryContactTotal(0);
+            setIsQueryContactTotalZero(true);
             SearchDomain.callContactService.cancel();
         }
         checkQueryAndTotal();
@@ -577,16 +585,18 @@ public class SearchViewModel extends BaseObservable {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = nameInput.getText().toString();
-                        if(title != null && title.length() > 0) {
+                        if (title != null && title.length() > 0) {
                             Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
-                           // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
-                            String  saveCompany = ((SearchActivity)getActivity()).companyFilter;
-                            if (saveCompany !=null && !saveCompany.equals("")) {
+                            // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
+                            String saveCompany = ((SearchActivity) getActivity()).companyFilter;
+                            if (saveCompany != null && !saveCompany.equals("")) {
 
-                                saveCurrentCompanySearch(title,saveCompany);
+                                saveCurrentCompanySearch(title, saveCompany);
                             } else {
                                 saveCurrentProjectSearch(title);
                             }
+                          //  init();
+                          //  updateViewQuery();
                         }
                         dialog.dismiss();
                         setSaveSearchHeaderVisible(false);
@@ -610,6 +620,8 @@ public class SearchViewModel extends BaseObservable {
                 } else {
                     Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
                 }
+                init();
+                updateViewQuery();
             }
 
             @Override
@@ -619,7 +631,7 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
-    private void saveCurrentCompanySearch(String title,String filter) {
+    private void saveCurrentCompanySearch(String title, String filter) {
         searchDomain.setCompanyFilter(filter);
         Log.d("SearchActivity", "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
 
@@ -631,6 +643,8 @@ public class SearchViewModel extends BaseObservable {
                 } else {
                     Log.e(TAG, "saveCurrentCompanySearch: onResponse: Company search save unsuccessful. " + response.message());
                 }
+                init();
+                updateViewQuery();
             }
 
             @Override
@@ -824,10 +838,12 @@ public class SearchViewModel extends BaseObservable {
     public boolean getDisplaySeeAllProject() {
         return displaySeeAllProject;
     }
+
     @Bindable
     public boolean getDisplaySeeAllCompany() {
         return displaySeeAllCompany;
     }
+
     @Bindable
     public boolean getDisplaySeeAllContact() {
         return displaySeeAllContact;
@@ -938,7 +954,7 @@ public class SearchViewModel extends BaseObservable {
 
     @Bindable
     public boolean getIsQueryProjectTotalZero() {
-       // return queryProjectTotal <= 0;
+        // return queryProjectTotal <= 0;
         return isQueryProjectTotalZero;
     }
 
@@ -964,7 +980,7 @@ public class SearchViewModel extends BaseObservable {
     @Bindable
     public boolean getIsQueryContactTotalZero() {
         //return queryContactTotal <= 0;
-        return  isQueryContactTotalZero;
+        return isQueryContactTotalZero;
     }
 
     @Bindable
@@ -1082,6 +1098,25 @@ public class SearchViewModel extends BaseObservable {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String parseSearchFilter(String parse1) {
+        parse1 = parse1.replace("{", "").replace("}", "");
+        Log.d("companysearchfilter2", "companysearchfilter2" + parse1);
+        String parseLoc[] = parse1.split(",");
+        Log.d("parseLength", "parseLength: " + parseLoc.length);
+        if (parseLoc == null) return null;
+        String st = "";
+        int j = 0;
+        for (int i = 0; ; ++i) {
+            String[] parseEach = parseLoc[i].split("=");
+            st += "\"" + parseEach[0].trim() + "\":" + "\"" + parseEach[1].trim() + "\"";
+            ++j;
+            if (i == (parseLoc.length - 1)) break;
+            st += ",";
+        }
+        Log.d("st", "st:" + st);
+        return st;
     }
 
 }
