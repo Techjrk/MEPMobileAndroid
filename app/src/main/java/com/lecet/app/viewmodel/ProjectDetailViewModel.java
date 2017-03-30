@@ -179,7 +179,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_types), project.getProjectTypes()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage_normal), project.getProjectStage().getName()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage_normal), project.getProjectStage() != null ? project.getProjectStage().getName() : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.start_date), project.getTargetStartDate() != null ? DateUtility.formatDateForDisplay(project.getTargetStartDate()) : ""));
