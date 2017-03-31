@@ -588,7 +588,7 @@ public class SearchViewModel extends BaseObservable {
                         if (title != null && title.length() > 0) {
                             Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
                             // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
-                            String saveCompany = ((SearchActivity) getActivity()).companyFilter;
+                            String saveCompany = ((SearchActivity) getActivity()).getCompanyFilter();
                             if (saveCompany != null && !saveCompany.equals("")) {
 
                                 saveCurrentCompanySearch(title, saveCompany);
