@@ -162,6 +162,20 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
         subtitleTextView.setText(subtitle);
     }
 
+    public void updateToolbarSubTitle(int listSize, String title) {
+
+        subtitleTextView.setText(getActionBarSubtitle(listSize, title));
+    }
+
+    public String getActionBarSubtitle(int dataSize, String title) {
+        // subtitle, handle plural or singular
+        StringBuilder subtitleSb = new StringBuilder();
+        subtitleSb.append(dataSize);
+        subtitleSb.append(" ");
+        subtitleSb.append(title);
+
+        return subtitleSb.toString();
+    }
 
     /**
      * Adapter Data Management: Project List
