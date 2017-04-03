@@ -16,10 +16,17 @@ import io.realm.RealmChangeListener;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class CompanyTrackingListActivity extends TrackingListActivity {
+public class CompanyTrackingListActivity extends TrackingListActivity<CompanyTrackingListViewModel> {
 
     @Override
-    public TrackingListViewModel buildViewModel(long listItemId) {
+    protected void onResume() {
+        super.onResume();
+
+        getViewModel().getCompanies(getListItemId());
+    }
+
+    @Override
+    public CompanyTrackingListViewModel buildViewModel(long listItemId) {
 
         TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance(), new RealmChangeListener() {
             @Override

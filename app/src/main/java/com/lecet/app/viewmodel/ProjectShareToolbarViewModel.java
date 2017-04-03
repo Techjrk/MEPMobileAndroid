@@ -74,6 +74,8 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
     @Override
     public void removeTrackedObjectFromTrackingList(long trackingListId, List<Long> trackedIds) {
 
+        final ProjectTrackingList prevList = getAssociatedTrackingList(getTrackedObject());
+
         showProgressDialog(getAppCompatActivity().getString(R.string.app_name), getAppCompatActivity().getString(R.string.updating));
 
         getTrackingListDomain().syncProjectTrackingList(trackingListId, trackedIds, new Callback<ProjectTrackingList>() {
@@ -88,7 +90,9 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                     selectedItems.add(getTrackedObject().getId());
 
                     // Remove items from Tracking list relationship
-                    asyncDeleteProjects(getTrackedObject().getId(), selectedItems);
+                    if (prevList != null) {
+                        asyncDeleteProjects(prevList.getId(), selectedItems);
+                    }
 
                 } else {
 

@@ -129,6 +129,19 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (overflowMenu != null && overflowMenu.isShowing()) {
+            overflowMenu.dismiss();
+        }
+
+        if (mtmMenu != null && mtmMenu.isShowing()) {
+            mtmMenu.dismiss();
+        }
+    }
+
     private void setupBinding() {
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
