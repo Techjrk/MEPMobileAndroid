@@ -51,6 +51,8 @@
     <string name="save">Save</string>
     <string name="min">MIN</string>
     <string name="max">MAX</string>
+    <string name="edit_upper">Edit</string>
+    <string name="discard">Discard</string>
 
 
     <!-- Splash, Login & Navigation Base -->
@@ -114,12 +116,13 @@
     <string name="projects">Projects</string>
     <string name="company">Company</string>
     <string name="companies">Companies</string>
+    <string name="pending_changes">There are pending changes to your list. Would you like to discard them?</string>
 
     <!-- MSE: Search Page -->
     <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
     <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
     <string name="recent">RECENT</string>
-    <string name="last_checked">Last checked</string>
+    <string name="last_checked">Last checked yesterday</string>
     <string name="search">Search</string>
 
     <!-- Geofencing -->
@@ -216,8 +219,8 @@
     <string name="confirm_cancel">CANCEL</string>
 
     <!-- MTM Menu -->
-    <string name="mtm_menu_number_company">%s Companies</string>
-    <string name="mtm_menu_number_projects">%s Projects</string>
+    <string name="mtm_menu_number_company">%d Companies</string>
+    <string name="mtm_menu_number_projects">%d Projects</string>
     <string name="mse_2_0">MSE 2.0</string>
     <string name="project_query_searches">PROJECTS</string>
     <string name="company_query_searches">COMPANIES</string>

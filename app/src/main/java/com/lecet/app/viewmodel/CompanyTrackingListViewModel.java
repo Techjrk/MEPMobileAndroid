@@ -48,7 +48,6 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
         this.trackingListDomain = trackingListDomain;
         this.companyDomain = companyDomain;
-        //getCompanies(listItemId);
     }
 
     public void getCompanies(long listId) {
@@ -56,6 +55,12 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
         CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listId);
         if (companyList != null) {
             RealmList<Company> companies = companyList.getCompanies();
+
+            if (companies.size() != 1) {
+                updateToolbarSubTitle(companies.size(), getAppCompatActivity().getResources().getString(R.string.companies));
+            } else {
+                updateToolbarSubTitle(companies.size(), getAppCompatActivity().getResources().getString(R.string.company));
+            }
 
             selectedSort = SORT_ALPHABETICAL;
             setAdapterData(companies.sort("name", Sort.ASCENDING));

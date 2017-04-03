@@ -512,6 +512,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
+
+        // Dismiss menu so that it refreshes properly
+        mtmMenu.dismiss();
+
         Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
@@ -521,6 +525,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
+
+        // Dismiss menu so that it refreshes properly
+        mtmMenu.dismiss();
+
         Intent intent = new Intent(getBaseContext(), CompanyTrackingListActivity.class);
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, companyTrackingList.getId());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, companyTrackingList.getCompanies().size());

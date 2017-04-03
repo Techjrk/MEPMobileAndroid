@@ -54,7 +54,6 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
         this.projectDomain = projectDomain;
         this.trackingListDomain = trackingListDomain;
-        //getProjectTrackingListUpdates(listItemId);
     }
 
     /**
@@ -72,6 +71,12 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
                 if (response.isSuccessful()) {
 
                     List<Project> data = response.body();
+
+                    if (data.size() != 1) {
+                        updateToolbarSubTitle(data.size(), getAppCompatActivity().getResources().getString(R.string.projects));
+                    } else {
+                        updateToolbarSubTitle(data.size(), getAppCompatActivity().getResources().getString(R.string.project));
+                    }
 
                     projectDomain.asyncCopyToRealm(data, new Realm.Transaction.OnSuccess() {
 
