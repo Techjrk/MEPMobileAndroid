@@ -115,25 +115,20 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
     private void initProjectTrackingList(long trackingListId) {
 
         ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(trackingListId);
+        RealmList<Project> projects = projectList.getProjects();
 
-        if (projectList != null) {
-            RealmList<Project> projects = projectList.getProjects();
-
-            selectedSort = SORT_BID_DATE;
-            setAdapterData(projects.sort("bidDate", Sort.DESCENDING));
-            getListAdapter().notifyDataSetChanged();
-        }
+        selectedSort = SORT_BID_DATE;
+        setAdapterData(projects.sort("bidDate", Sort.DESCENDING));
+        getListAdapter().notifyDataSetChanged();
     }
 
     private void updateProjectTrackingList(long trackingListId) {
 
         ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(trackingListId);
 
-        if (projectList != null) {
-            RealmList<Project> projects = projectList.getProjects();
-            setAdapterData(projects.sort(filter, selectedSort == SORT_VALUE_LOW ? Sort.ASCENDING : Sort.DESCENDING));
-            getListAdapter().notifyDataSetChanged();
-        }
+        RealmList<Project> projects = projectList.getProjects();
+        setAdapterData(projects.sort(filter, selectedSort == SORT_VALUE_LOW ? Sort.ASCENDING : Sort.DESCENDING));
+        getListAdapter().notifyDataSetChanged();
     }
 
 
