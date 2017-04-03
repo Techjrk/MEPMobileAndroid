@@ -104,6 +104,13 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
             viewModel.setQuery("");
         }
 
+        if(searchSaved.getModelName().equals("Company")) {  //TODO - hard-coded
+            viewModel.setSaveSearchCategory(SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
+        }
+        else {
+            viewModel.setSaveSearchCategory(SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT); //default to project
+        }
+
         //Log.d("searchfilter","searchfilter:"+searchSaved.getFilter().getSearchFilter());
         viewModel.setIsMSE1SectionVisible(false);
         viewModel.setIsMSE2SectionVisible(true);
