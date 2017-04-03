@@ -74,6 +74,10 @@ public class SearchViewModel extends BaseObservable {
     public static final String FILTER_PROJECT_OWNER_TYPE = "ownerType";
     public static final String FILTER_PROJECT_WORK_TYPE = "workType";
     public static final String FILTER_INSTANT_SEARCH = "instantSearch";
+    public static final String SAVE_SEARCH_CATEGORY = "saveSearchCategory";
+    public static final String SAVE_SEARCH_CATEGORY_PROJECT = "project";
+    public static final String SAVE_SEARCH_CATEGORY_COMPANY = "company";
+    public static final String SAVE_SEARCH_CATEGORY_CONTACT = "contact";
     public static boolean USING_INSTANT_SEARCH = false;     //TODO - convert to a private var with accessors
     public static final int REQUEST_CODE_ZERO = 0;
     public static boolean INIT_SEARCH=true;                 //TODO - convert to a private var with accessors
@@ -89,6 +93,7 @@ public class SearchViewModel extends BaseObservable {
     private String errorMessage = null;
     private Filter filterSearchSaved;
     private SearchFilter searchFilterSearchSaved;
+    private String saveSearchCategory = SAVE_SEARCH_CATEGORY_PROJECT;
 
     public Filter getFilterSearchSaved() {
         return filterSearchSaved;
@@ -104,6 +109,16 @@ public class SearchViewModel extends BaseObservable {
 
     public void setSearchFilterSearchSaved(SearchFilter searchFilterSearchSaved) {
         this.searchFilterSearchSaved = searchFilterSearchSaved;
+    }
+
+    public String getSaveSearchCategory() {
+        Log.d(TAG, "getSaveSearchCategory: " + this.saveSearchCategory);
+        return this.saveSearchCategory;
+    }
+
+    public void setSaveSearchCategory(String saveSearchCategory) {
+        Log.d(TAG, "setSaveSearchCategory: " + saveSearchCategory);
+        this.saveSearchCategory = saveSearchCategory;
     }
 
     // Adapter types
@@ -208,7 +223,7 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.setProjectFilter(filter);
     }
 
-    public void setProjectSearchFilter2(String filter) {
+    public void setProjectSearchFilter2(String filter) {    //TODO - what is the difference between these functions?
         searchDomain.setProjectFilter2(filter);
     }
 
@@ -591,13 +606,13 @@ public class SearchViewModel extends BaseObservable {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = nameInput.getText().toString();
                         if (title != null && title.length() > 0) {
-                            Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
+                            Log.d(TAG, "showSaveSearchDialog: Save category: " + getSaveSearchCategory() + ", title: " + title);
                             // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
-                            String saveCompany = ((SearchActivity) getActivity()).companyFilter;
-                            if (saveCompany != null && !saveCompany.equals("")) {
-
-                                saveCurrentCompanySearch(title, saveCompany);
-                            } else {
+                            //String saveCompany = ((SearchActivity) getActivity()).getCompanyFilter();       //TODO - this If statement is assuming either Project or Company filter has been set, but it could be both.
+                            if (getSaveSearchCategory().equals(SAVE_SEARCH_CATEGORY_COMPANY)) {
+                                saveCurrentCompanySearch(title);
+                            }
+                            else {
                                 saveCurrentProjectSearch(title);
                             }
                           //  init();
@@ -615,7 +630,7 @@ public class SearchViewModel extends BaseObservable {
      * Make the save search call and handle its callback
      */
     private void saveCurrentProjectSearch(String title) {
-        Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
+        Log.d(TAG, "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 
         searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
@@ -636,9 +651,8 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
-    private void saveCurrentCompanySearch(String title, String filter) {
-        searchDomain.setCompanyFilter(filter);
-        Log.d("SearchActivity", "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
+    private void saveCurrentCompanySearch(String title) {
+        Log.d(TAG, "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
 
         searchDomain.saveCurrentCompanySearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
@@ -1064,14 +1078,17 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void onClickSeeAllProject(View view) {
+        setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
     }
 
     public void onClickSeeAllCompany(View view) {
+        setSaveSearchCategory(SAVE_SEARCH_CATEGORY_COMPANY);
         setSeeAll(SEE_ALL_COMPANIES);
     }
 
     public void onClickSeeAllContact(View view) {
+        setSaveSearchCategory(SAVE_SEARCH_CATEGORY_CONTACT);
         setSeeAll(SEE_ALL_CONTACTS);
     }
 
