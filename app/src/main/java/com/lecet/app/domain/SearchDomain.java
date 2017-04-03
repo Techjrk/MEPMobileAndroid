@@ -94,7 +94,7 @@ public class SearchDomain {
     public void setProjectFilter(String projectFilter) {
         this.projectFilter = projectFilter;
     }
-    public void setProjectFilter2(String filter) {
+    public void setProjectFilter2(String filter) {  //TODO what is the difference between these functions?
         String pfilter = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{"+filter+"}}";
         this.projectFilter = pfilter;
     }
