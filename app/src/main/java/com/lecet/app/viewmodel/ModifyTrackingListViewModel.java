@@ -142,6 +142,10 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         notifyPropertyChanged(BR.objectsSelected);
     }
 
+    public RealmResults<U> getDataItems() {
+        return dataItems;
+    }
+
     public void updateDataItems(RealmResults<U> dataItems) {
 
         listView.setAdapter(getListAdapter(appCompatActivity, dataItems));
@@ -285,6 +289,22 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);
     }
+
+    public void updateToolbarSubTitle(int listSize, String title) {
+
+        subtitleTextView.setText(getActionBarSubtitle(listSize, title));
+    }
+
+    public String getActionBarSubtitle(int dataSize, String title) {
+        // subtitle, handle plural or singular
+        StringBuilder subtitleSb = new StringBuilder();
+        subtitleSb.append(dataSize);
+        subtitleSb.append(" ");
+        subtitleSb.append(title);
+
+        return subtitleSb.toString();
+    }
+
 
     @Override
     public void onTrackingListClicked(T trackingList) {

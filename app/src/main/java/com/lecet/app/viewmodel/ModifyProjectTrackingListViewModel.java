@@ -210,13 +210,20 @@ public class ModifyProjectTrackingListViewModel extends ModifyTrackingListViewMo
         });
     }
 
-    private void moveItems(long source, final List<Long> toBeDeleted, long destination, List<Long> destinationItems, List<Long> sourceIds) {
+    private void moveItems(long source, final List<Long> toBeDeleted, long destination, List<Long> destinationItems, final List<Long> sourceIds) {
 
         showProgressDialog(getAppCompatActivity().getString(R.string.app_name), getAppCompatActivity().getString(R.string.updating));
 
         trackingListDomain.moveProjectsToDestinationTrackingList(source, destination, destinationItems, sourceIds, new LecetCallback() {
             @Override
             public void onSuccess(Object result) {
+
+                if (sourceIds.size() != 1) {
+                    updateToolbarSubTitle(sourceIds.size(), getAppCompatActivity().getResources().getString(R.string.projects));
+                } else {
+                    updateToolbarSubTitle(sourceIds.size(), getAppCompatActivity().getResources().getString(R.string.project));
+                }
+
 
                 // Remove items from Tracking list relationship
                 asyncDeleteProjects(toBeDeleted);
@@ -239,6 +246,12 @@ public class ModifyProjectTrackingListViewModel extends ModifyTrackingListViewMo
             public void onResponse(Call<ProjectTrackingList> call, Response<ProjectTrackingList> response) {
 
                 if (response.isSuccessful()) {
+
+                    if (retainedItems.size() != 1) {
+                        updateToolbarSubTitle(retainedItems.size(), getAppCompatActivity().getResources().getString(R.string.projects));
+                    } else {
+                        updateToolbarSubTitle(retainedItems.size(), getAppCompatActivity().getResources().getString(R.string.project));
+                    }
 
                     // Remove items from Tracking list relationship
                     asyncDeleteProjects(selectedItems);
