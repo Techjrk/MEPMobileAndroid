@@ -39,6 +39,8 @@ import retrofit2.Response;
 
 public class TrackingListDomain {
 
+    private static final String TAG = "TrackingListDomain";
+
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
@@ -360,7 +362,7 @@ public class TrackingListDomain {
                         }
                     }
                 } catch (Exception e) {
-                    Log.d("getProject() is null", "getProjects() is null"); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
+                    Log.e(TAG, "deleteProjectsFromTrackingListAsync", e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
                 }
 
             }
@@ -410,7 +412,7 @@ public class TrackingListDomain {
                         }
                     }
                 } catch (Exception e) {
-                        Log.d("getProject() is null", "getProjects() is null"); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
+                    Log.e(TAG, "deleteCompaniesFromTrackingListAsync", e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
                     }
             //}
             }

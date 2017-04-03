@@ -54,7 +54,7 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
         this.projectDomain = projectDomain;
         this.trackingListDomain = trackingListDomain;
-        getProjectTrackingListUpdates(listItemId);
+        //getProjectTrackingListUpdates(listItemId);
     }
 
     /**

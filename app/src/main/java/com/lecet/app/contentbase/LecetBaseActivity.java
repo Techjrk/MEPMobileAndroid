@@ -160,6 +160,8 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
 
     public void showNetworkAlert() {
 
+        if (isFinishing() || isDestroyed()) return;
+
         if (displayingNetworkAlert) return;
 
         displayingNetworkAlert = true;

@@ -188,7 +188,8 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         if (moveMenu == null) {
             createMoveMenu(view);
         } else {
-            moveToAdapter.setTrackingLists(getUserTrackingListsExcludingCurrentList(trackingList));
+            moveToAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, getUserTrackingListsExcludingCurrentList(trackingList));
+            moveMenu.setAdapter(moveToAdapter);
         }
         moveMenu.show();
     }

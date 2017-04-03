@@ -179,12 +179,39 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_types), project.getProjectTypes()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage_normal), project.getProjectStage().getName()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage_normal), project.getProjectStage() != null ? project.getProjectStage().getName() : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.start_date), project.getTargetStartDate() != null ? DateUtility.formatDateForDisplay(project.getTargetStartDate()) : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", this.bidAmount)));
+
+        // Project Value
+        if (project.getProjectStage() != null) {
+
+            // The project is in Bidding/Participating Stage
+            if (project.getProjectStage().getParentId() == 102) {
+
+                // If the project is in the "Bid Results" stage, we will use the
+                // EstLow value
+                if (project.getProjectStage().getName() != null && project.getProjectStage().getName().equals("Bid Results")) {
+
+                    details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", project.getEstLow())));
+
+                } else {
+
+                    // Else we will use the average of the EstLow & EstHigh
+                    double average = (project.getEstLow() + project.getEstHigh()) / 2;
+                    details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", average)));
+                }
+            }
+
+        } else {
+
+            // Not in Bidding/Participating Stage so we will display $0
+            details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", 0)));
+        }
+
+        // Remaining details
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance()), projectID, activity.getString(R.string.jurisdiction)));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
 
