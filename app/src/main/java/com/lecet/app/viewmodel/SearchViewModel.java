@@ -232,6 +232,11 @@ public class SearchViewModel extends BaseObservable {
         Log.d("setcompanyfilter","setcompanyfilter"+filter);
 
     }
+    public void setCompanySearchFilter2(String filter) {
+        searchDomain.setCompanyFilter2(filter);
+        Log.d("setcompanyfilter","setcompanyfilter"+filter);
+
+    }
 
     public void setContactSearchFilter(String filter) {
         searchDomain.setContactFilter(filter);
@@ -825,6 +830,7 @@ public class SearchViewModel extends BaseObservable {
         } else if (isMSE2SectionVisible) {
             setIsMSE2SectionVisible(false);
             setIsMSE1SectionVisible(true);
+            USING_INSTANT_SEARCH=true;
             //  setQuery("");
         } else {
             activity.finish();

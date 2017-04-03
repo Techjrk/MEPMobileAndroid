@@ -52,8 +52,7 @@ public class SearchDomain {
         this.companyFilter = companyFilter;
     }
    */
-
-   /*public void setCompanyFilter(String xfilter) {
+   public void setCompanyFilter(String xfilter) {
 //        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
        if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
@@ -61,12 +60,16 @@ public class SearchDomain {
       // setCompanyFilter(sCompanyFilter);
        Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
 
-    }*/
-
-    public void setCompanyFilter(String companyFilter) {
-        this.companyFilter = companyFilter;
     }
+    public void setCompanyFilter2(String xfilter) {
+//        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
+        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0," +xfilter + "}";
+        if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
+        this.companyFilter = sCompanyFilter;
+        // setCompanyFilter(sCompanyFilter);
+        Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
 
+    }
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
@@ -78,7 +81,6 @@ public class SearchDomain {
         setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
         //  {\"include\":[\"company\"]}
     }
-
     public String getContactFilter() {
         return contactFilter;
     }
@@ -94,7 +96,7 @@ public class SearchDomain {
     public void setProjectFilter(String projectFilter) {
         this.projectFilter = projectFilter;
     }
-    public void setProjectFilter2(String filter) {  //TODO what is the difference between these functions?
+    public void setProjectFilter2(String filter) {
         String pfilter = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{"+filter+"}}";
         this.projectFilter = pfilter;
     }
