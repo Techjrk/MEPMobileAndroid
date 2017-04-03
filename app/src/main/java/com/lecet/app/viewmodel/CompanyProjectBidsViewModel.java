@@ -297,21 +297,21 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
     private class BidDateComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getProject().getBidDate().after(b.getProject().getBidDate()) ? 1 : -1;
+            return a.getProject().getBidDate().before(b.getProject().getBidDate()) ? 1 : -1;
         }
     }
 
     private class BidAddedComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getProject().getFirstPublishDate().after(b.getProject().getFirstPublishDate()) ? 1 : -1;
+            return a.getProject().getFirstPublishDate().before(b.getProject().getFirstPublishDate()) ? 1 : -1;
         }
     }
 
     private class BidLastUpdatedComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getProject().getLastPublishDate().after(b.getProject().getLastPublishDate()) ? 1 : -1;
+            return a.getProject().getLastPublishDate().before(b.getProject().getLastPublishDate()) ? 1 : -1;
         }
     }
 
