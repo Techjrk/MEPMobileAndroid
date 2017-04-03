@@ -18,8 +18,9 @@ import io.realm.Realm;
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
-    private String searchFilter;
     private SearchDomain searchDomain;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,160 +56,202 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * Handle the result of all filters being applied, returning to this main
      * Search Activity with the relevant filters, and make the filtered query.
+     * Projects and Companies support filters; Contacts do not.
      */
-    public String companyFilter;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        StringBuilder sb = new StringBuilder();     // used to construct the combined search filter
+        if(resultCode == RESULT_CANCELED || data == null) return;
 
-        if (data != null) {
+        // SEARCH CATEGORY (Project vs Company)
+        String category = processSearchCategory(data);
+        viewModel.setSaveSearchCategory(category);
 
-            // Location Filter e.g. {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
-            String locationFilter = processLocationFilter(data);
-            if(locationFilter.length() > 0) {
-                sb.append(locationFilter);
-            }
-            companyFilter = processCompanyLocationFilter(data);
-           /* if(companyFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(companyFilter);
-            }*/
+        StringBuilder projectsSb  = new StringBuilder();     // used to construct the combined search filter
+        StringBuilder companiesSb = new StringBuilder();
 
-            // Primary Project Type Filter e.g. {"type": {Engineering}}
-            String primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
-            if(primaryProjectTypeFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(primaryProjectTypeFilter);
-            }
+        // PROJECT-SPECIFIC SEARCH FILTERS
 
-            // Project ID Type Filter
-            String projectTypeIdFilter = processProjectTypeIdFilter(data);
-            if(projectTypeIdFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(projectTypeIdFilter);
-            }
-
-            // Value Filter
-            String valueFilter = processValueFilter(data);
-            if(valueFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(valueFilter);
-            }
-
-            // Updated Within Filter
-            String updatedWithinFilter = processUpdatedWithinFilter(data);
-            if(updatedWithinFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(updatedWithinFilter);
-            }
-
-            // Jurisdiction Filter
-            String jurisdictionFilter = processJurisdictionFilter(data);
-            if(jurisdictionFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(jurisdictionFilter);
-            }
-
-            // Stage Filter
-            String stageFilter = processStageFilter(data);
-            if(stageFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(stageFilter);
-            }
-
-            // Bidding Within Filter
-            String biddingWithinFilter = processBiddingWithinFilter(data);
-            if(biddingWithinFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(biddingWithinFilter);
-            }
-
-            // Building-or-Highway Filter
-            String buildingOrHighwayFilter = processBuildingOrHighwayFilter(data);
-            if(buildingOrHighwayFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(buildingOrHighwayFilter);
-            }
-
-            // Owner Type Filter
-            String ownerTypeFilter = processOwnerTypeFilter(data);
-            if(ownerTypeFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(ownerTypeFilter);
-            }
-
-            // Work Type Filter
-            String workTypeFilter = processWorkTypeFilter(data);
-            if(workTypeFilter.length() > 0) {
-                if(sb.length() > 0) sb.append(",");
-                sb.append(workTypeFilter);
-            }
-
-            // prepend searchFilter param if there are any filters used
-            if(sb.length() > 0) {
-                sb.insert(0, ",\"searchFilter\":{");
-                sb.append("}");
-            }
+        // Project Location Filter e.g. {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
+        String projectLocationFilter = processProjectLocationFilter(data);
+        if(projectLocationFilter.length() > 0) {
+            projectsSb.append(projectLocationFilter);
         }
 
-        String combinedFilter = sb.toString();
-        Log.d(TAG, "onActivityResult: combinedFilter: " + combinedFilter);
+        // Updated Within Filter
+        String updatedWithinFilter = processUpdatedWithinFilter(data);
+        if(updatedWithinFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(updatedWithinFilter);
+        }
 
-        String searchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + combinedFilter + "}";
-        Log.d(TAG, "onActivityResult: searchStr: " + searchStr);
+        // Stage Filter
+        String stageFilter = processStageFilter(data);
+        if(stageFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(stageFilter);
+        }
 
-        viewModel.setProjectSearchFilter(searchStr);
-        Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
-        //Revisit this:
-        //This area is for setting the filter for Company and Contact..
-      //  viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
-//        viewModel.setContactSearchFilter(filter?); //Pls. check what correct filter value should be passed for contact
+        // Building-or-Highway Filter
+        String buildingOrHighwayFilter = processBuildingOrHighwayFilter(data);
+        if(buildingOrHighwayFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(buildingOrHighwayFilter);
+        }
 
-//Default section page once you clicked the Apply button of the Search Filter section page.
+        // Owner Type Filter
+        String ownerTypeFilter = processOwnerTypeFilter(data);
+        if(ownerTypeFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(ownerTypeFilter);
+        }
+
+        // Work Type Filter
+        String workTypeFilter = processWorkTypeFilter(data);
+        if(workTypeFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(workTypeFilter);
+        }
+
+        // COMPANY-SPECIFIC SEARCH FILTERS
+
+        // Company Location Filter e.g. {"companyLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
+        String companyLocationFilter = processCompanyLocationFilter(data);
+        if(companyLocationFilter.length() > 0) {
+            companiesSb.append(companyLocationFilter);
+        }
+
+        // SEARCH FILTERS USED IN BOTH PROJECT AND COMPANY SEARCHES
+
+        // Primary Project Type Filter e.g. {"type": {Engineering}}
+        String primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
+        if(primaryProjectTypeFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(primaryProjectTypeFilter);
+            //TODO - add to Companies filter when this filter is supported by the API
+        }
+
+        // Project ID Type Filter
+        String projectTypeIdFilter = processProjectTypeIdFilter(data);
+        if(projectTypeIdFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(projectTypeIdFilter);
+            //TODO - add to Companies filter when this filter is supported by the API
+        }
+
+        // Value Filter
+        String valueFilter = processValueFilter(data);
+        if(valueFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(valueFilter);
+            if(companiesSb.length() > 0) companiesSb.append(",");
+            companiesSb.append(valueFilter);
+        }
+
+        // Jurisdiction Filter
+        String jurisdictionFilter = processJurisdictionFilter(data);
+        if(jurisdictionFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(jurisdictionFilter);
+            //TODO - add to Companies filter when this filter is supported by the API
+        }
+
+        // Bidding Within Filter
+        String biddingWithinFilter = processBiddingWithinFilter(data);
+        if(biddingWithinFilter.length() > 0) {
+            if(projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(biddingWithinFilter);
+            //TODO - add to Companies filter when this filter is supported by the API
+        }
+
+        // prepend searchFilter param if there are any filters used
+
+        // project search
+        if(projectsSb.length() > 0) {
+            projectsSb.insert(0, ",\"searchFilter\":{");
+            projectsSb.append("}");
+        }
+
+        String projectsCombinedFilter = projectsSb.toString();
+        String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
+        viewModel.setProjectSearchFilter(projectsSearchStr);
+        projectsCombinedFilter.replaceFirst(",","");
+        Log.d(TAG, "onActivityResult: projectsSearchStr: " + projectsSearchStr);
+        Log.d(TAG, "onActivityResult: projectsCombinedFilter: " + projectsCombinedFilter);
+
+        // company search
+        if(companiesSb.length() > 0) {
+            companiesSb.insert(0, ",\"searchFilter\":{");
+            companiesSb.append("}");
+        }
+
+        String companiesCombinedFilter = companiesSb.toString();
+        String companiesSearchStr = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]" + companiesCombinedFilter + "}";
+        viewModel.setCompanySearchFilter(companiesSearchStr);
+        companiesCombinedFilter.replaceFirst(",","");
+        Log.d(TAG, "onActivityResult: companiesSearchStr:  " + companiesSearchStr);
+        Log.d(TAG, "onActivityResult: companiesCombinedFilter: " + companiesCombinedFilter);
+
+        //Default section page once you clicked the Apply button of the Search Filter section page.
         viewModel.setIsMSE2SectionVisible(true);
         viewModel.updateViewQuery();
 
-        // if there were any filters applied, show the Save Search? header
-        if(sb.length() > 0) {
+        // if there were any filters applied, show the Save Search? header dialog -- unless the search was for Contacts, which aren't allowed to be saved
+        if((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT)) {
             viewModel.setSaveSearchHeaderVisible(true);
         }
     }
-    
+
     /**
-     * Process the Location filter data
+     * Process the Search Category which is either Project or Company,
+     * so that the search may be saved to the correct list.
+     */
+    private String processSearchCategory(Intent data) {
+        if (viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT)) {
+            return SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT;
+        }
+        else if (viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY)) {
+            return SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY;
+        }
+        else {
+            String category = data.getStringExtra(SearchViewModel.SAVE_SEARCH_CATEGORY);
+            if (category != null && !category.isEmpty()) {
+                return category;
+            }
+        }
+        return  SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT;   // use project by default when none is specified
+    }
+
+    /**
+     * Process the Project Location filter data
      * Ex: "projectLocation":{"city":"Brooklyn","county":"Kings","zip5":"11215"}
      */
-    private String processLocationFilter(Intent data) {
+    private String processProjectLocationFilter(Intent data) {
         String filter = "";
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
-        /*String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
-        if (companyLocation !=null) {
-            viewModel.setCompanySearchFilter(companyLocation); //Pls. check what correct filter value should be passed for company
-            Log.d("companyfilter","companyfilter:"+companyLocation);
-            filter = companyLocation;
-        }*/
         if (projectLocation != null && !projectLocation.equals("")) {
-            Log.d("SearchActivity", "projectLocation = " + projectLocation);
+            Log.d(TAG, "onActivityResult: projectLocation: " + projectLocation);
             filter = projectLocation;
-            Log.d("projectfilter","projectfilter:"+projectLocation);
         }
 
         return filter;
     }
+
+    /**
+     * Process the Company Location filter data
+     */
     private String processCompanyLocationFilter(Intent data) {
         String filter = "";
         String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
         if (companyLocation !=null) {
-            Log.d("companyfilter","companyfilter:"+companyLocation);
-            viewModel.setCompanySearchFilter(companyLocation); //Pls. check what correct filter value should be passed for company
-
+            Log.d(TAG,"onActivityResult: companyLocation: " + companyLocation);
             filter = companyLocation;
         }
 
         return filter;
     }
+
     /**
      * Process the Primary Project Type filter data
      */
@@ -347,6 +390,8 @@ public class SearchActivity extends AppCompatActivity {
         }
         return filter;
     }
+
+
 
 }
 
