@@ -80,7 +80,26 @@ public class ModifyCompanyTrackingListViewModel extends ModifyTrackingListViewMo
     @Override
     public void handleDoneClicked(List<Company> selectedItems) {
 
-        finishWithEditedResult();
+        if (selectedItems != null && selectedItems.size() > 0) {
+
+            showDoneDialog(getTrackingList().getName(), getAppCompatActivity().getString(R.string.pending_changes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    finishWithEditedResult();
+                }
+            });
+
+        } else {
+
+            finishWithEditedResult();
+        }
     }
 
     @Override

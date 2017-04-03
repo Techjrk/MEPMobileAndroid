@@ -51,6 +51,8 @@
     <string name="save">Save</string>
     <string name="min">MIN</string>
     <string name="max">MAX</string>
+    <string name="edit_upper">Edit</string>
+    <string name="discard">Discard</string>
 
 
     <!-- Splash, Login & Navigation Base -->
@@ -114,12 +116,13 @@
     <string name="projects">Projects</string>
     <string name="company">Company</string>
     <string name="companies">Companies</string>
+    <string name="pending_changes">There are pending changes to your list. Would you like to discard them?</string>
 
     <!-- MSE: Search Page -->
     <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
     <string name="company_saved_searches">COMPANY SAVED SEARCHES</string>
     <string name="recent">RECENT</string>
-    <string name="last_checked">Last checked</string>
+    <string name="last_checked">Last checked yesterday</string>
     <string name="search">Search</string>
 
     <!-- Geofencing -->
