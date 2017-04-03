@@ -418,4 +418,21 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
         alertDialog = builder.show();
     }
+
+    public void showDoneDialog(String title, String message, DialogInterface.OnClickListener positive, DialogInterface.OnClickListener negative) {
+
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+
+        dismissAlertDialog();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getAppCompatActivity());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(getAppCompatActivity().getString(R.string.discard), negative);
+        builder.setPositiveButton(getAppCompatActivity().getString(R.string.edit_upper), positive);
+
+        alertDialog = builder.show();
+    }
 }
