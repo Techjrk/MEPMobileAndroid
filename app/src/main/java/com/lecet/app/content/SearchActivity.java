@@ -151,16 +151,33 @@ public class SearchActivity extends AppCompatActivity {
                 sb.insert(0, ",\"searchFilter\":{");
                 sb.append("}");
             }
+
+            String combinedFilter = sb.toString();
+            Log.d(TAG, "onActivityResult: combinedFilter: " + combinedFilter);
+            Log.d(TAG, "onActivityResult: locationFilter: " + locationFilter.substring(locationFilter.indexOf(':')+1));
+
+            String searchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + combinedFilter + "}";
+            Log.d(TAG, "onActivityResult: searchStr: " + searchStr);
+
+            viewModel.setProjectSearchFilter(searchStr);
+
+            if (companyFilter == null || companyFilter.trim().equals("")){
+                companyFilter = "\"companyLocation\":" + locationFilter.substring(locationFilter.indexOf(':')+1) ;
+                viewModel.setCompanySearchFilter(companyFilter);
+
+            }
+            Log.d("company filter","company filter:"+companyFilter);
+            Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
         }
 
-        String combinedFilter = sb.toString();
+       /* String combinedFilter = sb.toString();
         Log.d(TAG, "onActivityResult: combinedFilter: " + combinedFilter);
 
         String searchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + combinedFilter + "}";
         Log.d(TAG, "onActivityResult: searchStr: " + searchStr);
 
         viewModel.setProjectSearchFilter(searchStr);
-        Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));
+        Log.d(TAG, "onActivityResult: new combinedFilter: " + combinedFilter.replaceFirst(",",""));*/
         //Revisit this:
         //This area is for setting the filter for Company and Contact..
       //  viewModel.setCompanySearchFilter(filter?); //Pls. check what correct filter value should be passed for company
@@ -174,7 +191,7 @@ public class SearchActivity extends AppCompatActivity {
         if(sb.length() > 0) {
             viewModel.setSaveSearchHeaderVisible(true);
         }
-    }
+    } //end of onActivityResult...
     
     /**
      * Process the Location filter data
