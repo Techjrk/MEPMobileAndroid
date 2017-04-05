@@ -668,7 +668,7 @@ public class SearchViewModel extends BaseObservable {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "saveCurrentCompanySearch: onResponse: success: Company search saved.");
-                    
+
                 } else {
                     Log.e(TAG, "saveCurrentCompanySearch: onResponse: Company search save unsuccessful. " + response.message());
                 }
@@ -823,7 +823,10 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-         if (isMSE2SectionVisible) {
+       if (isMSE1SectionVisible) {
+            activity.finish();
+        }
+        else if (isMSE2SectionVisible) {
             setIsMSE2SectionVisible(false);
             setIsMSE1SectionVisible(true);
             USING_INSTANT_SEARCH = true;
