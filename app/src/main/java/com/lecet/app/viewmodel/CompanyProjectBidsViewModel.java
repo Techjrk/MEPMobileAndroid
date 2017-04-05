@@ -92,6 +92,22 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
         setupTabLayout(appCompatActivity);
     }
 
+    // We are running into a crash as though the data is lost when an acitvity resumes
+    public void refreshData() {
+
+        // TODO: No need to refresh, data is still there. Why is this occuring?
+        // Default to create date
+        RealmResults<Bid> results = bidDomain.fetchBidsByCompanyGreaterThanDate(company.getId(), "amount", Sort.DESCENDING, new Date());
+        Bid[] bids = new Bid[results.size()];
+        results.toArray(bids);
+        data = new ArrayList<>(Arrays.asList(bids));
+
+        this.navigationMode = CompanyProjectBidsAdapter.NAVIGATION_MODE_PAST;
+        initRecyclerView(this.company);
+
+        // Set Tablayout to default position
+        tabLayout.getTabAt(0).select();
+    }
 
     /**
      * Toolbar
@@ -191,10 +207,10 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
         LinearLayoutManager layoutManager = new LinearLayoutManager(appCompatActivity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        initializeAdapter(company);
+        initializeAdapter();
     }
 
-    private void initializeAdapter(Company company) {
+    private void initializeAdapter() {
 
         listAdapter = new CompanyProjectBidsAdapter(appCompatActivity, data);
         recyclerView.setAdapter(listAdapter);

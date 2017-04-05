@@ -24,6 +24,7 @@ public class CompanyProjectBidsActivity extends LecetBaseActivity {
 
     public static final String COMPANY_ID_EXTRA = "com.lecet.app.content.CompanyProjectBidsActivity.company.id.extra";
 
+    private CompanyProjectBidsViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,17 @@ public class CompanyProjectBidsActivity extends LecetBaseActivity {
         Company company = companyDomain.fetchCompany(companyId).first();
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
 
-        CompanyProjectBidsViewModel viewModel = new CompanyProjectBidsViewModel(this, company, bidDomain);
+        viewModel = new CompanyProjectBidsViewModel(this, company, bidDomain);
         binding.setViewModel(viewModel);
 
         setupToolbar(viewModel, company.getName(), getString(R.string.project_bids));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        viewModel.refreshData();
     }
 
     @Override
