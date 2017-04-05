@@ -19,8 +19,15 @@ public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     private SearchViewModel viewModel;
     private SearchDomain searchDomain;
+    private String companyFilter;
 
+    public String getCompanyFilter() {
+        return companyFilter;
+    }
 
+    public void setCompanyFilter(String companyFilter) {
+        this.companyFilter = companyFilter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +85,7 @@ public class SearchActivity extends AppCompatActivity {
         if(projectLocationFilter.length() > 0) {
             projectsSb.append(projectLocationFilter);
         }
-
+       // companyFilter = processCompanyLocationFilter(data);
         // Updated Within Filter
         String updatedWithinFilter = processUpdatedWithinFilter(data);
         if(updatedWithinFilter.length() > 0) {
@@ -117,11 +124,14 @@ public class SearchActivity extends AppCompatActivity {
         // COMPANY-SPECIFIC SEARCH FILTERS
 
         // Company Location Filter e.g. {"companyLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
-        String companyLocationFilter = processCompanyLocationFilter(data);
-        if(companyLocationFilter.length() > 0) {
+        companyFilter = processCompanyLocationFilter(data);
+       // String companyLocationFilter = processCompanyLocationFilter(data);
+        /*if(companyLocationFilter.length() > 0) {
             companiesSb.append(companyLocationFilter);
+        }*/
+        if(companyFilter.length() > 0) {
+            companiesSb.append(companyFilter);
         }
-
         // SEARCH FILTERS USED IN BOTH PROJECT AND COMPANY SEARCHES
 
         // Primary Project Type Filter e.g. {"type": {Engineering}}
@@ -172,10 +182,12 @@ public class SearchActivity extends AppCompatActivity {
             projectsSb.insert(0, ",\"searchFilter\":{");
             projectsSb.append("}");
         }
-
+        //Final search filter result for Project
         String projectsCombinedFilter = projectsSb.toString();
         String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
         viewModel.setProjectSearchFilter(projectsSearchStr);
+
+
         projectsCombinedFilter.replaceFirst(",","");
         Log.d(TAG, "onActivityResult: projectsSearchStr: " + projectsSearchStr);
         Log.d(TAG, "onActivityResult: projectsCombinedFilter: " + projectsCombinedFilter);
@@ -187,18 +199,31 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         String companiesCombinedFilter = companiesSb.toString();
-        String companiesSearchStr = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]" + companiesCombinedFilter + "}";
-        viewModel.setCompanySearchFilter(companiesSearchStr);
+        if (companyFilter == null || companyFilter.trim().equals("")){
+            String cFilter = "\"companyLocation\":" + projectLocationFilter.substring(projectLocationFilter.indexOf(':')+1) ;
+            viewModel.setCompanySearchFilter(cFilter);
+
+        } /*else {
+            String cFilter = "\"companyLocation\":" + getCompanyFilter();
+            viewModel.setCompanySearchFilter(cFilter);
+            //String companiesSearchStr = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]" + companiesCombinedFilter + "}";
+            //viewModel.setCompanySearchFilter(companiesSearchStr);
+        }*/
+
+        Log.d("companyfilterx", "companyfilterx:" + searchDomain.getCompanyFilter());
         companiesCombinedFilter.replaceFirst(",","");
-        Log.d(TAG, "onActivityResult: companiesSearchStr:  " + companiesSearchStr);
+       // Log.d(TAG, "onActivityResult: companiesSearchStr:  " + companiesSearchStr);
         Log.d(TAG, "onActivityResult: companiesCombinedFilter: " + companiesCombinedFilter);
 
         //Default section page once you clicked the Apply button of the Search Filter section page.
         viewModel.setIsMSE2SectionVisible(true);
+        viewModel.init();
         viewModel.updateViewQuery();
 
         // if there were any filters applied, show the Save Search? header dialog -- unless the search was for Contacts, which aren't allowed to be saved
-        if((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT)) {
+        if((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT )) {
+//        if((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT ) &&
+//                viewModel.getQuery() !=null && !viewModel.getQuery().trim().equals("")) {
             viewModel.setSaveSearchHeaderVisible(true);
         }
     }
@@ -246,6 +271,9 @@ public class SearchActivity extends AppCompatActivity {
         String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
         if (companyLocation !=null) {
             Log.d(TAG,"onActivityResult: companyLocation: " + companyLocation);
+            Log.d("companyfilterl","companyfilterl:"+companyLocation);
+            viewModel.setCompanySearchFilter(companyLocation); //Pls. check what correct filter value should be passed for company
+
             filter = companyLocation;
         }
 

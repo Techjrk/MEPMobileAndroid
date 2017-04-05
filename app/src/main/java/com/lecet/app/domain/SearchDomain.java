@@ -70,6 +70,9 @@ public class SearchDomain {
         Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
 
     }
+    public void setCompanyFilterComplete(String sCompanyFilter) {
+        this.companyFilter = sCompanyFilter;
+    }
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
@@ -96,7 +99,9 @@ public class SearchDomain {
     public void setProjectFilter(String projectFilter) {
         this.projectFilter = projectFilter;
     }
-    public void setProjectFilter2(String filter) {
+
+    //passing the search filter content only of the project
+    public void setProjectFilterOnly(String filter) {
         String pfilter = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{"+filter+"}}";
         this.projectFilter = pfilter;
     }
@@ -355,7 +360,10 @@ public class SearchDomain {
             //works String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"apartment\",\"filter\":{\"include\":[{\"bids\":[\"company\",{\"project\":[\"projectStage\"]}]},{\"contacts\":[\"company\",\"contact\",\"contactType\"]},\"csiCodes\",{\"primaryProjectType\":[\"projectCategory\"]},\"projectStage\",\"secondaryProjectTypes\",\"specAlerts\",\"userNotes\",\"workTypes\"],\"jurisdiction\":true,\"limit\":28,\"searchFilter\":{\"projectValue\":{\"min\":333,\"max\":9999999},\"projectLocation\":{\"city\":\"Brookfield\"}},\"skip\":0}}";
             String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"" + query + "\",\"filter\":" + searchFilter + "}";
             //String bodyContent ="{ \"title\" : " + title + " , \"modelName\" : " + "project" + " }";
-            RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),bodyContent);
+
+            //RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
+            //"application/json; charset=utf-8"
             Call<ResponseBody> call = lecetClient.getSearchService().saveProjectSearch(recentToken, body);
             Log.d(TAG,"saveCurrentProjectSearch: bodyContent: " + bodyContent);
             call.enqueue(callback);

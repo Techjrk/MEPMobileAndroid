@@ -94,7 +94,7 @@ public class SearchViewModel extends BaseObservable {
     private Filter filterSearchSaved;
     private SearchFilter searchFilterSearchSaved;
     private String saveSearchCategory = SAVE_SEARCH_CATEGORY_PROJECT;
-
+    private String saveCompanyFilter;
     public Filter getFilterSearchSaved() {
         return filterSearchSaved;
     }
@@ -223,8 +223,9 @@ public class SearchViewModel extends BaseObservable {
         searchDomain.setProjectFilter(filter);
     }
 
-    public void setProjectSearchFilter2(String filter) {    //TODO - what is the difference between these functions?
-        searchDomain.setProjectFilter2(filter);
+    //passing the search filter content only of the project
+    public void setProjectSearchFilterOnly(String filter) {
+        searchDomain.setProjectFilterOnly(filter);
     }
 
     public void setCompanySearchFilter(String filter) {
@@ -232,12 +233,18 @@ public class SearchViewModel extends BaseObservable {
         Log.d("setcompanyfilter","setcompanyfilter"+filter);
 
     }
-    public void setCompanySearchFilter2(String filter) {
+   /* public void setCompanySearchFilter2(String filter) {
         searchDomain.setCompanyFilter2(filter);
         Log.d("setcompanyfilter","setcompanyfilter"+filter);
 
-    }
+    }*/
 
+    //Passing the whole search filter content coming from the web.
+    public void setCompanySearchFilterComplete(String filter) {
+        searchDomain.setCompanyFilterComplete(filter);
+        Log.d("filtercomplete","filtercomplete"+filter);
+
+    }
     public void setContactSearchFilter(String filter) {
         searchDomain.setContactFilter(filter);
     }
@@ -590,6 +597,7 @@ public class SearchViewModel extends BaseObservable {
         nameInput.setInputType(InputType.TYPE_CLASS_TEXT);
 
         saveSearchDialog = new AlertDialog.Builder(this.activity).create();
+
         saveSearchDialog.setTitle(this.activity.getResources().getString(R.string.save_search_dialog_title));
         saveSearchDialog.setMessage(this.activity.getResources().getString(R.string.save_search_dialog_msg));
         saveSearchDialog.setView(nameInput);
@@ -606,13 +614,13 @@ public class SearchViewModel extends BaseObservable {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = nameInput.getText().toString();
                         if (title != null && title.length() > 0) {
-                            Log.d(TAG, "showSaveSearchDialog: Save category: " + getSaveSearchCategory() + ", title: " + title);
+                            Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
                             // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
-                            //String saveCompany = ((SearchActivity) getActivity()).getCompanyFilter();       //TODO - this If statement is assuming either Project or Company filter has been set, but it could be both.
-                            if (getSaveSearchCategory().equals(SAVE_SEARCH_CATEGORY_COMPANY)) {
-                                saveCurrentCompanySearch(title);
-                            }
-                            else {
+                            //String saveCompanyFilter = ((SearchActivity) getActivity()).getCompanyFilter();
+                            Log.d("saveCompany","saveCompany"+saveCompanyFilter);
+                            if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
+                                saveCurrentCompanySearch(title, saveCompanyFilter);
+                            } else {
                                 saveCurrentProjectSearch(title);
                             }
                           //  init();
@@ -630,20 +638,19 @@ public class SearchViewModel extends BaseObservable {
      * Make the save search call and handle its callback
      */
     private void saveCurrentProjectSearch(String title) {
-        Log.d(TAG, "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
+        Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 
         searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+                    init();
+                    updateViewQuery();
                     Log.d(TAG, "saveCurrentProjectSearch: onResponse: success: Project search saved.");
                 } else {
                     Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
                 }
-                init();
-                updateViewQuery();
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, "saveCurrentProjectSearch: onFailure: Network is busy. Pls. try again. ");
@@ -651,19 +658,20 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
-    private void saveCurrentCompanySearch(String title) {
-        Log.d(TAG, "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
+    private void saveCurrentCompanySearch(String title, String filter) {
+        searchDomain.setCompanyFilter(filter);
+        Log.d("SearchActivity", "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
 
         searchDomain.saveCurrentCompanySearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "saveCurrentCompanySearch: onResponse: success: Company search saved.");
+                    init();
+                    updateViewQuery();
                 } else {
                     Log.e(TAG, "saveCurrentCompanySearch: onResponse: Company search save unsuccessful. " + response.message());
                 }
-                init();
-                updateViewQuery();
             }
 
             @Override
@@ -1070,6 +1078,8 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void onSaveSearchClicked(View view) {
+        saveCompanyFilter = ((SearchActivity) getActivity()).getCompanyFilter();
+        searchDomain.setCompanyFilter(saveCompanyFilter);
         showSaveSearchDialog();
     }
 
