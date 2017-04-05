@@ -8,6 +8,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.adapters.MoveToProjectListAdapter;
 import com.lecet.app.content.LecetConfirmDialogFragment;
+import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -232,6 +233,12 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                         getTrackingListDomain().getProjectDomain().setProjectHidden(project, true);
                         setHideButtonTitle(getAppCompatActivity().getString(R.string.unhide));
                         dismissProgressDialog();
+
+                        // Finish the activity and clear the stack
+                        Intent intent = new Intent(getAppCompatActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        getAppCompatActivity().startActivity(intent);
+                        getAppCompatActivity().finish();
 
                     } else {
 
