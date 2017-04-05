@@ -10,6 +10,7 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.databinding.ListItemMpdBidBinding;
 import com.lecet.app.viewmodel.ProjectDetailBidViewModel;
 
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -20,9 +21,9 @@ import io.realm.RealmResults;
 
 public class ProjectBiddersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private RealmResults<Bid> data;
+    private RealmList<Bid> data;
 
-    public ProjectBiddersAdapter(RealmResults<Bid> data) {
+    public ProjectBiddersAdapter(RealmList<Bid> data) {
 
         this.data = data;
     }

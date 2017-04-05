@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -231,13 +232,35 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         RealmResults<Contact> contacts = projectDomain.fetchProjectContacts(projectID);
 
         // Bidders
-        RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
+        RealmList<Bid> bids = getResortedBids(projectID);
 
 
         projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
         initRecyclerView(activity, projectDetailAdapter);
     }
 
+    private RealmList<Bid> getResortedBids(long projectID) {
+        RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
+        RealmList<Bid> bidsCopy = new RealmList<>();
+        RealmList<Bid> resortedBids = new RealmList<>();
+        bidsCopy.addAll(bids);
+
+        // add sorted Bids with value more than zero first
+        for(Bid bid : bidsCopy) {
+            if(bid.getAmount() > 0) {
+                resortedBids.add(bid);
+            }
+        }
+
+        // add Bids with value of 0 last
+        for(Bid bid : bidsCopy) {
+            if(bid.getAmount() == 0) {
+                resortedBids.add(bid);
+            }
+        }
+
+        return resortedBids;
+    }
 
     private void initRecyclerView(ProjectDetailActivity activity, ProjectDetailAdapter adapter) {
 

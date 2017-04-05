@@ -104,11 +104,9 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
     private void updateTrackingList(long listId) {
 
         CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listId);
-        if (companyList != null) {
-            RealmList<Company> companies = companyList.getCompanies();
-            setAdapterData(companies.sort(filter, selectedSort == SORT_ALPHABETICAL ? Sort.ASCENDING : Sort.DESCENDING));
-            getListAdapter().notifyDataSetChanged();
-        }
+        RealmList<Company> companies = companyList.getCompanies();
+        setAdapterData(companies.sort(filter, selectedSort == SORT_ALPHABETICAL ? Sort.ASCENDING : Sort.DESCENDING));
+        getListAdapter().notifyDataSetChanged();
     }
 
     @Override

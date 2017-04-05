@@ -209,7 +209,6 @@ public class CompanyAssociatedProjectsViewModel {
         data = data.sort(filter, sort);
         listAdapter = new CompanyAssociatedProjectAdapter(data);
         recyclerView.setAdapter(listAdapter);
-        //listAdapter.notifyDataSetChanged();
     }
 
     private RealmResults<Project> defaultSortedData(RealmList<Project> projects) {

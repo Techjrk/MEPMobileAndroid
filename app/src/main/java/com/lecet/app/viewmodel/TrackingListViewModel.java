@@ -91,17 +91,7 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
 
     public void setAdapterData(T adapterData) {
 
-        if (this.adapterData == null) {
-
-            this.adapterData = adapterData;
-
-            //TODO: Need better solution
-            // Reinitialize adapter
-
-        } else {
-
-            this.adapterData = adapterData;
-        }
+        this.adapterData = adapterData;
         initializeAdapter();
     }
 
