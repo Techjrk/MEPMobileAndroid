@@ -80,7 +80,7 @@ public class SearchViewModel extends BaseObservable {
     public static final String SAVE_SEARCH_CATEGORY_CONTACT = "contact";
     public static boolean USING_INSTANT_SEARCH = false;     //TODO - convert to a private var with accessors
     public static final int REQUEST_CODE_ZERO = 0;
-    public static boolean INIT_SEARCH=true;                 //TODO - convert to a private var with accessors
+    public static boolean INIT_SEARCH = true;                 //TODO - convert to a private var with accessors
     static final String CONTACT_TEXT = " Contact";
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
@@ -95,6 +95,7 @@ public class SearchViewModel extends BaseObservable {
     private SearchFilter searchFilterSearchSaved;
     private String saveSearchCategory = SAVE_SEARCH_CATEGORY_PROJECT;
     private String saveCompanyFilter;
+
     public Filter getFilterSearchSaved() {
         return filterSearchSaved;
     }
@@ -230,7 +231,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setCompanySearchFilter(String filter) {
         searchDomain.setCompanyFilter(filter);
-        Log.d("setcompanyfilter","setcompanyfilter"+filter);
+        Log.d("setcompanyfilter", "setcompanyfilter" + filter);
 
     }
    /* public void setCompanySearchFilter2(String filter) {
@@ -242,9 +243,10 @@ public class SearchViewModel extends BaseObservable {
     //Passing the whole search filter content coming from the web.
     public void setCompanySearchFilterComplete(String filter) {
         searchDomain.setCompanyFilterComplete(filter);
-        Log.d("filtercomplete","filtercomplete"+filter);
+        Log.d("filtercomplete", "filtercomplete" + filter);
 
     }
+
     public void setContactSearchFilter(String filter) {
         searchDomain.setContactFilter(filter);
     }
@@ -617,14 +619,12 @@ public class SearchViewModel extends BaseObservable {
                             Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
                             // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
                             //String saveCompanyFilter = ((SearchActivity) getActivity()).getCompanyFilter();
-                            Log.d("saveCompany","saveCompany"+saveCompanyFilter);
+                            Log.d("saveCompany", "saveCompany" + saveCompanyFilter);
                             if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
                                 saveCurrentCompanySearch(title, saveCompanyFilter);
                             } else {
                                 saveCurrentProjectSearch(title);
                             }
-                          //  init();
-                          //  updateViewQuery();
                         }
                         dialog.dismiss();
                         setSaveSearchHeaderVisible(false);
@@ -640,17 +640,18 @@ public class SearchViewModel extends BaseObservable {
     private void saveCurrentProjectSearch(String title) {
         Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 
+
+
         searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    init();
-                    updateViewQuery();
                     Log.d(TAG, "saveCurrentProjectSearch: onResponse: success: Project search saved.");
                 } else {
                     Log.e(TAG, "saveCurrentProjectSearch: onResponse: Project search save unsuccessful. " + response.message());
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, "saveCurrentProjectSearch: onFailure: Network is busy. Pls. try again. ");
@@ -667,8 +668,7 @@ public class SearchViewModel extends BaseObservable {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "saveCurrentCompanySearch: onResponse: success: Company search saved.");
-                    init();
-                    updateViewQuery();
+                    
                 } else {
                     Log.e(TAG, "saveCurrentCompanySearch: onResponse: Company search save unsuccessful. " + response.message());
                 }
@@ -823,7 +823,13 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-        if (isMSR13Visible) {
+         if (isMSE2SectionVisible) {
+            setIsMSE2SectionVisible(false);
+            setIsMSE1SectionVisible(true);
+            USING_INSTANT_SEARCH = true;
+            //  setQuery("");
+        }
+        else if (isMSR13Visible) {
             setIsMSR13Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
@@ -835,12 +841,7 @@ public class SearchViewModel extends BaseObservable {
             setIsMSR11Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
-        } else if (isMSE2SectionVisible) {
-            setIsMSE2SectionVisible(false);
-            setIsMSE1SectionVisible(true);
-            USING_INSTANT_SEARCH=true;
-            //  setQuery("");
-        } else {
+        }  else {
             activity.finish();
         }
     }

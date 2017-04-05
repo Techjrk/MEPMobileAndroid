@@ -41,6 +41,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.d(TAG, "onResume");
+        //viewModel.setIsMSE2SectionVisible(true);
         viewModel.init();
         viewModel.updateViewQuery();
     }
@@ -55,7 +56,13 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        searchDomain.initFilter();
+
+        if (viewModel.getIsMSE2SectionVisible()) {
+            searchDomain.initFilter();
+            viewModel.init();
+            viewModel.updateViewQuery();
+        }
+
         viewModel.checkDisplayMSESectionOrMain();
     }
 
@@ -181,6 +188,7 @@ public class SearchActivity extends AppCompatActivity {
         if(projectsSb.length() > 0) {
             projectsSb.insert(0, ",\"searchFilter\":{");
             projectsSb.append("}");
+
         }
         //Final search filter result for Project
         String projectsCombinedFilter = projectsSb.toString();
@@ -199,16 +207,18 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         String companiesCombinedFilter = companiesSb.toString();
+
+        /**
+         * This will apply the search filter to company filter coming from the project filter if the parsing will be done for project only.
+         * If it is not needed, then we could comment the conditional statement below.
+         */
+
         if (companyFilter == null || companyFilter.trim().equals("")){
             String cFilter = "\"companyLocation\":" + projectLocationFilter.substring(projectLocationFilter.indexOf(':')+1) ;
             viewModel.setCompanySearchFilter(cFilter);
+        } else
+            viewModel.setCompanySearchFilter(companyFilter);
 
-        } /*else {
-            String cFilter = "\"companyLocation\":" + getCompanyFilter();
-            viewModel.setCompanySearchFilter(cFilter);
-            //String companiesSearchStr = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]" + companiesCombinedFilter + "}";
-            //viewModel.setCompanySearchFilter(companiesSearchStr);
-        }*/
 
         Log.d("companyfilterx", "companyfilterx:" + searchDomain.getCompanyFilter());
         companiesCombinedFilter.replaceFirst(",","");
@@ -222,8 +232,6 @@ public class SearchActivity extends AppCompatActivity {
 
         // if there were any filters applied, show the Save Search? header dialog -- unless the search was for Contacts, which aren't allowed to be saved
         if((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT )) {
-//        if((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT ) &&
-//                viewModel.getQuery() !=null && !viewModel.getQuery().trim().equals("")) {
             viewModel.setSaveSearchHeaderVisible(true);
         }
     }
@@ -272,7 +280,6 @@ public class SearchActivity extends AppCompatActivity {
         if (companyLocation !=null) {
             Log.d(TAG,"onActivityResult: companyLocation: " + companyLocation);
             Log.d("companyfilterl","companyfilterl:"+companyLocation);
-            viewModel.setCompanySearchFilter(companyLocation); //Pls. check what correct filter value should be passed for company
 
             filter = companyLocation;
         }
