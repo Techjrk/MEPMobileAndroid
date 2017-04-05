@@ -215,7 +215,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             if (sb.length() > 0) sb.append(",");
             sb.append("\"zip5\":\"" + zip + "\"");
         }
-        //if (!viewModel.getIsProjectViewVisible()) {
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, null);
+        if (!viewModel.getIsProjectViewVisible()) {
             /*projectLocation = sb.toString();
             if (!projectLocation.trim().equals("")) {
                 projectLocation = "\"projectLocation\":{" + projectLocation + "}";
@@ -230,7 +231,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
             viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, companyLocation);  // this should work whether or not companyLocation is empty
             Log.d("companyresult","companyresult:"+companyLocation);
-        //}
+        }
         projectLocation = sb.toString();
 
         if (!projectLocation.trim().equals("")) {

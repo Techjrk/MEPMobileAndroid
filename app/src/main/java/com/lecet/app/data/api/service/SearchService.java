@@ -47,7 +47,7 @@ public interface SearchService {
     //***SavedSearch
     @Headers({
             "Accept: application/json",
-            "Content-Type: application/x-www-form-urlencoded"
+            "Content-Type: application/json"
     })
     @GET("LecetUsers/{userId}/searches")
     Call<List<SearchSaved>> getSearchSaved(@Header("Authorization") String token, @Path("userId") long userId);

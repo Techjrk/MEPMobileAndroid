@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by getdevsinc on 11/21/16.
+ * Created by getdevsinc on 4/4/17.
  */
 
 public class SearchFilter {
- //   @SerializedName("searchFilter")
- //   private SearchFilter searchFilter;
+//   @SerializedName("searchFilter")
+    //   private SearchFilter searchFilter;
 
- //   @SerializedName("jurisdictions")
- //   private SearchFilter jurisdictions;
+    //   @SerializedName("jurisdictions")
+    //   private SearchFilter jurisdictions;
 /* TODO: Will check first if the string type is enough for each of the search filter type. If not, the comment class type listed below will be created and will be used.
     private ProjectValue projectValue ;
     private BuildingOrHighway buildingOrHighway ;
@@ -216,4 +216,3 @@ public class SearchFilter {
 
 
 }
-

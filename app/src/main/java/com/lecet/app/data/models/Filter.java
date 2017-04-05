@@ -2,6 +2,8 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,25 @@ import java.util.List;
  */
 public class Filter
 {
+private JSONObject filter;
+private Object q;
+
+    public JSONObject getFilter() {
+        return filter;
+    }
+
+    public void setFilter(JSONObject filter) {
+        this.filter = filter;
+    }
+
+    public Object getQ() {
+        return q;
+    }
+
+    public void setQ(Object q) {
+        this.q = q;
+    }
+/*
     @SerializedName("searchFilter")
     private SearchFilter searchFilter;
 
@@ -75,5 +96,5 @@ public class Filter
         result = 31 * result + limit;
         result = 31 * result + (include != null ? include.hashCode() : 0);
         return result;
-    }
+    }*/
 }
