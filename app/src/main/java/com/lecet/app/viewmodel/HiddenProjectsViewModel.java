@@ -73,11 +73,6 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
         setSubTitle(title);
     }
 
-    /** Activity Lifecycle **/
-    public void onActivityDestroy() {
-
-        removeHiddenProjectsResultsListener();
-    }
 
     /** Networking **/
 
@@ -139,24 +134,6 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
         setupRecyclerView(recyclerView);
         listAdapter = new HiddenProjectsAdapter(projectDomain, hiddenProjects, appCompatActivity.getString(R.string.google_maps_key));
         recyclerView.setAdapter(listAdapter);
-    }
-
-    private void addHiddenProjectsResultsListener(RealmResults<Project> realmResults) {
-
-        realmResults.addChangeListener(new RealmChangeListener<RealmResults<Project>>() {
-            @Override
-            public void onChange(RealmResults<Project> element) {
-                listAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void removeHiddenProjectsResultsListener() {
-
-        if (results != null) {
-
-            results.removeChangeListeners();
-        }
     }
 
     /**

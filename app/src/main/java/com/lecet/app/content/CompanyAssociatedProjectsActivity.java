@@ -33,9 +33,23 @@ public class CompanyAssociatedProjectsActivity extends LecetBaseActivity {
         CompanyDomain companyDomain = new CompanyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         Company company = companyDomain.fetchCompany(companyId).first();
 
-        viewModel = new CompanyAssociatedProjectsViewModel(this, company);
+        viewModel = new CompanyAssociatedProjectsViewModel(this, companyDomain, company.getId());
 
         setupToolbar(company.getName(), company.getProjects().size());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        viewModel.refreshData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        viewModel.cancelRequest();
     }
 
     private void setupToolbar(String title, int listItemSize) {
