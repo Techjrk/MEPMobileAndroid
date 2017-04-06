@@ -1,5 +1,7 @@
 package com.lecet.app.content;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -34,7 +36,7 @@ public class ProjectDetailAddNoteActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityProjectAddNoteBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_note);
-        viewModel = new ProjectDetailAddNoteViewModel();
+        viewModel = new ProjectDetailAddNoteViewModel(this);
         binding.setViewModel(viewModel);
     }
 

@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            app:tabTextAppearance="@style/ProjectDetailTabLayout"
             app:tabTextColor="@color/pureWhite"
             app:tabMode="fixed"
             app:tabIndicatorHeight="3dp"
