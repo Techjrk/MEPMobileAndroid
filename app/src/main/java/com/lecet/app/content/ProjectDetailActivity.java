@@ -34,9 +34,22 @@ public class ProjectDetailActivity extends LecetBaseActivity {
 
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         viewModel = new ProjectDetailViewModel(this, projectId, bidAmount, getResources().getString(google_api_key), projectDomain);
-        viewModel.getProjectDetail();
 
         binding.setViewModel(viewModel);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        viewModel.getProjectDetail();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        viewModel.cancelGetProjectDetailRequest();
     }
 
     @Override

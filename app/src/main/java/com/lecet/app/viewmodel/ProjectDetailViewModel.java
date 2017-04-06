@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectDetailAdapter;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
@@ -38,7 +39,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectDetailViewModel implements ClickableMapInterface {
+public class ProjectDetailViewModel extends BaseObservableViewModel implements ClickableMapInterface {
 
     private static final String TAG = "ProjectDetailViewModel";
 
@@ -57,6 +58,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     private Call<Project> projectDetailCall;
 
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, double bidAmount, String mapsApiKey, ProjectDomain projectDomain) {
+        super(activity);
 
         this.activityWeakReference = new WeakReference<>(activity);
         this.projectID = projectID;
@@ -86,6 +88,12 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
     private void getProjectDetail(final long projectID) {
 
+        ProjectDetailActivity activity = activityWeakReference.get();
+
+        if (activity == null) return;
+
+        showProgressDialog(activity.getString(R.string.updating), "");
+
         projectDetailCall = projectDomain.getProjectDetail(projectID, new Callback<Project>() {
             @Override
             public void onResponse(Call<Project> call, Response<Project> response) {
@@ -95,6 +103,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                 if (activity == null) return;
 
                 if (response.isSuccessful()) {
+
+                    dismissProgressDialog();
 
                     Project responseProject = response.body();
 
@@ -116,6 +126,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                         @Override
                         public void onError(Throwable error) {
 
+                            dismissProgressDialog();
+
                             activity.hideNetworkAlert();
 
                             if (networkAlertDialog != null && networkAlertDialog.isShowing())
@@ -132,6 +144,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
 
                 } else {
+
+                    dismissProgressDialog();
 
                     if (activity.isDisplayingNetworkAlert()) {
 
@@ -152,6 +166,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
+
+                dismissProgressDialog();
 
                 ProjectDetailActivity activity = activityWeakReference.get();
 
