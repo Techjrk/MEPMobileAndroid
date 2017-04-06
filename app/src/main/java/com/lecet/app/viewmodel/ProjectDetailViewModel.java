@@ -297,7 +297,25 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
 
     public String getMapUrl(Project project) {
 
-        if (project.getGeocode() == null) return null;
+        if (project.getGeocode() == null) {
+
+            String mapStr;
+
+            String generatedAddress = generateCenterPointAddress(project);
+
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append("https://maps.googleapis.com/maps/api/staticmap");
+            sb2.append("?center=");
+            sb2.append(generatedAddress);
+            sb2.append("&zoom=16");
+            sb2.append("&size=200x200");
+            sb2.append("&markers=color:blue|");
+            sb2.append(generatedAddress);
+            sb2.append("&key=" + mapsApiKey);
+            mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+
+            return mapStr;
+        }
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=800x500&" +
                         "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
@@ -317,5 +335,37 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         if (mapIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(mapIntent);
         }
+    }
+
+    private String generateCenterPointAddress(Project project) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (project.getAddress1() != null) {
+            stringBuilder.append(project.getAddress1());
+            stringBuilder.append(",");
+        }
+
+        if (project.getAddress2() != null) {
+            stringBuilder.append(project.getAddress2());
+            stringBuilder.append(",");
+        }
+
+        if (project.getCity() != null) {
+            stringBuilder.append(project.getCity());
+            stringBuilder.append(",");
+        }
+
+        if (project.getState() != null) {
+            stringBuilder.append(project.getState());
+        }
+
+        if (project.getZipPlus4() != null) {
+            stringBuilder.append(",");
+            stringBuilder.append(project.getZipPlus4());
+        }
+
+
+        return stringBuilder.toString();
     }
 }
