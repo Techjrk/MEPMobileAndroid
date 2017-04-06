@@ -1094,11 +1094,13 @@ public class SearchViewModel extends BaseObservable {
     public void onClickSeeAllProject(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
+        Log.d("all_project","allproject"+SEE_ALL_PROJECTS);
     }
 
     public void onClickSeeAllCompany(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_COMPANY);
         setSeeAll(SEE_ALL_COMPANIES);
+        Log.d("all_company","allcompany:"+SEE_ALL_COMPANIES);
     }
 
     public void onClickSeeAllContact(View view) {
@@ -1115,15 +1117,21 @@ public class SearchViewModel extends BaseObservable {
 
     public void setSeeAll(int seeOrder) {
         seeAllForResult = seeOrder;
-
-        switch (seeOrder) {
+        Log.d("all_see","all_see"+seeOrder);
+        switch (seeAllForResult) {
             case SEE_ALL_PROJECTS:  //for see all Project
                 setIsMSR11Visible(true);
+                setIsMSR12Visible(false);
+                setIsMSR13Visible(false);
                 break;
             case SEE_ALL_COMPANIES:
+                setIsMSR11Visible(false);
                 setIsMSR12Visible(true);
+                setIsMSR13Visible(false);
                 break;
             case SEE_ALL_CONTACTS:
+                setIsMSR11Visible(false);
+                setIsMSR12Visible(false);
                 setIsMSR13Visible(true);
                 break;
             default:

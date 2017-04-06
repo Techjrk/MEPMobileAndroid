@@ -41,7 +41,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.d(TAG, "onResume");
-        viewModel.setIsMSE2SectionVisible(true);
+       // viewModel.setIsMSE2SectionVisible(true);
         viewModel.init();
         viewModel.updateViewQuery();
     }
