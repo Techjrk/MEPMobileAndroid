@@ -7,6 +7,7 @@ import android.databinding.BaseObservable;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -15,7 +16,9 @@ import com.lecet.app.content.ProjectDetailAddNoteActivity;
 import com.lecet.app.content.ProjectDetailTakePhotoActivity;
 import com.lecet.app.domain.ProjectDomain;
 
+import java.security.acl.Permission;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -52,16 +55,34 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     private boolean canSetup(){
         if(Build.VERSION.SDK_INT >= 23) {
+            List<String> permissionNeeded = new ArrayList<String>();//list of permissions that aren't allowed
 
-            int hasCameraPermission = ActivityCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA);
-            Log.e(TAG, "canSetup: Returning: " + (ActivityCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED));
-            if(hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(fragment.getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_PERMISSIONS);
-                return (ActivityCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+            if(!hasPermission(Manifest.permission.CAMERA)){//has Camera permissions
+               permissionNeeded.add(Manifest.permission.CAMERA);
             }
-            return true;
+
+            if(!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                permissionNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            Log.e(TAG, "canSetup: NeededPermission(s) = " + permissionNeeded.size());
+
+            if(permissionNeeded.size() > 0) {
+                String[] tempList = new String[permissionNeeded.size()];//TODO: write actual converter from List<String> to String[]
+                ActivityCompat.requestPermissions(fragment.getActivity(), permissionNeeded.toArray(tempList), REQUEST_CODE_ASK_PERMISSIONS);
+            }else {
+                return true;//none were needed
+            }
+
+            return false;//if less then 1 then there are no permissions so return true. you can now set up
         }
         return true;
+    }
+
+    private boolean hasPermission(String permission){
+        if(ActivityCompat.checkSelfPermission(fragment.getActivity(), permission) == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        return  true;
     }
 
     //TODO - call & fill in
