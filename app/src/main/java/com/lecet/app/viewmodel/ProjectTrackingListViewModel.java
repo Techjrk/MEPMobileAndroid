@@ -78,7 +78,7 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
                         updateToolbarSubTitle(data.size(), getAppCompatActivity().getResources().getString(R.string.project));
                     }
 
-                    projectDomain.asyncCopyToRealm(data, new Realm.Transaction.OnSuccess() {
+                    trackingListDomain.asyncCopyProjectTrackingListUpdatesToRealm(projectTrackingListId, data, new Realm.Transaction.OnSuccess() {
 
                         @Override
                         public void onSuccess() {

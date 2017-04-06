@@ -456,6 +456,37 @@ public class TrackingListDomain {
 
     // Project Update Mapping
 
+    public void asyncCopyProjectTrackingListUpdatesToRealm(final long projectTrackingListID ,final List<Project> projects, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                // Clear existing relationship and add new ones
+                ProjectTrackingList asyncList = realm.where(ProjectTrackingList.class).equalTo("id", projectTrackingListID).findFirst();
+                asyncList.getProjects().clear();
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, project, null);
+                        realm.copyToRealmOrUpdate(storedProject);
+                        asyncList.getProjects().add(storedProject);
+
+                    } else {
+
+                        realm.copyToRealmOrUpdate(project);
+                        asyncList.getProjects().add(project);
+                    }
+
+                }
+            }
+        }, onSuccess, onError);
+    }
+
     public void asyncMapUpdatesToProjects(final List<ActivityUpdate> updates, Realm.Transaction.OnSuccess successCallback,
                                           final Realm.Transaction.OnError errorCallback) {
 
@@ -502,6 +533,8 @@ public class TrackingListDomain {
 
         }, successCallback, errorCallback);
     }
+
+
 
     // Sorting
 
