@@ -32,9 +32,22 @@ public class CompanyDetailActivity extends LecetBaseActivity {
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         CompanyDomain companyDomain = new CompanyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         viewModel = new CompanyDetailViewModel(this, companyId, companyDomain, projectDomain);
-        viewModel.getCompanyDetail();
 
         binding.setViewModel(viewModel);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        viewModel.getCompanyDetail();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        viewModel.cancelGetCompanyDetailRequest();
     }
 
     @Override

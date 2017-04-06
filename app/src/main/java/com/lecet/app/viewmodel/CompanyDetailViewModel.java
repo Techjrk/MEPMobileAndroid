@@ -12,6 +12,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyDetailAdapter;
 import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.domain.ProjectDomain;
@@ -30,7 +31,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class CompanyDetailViewModel implements ClickableMapInterface {
+public class CompanyDetailViewModel extends BaseObservableViewModel implements ClickableMapInterface {
 
     private static final String TAG = "CompanyDetailViewModel";
 
@@ -49,6 +50,7 @@ public class CompanyDetailViewModel implements ClickableMapInterface {
 
 
     public CompanyDetailViewModel(CompanyDetailActivity activity, long companyID, CompanyDomain companyDomain, ProjectDomain projectDomain) {
+        super(activity);
 
         this.activityWeakReference = new WeakReference<>(activity);
         this.companyID = companyID;
@@ -77,6 +79,12 @@ public class CompanyDetailViewModel implements ClickableMapInterface {
 
     private void getCompanyDetail(final long companyID) {
 
+        CompanyDetailActivity activity = activityWeakReference.get();
+
+        if (activity == null) return;
+
+        showProgressDialog(activity.getString(R.string.updating), "");
+
         companyDetailCall = companyDomain.getCompanyDetails(companyID, new Callback<Company>() {
             @Override
             public void onResponse(Call<Company> call, Response<Company> response) {
@@ -86,6 +94,8 @@ public class CompanyDetailViewModel implements ClickableMapInterface {
                 if (activity == null) return;
 
                 if (response.isSuccessful()) {
+
+                    dismissProgressDialog();
 
                     Company responseCompany = response.body();
                     companyDomain.copyToRealmTransaction(responseCompany);
@@ -100,6 +110,8 @@ public class CompanyDetailViewModel implements ClickableMapInterface {
                     initMapImageView(activity, getMapUrl(company));
 
                 } else {
+
+                    dismissProgressDialog();
 
                     if (activity.isDisplayingNetworkAlert()) {
 
@@ -120,6 +132,8 @@ public class CompanyDetailViewModel implements ClickableMapInterface {
 
             @Override
             public void onFailure(Call<Company> call, Throwable t) {
+
+                dismissProgressDialog();
 
                 CompanyDetailActivity activity = activityWeakReference.get();
 
