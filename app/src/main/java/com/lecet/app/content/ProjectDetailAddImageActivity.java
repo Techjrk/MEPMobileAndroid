@@ -1,7 +1,10 @@
 package com.lecet.app.content;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.lecet.app.R;
@@ -17,6 +20,7 @@ public class ProjectDetailAddImageActivity extends LecetBaseActivity {
     private long projectId; //TODO: use this Id to learn where to post the image to.
     ProjectDetailAddImageViewModel viewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +28,7 @@ public class ProjectDetailAddImageActivity extends LecetBaseActivity {
         //projectId = extras.getLong("projectId");//Get the projectId for posting image to proper file.
 
         setupBinding();
+
     }
 
     private void setupBinding() {
