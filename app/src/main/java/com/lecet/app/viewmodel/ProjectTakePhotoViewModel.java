@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.lecet.app.R;
@@ -95,6 +96,11 @@ public class ProjectTakePhotoViewModel extends BaseObservable {
             camera = null;
             Log.w(TAG, "releaseCamera: CameraReleased");
         }
+    }
+
+    public void onClickCancel(View view){
+        Log.e(TAG, "onClickCancel: onClickCancel called");
+        fragment.getActivity().finish();
     }
 
 

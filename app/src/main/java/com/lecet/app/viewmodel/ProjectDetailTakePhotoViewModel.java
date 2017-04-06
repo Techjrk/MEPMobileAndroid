@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +13,12 @@ import android.view.View;
  */
 
 public class ProjectDetailTakePhotoViewModel extends BaseObservable {
-
+    private Activity activity;
     private static final String TAG = "ProjDetailTakePhotoVM";
+
+    public ProjectDetailTakePhotoViewModel(Activity activity){
+        this.activity = activity;
+    }
 
     public ProjectDetailTakePhotoViewModel() {
     }
@@ -26,6 +31,7 @@ public class ProjectDetailTakePhotoViewModel extends BaseObservable {
 
 
     public void onClickCancel(View view){
-        //finish();
+        Log.e(TAG, "onClickCancel: onClickCancel called");
+         activity.finish();
     }
 }

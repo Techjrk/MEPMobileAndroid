@@ -38,7 +38,7 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityProjectTakePhotoBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_take_photo);
-        viewModel = new ProjectDetailTakePhotoViewModel();
+        viewModel = new ProjectDetailTakePhotoViewModel(this);
         binding.setViewModel(viewModel);
     }
 

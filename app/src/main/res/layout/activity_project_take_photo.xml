@@ -36,6 +36,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
+                        android:onClick="@{viewModel.onClickCancel}"
                         android:text="@string/cancel"
                         android:textColor="@color/lecetLightBlue"
                         android:textSize="16sp"
