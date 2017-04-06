@@ -54,6 +54,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     private boolean fetchedMRU;
     private boolean fetchedCompTracking;
     private boolean fetchedProjTracking;
+    private boolean launched;
 
 
     public DashboardIntermediaryViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain, SearchDomain searchDomain, TrackingListDomain trackingListDomain) {
@@ -74,7 +75,9 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     /* Navigation Logic */
     private void checkDataDownloaded() {
 
-        if (fetchedJurisdiction && fetchedProjectType && fetchedStageList && fetchedMBR && fetchedMHS && fetchedMRA && fetchedMRU && fetchedCompTracking && fetchedProjTracking) {
+        if (fetchedJurisdiction && fetchedProjectType && fetchedStageList && fetchedMBR && fetchedMHS && fetchedMRA && fetchedMRU && fetchedCompTracking && fetchedProjTracking && !launched) {
+
+            launched = true;
 
             AppCompatActivity appCompatActivity = getActivityWeakReference().get();
             if (appCompatActivity != null) {
