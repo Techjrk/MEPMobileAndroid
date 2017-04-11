@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.content.SearchActivity;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.databinding.ListItemSearchRecentViewBinding;
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
@@ -30,11 +31,13 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     private final int adapterType;
     private AppCompatActivity appCompatActivity;
     private List data = Collections.emptyList();
+    private SearchActivity activity;
 
     public SearchRecentRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
         this.appCompatActivity = appCompatActivity;
         this.adapterType = adapterType;
         this.data = data;
+        activity = (SearchActivity) appCompatActivity;
     }
 
 
@@ -59,7 +62,7 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         SearchItemRecentViewModel vm = null;
 
         if (((SearchResult) data.get(position)).getProject() != null) {
-            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), mapsApiKey);
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), mapsApiKey,activity.getViewModel());
         }
         else
             vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey);

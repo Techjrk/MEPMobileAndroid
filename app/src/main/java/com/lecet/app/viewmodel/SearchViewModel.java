@@ -14,6 +14,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -140,7 +141,7 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL = 7;      // Company Query All
     public static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL = 8;      // Contact Query All
 
-    private AppCompatActivity activity;
+    private SearchActivity activity;
     private final SearchDomain searchDomain;
     private List<SearchResult> adapterDataRecentlyViewed;
     private List<SearchSaved> adapterDataProjectSearchSaved;
@@ -155,6 +156,7 @@ public class SearchViewModel extends BaseObservable {
     private boolean isMSR11Visible = false;
     private boolean isMSR12Visible = false;
     private boolean isMSR13Visible = false;
+    private boolean detailVisible = false;
     private final int CONTENT_MAX_SIZE = 4;
 
     //For MSE 2.0
@@ -189,6 +191,22 @@ public class SearchViewModel extends BaseObservable {
     private int hideProjectSummary;
     private int hideCompanySummary;
     private int hideContactSummary;
+
+    /**
+     * Variables used for displaying the next batch search results for Project, Company and Contacts
+     */
+    private boolean loading = true;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount, skipCounter;
+    private final static int VIEW_MAX_COUNT = 25;
+
+    @Bindable
+    public boolean getDetailVisible() {
+        return detailVisible;
+    }
+
+    public void setDetailVisible(boolean detailVisible) {
+        this.detailVisible = detailVisible;
+    }
 
     @Bindable
     public int getHideProjectSummary() {
@@ -284,7 +302,7 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
      */
-    public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
+    public SearchViewModel(SearchActivity activity, SearchDomain sd) {
         this.activity = activity;
         this.searchDomain = sd;
         //  projectmodel = new SearchProjectViewModel(this,activity,sd);
@@ -292,6 +310,7 @@ public class SearchViewModel extends BaseObservable {
         seeAllForResult = -1;
         //init();
     }
+
 
     public void init() {
 
@@ -329,6 +348,7 @@ public class SearchViewModel extends BaseObservable {
             setIsMSR11Visible(false);
             setIsMSR12Visible(false);
             setIsMSR13Visible(false);
+            setDetailVisible(false);
             return;
         }
         setHideProjectSummary(View.GONE);
@@ -641,7 +661,6 @@ public class SearchViewModel extends BaseObservable {
         Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 
 
-
         searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -731,14 +750,97 @@ public class SearchViewModel extends BaseObservable {
     }
 
     /**
+     * Used for fetching the next 25 batch project results.
+     *
+     * @param q - query search value
+     */
+
+    public void getProjectAdditionalData(String q) {
+        searchDomain.getSearchProjectQuery(q, new Callback<SearchProject>() {
+            @Override
+            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
+                SearchProject sp;
+                if (response.isSuccessful()) {
+                    sp = response.body();
+                    if (sp == null) return;
+                    RealmList<Project> slist = sp.getResults();
+                    if (slist == null) return;
+                    int ctr = 0;
+                    for (Project s : slist) {
+                        if (s != null) {
+                            adapterDataProjectAll.add(s);
+                            ctr++;
+                        }
+                    }
+                    searchAdapterProjectAll.notifyDataSetChanged();
+                    if (ctr > 0) loading = true;
+                } else {
+                    handleError("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchProject> call, Throwable t) {
+                handleError("Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
+
+    /**
      * Initialize Project Items Adapter Search Query All
      */
+
     private void initializeAdapterProjectQueryAll() {
         adapterDataProjectAll = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
-        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        setupRecyclerView(recyclerView, LinearLayout.VERTICAL);
         searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, adapterDataProjectAll);
+        //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        /**
+         * Variables for checking if the display reaches the bottom recycle's items list.
+         */
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+        /**
+         * Scroll event for triggering the fetching of the next 25 project results to be displayed.
+         *
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
+                 Log.v("scroll", "filter" + searchDomain.getProjectFilter());
+                if (loading)
+                    if (dy > 0) //check for scroll down
+                    {
+                        if (loading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                loading = false;
+                                String sf = searchDomain.getProjectFilter();
+                                sf = sf.substring(0, sf.lastIndexOf('}'));
+                                skipCounter += VIEW_MAX_COUNT;
+                                if (sf.contains("skip")) {
+                                    sf = sf.replace("" + (skipCounter - VIEW_MAX_COUNT), "" + skipCounter) + "}";
+                                } else {
+                                    sf = sf + ",\"skip\":" + skipCounter + "}";
+                                }
+                                searchDomain.setProjectFilter(sf);
+                                getProjectAdditionalData(getQuery());
+                                Log.v("Bottom", "Bottom. filter:" + sf);
+                            }
+                        }
+                    }
+            }
+        });
     }
 
     /**
@@ -823,30 +925,53 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-       if (isMSE1SectionVisible) {
+        Log.d("detailvisible","detailvisible"+getDetailVisible());
+       if (getDetailVisible()) {
+           // setIsMSE2SectionVisible(false);
+            if (getIsMSR11Visible()) setIsMSR11Visible(true);
+            else if (getIsMSR12Visible()) setIsMSR12Visible(true);
+            else if (getIsMSR13Visible()) setIsMSR13Visible(true);
+            else if (getIsMSE2SectionVisible()) setIsMSE2SectionVisible(true);
+            else setIsMSE1SectionVisible(true);
+            setDetailVisible(false);
+            return;
+        }
+        else if (isMSE1SectionVisible) {
             activity.finish();
+            return;
         }
         else if (isMSE2SectionVisible) {
-            setIsMSE2SectionVisible(false);
-            setIsMSE1SectionVisible(true);
+            /*setIsMSE2SectionVisible(false);
+            setIsMSE1SectionVisible(true);*/
             USING_INSTANT_SEARCH = true;
+           INIT_SEARCH=true;
+            callInit();
+            return;
             //  setQuery("");
-        }
-        else if (isMSR13Visible) {
+        } else if (isMSR13Visible) {
             setIsMSR13Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
+
+            return;
         } else if (isMSR12Visible) {
             setIsMSR12Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
+            return;
         } else if (isMSR11Visible) {
             setIsMSR11Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
-        }  else {
+            return;
+        } else {
             activity.finish();
         }
+    }
+    void callInit() {
+        searchDomain.initFilter();
+        init();
+        updateViewQuery();
     }
 
     public void setDisplaySeeAllProject(boolean displaySeeAllProject) {
@@ -1074,6 +1199,7 @@ public class SearchViewModel extends BaseObservable {
         Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
         USING_INSTANT_SEARCH = getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
         intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
+        setDetailVisible(true);
         activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
     }
 
@@ -1094,13 +1220,13 @@ public class SearchViewModel extends BaseObservable {
     public void onClickSeeAllProject(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
-        Log.d("all_project","allproject"+SEE_ALL_PROJECTS);
+        Log.d("all_project", "allproject" + SEE_ALL_PROJECTS);
     }
 
     public void onClickSeeAllCompany(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_COMPANY);
         setSeeAll(SEE_ALL_COMPANIES);
-        Log.d("all_company","allcompany:"+SEE_ALL_COMPANIES);
+        Log.d("all_company", "allcompany:" + SEE_ALL_COMPANIES);
     }
 
     public void onClickSeeAllContact(View view) {
@@ -1117,7 +1243,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setSeeAll(int seeOrder) {
         seeAllForResult = seeOrder;
-        Log.d("all_see","all_see"+seeOrder);
+        Log.d("all_see", "all_see" + seeOrder);
         switch (seeAllForResult) {
             case SEE_ALL_PROJECTS:  //for see all Project
                 setIsMSR11Visible(true);

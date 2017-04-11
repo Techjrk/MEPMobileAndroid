@@ -42,13 +42,31 @@ public class SearchItemRecentViewModel extends BaseObservable {
     private String mapsApiKey;
     private boolean isClientLocation2;
     SearchDomain searchDomain;
+    SearchViewModel viewModel;
 
-    public SearchItemRecentViewModel(Project project, String mapsApiKey) {
+    /**
+     * This is for viewing all section for project, company and contacts with SearchViewModel
+     * @param project
+     * @param mapsApiKey
+     * @param viewModel
+     */
+    public SearchItemRecentViewModel(Project project, String mapsApiKey, SearchViewModel viewModel) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
         searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel =viewModel;
     }
 
+    /**
+     *
+     * This is for Recently viewed section
+
+      public SearchItemRecentViewModel(Project project, String mapsApiKey) {
+        this.project = project;
+        this.mapsApiKey = mapsApiKey;
+        searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel =viewModel;
+    }*/
     public SearchItemRecentViewModel(Company company, String mapsApiKey) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
@@ -212,6 +230,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true); // for now, if company is selected, viewmodel will return null;
         if (project == null) {
             onCompanyClick(view);
             return;
@@ -228,6 +247,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
         if (project == null) return;
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+        viewModel.setDetailVisible(true);
         view.getContext().startActivity(intent);
         Log.d("project","project");
         saveRecentlyProject(project.getId());

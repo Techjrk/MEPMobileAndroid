@@ -75,7 +75,7 @@ public class SearchDomain {
     }
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
-        setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{}}");
+        setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{},\"skip\":0}");
         //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
         setCompanyFilter("{\"searchFilter\":{}}");
         //***

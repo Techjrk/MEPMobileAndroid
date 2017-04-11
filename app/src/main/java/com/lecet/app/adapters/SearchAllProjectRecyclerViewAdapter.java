@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.lecet.app.R;
+import com.lecet.app.content.SearchActivity;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.ListItemSearchQueryAllProjectBinding;
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
@@ -26,12 +27,15 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
-    private AppCompatActivity appCompatActivity;
+ //   private AppCompatActivity appCompatActivity;
+    private SearchActivity activity;
 
     private List data = Collections.emptyList();
 
-    public SearchAllProjectRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
-        this.appCompatActivity = appCompatActivity;
+    public SearchAllProjectRecyclerViewAdapter(SearchActivity activity, int adapterType, List data) {
+//        public SearchAllProjectRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
+//        this.appCompatActivity = appCompatActivity;
+        this.activity = activity;
         this.adapterType = adapterType;
         this.data = data;
     }
@@ -53,10 +57,11 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
+//        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
+        final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
 
         ProjectQuerySearchViewHolder viewHolder = (ProjectQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Project) data.get(position), mapsApiKey);
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Project) data.get(position), mapsApiKey, activity.getViewModel());
         viewHolder.getBinding().setViewModel(vm);
     }
 

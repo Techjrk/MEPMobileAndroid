@@ -29,6 +29,14 @@ public class SearchActivity extends AppCompatActivity {
         this.companyFilter = companyFilter;
     }
 
+    public SearchViewModel getViewModel() {
+        return viewModel;
+    }
+
+    public void setViewModel(SearchViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +49,13 @@ public class SearchActivity extends AppCompatActivity {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.d(TAG, "onResume");
-       // viewModel.setIsMSE2SectionVisible(true);
-        viewModel.init();
-        viewModel.updateViewQuery();
+
+        if (viewModel.getDetailVisible()) {
+            viewModel.checkDisplayMSESectionOrMain();
+        } else {
+            viewModel.init();
+            viewModel.updateViewQuery();
+        }
     }
 
     private void setupBinding() {
@@ -57,12 +69,14 @@ public class SearchActivity extends AppCompatActivity {
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
 
-        if (viewModel.getIsMSE2SectionVisible()) {
+       /* if (viewModel.getIsMSE2SectionVisible()) {
             searchDomain.initFilter();
             viewModel.init();
             viewModel.updateViewQuery();
-        }
-
+        }*/
+       /*if (viewModel.getDetailVisible()) {
+           viewModel.setDetailVisible(false);
+       } else*/
         viewModel.checkDisplayMSESectionOrMain();
     }
 
