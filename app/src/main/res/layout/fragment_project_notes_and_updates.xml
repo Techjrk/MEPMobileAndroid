@@ -58,7 +58,6 @@
                     android:background="@drawable/share_radio_background"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:onClick="@{viewModel::onClickAddImage}"/>
-            <!--TODO: set reference for onCLick-->
 
         </LinearLayout>
 

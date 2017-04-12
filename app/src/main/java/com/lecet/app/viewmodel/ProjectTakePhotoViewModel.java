@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -9,9 +10,11 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.lecet.app.R;
+import com.lecet.app.content.ProjectDetailPreviewImageActivity;
 import com.lecet.app.content.ProjectTakePhotoFragment;
 
 import java.io.File;
@@ -21,15 +24,23 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+import static com.lecet.app.content.ProjectTakePhotoFragment.FROM_CAMERA;
+import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
+
+
 /**
  * Created by jasonm on 3/29/17.
+ * TODO - replace deprecatd Camera functionality with a more current implementation
+ * TODO - make sure Camera is released in all cases (use, cancel, close app, etc)
  */
-public class ProjectTakePhotoViewModel extends BaseObservable {
+public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
     private static Camera camera;
-    private static final String TAG = "projTakePhotoViewModel";
+    private static final String TAG = "ProjTakePhotoViewModel";
     private CameraPreview cameraPreview;
     private long projectId;
-    ProjectTakePhotoFragment fragment;
+    private ProjectTakePhotoFragment fragment;
+
 
     public ProjectTakePhotoViewModel(ProjectTakePhotoFragment fragment, long projectId, FrameLayout frameLayout) {
         super();
@@ -49,8 +60,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyCameraApp");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -65,9 +75,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable {
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-        File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
-
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"+ timeStamp + ".jpg");
 
         return mediaFile;
     }
@@ -98,25 +106,90 @@ public class ProjectTakePhotoViewModel extends BaseObservable {
         }
     }
 
-    public void onClickCancel(View view){
+    /*@Override
+    public void onPictureTaken(byte[] data, Camera camera) {
+
+        File pictureFile = getOutputMediaFile();
+        if(pictureFile == null) {
+            Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
+            return;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            fos.write(data);
+            fos.close();
+            Log.d(TAG, "onPictureTaken: Picture saved.");
+        }
+        catch (FileNotFoundException e) {
+            Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
+        }
+        catch (IOException e) {
+            Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
+        }
+
+    }*/
+
+    private void startImagePreviewActivity(String imagePath) {
+        Intent intent = new Intent(fragment.getContext(), ProjectDetailPreviewImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        intent.putExtra(FROM_CAMERA, true);
+        intent.putExtra(IMAGE_PATH, imagePath);
+        fragment.getActivity().startActivity(intent);
+    }
+
+    /**
+     * Click Events
+     */
+    public void onClickCancel(View view) {
         Log.e(TAG, "onClickCancel: onClickCancel called");
         fragment.getActivity().finish();
     }
 
+    public void onTakePhotoClick(View view) {
+        Log.e(TAG, "onTakePhotoClick");
+        if(camera != null) {
+            camera.takePicture(null, null, new CameraPreview(this.fragment.getContext()));
+        }
 
-    public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
+    }
+
+    /**
+     * CameraPreview Inner Class
+     */
+    public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PictureCallback {
+
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
 
-
-        private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+        /*private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 Log.e(TAG, "onPictureTaken: PictureTaken");
                 //TODO: addFunctionality to this
+
+                File pictureFile = getOutputMediaFile();
+                if(pictureFile == null) {
+                    Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
+                    return;
+                }
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(data);
+                    fos.close();
+                    Log.d(TAG, "onPictureTaken: Picture saved.");
+                }
+                catch (FileNotFoundException e) {
+                    Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
+                }
+                catch (IOException e) {
+                    Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
+                }
+
             }
-        };
+        };*/
 
         public CameraPreview(Context context) {
             super(context);
@@ -177,8 +250,36 @@ public class ProjectTakePhotoViewModel extends BaseObservable {
             releaseCamera();
         }
 
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            Log.d(TAG, "onPictureTaken ***");
 
+            File imageFile = getOutputMediaFile();
+            if(imageFile == null) {
+                Log.e(TAG, "onPictureTaken ***: Error creating media file, check storage permissions.");
+                return;
+            }
 
+            try {
+                FileOutputStream fos = new FileOutputStream(imageFile);
+                fos.write(data);
+                fos.close();
+                Log.d(TAG, "onPictureTaken ***: Picture saved.");
 
-    }
+                // start Preview Image Activity
+                String imagePath = imageFile.getAbsolutePath();
+                startImagePreviewActivity(imagePath);
+            }
+            catch (FileNotFoundException e) {
+                Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());
+            }
+            catch (IOException e) {
+                Log.e(TAG, "onPictureTaken ***: Error accessing file: " + e.getMessage());
+            }
+            finally {
+                camera.release();
+            }
+
+        }
+    } // end inner class
 }

@@ -23,6 +23,8 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+
 /**
  * Created by jasonm on 3/9/17.
  */
@@ -31,8 +33,6 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
 
     private static final String TAG = "ProjectNotesUpdatesFrag";
 
-    public static String PROJECT_ID = "com.lecet.app.content.ProjectNotesAndUpdatesFragment.projectId";
-
     private List<ProjectNote> notes;
     private FragmentProjectNotesAndUpdatesBinding binding;
     private long projectId;
@@ -40,7 +40,7 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
     public static ProjectNotesAndUpdatesFragment newInstance(long projectId) {
         ProjectNotesAndUpdatesFragment fragmentInstance = new ProjectNotesAndUpdatesFragment();
         Bundle args = new Bundle();
-        args.putLong(ProjectNotesAndUpdatesFragment.PROJECT_ID, projectId);
+        args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -52,7 +52,7 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            projectId = getArguments().getLong(ProjectNotesAndUpdatesFragment.PROJECT_ID);
+            projectId = getArguments().getLong(PROJECT_ID_EXTRA);
         }
 
         Log.d(TAG, "onCreate: projectId: " + projectId);
@@ -86,10 +86,6 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_notes_and_updates, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
-
-        //IncludeProjectDetailAddHeaderBinding binding2 = DataBindingUtil.inflate(inflater,R.layout.include_project_detail_add_header, container, false);
-        //binding2.setViewModel(new ProjectDetailAddHeaderViewModel());//TODO: Setup Button Functionality.
-        //binding.getViewModel().initiNoteView();
         return view;
     }
 }

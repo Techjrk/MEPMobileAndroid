@@ -20,6 +20,8 @@ import com.lecet.app.viewmodel.ProjectLocationViewModel;
 
 import io.realm.Realm;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+
 /**
  * Created by jasonm on 3/9/17.
  */
@@ -28,15 +30,13 @@ public class ProjectLocationFragment extends Fragment {
 
     private static final String TAG = "ProjectLocationFragment";
 
-    public static String PROJECT_ID = "com.lecet.app.content.ProjectLocationFragment.projectId";
-
     private FragmentProjectLocationBinding binding;
     private long projectId;
 
     public static ProjectLocationFragment newInstance(long projectId) {
         ProjectLocationFragment fragmentInstance = new ProjectLocationFragment();
         Bundle args = new Bundle();
-        args.putLong(ProjectLocationFragment.PROJECT_ID, projectId);
+        args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -48,7 +48,7 @@ public class ProjectLocationFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            projectId = getArguments().getLong(ProjectLocationFragment.PROJECT_ID);
+            projectId = getArguments().getLong(PROJECT_ID_EXTRA);
         }
 
         Log.d(TAG, "onCreate: projectId: " + projectId);
@@ -62,8 +62,6 @@ public class ProjectLocationFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-          //TODO - fill in
     }
 
     @Override

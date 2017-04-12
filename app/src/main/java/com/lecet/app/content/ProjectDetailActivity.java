@@ -51,17 +51,17 @@ public class ProjectDetailActivity extends LecetBaseActivity {
 
         // set up ViewPager
         viewPager = (ViewPager) findViewById(R.id.view_pager_project_detail);
-        setupViewPager(viewPager);
+        setupViewPager(viewPager, projectId);
 
         // set up TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_project_detail);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager, long projectId) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ProjectLocationFragment(),"Location Info");
-        adapter.addFragment(new ProjectNotesAndUpdatesFragment(),"Notes & Updates");
+        adapter.addFragment(ProjectLocationFragment.newInstance(projectId), getResources().getString(R.string.location_info));
+        adapter.addFragment(ProjectNotesAndUpdatesFragment.newInstance(projectId), getResources().getString(R.string.notes_and_updates));
         viewPager.setAdapter(adapter);
     }
 

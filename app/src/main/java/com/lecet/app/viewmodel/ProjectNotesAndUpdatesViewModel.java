@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.content.ProjectDetailAddImageActivity;
 import com.lecet.app.content.ProjectDetailAddNoteActivity;
 import com.lecet.app.content.ProjectDetailTakePhotoActivity;
 import com.lecet.app.domain.ProjectDomain;
@@ -21,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+
 /**
  * Created by jasonm on 3/9/17.
  */
@@ -28,6 +29,7 @@ import java.util.StringTokenizer;
 public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectNotesUpdatesVM";
+
     private final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
     private final Fragment fragment;
     private final long projectId;
@@ -49,6 +51,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
         if(canSetup()) {
             Log.e(TAG, "onClickAddImage: Launch Take Photo Activity");
             Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailTakePhotoActivity.class);
+            intent.putExtra(PROJECT_ID_EXTRA, projectId);
             fragment.getActivity().startActivity(intent);
         }
     }

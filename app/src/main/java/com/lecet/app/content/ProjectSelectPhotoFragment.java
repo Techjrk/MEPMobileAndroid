@@ -14,6 +14,8 @@ import com.lecet.app.R;
 import com.lecet.app.databinding.FragmentProjectSelectPhotoBinding;
 import com.lecet.app.viewmodel.ProjectSelectPhotoViewModel;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+
 /**
  * Created by jasonm on 3/29/17.
  */
@@ -22,15 +24,13 @@ public class ProjectSelectPhotoFragment extends Fragment {
 
     private static final String TAG = "ProjectSelectPhotoFrag";
 
-    public static String PROJECT_ID = "com.lecet.app.content.ProjectSelectPhotoFragment.projectId";
-
     private FragmentProjectSelectPhotoBinding binding;
     private long projectId;
 
     public static ProjectSelectPhotoFragment newInstance(long projectId) {
         ProjectSelectPhotoFragment fragmentInstance = new ProjectSelectPhotoFragment();
         Bundle args = new Bundle();
-        args.putLong(ProjectSelectPhotoFragment.PROJECT_ID, projectId);
+        args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -42,7 +42,7 @@ public class ProjectSelectPhotoFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            projectId = getArguments().getLong(ProjectSelectPhotoFragment.PROJECT_ID);
+            projectId = getArguments().getLong(PROJECT_ID_EXTRA);
         }
 
         Log.d(TAG, "onCreate: projectId: " + projectId);
@@ -56,8 +56,6 @@ public class ProjectSelectPhotoFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-          //TODO - fill in
     }
 
     @Override
