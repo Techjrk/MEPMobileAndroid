@@ -769,11 +769,18 @@ public class SearchViewModel extends BaseObservable {
             }
         });
     }
+
     /**
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
-        contactSkipCounter=0; loadingContact=true;
+        contactSkipCounter = 0;
+        //TODO: The ContactViewModel object is using the limited number of contacts stored in Realm (based on first 25 display only).
+        // App will crash if the selected contact is not on the Realm list. If the issue has been addressed,
+        // just remove the comment below (loadingContact=true). Thanks.
+
+        //loadingContact=true;
+
         adapterDataContactAll = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
@@ -798,8 +805,7 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
-                Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
+             //   Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
                 if (dy > 0) //check for scroll down
                 {
                     if (loadingContact) {
@@ -815,7 +821,7 @@ public class SearchViewModel extends BaseObservable {
                             }
                             searchDomain.setContactFilter(sf);
                             getContactAdditionalData(getQuery());
-                            Log.v("Bottom", "Bottom. filter:" + sf);
+                       //     Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
                 }
@@ -864,7 +870,8 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Company Items Adapter Search Query All
      */
     private void initializeAdapterCompanyQueryAll() {
-        companySkipCounter=0; loadingCompany=true;
+        companySkipCounter = 0;
+        loadingCompany = true;
         adapterDataCompanyAll = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
@@ -889,27 +896,26 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
-                Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
-                    if (dy > 0) //check for scroll down
-                    {
-                        if (loadingCompany) {
-                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                loadingCompany = false;
-                                String sf = searchDomain.getCompanyFilter();
-                                sf = sf.substring(0, sf.lastIndexOf('}'));
-                                companySkipCounter += VIEW_MAX_COUNT;
-                                if (sf.contains("skip")) {
-                                    sf = sf.replace("" + (companySkipCounter - VIEW_MAX_COUNT), "" + companySkipCounter) + "}";
-                                } else {
-                                    sf = sf + ",\"skip\":" + companySkipCounter + "}";
-                                }
-                                searchDomain.setCompanyFilterComplete(sf);
-                                getCompanyAdditionalData(getQuery());
-                                Log.v("Bottom", "Bottom. filter:" + sf);
+               // Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
+                if (dy > 0) //check for scroll down
+                {
+                    if (loadingCompany) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loadingCompany = false;
+                            String sf = searchDomain.getCompanyFilter();
+                            sf = sf.substring(0, sf.lastIndexOf('}'));
+                            companySkipCounter += VIEW_MAX_COUNT;
+                            if (sf.contains("skip")) {
+                                sf = sf.replace("" + (companySkipCounter - VIEW_MAX_COUNT), "" + companySkipCounter) + "}";
+                            } else {
+                                sf = sf + ",\"skip\":" + companySkipCounter + "}";
                             }
+                            searchDomain.setCompanyFilterComplete(sf);
+                            getCompanyAdditionalData(getQuery());
+                 //           Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
+                }
             }
         });
     }
@@ -957,7 +963,8 @@ public class SearchViewModel extends BaseObservable {
      */
 
     private void initializeAdapterProjectQueryAll() {
-        projectSkipCounter=0; loadingProject=true;
+        projectSkipCounter = 0;
+        loadingProject = true;
         adapterDataProjectAll = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
         setupRecyclerView(recyclerView, LinearLayout.VERTICAL);
@@ -984,26 +991,26 @@ public class SearchViewModel extends BaseObservable {
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
                 // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
-                 Log.v("scroll", "filter" + searchDomain.getProjectFilter());
-                    if (dy > 0) //check for scroll down
-                    {
-                        if (loadingProject) {
-                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                loadingProject = false;
-                                String sf = searchDomain.getProjectFilter();
-                                sf = sf.substring(0, sf.lastIndexOf('}'));
-                                projectSkipCounter += VIEW_MAX_COUNT;
-                                if (sf.contains("skip")) {
-                                    sf = sf.replace("" + (projectSkipCounter - VIEW_MAX_COUNT), "" + projectSkipCounter) + "}";
-                                } else {
-                                    sf = sf + ",\"skip\":" + projectSkipCounter + "}";
-                                }
-                                searchDomain.setProjectFilter(sf);
-                                getProjectAdditionalData(getQuery());
-                                Log.v("Bottom", "Bottom. filter:" + sf);
+                Log.v("scroll", "filter" + searchDomain.getProjectFilter());
+                if (dy > 0) //check for scroll down
+                {
+                    if (loadingProject) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loadingProject = false;
+                            String sf = searchDomain.getProjectFilter();
+                            sf = sf.substring(0, sf.lastIndexOf('}'));
+                            projectSkipCounter += VIEW_MAX_COUNT;
+                            if (sf.contains("skip")) {
+                                sf = sf.replace("" + (projectSkipCounter - VIEW_MAX_COUNT), "" + projectSkipCounter) + "}";
+                            } else {
+                                sf = sf + ",\"skip\":" + projectSkipCounter + "}";
                             }
+                            searchDomain.setProjectFilter(sf);
+                            getProjectAdditionalData(getQuery());
+                            Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
+                }
             }
         });
     }
@@ -1090,9 +1097,9 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-        Log.d("detailvisible","detailvisible"+getDetailVisible());
-       if (getDetailVisible()) {
-           // setIsMSE2SectionVisible(false);
+        Log.d("detailvisible", "detailvisible" + getDetailVisible());
+        if (getDetailVisible()) {
+            // setIsMSE2SectionVisible(false);
             if (getIsMSR11Visible()) setIsMSR11Visible(true);
             else if (getIsMSR12Visible()) setIsMSR12Visible(true);
             else if (getIsMSR13Visible()) setIsMSR13Visible(true);
@@ -1100,16 +1107,14 @@ public class SearchViewModel extends BaseObservable {
             else setIsMSE1SectionVisible(true);
             setDetailVisible(false);
             return;
-        }
-        else if (isMSE1SectionVisible) {
+        } else if (isMSE1SectionVisible) {
             activity.finish();
             return;
-        }
-        else if (isMSE2SectionVisible) {
+        } else if (isMSE2SectionVisible) {
             /*setIsMSE2SectionVisible(false);
             setIsMSE1SectionVisible(true);*/
             USING_INSTANT_SEARCH = true;
-           INIT_SEARCH=true;
+            INIT_SEARCH = true;
             callInit();
             return;
             //  setQuery("");
@@ -1133,6 +1138,7 @@ public class SearchViewModel extends BaseObservable {
             activity.finish();
         }
     }
+
     void callInit() {
         searchDomain.initFilter();
         init();
