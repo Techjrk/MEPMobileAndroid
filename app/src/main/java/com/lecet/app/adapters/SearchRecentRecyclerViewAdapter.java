@@ -65,7 +65,7 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), mapsApiKey,activity.getViewModel());
         }
         else
-            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey);
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey, activity.getViewModel());
 
         viewHolder.getBinding().setViewModel(vm);
     }

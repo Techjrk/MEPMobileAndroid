@@ -67,10 +67,11 @@ public class SearchItemRecentViewModel extends BaseObservable {
         searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
         this.viewModel =viewModel;
     }*/
-    public SearchItemRecentViewModel(Company company, String mapsApiKey) {
+    public SearchItemRecentViewModel(Company company, String mapsApiKey, SearchViewModel viewModel) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
         searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel=viewModel;
     }
 
     public SearchItemRecentViewModel(Contact contact) {
@@ -244,6 +245,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
 //event for clicking the Saved Search Project Detail item
     public void onProjectClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (project == null) return;
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
@@ -254,6 +256,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 //event for clicking the Saved Search Company Detail item
     public void onCompanyClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (company == null) return;
         Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
@@ -263,6 +266,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public void onContactClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (contact == null) return;
         Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
         intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());

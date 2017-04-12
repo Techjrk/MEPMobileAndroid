@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.content.SearchActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryCompanyBinding;
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
@@ -30,12 +31,14 @@ public class SearchSummaryCompanyRecyclerViewAdapter extends RecyclerView.Adapte
     private final int adapterType;
     private AppCompatActivity appCompatActivity;
     private List data = Collections.emptyList();
+    private SearchActivity activity;
 
 
     public SearchSummaryCompanyRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType,List data) {
         this.appCompatActivity = appCompatActivity;
         this.adapterType = adapterType;
         this.data = data;
+        activity = (SearchActivity) appCompatActivity;
     }
 
 
@@ -58,7 +61,7 @@ public class SearchSummaryCompanyRecyclerViewAdapter extends RecyclerView.Adapte
         final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
 
         CompanyQuerySearchViewHolder viewHolder = (CompanyQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), mapsApiKey);
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), mapsApiKey, activity.getViewModel());
         viewHolder.getBinding().setViewModel(vm);
     }
 

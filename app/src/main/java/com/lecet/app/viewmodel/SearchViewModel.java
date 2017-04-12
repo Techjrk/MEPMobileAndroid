@@ -195,9 +195,12 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Variables used for displaying the next batch search results for Project, Company and Contacts
      */
-    private boolean loading = true;
-    private int pastVisiblesItems, visibleItemCount, totalItemCount, skipCounter;
+    private boolean loadingProject;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount, projectSkipCounter;
     private final static int VIEW_MAX_COUNT = 25;
+
+    private boolean loadingCompany;
+    private int companySkipCounter;
 
     @Bindable
     public boolean getDetailVisible() {
@@ -739,14 +742,94 @@ public class SearchViewModel extends BaseObservable {
     }
 
     /**
+     * Used for fetching the next 25 batch company results.
+     *
+     * @param q - query search value
+     */
+
+    public void getCompanyAdditionalData(String q) {
+        searchDomain.getSearchCompanyQuery(q, new Callback<SearchCompany>() {
+            @Override
+            public void onResponse(Call<SearchCompany> call, Response<SearchCompany> response) {
+                SearchCompany sc;
+                if (response.isSuccessful()) {
+                    sc = response.body();
+                    if (sc == null) return;
+                    RealmList<Company> slist = sc.getResults();
+                    if (slist == null) return;
+                    int ctr = 0;
+                    for (Company s : slist) {
+                        if (s != null) {
+                            adapterDataCompanyAll.add(s);
+                            ctr++;
+                        }
+                    }
+                    searchAdapterCompanyAll.notifyDataSetChanged();
+                    if (ctr > 0) loadingCompany = true;
+                } else {
+                    handleError("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchCompany> call, Throwable t) {
+                handleError("Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
+    /**
      * Initialize Company Items Adapter Search Query All
      */
     private void initializeAdapterCompanyQueryAll() {
+        companySkipCounter=0; loadingCompany=true;
         adapterDataCompanyAll = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, adapterDataCompanyAll);
         recyclerView.setAdapter(searchAdapterCompanyAll);
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        /**
+         * Variables for checking if the display reaches the bottom recycle's items list.
+         */
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+        /**
+         * Scroll event for triggering the fetching of the next 25 project results to be displayed.
+         *
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
+                Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
+                    if (dy > 0) //check for scroll down
+                    {
+                        if (loadingCompany) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                loadingCompany = false;
+                                String sf = searchDomain.getCompanyFilter();
+                                sf = sf.substring(0, sf.lastIndexOf('}'));
+                                companySkipCounter += VIEW_MAX_COUNT;
+                                if (sf.contains("skip")) {
+                                    sf = sf.replace("" + (companySkipCounter - VIEW_MAX_COUNT), "" + companySkipCounter) + "}";
+                                } else {
+                                    sf = sf + ",\"skip\":" + companySkipCounter + "}";
+                                }
+                                searchDomain.setCompanyFilterComplete(sf);
+                                getCompanyAdditionalData(getQuery());
+                                Log.v("Bottom", "Bottom. filter:" + sf);
+                            }
+                        }
+                    }
+            }
+        });
     }
 
     /**
@@ -773,7 +856,7 @@ public class SearchViewModel extends BaseObservable {
                         }
                     }
                     searchAdapterProjectAll.notifyDataSetChanged();
-                    if (ctr > 0) loading = true;
+                    if (ctr > 0) loadingProject = true;
                 } else {
                     handleError("Unsuccessful Query. " + response.message());
                 }
@@ -792,6 +875,7 @@ public class SearchViewModel extends BaseObservable {
      */
 
     private void initializeAdapterProjectQueryAll() {
+        projectSkipCounter=0; loadingProject=true;
         adapterDataProjectAll = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
         setupRecyclerView(recyclerView, LinearLayout.VERTICAL);
@@ -819,19 +903,18 @@ public class SearchViewModel extends BaseObservable {
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
                 // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
                  Log.v("scroll", "filter" + searchDomain.getProjectFilter());
-                if (loading)
                     if (dy > 0) //check for scroll down
                     {
-                        if (loading) {
+                        if (loadingProject) {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                loading = false;
+                                loadingProject = false;
                                 String sf = searchDomain.getProjectFilter();
                                 sf = sf.substring(0, sf.lastIndexOf('}'));
-                                skipCounter += VIEW_MAX_COUNT;
+                                projectSkipCounter += VIEW_MAX_COUNT;
                                 if (sf.contains("skip")) {
-                                    sf = sf.replace("" + (skipCounter - VIEW_MAX_COUNT), "" + skipCounter) + "}";
+                                    sf = sf.replace("" + (projectSkipCounter - VIEW_MAX_COUNT), "" + projectSkipCounter) + "}";
                                 } else {
-                                    sf = sf + ",\"skip\":" + skipCounter + "}";
+                                    sf = sf + ",\"skip\":" + projectSkipCounter + "}";
                                 }
                                 searchDomain.setProjectFilter(sf);
                                 getProjectAdditionalData(getQuery());
