@@ -74,10 +74,9 @@ public class SearchItemRecentViewModel extends BaseObservable {
         this.viewModel=viewModel;
     }
 
-    public SearchItemRecentViewModel(Contact contact) {
+    public SearchItemRecentViewModel(Contact contact, SearchViewModel viewModel) {
         this.contact = contact;
-
-        //   this.viewModel = viewModel;
+        this.viewModel=viewModel;
     }
 
     ////////////////////////////////////

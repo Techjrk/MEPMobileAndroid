@@ -202,6 +202,9 @@ public class SearchViewModel extends BaseObservable {
     private boolean loadingCompany;
     private int companySkipCounter;
 
+    private boolean loadingContact;
+    private int contactSkipCounter;
+
     @Bindable
     public boolean getDetailVisible() {
         return detailVisible;
@@ -731,14 +734,93 @@ public class SearchViewModel extends BaseObservable {
     }
 
     /**
+     * Used for fetching the next 25 batch company results.
+     *
+     * @param q - query search value
+     */
+
+    public void getContactAdditionalData(String q) {
+        searchDomain.getSearchContactQuery(q, new Callback<SearchContact>() {
+            @Override
+            public void onResponse(Call<SearchContact> call, Response<SearchContact> response) {
+                SearchContact sc;
+                if (response.isSuccessful()) {
+                    sc = response.body();
+                    if (sc == null) return;
+                    RealmList<Contact> slist = sc.getResults();
+                    if (slist == null) return;
+                    int ctr = 0;
+                    for (Contact s : slist) {
+                        if (s != null) {
+                            adapterDataContactAll.add(s);
+                            ctr++;
+                        }
+                    }
+                    searchAdapterContactAll.notifyDataSetChanged();
+                    if (ctr > 0) loadingContact = true;
+                } else {
+                    handleError("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchContact> call, Throwable t) {
+                handleError("Network is busy. Pls. try again. ");
+            }
+        });
+    }
+    /**
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
+        contactSkipCounter=0; loadingContact=true;
         adapterDataContactAll = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, adapterDataContactAll);
+        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, adapterDataContactAll);
         recyclerView.setAdapter(searchAdapterContactAll);
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        /**
+         * Variables for checking if the display reaches the bottom recycle's items list.
+         */
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+        /**
+         * Scroll event for triggering the fetching of the next 25 project results to be displayed.
+         *
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
+                Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
+                if (dy > 0) //check for scroll down
+                {
+                    if (loadingContact) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loadingContact = false;
+                            String sf = searchDomain.getContactFilter();
+                            sf = sf.substring(0, sf.lastIndexOf('}'));
+                            contactSkipCounter += VIEW_MAX_COUNT;
+                            if (sf.contains("skip")) {
+                                sf = sf.replace("" + (contactSkipCounter - VIEW_MAX_COUNT), "" + contactSkipCounter) + "}";
+                            } else {
+                                sf = sf + ",\"skip\":" + contactSkipCounter + "}";
+                            }
+                            searchDomain.setContactFilter(sf);
+                            getContactAdditionalData(getQuery());
+                            Log.v("Bottom", "Bottom. filter:" + sf);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -955,7 +1037,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataContactSummary = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, adapterDataContactSummary);
+        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, adapterDataContactSummary);
         recyclerView.setAdapter(searchAdapterContactSummary);
     }
 
