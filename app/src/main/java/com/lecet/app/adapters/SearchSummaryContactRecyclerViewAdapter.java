@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.content.SearchActivity;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.databinding.ListItemSearchQuerySummaryContactBinding;
 import com.lecet.app.viewmodel.SearchItemRecentViewModel;
@@ -26,10 +27,11 @@ public class SearchSummaryContactRecyclerViewAdapter extends RecyclerView.Adapte
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
     private List data = Collections.emptyList();
-
-    public SearchSummaryContactRecyclerViewAdapter(int adapterType, List data) {
+    private SearchActivity activity;
+    public SearchSummaryContactRecyclerViewAdapter(SearchActivity activity, int adapterType, List data) {
         this.adapterType = adapterType;
         this.data = data;
+        this.activity = activity;
     }
 
 
@@ -50,7 +52,7 @@ public class SearchSummaryContactRecyclerViewAdapter extends RecyclerView.Adapte
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         ContactQuerySearchViewHolder viewHolder = (ContactQuerySearchViewHolder) holder;
-        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Contact) data.get(position));
+        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Contact) data.get(position), activity.getViewModel());
         viewHolder.getBinding().setViewModel(vm);
     }
 

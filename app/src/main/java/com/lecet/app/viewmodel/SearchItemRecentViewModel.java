@@ -42,23 +42,41 @@ public class SearchItemRecentViewModel extends BaseObservable {
     private String mapsApiKey;
     private boolean isClientLocation2;
     SearchDomain searchDomain;
+    SearchViewModel viewModel;
 
-    public SearchItemRecentViewModel(Project project, String mapsApiKey) {
+    /**
+     * This is for viewing all section for project, company and contacts with SearchViewModel
+     * @param project
+     * @param mapsApiKey
+     * @param viewModel
+     */
+    public SearchItemRecentViewModel(Project project, String mapsApiKey, SearchViewModel viewModel) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
         searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel =viewModel;
     }
 
-    public SearchItemRecentViewModel(Company company, String mapsApiKey) {
+    /**
+     *
+     * This is for Recently viewed section
+
+      public SearchItemRecentViewModel(Project project, String mapsApiKey) {
+        this.project = project;
+        this.mapsApiKey = mapsApiKey;
+        searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel =viewModel;
+    }*/
+    public SearchItemRecentViewModel(Company company, String mapsApiKey, SearchViewModel viewModel) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
         searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel=viewModel;
     }
 
-    public SearchItemRecentViewModel(Contact contact) {
+    public SearchItemRecentViewModel(Contact contact, SearchViewModel viewModel) {
         this.contact = contact;
-
-        //   this.viewModel = viewModel;
+        this.viewModel=viewModel;
     }
 
     ////////////////////////////////////
@@ -212,6 +230,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true); // for now, if company is selected, viewmodel will return null;
         if (project == null) {
             onCompanyClick(view);
             return;
@@ -225,15 +244,18 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
 //event for clicking the Saved Search Project Detail item
     public void onProjectClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (project == null) return;
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+        viewModel.setDetailVisible(true);
         view.getContext().startActivity(intent);
         Log.d("project","project");
         saveRecentlyProject(project.getId());
     }
 //event for clicking the Saved Search Company Detail item
     public void onCompanyClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (company == null) return;
         Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
@@ -243,6 +265,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public void onContactClick(View view) {
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (contact == null) return;
         Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
         intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());

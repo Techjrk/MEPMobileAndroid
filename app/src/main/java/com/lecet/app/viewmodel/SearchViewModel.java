@@ -14,6 +14,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -140,7 +141,7 @@ public class SearchViewModel extends BaseObservable {
     public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL = 7;      // Company Query All
     public static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL = 8;      // Contact Query All
 
-    private AppCompatActivity activity;
+    private SearchActivity activity;
     private final SearchDomain searchDomain;
     private List<SearchResult> adapterDataRecentlyViewed;
     private List<SearchSaved> adapterDataProjectSearchSaved;
@@ -155,6 +156,7 @@ public class SearchViewModel extends BaseObservable {
     private boolean isMSR11Visible = false;
     private boolean isMSR12Visible = false;
     private boolean isMSR13Visible = false;
+    private boolean detailVisible = false;
     private final int CONTENT_MAX_SIZE = 4;
 
     //For MSE 2.0
@@ -189,6 +191,28 @@ public class SearchViewModel extends BaseObservable {
     private int hideProjectSummary;
     private int hideCompanySummary;
     private int hideContactSummary;
+
+    /**
+     * Variables used for displaying the next batch search results for Project, Company and Contacts
+     */
+    private boolean loadingProject;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount, projectSkipCounter;
+    private final static int VIEW_MAX_COUNT = 25;
+
+    private boolean loadingCompany;
+    private int companySkipCounter;
+
+    private boolean loadingContact;
+    private int contactSkipCounter;
+
+    @Bindable
+    public boolean getDetailVisible() {
+        return detailVisible;
+    }
+
+    public void setDetailVisible(boolean detailVisible) {
+        this.detailVisible = detailVisible;
+    }
 
     @Bindable
     public int getHideProjectSummary() {
@@ -284,7 +308,7 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Constructor without input query - For RecentlyViewed and SavedSearch API
      */
-    public SearchViewModel(AppCompatActivity activity, SearchDomain sd) {
+    public SearchViewModel(SearchActivity activity, SearchDomain sd) {
         this.activity = activity;
         this.searchDomain = sd;
         //  projectmodel = new SearchProjectViewModel(this,activity,sd);
@@ -292,6 +316,7 @@ public class SearchViewModel extends BaseObservable {
         seeAllForResult = -1;
         //init();
     }
+
 
     public void init() {
 
@@ -329,6 +354,7 @@ public class SearchViewModel extends BaseObservable {
             setIsMSR11Visible(false);
             setIsMSR12Visible(false);
             setIsMSR13Visible(false);
+            setDetailVisible(false);
             return;
         }
         setHideProjectSummary(View.GONE);
@@ -641,7 +667,6 @@ public class SearchViewModel extends BaseObservable {
         Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 
 
-
         searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -709,36 +734,285 @@ public class SearchViewModel extends BaseObservable {
     }
 
     /**
+     * Used for fetching the next 25 batch company results.
+     *
+     * @param q - query search value
+     */
+
+    public void getContactAdditionalData(String q) {
+        searchDomain.getSearchContactQuery(q, new Callback<SearchContact>() {
+            @Override
+            public void onResponse(Call<SearchContact> call, Response<SearchContact> response) {
+                SearchContact sc;
+                if (response.isSuccessful()) {
+                    sc = response.body();
+                    if (sc == null) return;
+                    RealmList<Contact> slist = sc.getResults();
+                    if (slist == null) return;
+                    int ctr = 0;
+                    for (Contact s : slist) {
+                        if (s != null) {
+                            adapterDataContactAll.add(s);
+                            ctr++;
+                        }
+                    }
+                    searchAdapterContactAll.notifyDataSetChanged();
+                    if (ctr > 0) loadingContact = true;
+                } else {
+                    handleError("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchContact> call, Throwable t) {
+                handleError("Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
+    /**
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
+        contactSkipCounter = 0;
+        //TODO: The ContactViewModel object is using the limited number of contacts stored in Realm (based on first 25 display only).
+        // App will crash if the selected contact is not on the Realm list. If the issue has been addressed,
+        // just remove the comment below (loadingContact=true). Thanks.
+
+        //loadingContact=true;
+
         adapterDataContactAll = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, adapterDataContactAll);
+        searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, adapterDataContactAll);
         recyclerView.setAdapter(searchAdapterContactAll);
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        /**
+         * Variables for checking if the display reaches the bottom recycle's items list.
+         */
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+        /**
+         * Scroll event for triggering the fetching of the next 25 project results to be displayed.
+         *
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+             //   Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
+                if (dy > 0) //check for scroll down
+                {
+                    if (loadingContact) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loadingContact = false;
+                            String sf = searchDomain.getContactFilter();
+                            sf = sf.substring(0, sf.lastIndexOf('}'));
+                            contactSkipCounter += VIEW_MAX_COUNT;
+                            if (sf.contains("skip")) {
+                                sf = sf.replace("" + (contactSkipCounter - VIEW_MAX_COUNT), "" + contactSkipCounter) + "}";
+                            } else {
+                                sf = sf + ",\"skip\":" + contactSkipCounter + "}";
+                            }
+                            searchDomain.setContactFilter(sf);
+                            getContactAdditionalData(getQuery());
+                       //     Log.v("Bottom", "Bottom. filter:" + sf);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Used for fetching the next 25 batch company results.
+     *
+     * @param q - query search value
+     */
+
+    public void getCompanyAdditionalData(String q) {
+        searchDomain.getSearchCompanyQuery(q, new Callback<SearchCompany>() {
+            @Override
+            public void onResponse(Call<SearchCompany> call, Response<SearchCompany> response) {
+                SearchCompany sc;
+                if (response.isSuccessful()) {
+                    sc = response.body();
+                    if (sc == null) return;
+                    RealmList<Company> slist = sc.getResults();
+                    if (slist == null) return;
+                    int ctr = 0;
+                    for (Company s : slist) {
+                        if (s != null) {
+                            adapterDataCompanyAll.add(s);
+                            ctr++;
+                        }
+                    }
+                    searchAdapterCompanyAll.notifyDataSetChanged();
+                    if (ctr > 0) loadingCompany = true;
+                } else {
+                    handleError("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchCompany> call, Throwable t) {
+                handleError("Network is busy. Pls. try again. ");
+            }
+        });
     }
 
     /**
      * Initialize Company Items Adapter Search Query All
      */
     private void initializeAdapterCompanyQueryAll() {
+        companySkipCounter = 0;
+        loadingCompany = true;
         adapterDataCompanyAll = new ArrayList<Company>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, adapterDataCompanyAll);
         recyclerView.setAdapter(searchAdapterCompanyAll);
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        /**
+         * Variables for checking if the display reaches the bottom recycle's items list.
+         */
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+        /**
+         * Scroll event for triggering the fetching of the next 25 project results to be displayed.
+         *
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+               // Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
+                if (dy > 0) //check for scroll down
+                {
+                    if (loadingCompany) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loadingCompany = false;
+                            String sf = searchDomain.getCompanyFilter();
+                            sf = sf.substring(0, sf.lastIndexOf('}'));
+                            companySkipCounter += VIEW_MAX_COUNT;
+                            if (sf.contains("skip")) {
+                                sf = sf.replace("" + (companySkipCounter - VIEW_MAX_COUNT), "" + companySkipCounter) + "}";
+                            } else {
+                                sf = sf + ",\"skip\":" + companySkipCounter + "}";
+                            }
+                            searchDomain.setCompanyFilterComplete(sf);
+                            getCompanyAdditionalData(getQuery());
+                 //           Log.v("Bottom", "Bottom. filter:" + sf);
+                        }
+                    }
+                }
+            }
+        });
     }
+
+    /**
+     * Used for fetching the next 25 batch project results.
+     *
+     * @param q - query search value
+     */
+
+    public void getProjectAdditionalData(String q) {
+        searchDomain.getSearchProjectQuery(q, new Callback<SearchProject>() {
+            @Override
+            public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
+                SearchProject sp;
+                if (response.isSuccessful()) {
+                    sp = response.body();
+                    if (sp == null) return;
+                    RealmList<Project> slist = sp.getResults();
+                    if (slist == null) return;
+                    int ctr = 0;
+                    for (Project s : slist) {
+                        if (s != null) {
+                            adapterDataProjectAll.add(s);
+                            ctr++;
+                        }
+                    }
+                    searchAdapterProjectAll.notifyDataSetChanged();
+                    if (ctr > 0) loadingProject = true;
+                } else {
+                    handleError("Unsuccessful Query. " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchProject> call, Throwable t) {
+                handleError("Network is busy. Pls. try again. ");
+            }
+        });
+    }
+
 
     /**
      * Initialize Project Items Adapter Search Query All
      */
+
     private void initializeAdapterProjectQueryAll() {
+        projectSkipCounter = 0;
+        loadingProject = true;
         adapterDataProjectAll = new ArrayList<Project>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
-        setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
+        setupRecyclerView(recyclerView, LinearLayout.VERTICAL);
         searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, adapterDataProjectAll);
+        //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
+        final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        /**
+         * Variables for checking if the display reaches the bottom recycle's items list.
+         */
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+        /**
+         * Scroll event for triggering the fetching of the next 25 project results to be displayed.
+         *
+         */
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
+                Log.v("scroll", "filter" + searchDomain.getProjectFilter());
+                if (dy > 0) //check for scroll down
+                {
+                    if (loadingProject) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loadingProject = false;
+                            String sf = searchDomain.getProjectFilter();
+                            sf = sf.substring(0, sf.lastIndexOf('}'));
+                            projectSkipCounter += VIEW_MAX_COUNT;
+                            if (sf.contains("skip")) {
+                                sf = sf.replace("" + (projectSkipCounter - VIEW_MAX_COUNT), "" + projectSkipCounter) + "}";
+                            } else {
+                                sf = sf + ",\"skip\":" + projectSkipCounter + "}";
+                            }
+                            searchDomain.setProjectFilter(sf);
+                            getProjectAdditionalData(getQuery());
+                            Log.v("Bottom", "Bottom. filter:" + sf);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -770,7 +1044,7 @@ public class SearchViewModel extends BaseObservable {
         adapterDataContactSummary = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
-        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, adapterDataContactSummary);
+        searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, adapterDataContactSummary);
         recyclerView.setAdapter(searchAdapterContactSummary);
     }
 
@@ -823,30 +1097,52 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-       if (isMSE1SectionVisible) {
+        Log.d("detailvisible", "detailvisible" + getDetailVisible());
+        if (getDetailVisible()) {
+            // setIsMSE2SectionVisible(false);
+            if (getIsMSR11Visible()) setIsMSR11Visible(true);
+            else if (getIsMSR12Visible()) setIsMSR12Visible(true);
+            else if (getIsMSR13Visible()) setIsMSR13Visible(true);
+            else if (getIsMSE2SectionVisible()) setIsMSE2SectionVisible(true);
+            else setIsMSE1SectionVisible(true);
+            setDetailVisible(false);
+            return;
+        } else if (isMSE1SectionVisible) {
             activity.finish();
-        }
-        else if (isMSE2SectionVisible) {
-            setIsMSE2SectionVisible(false);
-            setIsMSE1SectionVisible(true);
+            return;
+        } else if (isMSE2SectionVisible) {
+            /*setIsMSE2SectionVisible(false);
+            setIsMSE1SectionVisible(true);*/
             USING_INSTANT_SEARCH = true;
+            INIT_SEARCH = true;
+            callInit();
+            return;
             //  setQuery("");
-        }
-        else if (isMSR13Visible) {
+        } else if (isMSR13Visible) {
             setIsMSR13Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
+
+            return;
         } else if (isMSR12Visible) {
             setIsMSR12Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
+            return;
         } else if (isMSR11Visible) {
             setIsMSR11Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
-        }  else {
+            return;
+        } else {
             activity.finish();
         }
+    }
+
+    void callInit() {
+        searchDomain.initFilter();
+        init();
+        updateViewQuery();
     }
 
     public void setDisplaySeeAllProject(boolean displaySeeAllProject) {
@@ -1074,6 +1370,7 @@ public class SearchViewModel extends BaseObservable {
         Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
         USING_INSTANT_SEARCH = getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
         intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
+        setDetailVisible(true);
         activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
     }
 
@@ -1094,13 +1391,13 @@ public class SearchViewModel extends BaseObservable {
     public void onClickSeeAllProject(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
-        Log.d("all_project","allproject"+SEE_ALL_PROJECTS);
+        Log.d("all_project", "allproject" + SEE_ALL_PROJECTS);
     }
 
     public void onClickSeeAllCompany(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_COMPANY);
         setSeeAll(SEE_ALL_COMPANIES);
-        Log.d("all_company","allcompany:"+SEE_ALL_COMPANIES);
+        Log.d("all_company", "allcompany:" + SEE_ALL_COMPANIES);
     }
 
     public void onClickSeeAllContact(View view) {
@@ -1117,7 +1414,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setSeeAll(int seeOrder) {
         seeAllForResult = seeOrder;
-        Log.d("all_see","all_see"+seeOrder);
+        Log.d("all_see", "all_see" + seeOrder);
         switch (seeAllForResult) {
             case SEE_ALL_PROJECTS:  //for see all Project
                 setIsMSR11Visible(true);
