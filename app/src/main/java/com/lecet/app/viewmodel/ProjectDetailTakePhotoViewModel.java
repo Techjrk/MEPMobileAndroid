@@ -25,14 +25,6 @@ public class ProjectDetailTakePhotoViewModel extends BaseObservable {
         this.projectId = projectId;
     }
 
-    // removed this as there is no Use button at the top of the Activity which uses this ViewModel
-    /*public void onClickUsePhoto(View view){
-        Log.e(TAG, "onClickUsePhoto: Launch Add Image Activity");
-        //Intent intent = new Intent(this, ProjectDetailAddImageActivity.class);
-        //this.startActivity(intent);
-    }*/
-
-
     public void onClickCancel(View view){
         Log.e(TAG, "onClickCancel: onClickCancel called");
          activity.onBackPressed();

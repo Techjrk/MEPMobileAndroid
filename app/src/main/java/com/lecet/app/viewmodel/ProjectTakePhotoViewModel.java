@@ -3,17 +3,21 @@ package com.lecet.app.viewmodel;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
-import com.lecet.app.R;
 import com.lecet.app.content.ProjectDetailPreviewImageActivity;
 import com.lecet.app.content.ProjectTakePhotoFragment;
 
@@ -60,14 +64,14 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lecet");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
+                Log.d("Lecet", "failed to create directory");
                 return null;
             }
         }
@@ -106,29 +110,6 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         }
     }
 
-    /*@Override
-    public void onPictureTaken(byte[] data, Camera camera) {
-
-        File pictureFile = getOutputMediaFile();
-        if(pictureFile == null) {
-            Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
-            return;
-        }
-
-        try {
-            FileOutputStream fos = new FileOutputStream(pictureFile);
-            fos.write(data);
-            fos.close();
-            Log.d(TAG, "onPictureTaken: Picture saved.");
-        }
-        catch (FileNotFoundException e) {
-            Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
-        }
-        catch (IOException e) {
-            Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
-        }
-
-    }*/
 
     private void startImagePreviewActivity(String imagePath) {
         Intent intent = new Intent(fragment.getContext(), ProjectDetailPreviewImageActivity.class);
@@ -136,6 +117,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         intent.putExtra(FROM_CAMERA, true);
         intent.putExtra(IMAGE_PATH, imagePath);
         fragment.getActivity().startActivity(intent);
+        fragment.getActivity().finish();
     }
 
     /**
@@ -162,37 +144,11 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
 
-        /*private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                Log.e(TAG, "onPictureTaken: PictureTaken");
-                //TODO: addFunctionality to this
-
-                File pictureFile = getOutputMediaFile();
-                if(pictureFile == null) {
-                    Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
-                    return;
-                }
-
-                try {
-                    FileOutputStream fos = new FileOutputStream(pictureFile);
-                    fos.write(data);
-                    fos.close();
-                    Log.d(TAG, "onPictureTaken: Picture saved.");
-                }
-                catch (FileNotFoundException e) {
-                    Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
-                }
-                catch (IOException e) {
-                    Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
-                }
-
-            }
-        };*/
 
         public CameraPreview(Context context) {
             super(context);
+
 
             // Install a SurfaceHolder.Callback so we get notified when the
             // underlying surface is created and destroyed.
@@ -208,6 +164,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
             }
             // The Surface has been created, now tell the camera where to draw the preview.
             try {
+                camera.setDisplayOrientation(90);
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
             } catch (IOException e) {
@@ -250,6 +207,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
             releaseCamera();
         }
 
+
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             Log.d(TAG, "onPictureTaken ***");
@@ -262,15 +220,42 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
 
             try {
                 FileOutputStream fos = new FileOutputStream(imageFile);
-                fos.write(data);
-                fos.close();
-                Log.d(TAG, "onPictureTaken ***: Picture saved.");
 
-                // start Preview Image Activity
-                String imagePath = imageFile.getAbsolutePath();
-                startImagePreviewActivity(imagePath);
-            }
-            catch (FileNotFoundException e) {
+                Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                ExifInterface exif = new ExifInterface(imageFile.toString());
+                String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+
+                Log.e(TAG, "onPictureTaken: orientation: " + orientation);
+
+                switch (orientation) {
+                    default:
+                    case "0":
+                    case "6":
+                        realImage = rotateImage(realImage, 90);
+                        break;
+                    case "8":
+                        realImage = rotateImage(realImage, 270);
+                        break;
+                    case "3":
+                        realImage = rotateImage(realImage, 180);
+                        break;
+                }
+
+
+                boolean successful = realImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+                fos.close();
+
+                if(successful) {
+                    Log.e(TAG, "onPictureTaken: Success");
+                }else {
+                    Log.e(TAG, "onPictureTaken: Failure");
+                }
+
+            // start Preview Image Activity
+            String imagePath = imageFile.getAbsolutePath();
+            startImagePreviewActivity(imagePath);
+            }catch (FileNotFoundException e) {
                 Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());
             }
             catch (IOException e) {
@@ -281,5 +266,16 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
             }
 
         }
+
+        public Bitmap rotateImage(Bitmap image,float angle){
+            int w = image.getWidth();
+            int h = image.getHeight();
+
+            Matrix mtx = new Matrix();
+            mtx.setRotate(angle);
+
+            return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
+        }
+
     } // end inner class
 }
