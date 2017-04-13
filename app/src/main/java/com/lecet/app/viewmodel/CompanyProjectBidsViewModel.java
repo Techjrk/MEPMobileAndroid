@@ -304,10 +304,7 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
         }
 
         Collections.sort(data, comparator);
-
-        listAdapter = new CompanyProjectBidsAdapter(appCompatActivity, data);
-        recyclerView.setAdapter(listAdapter);
-        //listAdapter.notifyDataSetChanged();
+        listAdapter.notifyDataSetChanged();
     }
 
     private class BidDateComparator implements Comparator<Bid> {

@@ -20,7 +20,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lecet.app.BR;
@@ -82,7 +81,7 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
 
-    RelativeLayout rfooter;
+
     private T trackingList;
     private RealmResults<U> dataItems;
     private String objectsSelected;
@@ -94,7 +93,7 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         this.appCompatActivity = appCompatActivity;
         this.trackingList = trackingList;
         this.selectedSort = sortBy;
-        rfooter = (RelativeLayout) appCompatActivity.findViewById(R.id.project_track_footer);
+
         this.dataItems = getData(trackingList, sortBy);
         setupAdapter(dataItems);
     }
@@ -342,13 +341,10 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         int selectedItemsCount = listView.getCheckedItemCount();
         if (selectedItemsCount == 0) {
-            rfooter.setVisibility(View.GONE);
             setObjectsSelected(null);
         } else {
-            rfooter.setVisibility(View.VISIBLE);
             setObjectsSelected(appCompatActivity.getString(R.string.x_selected, Integer.toString(selectedItemsCount)));
         }
     }

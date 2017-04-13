@@ -345,7 +345,7 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
         } else if (section == SECTION_CONTACTS) {
 
-            CompanyDetailContactViewModel viewModel = new CompanyDetailContactViewModel(appCompatActivity, company, company.getContacts().get(position));
+            CompanyDetailContactViewModel viewModel = new CompanyDetailContactViewModel(appCompatActivity, company.getContacts().get(position));
             ((CompanyContactViewHolder) holder).getBinding().setViewModel(viewModel);
 
         } else if (section == SECTION_BIDS) {

@@ -13,23 +13,19 @@
     <string name="county">County</string>
     <string name="project_id">Project ID</string>
     <string name="project_type">Project Type</string>
-    <string name="project_types">Project Type(s)</string>
     <string name="est_low">Est. Low</string>
     <string name="stage">STAGE</string>
-    <string name="stage_normal">Stage</string>
     <string name="notes">Notes</string>
     <string name="participants">Participants</string>
     <string name="architects">Architects</string>
     <string name="owner">Owner</string>
     <string name="project_bidders">Project Bidders</string>
-    <string name="project_participant">PARTICIPANTS</string>
     <string name="architect">Architect</string>
     <string name="see_all">See All</string>
     <string name="updating">Updating..</string>
     <string name="est_high">Est. High</string>
     <string name="date_added">Date Added</string>
     <string name="bid_date">Bid Date</string>
-    <string name="start_date">Target Start Date</string>
     <string name="last_updated">Last Updated</string>
     <string name="value">Value</string>
     <string name="jurisdiction">Jurisdiction</string>
@@ -288,11 +284,10 @@
     <string name="move">MOVE</string>
     <string name="x_selected">%s Selected</string>
     <string name="move_to">Move to</string>
-    <string name="select_tracking_list">Select a Tracking List</string>
 
     <!-- MTM Confirmation -->
-    <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s?</string>
-    <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s?</string>
+    <string name="move_selected_item_from_list_message">Move selected %1$s to %2$s</string>
+    <string name="remove_selected_item_from_list_message">Remove selected %1$s from %2$s</string>
 
     <!-- Share -->
     <string name="share_project">Share Project Details</string>
@@ -350,4 +345,21 @@
     <string name="new_project">New Project</string>
     <string name="down_arrow">down arrow</string>
 
+    <!--MPD Add Notes & Images-->
+    <string name="location_info">Location Info</string>
+    <string name="notes_and_updates">Notes &amp; Updates</string>
+    <string name="add_note">Add Note</string>
+    <string name="add_image">Add Image</string>
+    <string name="add">ADD</string>
+    <string name="post_title">Post Title</string>
+    <string name="post_body">Post Body</string>
+    <string name="post_visibility_warning">This post will be visible by all MEP Users</string>
+    <string name="optional">Optional</string>
+    <string name="title_all_caps">TITLE</string>
+    <string name="body_all_caps">BODY</string>
+    <string name="testing_purposes_lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="use">Use</string>
+    <string name="photo">Photo</string>
+    <string name="library">Library</string>
+    <string name="preview">Preview</string>
 </resources>

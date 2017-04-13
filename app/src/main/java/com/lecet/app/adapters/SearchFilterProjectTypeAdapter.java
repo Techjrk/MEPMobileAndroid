@@ -44,7 +44,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
-    private static int NO_IMAGE = 0;
 
     public SearchFilterProjectTypeAdapter(List<Parent> data, SearchFilterProjectTypeViewModel viewModel) {
 
@@ -105,16 +104,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 }
 
                 return childrenSize + grandChildrenSize;
-            } else {
-                /**
-                 * When the parent is no longer expanded, the children of this parent should be also in the mode of not be expanded.
-                 */
-                int k = 0;
-                if (children != null)
-                    for (Child child : children) {
-                        children.get(k).isExpanded = false;
-                        k++;
-                    }
             }
 
             return childrenSize;
@@ -183,7 +172,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
                     // If the position is already in the expanded list, then we need to remove it
                     if (expanded.containsKey(position)) {
-                        child.isExpanded = false;
+
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
                         TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
@@ -216,7 +205,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                         expanded.putAll(toBeAdded);
 
                     } else {
-                        child.isExpanded = true;
+
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
                         TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
@@ -257,9 +246,9 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
             final GrandChildTypeViewHolder grandChildViewHolder = (GrandChildTypeViewHolder) holder;
 
-            final Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
-            final Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
-            final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
+            Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
+            Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
+            Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
             final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
             grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -282,15 +271,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         // Parent denoted by section number
         final Parent parent = data.get(section);
         parentViewHolder.checkView.setText(parent.getName());
-        if (parent.getChildren() == null) {
-            parentViewHolder.imgView.setImageResource(NO_IMAGE);
-        } else {
-            if (parent.isExpanded)
-                parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
-            else
-                parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-        }
-        parentViewHolder.checkView.setOnCheckedChangeListener(null);
+        // parentViewHolder.id = parent.getId();
         parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -302,18 +283,17 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 }
             }
         });
-        parentViewHolder.imgView.setOnClickListener(null);
-        parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+        ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 customSearch=false;
                 if (expandedParents.contains(section)) {
-                    parent.isExpanded = false;
+
                     expandedParents.remove(Integer.valueOf(section));
                     expandedChildren.remove(Integer.valueOf(section));
 
                 } else {
-                    parent.isExpanded = true;
+
                     expandedParents.add(section);
                 }
 

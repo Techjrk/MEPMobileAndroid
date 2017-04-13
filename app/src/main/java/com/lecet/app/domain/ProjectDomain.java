@@ -13,6 +13,7 @@ import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -314,8 +315,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-//        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
-            if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -328,8 +328,7 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
 
-//        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
-            } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -374,8 +373,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-//        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
-            if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
@@ -388,8 +386,7 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
 
-//        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
-            } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
@@ -458,7 +455,16 @@ public class ProjectDomain {
 
         return result;
     }
+/* TODO: Remove after Project Notes can extend RealmObject
+    public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
 
+        RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
+                .equalTo("projectId", projectID)
+                .findAllSorted("amount", Sort.DESCENDING);
+
+        return notesResult;
+    }
+*/
     public RealmResults<Project> fetchHiddenProjects() {
 
         return realm.where(Project.class).equalTo("hidden", true).findAll();

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.lecet.app.data.models.DistrictCouncil;
 import com.lecet.app.data.models.Jurisdiction;
-import com.lecet.app.data.models.Region;
 import com.lecet.app.domain.ProjectDomain;
 
 import java.util.List;
@@ -47,32 +46,15 @@ public class ProjectDetailJurisdictionViewModel extends ProjDetailItemViewModel 
                     for (int i = 0; i < jurisdictions.size(); i++) {
 
                         Jurisdiction jurisdiction = jurisdictions.get(i);
-                        if (jurisdiction != null /*&& jurisdiction.getDistrictCouncil() != null*/) {
+                        if (jurisdiction != null && jurisdiction.getDistrictCouncil() != null) {
 
-                            // local
-                            String jName = jurisdiction.getName().trim();
-                            if(jName != null && !jName.isEmpty()) {
-                                if(i == 0) {
-                                    jurString = "Local: " + jurString;
-                                }
-                                jurString = jurString + jName;
+                            DistrictCouncil districtCouncil = jurisdiction.getDistrictCouncil();
+                            String abbreviation = districtCouncil.getAbbreviation();
+
+                            if (abbreviation != null && abbreviation.length() > 0) {
+
+                                jurString = jurString + " " + abbreviation;
                             }
-
-                            // council
-                            /*DistrictCouncil districtCouncil = jurisdiction.getDistrictCouncil();
-                            String dcName = districtCouncil.getName().trim();
-                            if(dcName != null && !dcName.isEmpty()) {
-                                jurString = jurString + "District: " + dcName + "\n";
-                            }*/
-
-                            // region
-                            /*List<Region> regions = jurisdiction.getRegions();
-                            for(Region region : regions) {
-                                String rName = region.getName();
-                                if (rName != null && !rName.isEmpty()) {
-                                    jurString = jurString + "Region: " + rName + "\n";
-                                }
-                            }*/
 
                             if (i != (jurisdictions.size() - 1)) {
                                 jurString = jurString + ", ";
@@ -84,7 +66,7 @@ public class ProjectDetailJurisdictionViewModel extends ProjDetailItemViewModel 
                     setInfo(jurString);
 
                 } else {
-                    Log.w("ProjectDetailJurisdVM", "onResponse: not successful: ");
+                    Log.d("ProjectDetailJurisdVM", "onResponse: ");
                 }
             }
 

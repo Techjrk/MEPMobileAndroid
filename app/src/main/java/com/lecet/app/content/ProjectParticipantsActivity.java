@@ -34,8 +34,7 @@ public class ProjectParticipantsActivity extends LecetBaseActivity {
         Project project = projectDomain.fetchProjectById(projectID);
         viewModel = new ProjectParticipantViewModel(this, projectDomain, projectID);
 
-        setupToolbar(project.getTitle(), getString(R.string.project_participant));
-//        setupToolbar(project.getTitle(), getString(R.string.project_bidders));
+        setupToolbar(project.getTitle(), getString(R.string.project_bidders));
     }
 
     private void setupToolbar(String title, String subTitle) {

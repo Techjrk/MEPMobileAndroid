@@ -14,7 +14,6 @@ public class Region {
     private String name;
 
     @SerializedName("longName")
-
     private String longName;
 
     @SerializedName("abbreviation")
@@ -24,22 +23,6 @@ public class Region {
     private long id;
 
     public Region(){}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLongName() {
-        return longName;
-    }
-
-    public void setLongName(String longName) {
-        this.longName = longName;
-    }
 
     @Override
     public String toString() {

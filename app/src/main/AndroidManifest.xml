@@ -7,11 +7,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- Uses feature -->
     <uses-feature
             android:glEsVersion="0x00020000"
             android:required="true"/>
+    <uses-feature android:name="android.hardware.camera" />
 
     <!-- Application -->
     <application
@@ -97,6 +98,26 @@
                 android:theme="@style/AppTheme"/>
         <activity
                 android:name=".content.SearchActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ProjectDetailAddNoteActivity"
+                android:label="ProjectAddNotes"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ProjectDetailTakePhotoActivity"
+                android:label="ProjectTakePhoto"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ProjectDetailAddImageActivity"
+                android:label="ProjectAddImages"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ProjectDetailPreviewImageActivity"
+                android:label="ProjectPreviewImage"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity

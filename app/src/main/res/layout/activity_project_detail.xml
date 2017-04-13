@@ -12,13 +12,15 @@
             android:layout_height="match_parent"
             tools:context="com.lecet.app.content.ProjectDetailActivity">
 
+        <!-- App Bar -->
+        <include layout="@layout/include_collapsing_app_bar_layout"
+            bind:mapInterface="@{viewModel}"/>
 
         <!-- Content -->
         <include layout="@layout/content_project_detail"/>
 
-        <!-- App Bar -->
-        <include layout="@layout/include_collapsing_app_bar_layout"
-                 bind:mapInterface="@{viewModel}"/>
+
+
 
 
     </android.support.design.widget.CoordinatorLayout>

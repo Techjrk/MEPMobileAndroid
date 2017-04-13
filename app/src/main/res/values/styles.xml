@@ -512,6 +512,12 @@
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
+    <!--Project Detail Page-->
+    <style name="ProjectDetailTabLayout" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <!-- MSE: Search Page -->
     <style name="SearchPageSectionTextView">
         <item name="android:layout_width">match_parent</item>

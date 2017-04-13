@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectPhotoViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:maxHeight="200dp"
+                android:src="@drawable/sample_construction_site"
+                android:id="@+id/imageView"
+                tools:src="@drawable/sample_construction_site"/>
+            <!--TODO: add actual image reference -->
+            <!--TODO: Set Method path for getting images-->
+
+            <ImageView
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitEnd"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_pencil_white"/>
+            <!--TODO: get actual pencil image-->
+            <!--TODO: Set visibility equation-->
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@color/pureWhite">
+            <!--TODO:Set onClick method-->
+
+
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_height="30dp"
+                android:textSize="16sp"
+                android:textColor="@color/pureBlack"
+                android:gravity="bottom"
+                android:text="@{viewModel.title}"
+                android:maxLines="1"
+                bind:typeface="@{`Lato-Regular.ttf`}"
+                tools:text="Photo Title"/>
+            <!--TODO: Add actual text reference-->
+
+            <include layout="@layout/rule_horiz_blue"/>
+
+            <TextView
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="1dp"
+                android:textColor="@color/pureBlack"
+                android:text="@{viewModel.text}"
+                android:maxLines="4"
+                android:ellipsize="end"
+                bind:typeface="@{`Lato-Regular.ttf`}"
+                android:id="@+id/textView2"
+                tools:text="@string/testing_purposes_lorem_ipsum"/>
+            <!--TODO: add note reference-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:scaleType="fitStart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/ic_image_placeholder"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:textSize="14sp"
+                    android:textColor="@color/lecetMediumBlue"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:text="@{viewModel.authorName}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:maxLines="1"
+                    tools:text="Erin Bernardin"/>
+
+                <TextView
+                    android:layout_marginRight="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:textSize="12sp"
+                    android:textColor="@color/lecetLightGray"
+                    android:gravity="end"
+                    android:text="@{viewModel.timeDifference}"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:maxLines="1"
+                    tools:text="1 day ago"/>
+                <!--TODO: set equation to get time-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

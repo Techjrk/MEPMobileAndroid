@@ -7,9 +7,10 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.BR;
+import com.android.databinding.library.baseAdapters.BR;
 import com.lecet.app.R;
 
 /**
@@ -31,12 +32,10 @@ public class SearchFilterValueViewModel extends BaseObservable {
     public void onApplyButtonClick(View view) {
 
         // min/max validation
-        //Integer minInt = Integer.valueOf(getMin());
-        //Integer maxInt = Integer.valueOf(getMax());
-        // Log.d("min","min"+getMin());
-        // Log.d("max","max"+getMax());
+       // Log.d("min","min"+getMin());
+       // Log.d("max","max"+getMax());
         if ((getMin()== null || getMin().equals("")) && (getMax()==null || getMax().equals(""))){
-            // activity.setResult(Activity.RESULT_CANCELED);
+           // activity.setResult(Activity.RESULT_CANCELED);
             min=""; max="";
             Intent intent = activity.getIntent();
             intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, new String[]{min, max});
@@ -60,8 +59,6 @@ public class SearchFilterValueViewModel extends BaseObservable {
         }
         //Log.d("min","minint"+minInt);
         //Log.d("max","maxint"+maxInt);
-
-
         if (minInt <= maxInt) {
             Intent intent = activity.getIntent();
             intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA, new String[]{min, max});
@@ -119,7 +116,6 @@ public class SearchFilterValueViewModel extends BaseObservable {
 
     @Bindable
     public void setMax(String max) {
-
         this.max = max;
         notifyPropertyChanged(BR.max);
     }

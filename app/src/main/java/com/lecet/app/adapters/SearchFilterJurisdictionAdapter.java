@@ -38,9 +38,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     public static final int PARENT_VIEW_TYPE = 0;
     public static final int CHILD_VIEW_TYPE = 1;
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
-    private static final int NO_TYPE = -1;
+    public static final int NO_TYPE = -1;
     public static boolean customSearch;
-    private static int lastFamilyChecked = NO_TYPE;
+    // public static CheckBox lastChecked;
+    public static int lastFamilyChecked = NO_TYPE;
     private static int lastSection; //keep track of last section used by the selected item
     private static int lastPosition; //keep track of last position used by the selected item
     private static int lastChildParentPosition; //keep track of last child parent used by the selected item
@@ -52,6 +53,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
+    //private List<String> noChildren;
     public SearchFilterJurisdictionAdapter(List<Parent> data, SearchFilterJurisdictionViewModel viewModel) {
 
         this.data = data;
@@ -61,6 +63,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         // Expanded grandChildrens, we need to keep track of section and then subtype position
         expandedChildren = new HashMap<>();
         checkLastSelect(true);
+        // notifyDataSetChanged();
     }
 
     public void clearLast() {
@@ -104,8 +107,8 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         checkLastSelect(false);
                         gcname.setSelected(selected);
                         vholder.checkView.setSelected(selected);
-                        lastPosition = grandChildIndex; //Integer.valueOf(grandChildIndex);
-                        lastChildParentPosition = grandChildParentIndex; //Integer.valueOf(grandChildParentIndex);
+                        lastPosition = Integer.valueOf(grandChildIndex);
+                        lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
                         lastSection = section;
                     } else if (gcname.getSelected() == true) gcname.setSelected(false);
                 }
@@ -122,10 +125,9 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         checkLastSelect(false);
                         cname.setSelected(selected);
                         vholder.checkView.setSelected(selected);
-                        lastPosition =truePosition; // Integer.valueOf(truePosition);
+                        lastPosition = Integer.valueOf(truePosition);
                         lastSection = section;
-                    } else
-                    if (cname.getSelected()) cname.setSelected(false);
+                    } else if (cname.getSelected() == true) cname.setSelected(false);
                 }
             }
         }
@@ -142,8 +144,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         checkLastSelect(true);
                         vholder.checkView.setSelected(selected);
                         lastSection = section;
-                    } else
-                    if (pname.getSelected()) pname.setSelected(false);
+                    } else if (pname.getSelected() == true) pname.setSelected(false);
                 }
 
             }
@@ -203,10 +204,11 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 /**
                  * When the parent is no longer expanded, the children of this parent should be also in the mode of not be expanded.
                  */
-
-              //  if (children != null)
-                    for (int k = 0; k<children.size();k++ ) {
+                int k = 0;
+                if (children != null)
+                    for (Child child : children) {
                         children.get(k).isExpanded = false;
+                        k++;
                     }
             }
 
@@ -252,7 +254,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             childViewHolder.checkView.setText(child.name);
             checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
             childViewHolder.checkView.setChecked(child.getSelected());
-            childViewHolder.checkView.setTag(truePosition);
+            childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
             if (child.isExpanded)
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
@@ -269,6 +271,8 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         public void onClick(View view) {
                             customSearch = false;
                             cb = (CheckBox) view;
+
+                            // int clickedPos = ((Integer) cb.getTag()).intValue();
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);
@@ -304,6 +308,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 @Override
                 public void onClick(View view) {
                     customSearch = false;
+                    // child.isExpanded = !child.isExpanded;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -340,7 +345,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         for (Integer integer : toBeRemoved) {
                             expanded.remove(integer);
                         }
-                       // expanded.remove(position);
+
                         expanded.remove(Integer.valueOf(position));
                         expanded.putAll(toBeAdded);
 
@@ -417,10 +422,11 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
                                 viewModel.setLastChecked(grandChildViewHolder.checkView);
                                 lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
-                                lastPosition = grandChildIndex; //Integer.valueOf(grandChildIndex);
-                                lastChildParentPosition = grandChildParentIndex; //Integer.valueOf(grandChildParentIndex);
+                                lastPosition = Integer.valueOf(grandChildIndex);
+                                lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
                                 lastSection = section;
                                 lastName = cb.getText().toString().trim();
+
                             } else {
                                 clearLast();
                                 viewModel.clearBundle();
@@ -527,20 +533,26 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_sectioned_adapter_child, parent, false);
-            return new ChildViewHolder(v);
+
+            ChildViewHolder vh = new ChildViewHolder(v);
+            return vh;
 
         } else if (viewType == GRAND_CHILD_VIEW_TYPE) {
 
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_sectioned_adapter_grandchild, parent, false);
-            return new GrandChildTypeViewHolder(v);
+
+            GrandChildTypeViewHolder vh = new GrandChildTypeViewHolder(v);
+            return vh;
 
         } else {
 
             // create a parent layout
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_sectioned_adapter_parent, parent, false);
-            return new ParentViewHolder(v);
+
+            ParentViewHolder vh = new ParentViewHolder(v);
+            return vh;
         }
     }
 
@@ -559,7 +571,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
      * @return true if the section, position in the data set relates to a child. False equates
      * to a grandchild.
      */
-    private boolean isChild(int section, int position) {
+    public boolean isChild(int section, int position) {
 
         // Check to see if the section, position is an expanded position
         if (expandedChildren.containsKey(section)) {
@@ -601,7 +613,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
      * @param position The position within the given section.
      * @return The position within the original data set.
      */
-    private Integer childPositionInIndex(Integer section, Integer position) {
+    public Integer childPositionInIndex(Integer section, Integer position) {
 
         // Check to see if the section, position is an expanded position
         if (expandedChildren.containsKey(section)) {
@@ -633,7 +645,8 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         return position;
     }
 
-    private Integer grandChildParentIndex(Integer section, Integer adapterPosition) {
+    //***
+    public Integer grandChildParentIndex(Integer section, Integer adapterPosition) {
 
         if (expandedChildren.get(section).floorKey(adapterPosition) == null)
             throw new IllegalArgumentException(String.format("There is no expanded child at Section: %1d, Position: %2d", section, adapterPosition));
@@ -641,40 +654,42 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         return expandedChildren.get(section).floorKey(adapterPosition);
     }
 
-    private Integer grandChildIndexInParent(Integer parentPosition, Integer adapterPosition) {
+    public Integer grandChildIndexInParent(Integer parentPosition, Integer adapterPosition) {
 
         // If parent is 5, and adapter position is 7. Then we know the grand child is in index position
         // 1.
         return adapterPosition - parentPosition - 1;
     }
 
-private  class ParentViewHolder extends RecyclerView.ViewHolder {
+
+    //***
+    public class ParentViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkView;
         ImageView imgView;
 
-         private ParentViewHolder(View itemView) {
+        public ParentViewHolder(View itemView) {
             super(itemView);
             checkView = (CheckBox) itemView.findViewById(R.id.j_parent);
             imgView = (ImageView) itemView.findViewById(R.id.j_parent_img);
         }
     }
 
-    private class ChildViewHolder extends RecyclerView.ViewHolder {
+    public class ChildViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkView;
         ImageView imgView;
 
-        private ChildViewHolder(View itemView) {
+        public ChildViewHolder(View itemView) {
             super(itemView);
             checkView = (CheckBox) itemView.findViewById(R.id.j_child);
             imgView = (ImageView) itemView.findViewById(R.id.j_child_img);
         }
     }
 
-private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
+    public class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkView;
 
 
-         private GrandChildTypeViewHolder(View itemView) {
+        public GrandChildTypeViewHolder(View itemView) {
             super(itemView);
             checkView = (CheckBox) itemView.findViewById(R.id.j_grandchild);
         }
@@ -734,7 +749,7 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
             this.abbreviation = abbreviation;
         }
 
-         String getLongName() {
+        public String getLongName() {
             return longName;
         }
 
@@ -746,7 +761,7 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
             this.children = children;
         }
 
-         List<Child> getChildren() {
+        public List<Child> getChildren() {
             return children;
         }
     }
@@ -762,7 +777,7 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
         private List<GrandChild> grandChildren;
         private Integer districtCouncilId;
 
-        boolean isSelected = false;
+        public boolean isSelected = false;
 
         public boolean getSelected() {
             return isSelected;
@@ -780,7 +795,7 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
             this.id = id;
         }
 
-         int getRegionId() {
+        public int getRegionId() {
             return regionId;
         }
 
@@ -804,18 +819,29 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
             this.abbreviation = abbreviation;
         }
 
-         String getLongName() {
+        public String getLongName() {
             return longName;
+        }
+
+        public void setLongName(String longName) {
+            this.longName = longName;
         }
 
         public void setGrandChildren(List<GrandChild> grandChildren) {
             this.grandChildren = grandChildren;
         }
 
-         List<GrandChild> getGrandChildren() {
+        public List<GrandChild> getGrandChildren() {
             return grandChildren;
         }
 
+        public void setDistrictCouncilId(Integer districtCouncilId) {
+            this.districtCouncilId = districtCouncilId;
+        }
+
+        public Integer getDistrictCouncilId() {
+            return districtCouncilId;
+        }
     }
 
     public static class GrandChild {
@@ -825,6 +851,7 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
         private String abbreviation;
         private String longName;
         boolean isSelected = false;
+        private boolean isExpanded;
 
         public boolean getSelected() {
             return isSelected;
@@ -858,10 +885,13 @@ private class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
             this.abbreviation = abbreviation;
         }
 
-         String getLongName() {
+        public String getLongName() {
             return longName;
         }
 
+        public void setLongName(String longName) {
+            this.longName = longName;
+        }
     }
 
 
