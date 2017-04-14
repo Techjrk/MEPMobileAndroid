@@ -7,10 +7,12 @@ import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.api.service.ProjectService;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Jurisdiction;
+import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
@@ -35,6 +37,7 @@ import io.realm.Sort;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * File: ProjectDomain Created: 10/5/16 Author: domandtom
@@ -78,13 +81,19 @@ public class ProjectDomain {
      **/
 
     public Call<Project> getProjectDetail(long projectID, Callback<Project> callback) {
-
         String token = sharedPreferenceUtil.getAccessToken();
 
         String filter = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\":[\"company\",\"contact\"]},{\"contacts\":[\"contactType\",\"company\"]}]}";
 
         Call<Project> call = lecetClient.getProjectService().project(token, projectID, filter);
         call.enqueue(callback);
+
+        return call;
+    }
+
+    public Call<ProjectNote> postNote(long projectID, NotePost notePost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectNote> call = lecetClient.getProjectService().addNote(token, projectID, notePost);
 
         return call;
     }
@@ -189,7 +198,7 @@ public class ProjectDomain {
 
 
     public Call<List<Project>> getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
-
+    //// TODO: 4/14/17 REFERENCE POINT 2, DELETE IF NOT ALI
         String token = sharedPreferenceUtil.getAccessToken();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -455,16 +464,20 @@ public class ProjectDomain {
 
         return result;
     }
-/* TODO: Remove after Project Notes can extend RealmObject
-    public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
+        //TODO: Change ProjectNote to ProjectAdditionalInfo
+    public Call<List<ProjectNote>> fetchProjectNotes(long projectID, Callback<List<ProjectNote>> callback) {
 
-        RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
-                .equalTo("projectId", projectID)
-                .findAllSorted("amount", Sort.DESCENDING);
+        String token = sharedPreferenceUtil.getAccessToken();
 
-        return notesResult;
+        Call<List<ProjectNote>> call = lecetClient.getProjectService().projectNotes(token, projectID);
+        call.enqueue(callback);
+
+        return call;
+
     }
-*/
+
+
+    
     public RealmResults<Project> fetchHiddenProjects() {
 
         return realm.where(Project.class).equalTo("hidden", true).findAll();
@@ -481,7 +494,7 @@ public class ProjectDomain {
         realm.beginTransaction();
         Project persistedProject = realm.copyToRealmOrUpdate(project);
         realm.commitTransaction();
-
+        
         return persistedProject;
     }
 

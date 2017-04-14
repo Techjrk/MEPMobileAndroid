@@ -30,6 +30,8 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectNotesUpdatesVM";
 
+    public static final int NOTE_REQUEST_CODE = 999;
+
     private final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
     private final Fragment fragment;
     private final long projectId;
@@ -44,7 +46,8 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
     public void onClickAddNote(View view){
         Log.e(TAG, "onClickAddNote: Launch Add Note Activity");
         Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
-        fragment.getActivity().startActivity(intent);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        fragment.getActivity().startActivityForResult(intent, NOTE_REQUEST_CODE);
     }
 
     public void onClickAddImage(View view){
