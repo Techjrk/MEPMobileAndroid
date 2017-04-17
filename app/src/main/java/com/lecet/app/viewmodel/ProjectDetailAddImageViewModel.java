@@ -29,6 +29,11 @@ public class ProjectDetailAddImageViewModel extends BaseObservable {
     private String imagePath;
     private String title;
     private String body;
+    private int titleSize;
+
+    public String getTitleSize() {
+        return String.valueOf(titleSize);
+    }
 
 
     public ProjectDetailAddImageViewModel(AppCompatActivity activity, long projectId, String imagePath) {
@@ -58,7 +63,8 @@ public class ProjectDetailAddImageViewModel extends BaseObservable {
 
     public void setTitle(String title) {
         this.title = title;
-        Log.d(TAG, "setTitle: " + title);   //TODO - remove logging; for testing only
+        titleSize = title.length();
+        notifyChange();
     }
 
     @Bindable
@@ -68,7 +74,7 @@ public class ProjectDetailAddImageViewModel extends BaseObservable {
 
     public void setBody(String body) {
         this.body = body;
-        Log.d(TAG, "setBody: " + body);     //TODO - remove logging; for testing only
+        Log.d(TAG, "setBody: " + body);
     }
 
     @Bindable

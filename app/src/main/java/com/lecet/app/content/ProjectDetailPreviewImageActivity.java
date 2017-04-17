@@ -46,7 +46,7 @@ public class ProjectDetailPreviewImageActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityProjectPreviewImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_preview_image);
-        viewModel = new ProjectDetailPreviewImageViewModel(this.getBaseContext(), projectId, fromCamera, imagePath);
+        viewModel = new ProjectDetailPreviewImageViewModel(this, projectId, fromCamera, imagePath);
         binding.setViewModel(viewModel);
     }
 

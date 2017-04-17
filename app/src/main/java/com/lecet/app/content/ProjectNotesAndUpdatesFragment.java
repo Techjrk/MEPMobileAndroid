@@ -36,9 +36,12 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
     private List<ProjectNote> notes;
     private FragmentProjectNotesAndUpdatesBinding binding;
     private long projectId;
+    private ProjectDomain projectDomain;
 
-    public static ProjectNotesAndUpdatesFragment newInstance(long projectId) {
+    public static ProjectNotesAndUpdatesFragment newInstance(long projectId, ProjectDomain projectDomain) {
+
         ProjectNotesAndUpdatesFragment fragmentInstance = new ProjectNotesAndUpdatesFragment();
+        fragmentInstance.projectDomain = projectDomain;
         Bundle args = new Bundle();
         args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);

@@ -1,8 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.text.format.Time;
 import android.util.Log;
 
 import com.lecet.app.data.models.ProjectNote;
+
+import java.util.TimeZone;
 
 /**
  * Created by ludwigvondrake on 3/23/17.
@@ -36,8 +39,11 @@ public class ProjectNoteViewModel {
     public long getId(){return note.getId();}
 
     public String getTimeDifference(){
+        long currentTime = System.currentTimeMillis();
 
-        long difference =  System.currentTimeMillis() - note.getUpdatedAt().getTime();
+        currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
+
+        long difference =  currentTime - note.getUpdatedAt().getTime();
         if(difference < 0){
             Log.e(TAG, "getTimeDifference: Less then 0");
         }

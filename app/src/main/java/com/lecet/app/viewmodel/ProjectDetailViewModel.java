@@ -1,7 +1,6 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,9 +18,7 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
-import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.IncludeProjectDetailAddHeaderBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.lecet.app.interfaces.ProjectAdditionalData;
@@ -30,11 +27,11 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,6 +52,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
     private final WeakReference<ProjectDetailActivity> activityWeakReference;
     private final ProjectDomain projectDomain;
+    private List<ProjectAdditionalData> additionalNotes;
 
     private Project project;
     private AlertDialog networkAlertDialog;
@@ -63,7 +61,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
     // Retrofit calls
     private Call<Project> projectDetailCall;
-    private List<ProjectAdditionalData> additonalNotes; //TODO: Remove/Replace with Proper call for notes
+    private Call<List<ProjectNote>> additonalNotesCall; //// TODO: 4/14/17 UPDATE FOR IMAGES
 
 
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, String mapsApiKey, ProjectDomain projectDomain) {
@@ -219,11 +217,10 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
         projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
         initLocationRecyclerView(activity, projectDetailAdapter);
-
-        initAdditionalNotes();//TODO:This is where the fake call is used
-        projectNotesAdapter = new ProjectNotesAdapter(additonalNotes);
+        additionalNotes = new ArrayList<ProjectAdditionalData>();
+        projectNotesAdapter = new ProjectNotesAdapter(additionalNotes);
         initNotesRecyclerView(activity, projectNotesAdapter);
-
+        getAdditionalNotes(false);
     }
 
 
@@ -255,31 +252,35 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         Picasso.with(imageView.getContext()).load(mapUrl).fit().into(imageView);
     }
 
+    public void getAdditionalNotes(final boolean refresh){
+        additonalNotesCall = projectDomain.fetchProjectNotes(projectID, new Callback<List<ProjectNote>>() {
+            @Override
+            public void onResponse(Call<List<ProjectNote>> call, Response<List<ProjectNote>> response) {
+                List<ProjectNote> responseBody = response.body();
 
-    private void initAdditionalNotes(){//TODO: Change with actual call for project Notes
-        additonalNotes = new ArrayList<ProjectAdditionalData>();
-        additonalNotes.add(new ProjectNote(1L,"Random House",
-                "I Really Like this Project, ITS SO AWESOME!", 35L, 32L, 68L,
-                new Date(291156831000L)));
-        additonalNotes.add(new ProjectNote(2L, "I Hate Construction",
-                "It takes forever, enough said", 35L, 32L, 69L, new Date(1490388831000L)));
-        additonalNotes.add(new ProjectPhoto(3L, "I Snagged A Picture",
-                "The Project has been going, I really like the new windows they put in, and the toilet. Very toilety",
-                35L, 32L, 70L, new Date(System.currentTimeMillis() - 30000L),
-                ("drawable://" + R.drawable.sample_construction_site)));
-        additonalNotes.add(new ProjectNote(4L, "How is it going?",
-                "I was born and raised here, and they closed it down so im sad now, im not stalling " +
-                        "just to get a longer line count. Im not trying to get cut off by the Line limit, "+
-                        "Makeing an elipses which causes you to close out the application and i might copy and paste" +
-                        "just to get a longer line count. Im not trying to get cut off by the Line limit, "+
-                        "Makeing an elipses which causes you to close out the application and i might copy and paste" +
-                        "just to get a longer line count. Im not trying to get cut off by the Line limit, "+
-                        "Makeing an elipses which causes you to close out the application and i might copy and paste",
-                35L, 32L, 70L, new Date(1490376557736L)));
-        additonalNotes.add(new ProjectNote(5L, "This isn't facebook?", "I thought this was Facebook," +
-                "Well you guys are making great progress. Carry on.", 35L, 32L, 70L, new Date(System.currentTimeMillis() - 120000L)));
+                if (refresh) {
+                    additionalNotes.clear();
+                }
 
+                additionalNotes.addAll(responseBody);
+                Collections.reverse(additionalNotes);
+                projectNotesAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectNote>> call, Throwable t) {
+                ProjectDetailActivity activity = activityWeakReference.get();
+
+                if (activity == null) return;
+
+                if (networkAlertDialog != null && networkAlertDialog.isShowing())
+                    networkAlertDialog.dismiss();
+
+                activity.showNetworkAlert();
+            }
+        });
     }
+
 
     public String getMapUrl(Project project) {
 
@@ -303,9 +304,5 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         if (mapIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(mapIntent);
         }
-    }
-
-    public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "handleOnActivityResult: " + resultCode);
     }
 }

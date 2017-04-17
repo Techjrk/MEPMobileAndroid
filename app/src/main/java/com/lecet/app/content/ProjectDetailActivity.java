@@ -18,6 +18,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectDetailBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ProjectDetailViewModel;
+import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,17 +53,27 @@ public class ProjectDetailActivity extends LecetBaseActivity {
 
         // set up ViewPager
         viewPager = (ViewPager) findViewById(R.id.view_pager_project_detail);
-        setupViewPager(viewPager, projectId);
+        setupViewPager(viewPager, projectId, projectDomain);
 
         // set up TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_project_detail);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager, long projectId) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE) {
+            viewModel.getAdditionalNotes(true);
+            Log.d("ProjectDetailActivity", "Result Success");
+        }
+    }
+
+    private void setupViewPager(ViewPager viewPager, long projectId, ProjectDomain projectDomain) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(ProjectLocationFragment.newInstance(projectId), getResources().getString(R.string.location_info));
-        adapter.addFragment(ProjectNotesAndUpdatesFragment.newInstance(projectId), getResources().getString(R.string.notes_and_updates));
+        adapter.addFragment(ProjectNotesAndUpdatesFragment.newInstance(projectId, projectDomain), getResources().getString(R.string.notes_and_updates));
         viewPager.setAdapter(adapter);
     }
 
@@ -97,26 +108,6 @@ public class ProjectDetailActivity extends LecetBaseActivity {
             return fragmentTitleList.get(position);
         }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("ProjectDetailActivity", "onActivityResult: requestCode: " + requestCode);
-        if(resultCode == RESULT_OK) {
-            Log.d("ProjectDetailActivity", "onActivityResult: RESULT_OK, " + resultCode);
-
-        }
-        else if (resultCode == RESULT_CANCELED) {
-            Log.d("ProjectDetailActivity", "onActivityResult: RESULT_CANCELED, " + resultCode);
-
-        }
-        else Log.e("ProjectDetailActivity", "onActivityResult: WARNING: RESULT CODE NOT SUPPORTED: " + resultCode);
-
-        viewModel.handleOnActivityResult(requestCode, resultCode, data);
-    }
-
-
-
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {

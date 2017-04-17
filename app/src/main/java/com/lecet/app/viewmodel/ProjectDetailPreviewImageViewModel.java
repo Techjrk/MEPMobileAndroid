@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -7,6 +8,8 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +17,8 @@ import android.widget.ImageView;
 import com.lecet.app.content.ProjectDetailAddImageActivity;
 import com.lecet.app.content.ProjectDetailTakePhotoActivity;
 import com.lecet.app.content.ProjectSelectPhotoFragment;
+
+import java.io.IOException;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
@@ -32,13 +37,41 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
     private Bitmap bitmap;
     private boolean fromCamera;
     private String imagePath;
+    private Activity activity;
 
-    public ProjectDetailPreviewImageViewModel(Context context, long projectId, boolean fromCamera, String imagePath) {
-        this.context = context;
+    public ProjectDetailPreviewImageViewModel(Activity activity, long projectId, boolean fromCamera, String imagePath) {
+        this.activity = activity;
+        this.context = activity.getBaseContext();
         this.projectId = projectId;
         this.fromCamera = fromCamera;
         this.imagePath = imagePath;
         this.bitmap = BitmapFactory.decodeFile(imagePath);
+        try {
+            ExifInterface exifInterface = new ExifInterface(imagePath);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            Log.e(TAG, "ProjectDetailPreviewImageViewModel: Orientation: " + orientation);
+            switch(orientation){
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    this.bitmap = rotateImage(bitmap, 90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    this.bitmap = rotateImage(bitmap, 180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    this.bitmap = rotateImage(bitmap, 270);
+                    break;
+
+                default:
+                    break;
+
+            }
+        }catch(IOException e){
+            Log.e(TAG, "ProjectDetailPreviewImageViewModel:" + e.getMessage());
+        }
+
     }
 
     public void onUseImageButtonClick(View view) {
@@ -64,6 +97,13 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
 
         this.context.startActivity(intent);
+        activity.finish();
+    }
+
+    public Bitmap rotateImage(Bitmap image,float angle){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
     }
 
     public boolean isFromCamera() {

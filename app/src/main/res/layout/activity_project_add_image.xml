@@ -74,14 +74,15 @@
                 <RelativeLayout
                     android:padding="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/image_view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:adjustViewBounds="true"
+                        android:adjustViewBounds="false"
                         bind:imageBitmap="@{viewModel.bitmap}"/>
                     <!--TODO: add Curvy ends -->
 
@@ -92,11 +93,10 @@
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:adjustViewBounds="true"
                         android:src="@drawable/ic_trash_can_white"/>
                     <!--TODO: get actual Trash image-->
-                    <!--TODO: Set visibility equation-->
 
                 </RelativeLayout>
 
@@ -134,6 +134,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/post_title"
                     android:textSize="14sp"
+                    android:maxLength="55"
                     android:textColorHint="@color/lecetTextLightGray"
                     android:background="@drawable/shape_rect_solid_border_1"
                     android:padding="8dp"
@@ -144,10 +145,11 @@
                     android:layout_width="70dp"
                     android:layout_height="20dp"
                     android:layout_gravity="end"
+
                     android:textColor="@color/lecetTextLightGray"
                     android:gravity="end"
                     android:textSize="14sp"
-                    android:text="0/55" />
+                    android:text='@{viewModel.titleSize + "/55"}' />
                 <!--TODO: Add enhanced Getter for string size-->
 
                 <LinearLayout

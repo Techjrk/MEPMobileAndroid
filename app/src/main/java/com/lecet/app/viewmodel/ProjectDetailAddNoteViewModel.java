@@ -15,6 +15,13 @@ import android.view.View;
 
 import com.lecet.app.content.LecetConfirmDialogFragment;
 import com.lecet.app.data.models.BindableString;
+import com.lecet.app.data.models.NotePost;
+import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.domain.ProjectDomain;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ludwigvondrake on 3/24/17.
@@ -26,12 +33,16 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
     private static final String TAG = "projDetailAddNoteVM";
     private BindableString noteTitle;
     private AlertDialog alert;
+    private long projectID;
+    private ProjectDomain projectDomain;
 
     private String body = "";
 
-    public ProjectDetailAddNoteViewModel(Activity activity) {
+    public ProjectDetailAddNoteViewModel(Activity activity, long projectID, ProjectDomain projectDomain) {
         noteTitle = new BindableString("");
         this.activity = activity;
+        this.projectID = projectID;
+        this.projectDomain = projectDomain;
 
     }
 
@@ -49,6 +60,7 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
 
     public void onClickCancel(View view){
         Log.e(TAG, "onClickCancel: onClickCancel called");
+        activity.setResult(RESULT_CANCELED);
         activity.finish();
     }
 
@@ -59,8 +71,30 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Bundle extras = activity.getIntent();
-                        //TODO: add Functionality to post deployment
-                        activity.finish();
+                        Call<ProjectNote> call = projectDomain.postNote(projectID,new NotePost(noteTitle.getValue(), body, false));
+                        call.enqueue(new Callback<ProjectNote>() {
+                            @Override
+                            public void onResponse(Call<ProjectNote> call, Response<ProjectNote> response) {
+
+                                if (response.isSuccessful()) {
+
+                                    activity.setResult(RESULT_OK);
+                                    activity.finish();
+
+                                } else {
+
+                                    // TODO: Alert HTTP call error
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ProjectNote> call, Throwable t) {
+                                Log.e(TAG, "onResponse: failure");
+
+                                //TODO: Display alert noting network failure
+                            }
+                        });
+
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -87,4 +121,9 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
         }
     }
 
+    private void postNote(){
+
+    }
+
 }
+

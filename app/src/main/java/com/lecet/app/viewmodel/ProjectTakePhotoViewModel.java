@@ -3,7 +3,11 @@ package com.lecet.app.viewmodel;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -62,14 +66,14 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lecet");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
+                Log.d("Lecet", "failed to create directory");
                 return null;
             }
         }
@@ -219,6 +223,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
             }
             // The Surface has been created, now tell the camera where to draw the preview.
             try {
+                camera.setDisplayOrientation(90);
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
             } catch (IOException e) {
@@ -273,16 +278,42 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
 
             try {
                 FileOutputStream fos = new FileOutputStream(imageFile);
-                fos.write(data);
-                fos.close();
-                Log.d(TAG, "onPictureTaken ***: Picture saved.");
 
-                // start Preview Image Activity
-                imagePath = imageFile.getAbsolutePath();
-                startProjectDetailAddImageActivity();
-                //TODO FINISH WITH RESULT WITH IMAGEPATH
-            }
-            catch (FileNotFoundException e) {
+                Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                ExifInterface exif = new ExifInterface(imageFile.toString());
+                String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+
+                Log.e(TAG, "onPictureTaken: orientation: " + orientation);
+
+                switch (orientation) {
+                    default:
+                    case "0":
+                    case "6":
+                        realImage = rotateImage(realImage, 90);
+                        break;
+                    case "8":
+                        realImage = rotateImage(realImage, 270);
+                        break;
+                    case "3":
+                        realImage = rotateImage(realImage, 180);
+                        break;
+                }
+
+
+                boolean successful = realImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+                fos.close();
+
+                if(successful) {
+                    Log.e(TAG, "onPictureTaken: Success");
+                }else {
+                    Log.e(TAG, "onPictureTaken: Failure");
+                }
+
+            // start Preview Image Activity
+            imagePath = imageFile.getAbsolutePath();
+            startProjectDetailAddImageActivity();
+            }catch (FileNotFoundException e) {
                 Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());
             }
             catch (IOException e) {
@@ -293,5 +324,16 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
             }
 
         }
+
+        public Bitmap rotateImage(Bitmap image,float angle){
+            int w = image.getWidth();
+            int h = image.getHeight();
+
+            Matrix mtx = new Matrix();
+            mtx.setRotate(angle);
+
+            return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
+        }
+
     } // end inner class
 }

@@ -1,5 +1,7 @@
 package com.lecet.app.data.models;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 import com.lecet.app.interfaces.ProjectAdditionalData;
 
@@ -13,7 +15,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectPhoto implements ProjectAdditionalData {
+public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
 
     @PrimaryKey
     @SerializedName("id")
@@ -69,6 +71,15 @@ public class ProjectPhoto implements ProjectAdditionalData {
         this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, null);
     }
 
+    @Override
+    public int compareTo(@NonNull ProjectAdditionalData other) {
+        if(other instanceof ProjectNote){
+            return (int)(id - ((ProjectNote) other).getId());
+        }else{
+            return (int)(id - ((ProjectPhoto) other).id);
+        }
+    }
+
     //GETTERS AND SETTERS
     public long getId() {return id;}
 
@@ -109,4 +120,6 @@ public class ProjectPhoto implements ProjectAdditionalData {
     public String getSrc() {return src;}
 
     public void setSrc(String src) {this.src = src;}
+
+
 }
