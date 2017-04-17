@@ -116,11 +116,6 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.ProjectDetailPreviewImageActivity"
-                android:label="ProjectPreviewImage"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
-        <activity
                 android:name=".content.ProjectsNearMeActivity"
                 android:parentActivityName=".content.MainActivity"
                 android:screenOrientation="portrait"

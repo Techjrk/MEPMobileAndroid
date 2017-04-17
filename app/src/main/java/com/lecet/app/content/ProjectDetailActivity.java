@@ -1,5 +1,6 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -96,6 +97,26 @@ public class ProjectDetailActivity extends LecetBaseActivity {
             return fragmentTitleList.get(position);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("ProjectDetailActivity", "onActivityResult: requestCode: " + requestCode);
+        if(resultCode == RESULT_OK) {
+            Log.d("ProjectDetailActivity", "onActivityResult: RESULT_OK, " + resultCode);
+
+        }
+        else if (resultCode == RESULT_CANCELED) {
+            Log.d("ProjectDetailActivity", "onActivityResult: RESULT_CANCELED, " + resultCode);
+
+        }
+        else Log.e("ProjectDetailActivity", "onActivityResult: WARNING: RESULT CODE NOT SUPPORTED: " + resultCode);
+
+        viewModel.handleOnActivityResult(requestCode, resultCode, data);
+    }
+
+
+
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {

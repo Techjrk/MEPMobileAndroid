@@ -23,6 +23,7 @@ import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
  * Created by jasonm on 4/11/17.
  */
 
+@Deprecated
 public class ProjectDetailPreviewImageViewModel extends BaseObservable {
 
     private static final String TAG = "ProjDetailPreviewImgVM";

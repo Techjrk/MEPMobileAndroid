@@ -7,18 +7,16 @@ import android.databinding.BaseObservable;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectDetailAddNoteActivity;
 import com.lecet.app.content.ProjectDetailTakePhotoActivity;
 import com.lecet.app.domain.ProjectDomain;
 
-import java.security.acl.Permission;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
@@ -30,6 +28,9 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectNotesUpdatesVM";
 
+    public static final int RESULT_CODE_PROJECT_ADD_IMAGE = 907;       //TODO - move to activity?
+    public static final int RESULT_CODE_PROJECT_CAMERA_IMAGE = 908;    //TODO - move to activity?
+    public static final int RESULT_CODE_PROJECT_LIBRARY_IMAGE = 909;   //TODO - move to activity?
     private final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
     private final Fragment fragment;
     private final long projectId;
@@ -42,17 +43,19 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
     }
 
     public void onClickAddNote(View view){
-        Log.e(TAG, "onClickAddNote: Launch Add Note Activity");
+        Log.e(TAG, "onClickAddNote");
         Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
         fragment.getActivity().startActivity(intent);
     }
 
     public void onClickAddImage(View view){
         if(canSetup()) {
-            Log.e(TAG, "onClickAddImage: Launch Take Photo Activity");
-            Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailTakePhotoActivity.class);
+            Log.e(TAG, "onClickAddImage");
+            ProjectDetailActivity activity = (ProjectDetailActivity) this.fragment.getActivity();
+            Intent intent = new Intent(activity, ProjectDetailTakePhotoActivity.class);
             intent.putExtra(PROJECT_ID_EXTRA, projectId);
-            fragment.getActivity().startActivity(intent);
+            //activity.startActivityForResult(intent, RESULT_CODE_PROJECT_CAMERA_IMAGE);
+            activity.startActivity(intent);
         }
     }
 

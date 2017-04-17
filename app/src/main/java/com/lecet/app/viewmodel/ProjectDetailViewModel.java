@@ -304,4 +304,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
             activity.startActivity(mapIntent);
         }
     }
+
+    public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "handleOnActivityResult: " + resultCode);
+    }
 }

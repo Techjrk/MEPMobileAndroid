@@ -1,5 +1,7 @@
 package com.lecet.app.content;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,11 +11,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectTakePhotoBinding;
 import com.lecet.app.viewmodel.ProjectDetailTakePhotoViewModel;
+import com.lecet.app.viewmodel.ProjectTakePhotoViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,7 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
  * Created by jasonm on 3/29/17.
  */
 
-public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
+public class ProjectDetailTakePhotoActivity extends LecetBaseActivity { //TODO - change name to Take or Select Image
 
     private static final String TAG = "ProjDetailTakePhotoAct";
 
@@ -32,6 +36,8 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private long projectId;
+    private ProjectTakePhotoFragment takePhotoFragment;
+    private ProjectSelectPhotoFragment selectPhotoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,7 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
         Log.d(TAG, "onCreate: projectId: " + projectId);
 
         setupBinding();
+        setupFragments();
         setUpViewPager();
         setUpTabLayout();
     }
@@ -54,6 +61,11 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
         binding.setViewModel(viewModel);
     }
 
+    private void setupFragments() {
+        takePhotoFragment   = ProjectTakePhotoFragment.newInstance(projectId);
+        selectPhotoFragment = ProjectSelectPhotoFragment.newInstance(projectId);
+    }
+
     private void setUpViewPager() {
         viewPager = (ViewPager) findViewById(R.id.view_pager_take_photo);
         setupViewPagerAdapter(viewPager);
@@ -61,13 +73,47 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
 
     private void setUpTabLayout() {
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_take_photo);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                handleTabSelection(tab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                handleTabSelection(tab);
+            }
+        });
+
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void handleTabSelection(TabLayout.Tab tab) {
+        // take photo
+        if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.photo))) {
+            // TODO - anything needed here?
+        }
+        // library
+        else if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.library))) {
+            ProjectTakePhotoViewModel.releaseCamera();  // release the camera which may have been activated in the Take Photo tab
+            selectPhotoFragment.initImageChooser();
+        }
     }
 
     private void setupViewPagerAdapter(ViewPager viewPager) {
         ProjectDetailTakePhotoActivity.ViewPagerAdapter adapter = new ProjectDetailTakePhotoActivity.ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(ProjectTakePhotoFragment.newInstance(projectId), getResources().getString(R.string.photo));
-        adapter.addFragment(ProjectSelectPhotoFragment.newInstance(projectId), getResources().getString(R.string.library));
+
+        // add the Take Photo fragment
+        adapter.addFragment(takePhotoFragment, getResources().getString(R.string.photo));
+
+        // add the Select Image from Library fragment
+        adapter.addFragment(selectPhotoFragment, getResources().getString(R.string.library));
+
         viewPager.setAdapter(adapter);
     }
 
@@ -103,6 +149,21 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: requestCode: " + requestCode);
+        if(resultCode == RESULT_OK) {
+            Log.d(TAG, "onActivityResult: RESULT_OK, " + resultCode);
+
+        }
+        else if (resultCode == RESULT_CANCELED) {
+            Log.d(TAG, "onActivityResult: RESULT_CANCELED, " + resultCode);
+        }
+        else Log.e(TAG, "onActivityResult: WARNING: RESULT CODE NOT SUPPORTED: " + resultCode);
+
+        viewModel.handleOnActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {

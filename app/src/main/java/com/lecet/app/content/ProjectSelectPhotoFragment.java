@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class ProjectSelectPhotoFragment extends Fragment {
 
     private static final String TAG = "ProjectSelectPhotoFrag";
 
+    private ProjectSelectPhotoViewModel viewModel;
     private FragmentProjectSelectPhotoBinding binding;
     private long projectId;
 
@@ -36,6 +38,12 @@ public class ProjectSelectPhotoFragment extends Fragment {
     }
 
     public ProjectSelectPhotoFragment() {
+    }
+
+    public void initImageChooser() {
+        if(viewModel != null) {
+            viewModel.initImageChooser();
+        }
     }
 
     @Override
@@ -63,9 +71,28 @@ public class ProjectSelectPhotoFragment extends Fragment {
         View view = initDataBinding(inflater, container);
         return view;
     }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d(TAG, "onHiddenChanged: " + hidden);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(this.getArguments());
+        Log.d(TAG, "onViewStateRestored");
+    }
+
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        ProjectSelectPhotoViewModel viewModel = new ProjectSelectPhotoViewModel(this, projectId);
+        viewModel = new ProjectSelectPhotoViewModel(this, projectId);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_select_photo, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();

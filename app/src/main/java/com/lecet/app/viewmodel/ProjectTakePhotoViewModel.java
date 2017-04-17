@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.lecet.app.R;
+import com.lecet.app.content.ProjectDetailAddImageActivity;
 import com.lecet.app.content.ProjectDetailPreviewImageActivity;
 import com.lecet.app.content.ProjectTakePhotoFragment;
 
@@ -39,6 +40,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
     private static final String TAG = "ProjTakePhotoViewModel";
     private CameraPreview cameraPreview;
     private long projectId;
+    private String imagePath;
     private ProjectTakePhotoFragment fragment;
 
 
@@ -130,8 +132,17 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
 
     }*/
 
+    /*@Deprecated
     private void startImagePreviewActivity(String imagePath) {
         Intent intent = new Intent(fragment.getContext(), ProjectDetailPreviewImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        intent.putExtra(FROM_CAMERA, true);
+        intent.putExtra(IMAGE_PATH, imagePath);
+        fragment.getActivity().startActivity(intent);
+    }*/
+
+    private void startProjectDetailAddImageActivity() {
+        Intent intent = new Intent(fragment.getContext(), ProjectDetailAddImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(FROM_CAMERA, true);
         intent.putExtra(IMAGE_PATH, imagePath);
@@ -142,7 +153,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
      * Click Events
      */
     public void onClickCancel(View view) {
-        Log.e(TAG, "onClickCancel: onClickCancel called");
+        Log.e(TAG, "onClickCancel");
         fragment.getActivity().finish();
     }
 
@@ -267,8 +278,9 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
                 Log.d(TAG, "onPictureTaken ***: Picture saved.");
 
                 // start Preview Image Activity
-                String imagePath = imageFile.getAbsolutePath();
-                startImagePreviewActivity(imagePath);
+                imagePath = imageFile.getAbsolutePath();
+                startProjectDetailAddImageActivity();
+                //TODO FINISH WITH RESULT WITH IMAGEPATH
             }
             catch (FileNotFoundException e) {
                 Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());

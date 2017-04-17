@@ -18,6 +18,7 @@ import static com.lecet.app.content.ProjectTakePhotoFragment.FROM_CAMERA;
  * Created by jasonm on 4/11/17.
  */
 
+@Deprecated
 public class ProjectDetailPreviewImageActivity extends LecetBaseActivity {
 
     private static final String TAG = "ProjDetailPreviewImgAct";
