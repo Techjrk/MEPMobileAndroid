@@ -3,8 +3,10 @@ package com.lecet.app.data.api.service;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
+import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.ProjectPhoto;
 
 
 import java.util.List;
@@ -94,5 +96,12 @@ public interface ProjectService {
     })
    @GET("Projects/{projectID}/userNotes")
     Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("Projects/{projectID}/uploadImage")
+    Call<ProjectPhoto> addPhoto (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Body PhotoPost photoPost);
 
 }
