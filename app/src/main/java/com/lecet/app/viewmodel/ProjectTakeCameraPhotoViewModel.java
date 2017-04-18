@@ -37,8 +37,12 @@ import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
  * TODO - make sure Camera is released in all cases (use, cancel, close app, etc)
  */
 public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
-    private static Camera camera;
+
     private static final String TAG = "ProjCameraTakePhotoVM";
+
+    private final int MAX_IMAGE_SIZE = 9000000;
+
+    private static Camera camera;
     private CameraPreview cameraPreview;
     private long projectId;
     private String imagePath;
@@ -154,12 +158,12 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
      * Click Events
      */
     public void onClickCancel(View view) {
-        Log.e(TAG, "onClickCancel");
+        Log.d(TAG, "onClickCancel");
         fragment.getActivity().finish();
     }
 
     public void onTakePhotoClick(View view) {
-        Log.e(TAG, "onTakePhotoClick");
+        Log.d(TAG, "onTakePhotoClick");
         if(camera != null) {
             camera.takePicture(null, null, new CameraPreview(this.fragment.getContext()));
         }
@@ -178,7 +182,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
 
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                Log.e(TAG, "onPictureTaken: PictureTaken");
+                Log.d(TAG, "onPictureTaken: PictureTaken");
                 //TODO: addFunctionality to this
 
                 File pictureFile = getOutputMediaFile();
@@ -277,40 +281,61 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                 FileOutputStream fos = new FileOutputStream(imageFile);
 
                 Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+                Bitmap resizedImage = null;
 
-                ExifInterface exif = new ExifInterface(imageFile.toString());
+                Log.d(TAG, "onPictureTaken: realImage w: " + realImage.getWidth());
+                Log.d(TAG, "onPictureTaken: realImage h: " + realImage.getHeight());
+                Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
+
+                if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
+                    int resizedWidth  = realImage.getWidth() / 5;       //TODO - create helper which progressively resizes until best sized reached
+                    int resizedHeight = realImage.getHeight() / 5;
+                    resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
+                    Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
+                    Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
+                    Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
+                }
+
+
+                //TODO - temporarily removed this rotation functionality as it was causing an error which resulted in image post failure
+                /*ExifInterface exif = new ExifInterface(imageFile.toString());
                 String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
 
-                Log.e(TAG, "onPictureTaken: orientation: " + orientation);
+                Log.d(TAG, "onPictureTaken: orientation: " + orientation);
 
                 switch (orientation) {
                     default:
                     case "0":
                     case "6":
-                        realImage = rotateImage(realImage, 90);
+                        resizedImage = rotateImage(realImage, 90);
                         break;
                     case "8":
-                        realImage = rotateImage(realImage, 270);
+                        resizedImage = rotateImage(realImage, 270);
                         break;
                     case "3":
-                        realImage = rotateImage(realImage, 180);
+                        resizedImage = rotateImage(realImage, 180);
                         break;
+                }*/
+
+                if(resizedImage == null) {
+                    resizedImage = realImage;
                 }
+                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
 
-
-                boolean successful = realImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
                 fos.close();
 
-                if(successful) {
-                    Log.e(TAG, "onPictureTaken: Success");
-                }else {
-                    Log.e(TAG, "onPictureTaken: Failure");
+                if(writeSuccessful) {
+                    Log.d(TAG, "onPictureTaken: Image Write Success");
+                }
+                else {
+                    Log.e(TAG, "onPictureTaken: Image Write Failure");
                 }
 
-            // start Preview Image Activity
-            imagePath = imageFile.getAbsolutePath();
-            startProjectDetailAddImageActivity();
-            }catch (FileNotFoundException e) {
+                // start next Activity
+                imagePath = imageFile.getAbsolutePath();
+                startProjectDetailAddImageActivity();       //TODO - skips preview, goes straight to Add Image
+            }
+            catch (FileNotFoundException e) {
                 Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());
             }
             catch (IOException e) {
