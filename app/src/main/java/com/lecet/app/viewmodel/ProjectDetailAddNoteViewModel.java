@@ -43,7 +43,6 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
         this.activity = activity;
         this.projectID = projectID;
         this.projectDomain = projectDomain;
-
     }
 
     public BindableString getNoteTitle() {
@@ -59,7 +58,7 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
     }
 
     public void onClickCancel(View view){
-        Log.e(TAG, "onClickCancel: onClickCancel called");
+        Log.e(TAG, "onClickCancel");
         activity.setResult(RESULT_CANCELED);
         activity.finish();
     }

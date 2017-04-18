@@ -262,9 +262,11 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                     additionalNotes.clear();
                 }
 
-                additionalNotes.addAll(responseBody);
-                Collections.reverse(additionalNotes);
-                projectNotesAdapter.notifyDataSetChanged();
+                if(responseBody != null && additionalNotes != null) {
+                    additionalNotes.addAll(responseBody);
+                    Collections.reverse(additionalNotes);
+                    projectNotesAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
