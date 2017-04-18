@@ -27,10 +27,11 @@ import retrofit2.Response;
  * Created by ludwigvondrake on 3/24/17.
  */
 
-public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
+public class ProjectAddNoteViewModel extends AppCompatActivity{
+
+    private static final String TAG = "ProjectAddNoteVM";
 
     private Activity activity;
-    private static final String TAG = "projDetailAddNoteVM";
     private BindableString noteTitle;
     private AlertDialog alert;
     private long projectID;
@@ -38,7 +39,7 @@ public class ProjectDetailAddNoteViewModel extends AppCompatActivity{
 
     private String body = "";
 
-    public ProjectDetailAddNoteViewModel(Activity activity, long projectID, ProjectDomain projectDomain) {
+    public ProjectAddNoteViewModel(Activity activity, long projectID, ProjectDomain projectDomain) {
         noteTitle = new BindableString("");
         this.activity = activity;
         this.projectID = projectID;

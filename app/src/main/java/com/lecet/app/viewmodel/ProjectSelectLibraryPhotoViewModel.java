@@ -9,14 +9,14 @@ import android.util.Log;
 /**
  * Created by jasonm on 3/29/17.
  */
-public class ProjectSelectPhotoViewModel extends BaseObservable {
+public class ProjectSelectLibraryPhotoViewModel extends BaseObservable {
 
-    private static final String TAG = "ProjectSelectPhotoVM";
+    private static final String TAG = "ProjSelectLibPhotoVM";
 
     private Fragment fragment;
     private long projectId;
 
-    public ProjectSelectPhotoViewModel(Fragment fragment, long projectId) {
+    public ProjectSelectLibraryPhotoViewModel(Fragment fragment, long projectId) {
         this.fragment = fragment;
         this.projectId = projectId;
 

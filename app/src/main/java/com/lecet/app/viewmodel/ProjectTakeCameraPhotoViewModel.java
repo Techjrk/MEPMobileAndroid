@@ -14,13 +14,10 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.lecet.app.R;
-import com.lecet.app.content.ProjectDetailAddImageActivity;
-import com.lecet.app.content.ProjectDetailPreviewImageActivity;
-import com.lecet.app.content.ProjectTakePhotoFragment;
+import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectTakeCameraPhotoFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,8 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.FROM_CAMERA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 
 /**
@@ -39,16 +36,16 @@ import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
  * TODO - replace deprecatd Camera functionality with a more current implementation
  * TODO - make sure Camera is released in all cases (use, cancel, close app, etc)
  */
-public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
+public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
     private static Camera camera;
-    private static final String TAG = "ProjTakePhotoViewModel";
+    private static final String TAG = "ProjCameraTakePhotoVM";
     private CameraPreview cameraPreview;
     private long projectId;
     private String imagePath;
-    private ProjectTakePhotoFragment fragment;
+    private ProjectTakeCameraPhotoFragment fragment;
 
 
-    public ProjectTakePhotoViewModel(ProjectTakePhotoFragment fragment, long projectId, FrameLayout frameLayout) {
+    public ProjectTakeCameraPhotoViewModel(ProjectTakeCameraPhotoFragment fragment, long projectId, FrameLayout frameLayout) {
         super();
         this.fragment = fragment;
         this.projectId = projectId;
@@ -138,7 +135,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
 
     /*@Deprecated
     private void startImagePreviewActivity(String imagePath) {
-        Intent intent = new Intent(fragment.getContext(), ProjectDetailPreviewImageActivity.class);
+        Intent intent = new Intent(fragment.getContext(), ProjectPreviewImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(FROM_CAMERA, true);
         intent.putExtra(IMAGE_PATH, imagePath);
@@ -146,7 +143,7 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
     }*/
 
     private void startProjectDetailAddImageActivity() {
-        Intent intent = new Intent(fragment.getContext(), ProjectDetailAddImageActivity.class);
+        Intent intent = new Intent(fragment.getContext(), ProjectAddImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(FROM_CAMERA, true);
         intent.putExtra(IMAGE_PATH, imagePath);

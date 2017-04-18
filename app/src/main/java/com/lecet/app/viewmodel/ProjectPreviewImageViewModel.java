@@ -14,14 +14,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lecet.app.content.ProjectDetailAddImageActivity;
-import com.lecet.app.content.ProjectDetailTakePhotoActivity;
-import com.lecet.app.content.ProjectSelectPhotoFragment;
+import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectImageChooserActivity;
+import com.lecet.app.content.ProjectSelectLibraryPhotoFragment;
 
 import java.io.IOException;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 
 /**
@@ -29,9 +29,9 @@ import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
  */
 
 @Deprecated
-public class ProjectDetailPreviewImageViewModel extends BaseObservable {
+public class ProjectPreviewImageViewModel extends BaseObservable {
 
-    private static final String TAG = "ProjDetailPreviewImgVM";
+    private static final String TAG = "ProjectPreviewImageVM";
     private Context context;
     private long projectId;
     private Bitmap bitmap;
@@ -39,18 +39,20 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
     private String imagePath;
     private Activity activity;
 
-    public ProjectDetailPreviewImageViewModel(Activity activity, long projectId, boolean fromCamera, String imagePath) {
+    public ProjectPreviewImageViewModel(Activity activity, long projectId, boolean fromCamera, String imagePath) {
         this.activity = activity;
         this.context = activity.getBaseContext();
         this.projectId = projectId;
         this.fromCamera = fromCamera;
         this.imagePath = imagePath;
         this.bitmap = BitmapFactory.decodeFile(imagePath);
+
+        // orient the image rotation
         try {
             ExifInterface exifInterface = new ExifInterface(imagePath);
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
-            Log.e(TAG, "ProjectDetailPreviewImageViewModel: Orientation: " + orientation);
+            Log.e(TAG, "ProjectPreviewImageViewModel: Orientation: " + orientation);
             switch(orientation){
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     this.bitmap = rotateImage(bitmap, 90);
@@ -69,7 +71,7 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
 
             }
         }catch(IOException e){
-            Log.e(TAG, "ProjectDetailPreviewImageViewModel:" + e.getMessage());
+            Log.e(TAG, "ProjectPreviewImageViewModel:" + e.getMessage());
         }
 
     }
@@ -78,7 +80,7 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
         Log.d(TAG, "onUseImageButtonClick");
 
         // pass the photo data to the MPP 1.1 - Mobile Project Photo Add activity
-        Intent intent = new Intent(this.context, ProjectDetailAddImageActivity.class);
+        Intent intent = new Intent(this.context, ProjectAddImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(IMAGE_PATH, imagePath);
         this.context.startActivity(intent);
@@ -90,9 +92,9 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
         // go back to either the Camera or Library to take or select a different photo
         Intent intent;
         if(this.fromCamera) {
-            intent = new Intent(this.context, ProjectDetailTakePhotoActivity.class);
+            intent = new Intent(this.context, ProjectImageChooserActivity.class);
         }
-        else intent = new Intent(this.context, ProjectSelectPhotoFragment.class);
+        else intent = new Intent(this.context, ProjectSelectLibraryPhotoFragment.class);
 
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
 

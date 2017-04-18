@@ -5,7 +5,7 @@
 
         <variable
                 name="viewModel"
-                type="com.lecet.app.viewmodel.ProjectSelectPhotoViewModel" />
+                type="com.lecet.app.viewmodel.ProjectSelectLibraryPhotoViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
                   android:layout_height="match_parent"
                   android:gravity="center_horizontal"
                   android:orientation="vertical"
-                  tools:context="com.lecet.app.content.ProjectSelectPhotoFragment"
+                  tools:context="com.lecet.app.content.ProjectSelectLibraryPhotoFragment"
                   android:background="@color/lecetLightBlue">
 
 

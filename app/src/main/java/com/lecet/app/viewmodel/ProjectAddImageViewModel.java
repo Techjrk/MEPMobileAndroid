@@ -1,8 +1,6 @@
 package com.lecet.app.viewmodel;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -16,9 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lecet.app.content.LecetConfirmDialogFragment;
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.data.models.BindableString;
 import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
@@ -37,12 +33,11 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
  * Created by jasonm on 4/11/17.
  */
 
-public class ProjectDetailAddImageViewModel extends BaseObservable {
+public class ProjectAddImageViewModel extends BaseObservable {
 
-    private static final String TAG = "ProjectDetailAddImageVM";
+    private static final String TAG = "ProjectAddImageVM";
 
     private AppCompatActivity activity;
-    private BindableString noteTitle;
     private AlertDialog alert;
 	private ProjectDomain projectDomain;
     private long projectId;
@@ -57,14 +52,14 @@ public class ProjectDetailAddImageViewModel extends BaseObservable {
     }
 
 
-    public ProjectDetailAddImageViewModel(AppCompatActivity activity, long projectId, String imagePath, ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, String imagePath, ProjectDomain projectDomain) {
         this.activity = activity;
         this.projectId = projectId;
 		this.projectDomain = projectDomain;
         this.imagePath = imagePath;
         this.bitmap = BitmapFactory.decodeFile(imagePath);
 
-        Log.d(TAG, "ProjectDetailAddImageViewModel: imagePath: " + imagePath);
+        Log.d(TAG, "Constructor: imagePath: " + imagePath);
 
         if(imagePath != null && !imagePath.isEmpty()) {
             //TODO - switch on image path depending on whether from camera or library

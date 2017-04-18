@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailTakePhotoViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectImageChooserViewModel"/>
         <import type="android.view.View" />
     </data>
 
@@ -12,7 +12,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ProjectDetailTakePhotoActivity">
+        tools:context="com.lecet.app.content.ProjectImageChooserActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

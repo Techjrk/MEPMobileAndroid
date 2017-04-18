@@ -5,15 +5,14 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.FragmentProjectSelectPhotoBinding;
-import com.lecet.app.viewmodel.ProjectSelectPhotoViewModel;
+import com.lecet.app.databinding.FragmentProjectSelectLibraryPhotoBinding;
+import com.lecet.app.viewmodel.ProjectSelectLibraryPhotoViewModel;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
@@ -21,23 +20,23 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
  * Created by jasonm on 3/29/17.
  */
 
-public class ProjectSelectPhotoFragment extends Fragment {
+public class ProjectSelectLibraryPhotoFragment extends Fragment {
 
     private static final String TAG = "ProjectSelectPhotoFrag";
 
-    private ProjectSelectPhotoViewModel viewModel;
-    private FragmentProjectSelectPhotoBinding binding;
+    private ProjectSelectLibraryPhotoViewModel viewModel;
+    private FragmentProjectSelectLibraryPhotoBinding binding;
     private long projectId;
 
-    public static ProjectSelectPhotoFragment newInstance(long projectId) {
-        ProjectSelectPhotoFragment fragmentInstance = new ProjectSelectPhotoFragment();
+    public static ProjectSelectLibraryPhotoFragment newInstance(long projectId) {
+        ProjectSelectLibraryPhotoFragment fragmentInstance = new ProjectSelectLibraryPhotoFragment();
         Bundle args = new Bundle();
         args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
-    public ProjectSelectPhotoFragment() {
+    public ProjectSelectLibraryPhotoFragment() {
     }
 
     public void initImageChooser() {
@@ -92,8 +91,8 @@ public class ProjectSelectPhotoFragment extends Fragment {
 
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        viewModel = new ProjectSelectPhotoViewModel(this, projectId);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_select_photo, container, false);
+        viewModel = new ProjectSelectLibraryPhotoViewModel(this, projectId);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_select_library_photo, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
         return view;

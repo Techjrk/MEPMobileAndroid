@@ -7,19 +7,16 @@ import android.databinding.BaseObservable;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.content.ProjectDetailAddNoteActivity;
-import com.lecet.app.content.ProjectDetailTakePhotoActivity;
+import com.lecet.app.content.ProjectAddNoteActivity;
+import com.lecet.app.content.ProjectImageChooserActivity;
 import com.lecet.app.domain.ProjectDomain;
 
-import java.security.acl.Permission;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
@@ -48,7 +45,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     public void onClickAddNote(View view){
         Log.e(TAG, "onClickAddNote: Launch Add Note Activity");
-        Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
+        Intent intent = new Intent(this.fragment.getActivity(), ProjectAddNoteActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         fragment.getActivity().startActivityForResult(intent, NOTE_REQUEST_CODE);
     }
@@ -57,7 +54,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
         if(canSetup()) {
             Log.e(TAG, "onClickAddImage");
             ProjectDetailActivity activity = (ProjectDetailActivity) this.fragment.getActivity();
-            Intent intent = new Intent(activity, ProjectDetailTakePhotoActivity.class);
+            Intent intent = new Intent(activity, ProjectImageChooserActivity.class);
             intent.putExtra(PROJECT_ID_EXTRA, projectId);
             //activity.startActivityForResult(intent, RESULT_CODE_PROJECT_CAMERA_IMAGE);
             activity.startActivity(intent);

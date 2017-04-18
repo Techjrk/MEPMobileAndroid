@@ -8,7 +8,6 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,13 +15,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.BR;
-import com.lecet.app.content.ProjectDetailAddImageActivity;
+import com.lecet.app.content.ProjectAddImageActivity;
 
 import java.io.IOException;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.FROM_CAMERA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.RESULT_CODE_PROJECT_CAMERA_IMAGE;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.RESULT_CODE_PROJECT_LIBRARY_IMAGE;
 
@@ -31,9 +30,9 @@ import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.RESULT_COD
  * Created by jasonm on 3/29/17.
  */
 
-public class ProjectDetailTakePhotoViewModel extends BaseObservable {   //TODO - change name to Take or Select Image
+public class ProjectImageChooserViewModel extends BaseObservable {
 
-    private static final String TAG = "ProjDetailTakePhotoVM";
+    private static final String TAG = "ProjectImageChooserVM";
 
     private Activity activity;
     private long projectId;
@@ -41,14 +40,14 @@ public class ProjectDetailTakePhotoViewModel extends BaseObservable {   //TODO -
     private Bitmap bitmap;
     private boolean showImagePreview;   //TODO - may not be necessary if layout can use bitmap != null instead
 
-    public ProjectDetailTakePhotoViewModel(Activity activity, long projectId){
+    public ProjectImageChooserViewModel(Activity activity, long projectId){
         this.activity = activity;
         this.projectId = projectId;
     }
 
     public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(TAG, "handleOnActivityResult: handleOnActivityResult: requestCode: " + requestCode);
-        Log.e(TAG, "handleOnActivityResult: handleOnActivityResult: resultCode:  " + resultCode);
+        Log.e(TAG, "handleOnActivityResult: requestCode: " + requestCode);
+        Log.e(TAG, "handleOnActivityResult: resultCode:  " + resultCode);
 
         if(resultCode == RESULT_CODE_PROJECT_CAMERA_IMAGE) {
             Log.d(TAG, "handleOnActivityResult: resultCode: RESULT_CODE_PROJECT_CAMERA_IMAGE, " + resultCode);
@@ -123,7 +122,7 @@ public class ProjectDetailTakePhotoViewModel extends BaseObservable {   //TODO -
 
     public void onClickUsePhoto(View view){
         Log.e(TAG, "onClickUsePhoto");
-        Intent intent = new Intent(this.activity, ProjectDetailAddImageActivity.class);
+        Intent intent = new Intent(this.activity, ProjectAddImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(FROM_CAMERA, false);    //TODO - check
         intent.putExtra(IMAGE_PATH, picturePath);

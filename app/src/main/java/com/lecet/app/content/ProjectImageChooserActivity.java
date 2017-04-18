@@ -1,6 +1,5 @@
 package com.lecet.app.content;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
@@ -11,13 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
-import com.lecet.app.databinding.ActivityProjectTakePhotoBinding;
-import com.lecet.app.viewmodel.ProjectDetailTakePhotoViewModel;
-import com.lecet.app.viewmodel.ProjectTakePhotoViewModel;
+import com.lecet.app.databinding.ActivityProjectImageChooserBinding;
+import com.lecet.app.viewmodel.ProjectImageChooserViewModel;
+import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +26,16 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
  * Created by jasonm on 3/29/17.
  */
 
-public class ProjectDetailTakePhotoActivity extends LecetBaseActivity { //TODO - change name to Take or Select Image
+public class ProjectImageChooserActivity extends LecetBaseActivity {
 
-    private static final String TAG = "ProjDetailTakePhotoAct";
+    private static final String TAG = "ProjectImageChooserAct";
 
-    private ProjectDetailTakePhotoViewModel viewModel;
+    private ProjectImageChooserViewModel viewModel;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private long projectId;
-    private ProjectTakePhotoFragment takePhotoFragment;
-    private ProjectSelectPhotoFragment selectPhotoFragment;
+    private ProjectTakeCameraPhotoFragment takePhotoFragment;
+    private ProjectSelectLibraryPhotoFragment selectPhotoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +54,14 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity { //TODO -
     }
 
     private void setupBinding() {
-        ActivityProjectTakePhotoBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_take_photo);
-        viewModel = new ProjectDetailTakePhotoViewModel(this, projectId);
+        ActivityProjectImageChooserBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_image_chooser);
+        viewModel = new ProjectImageChooserViewModel(this, projectId);
         binding.setViewModel(viewModel);
     }
 
     private void setupFragments() {
-        takePhotoFragment   = ProjectTakePhotoFragment.newInstance(projectId);
-        selectPhotoFragment = ProjectSelectPhotoFragment.newInstance(projectId);
+        takePhotoFragment   = ProjectTakeCameraPhotoFragment.newInstance(projectId);
+        selectPhotoFragment = ProjectSelectLibraryPhotoFragment.newInstance(projectId);
     }
 
     private void setUpViewPager() {
@@ -100,13 +98,13 @@ public class ProjectDetailTakePhotoActivity extends LecetBaseActivity { //TODO -
         }
         // library
         else if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.library))) {
-            ProjectTakePhotoViewModel.releaseCamera();  // release the camera which may have been activated in the Take Photo tab
+            ProjectTakeCameraPhotoViewModel.releaseCamera();  // release the camera which may have been activated in the Take Photo tab
             selectPhotoFragment.initImageChooser();
         }
     }
 
     private void setupViewPagerAdapter(ViewPager viewPager) {
-        ProjectDetailTakePhotoActivity.ViewPagerAdapter adapter = new ProjectDetailTakePhotoActivity.ViewPagerAdapter(getSupportFragmentManager());
+        ProjectImageChooserActivity.ViewPagerAdapter adapter = new ProjectImageChooserActivity.ViewPagerAdapter(getSupportFragmentManager());
 
         // add the Take Photo fragment
         adapter.addFragment(takePhotoFragment, getResources().getString(R.string.photo));

@@ -1,9 +1,7 @@
 package com.lecet.app.content;
 
-import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +12,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.lecet.app.R;
-import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.FragmentProjectTakePhotoBinding;
-import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.viewmodel.ProjectTakePhotoViewModel;
-
-import io.realm.Realm;
+import com.lecet.app.databinding.FragmentProjectTakeCameraPhotoBinding;
+import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
@@ -28,26 +21,26 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
  * Created by jasonm on 3/29/17.
  */
 
-public class ProjectTakePhotoFragment extends Fragment {
+public class ProjectTakeCameraPhotoFragment extends Fragment {
 
-    private static final String TAG = "ProjectTakePhotoFrag";
+    private static final String TAG = "ProjTakeCameraPhotoFrag";
 
-    public static String IMAGE_PATH = "com.lecet.app.content.ProjectTakePhotoFragment.imagePath";
-    public static String FROM_CAMERA = "com.lecet.app.content.ProjectTakePhotoFragment.fromCamera";
+    public static String IMAGE_PATH  = "com.lecet.app.content.ProjectTakeCameraPhotoFragment.imagePath";
+    public static String FROM_CAMERA = "com.lecet.app.content.ProjectTakeCameraPhotoFragment.fromCamera";
 
-    private FragmentProjectTakePhotoBinding binding;
+    private FragmentProjectTakeCameraPhotoBinding binding;
     private long projectId;
     private FrameLayout frameLayout;
 
-    public static ProjectTakePhotoFragment newInstance(long projectId) {
-        ProjectTakePhotoFragment fragmentInstance = new ProjectTakePhotoFragment();
+    public static ProjectTakeCameraPhotoFragment newInstance(long projectId) {
+        ProjectTakeCameraPhotoFragment fragmentInstance = new ProjectTakeCameraPhotoFragment();
         Bundle args = new Bundle();
         args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
-    public ProjectTakePhotoFragment() {
+    public ProjectTakeCameraPhotoFragment() {
     }
 
     @Override
@@ -79,9 +72,9 @@ public class ProjectTakePhotoFragment extends Fragment {
     }
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_take_photo, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_take_camera_photo, container, false);
         frameLayout = (FrameLayout) binding.getRoot().findViewById(R.id.camera_preview);
-        ProjectTakePhotoViewModel viewModel = new ProjectTakePhotoViewModel(this, projectId, frameLayout);
+        ProjectTakeCameraPhotoViewModel viewModel = new ProjectTakeCameraPhotoViewModel(this, projectId, frameLayout);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
         return view;
@@ -91,14 +84,14 @@ public class ProjectTakePhotoFragment extends Fragment {
 
     public void onPause() {
         super.onPause();
-        ProjectTakePhotoViewModel.releaseCamera();
+        ProjectTakeCameraPhotoViewModel.releaseCamera();
 
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        ProjectTakePhotoViewModel.getCameraInstance();
+        ProjectTakeCameraPhotoViewModel.getCameraInstance();
     }
 
 

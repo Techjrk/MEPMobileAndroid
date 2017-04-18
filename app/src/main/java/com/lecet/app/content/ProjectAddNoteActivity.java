@@ -9,47 +9,38 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
-import com.lecet.app.databinding.ActivityProjectAddImageBinding;
+import com.lecet.app.databinding.ActivityProjectAddNoteBinding;
 import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.viewmodel.ProjectDetailAddImageViewModel;
+import com.lecet.app.viewmodel.ProjectAddNoteViewModel;
 
 import io.realm.Realm;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
 
 /**
  * Created by ludwigvondrake on 3/24/17.
  */
 
-public class ProjectDetailAddImageActivity extends LecetBaseActivity {
+public class ProjectAddNoteActivity extends LecetBaseActivity {
 
-    private static final String TAG = "ProjectDetailAddNoteAct";
-
-    private ProjectDetailAddImageViewModel viewModel;
-    private long projectId;
-    private String imagePath;
-
+    private static final String TAG = "ProjectAddNoteAct";
+    private long projectId; //TODO: use this Id to learn where to post the note to.
+    ProjectAddNoteViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // get project ID and image data for passing to the viewmodel
-        Bundle extras = getIntent().getExtras();
-        projectId = extras.getLong(PROJECT_ID_EXTRA, -1);
-        imagePath = extras.getString(IMAGE_PATH);
-
-        Log.d(TAG, "onCreate: projectId: " + projectId + ", imagePath: " + imagePath);
-
+        Log.d(TAG, "onCreate");
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
+        projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
 
         setupBinding(projectDomain);
     }
 
     private void setupBinding(ProjectDomain projectDomain) {
-        ActivityProjectAddImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_image);
-        viewModel = new ProjectDetailAddImageViewModel(this, projectId, imagePath, projectDomain);
+        ActivityProjectAddNoteBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_note);
+        viewModel = new ProjectAddNoteViewModel(this, projectId, projectDomain);
         binding.setViewModel(viewModel);
     }
 
