@@ -80,7 +80,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
         binding.setViewModel(viewModel);
-
     }
 
     private void setupToolbar() {

@@ -20,9 +20,6 @@
         <include layout="@layout/content_project_detail"/>
 
 
-
-
-
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>

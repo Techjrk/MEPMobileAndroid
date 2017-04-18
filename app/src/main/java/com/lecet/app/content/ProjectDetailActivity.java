@@ -44,7 +44,7 @@ public class ProjectDetailActivity extends LecetBaseActivity {
         long projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
 
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-        viewModel = new ProjectDetailViewModel(this, projectId, bidAmount, getResources().getString(google_api_key), projectDomain);
+        viewModel = new ProjectDetailViewModel(this, projectId, getResources().getString(google_api_key), projectDomain);
 
         binding.setViewModel(viewModel);
     }

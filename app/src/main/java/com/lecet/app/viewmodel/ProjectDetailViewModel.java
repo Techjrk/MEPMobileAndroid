@@ -67,7 +67,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
     private List<ProjectAdditionalData> additonalNotes; //TODO: Remove/Replace with Proper call for notes
 
 
-    public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, double bidAmount, String mapsApiKey, ProjectDomain projectDomain) {
+    public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, String mapsApiKey, ProjectDomain projectDomain) {
         super(activity);
 
         this.activityWeakReference = new WeakReference<>(activity);
@@ -297,7 +297,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         //Scope Limit the Location Recycler View
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
 
-        RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_location_detail);
+        RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
