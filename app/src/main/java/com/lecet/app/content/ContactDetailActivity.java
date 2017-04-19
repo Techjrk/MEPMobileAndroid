@@ -30,11 +30,23 @@ public class ContactDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         long contactID = getIntent().getLongExtra(CONTACT_ID_EXTRA, -1);
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
 
         ActivityContactDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_contact_detail);
 
         CompanyDomain companyDomain = new CompanyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-        ContactViewModel viewModel = new ContactViewModel(this, companyDomain, contactID);
+        ContactViewModel viewModel=null;
+        if (contact == null) {
+           // Log.d("contactnull","contactnull");
+            //This is the old code. Will not be deleted because it might be used by other section
+            viewModel = new ContactViewModel(this, companyDomain, contactID);
+        }
+        else {
+           // Log.d("contactexist","contactexist");
+            //This is the instance of ContactViewModel to pass the contact object in order
+            //to provide the detail of Contacts to the ContactViewModel object.
+            viewModel = new ContactViewModel(this, companyDomain, contact);
+        }
         binding.setViewModel(viewModel);
         setupToolbar(viewModel);
     }

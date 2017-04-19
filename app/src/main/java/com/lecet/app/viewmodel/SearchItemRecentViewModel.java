@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import com.lecet.app.content.CompanyDetailActivity;
@@ -20,6 +21,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.SearchDomain;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import io.realm.Realm;
@@ -269,6 +271,8 @@ public class SearchItemRecentViewModel extends BaseObservable {
         if (contact == null) return;
         Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
         intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
+        intent.putExtra("contact", (Serializable) contact);
+
         view.getContext().startActivity(intent);
     }
 

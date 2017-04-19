@@ -51,7 +51,20 @@ public class ContactViewModel {
             this.company = companyDomain.fetchCompany(contact.getCompanyId()).first();
         }
     }
+    //This is the new constructor for getting the Contact detail when the user selects a contact item
+    // from the next batch results list.
+    public ContactViewModel(AppCompatActivity appCompatActivity, CompanyDomain companyDomain, Contact contact) {
+        this.appCompatActivity = appCompatActivity;
+        this.companyDomain = companyDomain;
 
+//        this.contact = companyDomain.fetchCompanyContact(contactID);
+        this.contact =  contact;
+        this.company = contact.getCompany();
+
+        if (this.company == null) {
+            this.company = companyDomain.fetchCompany(contact.getCompanyId()).first();
+        }
+    }
     public void setToolbar(View toolbar) {
         titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
         subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
