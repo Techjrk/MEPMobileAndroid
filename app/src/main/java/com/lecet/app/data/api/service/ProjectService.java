@@ -104,4 +104,11 @@ public interface ProjectService {
     @POST("Projects/{projectID}/uploadImage")
     Call<ProjectPhoto> addPhoto (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Body PhotoPost photoPost);
 
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("Projects/{projectID}/images")
+    Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID);
+
 }

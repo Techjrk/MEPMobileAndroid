@@ -1,6 +1,8 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -14,7 +16,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.content.LecetConfirmDialogFragment;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.data.models.BindableString;
 import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
@@ -38,6 +42,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private static final String TAG = "ProjectAddImageVM";
 
     private AppCompatActivity activity;
+    private BindableString noteTitle;
     private AlertDialog alert;
 	private ProjectDomain projectDomain;
     private long projectId;
@@ -59,7 +64,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         this.imagePath = imagePath;
         this.bitmap = BitmapFactory.decodeFile(imagePath);
 
-        Log.d(TAG, "Constructor: imagePath: " + imagePath);
+        Log.d(TAG, "ProjectAddImageViewModel: imagePath: " + imagePath);
 
         if(imagePath != null && !imagePath.isEmpty()) {
             //TODO - switch on image path depending on whether from camera or library
@@ -86,7 +91,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Log.d(TAG, "onClick: POSTING IMAGE **************");
+                        Log.d(TAG, "onClick: posting image");
                         String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 80);
                         PhotoPost photoPost = new PhotoPost(title, body, false, base64Image);
                         Call<ProjectPhoto> call = projectDomain.postPhoto(projectId, photoPost);
@@ -95,13 +100,13 @@ public class ProjectAddImageViewModel extends BaseObservable {
                             public void onResponse(Call<ProjectPhoto> call, Response<ProjectPhoto> response) {
 
                                 if (response.isSuccessful()) {
-                                    Log.d(TAG, "onResponse: IMAGE POST SUCCESSFUL **************");
+                                    Log.d(TAG, "onResponse: image post successful");
                                     startProjectDetailActivity();
                                     //activity.setResult(RESULT_OK);
                                     //activity.finish();
 
                                 } else {
-                                    Log.e(TAG, "onResponse: IMAGE POST FAILED **************");
+                                    Log.e(TAG, "onResponse: image post failed");
 
                                     // TODO: Alert HTTP call error
                                 }
