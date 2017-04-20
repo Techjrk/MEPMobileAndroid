@@ -5,60 +5,20 @@
     <data>
 
         <variable
-                name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailPreviewImageViewModel" />
+                name="viewModel" type="com.lecet.app.viewmodel.ProjectPreviewImageViewModel" />
     </data>
 
-    <LinearLayout
-            android:orientation="vertical"
+    <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:background="@color/lecetButtonDarkBlue"
-            tools:context="com.lecet.app.content.ProjectDetailPreviewImageActivity">
+            tools:context="com.lecet.app.content.ProjectPreviewImageActivity">
 
-        <!-- MENU -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/lecetButtonDarkBlue"
-            android:orientation="horizontal">
-
-
-            <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"
-                android:onClick="@{viewModel::onChangeImageButtonClick}"
-                android:text="Change"
-                android:textColor="@color/lecetLightBlue"
-                android:textSize="16sp"
-                bind:typeface="@{`Lato-Bold.ttf`}" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:gravity="center_horizontal"
-                android:text="@string/add_photo"
-                android:textColor="@color/lecetTextWhite"
-                android:textSize="16sp"
-                bind:typeface="@{`Lato-Bold.ttf`}" />
-
-            <Button
-                android:id="@+id/use_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"
-                android:textColor="@color/lecetLightBlue"
-                android:text="Use"
-                android:textSize="16sp"
-                android:onClick="@{viewModel::onUseImageButtonClick}"/>
-
-        </LinearLayout>
-
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:id="@+id/camera_preview"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:orientation="vertical"
+                     android:background="@color/lecetButtonDarkBlue"/>
 
         <ImageView
                 android:id="@+id/prevew_image_view"
@@ -66,6 +26,30 @@
                 android:layout_height="match_parent"
                 bind:imageBitmap="@{viewModel.bitmap}" />
 
-    </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/change_image_button"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:text="Change"
+                android:onClick="@{viewModel::onChangeImageButtonClick}"/>
+
+        <Button
+                android:id="@+id/use_image_button"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/use"
+                android:onClick="@{viewModel::onUseImageButtonClick}"/>
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </layout>

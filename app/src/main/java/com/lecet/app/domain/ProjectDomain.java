@@ -13,9 +13,11 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
+import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -94,6 +96,13 @@ public class ProjectDomain {
     public Call<ProjectNote> postNote(long projectID, NotePost notePost){
         String token = sharedPreferenceUtil.getAccessToken();
         Call<ProjectNote> call = lecetClient.getProjectService().addNote(token, projectID, notePost);
+
+        return call;
+    }
+
+    public Call<ProjectPhoto> postPhoto(long projectID, PhotoPost photoPost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectPhoto> call = lecetClient.getProjectService().addPhoto(token, projectID, photoPost);
 
         return call;
     }

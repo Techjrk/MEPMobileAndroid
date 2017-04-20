@@ -6,12 +6,12 @@
     <data>
 
         <variable
-                name="viewModel" type="com.lecet.app.viewmodel.ProjectTakePhotoViewModel" />
+                name="viewModel" type="com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel" />
     </data>
     <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:context="com.lecet.app.content.ProjectTakePhotoFragment">
+        tools:context="com.lecet.app.content.ProjectTakeCameraPhotoFragment">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:id="@+id/camera_preview"

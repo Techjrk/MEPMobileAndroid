@@ -11,15 +11,13 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
-import com.lecet.app.content.ProjectDetailPreviewImageActivity;
-import com.lecet.app.content.ProjectTakePhotoFragment;
+import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectTakeCameraPhotoFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,8 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.FROM_CAMERA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 
 /**
@@ -38,15 +36,20 @@ import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
  * TODO - replace deprecatd Camera functionality with a more current implementation
  * TODO - make sure Camera is released in all cases (use, cancel, close app, etc)
  */
-public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
+public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
+
+    private static final String TAG = "ProjCameraTakePhotoVM";
+
+    private final int MAX_IMAGE_SIZE = 9000000;
+
     private static Camera camera;
-    private static final String TAG = "ProjTakePhotoViewModel";
     private CameraPreview cameraPreview;
     private long projectId;
-    private ProjectTakePhotoFragment fragment;
+    private String imagePath;
+    private ProjectTakeCameraPhotoFragment fragment;
 
 
-    public ProjectTakePhotoViewModel(ProjectTakePhotoFragment fragment, long projectId, FrameLayout frameLayout) {
+    public ProjectTakeCameraPhotoViewModel(ProjectTakeCameraPhotoFragment fragment, long projectId, FrameLayout frameLayout) {
         super();
         this.fragment = fragment;
         this.projectId = projectId;
@@ -110,26 +113,57 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         }
     }
 
+    /*@Override
+    public void onPictureTaken(byte[] data, Camera camera) {
 
+        File pictureFile = getOutputMediaFile();
+        if(pictureFile == null) {
+            Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
+            return;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            fos.write(data);
+            fos.close();
+            Log.d(TAG, "onPictureTaken: Picture saved.");
+        }
+        catch (FileNotFoundException e) {
+            Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
+        }
+        catch (IOException e) {
+            Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
+        }
+
+    }*/
+
+    /*@Deprecated
     private void startImagePreviewActivity(String imagePath) {
-        Intent intent = new Intent(fragment.getContext(), ProjectDetailPreviewImageActivity.class);
+        Intent intent = new Intent(fragment.getContext(), ProjectPreviewImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(FROM_CAMERA, true);
         intent.putExtra(IMAGE_PATH, imagePath);
         fragment.getActivity().startActivity(intent);
-        fragment.getActivity().finish();
+    }*/
+
+    private void startProjectDetailAddImageActivity() {
+        Intent intent = new Intent(fragment.getContext(), ProjectAddImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        intent.putExtra(FROM_CAMERA, true);
+        intent.putExtra(IMAGE_PATH, imagePath);
+        fragment.getActivity().startActivity(intent);
     }
 
     /**
      * Click Events
      */
     public void onClickCancel(View view) {
-        Log.e(TAG, "onClickCancel: onClickCancel called");
+        Log.d(TAG, "onClickCancel");
         fragment.getActivity().finish();
     }
 
     public void onTakePhotoClick(View view) {
-        Log.e(TAG, "onTakePhotoClick");
+        Log.d(TAG, "onTakePhotoClick");
         if(camera != null) {
             camera.takePicture(null, null, new CameraPreview(this.fragment.getContext()));
         }
@@ -144,11 +178,37 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
 
+        /*private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                Log.d(TAG, "onPictureTaken: PictureTaken");
+                //TODO: addFunctionality to this
+
+                File pictureFile = getOutputMediaFile();
+                if(pictureFile == null) {
+                    Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
+                    return;
+                }
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(data);
+                    fos.close();
+                    Log.d(TAG, "onPictureTaken: Picture saved.");
+                }
+                catch (FileNotFoundException e) {
+                    Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
+                }
+                catch (IOException e) {
+                    Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
+                }
+
+            }
+        };*/
 
         public CameraPreview(Context context) {
             super(context);
-
 
             // Install a SurfaceHolder.Callback so we get notified when the
             // underlying surface is created and destroyed.
@@ -207,7 +267,6 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
             releaseCamera();
         }
 
-
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             Log.d(TAG, "onPictureTaken ***");
@@ -222,40 +281,61 @@ public class ProjectTakePhotoViewModel extends BaseObservable /*implements Camer
                 FileOutputStream fos = new FileOutputStream(imageFile);
 
                 Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+                Bitmap resizedImage = null;
 
-                ExifInterface exif = new ExifInterface(imageFile.toString());
+                Log.d(TAG, "onPictureTaken: realImage w: " + realImage.getWidth());
+                Log.d(TAG, "onPictureTaken: realImage h: " + realImage.getHeight());
+                Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
+
+                if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
+                    int resizedWidth  = realImage.getWidth() / 5;       //TODO - create helper which progressively resizes until best sized reached
+                    int resizedHeight = realImage.getHeight() / 5;
+                    resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
+                    Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
+                    Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
+                    Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
+                }
+
+
+                //TODO - temporarily removed this rotation functionality as it was causing an error which resulted in image post failure
+                /*ExifInterface exif = new ExifInterface(imageFile.toString());
                 String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
 
-                Log.e(TAG, "onPictureTaken: orientation: " + orientation);
+                Log.d(TAG, "onPictureTaken: orientation: " + orientation);
 
                 switch (orientation) {
                     default:
                     case "0":
                     case "6":
-                        realImage = rotateImage(realImage, 90);
+                        resizedImage = rotateImage(realImage, 90);
                         break;
                     case "8":
-                        realImage = rotateImage(realImage, 270);
+                        resizedImage = rotateImage(realImage, 270);
                         break;
                     case "3":
-                        realImage = rotateImage(realImage, 180);
+                        resizedImage = rotateImage(realImage, 180);
                         break;
+                }*/
+
+                if(resizedImage == null) {
+                    resizedImage = realImage;
                 }
+                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
 
-
-                boolean successful = realImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
                 fos.close();
 
-                if(successful) {
-                    Log.e(TAG, "onPictureTaken: Success");
-                }else {
-                    Log.e(TAG, "onPictureTaken: Failure");
+                if(writeSuccessful) {
+                    Log.d(TAG, "onPictureTaken: Image Write Success");
+                }
+                else {
+                    Log.e(TAG, "onPictureTaken: Image Write Failure");
                 }
 
-            // start Preview Image Activity
-            String imagePath = imageFile.getAbsolutePath();
-            startImagePreviewActivity(imagePath);
-            }catch (FileNotFoundException e) {
+                // start next Activity
+                imagePath = imageFile.getAbsolutePath();
+                startProjectDetailAddImageActivity();       //TODO - skips preview, goes straight to Add Image
+            }
+            catch (FileNotFoundException e) {
                 Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());
             }
             catch (IOException e) {

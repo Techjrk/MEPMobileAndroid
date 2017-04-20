@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailAddImageViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectAddImageViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ProjectDetailAddImageActivity">
+        tools:context="com.lecet.app.content.ProjectAddImageActivity">
 
 
         <LinearLayout
@@ -59,7 +59,7 @@
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}"
-                    android:onClick="@{viewModel::onAddImageButtonClick}"/>
+                    android:onClick="@{viewModel::onClickAdd}"/>
 
             </LinearLayout>
 

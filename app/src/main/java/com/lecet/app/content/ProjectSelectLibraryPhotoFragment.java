@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
-import com.lecet.app.databinding.FragmentProjectSelectPhotoBinding;
-import com.lecet.app.viewmodel.ProjectSelectPhotoViewModel;
+import com.lecet.app.databinding.FragmentProjectSelectLibraryPhotoBinding;
+import com.lecet.app.viewmodel.ProjectSelectLibraryPhotoViewModel;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
@@ -20,22 +20,29 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
  * Created by jasonm on 3/29/17.
  */
 
-public class ProjectSelectPhotoFragment extends Fragment {
+public class ProjectSelectLibraryPhotoFragment extends Fragment {
 
     private static final String TAG = "ProjectSelectPhotoFrag";
 
-    private FragmentProjectSelectPhotoBinding binding;
+    private ProjectSelectLibraryPhotoViewModel viewModel;
+    private FragmentProjectSelectLibraryPhotoBinding binding;
     private long projectId;
 
-    public static ProjectSelectPhotoFragment newInstance(long projectId) {
-        ProjectSelectPhotoFragment fragmentInstance = new ProjectSelectPhotoFragment();
+    public static ProjectSelectLibraryPhotoFragment newInstance(long projectId) {
+        ProjectSelectLibraryPhotoFragment fragmentInstance = new ProjectSelectLibraryPhotoFragment();
         Bundle args = new Bundle();
         args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
 
-    public ProjectSelectPhotoFragment() {
+    public ProjectSelectLibraryPhotoFragment() {
+    }
+
+    public void initImageChooser() {
+        if(viewModel != null) {
+            viewModel.initImageChooser();
+        }
     }
 
     @Override
@@ -63,10 +70,29 @@ public class ProjectSelectPhotoFragment extends Fragment {
         View view = initDataBinding(inflater, container);
         return view;
     }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d(TAG, "onHiddenChanged: " + hidden);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(this.getArguments());
+        Log.d(TAG, "onViewStateRestored");
+    }
+
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        ProjectSelectPhotoViewModel viewModel = new ProjectSelectPhotoViewModel(this, projectId);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_select_photo, container, false);
+        viewModel = new ProjectSelectLibraryPhotoViewModel(this, projectId);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_select_library_photo, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
         return view;
