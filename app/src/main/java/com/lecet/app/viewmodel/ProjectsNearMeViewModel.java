@@ -58,7 +58,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private static final int DEFAULT_DISTANCE = 3;
     private static final int DEFAULT_ZOOM = 15;
-
+    private static final int REQUEST_FILTER_MPN = 8;
     private ProjectDomain projectDomain;
     private GoogleMap map;
     private Marker lastMarkerTapped;
@@ -297,7 +297,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         } else if (id == R.id.button_filter) {
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
             intent.putExtra(FILTER_INSTANT_SEARCH,false);
-            getActivityWeakReference().get().startActivityForResult(intent,0);
+            Activity activity = getActivityWeakReference().get();
+            activity.startActivityForResult(intent,REQUEST_FILTER_MPN);
         }
     }
 

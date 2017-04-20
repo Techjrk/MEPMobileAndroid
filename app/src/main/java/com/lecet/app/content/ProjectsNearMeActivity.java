@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +42,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
     public static final String EXTRA_LOCATION_MANAGER_CONNECTED = "location_manager_connected";
-
+    public static final int REQUEST_FILTER_MPN = 8;
     private static final int REQUEST_LOCATION_SETTINGS = 1;
 
     ActivityProjectsNearMeBinding binding;
@@ -229,6 +230,10 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
                     checkGps();
                 }
             }, 500);
+        }
+
+        if (requestCode == REQUEST_FILTER_MPN) {
+            Log.d("filtermpn","filtermpn");
         }
     }
 
