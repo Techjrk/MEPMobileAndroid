@@ -18,6 +18,7 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
@@ -53,15 +54,18 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     private final WeakReference<ProjectDetailActivity> activityWeakReference;
     private final ProjectDomain projectDomain;
     private List<ProjectAdditionalData> additionalNotes;
+    //private List<ProjectAdditionalData> additionalImages;
 
     private Project project;
     private AlertDialog networkAlertDialog;
     private ProjectDetailAdapter projectDetailAdapter;
     private ProjectNotesAdapter projectNotesAdapter;
+    //private ProjectImagesAdapter projectImagesAdapter;
 
     // Retrofit calls
     private Call<Project> projectDetailCall;
-    private Call<List<ProjectNote>> additonalNotesCall; //// TODO: 4/14/17 UPDATE FOR IMAGES
+    private Call<List<ProjectNote>> additonalNotesCall;   //// TODO: 4/14/17 UPDATE FOR IMAGES
+    private Call<List<ProjectPhoto>> additonalImagesCall;
 
 
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, String mapsApiKey, ProjectDomain projectDomain) {
@@ -71,7 +75,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         this.mapsApiKey = mapsApiKey;
         this.projectDomain = projectDomain;
 
-        Log.d(TAG, "ProjectDetailViewModel: projectId: " + projectID);
+        Log.d(TAG, "Constructor: projectId: " + projectID);
     }
 
     /**
@@ -221,6 +225,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         projectNotesAdapter = new ProjectNotesAdapter(additionalNotes);
         initNotesRecyclerView(activity, projectNotesAdapter);
         getAdditionalNotes(false);
+        getAdditionalImages(false);
     }
 
 
@@ -271,6 +276,40 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
             @Override
             public void onFailure(Call<List<ProjectNote>> call, Throwable t) {
+                ProjectDetailActivity activity = activityWeakReference.get();
+
+                if (activity == null) return;
+
+                if (networkAlertDialog != null && networkAlertDialog.isShowing())
+                    networkAlertDialog.dismiss();
+
+                activity.showNetworkAlert();
+            }
+        });
+    }
+
+    public void getAdditionalImages(final boolean refresh){
+        additonalImagesCall = projectDomain.fetchProjectImages(projectID, new Callback<List<ProjectPhoto>>() {
+            @Override
+            public void onResponse(Call<List<ProjectPhoto>> call, Response<List<ProjectPhoto>> response) {
+                Log.d(TAG, "getAdditionalImages: onResponse");
+
+                List<ProjectPhoto> responseBody = response.body();
+
+                if (refresh) {
+                    additionalNotes.clear();
+                }
+
+                if(responseBody != null && additionalNotes != null) {
+                    additionalNotes.addAll(responseBody);
+                    Collections.reverse(additionalNotes);
+                    projectNotesAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectPhoto>> call, Throwable t) {
+                Log.e(TAG, "getAdditionalImages: onFailure");
                 ProjectDetailActivity activity = activityWeakReference.get();
 
                 if (activity == null) return;
