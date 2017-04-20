@@ -5,7 +5,20 @@
     android:paddingBottom="8dp"
     android:paddingRight="12dp"
     android:paddingTop="8dp">
+    <ImageView
+        android:id="@+id/button_filter"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
 
+        android:layout_centerVertical="true"
+        android:scaleType="center"
+        android:src="@drawable/mpnfilter"
+        />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_toLeftOf="@id/button_filter"
+    android:layout_height="match_parent">
     <EditText
         android:id="@+id/search_entry"
         android:layout_width="match_parent"
@@ -36,5 +49,6 @@
         android:scaleType="center"
         android:src="@drawable/ic_action_clear_near_me"
         android:visibility="gone" />
+</RelativeLayout>
 
 </RelativeLayout>
