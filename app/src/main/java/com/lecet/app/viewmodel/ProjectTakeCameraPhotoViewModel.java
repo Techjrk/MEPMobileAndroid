@@ -178,35 +178,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
 
-        /*private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
-
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                Log.d(TAG, "onPictureTaken: PictureTaken");
-                //TODO: addFunctionality to this
-
-                File pictureFile = getOutputMediaFile();
-                if(pictureFile == null) {
-                    Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
-                    return;
-                }
-
-                try {
-                    FileOutputStream fos = new FileOutputStream(pictureFile);
-                    fos.write(data);
-                    fos.close();
-                    Log.d(TAG, "onPictureTaken: Picture saved.");
-                }
-                catch (FileNotFoundException e) {
-                    Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
-                }
-                catch (IOException e) {
-                    Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
-                }
-
-            }
-        };*/
-
         public CameraPreview(Context context) {
             super(context);
 
@@ -298,7 +269,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
 
 
                 //TODO - temporarily removed this rotation functionality as it was causing an error which resulted in image post failure
-                /*ExifInterface exif = new ExifInterface(imageFile.toString());
+                ExifInterface exif = new ExifInterface(imageFile.toString());
                 String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
 
                 Log.d(TAG, "onPictureTaken: orientation: " + orientation);
@@ -315,7 +286,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                     case "3":
                         resizedImage = rotateImage(realImage, 180);
                         break;
-                }*/
+                }
 
                 if(resizedImage == null) {
                     resizedImage = realImage;

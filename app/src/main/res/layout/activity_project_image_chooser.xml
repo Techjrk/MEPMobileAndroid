@@ -29,7 +29,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:background="@color/lecetButtonDarkBlue"
+                    android:background="@color/lecetDarkestBlue"
                     android:orientation="horizontal">
 
                     <Button
@@ -77,11 +77,7 @@
 
                 </LinearLayout>
 
-            <ImageView android:id="@+id/image_preview"
-                       android:layout_width="200dp"
-                       android:layout_height="200dp"
-                       android:visibility="@{viewModel.bitmap != null ? View.VISIBLE : View.GONE}"
-                       bind:imageBitmap="@{viewModel.bitmap}"/>
+
 
             </LinearLayout>
 
@@ -90,26 +86,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-                <android.support.v4.view.ViewPager
+                    <android.support.v4.view.ViewPager
                         android:id="@+id/view_pager_take_photo"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:visibility="@{viewModel.bitmap == null ? View.VISIBLE : View.GONE}"
                         android:background="@color/lecetDarkestBlue"/>
 
-                <android.support.design.widget.TabLayout
+                    <ImageView android:id="@+id/image_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="@{viewModel.bitmap != null ? View.VISIBLE : View.GONE}"
+                        android:background="@color/lecetDarkestBlue"
+                        bind:imageBitmap="@{viewModel.bitmap}" />
+
+                    <android.support.design.widget.TabLayout
                         android:id="@+id/tab_layout_take_photo"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:background="@color/lecetLightOrange"
+                        android:layout_alignParentBottom="true"
+                        android:visibility="@{viewModel.bitmap == null ? View.VISIBLE : View.GONE}"
                         app:tabTextColor="@color/pureWhite"
                         app:tabMode="fixed"
                         app:tabIndicatorHeight="3dp"
                         app:tabGravity="center"
-                        app:tabSelectedTextColor="@color/pureWhite"
-                        app:tabIndicatorColor="@color/lecetMediumOrange"/>
+                        app:tabSelectedTextColor="@color/pureWhite"/>
 
+                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>
