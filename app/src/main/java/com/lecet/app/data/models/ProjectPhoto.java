@@ -48,9 +48,12 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     @SerializedName("src")
     private String src;
 
+    @SerializedName("url")
+    private String url;
+
     public ProjectPhoto(){}//TODO: Understand why this is not working.
 
-    public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src) {
+    public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src, String url) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -61,22 +64,27 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.src = src;
+        this.url = url;
+    }
+
+    public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt, String src, String url) {
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src, url);
     }
 
     public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt, String src) {
-        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src);
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src, null);
     }
 
     public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt) {
-        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, null);
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, null, null);
     }
 
     @Override
     public int compareTo(@NonNull ProjectAdditionalData other) {
         if(other instanceof ProjectNote){
-            return (int)(id - ((ProjectNote) other).getId());
+            return (int)(updatedAt.getTime() - ((ProjectNote) other).getUpdatedAt().getTime());
         }else{
-            return (int)(id - ((ProjectPhoto) other).id);
+            return (int)(id - ((ProjectPhoto) other).getId());
         }
     }
 
@@ -120,6 +128,10 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     public String getSrc() {return src;}
 
     public void setSrc(String src) {this.src = src;}
+
+    public String getUrl() {return url;}
+
+    public void setUrl(String url) {this.url = url;}
 
 
 }

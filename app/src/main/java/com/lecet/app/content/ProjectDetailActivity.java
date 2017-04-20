@@ -66,8 +66,11 @@ public class ProjectDetailActivity extends LecetBaseActivity {
 
         if (resultCode == RESULT_OK && requestCode == ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE) {
             viewModel.getAdditionalNotes(true);
+            // TODO - conditions as per notes above
+            viewModel.getAdditionalImages(false);
             Log.d("ProjectDetailActivity", "Result Success");
         }
+
     }
 
     private void setupViewPager(ViewPager viewPager, long projectId, ProjectDomain projectDomain) {

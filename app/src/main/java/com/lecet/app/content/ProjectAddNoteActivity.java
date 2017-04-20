@@ -24,7 +24,7 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 public class ProjectAddNoteActivity extends LecetBaseActivity {
 
     private static final String TAG = "ProjectAddNoteAct";
-    private long projectId; //TODO: use this Id to learn where to post the note to.
+    private long projectId;
     ProjectAddNoteViewModel viewModel;
 
     @Override

@@ -2,6 +2,7 @@ package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,10 +13,12 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectAddImageBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ProjectAddImageViewModel;
+import com.lecet.app.viewmodel.ProjectImageChooserViewModel;
 
 import io.realm.Realm;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 /**
@@ -29,6 +32,8 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
     private ProjectAddImageViewModel viewModel;
     private long projectId;
     private String imagePath;
+    private Uri selectedImage;
+    private boolean fromCamera;
 
 
     @Override
@@ -38,7 +43,12 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
         // get project ID and image data for passing to the viewmodel
         Bundle extras = getIntent().getExtras();
         projectId = extras.getLong(PROJECT_ID_EXTRA, -1);
-        imagePath = extras.getString(IMAGE_PATH);
+        fromCamera = extras.getBoolean(FROM_CAMERA);
+        if(fromCamera) {
+            imagePath = extras.getString(IMAGE_PATH);
+        }else{
+            selectedImage = Uri.parse(extras.getString(ProjectImageChooserViewModel.IMAGE_URI));
+        }
 
         Log.d(TAG, "onCreate: projectId: " + projectId + ", imagePath: " + imagePath);
 
@@ -49,7 +59,11 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
 
     private void setupBinding(ProjectDomain projectDomain) {
         ActivityProjectAddImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_image);
-        viewModel = new ProjectAddImageViewModel(this, projectId, imagePath, projectDomain);
+        if(!fromCamera) {
+            viewModel = new ProjectAddImageViewModel(this, projectId, selectedImage , projectDomain);
+        }else {
+            viewModel = new ProjectAddImageViewModel(this, projectId, imagePath, projectDomain);
+        }
         binding.setViewModel(viewModel);
     }
 

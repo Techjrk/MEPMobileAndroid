@@ -166,9 +166,9 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
     @Override
     public int compareTo(@NonNull ProjectAdditionalData other) {
         if(other instanceof ProjectNote){
-            return (int)(id - ((ProjectNote) other).id);
+            return (int)(id - ((ProjectNote) other).getId());
         }else{
-            return (int)(id - ((ProjectPhoto) other).getId());
+            return (int)(updatedAt.getTime() - ((ProjectPhoto) other).getUpdatedAt().getTime());
         }
     }
 

@@ -482,7 +482,16 @@ public class ProjectDomain {
         call.enqueue(callback);
 
         return call;
+    }
 
+    public Call<List<ProjectPhoto>> fetchProjectImages(long projectID, Callback<List<ProjectPhoto>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        Call<List<ProjectPhoto>> call = lecetClient.getProjectService().projectImages(token, projectID);
+        call.enqueue(callback);
+
+        return call;
     }
 
 

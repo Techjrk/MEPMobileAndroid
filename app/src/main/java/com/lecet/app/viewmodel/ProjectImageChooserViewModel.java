@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
-import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.RESULT_CODE_PROJECT_CAMERA_IMAGE;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.RESULT_CODE_PROJECT_LIBRARY_IMAGE;
 
@@ -33,11 +32,12 @@ import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.RESULT_COD
 public class ProjectImageChooserViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectImageChooserVM";
-
+    public static final String IMAGE_URI = "Image_URI";
     private Activity activity;
     private long projectId;
     private String picturePath;
     private Bitmap bitmap;
+    private Uri selectedImageUri;
     private boolean showImagePreview;   //TODO - may not be necessary if layout can use bitmap != null instead
 
     public ProjectImageChooserViewModel(Activity activity, long projectId){
@@ -60,9 +60,7 @@ public class ProjectImageChooserViewModel extends BaseObservable {
             //TODO - add bitmap via path
         }
         else if(resultCode == Activity.RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            //String picturePath = getPath(activity.getApplicationContext(), selectedImageUri);
-            picturePath = getRealPathFromURI(selectedImageUri);
+            selectedImageUri = data.getData();
             Log.d(TAG, "handleOnActivityResult: resultCode: RESULT_OK, " + resultCode);
             Log.d(TAG, "handleOnActivityResult: selectedImageUri: " + selectedImageUri);
             Log.d(TAG, "handleOnActivityResult: picturePath, " + picturePath);
@@ -89,7 +87,9 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         }
     }
 
+
     private String getPath(Context context, Uri uri ) {
+        Log.d(TAG, "GetPath: Uri, " + uri);
         String result = null;
         String[] proj = { MediaStore.Images.Media.DATA };
         Cursor cursor = context.getContentResolver().query( uri, proj, null, null, null );
@@ -125,7 +125,8 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         Intent intent = new Intent(this.activity, ProjectAddImageActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         intent.putExtra(FROM_CAMERA, false);    //TODO - check
-        intent.putExtra(IMAGE_PATH, picturePath);
+        Log.d(TAG, "Sent Image Path, " + picturePath);
+        intent.putExtra(IMAGE_URI, selectedImageUri.toString());
         activity.startActivity(intent);
     }
 
