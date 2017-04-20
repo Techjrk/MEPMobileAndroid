@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.lecet.app.R;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
@@ -42,6 +43,8 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
 /**
  * Created by Josué Rodríguez on 5/10/2016.
@@ -69,6 +72,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private EditText search;
     private View buttonClear;
     private View buttonSearch;
+    private View buttonFilter;
 
     private Handler timer;
 
@@ -101,9 +105,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         search = (EditText) toolbar.findViewById(R.id.search_entry);
         buttonClear = toolbar.findViewById(R.id.button_clear);
         buttonSearch = toolbar.findViewById(R.id.button_search);
+        buttonFilter = toolbar.findViewById(R.id.button_filter);
 
         buttonClear.setOnClickListener(this);
         buttonSearch.setOnClickListener(this);
+        buttonFilter.setOnClickListener(this);
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -288,6 +294,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             search.setText(null);
         } else if (id == R.id.button_search) {
             searchAddress(search.getText().toString());
+        } else if (id == R.id.button_filter) {
+            Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
+            intent.putExtra(FILTER_INSTANT_SEARCH,false);
+            getActivityWeakReference().get().startActivityForResult(intent,0);
         }
     }
 

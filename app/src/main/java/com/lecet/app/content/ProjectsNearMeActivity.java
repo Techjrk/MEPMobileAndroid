@@ -191,8 +191,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     protected void onStop() {
         super.onStop();
-        isLocationManagerConnected = false;
-        locationManager.handleOnStop();
+        //Commenting the code due to producing crashes when going back to the activity.
+       /* isLocationManagerConnected = false;
+        locationManager.handleOnStop();*/
 
     }
 
