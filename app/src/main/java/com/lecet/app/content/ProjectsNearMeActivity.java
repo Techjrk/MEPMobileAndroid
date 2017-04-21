@@ -1,12 +1,5 @@
 package com.lecet.app.content;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -24,6 +17,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -33,6 +32,7 @@ import com.lecet.app.databinding.ActivityProjectsNearMeBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
 import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
+import com.lecet.app.viewmodel.SearchViewModel;
 
 import io.realm.Realm;
 
@@ -52,7 +52,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     boolean isAskingForPermission;
     boolean isLocationManagerConnected;
     Location lastKnowLocation;
-
+    private final String TAG = "ProjectsNearMeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         //showCurrentMarker(map);
     }
 
-    private void fetchProjects(boolean animateCamera) {
+
+        private void fetchProjects(boolean animateCamera) {
 
         if (!viewModel.isMapReady()) return;
 
@@ -233,9 +234,308 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         }
 
         if (requestCode == REQUEST_FILTER_MPN) {
-            Log.d("filtermpn","filtermpn");
+            Log.d("filtermpn", "filtermpn");
+            processFilter(requestCode, data);
         }
     }
+
+    ///*** Begin Filter Processing
+
+    void processFilter(int requestCode, Intent data) {
+
+        if (data == null) return;
+
+        StringBuilder projectsSb = new StringBuilder();
+
+        // PROJECT FILTERS
+        String mpnLocation = "";
+        // Project Location Filter e.g. {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
+        String projectLocationFilter = processProjectLocationFilter(data);
+        if (projectLocationFilter.length() > 0) {
+           // projectsSb.append(projectLocationFilter); //uncomment if mpnLocation will no longer be used.
+
+            mpnLocation = projectLocationFilter.substring(projectLocationFilter.indexOf(':') + 2, projectLocationFilter.lastIndexOf('}'));
+            mpnLocation = mpnLocation.replaceAll(":", " ");
+
+            if (mpnLocation.contains("zip5")) {
+                mpnLocation = mpnLocation.substring(mpnLocation.indexOf("zip5") - 1);
+                mpnLocation = mpnLocation.replaceAll("\"zip5\"", "");
+            } else {
+                if (mpnLocation.contains("city")) {
+                    mpnLocation = mpnLocation.replaceAll("\"city\"", "");
+                }
+                if (mpnLocation.contains("county")) {
+                    mpnLocation = mpnLocation.replaceAll("\"county\"", "");
+                }
+                if (mpnLocation.contains("state")) {
+                    mpnLocation = mpnLocation.replaceAll("\"state\"", "");
+                }
+            }
+            mpnLocation = mpnLocation.replaceAll("\"", "");
+            Log.d("mpnLocation", "mpnLocation:" + mpnLocation);
+        }
+        // Updated Within Filter
+        String updatedWithinFilter = processUpdatedWithinFilter(data);
+        if (updatedWithinFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(updatedWithinFilter);
+        }
+
+        // Stage Filter
+        String stageFilter = processStageFilter(data);
+        if (stageFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(stageFilter);
+        }
+
+        // Building-or-Highway Filter
+        String buildingOrHighwayFilter = processBuildingOrHighwayFilter(data);
+        if (buildingOrHighwayFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(buildingOrHighwayFilter);
+        }
+
+        // Owner Type Filter
+        String ownerTypeFilter = processOwnerTypeFilter(data);
+        if (ownerTypeFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(ownerTypeFilter);
+        }
+
+        // Work Type Filter
+        String workTypeFilter = processWorkTypeFilter(data);
+        if (workTypeFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(workTypeFilter);
+        }
+
+
+        // SEARCH FILTERS USED IN PROJECT Filter
+
+        // Primary Project Type Filter e.g. {"type": {Engineering}}
+        String primaryProjectTypeFilter = processPrimaryProjectTypeFilter(data);
+        if (primaryProjectTypeFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(primaryProjectTypeFilter);
+
+        }
+
+        // Project ID Type Filter
+        String projectTypeIdFilter = processProjectTypeIdFilter(data);
+        if (projectTypeIdFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(projectTypeIdFilter);
+
+        }
+
+        // Value Filter
+        String valueFilter = processValueFilter(data);
+        if (valueFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(valueFilter);
+        }
+
+        // Jurisdiction Filter
+        String jurisdictionFilter = processJurisdictionFilter(data);
+        if (jurisdictionFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(jurisdictionFilter);
+
+        }
+
+        // Bidding Within Filter
+        String biddingWithinFilter = processBiddingWithinFilter(data);
+        if (biddingWithinFilter.length() > 0) {
+            if (projectsSb.length() > 0) projectsSb.append(",");
+            projectsSb.append(biddingWithinFilter);
+
+        }
+
+        // prepend searchFilter param if there are any filters used
+
+        // project search
+        if (projectsSb.length() > 0) {
+            projectsSb.insert(0, ",\"searchFilter\":{");
+            projectsSb.append("}");
+
+        }
+        //Final search filter result for Project
+        String projectsCombinedFilter = projectsSb.toString();
+        //String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
+        String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\" " + projectsCombinedFilter + "}";
+        viewModel.setProjectFilter(filterMPN);
+        String plocation = viewModel.getSearch().getText().toString();
+        if (!plocation.isEmpty()) {
+            viewModel.searchAddress(plocation);
+        } else if (mpnLocation != null && !mpnLocation.isEmpty()) {
+            viewModel.searchAddress(mpnLocation);
+        } else {
+            enableLocationUpdates = true;
+            lastKnowLocation = locationManager.retrieveLastKnownLocation();
+            if (lastKnowLocation != null) {
+                Log.d("mpn2", "mpn2" + lastKnowLocation.getLongitude() + ":" + lastKnowLocation.getLatitude());
+                fetchProjects(true);
+            }
+            locationManager.startLocationUpdates();
+        }
+    }
+
+    /**
+     * Process the Project Location filter data
+     * Ex: "projectLocation":{"city":"Brooklyn","county":"Kings","zip5":"11215"}
+     */
+    private String processProjectLocationFilter(Intent data) {
+        String filter = "";
+        String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
+        if (projectLocation != null && !projectLocation.equals("")) {
+            Log.d(TAG, "onActivityResult: projectLocation: " + projectLocation);
+            filter = projectLocation;
+        }
+
+        return filter;
+    }
+
+
+    /**
+     * Process the Primary Project Type filter data
+     */
+    private String processPrimaryProjectTypeFilter(Intent data) {
+        String filter = "";
+        String projectType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE);
+        if (projectType != null && !projectType.equals("")) {
+            Log.d(TAG, "onActivityResult: projectType: " + projectType);
+            filter = projectType;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Project Type IDs filter data
+     * Ex: "projectTypeId":{"inq": [501, 502, 503]}
+     */
+    private String processProjectTypeIdFilter(Intent data) {
+        String filter = "";
+        String projectTypeIds = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE_ID);
+        if (projectTypeIds != null && !projectTypeIds.equals("")) {
+            Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
+            filter = projectTypeIds;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the $ Value filter data
+     * Ex: "projectValue":{"min":555,"max":666}
+     */
+    private String processValueFilter(Intent data) {
+        String filter = "";
+        String projectValue = data.getStringExtra(SearchViewModel.FILTER_PROJECT_VALUE);
+        if (projectValue != null && !projectValue.equals("")) {
+            Log.d(TAG, "onActivityResult: projectValue: " + projectValue);
+            filter = projectValue;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Updated In Last filter data
+     * Ex, using 12 months = 366 days: "updatedInLast":366
+     */
+    private String processUpdatedWithinFilter(Intent data) {
+        String filter = "";
+        String projectUpdatedWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST);
+        if (projectUpdatedWithin != null && !projectUpdatedWithin.equals("")) {
+            Log.d(TAG, "onActivityResult: projectUpdatedWithin: " + projectUpdatedWithin);
+            filter = projectUpdatedWithin;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Jurisdictions filter data
+     * Ex: "jurisdictions":{"inq":["Eastern","New Jersey","3"]}
+     */
+    private String processJurisdictionFilter(Intent data) {
+        String filter = "";
+        String jurisdiction = data.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION);
+        if (jurisdiction != null && !jurisdiction.equals("")) {
+            Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
+            filter = jurisdiction;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Stage filter data
+     * Ex: "projectStageId":{"inq":[203, 201, 206]}
+     */
+    private String processStageFilter(Intent data) {
+        String filter = "";
+        String stage = data.getStringExtra(SearchViewModel.FILTER_PROJECT_STAGE);
+        if (stage != null && !stage.equals("")) {
+            Log.d(TAG, "onActivityResult: stage: " + stage);
+            filter = stage;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Bidding Within filter data
+     * Ex, using 21 days: "biddingInNext":21
+     */
+    private String processBiddingWithinFilter(Intent data) {
+        String filter = "";
+        String projectBiddingWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN);
+        if (projectBiddingWithin != null && !projectBiddingWithin.equals("")) {
+            Log.d(TAG, "onActivityResult: projectBiddingWithin: " + projectBiddingWithin);
+            filter = projectBiddingWithin;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Building-or-Highway filter data
+     * Ex: "buildingOrHighway":{"inq":["B","H"]}
+     */
+    private String processBuildingOrHighwayFilter(Intent data) {
+        String filter = "";
+        String projectBuildingOrHighwayWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY);
+        if (projectBuildingOrHighwayWithin != null && !projectBuildingOrHighwayWithin.equals("")) {
+            Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
+            filter = projectBuildingOrHighwayWithin;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Owner Type filter data
+     * Ex: "ownerType":{"inq":["Federal"]}
+     */
+    private String processOwnerTypeFilter(Intent data) {
+        String filter = "";
+        String ownerType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_OWNER_TYPE);
+        if (ownerType != null && !ownerType.equals("")) {
+            Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
+            filter = ownerType;
+        }
+        return filter;
+    }
+
+    /**
+     * Process the Work Type filter data
+     * Ex: "workTypeId":{"inq":["2"]}
+     */
+    private String processWorkTypeFilter(Intent data) {
+        String filter = "";
+        String workType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_WORK_TYPE);
+        if (workType != null && !workType.equals("")) {
+            Log.d(TAG, "onActivityResult: workType: " + workType);
+            filter = workType;
+        }
+        return filter;
+    }
+
+    ///*** end of Filter Processing
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

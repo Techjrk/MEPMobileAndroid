@@ -1,13 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,12 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
@@ -82,12 +80,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.markers = new HashMap<>();
         this.timer = timer;
     }
+
     public void setProjectFilter(String filter) {
-       projectDomain.setFilterMPN(filter);
+        projectDomain.setFilterMPN(filter);
     }
+
     public String getProjectFilter() {
         return projectDomain.getFilterMPN();
     }
+
     public EditText getSearch() {
         return search;
     }
@@ -306,12 +307,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         if (id == R.id.button_clear) { //the x in the search bar
             search.setText(null);
         } else if (id == R.id.button_search) {
+            setProjectFilter("default");
             searchAddress(search.getText().toString());
         } else if (id == R.id.button_filter) {
+            search.setText(null);
+            setProjectFilter("default");
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
-            intent.putExtra(FILTER_INSTANT_SEARCH,false);
+            intent.putExtra(FILTER_INSTANT_SEARCH, false);
             Activity activity = getActivityWeakReference().get();
-            activity.startActivityForResult(intent,REQUEST_FILTER_MPN);
+            activity.startActivityForResult(intent, REQUEST_FILTER_MPN);
         }
     }
 
