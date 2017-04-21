@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -32,6 +33,7 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
     private long projectId;
     private FrameLayout frameLayout;
 
+
     public static ProjectTakeCameraPhotoFragment newInstance(long projectId) {
         ProjectTakeCameraPhotoFragment fragmentInstance = new ProjectTakeCameraPhotoFragment();
         Bundle args = new Bundle();
@@ -49,7 +51,6 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
         if (getArguments() != null) {
             projectId = getArguments().getLong(PROJECT_ID_EXTRA);
         }
-
 
         Log.d(TAG, "onCreate: projectId: " + projectId);
     }

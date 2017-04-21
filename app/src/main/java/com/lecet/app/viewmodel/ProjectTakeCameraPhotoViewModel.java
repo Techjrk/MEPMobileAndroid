@@ -2,6 +2,7 @@ package com.lecet.app.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -40,13 +43,14 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
 
     private static final String TAG = "ProjCameraTakePhotoVM";
 
-    private final int MAX_IMAGE_SIZE = 9000000;
+    private final int MAX_IMAGE_SIZE = 900000;
 
     private static Camera camera;
     private CameraPreview cameraPreview;
     private long projectId;
     private String imagePath;
     private ProjectTakeCameraPhotoFragment fragment;
+    private OrientationEventListener orientationEventListener = null;
 
 
     public ProjectTakeCameraPhotoViewModel(ProjectTakeCameraPhotoFragment fragment, long projectId, FrameLayout frameLayout) {
@@ -175,6 +179,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
      */
     public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PictureCallback {
 
+        private Configuration configuration;
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
 
@@ -195,7 +200,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
             }
             // The Surface has been created, now tell the camera where to draw the preview.
             try {
-                camera.setDisplayOrientation(90);
+                setCameraDisplayOrientation();
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
             } catch (IOException e) {
@@ -207,12 +212,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             // If your preview can change or rotate, take care of those events here.
             // Make sure to stop the preview before resizing or reformatting it.
-
-            if (mHolder.getSurface() == null){
-                // preview surface does not exist
-                return;
-            }
-
             // stop preview before making changes
             try {
                 camera.stopPreview();
@@ -225,11 +224,28 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
 
             // start preview with new settings
             try {
+                setCameraDisplayOrientation();
                 camera.setPreviewDisplay(mHolder);
                 camera.startPreview();
 
             } catch (Exception e){
                 Log.d(TAG, "Error starting camera preview: " + e.getMessage());
+            }
+        }
+
+        public void setCameraDisplayOrientation(){
+            if(Surface.ROTATION_90 == fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation()){
+                camera.setDisplayOrientation(0);
+                Log.e(TAG, "surfaceCreated: orientation: Rotation_90");
+            }else if(Surface.ROTATION_180 == fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation()){
+                camera.setDisplayOrientation(270);
+                Log.e(TAG, "surfaceCreated: orientation: Rotation_180");
+            }else if(Surface.ROTATION_270 == fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation()){
+                camera.setDisplayOrientation(180);
+                Log.e(TAG, "surfaceCreated: orientation: Rotation_270");
+            }else{
+                camera.setDisplayOrientation(90);
+                Log.e(TAG, "surfaceCreated: orientation: Rotation_0");
             }
         }
 
@@ -266,32 +282,19 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                     Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
                     Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
                 }
-
-
-                //TODO - temporarily removed this rotation functionality as it was causing an error which resulted in image post failure
-                ExifInterface exif = new ExifInterface(imageFile.toString());
-                String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-
-                Log.d(TAG, "onPictureTaken: orientation: " + orientation);
-
-                switch (orientation) {
-                    default:
-                    case "0":
-                    case "6":
-                        resizedImage = rotateImage(realImage, 90);
-                        break;
-                    case "8":
-                        resizedImage = rotateImage(realImage, 270);
-                        break;
-                    case "3":
-                        resizedImage = rotateImage(realImage, 180);
-                        break;
+                int orientation = fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation();
+                if(Surface.ROTATION_0 == orientation) {
+                    resizedImage = rotateImage(realImage, 90);
+                }else if(Surface.ROTATION_270 == orientation){
+                    resizedImage = rotateImage(realImage, 180);
+                }else{
+                    resizedImage = rotateImage(realImage, 0);
                 }
 
                 if(resizedImage == null) {
                     resizedImage = realImage;
                 }
-                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, fos);
 
                 fos.close();
 

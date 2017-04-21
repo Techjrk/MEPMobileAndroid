@@ -10,6 +10,7 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -114,7 +115,13 @@ public class ProjectAddImageViewModel extends BaseObservable {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         Log.d(TAG, "onClick: posting image");
-                        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 80);
+                        int compressionRate = 70;
+                        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
+                        while(base64Image.length() > 90000 && compressionRate > 0){
+                            compressionRate -= 10;
+                            base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
+                        }
+                        Log.e(TAG, "onClick: compressionRate: " + compressionRate );
                         PhotoPost photoPost = new PhotoPost(title, body, false, base64Image);
                         Call<ProjectPhoto> call = projectDomain.postPhoto(projectId, photoPost);
                         call.enqueue(new Callback<ProjectPhoto>() {
@@ -167,6 +174,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             alert.show();
         }
     }
+
 
     private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
     {

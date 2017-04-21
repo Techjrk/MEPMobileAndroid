@@ -108,7 +108,6 @@
         <activity
                 android:name=".content.ProjectImageChooserActivity"
                 android:label="ProjectTakePhoto"
-                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
                 android:name=".content.ProjectAddImageActivity"
