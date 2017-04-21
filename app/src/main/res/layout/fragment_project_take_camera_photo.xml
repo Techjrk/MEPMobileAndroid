@@ -18,15 +18,34 @@
                       android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:orientation="vertical"
-                      android:background="@color/lecetMediumBlue"/>
+                      android:background="@color/lecetDarkestBlue"/>
 
-        <Button
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_reverse_camera"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_camera_light"/>
+
+        <ImageView
             android:id="@+id/take_photo_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:keepScreenOn="true"
+            android:src="@drawable/ic_camera_button"
             android:onClick="@{viewModel::onTakePhotoClick}"/>
     </RelativeLayout>
 </layout>
