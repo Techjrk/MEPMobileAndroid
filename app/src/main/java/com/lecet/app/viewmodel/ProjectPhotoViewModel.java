@@ -8,9 +8,15 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.lecet.app.data.models.ProjectPhoto;
+import com.lecet.app.data.models.User;
+import com.lecet.app.domain.UserDomain;
 import com.squareup.picasso.Picasso;
 
 import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ludwigvondrake on 3/23/17.
@@ -21,10 +27,29 @@ public class ProjectPhotoViewModel extends BaseObservable {
     private static final String TAG = "ProjectPhotoViewModel";
 
     private ProjectPhoto photo;
-    private String authorName = "Some Photo Taker";
+    private String authorName = "Unknown Name";
 
-    public ProjectPhotoViewModel(ProjectPhoto photo) {
+    public ProjectPhotoViewModel(ProjectPhoto photo, final UserDomain userDomain) {
         this.photo = photo;
+        final User user = userDomain.fetchUser(photo.getAuthorId());
+        if(user == null){
+            userDomain.getUser(photo.getAuthorId(), new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.isSuccessful()) {
+                        userDomain.copyToRealmTransaction(response.body());
+                        setAuthorName(response.body().getFirstName() + " " + response.body().getLastName());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
+        }else {
+            setAuthorName(user.getFirstName() + " " + user.getLastName());
+        }
     }
 
     public String getImageUrl() {
@@ -39,6 +64,11 @@ public class ProjectPhotoViewModel extends BaseObservable {
 
     public String getAuthorName() {
         return authorName;
+    }
+
+    private void setAuthorName(String name){
+        authorName = name;
+        notifyChange();
     }
 
     public boolean canEdit() {

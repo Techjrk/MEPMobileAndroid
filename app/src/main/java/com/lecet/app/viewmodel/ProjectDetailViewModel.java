@@ -224,7 +224,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
         initLocationRecyclerView(activity, projectDetailAdapter);
         additionalNotes = new ArrayList<ProjectAdditionalData>();
-        projectNotesAdapter = new ProjectNotesAdapter(additionalNotes);
+        projectNotesAdapter = new ProjectNotesAdapter(additionalNotes, activity);
         initNotesRecyclerView(activity, projectNotesAdapter);
         getAdditionalNotes(false);
         //getAdditionalImages(false); TODO: remove comment if not helpful

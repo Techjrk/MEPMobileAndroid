@@ -36,7 +36,7 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     @SerializedName("projectId")
     private long projectId;
 
-    @SerializedName("authorId")
+    @SerializedName("userId")
     private long authorId;
 
     @SerializedName("createdAt")
