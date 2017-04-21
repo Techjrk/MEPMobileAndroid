@@ -2,6 +2,7 @@ package com.lecet.app.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
@@ -60,7 +61,10 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
         getCameraInstance();
         cameraPreview = new CameraPreview(fragment.getActivity());
         frameLayout.addView(cameraPreview);
+        orientationEventListener = cameraPreview.createOrientationListener();
     }
+
+
 
     private static Uri getOutputMediaFileUri(){
         return Uri.fromFile(getOutputMediaFile());
@@ -182,7 +186,20 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
         private Configuration configuration;
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
-
+        private Camera.CameraInfo cameraInfo;
+        private OrientationEventListener createOrientationListener() {
+            return new OrientationEventListener(fragment.getActivity()) {
+                public void onOrientationChanged(int orientation) {
+                    try {
+                        if (orientation != OrientationEventListener.ORIENTATION_UNKNOWN) {
+                            setCameraDisplayOrientation(fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation());
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "Error while onOrientationChanged", e);
+                    }
+                }
+            };
+        }
         public CameraPreview(Context context) {
             super(context);
 
@@ -200,7 +217,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
             }
             // The Surface has been created, now tell the camera where to draw the preview.
             try {
-                setCameraDisplayOrientation();
+                orientationEventListener.enable();
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
             } catch (IOException e) {
@@ -224,7 +241,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
 
             // start preview with new settings
             try {
-                setCameraDisplayOrientation();
                 camera.setPreviewDisplay(mHolder);
                 camera.startPreview();
 
@@ -233,25 +249,23 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
             }
         }
 
-        public void setCameraDisplayOrientation(){
-            if(Surface.ROTATION_90 == fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation()){
-                camera.setDisplayOrientation(0);
-                Log.e(TAG, "surfaceCreated: orientation: Rotation_90");
-            }else if(Surface.ROTATION_180 == fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation()){
-                camera.setDisplayOrientation(270);
-                Log.e(TAG, "surfaceCreated: orientation: Rotation_180");
-            }else if(Surface.ROTATION_270 == fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation()){
-                camera.setDisplayOrientation(180);
-                Log.e(TAG, "surfaceCreated: orientation: Rotation_270");
-            }else{
+        public void setCameraDisplayOrientation(int orientation){
+            int degrees = 0;
+            if(Surface.ROTATION_0 == orientation){
                 camera.setDisplayOrientation(90);
-                Log.e(TAG, "surfaceCreated: orientation: Rotation_0");
+            }else if(Surface.ROTATION_270 == orientation){
+                camera.setDisplayOrientation(180);
+            }else {
+                camera.setDisplayOrientation(0);
             }
         }
+
+
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             releaseCamera();
+            orientationEventListener.disable();
         }
 
         @Override
