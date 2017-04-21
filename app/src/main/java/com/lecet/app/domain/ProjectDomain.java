@@ -62,11 +62,27 @@ public class ProjectDomain {
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
 
+    private String filterMPN;
+
+    public String getFilterMPN() {
+        return filterMPN;
+    }
+
+    public void setFilterMPN(String filterMPN) {
+        this.filterMPN = filterMPN;
+
+    }
+
     public ProjectDomain(LecetClient lecetClient, final LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
 
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
+        initFilter();
+    }
+    void initFilter() {
+        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+        setFilterMPN(filter);
     }
 
     public Realm getRealm() {
@@ -222,9 +238,9 @@ public class ProjectDomain {
     public void getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-
-        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
-        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
+//        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+//        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
+        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, getFilterMPN());
         call.enqueue(callback);
     }
 
