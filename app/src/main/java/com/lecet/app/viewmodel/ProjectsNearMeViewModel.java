@@ -82,6 +82,19 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.markers = new HashMap<>();
         this.timer = timer;
     }
+    public void setProjectFilter(String filter) {
+       projectDomain.setFilterMPN(filter);
+    }
+    public String getProjectFilter() {
+        return projectDomain.getFilterMPN();
+    }
+    public EditText getSearch() {
+        return search;
+    }
+
+    public void setSearch(EditText search) {
+        this.search = search;
+    }
 
     public void setMap(GoogleMap map) {
         this.redMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
@@ -335,7 +348,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         try {
             address = coder.getFromLocationName(strAddress, 1);
-            if (address == null) {
+            if (address == null || address.size() == 0) {
                 return null;
             }
             Address location = address.get(0);
