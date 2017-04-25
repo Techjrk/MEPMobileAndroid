@@ -16,8 +16,8 @@ import com.lecet.app.databinding.ListItemProjectDetailImageBinding;
 import com.lecet.app.databinding.ListItemProjectDetailNoteBinding;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.interfaces.ProjectAdditionalData;
-import com.lecet.app.viewmodel.ProjectNoteViewModel;
-import com.lecet.app.viewmodel.ProjectPhotoViewModel;
+import com.lecet.app.viewmodel.ListItemProjectNoteViewModel;
+import com.lecet.app.viewmodel.ListItemProjectImageViewModel;
 
 import java.util.List;
 
@@ -70,12 +70,12 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (getItemViewType(position)){
             case PHOTO_VIEW_TYPE:
                 ((ProjectImageViewHolder) holder).binding.setViewModel(
-                        new ProjectPhotoViewModel((ProjectPhoto)data.get(position), userDomain)
+                        new ListItemProjectImageViewModel((ProjectPhoto)data.get(position), userDomain)
                 );
                 break;
             case NOTE_VIEW_TYPE:
                 ((ProjectNoteViewHolder) holder).binding.setViewModel(
-                        new ProjectNoteViewModel((ProjectNote)data.get(position), userDomain)
+                        new ListItemProjectNoteViewModel((ProjectNote)data.get(position), userDomain)
                 );
                 break;
             default:
