@@ -22,14 +22,14 @@ import retrofit2.Response;
  * Created by ludwigvondrake on 3/23/17.
  */
 
-public class ProjectPhotoViewModel extends BaseObservable {
+public class ListItemProjectImageViewModel extends BaseObservable {
 
-    private static final String TAG = "ProjectPhotoViewModel";
+    private static final String TAG = "ListItemProjectImageVM";
 
     private ProjectPhoto photo;
     private String authorName = "Unknown Name";
 
-    public ProjectPhotoViewModel(ProjectPhoto photo, final UserDomain userDomain) {
+    public ListItemProjectImageViewModel(ProjectPhoto photo, final UserDomain userDomain) {
         this.photo = photo;
         final User user = userDomain.fetchUser(photo.getAuthorId());
         if(user == null){
