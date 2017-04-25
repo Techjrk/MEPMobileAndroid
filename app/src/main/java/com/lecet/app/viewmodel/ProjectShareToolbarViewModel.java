@@ -8,6 +8,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.MoveToAdapter;
 import com.lecet.app.adapters.MoveToProjectListAdapter;
 import com.lecet.app.content.LecetConfirmDialogFragment;
+import com.lecet.app.content.MainActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
@@ -74,6 +75,8 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
     @Override
     public void removeTrackedObjectFromTrackingList(long trackingListId, List<Long> trackedIds) {
 
+        final ProjectTrackingList prevList = getAssociatedTrackingList(getTrackedObject());
+
         showProgressDialog(getAppCompatActivity().getString(R.string.app_name), getAppCompatActivity().getString(R.string.updating));
 
         getTrackingListDomain().syncProjectTrackingList(trackingListId, trackedIds, new Callback<ProjectTrackingList>() {
@@ -88,7 +91,9 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                     selectedItems.add(getTrackedObject().getId());
 
                     // Remove items from Tracking list relationship
-                    asyncDeleteProjects(getTrackedObject().getId(), selectedItems);
+                    if (prevList != null) {
+                        asyncDeleteProjects(prevList.getId(), selectedItems);
+                    }
 
                 } else {
 
@@ -228,6 +233,12 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                         getTrackingListDomain().getProjectDomain().setProjectHidden(project, true);
                         setHideButtonTitle(getAppCompatActivity().getString(R.string.unhide));
                         dismissProgressDialog();
+
+                        // Finish the activity and clear the stack
+                        Intent intent = new Intent(getAppCompatActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        getAppCompatActivity().startActivity(intent);
+                        getAppCompatActivity().finish();
 
                     } else {
 

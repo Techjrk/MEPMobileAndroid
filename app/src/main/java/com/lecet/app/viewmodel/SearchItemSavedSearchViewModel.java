@@ -2,8 +2,10 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.util.Log;
 import android.view.View;
 
+import com.google.gson.JsonElement;
 import com.lecet.app.BR;
 import com.lecet.app.data.models.SearchSaved;
 
@@ -40,12 +42,59 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
     ////////////////////////////////////
     // CLICK HANDLERS
 
+    /**
+     * Click event for selecting the Saved Search item
+     * @param view
+     */
     public void onClick(View view) {
         String query = searchSaved.getQuery();
-        if (query != null && query.length() > 0) {
-            viewModel.setQuery(searchSaved.getQuery().trim());
-            viewModel.setIsMSE1SectionVisible(false);
-            viewModel.setIsMSE2SectionVisible(true);
+        // viewModel.setFilterSearchSaved(searchSaved.getFilter());
+        Log.d("savef", "savef" + searchSaved.getFilter().toString());
+        String saveString = searchSaved.getFilter().toString();
+
+        //Processing the extraction of the search filter from the saved search project
+        //Applying directly the whole search filter for the project **new
+        viewModel.setProjectSearchFilter(searchSaved.getFilter().toString());
+
+        //If the extracted search filter contains companyLocation, then apply the search filter directly to company
+        if ((saveString.contains("companyLocation"))) {
+            //Processing the extraction of the search filter from the saved search company
+            viewModel.setCompanySearchFilterComplete(searchSaved.getFilter().toString());
+            JsonElement jelement = searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("companyLocation");
+
+            //We will also provide a company search filter to the project.
+            // If not needed, just delete the whole if-condition below for project
+            if (jelement != null) {
+                String parseFilter = searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("companyLocation").toString();
+                String st = "\"projectLocation\":" + parseFilter;
+                viewModel.setProjectSearchFilterOnly(st);
+                Log.d("saves", "saves" + searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("companyLocation").toString());
+            }
+        } else {
+            //if the search filter is for project only, then we will provide a project location filter for company.
+            // If this is not needed, then just delete the code inside the else statement.
+            JsonElement jelement = searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("projectLocation");
+            if (jelement != null) {
+                String parseFilter = searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("projectLocation").toString();
+                String st = "\"companyLocation\":" + parseFilter;
+                viewModel.setCompanySearchFilter(st);
+                Log.d("savec", "savec" + searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("projectLocation").toString());
+                Log.d("savet", "savet" + st);
+            }
         }
+
+        //Setting the query will refresh the display of the summary section for projects, companies and contacts
+        if (query != null && query.length() > 0) {
+            viewModel.setQuery(searchSaved.getQuery());
+            /*viewModel.setIsMSE1SectionVisible(false);
+            viewModel.setIsMSE2SectionVisible(true);*/
+        } else {
+            viewModel.setQuery("");
+        }
+
+        //Log.d("searchfilter","searchfilter:"+searchSaved.getFilter().getSearchFilter());
+        viewModel.setIsMSE1SectionVisible(false);
+        viewModel.setIsMSE2SectionVisible(true);
     }
+
 }

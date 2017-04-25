@@ -49,14 +49,19 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
         this.trackingListDomain = trackingListDomain;
         this.companyDomain = companyDomain;
-        getCompanies(listItemId);
     }
 
-    private void getCompanies(long listId) {
+    public void getCompanies(long listId) {
 
         CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listId);
         if (companyList != null) {
             RealmList<Company> companies = companyList.getCompanies();
+
+            if (companies.size() != 1) {
+                updateToolbarSubTitle(companies.size(), getAppCompatActivity().getResources().getString(R.string.companies));
+            } else {
+                updateToolbarSubTitle(companies.size(), getAppCompatActivity().getResources().getString(R.string.company));
+            }
 
             selectedSort = SORT_ALPHABETICAL;
             setAdapterData(companies.sort("name", Sort.ASCENDING));
@@ -100,11 +105,9 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
     private void updateTrackingList(long listId) {
 
         CompanyTrackingList companyList = trackingListDomain.fetchCompanyTrackingList(listId);
-        if (companyList != null) {
-            RealmList<Company> companies = companyList.getCompanies();
-            setAdapterData(companies.sort(filter, selectedSort == SORT_ALPHABETICAL ? Sort.ASCENDING : Sort.DESCENDING));
-            getListAdapter().notifyDataSetChanged();
-        }
+        RealmList<Company> companies = companyList.getCompanies();
+        setAdapterData(companies.sort(filter, selectedSort == SORT_ALPHABETICAL ? Sort.ASCENDING : Sort.DESCENDING));
+        getListAdapter().notifyDataSetChanged();
     }
 
     @Override

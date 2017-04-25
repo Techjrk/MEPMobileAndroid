@@ -44,6 +44,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -82,7 +83,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private Project project;
     private List<ProjDetailItemViewModel> projectDetails;
     private ProjDetailItemViewModel notes;
-    private RealmResults<Bid> projectBids;
+    private RealmList<Bid> projectBids;
     private RealmResults<Contact> projectParticipants;
     private ProjectDetailHeaderViewModel headerViewModel;
     private ProjectDomain projectDomain;
@@ -92,7 +93,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private boolean bidsDisplayed;
     private boolean participantsDisplayed;
 
-    public ProjectDetailAdapter(AppCompatActivity appCompatActivity, @NonNull Project project, @NonNull List<ProjDetailItemViewModel> projectDetails, ProjDetailItemViewModel notes, RealmResults<Bid> projectBids, RealmResults<Contact> projectParticipants, ProjectDetailHeaderViewModel headerViewModel, ProjectDomain projectDomain) {
+    public ProjectDetailAdapter(AppCompatActivity appCompatActivity, @NonNull Project project, @NonNull List<ProjDetailItemViewModel> projectDetails, ProjDetailItemViewModel notes, RealmList<Bid> projectBids, RealmResults<Contact> projectParticipants, ProjectDetailHeaderViewModel headerViewModel, ProjectDomain projectDomain) {
 
         this.appCompatActivity = appCompatActivity;
         this.project = project;

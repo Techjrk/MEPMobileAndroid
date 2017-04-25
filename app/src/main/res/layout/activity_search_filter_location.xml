@@ -100,6 +100,9 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_rect_solid_border_1"
                         android:padding="12dp"
+                        android:inputType="textCapCharacters"
+                        android:maxLength="2"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:text="@={viewModel.state}" />
 
                     <TextView

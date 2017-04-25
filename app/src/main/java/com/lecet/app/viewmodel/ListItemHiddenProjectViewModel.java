@@ -66,6 +66,7 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
     public void onHideSelected(View view) {
 
         if (isHidden) {
+
             projectDomain.unhideProject(getProject().getId(), new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

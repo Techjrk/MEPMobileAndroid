@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by getdevsinc on 11/21/16.
+ * Created by getdevsinc on 4/4/17.
  */
 
 public class SearchFilter {
- //   @SerializedName("searchFilter")
- //   private SearchFilter searchFilter;
+//   @SerializedName("searchFilter")
+    //   private SearchFilter searchFilter;
 
- //   @SerializedName("jurisdictions")
- //   private SearchFilter jurisdictions;
+    //   @SerializedName("jurisdictions")
+    //   private SearchFilter jurisdictions;
 /* TODO: Will check first if the string type is enough for each of the search filter type. If not, the comment class type listed below will be created and will be used.
     private ProjectValue projectValue ;
     private BuildingOrHighway buildingOrHighway ;
@@ -66,6 +66,9 @@ public class SearchFilter {
     @SerializedName("projectLocation")
     private Object projectLocation ;
 
+    @SerializedName("companyLocation")
+    private Object companyLocation ;
+
     @SerializedName("city")
     private String city ;
 
@@ -117,6 +120,10 @@ public class SearchFilter {
         return projectLocation;
     }
 
+    public Object getCompanyLocation() {
+        return companyLocation;
+    }
+
     public String getCity() {
         return city;
     }
@@ -124,18 +131,19 @@ public class SearchFilter {
     @Override
     public String toString() {
         return "SearchFilter{" +
-                "projectValue='" + projectValue + '\'' +
-                ", buildingOrHighway='" + buildingOrHighway + '\'' +
-                ", ownerType='" + ownerType + '\'' +
-                ", projectTypeId='" + projectTypeId + '\'' +
-                ", projectStageId='" + projectStageId + '\'' +
+                "projectValue=" + projectValue +
+                ", buildingOrHighway=" + buildingOrHighway +
+                ", ownerType=" + ownerType +
+                ", projectTypeId=" + projectTypeId +
+                ", projectStageId=" + projectStageId +
                 ", updatedInLast=" + updatedInLast +
-                ", workTypeId='" + workTypeId + '\'' +
-                ", jurisdictions='" + jurisdictions + '\'' +
+                ", workTypeId=" + workTypeId +
+                ", jurisdictions=" + jurisdictions +
                 ", deepJurisdictionId=" + deepJurisdictionId +
-                ", valuation='" + valuation + '\'' +
-                ", updatedWithin='" + updatedWithin + '\'' +
-                ", projectLocation='" + projectLocation + '\'' +
+                ", valuation=" + valuation +
+                ", updatedWithin=" + updatedWithin +
+                ", projectLocation=" + projectLocation +
+                ", companyLocation=" + companyLocation +
                 ", city='" + city + '\'' +
                 '}';
     }
@@ -170,6 +178,8 @@ public class SearchFilter {
             return false;
         if (projectLocation != null ? !projectLocation.equals(that.projectLocation) : that.projectLocation != null)
             return false;
+        if (companyLocation != null ? !companyLocation.equals(that.companyLocation) : that.companyLocation != null)
+            return false;
         return city != null ? city.equals(that.city) : that.city == null;
 
     }
@@ -188,11 +198,11 @@ public class SearchFilter {
         result = 31 * result + (valuation != null ? valuation.hashCode() : 0);
         result = 31 * result + (updatedWithin != null ? updatedWithin.hashCode() : 0);
         result = 31 * result + (projectLocation != null ? projectLocation.hashCode() : 0);
+        result = 31 * result + (companyLocation != null ? companyLocation.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         return result;
     }
-
-    /*
+/*
 
     public SearchFilter getSearchFilter() {
         return searchFilter;
@@ -206,4 +216,3 @@ public class SearchFilter {
 
 
 }
-

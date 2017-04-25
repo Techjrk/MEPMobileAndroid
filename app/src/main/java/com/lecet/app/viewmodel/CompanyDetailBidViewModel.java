@@ -8,6 +8,7 @@ import android.view.View;
 import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Bid;
+import com.lecet.app.data.models.Project;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 public class CompanyDetailBidViewModel extends BaseObservable {
 
     private final Bid bid;
+    private final Project project;
     private final String mapsApiKey;
     private final AppCompatActivity activity;
 
@@ -29,6 +31,7 @@ public class CompanyDetailBidViewModel extends BaseObservable {
         this.bid = bid;
         this.mapsApiKey = mapsApiKey;
         this.activity = activity;
+        this.project = bid.getProject();
     }
 
     public String getBidAmount() {
@@ -42,32 +45,32 @@ public class CompanyDetailBidViewModel extends BaseObservable {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-        return simpleDateFormat.format(bid.getProject().getBidDate());
+        return simpleDateFormat.format(project.getBidDate());
     }
 
     public String getProjectName() {
 
-        return bid.getProject().getTitle();
+        return project.getTitle();
     }
 
     public String getClientLocation() {
 
-        return bid.getProject().getCity() + " , " + bid.getProject().getState();
+        return project.getCity() + " , " + project.getState();
     }
 
     public String getMapUrl() {
 
-        if (bid.getProject().getGeocode() == null) return null;
+        if (project.getGeocode() == null) return null;
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=300x300&" +
-                        "markers=color:blue|%.6f,%.6f&key=%s", bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(),
-                bid.getProject().getGeocode().getLat(), bid.getProject().getGeocode().getLng(), mapsApiKey);
+                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
 
     public void onBidSelected(View view) {
 
         Intent intent = new Intent(activity, ProjectDetailActivity.class);
-        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, bid.getProject().getId());
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         activity.startActivity(intent);
     }
 

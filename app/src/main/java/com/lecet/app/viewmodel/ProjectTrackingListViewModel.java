@@ -54,7 +54,6 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
         this.projectDomain = projectDomain;
         this.trackingListDomain = trackingListDomain;
-        getProjectTrackingListUpdates(listItemId);
     }
 
     /**
@@ -73,7 +72,13 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
                     List<Project> data = response.body();
 
-                    projectDomain.asyncCopyToRealm(data, new Realm.Transaction.OnSuccess() {
+                    if (data.size() != 1) {
+                        updateToolbarSubTitle(data.size(), getAppCompatActivity().getResources().getString(R.string.projects));
+                    } else {
+                        updateToolbarSubTitle(data.size(), getAppCompatActivity().getResources().getString(R.string.project));
+                    }
+
+                    trackingListDomain.asyncCopyProjectTrackingListUpdatesToRealm(projectTrackingListId, data, new Realm.Transaction.OnSuccess() {
 
                         @Override
                         public void onSuccess() {
@@ -110,25 +115,20 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
     private void initProjectTrackingList(long trackingListId) {
 
         ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(trackingListId);
+        RealmList<Project> projects = projectList.getProjects();
 
-        if (projectList != null) {
-            RealmList<Project> projects = projectList.getProjects();
-
-            selectedSort = SORT_BID_DATE;
-            setAdapterData(projects.sort("bidDate", Sort.DESCENDING));
-            getListAdapter().notifyDataSetChanged();
-        }
+        selectedSort = SORT_BID_DATE;
+        setAdapterData(projects.sort("bidDate", Sort.DESCENDING));
+        getListAdapter().notifyDataSetChanged();
     }
 
     private void updateProjectTrackingList(long trackingListId) {
 
         ProjectTrackingList projectList = trackingListDomain.fetchProjectTrackingList(trackingListId);
 
-        if (projectList != null) {
-            RealmList<Project> projects = projectList.getProjects();
-            setAdapterData(projects.sort(filter, selectedSort == SORT_VALUE_LOW ? Sort.ASCENDING : Sort.DESCENDING));
-            getListAdapter().notifyDataSetChanged();
-        }
+        RealmList<Project> projects = projectList.getProjects();
+        setAdapterData(projects.sort(filter, selectedSort == SORT_VALUE_LOW ? Sort.ASCENDING : Sort.DESCENDING));
+        getListAdapter().notifyDataSetChanged();
     }
 
 

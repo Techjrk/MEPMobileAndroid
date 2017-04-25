@@ -1,6 +1,10 @@
 package com.lecet.app.data.models;
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import io.realm.RealmObject;
 
@@ -19,7 +23,16 @@ public class SearchSaved{
     private String query;
 
     @SerializedName("filter")
-    private Filter filter;
+    private JsonObject filter;
+
+    public JsonObject getFilter() {
+        return filter;
+    }
+
+    public void setFilter(JsonObject filter) {
+        this.filter = filter;
+    }
+//    private Filter filter;
 
     @SerializedName("optIn")
     private String optIn;
@@ -42,9 +55,9 @@ public class SearchSaved{
         return query;
     }
 
-    public Filter getFilter() {
-        return filter;
-    }
+  //  public Filter getFilter() {
+        //return filter;
+    //}
 
     public String getOptIn() {
         return optIn;

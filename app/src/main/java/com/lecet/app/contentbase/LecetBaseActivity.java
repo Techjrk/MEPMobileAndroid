@@ -60,7 +60,7 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        checkForUpdates();
+        //checkForUpdates();
         checkForCrashes();
     }
 
@@ -159,6 +159,8 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
     }
 
     public void showNetworkAlert() {
+
+        if (isFinishing() || isDestroyed()) return;
 
         if (displayingNetworkAlert) return;
 

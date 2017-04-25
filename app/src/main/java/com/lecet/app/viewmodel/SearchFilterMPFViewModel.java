@@ -26,7 +26,9 @@ import com.lecet.app.content.SearchFilterWorkTypeActivity;
  * Created by DomandTom 2016.
  */
 
-public class SearchFilterMPFViewModel extends BaseObservable {
+public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename to SearchFiltersAllTabbedViewModel
+    private static final String TAG = "SearchFilterMPFVM";
+
     public static final int LOCATION = 0;
     public static final int TYPE = 1;
     public static final int VALUE = 2;
@@ -39,7 +41,6 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final int WORK_TYPE = 9;
 
     public static int VALUE_MAX=999999999;
-    private static final String TAG = "SearchFilterMPFVM";
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
@@ -60,7 +61,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public static final String ANY = "Any";
 
     private AppCompatActivity activity;
-    private static int id;
+    private int id;
     private Intent intent;
     private boolean isProjectViewVisible = true;
     private boolean moreOption;
@@ -533,6 +534,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     public void onClickedProjectCompanyTab(View view) {
         isProjectViewVisible = view.getId() == R.id.btn_project;
 //        isProjectViewVisible = !isProjectViewVisible;
+        if (getIsProjectViewVisible()) {
+            Log.d("SearchFilterMPFVM","project tab clicked");
+        } else {
+            Log.d("SearchFilterMPFVM","company tab clicked");
+        }
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
 
@@ -549,6 +555,13 @@ public class SearchFilterMPFViewModel extends BaseObservable {
     }
 
     public void saveResult() {
+        if (getIsProjectViewVisible()) {
+            intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
+        }
+        else {
+            intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
+        }
+
         activity.setResult(Activity.RESULT_OK, intent);
     }
 

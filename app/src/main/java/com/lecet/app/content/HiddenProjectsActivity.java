@@ -51,10 +51,4 @@ public class HiddenProjectsActivity extends AppCompatActivity {
             actionBar.setDisplayShowCustomEnabled(true);
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewModel.onActivityDestroy();
-    }
 }

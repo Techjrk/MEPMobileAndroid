@@ -5,24 +5,42 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.location.Criteria;
 import android.location.Location;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -64,6 +82,58 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupToolbar();
         setupLocationManager();
         checkPermissions();
+    }
+
+    void showCurrentMarker(GoogleMap map) {
+        android.location.LocationManager locManager = (android.location.LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locManager.getBestProvider(criteria, true);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location loc = locManager.getLastKnownLocation(bestProvider);
+       double latitude=0, longitude=0;
+        if (loc != null) {
+             latitude = loc.getLatitude();
+             longitude = loc.getLongitude();
+            /*LatLng latLng = new LatLng(latitude, longitude);
+            MarkerOptions moption = new MarkerOptions();
+            moption.position(latLng).title("My Position");
+            BitmapDescriptor bd = BitmapDescriptorFactory
+                    .fromResource(R.drawable.cmap);
+            moption.icon(bd);
+            moption.infoWindowAnchor(-300f, -300f);
+            map.addMarker(moption).showInfoWindow();*/
+            onLocationChanged(loc);
+        } else {
+            Location lastLoc = locationManager.retrieveLastKnownLocation();
+             latitude =lastLoc.getLatitude();
+             longitude = lastLoc.getLongitude();
+           /* LatLng latLng = new LatLng(latitude, longitude);
+            MarkerOptions moption = new MarkerOptions();
+            moption.position(latLng).title("My Position");
+            BitmapDescriptor bd = BitmapDescriptorFactory
+                    .fromResource(R.drawable.cmap);
+            moption.icon(bd);
+            moption.infoWindowAnchor(-300f, -300f);
+            map.addMarker(moption).showInfoWindow();*/
+            onLocationChanged(lastLoc);
+        }
+        LatLng latLng = new LatLng(latitude, longitude);
+        MarkerOptions moption = new MarkerOptions();
+        moption.position(latLng).title("My Position");
+        BitmapDescriptor bd = BitmapDescriptorFactory
+                .fromResource(R.drawable.cmap);
+        moption.icon(bd);
+        moption.infoWindowAnchor(-300f, -300f);
+        map.addMarker(moption).showInfoWindow();
     }
 
     private void continueSetup() {
@@ -112,6 +182,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         viewModel.setMap(map);
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
+
+        // TODO: Undoing fix for case 7321. Causes major crashes
+        //showCurrentMarker(map);
     }
 
     private void fetchProjects(boolean animateCamera) {
@@ -329,3 +402,5 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         locationManager.startLocationUpdates();
     }
 }
+
+

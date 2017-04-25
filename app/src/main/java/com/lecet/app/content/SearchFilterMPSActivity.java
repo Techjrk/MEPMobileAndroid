@@ -198,6 +198,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         // StringBuilder used for generating query with commas as appropriate
         StringBuilder sb = new StringBuilder();
         String projectLocation = "";
+        String companyLocation ="";
 
         if (city.length() > 0) {
             sb.append("\"city\":\"" + city + "\"");
@@ -214,7 +215,23 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             if (sb.length() > 0) sb.append(",");
             sb.append("\"zip5\":\"" + zip + "\"");
         }
+        viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, null);
+        if (!viewModel.getIsProjectViewVisible()) {
+            /*projectLocation = sb.toString();
+            if (!projectLocation.trim().equals("")) {
+                projectLocation = "\"projectLocation\":{" + projectLocation + "}";
+            }
+            viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_LOCATION, projectLocation);  // this should work whether or not projectLocation is empty
+           // Log.d("project view","project view");
+        } else {*/
+            companyLocation = sb.toString();
+            if (!companyLocation.trim().equals("")) {
+                companyLocation = "\"companyLocation\":{" + companyLocation + "}";
+            }
 
+            viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, companyLocation);  // this should work whether or not companyLocation is empty
+            Log.d("companyresult","companyresult:"+companyLocation);
+        }
         projectLocation = sb.toString();
 
         if (!projectLocation.trim().equals("")) {

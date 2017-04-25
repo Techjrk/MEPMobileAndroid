@@ -13,6 +13,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectDetailAdapter;
 import com.lecet.app.adapters.ProjectNotesAdapter;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
@@ -35,6 +36,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,7 +48,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectDetailViewModel implements ClickableMapInterface {
+public class ProjectDetailViewModel extends BaseObservableViewModel implements ClickableMapInterface {
 
     private static final String TAG = "ProjectDetailViewModel";
 
@@ -69,8 +71,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
     private Call<List<ProjectNote>> additonalNotesCall;   //// TODO: 4/14/17 UPDATE FOR IMAGES
     private Call<List<ProjectPhoto>> additonalImagesCall;
 
-
-    public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, String mapsApiKey, ProjectDomain projectDomain) {
+    public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, double bidAmount, String mapsApiKey, ProjectDomain projectDomain) {
+        super(activity);
 
         this.activityWeakReference = new WeakReference<>(activity);
         this.projectID = projectID;
@@ -101,6 +103,12 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
     private void getProjectDetail(final long projectID) {
 
+        ProjectDetailActivity activity = activityWeakReference.get();
+
+        if (activity == null) return;
+
+        showProgressDialog(activity.getString(R.string.updating), "");
+
         projectDetailCall = projectDomain.getProjectDetail(projectID, new Callback<Project>() {
             @Override
             public void onResponse(Call<Project> call, Response<Project> response) {
@@ -110,6 +118,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                 if (activity == null) return;
 
                 if (response.isSuccessful()) {
+
+                    dismissProgressDialog();
 
                     Project responseProject = response.body();
 
@@ -131,6 +141,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
                         @Override
                         public void onError(Throwable error) {
 
+                            dismissProgressDialog();
+
                             activity.hideNetworkAlert();
 
                             if (networkAlertDialog != null && networkAlertDialog.isShowing())
@@ -147,6 +159,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
 
                 } else {
+
+                    dismissProgressDialog();
 
                     if (activity.isDisplayingNetworkAlert()) {
 
@@ -167,6 +181,8 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
+
+                dismissProgressDialog();
 
                 ProjectDetailActivity activity = activityWeakReference.get();
 
@@ -195,11 +211,38 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.project_type), project.getProjectTypes()));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage), project.getProjectStage().getName()));
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.stage_normal), project.getProjectStage() != null ? project.getProjectStage().getName() : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.last_updated), DateUtility.formatDateForDisplay(project.getLastPublishDate())));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), "$ 0"));
+
+        // Project Value
+        if (project.getProjectStage() != null) {
+
+            // The project is in Bidding/Participating Stage
+            if (project.getProjectStage().getParentId() == 102) {
+
+                // If the project is in the "Bid Results" stage, we will use the
+                // EstLow value
+                if (project.getProjectStage().getName() != null && project.getProjectStage().getName().equals("Bid Results")) {
+
+                    details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", project.getEstLow())));
+
+                } else {
+
+                    // Else we will use the average of the EstLow & EstHigh
+                    double average = (project.getEstLow() + project.getEstHigh()) / 2;
+                    details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", average)));
+                }
+            }
+
+        } else {
+
+            // Not in Bidding/Participating Stage so we will display $0
+            details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", 0)));
+        }
+
+        // Remaining details
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance()), projectID, activity.getString(R.string.jurisdiction)));
         details.add(new ProjDetailItemViewModel(activity.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
 
@@ -219,7 +262,7 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         RealmResults<Contact> contacts = projectDomain.fetchProjectContacts(projectID);
 
         // Bidders
-        RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
+        RealmList<Bid> bids = getResortedBids(projectID);
 
         projectDetailAdapter = new ProjectDetailAdapter(activity, project, details, note, bids, contacts, new ProjectDetailHeaderViewModel(project), projectDomain);
         initLocationRecyclerView(activity, projectDetailAdapter);
@@ -230,6 +273,28 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         //getAdditionalImages(false); TODO: remove comment if not helpful
     }
 
+    private RealmList<Bid> getResortedBids(long projectID) {
+        RealmResults<Bid> bids = projectDomain.fetchProjectBids(projectID);
+        RealmList<Bid> bidsCopy = new RealmList<>();
+        RealmList<Bid> resortedBids = new RealmList<>();
+        bidsCopy.addAll(bids);
+
+        // add sorted Bids with value more than zero first
+        for(Bid bid : bidsCopy) {
+            if(bid.getAmount() > 0) {
+                resortedBids.add(bid);
+            }
+        }
+
+        // add Bids with value of 0 last
+        for(Bid bid : bidsCopy) {
+            if(bid.getAmount() == 0) {
+                resortedBids.add(bid);
+            }
+        }
+
+        return resortedBids;
+    }
 
     private void initLocationRecyclerView(ProjectDetailActivity activity, ProjectDetailAdapter adapter) {
 
@@ -387,7 +452,25 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
 
     public String getMapUrl(Project project) {
 
-        if (project.getGeocode() == null) return null;
+        if (project.getGeocode() == null) {
+
+            String mapStr;
+
+            String generatedAddress = generateCenterPointAddress(project);
+
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append("https://maps.googleapis.com/maps/api/staticmap");
+            sb2.append("?center=");
+            sb2.append(generatedAddress);
+            sb2.append("&zoom=16");
+            sb2.append("&size=200x200");
+            sb2.append("&markers=color:blue|");
+            sb2.append(generatedAddress);
+            sb2.append("&key=" + mapsApiKey);
+            mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+
+            return mapStr;
+        }
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=800x500&" +
                         "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
@@ -407,5 +490,37 @@ public class ProjectDetailViewModel implements ClickableMapInterface {
         if (mapIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(mapIntent);
         }
+    }
+
+    private String generateCenterPointAddress(Project project) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (project.getAddress1() != null) {
+            stringBuilder.append(project.getAddress1());
+            stringBuilder.append(",");
+        }
+
+        if (project.getAddress2() != null) {
+            stringBuilder.append(project.getAddress2());
+            stringBuilder.append(",");
+        }
+
+        if (project.getCity() != null) {
+            stringBuilder.append(project.getCity());
+            stringBuilder.append(",");
+        }
+
+        if (project.getState() != null) {
+            stringBuilder.append(project.getState());
+        }
+
+        if (project.getZipPlus4() != null) {
+            stringBuilder.append(",");
+            stringBuilder.append(project.getZipPlus4());
+        }
+
+
+        return stringBuilder.toString();
     }
 }

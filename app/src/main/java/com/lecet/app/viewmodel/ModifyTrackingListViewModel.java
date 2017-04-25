@@ -141,6 +141,10 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         notifyPropertyChanged(BR.objectsSelected);
     }
 
+    public RealmResults<U> getDataItems() {
+        return dataItems;
+    }
+
     public void updateDataItems(RealmResults<U> dataItems) {
 
         listView.setAdapter(getListAdapter(appCompatActivity, dataItems));
@@ -187,7 +191,8 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         if (moveMenu == null) {
             createMoveMenu(view);
         } else {
-            moveToAdapter.setTrackingLists(getUserTrackingListsExcludingCurrentList(trackingList));
+            moveToAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, getUserTrackingListsExcludingCurrentList(trackingList));
+            moveMenu.setAdapter(moveToAdapter);
         }
         moveMenu.show();
     }
@@ -283,6 +288,22 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);
     }
+
+    public void updateToolbarSubTitle(int listSize, String title) {
+
+        subtitleTextView.setText(getActionBarSubtitle(listSize, title));
+    }
+
+    public String getActionBarSubtitle(int dataSize, String title) {
+        // subtitle, handle plural or singular
+        StringBuilder subtitleSb = new StringBuilder();
+        subtitleSb.append(dataSize);
+        subtitleSb.append(" ");
+        subtitleSb.append(title);
+
+        return subtitleSb.toString();
+    }
+
 
     @Override
     public void onTrackingListClicked(T trackingList) {
@@ -410,6 +431,23 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setNegativeButton(getAppCompatActivity().getString(R.string.ok), null);
+
+        alertDialog = builder.show();
+    }
+
+    public void showDoneDialog(String title, String message, DialogInterface.OnClickListener positive, DialogInterface.OnClickListener negative) {
+
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+
+        dismissAlertDialog();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getAppCompatActivity());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(getAppCompatActivity().getString(R.string.discard), negative);
+        builder.setPositiveButton(getAppCompatActivity().getString(R.string.edit_upper), positive);
 
         alertDialog = builder.show();
     }

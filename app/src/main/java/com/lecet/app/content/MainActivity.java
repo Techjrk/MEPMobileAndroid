@@ -60,6 +60,7 @@ import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.TextViewUtility;
 import com.lecet.app.viewmodel.MainViewModel;
+import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -125,6 +126,19 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             setupViewPager();
             setupPageIndicator();
             setupPageButtons();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (overflowMenu != null && overflowMenu.isShowing()) {
+            overflowMenu.dismiss();
+        }
+
+        if (mtmMenu != null && mtmMenu.isShowing()) {
+            mtmMenu.dismiss();
         }
     }
 
@@ -371,6 +385,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 toogleMTMMenu();
                 return true;
             case R.id.menu_item_search:
+                SearchViewModel.INIT_SEARCH=true;
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_item_more:
@@ -497,6 +512,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public void onProjectTrackingListClicked(ProjectTrackingList projectTrackingList) {
+
+        // Dismiss menu so that it refreshes properly
+        mtmMenu.dismiss();
+
         Intent intent = new Intent(getBaseContext(), ProjectTrackingListActivity.class);
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, projectTrackingList.getId());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, projectTrackingList.getProjects().size());
@@ -506,6 +525,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public void onCompanyTrackingListClicked(CompanyTrackingList companyTrackingList) {
+
+        // Dismiss menu so that it refreshes properly
+        mtmMenu.dismiss();
+
         Intent intent = new Intent(getBaseContext(), CompanyTrackingListActivity.class);
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_ID, companyTrackingList.getId());
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_SIZE, companyTrackingList.getCompanies().size());

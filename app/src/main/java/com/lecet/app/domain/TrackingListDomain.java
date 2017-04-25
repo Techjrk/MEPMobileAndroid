@@ -17,7 +17,6 @@ import com.lecet.app.utility.DateUtility;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -28,18 +27,19 @@ import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * File: TrackingListDomain Created: 11/3/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
 public class TrackingListDomain {
+
+    private static final String TAG = "TrackingListDomain";
 
     private final LecetClient lecetClient;
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
@@ -100,7 +100,7 @@ public class TrackingListDomain {
     }
 
 
-    public  Call<List<CompanyTrackingList>> getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
+    public Call<List<CompanyTrackingList>> getUserCompanyTrackingLists(Callback<List<CompanyTrackingList>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
         long userID = sharedPreferenceUtil.getId();
@@ -349,17 +349,22 @@ public class TrackingListDomain {
             public void execute(Realm asyncRealm) {
 
                 ProjectTrackingList threadSafeTrackingList = asyncRealm.where(ProjectTrackingList.class).equalTo("id", trackingListId).findFirst();
-                RealmList<Project> trackedProjects = threadSafeTrackingList.getProjects();
+                try {
+                    RealmList<Project> trackedProjects = threadSafeTrackingList.getProjects();
 
-                Iterator<Project> projectIterator = trackedProjects.iterator();
-                while (projectIterator.hasNext()) {
+                    Iterator<Project> projectIterator = trackedProjects.iterator();
+                    while (projectIterator.hasNext()) {
 
-                    Project project = projectIterator.next();
+                        Project project = projectIterator.next();
 
-                    if (toBeDeleted.contains(project.getId())){
-                        projectIterator.remove();
+                        if (toBeDeleted.contains(project.getId())) {
+                            projectIterator.remove();
+                        }
                     }
+                } catch (Exception e) {
+                    Log.e(TAG, "deleteProjectsFromTrackingListAsync", e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
                 }
+
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -392,19 +397,24 @@ public class TrackingListDomain {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm asyncRealm) {
-
                 CompanyTrackingList threadSafeTrackingList = asyncRealm.where(CompanyTrackingList.class).equalTo("id", trackingListId).findFirst();
-                RealmList<Company> trackedCompanies = threadSafeTrackingList.getCompanies();
+                try {
+              //  if (threadSafeTrackingList != null) {
+                    RealmList<Company> trackedCompanies = threadSafeTrackingList.getCompanies();
 
-                Iterator<Company> projectIterator = trackedCompanies.iterator();
-                while (projectIterator.hasNext()) {
+                    Iterator<Company> projectIterator = trackedCompanies.iterator();
+                    while (projectIterator.hasNext()) {
 
-                    Company company = projectIterator.next();
+                        Company company = projectIterator.next();
 
-                    if (toBeDeleted.contains(company.getId())){
-                        projectIterator.remove();
+                        if (toBeDeleted.contains(company.getId())) {
+                            projectIterator.remove();
+                        }
                     }
-                }
+                } catch (Exception e) {
+                    Log.e(TAG, "deleteCompaniesFromTrackingListAsync", e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
+                    }
+            //}
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -445,6 +455,37 @@ public class TrackingListDomain {
     }
 
     // Project Update Mapping
+
+    public void asyncCopyProjectTrackingListUpdatesToRealm(final long projectTrackingListID ,final List<Project> projects, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                // Clear existing relationship and add new ones
+                ProjectTrackingList asyncList = realm.where(ProjectTrackingList.class).equalTo("id", projectTrackingListID).findFirst();
+                asyncList.getProjects().clear();
+
+                for (Project project : projects) {
+
+                    Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
+                    if (storedProject != null) {
+
+                        storedProject.updateProject(realm, project, null);
+                        realm.copyToRealmOrUpdate(storedProject);
+                        asyncList.getProjects().add(storedProject);
+
+                    } else {
+
+                        realm.copyToRealmOrUpdate(project);
+                        asyncList.getProjects().add(project);
+                    }
+
+                }
+            }
+        }, onSuccess, onError);
+    }
 
     public void asyncMapUpdatesToProjects(final List<ActivityUpdate> updates, Realm.Transaction.OnSuccess successCallback,
                                           final Realm.Transaction.OnError errorCallback) {
@@ -492,6 +533,8 @@ public class TrackingListDomain {
 
         }, successCallback, errorCallback);
     }
+
+
 
     // Sorting
 

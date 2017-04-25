@@ -299,7 +299,7 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-                .findAllSorted("bidDate", Sort.DESCENDING);
+                .findAllSorted("bidDate", Sort.ASCENDING);
 
         return projectsResult;
     }
@@ -453,7 +453,7 @@ public class ProjectDomain {
 
         RealmResults<Bid> bidsResult = realm.where(Bid.class)
                 .equalTo("projectId", projectID)
-                .findAllSorted("amount", Sort.DESCENDING);
+                .findAllSorted("amount", Sort.ASCENDING);
 
         return bidsResult;
     }

@@ -15,12 +15,17 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyAssociatedProjectAdapter;
 import com.lecet.app.adapters.MenuTitleListAdapter;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.domain.CompanyDomain;
 
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * File: CompanyAssociatedProjectsViewModel Created: 1/25/17 Author: domandtom
@@ -28,7 +33,7 @@ import io.realm.Sort;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class CompanyAssociatedProjectsViewModel {
+public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel {
 
     /**
      * Tool Bar
@@ -39,6 +44,8 @@ public class CompanyAssociatedProjectsViewModel {
     private ImageView sortButton;
 
     private final AppCompatActivity appCompatActivity;
+    private final CompanyDomain companyDomain;
+
     private RecyclerView recyclerView;
     private CompanyAssociatedProjectAdapter listAdapter;
 
@@ -57,15 +64,20 @@ public class CompanyAssociatedProjectsViewModel {
     private String filter;
     private int selectedSort;
 
-    private final Company company;
+    private long companyId;
+    private Company company;
+    private Call<Company> companyCall;
     private RealmResults<Project> data;
 
 
-    public CompanyAssociatedProjectsViewModel(AppCompatActivity appCompatActivity, Company company) {
-        this.appCompatActivity = appCompatActivity;
-        this.company = company;
+    public CompanyAssociatedProjectsViewModel(AppCompatActivity appCompatActivity, CompanyDomain companyDomain, long companyId) {
+        super(appCompatActivity);
 
-        initRecyclerView(this.company);
+        this.appCompatActivity = appCompatActivity;
+        this.companyDomain = companyDomain;
+        this.companyId = companyId;
+
+        refreshData();
     }
 
 
@@ -93,6 +105,47 @@ public class CompanyAssociatedProjectsViewModel {
         subtitleTextView.setText(subtitle);
     }
 
+    // TODO: When returning from a different activity, the data seems to be null
+    public void refreshData() {
+
+        showProgressDialog(appCompatActivity.getString(R.string.updating), "");
+
+        companyCall = companyDomain.getCompanyDetails(companyId, new Callback<Company>() {
+            @Override
+            public void onResponse(Call<Company> call, Response<Company> response) {
+
+                if (response.isSuccessful()) {
+
+                    companyDomain.copyToRealmTransaction(response.body());
+                    company = companyDomain.fetchCompany(companyId).first();
+                    initRecyclerView(company);
+
+                    dismissProgressDialog();
+
+                } else {
+
+                    dismissProgressDialog();
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), response.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Company> call, Throwable t) {
+
+                dismissProgressDialog();
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+            }
+        });
+
+    }
+
+    public void cancelRequest() {
+
+        if (companyCall != null) {
+            companyCall.cancel();
+        }
+    }
 
     /**
      * Adapter Data Management: Project List
@@ -206,8 +259,9 @@ public class CompanyAssociatedProjectsViewModel {
                 break;
         }
 
-        data.sort(filter, sort);
-        listAdapter.notifyDataSetChanged();
+        data = data.sort(filter, sort);
+        listAdapter = new CompanyAssociatedProjectAdapter(data);
+        recyclerView.setAdapter(listAdapter);
     }
 
     private RealmResults<Project> defaultSortedData(RealmList<Project> projects) {
