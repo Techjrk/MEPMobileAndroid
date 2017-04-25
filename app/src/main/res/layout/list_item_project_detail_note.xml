@@ -38,7 +38,7 @@
                     android:layout_weight="8"
                     android:textSize="18sp"
                     android:maxLines="1"
-                    android:textColor="@color/lecetMapRed"
+                    android:textColor="@color/pureBlack"
                     android:gravity="bottom"
                     android:text="@{viewModel.title}"
                     bind:typeface="@{`Lato-Regular.ttf`}"

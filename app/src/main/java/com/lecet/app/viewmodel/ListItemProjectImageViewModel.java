@@ -2,6 +2,7 @@ package com.lecet.app.viewmodel;
 
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.text.format.Time;
 import android.util.Log;
@@ -27,18 +28,29 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     private static final String TAG = "ListItemProjectImageVM";
 
     private ProjectPhoto photo;
-    private String authorName = "Unknown Name";
+    private long authorId = -1;
+    private String authorName = "Unknown Author";
+    private long loggedInUserId = -1;
+    private boolean canEdit;
 
     public ListItemProjectImageViewModel(ProjectPhoto photo, final UserDomain userDomain) {
         this.photo = photo;
-        final User user = userDomain.fetchUser(photo.getAuthorId());
-        if(user == null){
+
+        setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
+        setCanEdit(photo.getAuthorId() == getLoggedInUserId());
+        fetchImageAuthor(photo, userDomain);
+    }
+
+    private void fetchImageAuthor(ProjectPhoto photo, final UserDomain userDomain) {
+        final User imageAuthor = userDomain.fetchUser(photo.getAuthorId());
+        if(imageAuthor == null){
             userDomain.getUser(photo.getAuthorId(), new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     if(response.isSuccessful()) {
                         userDomain.copyToRealmTransaction(response.body());
                         setAuthorName(response.body().getFirstName() + " " + response.body().getLastName());
+                        notifyChange();
                     }
                 }
 
@@ -47,10 +59,23 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
                 }
             });
-        }else {
-            setAuthorName(user.getFirstName() + " " + user.getLastName());
+        }
+        else {
+            setAuthorName(imageAuthor.getFirstName() + " " + imageAuthor.getLastName());
         }
     }
+
+
+
+    @Bindable
+    public boolean getCanEdit() {
+        return this.canEdit;
+    }
+
+    private void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
+
 
     public String getImageUrl() {
         //Log.d(TAG, "getImageUrl: photo url: " + photo.getUrl());
@@ -62,20 +87,20 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         return photo.getSrc();
     }
 
-    public String getAuthorName() {
+    public String getAuthorName(){
         return authorName;
     }
 
     private void setAuthorName(String name){
         authorName = name;
-        notifyChange();
     }
 
-    public boolean canEdit() {
-        /*if(note.getAuthorId() == WhateverYourIdIs){   //TODO - check editing
-            return true;
-        }//*/
-        return false;
+    public long getLoggedInUserId() {
+        return loggedInUserId;
+    }
+
+    public void setLoggedInUserId(long id) {
+        this.loggedInUserId = id;
     }
 
     public String getTitle() {
