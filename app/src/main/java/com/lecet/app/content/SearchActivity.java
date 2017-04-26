@@ -175,14 +175,15 @@ public class SearchActivity extends AppCompatActivity {
         String valueFilter = processValueFilter(data);
         if (valueFilter.length() > 0) {
 
+            if ( valueFilter.contains("MAX")) {
+                 valueFilter = valueFilter.replace(",\"max\":MAX", "");
+            }
+            
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(valueFilter);
-            if (valueFilter.contains("MAX")) {
-                valueFilter = valueFilter.replace(",\"max\":MAX", "");
-            }
             if (companiesSb.length() > 0) companiesSb.append(",");
-            
-            valueFilter = valueFilter.replace("projectValue", "valuation");
+            //For now, there's error from web API when using the valuation (0 company). will uncomment this once it's okay.
+            //valueFilter = valueFilter.replace("projectValue", "valuation");
             companiesSb.append(valueFilter);
         }
 
