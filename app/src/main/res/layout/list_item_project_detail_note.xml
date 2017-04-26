@@ -53,7 +53,8 @@
                     android:padding="5dp"
                     android:adjustViewBounds="false"
                     android:visibility="@{viewModel.canEdit ? View.VISIBLE : View.GONE}"
-                    android:src="@drawable/ic_pencil_blue"/>
+                    android:src="@drawable/ic_pencil_blue"
+                    android:onClick="@{viewModel::onEditButtonClick}"/>
 
             </LinearLayout>
 
@@ -101,7 +102,8 @@
                     android:text="@{viewModel.authorName}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:id="@+id/textView"
-                    tools:text="Erin Bernardin"/>
+                    tools:text="Erin Bernardin"
+                    android:onClick="@{viewModel::onAuthorNameClick}"/>
 
                 <!-- TIMESTAMP -->
                 <TextView

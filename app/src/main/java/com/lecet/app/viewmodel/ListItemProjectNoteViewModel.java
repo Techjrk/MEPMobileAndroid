@@ -1,10 +1,15 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.View;
 
+import com.lecet.app.content.ContactDetailActivity;
+import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
@@ -24,13 +29,15 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     private static String TAG = "ListItemProjectNoteVM";
 
     private ProjectNote note;
-    private long authorId = -1;
+    private AppCompatActivity activity;
+    //private long authorId = -1;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
     private boolean canEdit;
 
-    public ListItemProjectNoteViewModel(ProjectNote note, final UserDomain userDomain) {
+    public ListItemProjectNoteViewModel(ProjectNote note, AppCompatActivity activity, final UserDomain userDomain) {
         this.note = note;
+        this.activity = activity;
 
         setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
         setCanEdit(note.getAuthorId() == getLoggedInUserId());
@@ -71,7 +78,6 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         this.canEdit = canEdit;
     }
 
-
     /*public long getAuthorId() {
         return authorId;
     }
@@ -108,6 +114,40 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         return note.getId();
     }
 
+
+    ///////////////////////////
+    // Click Events
+
+    public void onEditButtonClick(View view) {
+        Log.d(TAG, "onEditButtonClick");
+        //TODO - fill in
+    }
+
+    //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
+    public void onAuthorNameClick(View view) {
+        Log.d(TAG, "onAuthorNameClick");
+        //Log.d(TAG, "onAuthorNameClick: logged in user id: " + getLoggedInUserId());
+        //Log.d(TAG, "onAuthorNameClick: note author id: " + note.getAuthorId());
+
+        if(note.getAuthorId() == getLoggedInUserId()) {
+            Log.d(TAG, "onAuthorNameClick: using logged in user id: " + getLoggedInUserId());
+            Intent intent = new Intent(activity, ProfileActivity.class);
+            activity.startActivity(intent);
+        }
+
+        else if (note.getAuthorId() > -1) {
+            Log.d(TAG, "onAuthorNameClick: using author id: " + note.getAuthorId());
+            try {
+                Intent intent = new Intent(activity, ContactDetailActivity.class);
+                intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, note.getAuthorId());
+                activity.startActivity(intent);
+            }
+            catch (IndexOutOfBoundsException e) {
+                Log.e(TAG, "onAuthorNameClick: " + e.getMessage() );
+            }
+        }
+    }
+
     //TODO - move to utils class?
     public String getTimeDifference() {
         long currentTime = System.currentTimeMillis();
@@ -117,7 +157,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         long difference =  currentTime - note.getUpdatedAt().getTime();
 
         if(difference < 0){
-            Log.e(TAG, "getTimeDifference: Less then 0");
+            Log.d(TAG, "getTimeDifference: Less then 0");
         }
         if(difference < 30000L){//less then 30 seconds
             return "Just Now";

@@ -31,6 +31,8 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         long contactID = getIntent().getLongExtra(CONTACT_ID_EXTRA, -1);
 
+        Log.d(TAG, "onCreate: contactID: " + contactID);
+
         ActivityContactDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_contact_detail);
 
         CompanyDomain companyDomain = new CompanyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());

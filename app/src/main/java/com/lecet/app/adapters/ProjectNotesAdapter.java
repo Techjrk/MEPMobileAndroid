@@ -2,6 +2,7 @@ package com.lecet.app.adapters;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,12 +33,15 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final String TAG = "ProjectNotesAdapter";
     private static final int NOTE_VIEW_TYPE = 0;
     private static final int PHOTO_VIEW_TYPE = 1;
+    private AppCompatActivity activity;
     private UserDomain userDomain;
 
     List<ProjectAdditionalData> data;
 
-    public ProjectNotesAdapter(List<ProjectAdditionalData> data, Activity activity) {
+    public ProjectNotesAdapter(List<ProjectAdditionalData> data, AppCompatActivity activity) {
         this.data = data;
+        this.activity = activity;
+
         userDomain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance());
     }
 
@@ -75,7 +79,7 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             case NOTE_VIEW_TYPE:
                 ((ProjectNoteViewHolder) holder).binding.setViewModel(
-                        new ListItemProjectNoteViewModel((ProjectNote)data.get(position), userDomain)
+                        new ListItemProjectNoteViewModel((ProjectNote)data.get(position), activity, userDomain)
                 );
                 break;
             default:
