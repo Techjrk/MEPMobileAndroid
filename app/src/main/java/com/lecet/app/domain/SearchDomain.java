@@ -53,12 +53,25 @@ public class SearchDomain {
     }
    */
    public void setCompanyFilter(String xfilter) {
-//        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
-       String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
+        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}"; //#1
+
+       /**
+        * Commented below are different scenarios for reviewing the esFilter and searchFilter.
+        */
+//        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"esFilter\":{" +xfilter + "}}";
+//       xfilter =  xfilter.replaceAll("companyLocation","projectLocation"); //#6
+//       String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]," +
+//               "\"limit\":28,\"skip\":0, \"esFilter\":{" +xfilter + "}}"; //#6
+//             xfilter =  xfilter.replaceAll("companyLocation","projectLocation"); //#7
+//             String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]," +
+//                     "\"limit\":28,\"skip\":0, \"esFilter\":{" +xfilter + "},\"searchFilter\":{ }}"; //#7
+//       String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]," +
+//               "\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "},\"esFilter\":{ }}"; //#2
+//       String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}]," +
+//               "\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "},\"esFilter\":{\" +xfilter + \" }}";
        if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
        this.companyFilter = sCompanyFilter;
-      // setCompanyFilter(sCompanyFilter);
-       Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
+       Log.d("companyfilter",xfilter+":companyfilter"+sCompanyFilter);
 
     }
     public void setCompanyFilter2(String xfilter) {
