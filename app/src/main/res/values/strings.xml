@@ -353,7 +353,8 @@
     <string name="notes_and_updates">Notes &amp; Updates</string>
     <string name="add_note">Add Note</string>
     <string name="add_image">Add Image</string>
-    <string name="add">ADD</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
     <string name="post_title">Post Title</string>
     <string name="post_body">Post Body</string>
     <string name="post_visibility_warning">This post will be visible by all MEP Users</string>

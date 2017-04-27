@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
+import com.lecet.app.content.ProjectAddNoteActivity;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
@@ -120,7 +121,12 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
     public void onEditButtonClick(View view) {
         Log.d(TAG, "onEditButtonClick");
-        //TODO - fill in
+
+        Intent intent = new Intent(activity, ProjectAddNoteActivity.class);
+        intent.putExtra(ProjectAddNoteActivity.NOTE_ID_EXTRA, note.getId());
+        intent.putExtra(ProjectAddNoteActivity.NOTE_TITLE_EXTRA, note.getTitle());
+        intent.putExtra(ProjectAddNoteActivity.NOTE_BODY_EXTRA, note.getText());
+        activity.startActivity(intent);
     }
 
     //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity

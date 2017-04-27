@@ -4,6 +4,7 @@
 
     <data>
         <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectAddNoteViewModel"/>
+        <import type="android.view.View" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -34,7 +35,7 @@
                     android:text="@string/cancel"
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
-                    android:onClick="@{viewModel.onClickCancel}"
+                    android:onClick="@{viewModel::onClickCancel}"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <TextView
@@ -48,6 +49,7 @@
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
+                <!-- ADD BUTTON -->
                 <Button
                     android:id="@+id/apply_button"
                     android:layout_width="0dp"
@@ -56,9 +58,25 @@
                     android:background="@null"
                     android:text="@string/add"
                     android:onClick="@{viewModel.onClickAdd}"
+                    android:visibility="@{viewModel.editMode ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <!-- UPDATE BUTTON -->
+                <Button
+                    android:id="@+id/update_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:text="@string/update"
+                    android:onClick="@{viewModel.onClickUpdate}"
+                    android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
+                    android:textColor="@color/lecetLightBlueTransp"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +116,7 @@
                     android:id="@+id/titleEntry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.noteTitle.value}"
+                    android:text="@={viewModel.newTitle}"
                     android:maxLength="55"
                     android:hint="@string/post_title"
                     android:textColorHint="@color/lecetTextLightGray"
@@ -114,7 +132,7 @@
                     android:textColor="@color/lecetTextLightGray"
                     android:gravity="end"
                     android:textSize="14sp"
-                    android:text='@{viewModel.noteTitle.size + "/55"}'/>
+                    android:text='@{viewModel.newTitleLength + "/55"}'/>
                 <!--TODO: Add Reference to char size-->
 
                 <TextView

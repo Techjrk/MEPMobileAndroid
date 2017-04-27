@@ -94,6 +94,13 @@ public interface ProjectService {
             "Accept: application/json",
             "Content-Type: application/json"
     })
+    @PUT("Notes/{noteID}")
+    Call<ProjectNote> updateNote (@Header("Authorization") String authorization, @Path("noteID") long noteID, @Body NotePost notePost);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
    @GET("Projects/{projectID}/userNotes")
     Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID);
 

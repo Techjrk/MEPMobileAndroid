@@ -100,6 +100,14 @@ public class ProjectDomain {
         return call;
     }
 
+    //TODO - move to a new NoteDomain class?
+    public Call<ProjectNote> updateNote(long noteID, NotePost notePost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectNote> call = lecetClient.getProjectService().updateNote(token, noteID, notePost);
+
+        return call;
+    }
+
     public Call<ProjectPhoto> postPhoto(long projectID, PhotoPost photoPost){
         String token = sharedPreferenceUtil.getAccessToken();
         Call<ProjectPhoto> call = lecetClient.getProjectService().addPhoto(token, projectID, photoPost);
