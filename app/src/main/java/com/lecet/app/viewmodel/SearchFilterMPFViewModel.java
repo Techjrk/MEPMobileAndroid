@@ -536,8 +536,10 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
 //        isProjectViewVisible = !isProjectViewVisible;
         if (getIsProjectViewVisible()) {
             Log.d("SearchFilterMPFVM","project tab clicked");
+         //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
         } else {
             Log.d("SearchFilterMPFVM","company tab clicked");
+         //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
