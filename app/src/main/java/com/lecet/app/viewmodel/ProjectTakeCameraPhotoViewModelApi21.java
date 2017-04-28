@@ -184,7 +184,6 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 /*THIS SETS UP WHERE THE IMAGES WILL BE DISPLAYED/SAVED*/
                 List<Surface> outputSurfaces = new ArrayList<Surface>();
                 outputSurfaces.add(reader.getSurface());
-                outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
 
                 //ADD SEMAPHORE TO CHECK IF CAMERA IS CLOSED. LOOK AT GOOGLE EXAMPLE
                 final CaptureRequest.Builder captureBuilder =
@@ -250,15 +249,6 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
                                     if(resizedImage == null) {
                                         resizedImage = realImage;
-                                    }
-
-                                    if(resizedImage.getByteCount() > MAX_IMAGE_SIZE) {
-                                        int resizedWidth  = resizedImage.getWidth() / 2;
-                                        int resizedHeight = resizedImage.getHeight() / 2;
-                                        resizedImage = Bitmap.createScaledBitmap(resizedImage, resizedWidth, resizedHeight, true);
-                                        Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
-                                        Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
-                                        Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
                                     }
 
                                     boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
