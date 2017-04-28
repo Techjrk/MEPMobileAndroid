@@ -186,8 +186,6 @@
                     android:textStyle="italic"
                     bind:typeface="@{`Lato-Bold.ttf`}"/>
 
-                </LinearLayout>
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,6 +207,9 @@
                     android:gravity="center_horizontal"
                     android:textStyle="bold"
                     android:textColor="@color/lecetTextLightGray"/>
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
