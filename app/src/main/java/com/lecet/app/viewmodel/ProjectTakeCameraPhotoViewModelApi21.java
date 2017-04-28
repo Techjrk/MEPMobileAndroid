@@ -230,8 +230,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                     Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
 
                                     if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
-                                        int resizedWidth  = realImage.getWidth() / 5;
-                                        int resizedHeight = realImage.getHeight() / 5;
+                                        int resizedWidth  = realImage.getWidth() / 10;
+                                        int resizedHeight = realImage.getHeight() / 10;
                                         resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
                                         Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
                                         Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
@@ -251,7 +251,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                         resizedImage = realImage;
                                     }
 
-                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
 
                                     outputStream.close();
 
