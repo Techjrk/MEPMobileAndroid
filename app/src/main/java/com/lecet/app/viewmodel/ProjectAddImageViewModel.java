@@ -162,17 +162,13 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private void postImage(boolean replaceExisting) {
         Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
 
-        // TODO - move resizing and compression to helper method
-        int compressionRate = 70;
-        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
+        Log.d(TAG, "encodeToBase64: encoding...");
+        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 70);
 
-        // keep shrinking the image until it is small enough to be accepted by the server
-        while (base64Image.length() > 70000 && compressionRate > 0) {
-            compressionRate -= 10;
-            base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
-        }
-        Log.d(TAG, "postImage: compressionRate: " + compressionRate);
-        PhotoPost photoPost = new PhotoPost(title, body, false, base64Image);
+        Log.d(TAG, "compressImageData: compressing...");
+        String compressedImage = compressImageData(base64Image);
+
+        PhotoPost photoPost = new PhotoPost(title, body, true, compressedImage);
 
         Call<ProjectPhoto> call;
 
@@ -184,7 +180,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         // for updating an existing post
         else {
             Log.d(TAG, "postImage: update to existing image post");
-            call = projectDomain.updatePhoto(photoID, new PhotoPost(title, body, true, base64Image));
+            call = projectDomain.updatePhoto(photoID, new PhotoPost(title, body, true, compressedImage));
         }
 
         call.enqueue(new Callback<ProjectPhoto>() {
@@ -235,7 +231,6 @@ public class ProjectAddImageViewModel extends BaseObservable {
         showAlertDialog(view, onClick);
     }
 
-
     private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
     {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
@@ -243,6 +238,18 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
 
+    private String compressImageData(String imageData) {
+        int compressionRate = 90;
+        final int MAX_IMAGE_DATA_SIZE = 70000;
+
+        while (imageData.length() > MAX_IMAGE_DATA_SIZE && compressionRate > 0) {
+            compressionRate -= 10;
+            imageData = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
+        }
+
+        Log.d(TAG, "compressImageData: final jpeg compressionRate: " + compressionRate);
+        return imageData;
+    }
 
     private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
