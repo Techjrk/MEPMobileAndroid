@@ -93,11 +93,17 @@ public class SearchActivity extends AppCompatActivity {
         if (resultCode == RESULT_CANCELED || data == null) return;
 
         // SEARCH CATEGORY (Project vs Company)
-        String category = processSearchCategory(data);
-        viewModel.setSaveSearchCategory(category);
-
+        String category = processSearchCategory(data); //processing the SearchViewModel.SAVE_SEARCH_CATEGORY  - Could be contact, company or project.
+       boolean isCompanyCateg=false;
+if (category !=null){
+    viewModel.setSaveSearchCategory(category);
+    if (category.equals(SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY)) {
+        isCompanyCateg=true;
+    }
+}
         StringBuilder projectsSb = new StringBuilder();     // used to construct the combined search filter
-        StringBuilder companiesSb = new StringBuilder();
+        StringBuilder companiesSb = new StringBuilder();    //used for combined company for searchFilter
+        StringBuilder esFilterSb = new StringBuilder(); //used for combined company for esFilter;
 
         // PROJECT-SPECIFIC SEARCH FILTERS
 
@@ -160,7 +166,12 @@ public class SearchActivity extends AppCompatActivity {
         if (primaryProjectTypeFilter.length() > 0) {
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(primaryProjectTypeFilter);
-            //TODO - add to Companies filter when this filter is supported by the API
+            //added to Companies filter the Project Type
+            //Uncomment this if-statement if there's a need to separate the filtering it from the Project.
+            //if (isCompanyCateg) {
+            if (esFilterSb.length() > 0) esFilterSb.append(",");
+            esFilterSb.append(primaryProjectTypeFilter);
+            // }
         }
 
         // Project ID Type Filter
@@ -168,7 +179,11 @@ public class SearchActivity extends AppCompatActivity {
         if (projectTypeIdFilter.length() > 0) {
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(projectTypeIdFilter);
-            //TODO - add to Companies filter when this filter is supported by the API
+            //added to Companies filter the Project Type
+            //if (isCompanyCateg) {
+                if (esFilterSb.length() > 0) esFilterSb.append(",");
+                esFilterSb.append(projectTypeIdFilter);
+           // }
         }
 
         // Value Filter
@@ -178,13 +193,14 @@ public class SearchActivity extends AppCompatActivity {
             if ( valueFilter.contains("MAX")) {
                  valueFilter = valueFilter.replace(",\"max\":MAX", "");
             }
-            
+
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(valueFilter);
-            if (companiesSb.length() > 0) companiesSb.append(",");
-            //For now, there's error from web API when using the valuation (0 company). will uncomment this once it's okay.
-            //valueFilter = valueFilter.replace("projectValue", "valuation");
-            companiesSb.append(valueFilter);
+            //if (isCompanyCateg) {
+                //added to Companies filter - the Project Value
+                    if (esFilterSb.length() > 0) esFilterSb.append(",");
+                    esFilterSb.append(valueFilter);
+            //}
         }
 
         // Jurisdiction Filter
@@ -192,7 +208,11 @@ public class SearchActivity extends AppCompatActivity {
         if (jurisdictionFilter.length() > 0) {
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(jurisdictionFilter);
-            //TODO - add to Companies filter when this filter is supported by the API
+            //added to Companies filter - Jurisdiction
+            //if (isCompanyCateg) {
+                if (esFilterSb.length() > 0) esFilterSb.append(",");
+                esFilterSb.append(jurisdictionFilter);
+            //}
         }
 
         // Bidding Within Filter
@@ -200,7 +220,11 @@ public class SearchActivity extends AppCompatActivity {
         if (biddingWithinFilter.length() > 0) {
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(biddingWithinFilter);
-            //TODO - add to Companies filter when this filter is supported by the API
+            //added to Companies filter when this filter is supported by the API
+            //if (isCompanyCateg) {
+                if (esFilterSb.length() > 0) esFilterSb.append(",");
+                esFilterSb.append(biddingWithinFilter);
+           // }
         }
 
         // prepend searchFilter param if there are any filters used
@@ -236,6 +260,7 @@ public class SearchActivity extends AppCompatActivity {
          * If it is not needed, then we could comment the conditional statement below.
          */
 
+
         if (companiesSb == null || companiesSb.toString().trim().equals("")) {
 //            if (companyFilter == null || companyFilter.trim().equals("")){
             String locationFilter = projectLocationFilter.substring(projectLocationFilter.indexOf(':') + 1);
@@ -246,13 +271,18 @@ public class SearchActivity extends AppCompatActivity {
                 cFilter = "\"companyLocation\":" + locationFilter;
             viewModel.setCompanySearchFilter(cFilter);
             companyFilter = cFilter;
+
         } else {
             companyFilter = companiesSb.toString();
 //            viewModel.setCompanySearchFilter(companiesSb.toString());
             viewModel.setCompanySearchFilter(companyFilter);
         }
 
-
+//    if (companiesSb !=null && esFilterSb !=null && !companiesSb.toString().trim().equals("") && !esFilterSb.toString().trim().equals("")){
+        if (esFilterSb !=null  && !esFilterSb.toString().trim().equals("")){
+            viewModel.setCompanySearchFilter(companyFilter,esFilterSb.toString());
+//            viewModel.setCompanySearchFilter(companiesSb.toString(),esFilterSb.toString());
+        }
         Log.d("companyfilterx", "companyfilterx:" + searchDomain.getCompanyFilter());
         companiesCombinedFilter.replaceFirst(",", "");
         Log.d(TAG, "onActivityResult: companySb: " + companiesSb.toString());
@@ -264,7 +294,7 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.updateViewQuery();
 
         // if there were any filters applied, show the Save Search? header dialog -- unless the search was for Contacts, which aren't allowed to be saved
-        if ((projectsSb.length() > 0 || companiesSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT)) {
+        if ((projectsSb.length() > 0 || companiesSb.length() > 0 || esFilterSb.length() > 0) && !viewModel.getSaveSearchCategory().equals(SearchViewModel.SAVE_SEARCH_CATEGORY_CONTACT)) {
             viewModel.setSaveSearchHeaderVisible(true);
         }
     }

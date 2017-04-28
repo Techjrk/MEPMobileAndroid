@@ -258,6 +258,10 @@ public class SearchViewModel extends BaseObservable {
         Log.d("setcompanyfilter", "setcompanyfilter" + filter);
 
     }
+    public void setCompanySearchFilter(String sFilter, String esFilter) {
+        searchDomain.setCompanyFilter(sFilter,esFilter);
+        Log.d("setcompanyfilter2", "setcompanyfilter2 sFilter:" + sFilter+" esFilter:"+esFilter);
+    }
    /* public void setCompanySearchFilter2(String filter) {
         searchDomain.setCompanyFilter2(filter);
         Log.d("setcompanyfilter","setcompanyfilter"+filter);
@@ -646,7 +650,8 @@ public class SearchViewModel extends BaseObservable {
                             // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
                             //String saveCompanyFilter = ((SearchActivity) getActivity()).getCompanyFilter();
                             Log.d("saveCompany", "saveCompany" + saveCompanyFilter);
-                            if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
+                           // if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
+                            if (SAVE_SEARCH_CATEGORY !=null && getSaveSearchCategory().equals(SAVE_SEARCH_CATEGORY_COMPANY)) {
                                 saveCurrentCompanySearch(title, saveCompanyFilter);
                             } else {
                                 saveCurrentProjectSearch(title);
