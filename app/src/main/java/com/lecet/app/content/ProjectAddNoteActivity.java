@@ -45,16 +45,11 @@ public class ProjectAddNoteActivity extends LecetBaseActivity {
         projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
 
         // in the case of editing an existing note look for its id, title and body
-        noteId    = getIntent().getLongExtra(NOTE_ID_EXTRA, -1);    //TODO - MARK - check these are put into Intent
+        noteId    = getIntent().getLongExtra(NOTE_ID_EXTRA, -1);
         noteTitle = getIntent().getStringExtra(NOTE_TITLE_EXTRA);
         noteBody  = getIntent().getStringExtra(NOTE_BODY_EXTRA);
 
         setupBinding(projectDomain);
-
-//        if (noteId != -1) {
-//            setupBinding(projectDomain);
-//        }
-//        else setupBinding(projectDomain, noteId);
     }
 
     private void setupBinding(ProjectDomain projectDomain) {
@@ -62,13 +57,6 @@ public class ProjectAddNoteActivity extends LecetBaseActivity {
         viewModel = new ProjectAddNoteViewModel(this, projectId, noteId, noteTitle, noteBody, projectDomain);
         binding.setViewModel(viewModel);
     }
-
-    //TODO - MARK
-    /*private void setupBinding(ProjectDomain projectDomain, long noteId) {
-        ActivityProjectAddNoteBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_note);
-        viewModel = new ProjectAddNoteViewModel(this, projectId, noteId, projectDomain);
-        binding.setViewModel(viewModel);
-    }*/
 
 
 

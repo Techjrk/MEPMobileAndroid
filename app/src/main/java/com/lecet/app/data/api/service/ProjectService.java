@@ -101,7 +101,7 @@ public interface ProjectService {
             "Accept: application/json",
             "Content-Type: application/json"
     })
-   @GET("Projects/{projectID}/userNotes")
+    @GET("Projects/{projectID}/userNotes")
     Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
     @Headers({
@@ -110,6 +110,13 @@ public interface ProjectService {
     })
     @POST("Projects/{projectID}/uploadImage")
     Call<ProjectPhoto> addPhoto (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Body PhotoPost photoPost);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("Images/{photoID}")
+    Call<ProjectPhoto> updatePhoto (@Header("Authorization") String authorization, @Path("photoID") long photoID, @Body PhotoPost photoPost);
 
     @Headers({
             "Accept: application/json",

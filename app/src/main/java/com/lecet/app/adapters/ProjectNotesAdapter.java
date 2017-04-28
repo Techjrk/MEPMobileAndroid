@@ -74,7 +74,7 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (getItemViewType(position)){
             case PHOTO_VIEW_TYPE:
                 ((ProjectImageViewHolder) holder).binding.setViewModel(
-                        new ListItemProjectImageViewModel((ProjectPhoto)data.get(position), userDomain)
+                        new ListItemProjectImageViewModel((ProjectPhoto)data.get(position), activity, userDomain)
                 );
                 break;
             case NOTE_VIEW_TYPE:

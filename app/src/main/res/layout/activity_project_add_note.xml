@@ -26,6 +26,7 @@
                 android:background="@color/lecetButtonDarkBlue"
                 android:orientation="horizontal">
 
+                <!-- CANCEL BUTTON -->
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"
@@ -51,7 +52,7 @@
 
                 <!-- ADD BUTTON -->
                 <Button
-                    android:id="@+id/apply_button"
+                    android:id="@+id/add_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -113,10 +114,10 @@
 
 
                 <EditText
-                    android:id="@+id/titleEntry"
+                    android:id="@+id/title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.newTitle}"
+                    android:text="@={viewModel.title}"
                     android:maxLength="55"
                     android:hint="@string/post_title"
                     android:textColorHint="@color/lecetTextLightGray"
@@ -133,7 +134,6 @@
                     android:gravity="end"
                     android:textSize="14sp"
                     android:text='@{viewModel.newTitleLength + "/55"}'/>
-                <!--TODO: Add Reference to char size-->
 
                 <TextView
                     android:layout_height="match_parent"
@@ -150,13 +150,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rect_solid_border_1"
                     android:padding="12dp"
+                    android:textSize="14sp"
                     android:lines="8"
-                    android:text="@={viewModel.body}"
                     android:hint="@string/post_body"
                     android:textColorHint="@color/lecetTextLightGray"
                     android:gravity="start"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
-                <!--TODO: Add Setter for post body binding-->
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:text="@={viewModel.body}"/>
 
                 <TextView
                     android:layout_width="match_parent"

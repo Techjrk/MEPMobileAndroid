@@ -352,7 +352,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
                         ids[i] = ((ProjectPhoto) additionalNotes.get(i)).getId();
                     }
                 }
-                Log.e(TAG, "getAdditionalNotes: IdList: \n" + Arrays.toString(ids));
+                Log.d(TAG, "getAdditionalNotes: IdList: \n" + Arrays.toString(ids));
             }
 
             @Override
@@ -392,7 +392,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
                         ids[i] = ((ProjectPhoto) additionalNotes.get(i)).getId();
                     }
                 }
-                Log.e(TAG, "getAdditionalNotes: IdList: \n" + Arrays.toString(ids));
+                Log.d(TAG, "getAdditionalNotes: IdList: \n" + Arrays.toString(ids));
             }
 
             @Override
