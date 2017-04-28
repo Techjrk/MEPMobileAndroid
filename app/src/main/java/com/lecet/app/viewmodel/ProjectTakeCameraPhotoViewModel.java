@@ -296,18 +296,22 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                     Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
                     Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
                 }
-                int orientation = fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation();
-                if(Surface.ROTATION_0 == orientation) {
-                    resizedImage = rotateImage(realImage, 90);
-                }else if(Surface.ROTATION_270 == orientation){
-                    resizedImage = rotateImage(realImage, 180);
-                }else{
-                    resizedImage = rotateImage(realImage, 0);
-                }
 
                 if(resizedImage == null) {
                     resizedImage = realImage;
                 }
+
+                int orientation = fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation();
+                if(Surface.ROTATION_0 == orientation) {
+                    resizedImage = rotateImage(resizedImage, 90);
+                }
+                else if(Surface.ROTATION_270 == orientation){
+                    resizedImage = rotateImage(resizedImage, 180);
+                }
+                else {
+                    resizedImage = rotateImage(resizedImage, 0);
+                }
+
                 boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, fos);
 
                 fos.close();

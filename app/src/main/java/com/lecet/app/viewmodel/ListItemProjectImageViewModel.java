@@ -1,13 +1,18 @@
 package com.lecet.app.viewmodel;
 
-
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.content.ContactDetailActivity;
+import com.lecet.app.content.ProfileActivity;
+import com.lecet.app.content.ProjectAddImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
@@ -19,6 +24,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_ID_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_URL_EXTRA;
+
 /**
  * Created by ludwigvondrake on 3/23/17.
  */
@@ -28,13 +39,15 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     private static final String TAG = "ListItemProjectImageVM";
 
     private ProjectPhoto photo;
+    private AppCompatActivity activity;
     private long authorId = -1;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
     private boolean canEdit;
 
-    public ListItemProjectImageViewModel(ProjectPhoto photo, final UserDomain userDomain) {
+    public ListItemProjectImageViewModel(ProjectPhoto photo, AppCompatActivity activity, final UserDomain userDomain) {
         this.photo = photo;
+        this.activity = activity;
 
         setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
         setCanEdit(photo.getAuthorId() == getLoggedInUserId());
@@ -125,12 +138,53 @@ public class ListItemProjectImageViewModel extends BaseObservable {
                 .into(view);
     }
 
+    ///////////////////////////
+    // Click Events
+
+    public void onEditButtonClick(View view) {
+        Log.d(TAG, "onEditButtonClick");
+
+        Intent intent = new Intent(activity, ProjectAddImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, photo.getProjectId());
+        intent.putExtra(IMAGE_ID_EXTRA, photo.getId());
+        intent.putExtra(IMAGE_TITLE_EXTRA, photo.getTitle());
+        intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
+        intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
+        activity.startActivity(intent);
+    }
+
+    //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
+    public void onAuthorNameClick(View view) {
+        Log.d(TAG, "onAuthorNameClick");
+        //Log.d(TAG, "onAuthorNameClick: logged in user id: " + getLoggedInUserId());
+        //Log.d(TAG, "onAuthorNameClick: image author id: " + photo.getAuthorId());
+
+        if(photo.getAuthorId() == getLoggedInUserId()) {
+            Log.d(TAG, "onAuthorNameClick: using logged in user id: " + getLoggedInUserId());
+            Intent intent = new Intent(activity, ProfileActivity.class);
+            activity.startActivity(intent);
+        }
+
+        else if (photo.getAuthorId() > -1) {
+            Log.d(TAG, "onAuthorNameClick: using author id: " + photo.getAuthorId());
+            try {
+                Intent intent = new Intent(activity, ContactDetailActivity.class);
+                intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, photo.getAuthorId());
+                activity.startActivity(intent);
+            }
+            catch (IndexOutOfBoundsException e) {
+                Log.e(TAG, "onAuthorNameClick: " + e.getMessage() );
+            }
+        }
+    }
+
 
     /*
      * Helpers
      */
 
-    public String getTimeDifference(){  //TODO - move to a utils class as static method
+    //TODO - move to utils class?
+    public String getTimeDifference(){
         long currentTime = System.currentTimeMillis();
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);

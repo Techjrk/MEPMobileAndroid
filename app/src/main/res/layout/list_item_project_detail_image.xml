@@ -44,7 +44,8 @@
                 android:layout_alignParentEnd="true"
                 android:adjustViewBounds="true"
                 android:visibility="@{viewModel.canEdit ? View.VISIBLE : View.GONE}"
-                android:src="@drawable/ic_pencil_white"/>
+                android:src="@drawable/ic_pencil_white"
+                android:onClick="@{viewModel::onEditButtonClick}"/>
 
         </RelativeLayout>
 
@@ -117,7 +118,8 @@
                     android:text="@{viewModel.authorName}"
                     android:maxLines="1"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="Erin Bernardin"/>
+                    tools:text="Erin Bernardin"
+                    android:onClick="@{viewModel::onAuthorNameClick}"/>
 
                 <!-- TIMESTAMP -->
                 <TextView

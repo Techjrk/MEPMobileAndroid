@@ -115,6 +115,14 @@ public class ProjectDomain {
         return call;
     }
 
+    //TODO - move to a new PhotoDomain class?
+    public Call<ProjectPhoto> updatePhoto(long photoID, PhotoPost photoPost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectPhoto> call = lecetClient.getProjectService().updatePhoto(token, photoID, photoPost);
+
+        return call;
+    }
+
     public Call<List<Project>> getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();

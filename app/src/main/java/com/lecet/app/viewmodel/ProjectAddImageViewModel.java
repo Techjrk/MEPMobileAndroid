@@ -1,8 +1,6 @@
 package com.lecet.app.viewmodel;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -10,7 +8,7 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +17,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lecet.app.content.LecetConfirmDialogFragment;
+import com.lecet.app.BR;
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.data.models.BindableString;
 import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +33,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
 /**
@@ -46,53 +44,83 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private static final String TAG = "ProjectAddImageVM";
 
     private AppCompatActivity activity;
-    private BindableString noteTitle;
     private AlertDialog alert;
-	private ProjectDomain projectDomain;
     private long projectId;
-    private Bitmap bitmap;
+    private long photoID;
+    private static Bitmap bitmap;
     private String imagePath;
+    private Uri uri;
     private String title;
     private String body = "";
-    private int titleSize;
-
-    public String getTitleSize() {
-        return String.valueOf(titleSize);
-    }
+	private ProjectDomain projectDomain;
+    private int newTitleLength = 0;
+    private Target picassoTarget;
 
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, String imagePath, ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, long photoID, String title, String body, String imagePath, ProjectDomain projectDomain) {
         this.activity = activity;
         this.projectId = projectId;
-		this.projectDomain = projectDomain;
+        this.photoID = photoID;
+        this.title = title;
+        this.body = body;
         this.imagePath = imagePath;
-        this.bitmap = BitmapFactory.decodeFile(imagePath);
+		this.projectDomain = projectDomain;
 
+        Log.d(TAG, "Constructor 1: projectId: " + imagePath);
+        Log.d(TAG, "Constructor 1: photoID: " + photoID);
+        Log.d(TAG, "Constructor 1: title: " + title);
+        Log.d(TAG, "Constructor 1: body: " + body);
+        Log.d(TAG, "Constructor 1: imagePath: " + imagePath);
 
-        Log.d(TAG, "ProjectAddImageViewModel: imagePath: " + imagePath);
-
-        if(imagePath != null && !imagePath.isEmpty()) {
-            //TODO - switch on image path depending on whether from camera or library
-        }
+        this.bitmap = BitmapFactory.decodeFile(imagePath);  //TODO - access of static var
     }
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, Uri uri , ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, long photoID, String title, String body, Uri uri, ProjectDomain projectDomain) {
         this.activity = activity;
         this.projectId = projectId;
+        this.photoID = photoID;
+        this.title = title;
+        this.body = body;
+        this.uri = uri;
         this.projectDomain = projectDomain;
+
+        Log.d(TAG, "Constructor 2: projectId: " + imagePath);
+        Log.d(TAG, "Constructor 2: photoID: " + photoID);
+        Log.d(TAG, "Constructor 2: title: " + title);
+        Log.d(TAG, "Constructor 2: body: " + body);
+        Log.d(TAG, "Constructor 2: imagePath: " + imagePath);
+
         try {
             bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-        }catch (IOException e){
-            Log.e(TAG, "ProjectAddImageViewModel: " + e.getMessage());
+        }
+        catch (IOException e){
+            Log.e(TAG, "Error converting URI to bitmap: " + e.getMessage());
+
+            picassoTarget = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Log.d(TAG, "onBitmapLoaded");
+                    ProjectAddImageViewModel.setBitmapData(bitmap);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    Log.e(TAG, "onBitmapFailed");
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+
+            Picasso.with(activity).load(uri).into(picassoTarget);
+
         }
 
-        Log.d(TAG, "ProjectAddImageViewModel: imagePath: " + imagePath);
-
-        if(imagePath != null && !imagePath.isEmpty()) {
-            //TODO - switch on image path depending on whether from camera or library
-        }
+        Log.d(TAG, "Constructor 2: uri: " + uri);
     }
-
 
     private void startProjectDetailActivity() {
         Log.d(TAG, "startProjectDetailActivity");
@@ -114,41 +142,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Log.d(TAG, "onClick: posting image");
-                        int compressionRate = 70;
-                        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
-                        while(base64Image.length() > 90000 && compressionRate > 0){
-                            compressionRate -= 10;
-                            base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
-                        }
-                        Log.e(TAG, "onClick: compressionRate: " + compressionRate );
-                        PhotoPost photoPost = new PhotoPost(title, body, false, base64Image);
-                        Call<ProjectPhoto> call = projectDomain.postPhoto(projectId, photoPost);
-                        call.enqueue(new Callback<ProjectPhoto>() {
-                            @Override
-                            public void onResponse(Call<ProjectPhoto> call, Response<ProjectPhoto> response) {
-
-                                if (response.isSuccessful()) {
-                                    Log.d(TAG, "onResponse: image post successful");
-                                    startProjectDetailActivity();
-                                    //activity.setResult(RESULT_OK);
-                                    activity.finish();
-
-                                } else {
-                                    Log.e(TAG, "onResponse: image post failed");
-
-                                    // TODO: Alert HTTP call error
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ProjectPhoto> call, Throwable t) {
-                                Log.e(TAG, "onResponse: failure");
-
-                                //TODO: Display alert noting network failure
-                            }
-                        });
-
+                        postImage(false);
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -162,17 +156,83 @@ public class ProjectAddImageViewModel extends BaseObservable {
             }
         };
 
-        alert = new AlertDialog.Builder(view.getContext()).create();
-        if(body.equals("")){//Required Content of post
-            alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
-            alert.setMessage("Post Needs Body Text. Express yourself.");
-            alert.show();
-        }else {//Are you sure?
-            alert.setMessage("You are about to post a public photo.");
-            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Post Photo", onClick);
-            alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
-            alert.show();
+        showAlertDialog(view, onClick);
+    }
+
+    private void postImage(boolean replaceExisting) {
+        Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
+
+        // TODO - move resizing and compression to helper method
+        int compressionRate = 70;
+        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
+
+        // keep shrinking the image until it is small enough to be accepted by the server
+        while (base64Image.length() > 70000 && compressionRate > 0) {
+            compressionRate -= 10;
+            base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
         }
+        Log.d(TAG, "postImage: compressionRate: " + compressionRate);
+        PhotoPost photoPost = new PhotoPost(title, body, false, base64Image);
+
+        Call<ProjectPhoto> call;
+
+        // for a new post
+        if (!replaceExisting) {
+            Log.d(TAG, "postImage: new image post");
+            call = projectDomain.postPhoto(projectId, photoPost);
+        }
+        // for updating an existing post
+        else {
+            Log.d(TAG, "postImage: update to existing image post");
+            call = projectDomain.updatePhoto(photoID, new PhotoPost(title, body, true, base64Image));
+        }
+
+        call.enqueue(new Callback<ProjectPhoto>() {
+            @Override
+            public void onResponse(Call<ProjectPhoto> call, Response<ProjectPhoto> response) {
+
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "postImage: onResponse: image post successful");
+                    startProjectDetailActivity();
+                    //activity.setResult(RESULT_OK);
+                    activity.finish();
+                }
+                else {
+                    Log.e(TAG, "postImage: onResponse: image post failed");
+                    // TODO: Alert HTTP call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProjectPhoto> call, Throwable t) {
+                Log.e(TAG, "postImage: onFailure: image post failed");
+                //TODO: Display alert noting network failure
+            }
+        });
+
+    }
+
+    public void onClickUpdate(View view) {
+        DialogInterface.OnClickListener onClick = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        postImage(true);
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showAlertDialog(view, onClick);
     }
 
 
@@ -183,24 +243,59 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
 
+
+    private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+        alert = new AlertDialog.Builder(view.getContext()).create();
+
+        //Required Content of image
+        if(body.equals("")) {
+            alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
+            alert.setMessage("Image content is required.");
+            alert.show();
+        }
+        //Are you sure?
+        else {
+            alert.setMessage("You are about to post a public image.");
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Post Image", onClick);
+            alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
+            alert.show();
+        }
+    }
+
+    public static void setBitmapData(Bitmap bmp) {
+        Log.d(TAG, "setBitmapData");
+        bitmap = bmp;
+    }
+
     @Bindable
+    public int getNewTitleLength() {
+        return this.newTitleLength;
+    }
+
+    public void setNewTitleLength(int newTitleLength) {
+        this.newTitleLength = newTitleLength;
+        notifyPropertyChanged(BR.newTitleLength);
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-        titleSize = title.length();
-        notifyChange();
+        setNewTitleLength(title.length());
     }
 
-    @Bindable
     public String getBody() {
         return body;
     }
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public boolean getEditMode() {
+        return photoID > -1;
     }
 
     @Bindable
@@ -218,4 +313,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     }
 
 
+
+
 }
+
