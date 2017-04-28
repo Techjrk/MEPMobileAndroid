@@ -3,6 +3,7 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectImageChooserBinding;
 import com.lecet.app.viewmodel.ProjectImageChooserViewModel;
 import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
+import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     private TabLayout tabLayout;
     private long projectId;
     private ProjectTakeCameraPhotoFragment takePhotoFragment;
+    private ProjectTakeCameraPhotoFragmentAPI21 takePhotoFragmentAPI21;
     private ProjectSelectLibraryPhotoFragment selectPhotoFragment;
 
     @Override
@@ -60,7 +63,11 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     }
 
     private void setupFragments() {
-        takePhotoFragment   = ProjectTakeCameraPhotoFragment.newInstance(projectId);
+        if(Build.VERSION.SDK_INT >= 21) {
+            takePhotoFragmentAPI21 = ProjectTakeCameraPhotoFragmentAPI21.newInstance(projectId);
+        }else {
+            takePhotoFragment = ProjectTakeCameraPhotoFragment.newInstance(projectId);
+        }
         selectPhotoFragment = ProjectSelectLibraryPhotoFragment.newInstance(projectId);
     }
 
@@ -98,6 +105,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         }
         // library
         else if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.library))) {
+            ProjectTakeCameraPhotoViewModelApi21.releaseCamera();
             ProjectTakeCameraPhotoViewModel.releaseCamera();  // release the camera which may have been activated in the Take Photo tab
             selectPhotoFragment.initImageChooser();
         }
@@ -106,8 +114,12 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     private void setupViewPagerAdapter(ViewPager viewPager) {
         ProjectImageChooserActivity.ViewPagerAdapter adapter = new ProjectImageChooserActivity.ViewPagerAdapter(getSupportFragmentManager());
 
-        // add the Take Photo fragment
-        adapter.addFragment(takePhotoFragment, getResources().getString(R.string.photo));
+        if(takePhotoFragment != null) {
+            // add the Take Photo fragment
+            adapter.addFragment(takePhotoFragment, getResources().getString(R.string.photo));
+        }else{
+            adapter.addFragment(takePhotoFragmentAPI21, getResources().getString(R.string.photo));
+        }
 
         // add the Select Image from Library fragment
         adapter.addFragment(selectPhotoFragment, getResources().getString(R.string.library));

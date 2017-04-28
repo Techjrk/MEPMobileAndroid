@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.lecet.app.domain.CompanyDomain;
  */
 
 public class ContactViewModel {
+    private static final String TAG = "ContactViewModel";
     /**
      * Tool Bar
      **/
@@ -32,7 +34,6 @@ public class ContactViewModel {
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
-
 
     private final AppCompatActivity appCompatActivity;
     private final CompanyDomain companyDomain;
@@ -42,8 +43,17 @@ public class ContactViewModel {
     public ContactViewModel(AppCompatActivity appCompatActivity, CompanyDomain companyDomain, long contactID) {
         this.appCompatActivity = appCompatActivity;
         this.companyDomain = companyDomain;
-
-        this.contact = companyDomain.fetchCompanyContact(contactID);
+        try {
+            this.contact = companyDomain.fetchCompanyContact(contactID);//TODO: Remove band-aid code and actually make sure Contact exist
+        }catch (IndexOutOfBoundsException e){
+            Log.e(TAG, "ContactViewModel: " + e.getMessage());
+            appCompatActivity.finish();
+            return;
+        }
+        if(contact == null){
+            appCompatActivity.finish();
+            return;
+        }
         this.company = contact.getCompany();
 
         if (this.company == null) {
@@ -53,6 +63,10 @@ public class ContactViewModel {
     }
 
     public void setToolbar(View toolbar) {
+        if(contact == null){
+            return; //TODO: more band-aid
+        }
+
         titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
         subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
