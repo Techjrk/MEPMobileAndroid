@@ -43,6 +43,10 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectAddImageVM";
 
+    private final int MAX_IMAGE_DATA_SIZE = 100000;
+    private final int MIN_IMAGE_W = 1000;
+    private final int MIN_IMAGE_H = 1000;
+
     private AppCompatActivity activity;
     private AlertDialog alert;
     private long projectId;
@@ -162,11 +166,14 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private void postImage(boolean replaceExisting) {
         Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
 
-        Log.d(TAG, "encodeToBase64: encoding...");
+        Log.d(TAG, "postImage: encoding to base64...");
         String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 70);
+        Log.d(TAG, "postImage: encoded length: " + base64Image.length());
 
-        Log.d(TAG, "compressImageData: compressing...");
-        String compressedImage = compressImageData(base64Image);
+        Log.d(TAG, "postImage: compressing...");
+        //String compressedImage = compressImageData(base64Image);
+        String compressedImage = resizeBase64Image(base64Image);
+        Log.d(TAG, "postImage: compressed base64 image length: " + compressedImage.length());
 
         PhotoPost photoPost = new PhotoPost(title, body, true, compressedImage);
 
@@ -238,17 +245,79 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
 
-    private String compressImageData(String imageData) {
+    /*private String compressImageData(String imageData) {
         int compressionRate = 90;
-        final int MAX_IMAGE_DATA_SIZE = 70000;
 
         while (imageData.length() > MAX_IMAGE_DATA_SIZE && compressionRate > 0) {
+            Log.d(TAG, "compressImageData: compressionRate: " + compressionRate);
+            Log.d(TAG, "compressImageData: data length: " + imageData.getBytes().length);
             compressionRate -= 10;
-            imageData = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
+            imageData = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);    //TODO - this is compressing the original, not the passed data
         }
 
         Log.d(TAG, "compressImageData: final jpeg compressionRate: " + compressionRate);
+        Log.d(TAG, "compressImageData: final jpeg data length: " + imageData.getBytes().length);
         return imageData;
+    }*/
+
+    private String resizeBase64Image(String base64image) {
+
+        Log.d(TAG, "resizeBase64Image: original length: " + base64image.length());
+
+        // if already small enough, don't recompress further
+        if(base64image.length() <= MAX_IMAGE_DATA_SIZE) {
+            Log.d(TAG, "resizeBase64Image: image already small enough, not resizing further");
+            return base64image;
+        }
+
+        // decode the passed data
+        byte [] encodeByte = Base64.decode(base64image.getBytes(), Base64.DEFAULT);
+
+        // options for BitmapFactory
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true; //TODO - deprecated in API v21
+
+        // create a decoded bitmap from the passed data
+        Bitmap image = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length, options);
+
+        // create new bitmap at specific scaled-down size
+        int compressionRate = 30;
+        int h = image.getHeight();
+        int w = image.getWidth();
+        int newW = 400;
+        int newH = 400;
+
+        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+        byte [] byteArray;
+        String compressedBase64Image = null;
+
+        for(int i=1; i<20; i++) {
+            compressionRate += 1;
+            newW += 100;
+            newH += 100;
+            image = Bitmap.createScaledBitmap(image, newW, newH, false);
+
+            // compress
+            image.compress(Bitmap.CompressFormat.JPEG, compressionRate, baos);
+            Log.d(TAG, "resizeBase64Image: width:  " + newW);
+            Log.d(TAG, "resizeBase64Image: height: " + newH);
+            Log.d(TAG, "resizeBase64Image: compressionRate: " + compressionRate);
+            //Log.d(TAG, "resizeBase64Image: data length: " + image.getByteCount());
+
+            byteArray = baos.toByteArray();
+            System.gc();
+
+            String nextLargerSizeImage = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+            Log.d(TAG, "resizeBase64Image: nextLargerSizeImage length: " + nextLargerSizeImage.length());
+            if(nextLargerSizeImage.length() > MAX_IMAGE_DATA_SIZE) {
+                break;
+            }
+            else compressedBase64Image = nextLargerSizeImage;
+        }
+
+        Log.d(TAG, "resizeBase64Image: compressedBase64Image length: " + compressedBase64Image.length());
+
+        return  compressedBase64Image;
     }
 
     private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {

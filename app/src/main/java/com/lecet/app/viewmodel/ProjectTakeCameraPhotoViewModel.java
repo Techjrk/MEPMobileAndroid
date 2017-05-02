@@ -44,7 +44,8 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
 
     private static final String TAG = "ProjCameraTakePhotoVM";
 
-    private final int MAX_IMAGE_SIZE = 900000;
+    private final int MAX_IMAGE_SIZE = 700000;
+    private final int REDUCED_IMAGE_AMT = 10;
 
     private static Camera camera;
     private CameraPreview cameraPreview;
@@ -289,8 +290,8 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                 Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
 
                 if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
-                    int resizedWidth  = realImage.getWidth() / 5;       //TODO - create helper which progressively resizes until best sized reached
-                    int resizedHeight = realImage.getHeight() / 5;
+                    int resizedWidth  = realImage.getWidth() / REDUCED_IMAGE_AMT;       //TODO - create helper which progressively resizes until best sized reached
+                    int resizedHeight = realImage.getHeight() / REDUCED_IMAGE_AMT;
                     resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
                     Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
                     Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);

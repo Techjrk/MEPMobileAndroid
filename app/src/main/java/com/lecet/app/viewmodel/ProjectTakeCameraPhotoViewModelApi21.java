@@ -63,8 +63,12 @@ import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
  */
 @TargetApi(21)
 public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
-    private static final String TAG = "CameraPhotoViewModel21";
-    private final int MAX_IMAGE_SIZE = 900000;
+
+    private static final String TAG = "CameraTakePhotoVM21";
+
+    private final int MAX_IMAGE_SIZE = 700000;
+    private final int REDUCED_IMAGE_AMT = 10;
+
     private static CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
     private long projectId;
@@ -207,7 +211,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                     buffer.get(bytes);
                                     save(bytes);
 
-                                }catch (Exception e){
+                                }
+                                catch (Exception e){
 
                                 } finally {
                                   if(image != null){
@@ -230,20 +235,22 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                     Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
 
                                     if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
-                                        int resizedWidth  = realImage.getWidth() / 10;
-                                        int resizedHeight = realImage.getHeight() / 10;
+                                        int resizedWidth  = realImage.getWidth() / REDUCED_IMAGE_AMT;
+                                        int resizedHeight = realImage.getHeight() / REDUCED_IMAGE_AMT;
                                         resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
-                                        Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
-                                        Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
-                                        Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
+                                        Log.d(TAG, "onPictureTaken: resizing: resizedImage w:  " + resizedWidth);
+                                        Log.d(TAG, "onPictureTaken: resizing: resizedImage h: " + resizedHeight);
+                                        Log.d(TAG, "onPictureTaken: resizing: resizedImage size: " + resizedImage.getByteCount());
                                     }
 
                                     int orientation = fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation();
                                     if(Surface.ROTATION_0 == orientation) {
                                         resizedImage = rotateImage(realImage, 90);
-                                    }else if(Surface.ROTATION_270 == orientation){
+                                    }
+                                    else if(Surface.ROTATION_270 == orientation){
                                         resizedImage = rotateImage(realImage, 180);
-                                    }else{
+                                    }
+                                    else{
                                         resizedImage = rotateImage(realImage, 0);
                                     }
 
@@ -266,11 +273,14 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                     String imagePath = file.getAbsolutePath();
                                     startProjectDetailAddImageActivity(imagePath);//TODO: DO we go to preview?
                                     fragment.getActivity().finish();
-                                } catch (FileNotFoundException e) {
+                                }
+                                catch (FileNotFoundException e) {
                                     Log.e(TAG, "save: " + e.getMessage());
-                                } catch (IOException e) {
+                                }
+                                catch (IOException e) {
                                     e.printStackTrace();
-                                } finally {
+                                }
+                                finally {
                                     try {
                                         if (outputStream != null)
                                             outputStream.close();
@@ -314,7 +324,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                         try{
                             session.capture(captureBuilder.build(), previewSession, handler);
                         } catch (CameraAccessException e) {
-                            Log.e(TAG, "onConfigured: " + e.getMessage());
+                            Log.d(TAG, "onConfigured: " + e.getMessage());
                         }
                     }
 
@@ -420,7 +430,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             try{
                 previewSession.setRepeatingRequest(previewBuilder.build(), null, handler);
             } catch (CameraAccessException e) {
-                Log.e(TAG, "updatePreviewChange: " + e.getMessage());
+                Log.d(TAG, "updatePreviewChange: " + e.getMessage());
             }
 
         }
@@ -453,7 +463,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         public Bitmap rotateImage(Bitmap image,float angle){
-            Log.e(TAG, "rotateImage: angle of rotation:" + angle);
+            Log.d(TAG, "rotateImage: angle of rotation:" + angle);
             int w = image.getWidth();
             int h = image.getHeight();
 
