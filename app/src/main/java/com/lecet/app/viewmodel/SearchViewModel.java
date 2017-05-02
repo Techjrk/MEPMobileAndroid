@@ -79,16 +79,19 @@ public class SearchViewModel extends BaseObservable {
     public static final String SAVE_SEARCH_CATEGORY_PROJECT = "project";
     public static final String SAVE_SEARCH_CATEGORY_COMPANY = "company";
     public static final String SAVE_SEARCH_CATEGORY_CONTACT = "contact";
-    public static boolean USING_INSTANT_SEARCH = false;     //TODO - convert to a private var with accessors
     public static final int REQUEST_CODE_ZERO = 0;
-    public static boolean INIT_SEARCH = true;                 //TODO - convert to a private var with accessors
-    static final String CONTACT_TEXT = " Contact";
-    static final String COMPANY_TEXT = " Company";
-    static final String PROJECT_TEXT = " Project";
     public static final int SEE_ALL_NO_RESULT = -1;
     public static final int SEE_ALL_PROJECTS = 0;
     public static final int SEE_ALL_COMPANIES = 1;
     public static final int SEE_ALL_CONTACTS = 2;
+
+
+    static final String CONTACT_TEXT = " Contact";
+    static final String COMPANY_TEXT = " Company";
+    static final String PROJECT_TEXT = " Project";
+
+    private static boolean USING_INSTANT_SEARCH = false;
+    private static boolean INIT_SEARCH = true;
     private int seeAllForResult = SEE_ALL_NO_RESULT;
     private static AlertDialog.Builder dialogBuilder;
     private String errorMessage = null;
@@ -96,32 +99,6 @@ public class SearchViewModel extends BaseObservable {
     private SearchFilter searchFilterSearchSaved;
     private String saveSearchCategory = SAVE_SEARCH_CATEGORY_PROJECT;
     private String saveCompanyFilter;
-
-    public Filter getFilterSearchSaved() {
-        return filterSearchSaved;
-    }
-
-    public void setFilterSearchSaved(Filter filterSearchSaved) {
-        this.filterSearchSaved = filterSearchSaved;
-    }
-
-    public SearchFilter getSearchFilterSearchSaved() {
-        return searchFilterSearchSaved;
-    }
-
-    public void setSearchFilterSearchSaved(SearchFilter searchFilterSearchSaved) {
-        this.searchFilterSearchSaved = searchFilterSearchSaved;
-    }
-
-    public String getSaveSearchCategory() {
-        Log.d(TAG, "getSaveSearchCategory: " + this.saveSearchCategory);
-        return this.saveSearchCategory;
-    }
-
-    public void setSaveSearchCategory(String saveSearchCategory) {
-        Log.d(TAG, "setSaveSearchCategory: " + saveSearchCategory);
-        this.saveSearchCategory = saveSearchCategory;
-    }
 
     // Adapter types
     @Retention(RetentionPolicy.SOURCE)
@@ -205,6 +182,50 @@ public class SearchViewModel extends BaseObservable {
     private boolean loadingContact;
     private int contactSkipCounter;
 
+
+    public static boolean isInitSearch() {
+        return INIT_SEARCH;
+    }
+
+    public static void setInitSearch(boolean initSearch) {
+        INIT_SEARCH = initSearch;
+    }
+
+    public static boolean isUsingInstantSearch() {
+        return USING_INSTANT_SEARCH;
+    }
+
+    public static void setUsingInstantSearch(boolean usingInstantSearch) {
+        USING_INSTANT_SEARCH = usingInstantSearch;
+    }
+
+    public Filter getFilterSearchSaved() {
+        return filterSearchSaved;
+    }
+
+    public void setFilterSearchSaved(Filter filterSearchSaved) {
+        this.filterSearchSaved = filterSearchSaved;
+    }
+
+    public SearchFilter getSearchFilterSearchSaved() {
+        return searchFilterSearchSaved;
+    }
+
+    public void setSearchFilterSearchSaved(SearchFilter searchFilterSearchSaved) {
+        this.searchFilterSearchSaved = searchFilterSearchSaved;
+    }
+
+    public String getSaveSearchCategory() {
+        Log.d(TAG, "getSaveSearchCategory: " + this.saveSearchCategory);
+        return this.saveSearchCategory;
+    }
+
+    public void setSaveSearchCategory(String saveSearchCategory) {
+        Log.d(TAG, "setSaveSearchCategory: " + saveSearchCategory);
+        this.saveSearchCategory = saveSearchCategory;
+    }
+
+
     @Bindable
     public boolean getDetailVisible() {
         return detailVisible;
@@ -258,15 +279,11 @@ public class SearchViewModel extends BaseObservable {
         Log.d("setcompanyfilter", "setcompanyfilter" + filter);
 
     }
-    public void setCompanySearchFilter(String sFilter, String esFilter) {
-        searchDomain.setCompanyFilter(sFilter,esFilter);
-        Log.d("setcompanyfilter2", "setcompanyfilter2 sFilter:" + sFilter+" esFilter:"+esFilter);
-    }
-   /* public void setCompanySearchFilter2(String filter) {
-        searchDomain.setCompanyFilter2(filter);
-        Log.d("setcompanyfilter","setcompanyfilter"+filter);
 
-    }*/
+    public void setCompanySearchFilter(String sFilter, String esFilter) {
+        searchDomain.setCompanyFilter(sFilter, esFilter);
+        Log.d("setcompanyfilter2", "setcompanyfilter2 sFilter:" + sFilter + " esFilter:" + esFilter);
+    }
 
     //Passing the whole search filter content coming from the web.
     public void setCompanySearchFilterComplete(String filter) {
@@ -315,7 +332,6 @@ public class SearchViewModel extends BaseObservable {
     public SearchViewModel(SearchActivity activity, SearchDomain sd) {
         this.activity = activity;
         this.searchDomain = sd;
-        //  projectmodel = new SearchProjectViewModel(this,activity,sd);
         setErrorMessage(null);
         seeAllForResult = -1;
         //init();
@@ -650,8 +666,8 @@ public class SearchViewModel extends BaseObservable {
                             // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
                             //String saveCompanyFilter = ((SearchActivity) getActivity()).getCompanyFilter();
                             Log.d("saveCompany", "saveCompany" + saveCompanyFilter);
-                           // if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
-                            if (SAVE_SEARCH_CATEGORY !=null && getSaveSearchCategory().equals(SAVE_SEARCH_CATEGORY_COMPANY)) {
+                            // if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
+                            if (SAVE_SEARCH_CATEGORY != null && getSaveSearchCategory().equals(SAVE_SEARCH_CATEGORY_COMPANY)) {
                                 saveCurrentCompanySearch(title, saveCompanyFilter);
                             } else {
                                 saveCurrentProjectSearch(title);
@@ -782,7 +798,7 @@ public class SearchViewModel extends BaseObservable {
         //These variables are used for monitoring if there's still available pending Contact items to be fetched from the
         // web.
         contactSkipCounter = 0;
-        loadingContact=true;
+        loadingContact = true;
 
         adapterDataContactAll = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
@@ -808,7 +824,7 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-             //   Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
+                //   Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
                 if (dy > 0) //check for scroll down
                 {
                     if (loadingContact) {
@@ -824,7 +840,7 @@ public class SearchViewModel extends BaseObservable {
                             }
                             searchDomain.setContactFilter(sf);
                             getContactAdditionalData(getQuery());
-                       //     Log.v("Bottom", "Bottom. filter:" + sf);
+                            //     Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
                 }
@@ -899,7 +915,7 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-               // Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
+                // Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
                 if (dy > 0) //check for scroll down
                 {
                     if (loadingCompany) {
@@ -915,7 +931,7 @@ public class SearchViewModel extends BaseObservable {
                             }
                             searchDomain.setCompanyFilterComplete(sf);
                             getCompanyAdditionalData(getQuery());
-                 //           Log.v("Bottom", "Bottom. filter:" + sf);
+                            //           Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
                 }
@@ -1374,6 +1390,7 @@ public class SearchViewModel extends BaseObservable {
         USING_INSTANT_SEARCH = getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
         intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
         setDetailVisible(true);
+        setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
     }
 

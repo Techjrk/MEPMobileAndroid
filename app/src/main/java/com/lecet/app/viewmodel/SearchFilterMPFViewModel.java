@@ -11,13 +11,13 @@ import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.content.SearchFilterBuildingOrHighwayActivity;
 import com.lecet.app.content.SearchFilterBiddingWithinActivity;
+import com.lecet.app.content.SearchFilterBuildingOrHighwayActivity;
 import com.lecet.app.content.SearchFilterJurisdictionActivity;
 import com.lecet.app.content.SearchFilterLocationActivity;
 import com.lecet.app.content.SearchFilterOwnerTypeActivity;
-import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
+import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterValueActivity;
 import com.lecet.app.content.SearchFilterWorkTypeActivity;
@@ -40,7 +40,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
     public static final int OWNER_TYPE = 8;
     public static final int WORK_TYPE = 9;
 
-    public static int VALUE_MAX=999999999;
+    public static int VALUE_MAX = 999999999;
     public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
     public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
@@ -48,7 +48,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
     public static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
     public static final String EXTRA_VALUE_MIN = "persistedValueMin";
     public static final String EXTRA_VALUE_MAX = "persistedValueMax";
-//    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
+    //    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
     public static final String EXTRA_JURISDICTION = "persistedJurisdiction";
     public static final String EXTRA_STAGE = "persistedStage";
     public static final String EXTRA_BIDDING_WITHIN_DISPLAY_STR = "persistedBiddingWithinDisplayStr";
@@ -201,11 +201,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
         return persistedBuildingOrHighway;
     }
 
-//    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
-        public void setPersistedBuildingOrHighway(Bundle bundle) {
-            String arr [] = {"",""};
-            arr[0]=  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
-            arr[1] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG);
+    //    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
+    public void setPersistedBuildingOrHighway(Bundle bundle) {
+        String arr[] = {"", ""};
+        arr[0] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+        arr[1] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG);
         this.persistedBuildingOrHighway = arr;
     }
 
@@ -520,6 +520,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
                 return;
 
             case R.id.cancel_button:
+                intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, "");
                 activity.finish();
                 return;
 
@@ -535,11 +536,11 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
         isProjectViewVisible = view.getId() == R.id.btn_project;
 //        isProjectViewVisible = !isProjectViewVisible;
         if (getIsProjectViewVisible()) {
-            Log.d("SearchFilterMPFVM","project tab clicked");
-         //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
+            Log.d("SearchFilterMPFVM", "project tab clicked");
+            //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
         } else {
-            Log.d("SearchFilterMPFVM","company tab clicked");
-         //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
+            Log.d("SearchFilterMPFVM", "company tab clicked");
+            //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
@@ -559,8 +560,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
     public void saveResult() {
         if (getIsProjectViewVisible()) {
             intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
-        }
-        else {
+        } else {
             intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
 
