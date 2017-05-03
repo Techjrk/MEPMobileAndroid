@@ -52,8 +52,8 @@ public class SearchFilterValueViewModel extends BaseObservable {
 
         Integer maxInt =0;
         if (getMax() == null || getMax().equals("")) {
-            maxInt = SearchFilterMPFViewModel.VALUE_MAX;
-            max = String.valueOf(SearchFilterMPFViewModel.VALUE_MAX);
+            maxInt = SearchFilterAllTabbedViewModel.VALUE_MAX;
+            max = String.valueOf(SearchFilterAllTabbedViewModel.VALUE_MAX);
         } else{
             maxInt = Integer.valueOf(getMax());
         }

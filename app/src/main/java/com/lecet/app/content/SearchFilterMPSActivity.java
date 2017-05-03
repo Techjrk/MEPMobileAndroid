@@ -23,7 +23,7 @@ import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
 import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
@@ -39,14 +39,14 @@ import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
 public class SearchFilterMPSActivity extends AppCompatActivity {
     private static final String TAG = "SearchFilterMPSActivity";
-    SearchFilterMPFViewModel viewModel;
+    SearchFilterAllTabbedViewModel viewModel;
     boolean instantSearch;
     int MAXCHARFIELD = 16;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new SearchFilterMPFViewModel(this);
+        viewModel = new SearchFilterAllTabbedViewModel(this);
         Intent i = getIntent();
         instantSearch = i.getBooleanExtra(FILTER_INSTANT_SEARCH, true);
         //Log.d(TAG, "onCreate: instantSearch: " + instantSearch);
@@ -90,22 +90,22 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 switch (requestCode) {
 
                     // Location
-                    case SearchFilterMPFViewModel.LOCATION:
+                    case SearchFilterAllTabbedViewModel.LOCATION:
                         processLocation(extrasArr);
                         break;
 
                     // Dollar Value
-                    case SearchFilterMPFViewModel.VALUE:
+                    case SearchFilterAllTabbedViewModel.VALUE:
                         processValue(extrasArr);
                         break;
 
                     // Owner Type
-                    case SearchFilterMPFViewModel.OWNER_TYPE:
+                    case SearchFilterAllTabbedViewModel.OWNER_TYPE:
                         processOwnerType(extrasArr);
                         break;
 
                     // Work Type
-                    case SearchFilterMPFViewModel.WORK_TYPE:
+                    case SearchFilterAllTabbedViewModel.WORK_TYPE:
                         processWorkType(extrasArr);
                         break;
 
@@ -121,32 +121,32 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 switch (requestCode) {
 
                     // Project Type
-                    case SearchFilterMPFViewModel.TYPE:
+                    case SearchFilterAllTabbedViewModel.TYPE:
                         processProjectType(bundle);
                         break;
 
                     // Jurisdiction
-                    case SearchFilterMPFViewModel.JURISDICTION:
+                    case SearchFilterAllTabbedViewModel.JURISDICTION:
                         processJurisdiction(bundle);
                         break;
 
                     // Project Stage
-                    case SearchFilterMPFViewModel.STAGE:
+                    case SearchFilterAllTabbedViewModel.STAGE:
                         processStage(bundle);
                         break;
 
                     // Bidding Within
-                    case SearchFilterMPFViewModel.BIDDING_WITHIN:
+                    case SearchFilterAllTabbedViewModel.BIDDING_WITHIN:
                         processBiddingWithin(bundle);
                         break;
 
                     // Updated Within
-                    case SearchFilterMPFViewModel.UPDATED_WITHIN:
+                    case SearchFilterAllTabbedViewModel.UPDATED_WITHIN:
                         processUpdatedWithin(bundle);
                         break;
 
                     // Building / Highway
-                    case SearchFilterMPFViewModel.BH:
+                    case SearchFilterAllTabbedViewModel.BH:
                         processBuildingOrHighway(bundle);
                         break;
 

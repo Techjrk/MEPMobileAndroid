@@ -26,7 +26,7 @@ import com.lecet.app.content.SearchFilterWorkTypeActivity;
  * Created by DomandTom 2016.
  */
 
-public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename to SearchFiltersAllTabbedViewModel
+public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private static final String TAG = "SearchFilterMPFVM";
 
     public static final int LOCATION = 0;
@@ -394,7 +394,7 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
     /**
      * Constructor
      */
-    public SearchFilterMPFViewModel(AppCompatActivity activity) {
+    public SearchFilterAllTabbedViewModel(AppCompatActivity activity) {
         this.activity = activity;
         setLocation_select("");
         setType_select("");
@@ -429,39 +429,40 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
 
             case R.id.clocation:
                 section = LOCATION;
+
                 i = new Intent(activity, SearchFilterLocationActivity.class);
                 break;
 
             case R.id.location:
                 section = LOCATION;
                 i = new Intent(activity, SearchFilterLocationActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY, getPersistedLocationCity());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE, getPersistedLocationState());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY, getPersistedLocationCounty());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP, getPersistedLocationZip());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_CITY, getPersistedLocationCity());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_STATE, getPersistedLocationState());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_COUNTY, getPersistedLocationCounty());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_ZIP, getPersistedLocationZip());
                 break;
 
             case R.id.ctype:
             case R.id.type:
                 section = TYPE;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
                 break;
 
             case R.id.cvalue:
             case R.id.value:
                 section = VALUE;
                 i = new Intent(activity, SearchFilterValueActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
                 break;
 
             case R.id.updated_within:
                 section = UPDATED_WITHIN;
                 i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
-//                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
+//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
 
                 break;
 
@@ -469,41 +470,41 @@ public class SearchFilterMPFViewModel extends BaseObservable {  //TODO - rename 
             case R.id.jurisdiction:
                 section = JURISDICTION;
                 i = new Intent(activity, SearchFilterJurisdictionActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
                 break;
 
             case R.id.stage:
                 section = STAGE;
                 i = new Intent(activity, SearchFilterStageActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_STAGE, getPersistedStage());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_STAGE, getPersistedStage());
                 break;
 
             case R.id.cbidding_within:
             case R.id.bidding_within:
                 section = BIDDING_WITHIN;
                 i = new Intent(activity, SearchFilterBiddingWithinActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
                 break;
 
             case R.id.bh:
                 section = BH;
                 i = new Intent(activity, SearchFilterBuildingOrHighwayActivity.class);
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_BUILDING_OR_HIGHWAY, getPersistedBuildingOrHighway());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_BUILDING_OR_HIGHWAY, getPersistedBuildingOrHighway());
                 break;
 
             case R.id.ownertype:
                 section = OWNER_TYPE;
                 i = new Intent(activity, SearchFilterOwnerTypeActivity.class);
                 setPersistedOwnerType(getOwner_type_select());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 
             case R.id.worktype:
                 section = WORK_TYPE;
                 i = new Intent(activity, SearchFilterWorkTypeActivity.class);
                 setPersistedWorkType(getWork_type_select());
-                i.putExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
 
             case R.id.option:

@@ -49,7 +49,7 @@ public class SearchFilterBuildingOrHighwayViewModel extends BaseObservable {
        // bh[0] = ((RadioButton) view).getText().toString();
        // bh[1] = (String) view.getTag();
         String str = ((RadioButton) view).getText().toString();
-//        if (str.equals("Both")) str = SearchFilterMPFViewModel.ANY;
+//        if (str.equals("Both")) str = SearchFilterAllTabbedViewModel.ANY;
         setStrBH(str);
         setTagBH( (String) view.getTag());
         setBHData(getStrBH(),getTagBH());

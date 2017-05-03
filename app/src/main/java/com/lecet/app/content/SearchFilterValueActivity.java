@@ -8,7 +8,7 @@ import android.os.Bundle;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterValueBinding;
 import com.lecet.app.viewmodel.SearchFilterValueViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 
 public class SearchFilterValueActivity extends AppCompatActivity {
     SearchFilterValueViewModel sfilter;
@@ -21,8 +21,8 @@ public class SearchFilterValueActivity extends AppCompatActivity {
 
         // get Value Extras
         Intent intent = getIntent();
-        String min = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MIN);
-        String max = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_VALUE_MAX);
+        String min = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN);
+        String max = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX);
 
         SearchFilterValueViewModel viewModel =  new SearchFilterValueViewModel(this);
         viewModel.setMin(min);

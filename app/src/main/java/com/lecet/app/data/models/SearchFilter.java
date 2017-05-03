@@ -9,27 +9,6 @@ import java.util.List;
  */
 
 public class SearchFilter {
-//   @SerializedName("searchFilter")
-    //   private SearchFilter searchFilter;
-
-    //   @SerializedName("jurisdictions")
-    //   private SearchFilter jurisdictions;
-/* TODO: Will check first if the string type is enough for each of the search filter type. If not, the comment class type listed below will be created and will be used.
-    private ProjectValue projectValue ;
-    private BuildingOrHighway buildingOrHighway ;
-    private OwnerType ownerType ;
-    private ProjectTypeId projectTypeId ;
-    private ProjectStageId projectStageId ;
-    private int updatedInLast ;
-    private WorkTypeId workTypeId ;
-    private Jurisdictions jurisdictions ;
-    private List<String> deepJurisdictionId ;
-    private Valuation valuation ;
-    private UpdatedWithin updatedWithin ;
-    private ProjectLocation projectLocation ;
-    private String city ;
-
-*/
     @SerializedName("projectValue")
     private Object projectValue ;
 
