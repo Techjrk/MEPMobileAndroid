@@ -36,8 +36,8 @@
                     android:text="@string/cancel"
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
-                    android:onClick="@{viewModel::onClickCancel}"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:onClick="@{viewModel::onClickCancel}"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -58,11 +58,11 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:text="@string/add"
-                    android:onClick="@{viewModel.onClickAdd}"
                     android:visibility="@{viewModel.editMode ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:onClick="@{viewModel::onClickAdd}"/>
 
                 <!-- UPDATE BUTTON -->
                 <Button
@@ -72,11 +72,11 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:text="@string/update"
-                    android:onClick="@{viewModel.onClickUpdate}"
                     android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:onClick="@{viewModel::onClickUpdate}"/>
 
             </LinearLayout>
 
@@ -89,7 +89,7 @@
                 <RelativeLayout
                     android:padding="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="0dp"
                     android:layout_weight="1">
 
                     <!-- USER IMAGE -->
@@ -100,20 +100,21 @@
                         android:scaleType="centerCrop"
                         android:adjustViewBounds="false"
                         bind:imageBitmap="@{viewModel.bitmap}"/>
-                    <!--TODO: add Curvy ends -->
+                        <!--TODO: add rounded corners -->
 
-                    <!-- TRASH ICON-->
+                    <!-- TRASH (REPLACE IMAGE) BUTTON -->
                     <ImageView
+                        android:id="@+id/replace_image_button"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:scaleType="fitEnd"
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/ic_trash_can_white"/>
-                    <!--TODO: get actual Trash image-->
+                        android:src="@drawable/ic_trash_can_white"
+                        android:onClick="@{viewModel::onClickReplaceImage}"/>
 
                 </RelativeLayout>
 

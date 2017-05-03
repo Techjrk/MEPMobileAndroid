@@ -29,6 +29,8 @@ import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_ID_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_URL_EXTRA;
+import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
+import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
 /**
  * Created by ludwigvondrake on 3/23/17.
@@ -150,7 +152,8 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         intent.putExtra(IMAGE_TITLE_EXTRA, photo.getTitle());
         intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
         intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
-        activity.startActivity(intent);
+        intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
+        activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
     }
 
     //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity

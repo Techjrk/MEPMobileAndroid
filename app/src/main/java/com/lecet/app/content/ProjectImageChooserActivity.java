@@ -3,6 +3,7 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -22,6 +23,8 @@ import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
 /**
@@ -32,10 +35,15 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
 
     private static final String TAG = "ProjectImageChooserAct";
 
+    public static final String PROJECT_REPLACE_IMAGE_EXTRA = "com.lecet.app.content.ProjectImageChooserActivity.extra.replace.image";
+
     private ProjectImageChooserViewModel viewModel;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private long projectId;
+    private String title;
+    private String body;
+    private boolean replaceImage = false;
     private ProjectTakeCameraPhotoFragment takePhotoFragment;
     private ProjectTakeCameraPhotoFragmentAPI21 takePhotoFragmentAPI21;
     private ProjectSelectLibraryPhotoFragment selectPhotoFragment;
@@ -48,7 +56,16 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         Bundle extras = getIntent().getExtras();
         projectId = extras.getLong(PROJECT_ID_EXTRA, -1);
 
+        // in the case of editing an existing image look for its id, title and body
+        //photoId    = extras.getLong(IMAGE_ID_EXTRA, -1);
+        title        = extras.getString(IMAGE_TITLE_EXTRA);
+        body         = extras.getString(IMAGE_BODY_EXTRA);
+        replaceImage = extras.getBoolean(PROJECT_REPLACE_IMAGE_EXTRA);
+
         Log.d(TAG, "onCreate: projectId: " + projectId);
+        Log.d(TAG, "onCreate: title: " + title);
+        Log.d(TAG, "onCreate: body: " + body);
+        Log.d(TAG, "onCreate: replaceImage: " + replaceImage);
 
         setupBinding();
         setupFragments();
@@ -58,7 +75,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityProjectImageChooserBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_image_chooser);
-        viewModel = new ProjectImageChooserViewModel(this, projectId);
+        viewModel = new ProjectImageChooserViewModel(this, projectId, title, body, replaceImage);
         binding.setViewModel(viewModel);
     }
 
@@ -163,16 +180,17 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: requestCode: " + requestCode);
+
         if(resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: RESULT_OK, " + resultCode);
-
+            Uri uri = data.getData();
+            Log.d(TAG, "onActivityResult: uri: " + uri);
+            viewModel.setBitmapFromUri(uri);
         }
         else if (resultCode == RESULT_CANCELED) {
             Log.d(TAG, "onActivityResult: RESULT_CANCELED, " + resultCode);
         }
         else Log.e(TAG, "onActivityResult: WARNING: RESULT CODE NOT SUPPORTED: " + resultCode);
-
-        viewModel.handleOnActivityResult(requestCode, resultCode, data);
     }
 
     @Override

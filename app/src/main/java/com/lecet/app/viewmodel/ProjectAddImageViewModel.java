@@ -19,6 +19,7 @@ import android.widget.ImageView;
 
 import com.lecet.app.BR;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.ProjectImageChooserActivity;
 import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
@@ -34,6 +35,8 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
+import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
 /**
  * Created by jasonm on 4/11/17.
@@ -50,6 +53,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private AlertDialog alert;
     private long projectId;
+    private boolean replaceImage;
     private long photoID;
     private static Bitmap bitmap;
     private String imagePath;
@@ -61,16 +65,18 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private Target picassoTarget;
 
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, long photoID, String title, String body, String imagePath, ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long photoID, String title, String body, String imagePath, ProjectDomain projectDomain) {
         this.activity = activity;
         this.projectId = projectId;
+        this.replaceImage = replaceImage;
         this.photoID = photoID;
         this.title = title;
         this.body = body;
         this.imagePath = imagePath;
 		this.projectDomain = projectDomain;
 
-        Log.d(TAG, "Constructor 1: projectId: " + imagePath);
+        Log.d(TAG, "Constructor 1: projectId: " + projectId);
+        Log.d(TAG, "Constructor 1: replaceImage: " + replaceImage);
         Log.d(TAG, "Constructor 1: photoID: " + photoID);
         Log.d(TAG, "Constructor 1: title: " + title);
         Log.d(TAG, "Constructor 1: body: " + body);
@@ -79,26 +85,28 @@ public class ProjectAddImageViewModel extends BaseObservable {
         this.bitmap = BitmapFactory.decodeFile(imagePath);  //TODO - access of static var
     }
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, long photoID, String title, String body, Uri uri, ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long photoID, String title, String body, Uri uri, ProjectDomain projectDomain) {
         this.activity = activity;
         this.projectId = projectId;
+        this.replaceImage = replaceImage;
         this.photoID = photoID;
         this.title = title;
         this.body = body;
         this.uri = uri;
         this.projectDomain = projectDomain;
 
-        Log.d(TAG, "Constructor 2: projectId: " + imagePath);
+        Log.d(TAG, "Constructor 2: projectId: " + projectId);
+        Log.d(TAG, "Constructor 2: replaceImage: " + replaceImage);
         Log.d(TAG, "Constructor 2: photoID: " + photoID);
         Log.d(TAG, "Constructor 2: title: " + title);
         Log.d(TAG, "Constructor 2: body: " + body);
-        Log.d(TAG, "Constructor 2: imagePath: " + imagePath);
+        Log.d(TAG, "Constructor 2: uri: " + uri);
 
         try {
             bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
         }
         catch (IOException e){
-            Log.e(TAG, "Error converting URI to bitmap: " + e.getMessage());
+            Log.e(TAG, "IOException. Error converting URI to bitmap: " + e.getMessage());
 
             picassoTarget = new Target() {
                 @Override
@@ -122,8 +130,10 @@ public class ProjectAddImageViewModel extends BaseObservable {
             Picasso.with(activity).load(uri).into(picassoTarget);
 
         }
+        catch (RuntimeException e1) {
+            Log.e(TAG, "ProjectAddImageViewModel: RuntimeException. Error converting URI to bitmap: " + uri);
+        }
 
-        Log.d(TAG, "Constructor 2: uri: " + uri);
     }
 
     private void startProjectDetailActivity() {
@@ -134,10 +144,19 @@ public class ProjectAddImageViewModel extends BaseObservable {
         activity.startActivity(intent);
     }
 
-    public void onClickCancel(View view){
-        Log.e(TAG, "onClickCancel");
+    public void onClickCancel(View view) {
+        Log.d(TAG, "onClickCancel");
         activity.setResult(RESULT_CANCELED);
         activity.finish();
+    }
+
+    public void onClickReplaceImage(View view) {
+        Log.d(TAG, "onClickReplaceImage");
+        Intent intent = new Intent(activity, ProjectImageChooserActivity.class);    //TODO - launch Chooser Activity, which immediately launches
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
+
+        activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
     }
 
     public void onClickAdd(View view){
@@ -252,7 +271,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             Log.d(TAG, "compressImageData: compressionRate: " + compressionRate);
             Log.d(TAG, "compressImageData: data length: " + imageData.getBytes().length);
             compressionRate -= 10;
-            imageData = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);    //TODO - this is compressing the original, not the passed data
+            imageData = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, compressionRate);
         }
 
         Log.d(TAG, "compressImageData: final jpeg compressionRate: " + compressionRate);
@@ -291,8 +310,9 @@ public class ProjectAddImageViewModel extends BaseObservable {
         byte [] byteArray;
         String compressedBase64Image = null;
 
+        // increase dimensions and quality until just before the image data is too large to post
         for(int i=1; i<20; i++) {
-            compressionRate += 1;
+            compressionRate += 2;
             newW += 100;
             newH += 100;
             image = Bitmap.createScaledBitmap(image, newW, newH, false);

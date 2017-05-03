@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -21,7 +22,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -34,9 +34,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 
-import com.lecet.app.R;
 import com.lecet.app.content.ProjectAddImageActivity;
-import com.lecet.app.content.ProjectTakeCameraPhotoFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,7 +83,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
         this.projectId = projectId;
 
-        //Look at this link https://developer.android.com/reference/android/hardware/camera2/package-summary.html
+        //Reference: https://developer.android.com/reference/android/hardware/camera2/package-summary.html
     }
 
 
@@ -271,8 +269,9 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
                                     // start next Activity
                                     String imagePath = file.getAbsolutePath();
-                                    startProjectDetailAddImageActivity(imagePath);//TODO: DO we go to preview?
-                                    fragment.getActivity().finish();
+                                    //startProjectDetailAddImageActivity(imagePath);//TODO: DO we go to preview?
+                                    //fragment.getActivity().finish();
+                                    finishActivityWithResult(imagePath);
                                 }
                                 catch (FileNotFoundException e) {
                                     Log.e(TAG, "save: " + e.getMessage());
@@ -460,6 +459,15 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             intent.putExtra(FROM_CAMERA, true);
             intent.putExtra(IMAGE_PATH, imagePath);
             fragment.getActivity().startActivity(intent);
+        }
+
+        private void finishActivityWithResult(String imagePath) {
+            Intent intent = fragment.getActivity().getIntent();
+            intent.putExtra(PROJECT_ID_EXTRA, projectId);
+            intent.putExtra(FROM_CAMERA, true);
+            intent.putExtra(IMAGE_PATH, imagePath);
+            fragment.getActivity().setResult(Activity.RESULT_OK, intent);
+            fragment.getActivity().finish();
         }
 
         public Bitmap rotateImage(Bitmap image,float angle){
