@@ -42,7 +42,6 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
     private ProjectPhoto photo;
     private AppCompatActivity activity;
-    private long authorId = -1;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
     private boolean canEdit;

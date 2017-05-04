@@ -14,11 +14,9 @@ public class ProjectSelectLibraryPhotoViewModel extends BaseObservable {
     private static final String TAG = "ProjSelectLibPhotoVM";
 
     private Fragment fragment;
-    private long projectId;
 
-    public ProjectSelectLibraryPhotoViewModel(Fragment fragment, long projectId) {
+    public ProjectSelectLibraryPhotoViewModel(Fragment fragment) {
         this.fragment = fragment;
-        this.projectId = projectId;
 
         //initImageChooser();
     }

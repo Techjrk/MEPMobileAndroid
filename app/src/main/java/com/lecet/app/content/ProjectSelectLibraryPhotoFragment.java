@@ -14,7 +14,6 @@ import com.lecet.app.R;
 import com.lecet.app.databinding.FragmentProjectSelectLibraryPhotoBinding;
 import com.lecet.app.viewmodel.ProjectSelectLibraryPhotoViewModel;
 
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
 /**
  * Created by jasonm on 3/29/17.
@@ -26,12 +25,10 @@ public class ProjectSelectLibraryPhotoFragment extends Fragment {
 
     private ProjectSelectLibraryPhotoViewModel viewModel;
     private FragmentProjectSelectLibraryPhotoBinding binding;
-    private long projectId;
 
-    public static ProjectSelectLibraryPhotoFragment newInstance(long projectId) {
+    public static ProjectSelectLibraryPhotoFragment newInstance() {
         ProjectSelectLibraryPhotoFragment fragmentInstance = new ProjectSelectLibraryPhotoFragment();
         Bundle args = new Bundle();
-        args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -48,11 +45,8 @@ public class ProjectSelectLibraryPhotoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            projectId = getArguments().getLong(PROJECT_ID_EXTRA);
-        }
 
-        Log.d(TAG, "onCreate: projectId: " + projectId);
+        Log.d(TAG, "onCreate");
     }
 
     @Override
@@ -91,7 +85,7 @@ public class ProjectSelectLibraryPhotoFragment extends Fragment {
 
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        viewModel = new ProjectSelectLibraryPhotoViewModel(this, projectId);
+        viewModel = new ProjectSelectLibraryPhotoViewModel(this);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_select_library_photo, container, false);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();

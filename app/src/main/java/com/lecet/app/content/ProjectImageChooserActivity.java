@@ -23,9 +23,6 @@ import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
-import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
 /**
  * Created by jasonm on 3/29/17.
@@ -40,9 +37,6 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     private ProjectImageChooserViewModel viewModel;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private long projectId;
-    private String title;
-    private String body;
     private boolean replaceImage = false;
     private ProjectTakeCameraPhotoFragment takePhotoFragment;
     private ProjectTakeCameraPhotoFragmentAPI21 takePhotoFragmentAPI21;
@@ -52,19 +46,9 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // get project ID and image data for passing to the viewmodel
         Bundle extras = getIntent().getExtras();
-        projectId = extras.getLong(PROJECT_ID_EXTRA, -1);
-
-        // in the case of editing an existing image look for its id, title and body
-        //photoId    = extras.getLong(IMAGE_ID_EXTRA, -1);
-        title        = extras.getString(IMAGE_TITLE_EXTRA);
-        body         = extras.getString(IMAGE_BODY_EXTRA);
         replaceImage = extras.getBoolean(PROJECT_REPLACE_IMAGE_EXTRA);
 
-        Log.d(TAG, "onCreate: projectId: " + projectId);
-        Log.d(TAG, "onCreate: title: " + title);
-        Log.d(TAG, "onCreate: body: " + body);
         Log.d(TAG, "onCreate: replaceImage: " + replaceImage);
 
         setupBinding();
@@ -75,17 +59,18 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityProjectImageChooserBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_image_chooser);
-        viewModel = new ProjectImageChooserViewModel(this, projectId, title, body, replaceImage);
+        viewModel = new ProjectImageChooserViewModel(this, replaceImage);
         binding.setViewModel(viewModel);
     }
 
     private void setupFragments() {
         if(Build.VERSION.SDK_INT >= 21) {
-            takePhotoFragmentAPI21 = ProjectTakeCameraPhotoFragmentAPI21.newInstance(projectId);
-        }else {
-            takePhotoFragment = ProjectTakeCameraPhotoFragment.newInstance(projectId);
+            takePhotoFragmentAPI21 = ProjectTakeCameraPhotoFragmentAPI21.newInstance();
         }
-        selectPhotoFragment = ProjectSelectLibraryPhotoFragment.newInstance(projectId);
+        else {
+            takePhotoFragment = ProjectTakeCameraPhotoFragment.newInstance();
+        }
+        selectPhotoFragment = ProjectSelectLibraryPhotoFragment.newInstance();
     }
 
     private void setUpViewPager() {
@@ -119,6 +104,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         // take photo
         if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.photo))) {
             // TODO - anything needed here?
+            //takePhotoFragment.initImageChooser();
         }
         // library
         else if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.library))) {

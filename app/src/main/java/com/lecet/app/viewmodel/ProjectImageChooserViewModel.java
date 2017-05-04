@@ -30,25 +30,16 @@ public class ProjectImageChooserViewModel extends BaseObservable {
     private static final String TAG = "ProjectImageChooserVM";
     public static final String IMAGE_URI = "Image_URI";
     private Activity activity;
-    private long projectId;
-    private String title;
-    private String body;
     private boolean replaceImage;
     private String picturePath;
-    private Bitmap bitmap;
     private Uri selectedImageUri;
+    private Bitmap bitmap;
     private boolean showImagePreview;   //TODO - may not be necessary if layout can use bitmap != null instead
 
-    public ProjectImageChooserViewModel(Activity activity, long projectId, String title, String body, boolean replaceImage){
+    public ProjectImageChooserViewModel(Activity activity, boolean replaceImage){
         this.activity = activity;
-        this.projectId = projectId;
-        this.title = title;
-        this.body = body;
         this.replaceImage = replaceImage;
 
-        Log.d(TAG, "projectId: " + projectId);
-        Log.d(TAG, "title: " + title);
-        Log.d(TAG, "body: " + body);
         Log.d(TAG, "replaceImage: " + replaceImage);
     }
 
@@ -67,7 +58,7 @@ public class ProjectImageChooserViewModel extends BaseObservable {
     }
 
     private String getPath(Context context, Uri uri ) {
-        Log.d(TAG, "GetPath: Uri, " + uri);
+        Log.d(TAG, "getPath: Uri: " + uri);
         String result = null;
         String[] proj = { MediaStore.Images.Media.DATA };
         Cursor cursor = context.getContentResolver().query( uri, proj, null, null, null );

@@ -34,8 +34,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 
-import com.lecet.app.content.ProjectAddImageActivity;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,7 +46,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
@@ -69,10 +66,9 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
     private static CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
-    private long projectId;
 
 
-    public ProjectTakeCameraPhotoViewModelApi21(Fragment fragment,TextureView textureView, long projectId) {
+    public ProjectTakeCameraPhotoViewModelApi21(Fragment fragment,TextureView textureView) {
         cameraPreview = new CameraPreview(textureView, fragment);
         if(ORIENTATIONS == null) {
             ORIENTATIONS = new SparseIntArray();
@@ -81,7 +77,6 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             ORIENTATIONS.append(Surface.ROTATION_180, 270);
             ORIENTATIONS.append(Surface.ROTATION_270, 180);
         }
-        this.projectId = projectId;
 
         //Reference: https://developer.android.com/reference/android/hardware/camera2/package-summary.html
     }
@@ -435,9 +430,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         private File getOutputMediaFile() {
-            File mediaStorageDir = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "Lecet");
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lecet");
             if (!mediaStorageDir.exists()) {
                 if (!mediaStorageDir.mkdirs()) {
                     Log.d("MyCameraApp", "failed to create directory");
@@ -445,25 +438,21 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 }
             }
             // Create a media file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                    .format(new Date());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File mediaFile;
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
             return mediaFile;
         }
 
-        private void startProjectDetailAddImageActivity(String imagePath) {
+        /*private void startProjectDetailAddImageActivity(String imagePath) {
             Intent intent = new Intent(fragment.getContext(), ProjectAddImageActivity.class);
-            intent.putExtra(PROJECT_ID_EXTRA, projectId);
             intent.putExtra(FROM_CAMERA, true);
             intent.putExtra(IMAGE_PATH, imagePath);
             fragment.getActivity().startActivity(intent);
-        }
+        }*/
 
         private void finishActivityWithResult(String imagePath) {
             Intent intent = fragment.getActivity().getIntent();
-            intent.putExtra(PROJECT_ID_EXTRA, projectId);
             intent.putExtra(FROM_CAMERA, true);
             intent.putExtra(IMAGE_PATH, imagePath);
             fragment.getActivity().setResult(Activity.RESULT_OK, intent);

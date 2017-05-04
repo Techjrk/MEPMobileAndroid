@@ -16,7 +16,6 @@ import com.lecet.app.R;
 import com.lecet.app.databinding.FragmentProjectTakeCameraPhotoBinding;
 import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
 
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
 /**
  * Created by jasonm on 3/29/17.
@@ -30,14 +29,12 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
     public static String FROM_CAMERA = "com.lecet.app.content.ProjectTakeCameraPhotoFragment.fromCamera";
 
     private FragmentProjectTakeCameraPhotoBinding binding;
-    private long projectId;
     private FrameLayout frameLayout;
 
 
-    public static ProjectTakeCameraPhotoFragment newInstance(long projectId) {
+    public static ProjectTakeCameraPhotoFragment newInstance() {
         ProjectTakeCameraPhotoFragment fragmentInstance = new ProjectTakeCameraPhotoFragment();
         Bundle args = new Bundle();
-        args.putLong(PROJECT_ID_EXTRA, projectId);
         fragmentInstance.setArguments(args);
         return fragmentInstance;
     }
@@ -48,11 +45,7 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            projectId = getArguments().getLong(PROJECT_ID_EXTRA);
-        }
-
-        Log.d(TAG, "onCreate: projectId: " + projectId);
+        Log.d(TAG, "onCreate");
     }
 
     @Override
@@ -75,7 +68,7 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_take_camera_photo, container, false);
         frameLayout = (FrameLayout) binding.getRoot().findViewById(R.id.camera_preview);
-        ProjectTakeCameraPhotoViewModel viewModel = new ProjectTakeCameraPhotoViewModel(this, projectId, frameLayout);
+        ProjectTakeCameraPhotoViewModel viewModel = new ProjectTakeCameraPhotoViewModel(this, frameLayout);
         binding.setViewModel(viewModel);
         View view = binding.getRoot();
         return view;
