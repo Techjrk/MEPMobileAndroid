@@ -460,7 +460,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.updated_within:
                 section = UPDATED_WITHIN;
                 i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
-//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN, getPersistedUpdatedWithin());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
 
@@ -535,7 +534,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
     public void onClickedProjectCompanyTab(View view) {
         isProjectViewVisible = view.getId() == R.id.btn_project;
-//        isProjectViewVisible = !isProjectViewVisible;
         if (getIsProjectViewVisible()) {
             Log.d("SearchFilterMPFVM", "project tab clicked");
             //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
