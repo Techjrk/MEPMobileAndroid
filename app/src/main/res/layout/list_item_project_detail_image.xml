@@ -32,7 +32,8 @@
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
                 app:projectImageUrl="@{viewModel.imageUrl}"
-                tools:src="@drawable/sample_construction_site"/>
+                tools:src="@drawable/sample_construction_site"
+                android:onClick="@{viewModel::onImageClick}"/>
 
             <!-- Edit Button -->
             <ImageView

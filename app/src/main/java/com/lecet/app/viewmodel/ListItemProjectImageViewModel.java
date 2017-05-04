@@ -142,6 +142,11 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     ///////////////////////////
     // Click Events
 
+    public void onImageClick(View view) {
+        Log.d(TAG, "onImageClick");
+        
+    }
+
     public void onEditButtonClick(View view) {
         Log.d(TAG, "onEditButtonClick");
 
