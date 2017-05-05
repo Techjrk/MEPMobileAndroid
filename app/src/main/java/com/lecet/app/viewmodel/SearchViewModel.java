@@ -774,12 +774,10 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
+        //These variables are used for monitoring if there's still available pending Contact items to be fetched from the
+        // web.
         contactSkipCounter = 0;
-        //TODO: The ContactViewModel object is using the limited number of contacts stored in Realm (based on first 25 display only).
-        // App will crash if the selected contact is not on the Realm list. If the issue has been addressed,
-        // just remove the comment below (loadingContact=true). Thanks.
-
-        //loadingContact=true;
+        loadingContact=true;
 
         adapterDataContactAll = new ArrayList<Contact>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
