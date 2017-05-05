@@ -112,9 +112,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         viewModel.setMap(map);
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
-
-        // TODO: Undoing fix for case 7321. Causes major crashes
-        //showCurrentMarker(map);
     }
 
 

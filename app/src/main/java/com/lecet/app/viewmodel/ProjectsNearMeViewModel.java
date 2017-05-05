@@ -174,6 +174,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                     List<Project> projects = response.body().getResults();
 
+                    // Clear map markers
+
                     populateMap(projects);
 
                     dismissProgressDialog();
@@ -213,6 +215,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private void populateMap(List<Project> projects) {
         if (isActivityAlive()) {
+
+            // Clear existing markers
+            map.clear();
+            markers.clear();
+
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
