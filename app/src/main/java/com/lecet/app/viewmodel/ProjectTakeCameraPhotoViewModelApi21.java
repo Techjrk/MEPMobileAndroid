@@ -1,9 +1,11 @@
 package com.lecet.app.viewmodel;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.BaseObservable;
 
 import android.graphics.Bitmap;
@@ -28,6 +30,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.Size;
@@ -86,10 +89,18 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         cameraPreview = new CameraPreview(textureView, fragment);
     }
 
+    public void onSwapCameraClick(View view) {
+        Log.d(TAG, "onSwapCameraClick");
+
+        cameraPreview.swapCamera();
+    }
+
+    public void onFlashClick(View view) {
+        Log.d(TAG, "onFlashClick");
+    }
 
     public void onTakePhotoClick(View view) {
         cameraPreview.getPicture();
-
     }
 
     //Releases the camera so it won't mess with any other classes, activities, or apps. static for use in any fragments/activites
@@ -111,19 +122,21 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     //Class that holds all the code that is needed for the camera preview and picture taking.
     public class CameraPreview{
         private final String TAG = "CameraPreviewAPI21";
+
         /*Sizes for Display*/
         private Size previewSize;//The current size of the preview
         private Size jpegSizes[] = null;//the possible sizes of the jpegOutput. smallest is selected
 
         private int sensorOrientation;//orientation of sensor. Default is 90.
         private Fragment fragment;
-        private Boolean isFlashable = false, isSwapableCamera = false;
+        private Boolean isFlashable = false;
+        private boolean isSwapableCamera = false;
         private TextureView textureView;//The textureView that is holding the camera preview
         private CameraDevice cameraDevice;//This is the actual camera that is used. it does not hold its own characteristics. us CameraCharacteristics class for that
         private CaptureRequest.Builder previewBuilder;//This creates the preview, it is called repetatively to update the visual effect
         private CameraCaptureSession previewSession;//The class that handles the capture of an image that the CameraDevice percieves
 
-        private CameraDevice.StateCallback stateCallback=new CameraDevice.StateCallback() {//Callback used with most camera actions.
+        private CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {//Callback used with most camera actions.
             @Override
             public void onOpened(CameraDevice camera) {
                 cameraDevice=camera;
@@ -145,13 +158,13 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                openCamera();
+                openCamera(0);
                 previewRotation(textureView.getWidth(), textureView.getHeight());
             }
 
             @Override
             public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                openCamera();
+                openCamera(0);
                 previewRotation(textureView.getWidth(), textureView.getHeight());
             }
 
@@ -179,6 +192,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                     .getSystemService(Context.CAMERA_SERVICE);
             try {
                 if(cameraManager.getCameraIdList().length > 1) {//Checks if there is more then one camera
+                    Log.d(TAG, "CameraPreview: camera list: " + cameraManager.getCameraIdList());
                     isSwapableCamera = true;
                 }
             } catch (CameraAccessException e) {
@@ -361,17 +375,19 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
+        /*public void openCameraById(int id) {
+
+        }*/
+
         //SETS THE VALUES FOR cameraDevice AND SETS THE previewSize
-        public void openCamera(){
-            CameraManager cameraManager = (CameraManager)fragment.getActivity()
-                    .getSystemService(Context.CAMERA_SERVICE);
+        public void openCamera(int id){
+            CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
 
             try{
 
-                String cameraId = cameraManager.getCameraIdList()[0];
+                String cameraId = cameraManager.getCameraIdList()[id];
 
-                CameraCharacteristics characteristics
-                        = cameraManager.getCameraCharacteristics(cameraId);
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
                 isFlashable = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 if(isFlashable == null){
                     isFlashable = false;
@@ -403,7 +419,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             if(cameraDevice == null || !textureView.isAvailable() || previewSize == null){
                 Log.e(TAG, "startCamera: Missing Required Field");
                 if(cameraDevice == null) {
-                    openCamera();
+                    openCamera(0);
                 }
                 return;
             }
@@ -445,6 +461,58 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
+        public void swapCamera() {
+            //TODO - add an check for if the camera is already previewing with existing camera
+
+            releaseCamera();
+
+            //Log.d(TAG, "swapCamera: " + cameraDevice.getId());
+            CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
+            CameraCharacteristics cc0 = null;
+            CameraCharacteristics cc1 = null;
+
+            try {
+                cc0 = cameraManager.getCameraCharacteristics("0");
+                Log.d(TAG, "swapCamera: cc0: " + cc0);
+            }
+            catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                cc1 = cameraManager.getCameraCharacteristics("1");
+                Log.d(TAG, "swapCamera: cc1: " + cc1);
+            }
+            catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+
+            if(cc0 != null && cc1 != null) {
+                boolean camera0isFront = (cc0.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT);
+                boolean camera0isBack  = (cc0.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK);
+                boolean camera1isFront = (cc1.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT);
+                boolean camera1isBack  = (cc1.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK);
+                Log.d(TAG, "swapCamera: cc0 is front? " + camera0isFront);
+                Log.d(TAG, "swapCamera: cc0 is back? " + camera0isBack);
+                Log.d(TAG, "swapCamera: cc1 is front? " + camera1isFront);
+                Log.d(TAG, "swapCamera: cc1 is back? " + camera1isBack);
+
+                closeCamera();
+
+                if (ActivityCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    if(camera0isFront) {
+                        openCamera(0);
+                    }
+                    else {
+                        openCamera(1);
+                    }
+                }
+                else {
+                    Log.e(TAG, "swapCamera: No camera permissions.");
+                }
+            }
+
+        }
 
         public void closeCamera(){
             if(cameraDevice !=  null){
