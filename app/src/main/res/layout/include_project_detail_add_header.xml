@@ -36,7 +36,6 @@
                     android:textSize="14sp"
                     android:background="@drawable/share_radio_background"
                     bind:typeface="@{`Lato-Regular.ttf`}"/>
-                <!--TODO: set onClick for the addNote button-->
 
                 <Button
                     android:id="@+id/add_image_button"
@@ -50,7 +49,6 @@
                     android:textSize="14sp"
                     android:background="@drawable/share_radio_background"
                     bind:typeface="@{`Lato-Regular.ttf`}"/>
-                    <!--TODO: set reference for onCLick-->
 
             </RadioGroup>
 

@@ -100,7 +100,6 @@
                         android:scaleType="centerCrop"
                         android:adjustViewBounds="false"
                         bind:imageBitmap="@{viewModel.bitmap}"/>
-                        <!--TODO: add rounded corners -->
 
                     <!-- TRASH (REPLACE IMAGE) BUTTON -->
                     <ImageView

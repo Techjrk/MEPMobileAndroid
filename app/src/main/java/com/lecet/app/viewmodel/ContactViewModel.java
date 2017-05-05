@@ -44,7 +44,7 @@ public class ContactViewModel {
         this.appCompatActivity = appCompatActivity;
         this.companyDomain = companyDomain;
         try {
-            this.contact = companyDomain.fetchCompanyContact(contactID);//TODO: Remove band-aid code and actually make sure Contact exist
+            this.contact = companyDomain.fetchCompanyContact(contactID);//TODO: Remove band-aid code and actually make sure Contact exist/Class was created properly
         }catch (IndexOutOfBoundsException e){
             Log.e(TAG, "ContactViewModel: " + e.getMessage());
             appCompatActivity.finish();

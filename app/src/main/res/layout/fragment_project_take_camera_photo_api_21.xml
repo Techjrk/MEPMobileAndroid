@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21" />
 
-        <variable
-                name="viewModel" type="com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21" />
     </data>
     <RelativeLayout
         android:layout_height="match_parent"
@@ -17,8 +16,7 @@
         <TextureView
             android:id="@+id/texture_view_api_21"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:layout_height="match_parent" />
 
         <ImageView
             android:layout_width="30dp"
@@ -26,6 +24,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
             android:layout_marginStart="20dp"
+            android:visibility="@{viewModel.canSwap()}"
             android:src="@drawable/ic_reverse_camera"/>
 
         <ImageView
@@ -35,6 +34,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="20dp"
             android:layout_marginEnd="20dp"
+            android:visibility="@{viewModel.canFlash()}"
             android:src="@drawable/ic_camera_light"/>
 
         <ImageView

@@ -68,7 +68,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
 
     // Retrofit calls
     private Call<Project> projectDetailCall;
-    private Call<List<ProjectNote>> additonalNotesCall;   //// TODO: 4/14/17 UPDATE FOR IMAGES
+    private Call<List<ProjectNote>> additonalNotesCall;
     private Call<List<ProjectPhoto>> additonalImagesCall;
 
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, double bidAmount, String mapsApiKey, ProjectDomain projectDomain) {
@@ -270,7 +270,6 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         projectNotesAdapter = new ProjectNotesAdapter(additionalNotes, activity);
         initNotesRecyclerView(activity, projectNotesAdapter);
         getAdditionalNotes(false);
-        //getAdditionalImages(false); TODO: remove comment if not helpful
     }
 
     private RealmList<Bid> getResortedBids(long projectID) {

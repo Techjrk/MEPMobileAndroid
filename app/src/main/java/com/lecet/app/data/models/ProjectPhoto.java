@@ -51,6 +51,7 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     @SerializedName("url")
     private String url;
 
+    /*Made For Realm*/
     public ProjectPhoto(){}//TODO: Understand why this is not working.
 
     public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src, String url) {

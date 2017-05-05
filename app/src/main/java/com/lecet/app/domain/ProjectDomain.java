@@ -223,7 +223,6 @@ public class ProjectDomain {
 
 
     public Call<List<Project>> getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
-    //// TODO: 4/14/17 REFERENCE POINT 2, DELETE IF NOT ALI
         String token = sharedPreferenceUtil.getAccessToken();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -489,7 +488,6 @@ public class ProjectDomain {
 
         return result;
     }
-        //TODO: Change ProjectNote to ProjectAdditionalInfo
     public Call<List<ProjectNote>> fetchProjectNotes(long projectID, Callback<List<ProjectNote>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();

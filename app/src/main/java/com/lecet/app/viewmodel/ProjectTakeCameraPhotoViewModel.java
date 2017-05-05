@@ -2,12 +2,15 @@ package com.lecet.app.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.view.OrientationEventListener;
@@ -27,15 +30,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 
 /**
  * Created by jasonm on 3/29/17.
- * TODO - make sure Camera is released in all cases (use, cancel, close app, etc)
  */
-public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
+public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
 
     private static final String TAG = "ProjCameraTakePhotoVM";
 
@@ -59,9 +62,10 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
     }
 
 
-    /*private static Uri getOutputMediaFileUri(){
+
+    private static Uri getOutputMediaFileUri(){
         return Uri.fromFile(getOutputMediaFile());
-    }*/
+    }
 
     /** Create a File for saving an image or video */
     private static File getOutputMediaFile() {
@@ -113,6 +117,39 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
             Log.w(TAG, "releaseCamera: CameraReleased");
         }
     }
+
+    /*@Override
+    public void onPictureTaken(byte[] data, Camera camera) {
+
+        File pictureFile = getOutputMediaFile();
+        if(pictureFile == null) {
+            Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
+            return;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            fos.write(data);
+            fos.close();
+            Log.d(TAG, "onPictureTaken: Picture saved.");
+        }
+        catch (FileNotFoundException e) {
+            Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
+        }
+        catch (IOException e) {
+            Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
+        }
+
+    }*/
+
+    /*@Deprecated
+    private void startImagePreviewActivity(String imagePath) {
+        Intent intent = new Intent(fragment.getContext(), ProjectPreviewImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        intent.putExtra(FROM_CAMERA, true);
+        intent.putExtra(IMAGE_PATH, imagePath);
+        fragment.getActivity().startActivity(intent);
+    }*/
 
     private void startProjectDetailAddImageActivity() {
         Intent intent = new Intent(fragment.getContext(), ProjectAddImageActivity.class);

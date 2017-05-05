@@ -50,10 +50,11 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     public ListItemProjectImageViewModel(ProjectPhoto photo, AppCompatActivity activity, final UserDomain userDomain) {
         this.photo = photo;
         this.activity = activity;
-
-        setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
-        setCanEdit(photo.getAuthorId() == getLoggedInUserId());
-        fetchImageAuthor(photo, userDomain);
+        if(userDomain.fetchLoggedInUser() != null) {
+            setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
+            setCanEdit(photo.getAuthorId() == getLoggedInUserId());
+            fetchImageAuthor(photo, userDomain);
+        }
     }
 
     private void fetchImageAuthor(ProjectPhoto photo, final UserDomain userDomain) {
