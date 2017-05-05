@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterBiddingWithinBinding;
 import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 
 /**
  * Activity for Search Filter: Bidding Within
@@ -26,8 +26,8 @@ public class SearchFilterBiddingWithinActivity extends AppCompatActivity {
 
         // get passed data from Intent if returning to Activity with existing user selection
         Intent intent = getIntent();
-        String displayStr   = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN_DISPLAY_STR);
-        String daysInt      = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_BIDDING_WITHIN_DAYS_INT);
+        String displayStr   = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_BIDDING_WITHIN_DISPLAY_STR);
+        String daysInt      = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_BIDDING_WITHIN_DAYS_INT);
         if(displayStr != null && daysInt != null) {
             viewModel.setBiddingWithinData(displayStr, daysInt);
         }

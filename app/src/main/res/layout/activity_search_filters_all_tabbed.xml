@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.lecet.app.viewmodel.SearchFilterMPFViewModel" />
+            type="com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -75,8 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/lecetDarkestBlue"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
                     <!-- Image Project Selection -->
                     <LinearLayout
@@ -168,9 +168,9 @@
                             <TextView
                                 android:id="@+id/location"
                                 style="@style/SearchFilterSectionFieldValue"
+                                android:hint="@string/everywhere"
                                 android:onClick="@{viewModel.onClicked}"
-                                android:text="@{viewModel.location_select}"
-                                android:hint="@string/everywhere"/>
+                                android:text="@{viewModel.location_select}" />
 
                             <TextView
                                 style="@style/SearchFilterSectionMPS30"
@@ -181,8 +181,8 @@
                             <TextView
                                 android:id="@+id/type"
                                 style="@style/SearchFilterSectionFieldValue"
-                                android:onClick="@{viewModel.onClicked}"
                                 android:hint="@string/all_types"
+                                android:onClick="@{viewModel.onClicked}"
                                 android:text="@{viewModel.type_select}" />
 
                             <TextView
@@ -194,8 +194,8 @@
                             <TextView
                                 android:id="@+id/value"
                                 style="@style/SearchFilterSectionFieldValue"
-                                android:onClick="@{viewModel.onClicked}"
                                 android:hint="@string/no_min_no_max"
+                                android:onClick="@{viewModel.onClicked}"
                                 android:text="@{viewModel.value_select}" />
 
                             <RelativeLayout

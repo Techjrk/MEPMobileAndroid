@@ -8,7 +8,7 @@ import android.os.Bundle;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterBuildingOrHighwayBinding;
 import com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 
 public class SearchFilterBuildingOrHighwayActivity extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class SearchFilterBuildingOrHighwayActivity extends AppCompatActivity {
 
         // get B/H Extras
         Intent intent = getIntent();
-        String[] bhArr = intent.getStringArrayExtra(SearchFilterMPFViewModel.EXTRA_BUILDING_OR_HIGHWAY);
+        String[] bhArr = intent.getStringArrayExtra(SearchFilterAllTabbedViewModel.EXTRA_BUILDING_OR_HIGHWAY);
 
         SearchFilterBuildingOrHighwayViewModel viewModel = new SearchFilterBuildingOrHighwayViewModel(this);
         if(bhArr != null) {

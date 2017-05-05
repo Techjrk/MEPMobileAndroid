@@ -385,7 +385,8 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 toogleMTMMenu();
                 return true;
             case R.id.menu_item_search:
-                SearchViewModel.INIT_SEARCH=true;
+                SearchViewModel.setInitSearch(true);
+//                SearchViewModel.INIT_SEARCH=true;
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_item_more:

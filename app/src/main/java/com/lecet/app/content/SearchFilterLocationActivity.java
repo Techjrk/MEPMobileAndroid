@@ -8,10 +8,10 @@ import android.os.Bundle;
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterLocationBinding;
 import com.lecet.app.viewmodel.SearchFilterLocationViewModel;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 
 public class SearchFilterLocationActivity extends AppCompatActivity {
-    SearchFilterMPFViewModel sfilter;
+    SearchFilterAllTabbedViewModel sfilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +21,10 @@ public class SearchFilterLocationActivity extends AppCompatActivity {
 
         // get Location Extras
        /* Intent intent = getIntent();
-        String city   = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_CITY);
-        String state  = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_STATE);
-        String county = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_COUNTY);
-        String zip    = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_LOCATION_ZIP);*/
+        String city   = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_CITY);
+        String state  = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_STATE);
+        String county = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_COUNTY);
+        String zip    = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_ZIP);*/
 
         SearchFilterLocationViewModel viewModel = new SearchFilterLocationViewModel(this);
         /*viewModel.setCity(city);

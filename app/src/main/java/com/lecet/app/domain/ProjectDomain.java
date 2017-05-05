@@ -3,17 +3,15 @@ package com.lecet.app.domain;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
-import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -28,8 +26,6 @@ import java.util.TreeSet;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmModel;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import okhttp3.ResponseBody;
@@ -38,7 +34,7 @@ import retrofit2.Callback;
 
 /**
  * File: ProjectDomain Created: 10/5/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -62,11 +58,31 @@ public class ProjectDomain {
     private final LecetSharedPreferenceUtil sharedPreferenceUtil;
     private final Realm realm;
 
+    private String filterMPN;
+
+    public String getFilterMPN() {
+        return filterMPN;
+    }
+
+    public void setFilterMPN(String filterMPN) {
+        if (filterMPN.equals("default")) {
+            initFilter();
+        } else {
+            this.filterMPN = filterMPN;
+        }
+    }
+
     public ProjectDomain(LecetClient lecetClient, final LecetSharedPreferenceUtil sharedPreferenceUtil, Realm realm) {
 
         this.lecetClient = lecetClient;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
         this.realm = realm;
+        initFilter();
+    }
+
+    void initFilter() {
+        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+        setFilterMPN(filter);
     }
 
     public Realm getRealm() {
@@ -125,7 +141,7 @@ public class ProjectDomain {
         return getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
-    public  Call<List<Project>> getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -142,14 +158,14 @@ public class ProjectDomain {
     }
 
 
-    public  Call<List<Project>> getProjectsRecentlyAdded(int limit, Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsRecentlyAdded(int limit, Callback<List<Project>> callback) {
 
         Date endDate = DateUtility.addDays(-30);
 
         return getProjectsRecentlyAdded(endDate, limit, callback);
     }
 
-    public  Call<List<Project>> getProjectsRecentlyAdded(Callback<List<Project>> callback) {
+    public Call<List<Project>> getProjectsRecentlyAdded(Callback<List<Project>> callback) {
 
         int limit = DASHBOARD_CALL_LIMIT;
 
@@ -222,9 +238,9 @@ public class ProjectDomain {
     public void getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-
-        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
-        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
+//        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+//        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
+        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, getFilterMPN());
         call.enqueue(callback);
     }
 
@@ -352,7 +368,6 @@ public class ProjectDomain {
         }
 
 
-
         return projectsResult;
     }
 
@@ -455,16 +470,17 @@ public class ProjectDomain {
 
         return result;
     }
-/* TODO: Remove after Project Notes can extend RealmObject
-    public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
 
-        RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
-                .equalTo("projectId", projectID)
-                .findAllSorted("amount", Sort.DESCENDING);
+    /* TODO: Remove after Project Notes can extend RealmObject
+        public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
 
-        return notesResult;
-    }
-*/
+            RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
+                    .equalTo("projectId", projectID)
+                    .findAllSorted("amount", Sort.DESCENDING);
+
+            return notesResult;
+        }
+    */
     public RealmResults<Project> fetchHiddenProjects() {
 
         return realm.where(Project.class).equalTo("hidden", true).findAll();

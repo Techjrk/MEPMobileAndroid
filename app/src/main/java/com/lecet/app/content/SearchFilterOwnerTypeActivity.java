@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterOwnerTypeBinding;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterOwnerTypeViewModel;
 
 public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
@@ -18,10 +18,10 @@ public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivitySearchFilterOwnerTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_owner_type);
         Intent intent = getIntent();
-        String sdata = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_OWNER_TYPE);
+        String sdata = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE);
          viewModel = new SearchFilterOwnerTypeViewModel(this);
 
-        if (sdata.equals(SearchFilterMPFViewModel.ANY)) {
+        if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
             Log.d("any","any");
             viewModel.setLastChecked(null);
         }

@@ -1,13 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,14 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
@@ -43,6 +42,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
+
 /**
  * Created by Josué Rodríguez on 5/10/2016.
  */
@@ -55,7 +56,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private static final int DEFAULT_DISTANCE = 3;
     private static final int DEFAULT_ZOOM = 15;
-
+    private static final int REQUEST_FILTER_MPN = 8;
     private ProjectDomain projectDomain;
     private GoogleMap map;
     private Marker lastMarkerTapped;
@@ -69,6 +70,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private EditText search;
     private View buttonClear;
     private View buttonSearch;
+    private View buttonFilter;
 
     private Handler timer;
 
@@ -77,6 +79,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
+    }
+
+    public void setProjectFilter(String filter) {
+        projectDomain.setFilterMPN(filter);
+    }
+
+    public String getProjectFilter() {
+        return projectDomain.getFilterMPN();
+    }
+
+    public EditText getSearch() {
+        return search;
+    }
+
+    public void setSearch(EditText search) {
+        this.search = search;
     }
 
     public void setMap(GoogleMap map) {
@@ -101,9 +119,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         search = (EditText) toolbar.findViewById(R.id.search_entry);
         buttonClear = toolbar.findViewById(R.id.button_clear);
         buttonSearch = toolbar.findViewById(R.id.button_search);
+        buttonFilter = toolbar.findViewById(R.id.button_filter);
 
         buttonClear.setOnClickListener(this);
         buttonSearch.setOnClickListener(this);
+        buttonFilter.setOnClickListener(this);
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -154,6 +174,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                     List<Project> projects = response.body().getResults();
 
+                    // Clear map markers
+
                     populateMap(projects);
 
                     dismissProgressDialog();
@@ -193,6 +215,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private void populateMap(List<Project> projects) {
         if (isActivityAlive()) {
+
+            // Clear existing markers
+            map.clear();
+            markers.clear();
+
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
@@ -287,7 +314,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         if (id == R.id.button_clear) { //the x in the search bar
             search.setText(null);
         } else if (id == R.id.button_search) {
+            setProjectFilter("default");
             searchAddress(search.getText().toString());
+        } else if (id == R.id.button_filter) {
+            search.setText(null);
+            setProjectFilter("default");
+            Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
+            intent.putExtra(FILTER_INSTANT_SEARCH, false);
+            Activity activity = getActivityWeakReference().get();
+            activity.startActivityForResult(intent, REQUEST_FILTER_MPN);
         }
     }
 
@@ -324,7 +359,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         try {
             address = coder.getFromLocationName(strAddress, 1);
-            if (address == null) {
+            if (address == null || address.size() == 0) {
                 return null;
             }
             Address location = address.get(0);

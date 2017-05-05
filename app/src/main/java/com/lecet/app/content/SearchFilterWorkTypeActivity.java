@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterWorkTypeBinding;
-import com.lecet.app.viewmodel.SearchFilterMPFViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterWorkTypeViewModel;
 
 public class SearchFilterWorkTypeActivity extends AppCompatActivity {
@@ -19,10 +19,10 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivitySearchFilterWorkTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_work_type);
         Intent intent = getIntent();
-        String sdata = intent.getStringExtra(SearchFilterMPFViewModel.EXTRA_WORK_TYPE);
+        String sdata = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE);
 
         viewModel = new SearchFilterWorkTypeViewModel(this);
-        if (sdata.equals(SearchFilterMPFViewModel.ANY)) {
+        if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
             Log.d("anywork", "anywork");
             // SearchFilterWorkTypeViewModel.lastChecked=null;
             viewModel.setLastChecked(null);
