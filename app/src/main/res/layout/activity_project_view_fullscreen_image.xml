@@ -4,13 +4,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectViewImageViewModel" />
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectViewFullscreenImageViewModel" />
     </data>
 
     <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            tools:context="com.lecet.app.content.ProjectViewImageActivity">
+            tools:context="com.lecet.app.content.ProjectViewFullscreenImageActivity">
 
         <FrameLayout
              android:layout_width="match_parent"
@@ -19,10 +19,10 @@
              android:background="@color/pureWhite"/>
 
             <ImageView
-                    android:id="@+id/image_view"
+                    android:id="@+id/image_view_fullscreen"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:onClick="@{viewModel::onImageClick}"
+                    android:scaleType="centerCrop"
                     app:projectImageUrl="@{viewModel.imageUrl}" />
 
             <TextView
@@ -36,7 +36,7 @@
                     tools:text="Photo Title"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    android:textColor="@color/lecetButtonDarkBlue"
+                    android:textColor="@color/pureWhite"
                     android:text="@{viewModel.title}"/>
 
             <TextView
@@ -50,7 +50,7 @@
                     android:textSize="14sp"
                     tools:text="This is a new note consectetur adipiscing elit. Fusce sit amet massa consectetur, vestibulum eros ut, commodo orci."
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    android:textColor="@color/lecetButtonDarkBlue"
+                    android:textColor="@color/pureWhite"
                     android:text="@{viewModel.body}"/>
 
     </RelativeLayout>

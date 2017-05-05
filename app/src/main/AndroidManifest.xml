@@ -120,6 +120,10 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
+                android:name=".content.ProjectViewFullscreenImageActivity"
+                android:label="ProjectViewFullscreenImage"
+                android:theme="@style/AppTheme"/>
+        <activity
                 android:name=".content.ProjectPreviewImageActivity"
                 android:label="ProjectPreviewImage"
                 android:screenOrientation="portrait"
