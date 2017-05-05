@@ -10,8 +10,10 @@ import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectViewImageBinding;
 import com.lecet.app.viewmodel.ProjectViewImageViewModel;
 
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
+import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_URL_EXTRA;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 /**
  * Created by jasonm on 4/11/17.
@@ -23,7 +25,9 @@ public class ProjectViewImageActivity extends LecetBaseActivity {
 
     private ProjectViewImageViewModel viewModel;
     private long projectId;
-    private String imagePath;
+    private String title;
+    private String body;
+    private String url;
 
 
     @Override
@@ -33,16 +37,18 @@ public class ProjectViewImageActivity extends LecetBaseActivity {
         // get project ID and image data for passing to the viewmodel
         Bundle extras = getIntent().getExtras();
         projectId  = extras.getLong(PROJECT_ID_EXTRA);
-        imagePath  = extras.getString(IMAGE_PATH);
+        title = extras.getString(IMAGE_TITLE_EXTRA);
+        body = extras.getString(IMAGE_BODY_EXTRA);
+        url = extras.getString(IMAGE_URL_EXTRA);
 
-        Log.d(TAG, "onCreate: projectId: " + projectId + ", imagePath: " + imagePath);
+        Log.d(TAG, "onCreate: projectId: " + projectId + ", url: " + url);
 
         setupBinding();
     }
 
     private void setupBinding() {
         ActivityProjectViewImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_view_image);
-        viewModel = new ProjectViewImageViewModel(this, projectId, imagePath);
+        viewModel = new ProjectViewImageViewModel(this, projectId, title, body, url);
         binding.setViewModel(viewModel);
     }
 

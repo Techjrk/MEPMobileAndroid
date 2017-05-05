@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectViewImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
@@ -144,7 +145,14 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
     public void onImageClick(View view) {
         Log.d(TAG, "onImageClick");
-        
+
+        Intent intent = new Intent(activity, ProjectViewImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, photo.getProjectId());
+        intent.putExtra(IMAGE_ID_EXTRA, photo.getId());
+        intent.putExtra(IMAGE_TITLE_EXTRA, photo.getTitle());
+        intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
+        intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
+        activity.startActivity(intent);
     }
 
     public void onEditButtonClick(View view) {

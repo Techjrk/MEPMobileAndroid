@@ -115,6 +115,11 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
+                android:name=".content.ProjectViewImageActivity"
+                android:label="ProjectViewImage"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/>
+        <activity
                 android:name=".content.ProjectPreviewImageActivity"
                 android:label="ProjectPreviewImage"
                 android:screenOrientation="portrait"

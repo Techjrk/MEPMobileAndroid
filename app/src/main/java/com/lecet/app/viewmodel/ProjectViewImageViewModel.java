@@ -1,19 +1,14 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
-import android.content.Context;
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.util.Log;
 import android.widget.ImageView;
 
-
-import java.io.IOException;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -23,47 +18,24 @@ import java.io.IOException;
 public class ProjectViewImageViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectViewImageVM";
-    private Context context;
-    private long projectId;
-    private Bitmap bitmap;
-    private String imagePath;
     private Activity activity;
+    private long projectId;
+    private String title;
+    private String body;
+    private String imageUrl;
 
-    public ProjectViewImageViewModel(Activity activity, long projectId, String imagePath) {
+    public ProjectViewImageViewModel(Activity activity, long projectId, String title, String body, String imageUrl) {
         this.activity = activity;
-        this.context = activity.getBaseContext();
         this.projectId = projectId;
-        this.imagePath = imagePath;
-        this.bitmap = BitmapFactory.decodeFile(imagePath);
+        this.imageUrl = imageUrl;
 
-        // orient the image rotation
-        try {
-            ExifInterface exifInterface = new ExifInterface(imagePath);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        this.title = title;
+        this.body = body;
 
-            Log.e(TAG, "Constructor: Orientation: " + orientation);
-            switch(orientation){
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    this.bitmap = rotateImage(bitmap, 90);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    this.bitmap = rotateImage(bitmap, 180);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    this.bitmap = rotateImage(bitmap, 270);
-                    break;
-
-                default:
-                    break;
-
-            }
-        }
-        catch(IOException e){
-            Log.e(TAG, "Constructor: Error: " + e.getMessage());
-        }
-
+        Log.d(TAG, "Constructor: projectId: " + projectId);
+        Log.d(TAG, "Constructor: title: " + title);
+        Log.d(TAG, "Constructor: body: " + body);
+        Log.d(TAG, "Constructor: imageUrl: " + imageUrl);
     }
 
     public Bitmap rotateImage(Bitmap image,float angle){
@@ -72,18 +44,23 @@ public class ProjectViewImageViewModel extends BaseObservable {
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
     }
 
-    @Bindable
-    public Bitmap getBitmap() {
-        return bitmap;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public String getTitle() {
+        return title;
     }
 
-    @BindingAdapter("bind:imageBitmap")
-    public static void loadImage(ImageView view, Bitmap bitmap) {
-        view.setImageBitmap(bitmap);
+    public String getBody() {
+        return body;
+    }
+
+    @BindingAdapter("bind:projectImageUrl")
+    public static void loadImage(ImageView view, String url) {
+        Log.d(TAG, "loadImage: url: " + url);
+
+        Picasso.with(view.getContext()).load(url).placeholder(null).into(view);
     }
 
 }
