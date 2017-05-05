@@ -1,25 +1,59 @@
 package com.lecet.app.viewmodel;
 
+import android.databinding.BaseObservable;
+import android.text.format.Time;
 import android.util.Log;
 
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.User;
+import com.lecet.app.domain.UserDomain;
+
+import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ludwigvondrake on 3/23/17.
  */
 
-public class ProjectNoteViewModel {
+public class ProjectNoteViewModel extends BaseObservable{
     private static String TAG = "ProjectNoteViewModel";
     private ProjectNote note;
-    private String authorName = "Some Person";
+    private String authorName = "Unknown Name";
 
-    public ProjectNoteViewModel (ProjectNote note){
+    public ProjectNoteViewModel (ProjectNote note, final UserDomain userDomain){
         this.note = note;
+        final User user = userDomain.fetchUser(note.getAuthorId());
+        if(user == null){
+            userDomain.getUser(note.getAuthorId(), new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.isSuccessful()) {
+                        userDomain.copyToRealmTransaction(response.body());
+                        setAuthorName(response.body().getFirstName() + " " + response.body().getLastName());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
+        }else {
+            setAuthorName(user.getFirstName() + " " + user.getLastName());
+        }
     }
 
     public String getAuthorName(){
-
         return authorName;
+    }
+
+    private void setAuthorName(String name){
+        authorName = name;
+        notifyChange();
     }
 
     public boolean canEdit(){
@@ -36,8 +70,11 @@ public class ProjectNoteViewModel {
     public long getId(){return note.getId();}
 
     public String getTimeDifference(){
+        long currentTime = System.currentTimeMillis();
 
-        long difference =  System.currentTimeMillis() - note.getUpdatedAt().getTime();
+        currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
+
+        long difference =  currentTime - note.getUpdatedAt().getTime();
         if(difference < 0){
             Log.e(TAG, "getTimeDifference: Less then 0");
         }

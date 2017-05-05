@@ -6,12 +6,16 @@ import android.support.annotation.Nullable;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
-import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
+import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Jurisdiction;
+import com.lecet.app.data.models.NotePost;
+import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
 
@@ -94,13 +98,42 @@ public class ProjectDomain {
      **/
 
     public Call<Project> getProjectDetail(long projectID, Callback<Project> callback) {
-
         String token = sharedPreferenceUtil.getAccessToken();
 
         String filter = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\":[\"company\",\"contact\"]},{\"contacts\":[\"contactType\",\"company\"]}]}";
 
         Call<Project> call = lecetClient.getProjectService().project(token, projectID, filter);
         call.enqueue(callback);
+
+        return call;
+    }
+
+    public Call<ProjectNote> postNote(long projectID, NotePost notePost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectNote> call = lecetClient.getProjectService().addNote(token, projectID, notePost);
+
+        return call;
+    }
+
+    //TODO - move to a new NoteDomain class?
+    public Call<ProjectNote> updateNote(long noteID, NotePost notePost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectNote> call = lecetClient.getProjectService().updateNote(token, noteID, notePost);
+
+        return call;
+    }
+
+    public Call<ProjectPhoto> postPhoto(long projectID, PhotoPost photoPost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectPhoto> call = lecetClient.getProjectService().addPhoto(token, projectID, photoPost);
+
+        return call;
+    }
+
+    //TODO - move to a new PhotoDomain class?
+    public Call<ProjectPhoto> updatePhoto(long photoID, PhotoPost photoPost){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectPhoto> call = lecetClient.getProjectService().updatePhoto(token, photoID, photoPost);
 
         return call;
     }
@@ -205,7 +238,6 @@ public class ProjectDomain {
 
 
     public Call<List<Project>> getProjectsRecentlyUpdated(Date publishDate, int limit, Callback<List<Project>> callback) {
-
         String token = sharedPreferenceUtil.getAccessToken();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -471,16 +503,26 @@ public class ProjectDomain {
         return result;
     }
 
-    /* TODO: Remove after Project Notes can extend RealmObject
-        public RealmResults<ProjectNote> fetchProjectNotes(long projectID) {
+    public Call<List<ProjectNote>> fetchProjectNotes(long projectID, Callback<List<ProjectNote>> callback) {
 
-            RealmResults<ProjectNote> notesResult = realm.where(ProjectNote.class)
-                    .equalTo("projectId", projectID)
-                    .findAllSorted("amount", Sort.DESCENDING);
+        String token = sharedPreferenceUtil.getAccessToken();
 
-            return notesResult;
-        }
-    */
+        Call<List<ProjectNote>> call = lecetClient.getProjectService().projectNotes(token, projectID);
+        call.enqueue(callback);
+
+        return call;
+    }
+
+    public Call<List<ProjectPhoto>> fetchProjectImages(long projectID, Callback<List<ProjectPhoto>> callback) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+
+        Call<List<ProjectPhoto>> call = lecetClient.getProjectService().projectImages(token, projectID);
+        call.enqueue(callback);
+
+        return call;
+    }
+
     public RealmResults<Project> fetchHiddenProjects() {
 
         return realm.where(Project.class).equalTo("hidden", true).findAll();
@@ -497,7 +539,7 @@ public class ProjectDomain {
         realm.beginTransaction();
         Project persistedProject = realm.copyToRealmOrUpdate(project);
         realm.commitTransaction();
-
+        
         return persistedProject;
     }
 

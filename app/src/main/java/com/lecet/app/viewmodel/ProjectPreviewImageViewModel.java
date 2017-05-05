@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.lecet.app.content.ProjectAddImageActivity;
 import com.lecet.app.content.ProjectImageChooserActivity;
+import com.lecet.app.content.ProjectSelectLibraryPhotoFragment;
 
 import java.io.IOException;
 
@@ -27,9 +28,10 @@ import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
  * Created by jasonm on 4/11/17.
  */
 
-public class ProjectDetailPreviewImageViewModel extends BaseObservable {
+@Deprecated
+public class ProjectPreviewImageViewModel extends BaseObservable {
 
-    private static final String TAG = "ProjDetailPreviewImgVM";
+    private static final String TAG = "ProjectPreviewImageVM";
     private Context context;
     private long projectId;
     private Bitmap bitmap;
@@ -37,18 +39,20 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
     private String imagePath;
     private Activity activity;
 
-    public ProjectDetailPreviewImageViewModel(Activity activity, long projectId, boolean fromCamera, String imagePath) {
+    public ProjectPreviewImageViewModel(Activity activity, long projectId, boolean fromCamera, String imagePath) {
         this.activity = activity;
         this.context = activity.getBaseContext();
         this.projectId = projectId;
         this.fromCamera = fromCamera;
         this.imagePath = imagePath;
         this.bitmap = BitmapFactory.decodeFile(imagePath);
+
+        // orient the image rotation
         try {
             ExifInterface exifInterface = new ExifInterface(imagePath);
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
-            Log.e(TAG, "ProjectDetailPreviewImageViewModel: Orientation: " + orientation);
+            Log.e(TAG, "ProjectPreviewImageViewModel: Orientation: " + orientation);
             switch(orientation){
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     this.bitmap = rotateImage(bitmap, 90);
@@ -67,7 +71,7 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
 
             }
         }catch(IOException e){
-            Log.e(TAG, "ProjectDetailPreviewImageViewModel:" + e.getMessage());
+            Log.e(TAG, "ProjectPreviewImageViewModel:" + e.getMessage());
         }
 
     }
@@ -90,7 +94,7 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
         if(this.fromCamera) {
             intent = new Intent(this.context, ProjectImageChooserActivity.class);
         }
-        else intent = new Intent(this.context, ProjectImageChooserActivity.class);
+        else intent = new Intent(this.context, ProjectSelectLibraryPhotoFragment.class);
 
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
 
@@ -118,6 +122,8 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
     }
 
     @BindingAdapter("bind:imageBitmap")
-    public static void loadImage(ImageView view, Bitmap bitmap) {view.setImageBitmap(bitmap);}
+    public static void loadImage(ImageView view, Bitmap bitmap) {
+        view.setImageBitmap(bitmap);
+    }
 
 }

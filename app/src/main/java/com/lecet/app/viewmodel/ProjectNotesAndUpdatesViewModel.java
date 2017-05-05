@@ -7,20 +7,19 @@ import android.databinding.BaseObservable;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.content.ProjectDetailAddNoteActivity;
-import com.lecet.app.content.ProjectDetailTakePhotoActivity;
+import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.ProjectAddNoteActivity;
 import com.lecet.app.domain.ProjectDomain;
 
-import java.security.acl.Permission;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
 
 /**
  * Created by jasonm on 3/9/17.
@@ -30,6 +29,12 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectNotesUpdatesVM";
 
+	public static final int NOTE_REQUEST_CODE = 880;
+    public static final int RESULT_CODE_PROJECT_ADD_IMAGE = 991;       //TODO - move to activity?
+    public static final int RESULT_CODE_PROJECT_CAMERA_IMAGE = 992;    //TODO - move to activity?
+    public static final int RESULT_CODE_PROJECT_LIBRARY_IMAGE = 993;   //TODO - move to activity?
+	public static final int REQUEST_CODE_NEW_IMAGE = 994;
+    public static final int REQUEST_CODE_REPLACE_IMAGE = 995;          //TODO - move to activity?
     private final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
     private final Fragment fragment;
     private final long projectId;
@@ -42,17 +47,22 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
     }
 
     public void onClickAddNote(View view){
-        Log.e(TAG, "onClickAddNote: Launch Add Note Activity");
-        Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailAddNoteActivity.class);
-        fragment.getActivity().startActivity(intent);
+        Log.d(TAG, "onClickAddNote: Launch Add Note Activity");
+        Intent intent = new Intent(this.fragment.getActivity(), ProjectAddNoteActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        fragment.getActivity().startActivityForResult(intent, NOTE_REQUEST_CODE);
     }
 
     public void onClickAddImage(View view){
         if(canSetup()) {
-            Log.e(TAG, "onClickAddImage: Launch Take Photo Activity");
-            Intent intent = new Intent(this.fragment.getActivity(), ProjectDetailTakePhotoActivity.class);
+            Log.d(TAG, "onClickAddImage");
+            ProjectDetailActivity activity = (ProjectDetailActivity) this.fragment.getActivity();
+
+            Intent intent = new Intent(activity, ProjectAddImageActivity.class);
             intent.putExtra(PROJECT_ID_EXTRA, projectId);
-            fragment.getActivity().startActivity(intent);
+            intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, false);
+            //activity.startActivityForResult(intent, RESULT_CODE_PROJECT_CAMERA_IMAGE);
+            activity.startActivity(intent);
         }
     }
 
@@ -67,7 +77,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
             if(!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
                 permissionNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-            Log.e(TAG, "canSetup: NeededPermission(s) = " + permissionNeeded.size());
+            Log.d(TAG, "canSetup: NeededPermission(s) = " + permissionNeeded.size());
 
             if(permissionNeeded.size() > 0) {
                 String[] tempList = new String[permissionNeeded.size()];//TODO: write actual converter from List<String> to String[]

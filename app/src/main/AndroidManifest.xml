@@ -101,22 +101,30 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.ProjectDetailAddNoteActivity"
+                android:name=".content.ProjectAddNoteActivity"
                 android:label="ProjectAddNotes"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.ProjectDetailTakePhotoActivity"
+                android:name=".content.ProjectImageChooserActivity"
                 android:label="ProjectTakePhoto"
-                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.ProjectDetailAddImageActivity"
+                android:name=".content.ProjectAddImageActivity"
                 android:label="ProjectAddImages"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>
         <activity
-                android:name=".content.ProjectDetailPreviewImageActivity"
+                android:name=".content.ProjectViewImageActivity"
+                android:label="ProjectViewImage"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ProjectViewFullscreenImageActivity"
+                android:label="ProjectViewFullscreenImage"
+                android:theme="@style/AppTheme"/>
+        <activity
+                android:name=".content.ProjectPreviewImageActivity"
                 android:label="ProjectPreviewImage"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme"/>

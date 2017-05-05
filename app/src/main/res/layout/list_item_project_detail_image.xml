@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectPhotoViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ListItemProjectImageViewModel"/>
+        <import type="android.view.View"/>
     </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,18 +23,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!-- Posted Image -->
             <ImageView
+                android:id="@+id/project_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
-                android:src="@drawable/sample_construction_site"
-                android:id="@+id/imageView"
-                tools:src="@drawable/sample_construction_site"/>
-            <!--TODO: add actual image reference -->
-            <!--TODO: Set Method path for getting images-->
+                app:projectImageUrl="@{viewModel.imageUrl}"
+                tools:src="@drawable/sample_construction_site"
+                android:onClick="@{viewModel::onImageClick}"/>
 
+            <!-- Edit Button -->
             <ImageView
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
@@ -39,9 +44,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_pencil_white"/>
-            <!--TODO: get actual pencil image-->
-            <!--TODO: Set visibility equation-->
+                android:visibility="@{viewModel.canEdit ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_pencil_white"
+                android:onClick="@{viewModel::onEditButtonClick}"/>
 
         </RelativeLayout>
 
@@ -52,13 +57,10 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:background="@color/pureWhite">
-            <!--TODO:Set onClick method-->
 
-
-
-
-
+            <!-- TITLE -->
             <TextView
+                android:id="@+id/image_title"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
@@ -70,14 +72,14 @@
                 android:maxLines="1"
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 tools:text="Photo Title"/>
-            <!--TODO: Add actual text reference-->
 
             <include layout="@layout/rule_horiz_blue"/>
 
+            <!-- BODY TEXT-->
             <TextView
+                android:id="@+id/image_body_text"
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="14dp"
-
                 android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,16 +89,16 @@
                 android:maxLines="4"
                 android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
-                android:id="@+id/textView2"
                 tools:text="@string/testing_purposes_lorem_ipsum"/>
-            <!--TODO: add note reference-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="18dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- PROFILE ICON -->
                 <ImageView
+                    android:id="@+id/image_author_profile_view"
                     android:scaleType="fitStart"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -104,7 +106,9 @@
                     android:adjustViewBounds="true"
                     android:src="@mipmap/ic_image_placeholder"/>
 
+                <!-- AUTHOR NAME -->
                 <TextView
+                    android:id="@+id/image_author"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
@@ -113,24 +117,26 @@
                     android:gravity="center_vertical"
                     android:layout_gravity="center"
                     android:text="@{viewModel.authorName}"
-                    bind:typeface="@{`Lato-Regular.ttf`}"
                     android:maxLines="1"
-                    tools:text="Erin Bernardin"/>
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="Erin Bernardin"
+                    android:onClick="@{viewModel::onAuthorNameClick}"/>
 
+                <!-- TIMESTAMP -->
                 <TextView
+                    android:id="@+id/image_timestamp"
                     android:layout_marginRight="10dp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="3"
+                    android:maxLines="1"
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
                     android:gravity="end"
                     android:text="@{viewModel.timeDifference}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    android:maxLines="1"
                     tools:text="1 day ago"/>
-                <!--TODO: set equation to get time-->
 
             </LinearLayout>
 

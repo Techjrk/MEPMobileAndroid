@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailAddNoteViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectAddNoteViewModel"/>
+        <import type="android.view.View" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ProjectDetailAddNoteActivity">
+        tools:context="com.lecet.app.content.ProjectAddNoteActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,6 +26,7 @@
                 android:background="@color/lecetButtonDarkBlue"
                 android:orientation="horizontal">
 
+                <!-- CANCEL BUTTON -->
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"
@@ -34,7 +36,7 @@
                     android:text="@string/cancel"
                     android:textColor="@color/lecetLightBlue"
                     android:textSize="16sp"
-                    android:onClick="@{viewModel.onClickCancel}"
+                    android:onClick="@{viewModel::onClickCancel}"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <TextView
@@ -48,17 +50,34 @@
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
+                <!-- ADD BUTTON -->
                 <Button
-                    android:id="@+id/apply_button"
+                    android:id="@+id/add_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:text="@string/add"
                     android:onClick="@{viewModel.onClickAdd}"
+                    android:visibility="@{viewModel.editMode ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <!-- UPDATE BUTTON -->
+                <Button
+                    android:id="@+id/update_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:text="@string/update"
+                    android:onClick="@{viewModel.onClickUpdate}"
+                    android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
+                    android:textColor="@color/lecetLightBlueTransp"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -95,10 +114,10 @@
 
 
                 <EditText
-                    android:id="@+id/titleEntry"
+                    android:id="@+id/title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.noteTitle.value}"
+                    android:text="@={viewModel.title}"
                     android:maxLength="55"
                     android:hint="@string/post_title"
                     android:textColorHint="@color/lecetTextLightGray"
@@ -114,8 +133,7 @@
                     android:textColor="@color/lecetTextLightGray"
                     android:gravity="end"
                     android:textSize="14sp"
-                    android:text='@{viewModel.noteTitle.size + "/55"}'/>
-                <!--TODO: Add Reference to char size-->
+                    android:text='@{viewModel.newTitleLength + "/55"}'/>
 
                 <TextView
                     android:layout_height="match_parent"
@@ -132,13 +150,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rect_solid_border_1"
                     android:padding="12dp"
+                    android:textSize="14sp"
                     android:lines="8"
-                    android:text="@={viewModel.body}"
                     android:hint="@string/post_body"
                     android:textColorHint="@color/lecetTextLightGray"
                     android:gravity="start"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
-                <!--TODO: Add Setter for post body binding-->
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:text="@={viewModel.body}"/>
 
                 <TextView
                     android:layout_width="match_parent"

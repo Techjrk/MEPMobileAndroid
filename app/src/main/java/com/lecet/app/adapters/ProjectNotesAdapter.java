@@ -1,21 +1,28 @@
 package com.lecet.app.adapters;
 
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.lecet.app.R;
+import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ListItemProjectDetailImageBinding;
 import com.lecet.app.databinding.ListItemProjectDetailNoteBinding;
+import com.lecet.app.domain.UserDomain;
 import com.lecet.app.interfaces.ProjectAdditionalData;
-import com.lecet.app.viewmodel.ProjectNoteViewModel;
-import com.lecet.app.viewmodel.ProjectPhotoViewModel;
+import com.lecet.app.viewmodel.ListItemProjectNoteViewModel;
+import com.lecet.app.viewmodel.ListItemProjectImageViewModel;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by ludwigvondrake on 3/23/17.
@@ -26,18 +33,23 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final String TAG = "ProjectNotesAdapter";
     private static final int NOTE_VIEW_TYPE = 0;
     private static final int PHOTO_VIEW_TYPE = 1;
+    private AppCompatActivity activity;
+    private UserDomain userDomain;
 
     List<ProjectAdditionalData> data;
 
-    public ProjectNotesAdapter(List<ProjectAdditionalData> data) {
+    public ProjectNotesAdapter(List<ProjectAdditionalData> data, AppCompatActivity activity) {
         this.data = data;
+        this.activity = activity;
+
+        userDomain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance());
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch (viewType){
+        switch (viewType) {
             case NOTE_VIEW_TYPE: {
                 ListItemProjectDetailNoteBinding binding = DataBindingUtil.inflate(inflater,
                         R.layout.list_item_project_detail_note, parent, false);
@@ -62,12 +74,12 @@ public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (getItemViewType(position)){
             case PHOTO_VIEW_TYPE:
                 ((ProjectImageViewHolder) holder).binding.setViewModel(
-                        new ProjectPhotoViewModel((ProjectPhoto)data.get(position))
+                        new ListItemProjectImageViewModel((ProjectPhoto)data.get(position), activity, userDomain)
                 );
                 break;
             case NOTE_VIEW_TYPE:
                 ((ProjectNoteViewHolder) holder).binding.setViewModel(
-                        new ProjectNoteViewModel((ProjectNote)data.get(position))
+                        new ListItemProjectNoteViewModel((ProjectNote)data.get(position), activity, userDomain)
                 );
                 break;
             default:

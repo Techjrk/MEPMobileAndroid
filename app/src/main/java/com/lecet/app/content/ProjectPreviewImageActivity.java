@@ -8,21 +8,22 @@ import android.util.Log;
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectPreviewImageBinding;
-import com.lecet.app.viewmodel.ProjectDetailPreviewImageViewModel;
+import com.lecet.app.viewmodel.ProjectPreviewImageViewModel;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakePhotoFragment.IMAGE_PATH;
-import static com.lecet.app.content.ProjectTakePhotoFragment.FROM_CAMERA;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 
 /**
  * Created by jasonm on 4/11/17.
  */
 
-public class ProjectDetailPreviewImageActivity extends LecetBaseActivity {
+@Deprecated
+public class ProjectPreviewImageActivity extends LecetBaseActivity {
 
-    private static final String TAG = "ProjDetailPreviewImgAct";
+    private static final String TAG = "ProjectPreviewImageAct";
 
-    private ProjectDetailPreviewImageViewModel viewModel;
+    private ProjectPreviewImageViewModel viewModel;
     private long projectId;
     private boolean fromCamera;
     private String imagePath;
@@ -45,7 +46,7 @@ public class ProjectDetailPreviewImageActivity extends LecetBaseActivity {
 
     private void setupBinding() {
         ActivityProjectPreviewImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_preview_image);
-        viewModel = new ProjectDetailPreviewImageViewModel(this.getBaseContext(), projectId, fromCamera, imagePath);
+        viewModel = new ProjectPreviewImageViewModel(this, projectId, fromCamera, imagePath);
         binding.setViewModel(viewModel);
     }
 

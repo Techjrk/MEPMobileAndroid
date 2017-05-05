@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailAddImageViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectAddImageViewModel"/>
+        <import type="android.view.View" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ProjectDetailAddImageActivity">
-
+        tools:context="com.lecet.app.content.ProjectAddImageActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,6 +26,7 @@
                 android:background="@color/lecetButtonDarkBlue"
                 android:orientation="horizontal">
 
+                <!-- CANCEL BUTTON -->
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"
@@ -49,6 +50,7 @@
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
 
+                <!-- ADD BUTTON -->
                 <Button
                     android:id="@+id/add_button"
                     android:layout_width="0dp"
@@ -56,13 +58,27 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:text="@string/add"
+                    android:visibility="@{viewModel.editMode ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}"
-                    android:onClick="@{viewModel::onAddImageButtonClick}"/>
+                    android:onClick="@{viewModel::onClickAdd}"/>
+
+                <!-- UPDATE BUTTON -->
+                <Button
+                    android:id="@+id/update_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:text="@string/update"
+                    android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
+                    android:textColor="@color/lecetLightBlueTransp"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:onClick="@{viewModel::onClickUpdate}"/>
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,38 +86,38 @@
                 android:layout_margin="15dp"
                 android:orientation="vertical">
 
-                <!--Add Photo-->
                 <RelativeLayout
                     android:padding="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
+                    <!-- USER IMAGE -->
                     <ImageView
                         android:id="@+id/image_view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:adjustViewBounds="true"
+                        android:adjustViewBounds="false"
                         bind:imageBitmap="@{viewModel.bitmap}"/>
-                    <!--TODO: add Curvy ends -->
 
+                    <!-- TRASH (REPLACE IMAGE) BUTTON -->
                     <ImageView
+                        android:id="@+id/replace_image_button"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:scaleType="fitEnd"
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/ic_trash_can_white"/>
-                    <!--TODO: get actual Trash image-->
-                    <!--TODO: Set visibility equation-->
+                        android:src="@drawable/ic_trash_can_white"
+                        android:onClick="@{viewModel::onClickReplaceImage}"/>
 
                 </RelativeLayout>
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="25dp">
 
@@ -129,52 +145,46 @@
 
 
                 <EditText
-                    android:id="@+id/titleEntry"
+                    android:id="@+id/title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.title}"
+                    android:maxLength="55"
                     android:hint="@string/post_title"
-                    android:textSize="14sp"
                     android:textColorHint="@color/lecetTextLightGray"
                     android:background="@drawable/shape_rect_solid_border_1"
                     android:padding="8dp"
-                    bind:typeface="@{`Lato-Bold.ttf`}"
-                    android:text="@={viewModel.title}"/>
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 <TextView
+                    android:id="@+id/note_title"
                     android:layout_width="70dp"
                     android:layout_height="20dp"
                     android:layout_gravity="end"
                     android:textColor="@color/lecetTextLightGray"
                     android:gravity="end"
                     android:textSize="14sp"
-                    android:text="0/55" />
-                <!--TODO: Add enhanced Getter for string size-->
+                    android:text='@{viewModel.newTitleLength + "/55"}'/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="55dp"
+                    android:text="@string/body_all_caps"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lecetDarkestBlue"
+                    android:gravity="center_vertical"
+                    bind:typeface="@{`Lato-Bold.ttf`}"/>
 
-                    <TextView
-                        android:layout_height="match_parent"
-                        android:layout_width="55dp"
-                        android:text="@string/body_all_caps"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/lecetDarkestBlue"
-                        android:gravity="center_vertical"
-                        bind:typeface="@{`Lato-Bold.ttf`}" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textColor="@color/lecetTextLightGray"
-                        android:textSize="14sp"
-                        android:text="@string/optional"
-                        android:textStyle="italic"
-                        bind:typeface="@{`Lato-Bold.ttf`}"/>
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/lecetTextLightGray"
+                    android:textSize="14sp"
+                    android:text="@string/optional"
+                    android:textStyle="italic"
+                    bind:typeface="@{`Lato-Bold.ttf`}"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -197,9 +207,11 @@
                     android:gravity="center_horizontal"
                     android:textStyle="bold"
                     android:textColor="@color/lecetTextLightGray"/>
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
-        </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

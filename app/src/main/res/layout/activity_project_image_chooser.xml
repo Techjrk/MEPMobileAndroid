@@ -4,31 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailTakePhotoViewModel"/>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectImageChooserViewModel"/>
+        <import type="android.view.View" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lecet.app.content.ProjectDetailTakePhotoActivity">
+        tools:context="com.lecet.app.content.ProjectImageChooserActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:orientation="vertical">
-
                 <!-- MENU -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:background="@color/lecetButtonDarkBlue"
+                    android:background="@color/lecetDarkestBlue"
                     android:orientation="horizontal">
 
                     <Button
@@ -37,7 +32,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:onClick="@{viewModel.onClickCancel}"
+                        android:onClick="@{viewModel::onClickCancel}"
                         android:text="@string/cancel"
                         android:textColor="@color/lecetLightBlue"
                         android:textSize="16sp"
@@ -55,14 +50,14 @@
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                     <!-- SPACER -->
-                    <View
+                    <!--View
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/transparent"/>
+                        android:textColor="@color/transparent"/-->
 
                     <!-- TEMP -->
-                    <!--Button
+                    <Button
                         android:id="@+id/use_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -71,36 +66,51 @@
                         android:textColor="@color/lecetLightBlue"
                         android:text="Use"
                         android:textSize="16sp"
-                        android:onClick="@{viewModel::onClickUsePhoto}"/-->
+                        android:visibility="@{viewModel.bitmap != null ? View.VISIBLE : View.INVISIBLE}"
+                        android:onClick="@{viewModel::onClickUsePhoto}"/>
 
                 </LinearLayout>
 
-            </LinearLayout>
 
             <!-- BOTTOM VIEWPAGER -->
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
 
-                <android.support.v4.view.ViewPager
-                        android:id="@+id/view_pager_take_photo"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="@color/lecetDarkestBlue"/>
-
-                <android.support.design.widget.TabLayout
+                    <android.support.design.widget.TabLayout
                         android:id="@+id/tab_layout_take_photo"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:background="@color/lecetLightOrange"
+                        android:background="@color/lecetDarkestBlue"
+                        android:layout_alignParentBottom="true"
+                        android:visibility="@{viewModel.bitmap == null ? View.VISIBLE : View.GONE}"
                         app:tabTextColor="@color/pureWhite"
                         app:tabMode="fixed"
                         app:tabIndicatorHeight="3dp"
                         app:tabGravity="center"
-                        app:tabSelectedTextColor="@color/pureWhite"
-                        app:tabIndicatorColor="@color/lecetMediumOrange"/>
+                        app:tabSelectedTextColor="@color/pureWhite"/>
+
+                    <ImageView android:id="@+id/image_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="80dp"
+                        android:visibility="@{viewModel.bitmap != null ? View.VISIBLE : View.GONE}"
+                        android:background="@color/lecetDarkestBlue"
+                        bind:imageBitmap="@{viewModel.bitmap}" />
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/view_pager_take_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="80dp"
+                        android:visibility="@{viewModel.bitmap == null ? View.VISIBLE : View.GONE}"
+                        android:background="@color/lecetDarkestBlue"/>
+                </RelativeLayout>
 
             </LinearLayout>
 

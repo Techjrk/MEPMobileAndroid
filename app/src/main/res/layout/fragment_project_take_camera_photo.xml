@@ -1,0 +1,51 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="viewModel" type="com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel" />
+    </data>
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        tools:context="com.lecet.app.content.ProjectTakeCameraPhotoFragment">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/camera_preview"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:background="@color/lecetDarkestBlue"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_reverse_camera"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_camera_light"/>
+
+        <ImageView
+            android:id="@+id/take_photo_button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:keepScreenOn="true"
+            android:src="@drawable/ic_camera_button"
+            android:onClick="@{viewModel::onTakePhotoClick}"/>
+    </RelativeLayout>
+</layout>
