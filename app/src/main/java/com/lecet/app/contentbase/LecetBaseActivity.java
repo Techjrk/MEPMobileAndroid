@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import com.lecet.app.R;
+import com.lecet.app.data.api.LecetClient;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
@@ -60,8 +61,11 @@ public abstract class LecetBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        //checkForUpdates();
-        checkForCrashes();
+
+        if (!LecetClient.IS_PRODUCTION) {
+            checkForUpdates();
+            checkForCrashes();
+        }
     }
 
     @Override
