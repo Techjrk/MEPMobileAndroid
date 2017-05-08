@@ -232,7 +232,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
-        if (viewModel !=null) viewModel.setDetailVisible(true); // for now, if company is selected, viewmodel will return null;
+        if (viewModel !=null) viewModel.setDetailVisible(true);
         if (project == null) {
             onCompanyClick(view);
             return;

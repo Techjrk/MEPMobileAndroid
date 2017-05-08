@@ -27,14 +27,11 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
- //   private AppCompatActivity appCompatActivity;
     private SearchActivity activity;
 
     private List data = Collections.emptyList();
 
     public SearchAllProjectRecyclerViewAdapter(SearchActivity activity, int adapterType, List data) {
-//        public SearchAllProjectRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
-//        this.appCompatActivity = appCompatActivity;
         this.activity = activity;
         this.adapterType = adapterType;
         this.data = data;

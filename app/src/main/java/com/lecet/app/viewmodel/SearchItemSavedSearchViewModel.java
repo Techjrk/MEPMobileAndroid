@@ -68,7 +68,6 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
                 String parseFilter = searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("companyLocation").toString();
                 String st = "\"projectLocation\":" + parseFilter;
                 viewModel.setProjectSearchFilterOnly(st);
-                Log.d("saves", "saves" + searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("companyLocation").toString());
             }
         } else {
             //if the search filter is for project only, then we will provide a project location filter for company.
@@ -78,21 +77,15 @@ public class SearchItemSavedSearchViewModel extends BaseObservable {
                 String parseFilter = searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("projectLocation").toString();
                 String st = "\"companyLocation\":" + parseFilter;
                 viewModel.setCompanySearchFilter(st);
-                Log.d("savec", "savec" + searchSaved.getFilter().get("searchFilter").getAsJsonObject().get("projectLocation").toString());
-                Log.d("savet", "savet" + st);
             }
         }
 
         //Setting the query will refresh the display of the summary section for projects, companies and contacts
         if (query != null && query.length() > 0) {
             viewModel.setQuery(searchSaved.getQuery());
-            /*viewModel.setIsMSE1SectionVisible(false);
-            viewModel.setIsMSE2SectionVisible(true);*/
         } else {
             viewModel.setQuery("");
         }
-
-        //Log.d("searchfilter","searchfilter:"+searchSaved.getFilter().getSearchFilter());
         viewModel.setIsMSE1SectionVisible(false);
         viewModel.setIsMSE2SectionVisible(true);
     }
