@@ -35,7 +35,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservable {
     public static final int RESULT_CODE_PROJECT_LIBRARY_IMAGE = 993;   //TODO - move to activity?
 	public static final int REQUEST_CODE_NEW_IMAGE = 994;
     public static final int REQUEST_CODE_REPLACE_IMAGE = 995;          //TODO - move to activity?
-    private final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
+    public static final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
     private final Fragment fragment;
     private final long projectId;
     private final ProjectDomain projectDomain;

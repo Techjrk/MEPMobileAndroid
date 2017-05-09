@@ -1,8 +1,10 @@
 package com.lecet.app.viewmodel;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -10,7 +12,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -28,6 +32,8 @@ import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +42,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_CANCELED;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
+import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_ASK_PERMISSIONS;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
 /**
@@ -152,11 +159,13 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     public void onClickReplaceImage(View view) {
         Log.d(TAG, "onClickReplaceImage");
-        Intent intent = new Intent(activity, ProjectImageChooserActivity.class);    //TODO - launch Chooser Activity, which immediately launches
-        intent.putExtra(PROJECT_ID_EXTRA, projectId);
-        intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
+        if (canSetup()) {
+            Intent intent = new Intent(activity, ProjectImageChooserActivity.class);    //TODO - launch Chooser Activity, which immediately launches
+            intent.putExtra(PROJECT_ID_EXTRA, projectId);
+            intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
 
-        activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
+            activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
+        }
     }
 
     public void onClickAdd(View view){
@@ -181,6 +190,40 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
         showAlertDialog(view, onClick);
     }
+
+    private boolean canSetup(){
+        if(Build.VERSION.SDK_INT >= 23) {
+            List<String> permissionNeeded = new ArrayList<String>();//list of permissions that aren't allowed
+
+            if(!hasPermission(Manifest.permission.CAMERA)){//has Camera permissions
+                permissionNeeded.add(Manifest.permission.CAMERA);
+            }
+
+            if(!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                permissionNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            Log.d(TAG, "canSetup: NeededPermission(s) = " + permissionNeeded.size());
+
+            if(permissionNeeded.size() > 0) {
+                String[] tempList = new String[permissionNeeded.size()];//TODO: write actual converter from List<String> to String[]
+                ActivityCompat.requestPermissions(activity, permissionNeeded.toArray(tempList), REQUEST_CODE_ASK_PERMISSIONS);
+            }else {
+                return true;//none were needed
+            }
+
+            return false;//if less then 1 then there are no permissions so return true. you can now set up
+        }
+        return true;
+    }
+
+    private boolean hasPermission(String permission){
+        if(ActivityCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        return  true;
+    }
+
+
 
     private void postImage(boolean replaceExisting) {
         Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
