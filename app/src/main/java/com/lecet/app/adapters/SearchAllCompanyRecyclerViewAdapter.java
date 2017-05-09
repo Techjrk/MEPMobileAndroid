@@ -60,7 +60,6 @@ public class SearchAllCompanyRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
         CompanyQuerySearchViewHolder viewHolder = (CompanyQuerySearchViewHolder) holder;
         SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), mapsApiKey, activity.getViewModel());
-//        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), mapsApiKey);
         viewHolder.getBinding().setViewModel(vm);
     }
 

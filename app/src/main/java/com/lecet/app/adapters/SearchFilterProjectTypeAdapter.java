@@ -139,7 +139,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.imgView.setVisibility(View.GONE);
-          //  expandItem(section,child,position);
+
             if (child.getGrandChildren() != null)
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
             childViewHolder.checkView.setText(child.name);

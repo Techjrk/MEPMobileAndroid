@@ -40,7 +40,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
     public static final int NO_TYPE = -1;
 
-    // public static  CheckBox lastChecked;
     public static int lastFamilyChecked = NO_TYPE;
     public static boolean customSearch;
 
@@ -67,7 +66,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     }
 
     public void clearLast() {
-        //lastChecked = null;
+
         viewModel.setLastChecked(null);
         lastFamilyChecked = NO_TYPE;
         lastName = "";
@@ -100,7 +99,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
     private void checkLastGChildSelectName(boolean selected, GrandChild gcname, GrandChildTypeViewHolder vholder, int section, int grandChildParentIndex, int grandChildIndex) {
         if (lastFamilyChecked != NO_TYPE) {
-            // lastChecked.setChecked(false);
+
             if (lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
                 if (data != null && gcname != null) {
                     if (lastName.equals(gcname.getName().trim())) {
@@ -110,8 +109,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                         lastPosition = Integer.valueOf(grandChildIndex);
                         lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
                         lastSection = section;
-                        //lastName = gcname.getName().trim();
-                        // notifyDataSetChanged();
                     } else if (gcname.getSelected() == true) gcname.setSelected(false);
                 }
             }
@@ -253,8 +250,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                                     viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
-                                // lastChecked = cb;
-                                // lastChecked = childViewHolder.checkView;
+
                                 viewModel.setLastChecked(childViewHolder.checkView);
                                 lastFamilyChecked = CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(truePosition);
@@ -282,7 +278,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 @Override
                 public void onClick(View view) {
                     customSearch = false;
-                    // child.isExpanded = !child.isExpanded;
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -359,7 +354,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     }
 
                     notifyDataSetChanged();
-                    // checkLastSelect(true);
                 }
             });
         } else if (holder instanceof GrandChildTypeViewHolder && !isChild) {
@@ -384,8 +378,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                                     viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
-                                //lastChecked = cb;
-                                //lastChecked = grandChildViewHolder.checkView;
+
                                 viewModel.setLastChecked(grandChildViewHolder.checkView);
                                 lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
                                 lastPosition = Integer.valueOf(grandChildIndex);
@@ -426,7 +419,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             @Override
             public void onClick(View view) {
                 customSearch = false;
-                //  parent.isExpanded = !parent.isExpanded;
+
                 if (expandedParents.contains(section)) {
                     parent.isExpanded = false;
                     expandedParents.remove(Integer.valueOf(section));
@@ -437,7 +430,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 }
 
                 notifyDataSetChanged();
-                // checkLastSelect(true);
+
             }
         });
         parentViewHolder.checkView.setText(parent.getName());
@@ -460,8 +453,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                                 viewModel.getLastChecked().setChecked(false);
                                 checkLastSelect(false);
                             }
-                            // lastChecked = cb;
-                            // lastChecked = parentViewHolder.checkView;
+
                             viewModel.setLastChecked(parentViewHolder.checkView);
                             lastFamilyChecked = PARENT_VIEW_TYPE;
                             lastSection = section;
