@@ -75,8 +75,10 @@ public class DateUtility {
     }
 
     public static String formatDateForDisplay(Date date) {
-
-        return sDisplayFormat.format(date);
+        if(date != null) {
+            return sDisplayFormat.format(date);
+        }
+        return null;
     }
 
     public static Date setDateToStartOfDate(Date date) {
