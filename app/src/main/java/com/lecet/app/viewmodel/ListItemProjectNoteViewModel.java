@@ -40,9 +40,11 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         this.note = note;
         this.activity = activity;
 
-        setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
-        setCanEdit(note.getAuthorId() == getLoggedInUserId());
-        fetchNoteAuthor(note, userDomain);
+        if(userDomain.fetchLoggedInUser() != null) {
+            setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
+            setCanEdit(note.getAuthorId() == getLoggedInUserId());
+            fetchNoteAuthor(note, userDomain);
+        }
     }
 
     private void fetchNoteAuthor(final ProjectNote note, final UserDomain userDomain) {
