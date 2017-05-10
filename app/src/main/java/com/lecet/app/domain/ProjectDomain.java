@@ -137,10 +137,17 @@ public class ProjectDomain {
         return call;
     }
 
-    //TODO - move to a new PhotoDomain class?
+    //TODO - move updatePhoto and deletePhoto to a new PhotoDomain class?
     public Call<ProjectPhoto> updatePhoto(long photoID, PhotoPost photoPost){
         String token = sharedPreferenceUtil.getAccessToken();
         Call<ProjectPhoto> call = lecetClient.getProjectService().updatePhoto(token, photoID, photoPost);
+
+        return call;
+    }
+
+    public Call<ProjectPhoto> deletePhoto(long photoID){
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ProjectPhoto> call = lecetClient.getProjectService().deletePhoto(token, photoID);
 
         return call;
     }

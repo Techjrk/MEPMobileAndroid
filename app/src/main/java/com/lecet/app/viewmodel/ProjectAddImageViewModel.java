@@ -40,6 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_ASK_PERMISSIONS;
@@ -188,7 +189,30 @@ public class ProjectAddImageViewModel extends BaseObservable {
             }
         };
 
-        showAlertDialog(view, onClick);
+        showPostPhotoAlertDialog(view, onClick);
+    }
+
+    public void onClickDelete(View view) {
+        DialogInterface.OnClickListener onClickDeleteListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        deletePhoto();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showDeletePhotoAlertDialog(view, onClickDeleteListener);
     }
 
     private boolean canSetup(){
@@ -277,6 +301,35 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     }
 
+    private void deletePhoto() {
+        Log.d(TAG, "deletePhoto");
+
+        Call<ProjectPhoto> call = projectDomain.deletePhoto(photoID);
+
+        call.enqueue(new Callback<ProjectPhoto>() {
+            @Override
+            public void onResponse(Call<ProjectPhoto> call, Response<ProjectPhoto> response) {
+
+                if (response.isSuccessful()) {
+
+                    Log.d(TAG, "deletePhoto: onResponse: photo deletion successful");
+                    activity.setResult(RESULT_OK);
+                    activity.finish();
+
+                } else {
+                    Log.e(TAG, "deletePhoto: onResponse: photo deletion failed");
+                    // TODO: Alert HTTP call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProjectPhoto> call, Throwable t) {
+                Log.e(TAG, "deletePhoto: onFailure: photo deletion failed");
+                //TODO: Display alert noting network failure
+            }
+        });
+    }
+
     public void onClickUpdate(View view) {
         DialogInterface.OnClickListener onClick = new DialogInterface.OnClickListener() {
             @Override
@@ -297,7 +350,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             }
         };
 
-        showAlertDialog(view, onClick);
+        showPostPhotoAlertDialog(view, onClick);
     }
 
     private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
@@ -383,7 +436,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return  compressedBase64Image;
     }
 
-    private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+    private void showPostPhotoAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         //Required Content of image
@@ -400,6 +453,17 @@ public class ProjectAddImageViewModel extends BaseObservable {
             alert.show();
         }
     }
+
+    private void showDeletePhotoAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+        alert = new AlertDialog.Builder(view.getContext()).create();
+
+        //Are you sure?
+        alert.setMessage("Are you sure you want to delete this photo?");
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Delete", onClick);
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
+        alert.show();
+    }
+
 
     public static void setBitmapData(Bitmap bmp) {
         Log.d(TAG, "setBitmapData");
@@ -435,6 +499,10 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     public boolean getEditMode() {
         return photoID > -1;
+    }
+
+    public boolean canDelete() {
+        return false;   //TODO - ADD USER ID CHECK TO ALLOW ONLY AUTHOR TO DELETE
     }
 
     @Bindable

@@ -167,7 +167,7 @@ public class ProjectAddNoteViewModel extends BaseObservable {
 
             @Override
             public void onFailure(Call<ProjectNote> call, Throwable t) {
-                Log.e(TAG, "deleteNote: onFailure: note post failed");
+                Log.e(TAG, "deleteNote: onFailure: note deletion failed");
                 //TODO: Display alert noting network failure
             }
         });

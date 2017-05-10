@@ -130,6 +130,13 @@ public interface ProjectService {
             "Accept: application/json",
             "Content-Type: application/json"
     })
+    @DELETE("Images/{photoID}")
+    Call<ProjectPhoto> deletePhoto (@Header("Authorization") String authorization, @Path("photoID") long photoID);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
     @GET("Projects/{projectID}/images")
     Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
