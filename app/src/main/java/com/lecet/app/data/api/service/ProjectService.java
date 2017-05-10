@@ -14,6 +14,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -96,6 +97,13 @@ public interface ProjectService {
     })
     @PUT("Notes/{noteID}")
     Call<ProjectNote> updateNote (@Header("Authorization") String authorization, @Path("noteID") long noteID, @Body NotePost notePost);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @DELETE("Notes/{noteID}")
+    Call<ProjectNote> deleteNote (@Header("Authorization") String authorization, @Path("noteID") long noteID);
 
     @Headers({
             "Accept: application/json",
