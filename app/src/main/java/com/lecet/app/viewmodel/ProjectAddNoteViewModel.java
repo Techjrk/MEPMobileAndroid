@@ -147,10 +147,10 @@ public class ProjectAddNoteViewModel extends BaseObservable {
     private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
-        //Required Content of note
-        if(body.equals("")) {
+        //Required body content of note
+        if(body == null || body.isEmpty()) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
-            alert.setMessage("Note content is required.");
+            alert.setMessage("Note body is required.");
             alert.show();
         }
         //Are you sure?
