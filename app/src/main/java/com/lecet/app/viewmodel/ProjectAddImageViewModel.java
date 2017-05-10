@@ -62,7 +62,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private long projectId;
     private boolean replaceImage;
     private long photoID;
-    private static Bitmap bitmap;
+    private static Bitmap bitmap;   //TODO - does this need to be static?
     private String imagePath;
     private Uri uri;
     private String title;
@@ -387,7 +387,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         //Required Content of image
-        if(body.equals("")) {
+        if(getBitmap() == null || getBitmap().getByteCount() == 0) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
             alert.setMessage("Image content is required.");
             alert.show();
