@@ -39,8 +39,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 
-import com.lecet.app.content.ProjectAddImageActivity;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,7 +51,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
@@ -70,8 +67,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     private final int MAX_IMAGE_SIZE = 700000;
     private final int REDUCED_IMAGE_AMT = 10;
 
-    private static List<String> rotatedCameraManufacturers =
-            new ArrayList<String>(Arrays.asList("samsung"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
+    private static List<String> rotatedCameraManufacturers = new ArrayList<String>(Arrays.asList("samsung"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
     private static CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
 
@@ -120,8 +116,10 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     }
 
 
-    //Class that holds all the code that is needed for the camera preview and picture taking.
-    public class CameraPreview{
+    /**
+     * CameraPreview: Inner Class that holds all the code that is needed for the camera preview and picture taking.
+     */
+    private class CameraPreview{
         private final String TAG = "CameraPreviewAPI21";
 
         /*Sizes for Display*/
@@ -182,9 +180,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             }
         };
 
-        /************************************END OF VARIABLES**************************************/
 
-        public CameraPreview(TextureView textureView, Fragment fragment){
+        private CameraPreview(TextureView textureView, Fragment fragment){
             this.textureView = textureView;
             this.fragment = fragment;
             textureView.setSurfaceTextureListener(surfaceTextureListener);
@@ -202,7 +199,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             }
         }
 
-        public void getPicture(){//Takes the picture but also does a lot of attachement of the callbacks and listeners
+        private void getPicture(){//Takes the picture but also does a lot of attachement of the callbacks and listeners
             if(cameraDevice == null){
                 Log.e(TAG, "getPicture: No Camera Device");
                 return;
@@ -381,7 +378,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //SETS THE VALUES FOR cameraDevice AND SETS THE previewSize
-        public void openCamera(int id){
+        private void openCamera(int id){
             Log.d(TAG, "openCamera: id: " + id);
 
             CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
@@ -418,7 +415,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //SETS UP THE PREVIEW USING THE previewBuilder
-        public void startCamera(){
+        private void startCamera(){
             if(cameraDevice == null || !textureView.isAvailable() || previewSize == null){
                 Log.e(TAG, "startCamera: Missing Required Field");
                 if(cameraDevice == null) {
@@ -464,7 +461,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
-        public void swapCamera() {
+        private void swapCamera() {
             //TODO - add an check for if the camera is already previewing with existing camera
 
             releaseCamera();
@@ -513,7 +510,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
-        public void closeCamera(){
+        private void closeCamera(){
             if(cameraDevice != null) {
                 Log.d(TAG, "closeCamera");
                 cameraDevice.close();
@@ -522,7 +519,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //Updates the preview over and over giving a steady stream of feed from the camera
-        public void updatePreviewChange(){
+        private void updatePreviewChange(){
             if(cameraDevice == null){
                 Log.e(TAG, "updatePreviewChange: camera not set");
                 return;
@@ -542,7 +539,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //This rotates the preview of devices that do not support the natural camera architecture
-        public void previewRotation(int width, int height){
+        private void previewRotation(int width, int height){
             if(previewSize == null || textureView == null){
                 return;
             }
@@ -570,9 +567,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         //Gets a new file for the use of a new
         private File getOutputMediaFile() {
-            File mediaStorageDir = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "Lecet");
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lecet");
             if (!mediaStorageDir.exists()) {
                 if (!mediaStorageDir.mkdirs()) {
                     Log.d("Lecet", "failed to create directory");
@@ -580,11 +575,9 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 }
             }
             // Create a media file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                    .format(new Date());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File mediaFile;
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
             return mediaFile;
         }
 
@@ -598,7 +591,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //Rotates images to the correct perspective. This can make images very big.
-        public Bitmap rotateImage(Bitmap image,float angle){
+        private Bitmap rotateImage(Bitmap image,float angle){
             Log.d(TAG, "rotateImage: angle of rotation:" + angle);
             int w = image.getWidth();
             int h = image.getHeight();
