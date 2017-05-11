@@ -30,7 +30,6 @@ public class SearchAllContactRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private List data = Collections.emptyList();
 
     public SearchAllContactRecyclerViewAdapter(SearchActivity activity, int adapterType, List data) {
-        //public SearchAllContactRecyclerViewAdapter(int adapterType, List data) {
         this.adapterType = adapterType;
         this.data = data;
         this.activity = activity;

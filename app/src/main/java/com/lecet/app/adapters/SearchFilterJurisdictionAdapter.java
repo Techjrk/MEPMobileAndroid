@@ -40,7 +40,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     public static final int GRAND_CHILD_VIEW_TYPE = 2;
     public static final int NO_TYPE = -1;
     public static boolean customSearch;
-    // public static CheckBox lastChecked;
     public static int lastFamilyChecked = NO_TYPE;
     private static int lastSection; //keep track of last section used by the selected item
     private static int lastPosition; //keep track of last position used by the selected item
@@ -53,9 +52,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    //private List<String> noChildren;
     public SearchFilterJurisdictionAdapter(List<Parent> data, SearchFilterJurisdictionViewModel viewModel) {
-
         this.data = data;
         this.viewModel = viewModel;
         expandedParents = new ArrayList<>();
@@ -63,7 +60,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         // Expanded grandChildrens, we need to keep track of section and then subtype position
         expandedChildren = new HashMap<>();
         checkLastSelect(true);
-        // notifyDataSetChanged();
     }
 
     public void clearLast() {
@@ -75,7 +71,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
     private void checkLastSelect(boolean selected) {
 
         if (lastFamilyChecked != NO_TYPE) {
-            // lastChecked.setChecked(false);
             if (lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
                 if (data != null && lastSection < data.size() && data.get(lastSection) != null && data.get(lastSection).getChildren() != null
                         && lastChildParentPosition < data.get(lastSection).getChildren().size() && data.get(lastSection).getChildren().get(lastChildParentPosition) != null
@@ -272,7 +267,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                             customSearch = false;
                             cb = (CheckBox) view;
 
-                            // int clickedPos = ((Integer) cb.getTag()).intValue();
                             if (cb.isChecked()) {
                                 if (viewModel.getLastChecked() != null) {
                                     viewModel.getLastChecked().setChecked(false);

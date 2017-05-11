@@ -5,21 +5,23 @@
     android:paddingBottom="8dp"
     android:paddingRight="12dp"
     android:paddingTop="8dp">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <ImageView
         android:id="@+id/button_filter"
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
-
+        android:padding="3dp"
         android:layout_centerVertical="true"
-        android:scaleType="center"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/mpnfilter"
         />
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_toLeftOf="@id/button_filter"
-    android:layout_height="match_parent">
     <EditText
+        android:layout_toLeftOf="@id/button_filter"
         android:id="@+id/search_entry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

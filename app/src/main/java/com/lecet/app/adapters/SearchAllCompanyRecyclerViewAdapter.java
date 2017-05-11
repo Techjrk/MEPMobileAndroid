@@ -29,13 +29,10 @@ public class SearchAllCompanyRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
-   // private AppCompatActivity appCompatActivity;
     private SearchActivity activity;
     private List data = Collections.emptyList();
 
     public SearchAllCompanyRecyclerViewAdapter(SearchActivity activity, int adapterType, List data) {
- //       public SearchAllCompanyRecyclerViewAdapter(AppCompatActivity appCompatActivity, int adapterType, List data) {
-       // this.appCompatActivity = appCompatActivity;
         this.adapterType = adapterType;
         this.data = data;
         this.activity = activity;
@@ -63,7 +60,6 @@ public class SearchAllCompanyRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
         CompanyQuerySearchViewHolder viewHolder = (CompanyQuerySearchViewHolder) holder;
         SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), mapsApiKey, activity.getViewModel());
-//        SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Company) data.get(position), mapsApiKey);
         viewHolder.getBinding().setViewModel(vm);
     }
 
