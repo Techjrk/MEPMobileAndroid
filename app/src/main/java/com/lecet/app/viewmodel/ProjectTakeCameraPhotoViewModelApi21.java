@@ -300,9 +300,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                         Log.e(TAG, "onPictureTaken: Image Write Failure");
                                     }
 
-                                    // start next Activity
+                                    // finish Activity with the imagePath extra
                                     String imagePath = file.getAbsolutePath();
-                                    //fragment.getActivity().finish();
                                     finishActivityWithResult(imagePath);
                                 }
                                 catch (FileNotFoundException e) {
