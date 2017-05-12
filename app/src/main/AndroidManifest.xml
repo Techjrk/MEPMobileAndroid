@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lecet.app">
+    package="com.lecet.app">
 
     <!-- Permissions -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <!-- Uses feature -->
     <uses-feature
-            android:glEsVersion="0x00020000"
-            android:required="true"/>
+        android:glEsVersion="0x00020000"
+        android:required="true" />
     <uses-feature android:name="android.hardware.camera" />
 
     <!-- Application -->
     <application
-            android:name=".LecetApplication"
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+        android:name=".LecetApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
 
         <!-- HockeyApp Integration -->
         <meta-data
-                android:name="net.hockeyapp.android.appIdentifier"
-                android:value="${HOCKEY_APP_ID}"/>
+            android:name="net.hockeyapp.android.appIdentifier"
+            android:value="${HOCKEY_APP_ID}" />
         <!--
                  The API key for Google Maps-based APIs is defined as a string resource.
                  (See the file "res/values/google_maps_api.xml").
@@ -36,224 +36,215 @@
                  You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_maps_key"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <!-- Metadata -->
         <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version"/>
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <!-- Activities -->
         <activity
-                android:name=".content.LauncherActivity"
-                android:label="@string/app_name"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.FullScreen">
+            android:name=".content.LauncherActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".content.LoginActivity"
-                android:label="@string/title_activity_login"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.FullScreen"/>
+            android:name=".content.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullScreen" />
         <activity
-                android:name=".content.MainActivity"
-                android:label="@string/title_activity_main"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProfileActivity"
-                android:label="@string/title_activity_profile"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.CompanyDetailProjectBidsActivity"
-                android:label="@string/title_activity_company_detail_project_bids"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.CompanyDetailProjectBidsActivity"
+            android:label="@string/title_activity_company_detail_project_bids"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ModifyProjectTrackingListActivity"
-                android:label="@string/title_activity_project_tracking_list"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ModifyProjectTrackingListActivity"
+            android:label="@string/title_activity_project_tracking_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ModifyCompanyTrackingListActivity"
-                android:label="@string/title_activity_project_tracking_list"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ModifyCompanyTrackingListActivity"
+            android:label="@string/title_activity_project_tracking_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ContactDetailActivity"
-                android:label="@string/title_activity_change_password"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ContactDetailActivity"
+            android:label="@string/title_activity_change_password"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SettingsActivity"
-                android:label="@string/title_activity_settings"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectAddNoteActivity"
-                android:label="ProjectAddNotes"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProjectAddNoteActivity"
+            android:label="ProjectAddNotes"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectImageChooserActivity"
-                android:label="ProjectTakePhoto"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProjectImageChooserActivity"
+            android:label="ProjectTakePhoto"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectAddImageActivity"
-                android:label="ProjectAddImages"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProjectAddImageActivity"
+            android:label="ProjectAddImages"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectViewImageActivity"
-                android:label="ProjectViewImage"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProjectViewImageActivity"
+            android:label="ProjectViewImage"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectViewFullscreenImageActivity"
-                android:label="ProjectViewFullscreenImage"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProjectViewFullscreenImageActivity"
+            android:label="ProjectViewFullscreenImage"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectPreviewImageActivity"
-                android:label="ProjectPreviewImage"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.ProjectPreviewImageActivity"
+            android:label="ProjectPreviewImage"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.ProjectsNearMeActivity"
-                android:parentActivityName=".content.MainActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
+            android:name=".content.ProjectsNearMeActivity"
+            android:parentActivityName=".content.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".content.MainActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
         </activity>
         <activity
-                android:name=".content.ProjectTrackingListActivity"
-                android:parentActivityName=".content.MainActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
+            android:name=".content.ProjectTrackingListActivity"
+            android:parentActivityName=".content.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".content.MainActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
         </activity>
         <activity
-                android:name=".content.CompanyTrackingListActivity"
-                android:parentActivityName=".content.MainActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
+            android:name=".content.CompanyTrackingListActivity"
+            android:parentActivityName=".content.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".content.MainActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
         </activity>
         <activity
-                android:name=".content.ProjectDetailActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.ProjectDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.SearchFilterMPSActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterMPSActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterLocationActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterLocationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterProjectTypeActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterProjectTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterValueActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterValueActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterBiddingWithinActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterBiddingWithinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterUpdatedWithinActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterUpdatedWithinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterJurisdictionActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterJurisdictionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterBuildingOrHighwayActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterBuildingOrHighwayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterStageActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterStageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterOwnerTypeActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterOwnerTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.SearchFilterWorkTypeActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+            android:name=".content.SearchFilterWorkTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-                android:name=".content.CompanyDetailActivity"
-                android:label="@string/title_activity_company_detail"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.CompanyDetailActivity"
+            android:label="@string/title_activity_company_detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.CompanyAssociatedProjectsActivity"
-                android:label="@string/title_activity_company_associated_projects"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.CompanyAssociatedProjectsActivity"
+            android:label="@string/title_activity_company_associated_projects"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.ProjectBiddersActivity"
-                android:label="@string/title_activity_project_bidders"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.ProjectBiddersActivity"
+            android:label="@string/title_activity_project_bidders"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.ProjectParticipantsActivity"
-                android:label="@string/title_activity_project_participants"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.ProjectParticipantsActivity"
+            android:label="@string/title_activity_project_participants"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.ChangePasswordActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.HiddenProjectsActivity"
-                android:label="@string/title_activity_hidden_projects"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.HiddenProjectsActivity"
+            android:label="@string/title_activity_hidden_projects"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.LocationDetailMapActivity"
-                android:label="@string/title_activity_location_detail_map">
-        </activity>
+            android:name=".content.LocationDetailMapActivity"
+            android:label="@string/title_activity_location_detail_map"></activity>
         <activity
-                android:name=".content.CompanyProjectBidsActivity"
-                android:label="@string/title_activity_company_project_bids"
-                android:theme="@style/AppTheme">
-        </activity>
+            android:name=".content.CompanyProjectBidsActivity"
+            android:label="@string/title_activity_company_project_bids"
+            android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".content.DashboardIntermediaryActivity"
-                android:theme="@style/AppTheme.FullScreen">
-        </activity>
-        <activity android:name=".content.CompanyContactsActivity">
-        </activity>
+            android:name=".content.DashboardIntermediaryActivity"
+            android:theme="@style/AppTheme.FullScreen"></activity>
+        <activity android:name=".content.CompanyContactsActivity"></activity>
+        <activity android:name=".content.ReturnToHomeActivity"
+         android:theme="@style/Theme.AppCompat.Translucent" ></activity>
     </application>
 
 </manifest>
