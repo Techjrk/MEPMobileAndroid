@@ -105,8 +105,7 @@
                     android:maxLines="1"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:id="@+id/textView"
-                    tools:text="Erin Bernardin"
-                    android:onClick="@{viewModel::onAuthorNameClick}"/>
+                    tools:text="Erin Bernardin"/>
 
                 <!-- TIMESTAMP -->
                 <TextView
