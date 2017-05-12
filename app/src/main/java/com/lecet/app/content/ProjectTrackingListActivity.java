@@ -1,5 +1,9 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
+import android.util.Log;
+import android.view.KeyEvent;
+
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -55,6 +59,11 @@ public class ProjectTrackingListActivity extends TrackingListActivity<ProjectTra
         return subtitleSb.toString();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("track","track result:"+resultCode+" req:"+requestCode);
+        if (resultCode == MainActivity.RETURN_TO_HOME)   finish();
+    }
 }
-
 

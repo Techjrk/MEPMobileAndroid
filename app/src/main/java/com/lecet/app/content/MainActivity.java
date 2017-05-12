@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -80,7 +81,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";
-
+    public static final int RETURN_TO_HOME = 8;
     private MainViewModel viewModel;
     private SearchDomain searchDomain;
 
@@ -536,5 +537,4 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         intent.putExtra(TrackingListActivity.PROJECT_LIST_ITEM_TITLE, companyTrackingList.getName());
         startActivity(intent);
     }
-
 }

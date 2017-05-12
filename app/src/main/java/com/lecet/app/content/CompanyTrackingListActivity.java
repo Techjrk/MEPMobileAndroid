@@ -1,5 +1,8 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
+import android.util.Log;
+
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -50,5 +53,10 @@ public class CompanyTrackingListActivity extends TrackingListActivity<CompanyTra
         } else subtitleSb.append(getResources().getString(R.string.company));
 
         return subtitleSb.toString();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == MainActivity.RETURN_TO_HOME)   finish();
     }
 }
