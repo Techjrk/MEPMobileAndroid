@@ -13,9 +13,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,7 +40,7 @@ import com.lecet.app.viewmodel.SearchViewModel;
 import io.realm.Realm;
 
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
-        , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
+        , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener  {
 
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
@@ -82,6 +85,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
         binding.setViewModel(viewModel);
     }
+
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -632,5 +636,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             fetchProjects(true);
         }
         locationManager.startLocationUpdates();
+    }
+    public void onBidTableViewPressed(View view) {
+     Log.d("tableView pressed","tableView pressed");
     }
 }
