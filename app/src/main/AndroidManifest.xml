@@ -99,7 +99,12 @@
         <activity
             android:name=".content.SearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.ProjectAddNoteActivity"
             android:label="ProjectAddNotes"
@@ -158,93 +163,150 @@
         <activity
             android:name=".content.ProjectDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.SearchFilterMPSActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterLocationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterProjectTypeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterValueActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterBiddingWithinActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterUpdatedWithinActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterJurisdictionActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterBuildingOrHighwayActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterStageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterOwnerTypeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterWorkTypeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.CompanyDetailActivity"
             android:label="@string/title_activity_company_detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.CompanyAssociatedProjectsActivity"
             android:label="@string/title_activity_company_associated_projects"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ProjectBiddersActivity"
             android:label="@string/title_activity_project_bidders"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ProjectParticipantsActivity"
             android:label="@string/title_activity_project_participants"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.ChangePasswordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.HiddenProjectsActivity"
             android:label="@string/title_activity_hidden_projects"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.LocationDetailMapActivity"
-            android:label="@string/title_activity_location_detail_map"></activity>
+            android:label="@string/title_activity_location_detail_map" />
         <activity
             android:name=".content.CompanyProjectBidsActivity"
             android:label="@string/title_activity_company_project_bids"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.DashboardIntermediaryActivity"
-            android:theme="@style/AppTheme.FullScreen"></activity>
-        <activity android:name=".content.CompanyContactsActivity"></activity>
-        <activity android:name=".content.ReturnToHomeActivity"
-         android:theme="@style/Theme.AppCompat.Translucent" ></activity>
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity android:name=".content.CompanyContactsActivity" />
+        <activity
+            android:name=".content.ReturnToHomeActivity"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
     </application>
 
 </manifest>
