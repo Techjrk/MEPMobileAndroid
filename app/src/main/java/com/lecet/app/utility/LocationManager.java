@@ -60,7 +60,6 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
     }
 
     // Must be called in the Activity onStart
