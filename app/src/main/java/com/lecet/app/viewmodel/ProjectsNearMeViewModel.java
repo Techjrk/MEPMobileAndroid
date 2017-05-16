@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -26,8 +27,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
+import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
+import com.lecet.app.content.widget.LecetInfoWindowAdapter;
+import com.lecet.app.content.widget.LecetInfoWindowCreatePinAdapter;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
@@ -42,6 +46,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_ADDRESS;
+import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LATITUDE;
+import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LONGITUDE;
 import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
 /**
@@ -57,14 +64,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private static final int DEFAULT_DISTANCE = 3;
     private static final int DEFAULT_ZOOM = 15;
     private static final int REQUEST_FILTER_MPN = 8;
+    private AppCompatActivity activity;
     private ProjectDomain projectDomain;
     private GoogleMap map;
+    private Marker currLocationMarker;
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
 
     private BitmapDescriptor redMarker;
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
+    private BitmapDescriptor currentLocationMarker;
 
     //Toolbar views
     private EditText search;
@@ -76,6 +86,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer) {
         super(activity);
+        this.activity = activity;
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
@@ -101,6 +112,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.redMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
         this.greenMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
         this.yellowMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
+        this.currentLocationMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
         this.map = map;
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
@@ -159,7 +171,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         return map != null;
     }
 
-    public void fetchProjectsNearMe(LatLng location) {
+    public void fetchProjectsNearMe(final LatLng location) {
 
         showProgressDialog("", getActivityWeakReference().get().getString(R.string.updating));
 
@@ -184,6 +196,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                         showCancelAlertDialog("", getActivityWeakReference().get().getString(R.string.no_projects_found));
                     }
+
+                    placeMapMarker(location);   //TODO - move to method responding to map press. only works on success
 
                 } else {
 
@@ -242,25 +256,62 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         }
     }
 
+    private void placeMapMarker(LatLng location) {
+        Log.d(TAG, "placeMapMarker");
+        LatLng latLng = new LatLng(location.latitude, location.longitude);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(getActivityWeakReference().get().getString(R.string.my_location));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        currLocationMarker = map.addMarker(markerOptions);
+    }
+
+    public void onMapClick(View view) {
+        Log.d(TAG, "onMapClick: " + view.getId());
+    }
+
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (lastMarkerTapped != null) {
+        Log.d(TAG, "onMarkerClick: " + marker.getTitle());
 
-            Project project = (Project) lastMarkerTapped.getTag();
+        BitmapDescriptor icon;
 
-            BitmapDescriptor icon;
-
-            if (project.getProjectStage() == null) {
-                icon = greenMarker;
-            } else {
-                icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
-            }
-
-            lastMarkerTapped.setIcon(icon);
+        boolean isMyLocationMarker = false;
+        if(marker != null && marker.getTitle() != null) {
+            isMyLocationMarker = marker.getTitle().equals(getActivityWeakReference().get().getString(R.string.my_location));
         }
 
-        lastMarkerTapped = marker;
-        lastMarkerTapped.setIcon(yellowMarker);
+        // my location marker, which uses its own info window adapter and layout
+        if (isMyLocationMarker) {
+            map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity));
+            icon = currentLocationMarker;
+            if (lastMarkerTapped != null) {
+                lastMarkerTapped.setIcon(icon);
+            }
+        }
+
+        // fetched project markers
+        else {
+            map.setInfoWindowAdapter(new LecetInfoWindowAdapter(activity));
+
+            if (lastMarkerTapped != null) {
+
+                Project project = (Project) lastMarkerTapped.getTag();
+
+                if (project.getProjectStage() == null) {
+                    icon = greenMarker;
+                } else {
+                    icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
+                }
+
+                lastMarkerTapped.setIcon(icon);
+            }
+
+            lastMarkerTapped = marker;
+            lastMarkerTapped.setIcon(yellowMarker);
+
+        }
 
         return false;
     }
@@ -268,8 +319,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     public void onNavigationClicked(View view) {
 
         //TODO center map on current location
-        Uri gmmIntentUri = Uri.parse(String.format("google.navigation:q=%s,%s"
-                , lastMarkerTapped.getPosition().latitude, lastMarkerTapped.getPosition().longitude));
+        Uri gmmIntentUri = Uri.parse(String.format("google.navigation:q=%s,%s", lastMarkerTapped.getPosition().latitude, lastMarkerTapped.getPosition().longitude));
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         getActivityWeakReference().get().startActivity(mapIntent);
@@ -277,15 +327,27 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Project project = (Project) marker.getTag();
+        Log.d(TAG, "onInfoWindowClick: marker: " + marker.getTitle());
 
         Activity context = getActivityWeakReference().get();
 
         if (context != null) {
 
-            Intent intent = new Intent(context, ProjectDetailActivity.class);
-            intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
-            context.startActivity(intent);
+            // TODO - add case for going to New Project Activity here, based on the ProjectDetailActivity layout *********************
+            if(marker.getTitle() != null && marker.getTitle().equals(context.getString(R.string.my_location))) {
+                Intent intent = new Intent(context, AddProjectActivity.class);
+                intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");   //TODO - hardcoded
+                intent.putExtra(EXTRA_MARKER_LATITUDE, marker.getPosition().latitude);
+                intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
+                context.startActivity(intent);
+            }
+
+            else {
+                Project project = (Project) marker.getTag();
+                Intent intent = new Intent(context, ProjectDetailActivity.class);
+                intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+                context.startActivity(intent);
+            }
         }
     }
 
@@ -310,6 +372,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "onClick: view id: " + v.getId());
         int id = v.getId();
         if (id == R.id.button_clear) { //the x in the search bar
             search.setText(null);
@@ -340,6 +403,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     };
 
     public void searchAddress(String query) {
+        Log.d(TAG, "searchAddress: " + query);
         if (!TextUtils.isEmpty(query)) {
             LatLng location = getLocationFromAddress(query);
             if (location == null) {
@@ -352,6 +416,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     public LatLng getLocationFromAddress(String strAddress) {
+        Log.d(TAG, "getLocationFromAddress: " + strAddress);
 
         Geocoder coder = new Geocoder(getActivityWeakReference().get(), Locale.US);
         List<Address> address;

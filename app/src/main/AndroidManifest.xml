@@ -138,6 +138,11 @@
                     android:value=".content.MainActivity"/>
         </activity>
         <activity
+                android:name=".content.AddProjectActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme">
+        </activity>
+        <activity
                 android:name=".content.ProjectTrackingListActivity"
                 android:parentActivityName=".content.MainActivity"
                 android:screenOrientation="portrait"
