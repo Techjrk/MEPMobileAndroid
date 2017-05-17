@@ -40,7 +40,6 @@ public class ProjectAddNoteActivity extends LecetBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate");
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
 
@@ -48,6 +47,11 @@ public class ProjectAddNoteActivity extends LecetBaseActivity {
         noteId    = getIntent().getLongExtra(NOTE_ID_EXTRA, -1);
         noteTitle = getIntent().getStringExtra(NOTE_TITLE_EXTRA);
         noteBody  = getIntent().getStringExtra(NOTE_BODY_EXTRA);
+
+        Log.d(TAG, "onCreate: projectId: " + projectId);
+        Log.d(TAG, "onCreate: noteId: " + noteId);
+        Log.d(TAG, "onCreate: noteTitle: " + noteTitle);
+        Log.d(TAG, "onCreate: noteBody: " + noteBody);
 
         setupBinding(projectDomain);
     }

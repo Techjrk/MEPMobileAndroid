@@ -42,6 +42,9 @@ import io.realm.Realm;
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
         , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener  {
 
+    public static final String EXTRA_MARKER_ADDRESS   = "com.lecet.app.content.ProjectsNearMeActivity.marker.address.extra";
+    public static final String EXTRA_MARKER_LATITUDE  = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
+    public static final String EXTRA_MARKER_LONGITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.longitude.extra";
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
     public static final String EXTRA_LOCATION_MANAGER_CONNECTED = "location_manager_connected";
@@ -112,14 +115,14 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap map) {
         MapsInitializer.initialize(this);
-        map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));
+        //map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));     // TODO - this is where the info_window_layout is set as the default info window for the map
         viewModel.setMap(map);
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
     }
 
 
-        private void fetchProjects(boolean animateCamera) {
+    private void fetchProjects(boolean animateCamera) {
 
         if (!viewModel.isMapReady()) return;
 

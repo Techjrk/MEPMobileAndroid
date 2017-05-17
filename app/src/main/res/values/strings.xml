@@ -53,6 +53,8 @@
     <string name="max">MAX</string>
     <string name="edit_upper">Edit</string>
     <string name="discard">Discard</string>
+    <string name="select">Select</string>
+    <string name="none">None</string>
 
 
     <!-- Splash, Login & Navigation Base -->
@@ -368,4 +370,14 @@
     <string name="photo">Photo</string>
     <string name="library">Library</string>
     <string name="preview">Preview</string>
+    <string name="my_location">My Location</string>
+
+    <!--MPA Add Project -->
+    <string name="bid_status">Bid Status</string>
+    <string name="type">Type</string>
+    <string name="target_set_date">Target Set Date</string>
+    <string name="project_title">Project Title</string>
+    <string name="street_1">Street 1</string>
+    <string name="street_2">Street 2</string>
+
 </resources>

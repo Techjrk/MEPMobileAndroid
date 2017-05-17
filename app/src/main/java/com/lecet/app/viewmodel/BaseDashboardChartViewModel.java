@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
@@ -151,9 +152,11 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         pieChartView.setDrawMarkerViews(false);
         pieChartView.setDrawEntryLabels(false);
         pieChartView.setCenterText("");
-        pieChartView.setDescription("");
         pieChartView.setRotationEnabled(false);
         pieChartView.setHighlightPerTapEnabled(true);
+
+        Description description = pieChartView.getDescription();
+        description.setEnabled(false);
 
         Legend legend = pieChartView.getLegend();
         legend.setEnabled(false);
@@ -408,7 +411,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
          * X Positioning for the marker
          * Known issue where enlarging slices via button strip throws off getXOffset values
          */
-        @Override
+        /*@Override
         public int getXOffset(float xpos) {
             int origX = -(getWidth() / 2);
             int chartCenterX = pieChartView.getWidth() / 2;
@@ -417,13 +420,13 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             int extendedXOffset = origX + addedX;
             //return origX;             // orig unshifted x
             return extendedXOffset;     // position custom label in center X of default label location
-        }
+        }*/
 
         /**
          * Y Positioning for the marker
          * Known issue where enlarging slices via button strip throws off getYOffset values
          */
-        @Override
+        /*@Override
         public int getYOffset(float ypos) {
             int origY = -(getHeight() / 2);
             int chartCenterY = pieChartView.getHeight() / 2;
@@ -432,7 +435,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             int extendedYOffset = origY + addY;
             //return origY;             // orig unshifted y
             return extendedYOffset;     // position custom label in center Y of default label location
-        }
+        }*/
     }
 
 

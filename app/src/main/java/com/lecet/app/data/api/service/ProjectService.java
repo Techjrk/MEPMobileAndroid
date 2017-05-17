@@ -14,6 +14,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -101,6 +102,13 @@ public interface ProjectService {
             "Accept: application/json",
             "Content-Type: application/json"
     })
+    @DELETE("Notes/{noteID}")
+    Call<ProjectNote> deleteNote (@Header("Authorization") String authorization, @Path("noteID") long noteID);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
     @GET("Projects/{projectID}/userNotes")
     Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
@@ -117,6 +125,13 @@ public interface ProjectService {
     })
     @PUT("Images/{photoID}")
     Call<ProjectPhoto> updatePhoto (@Header("Authorization") String authorization, @Path("photoID") long photoID, @Body PhotoPost photoPost);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @DELETE("Images/{photoID}")
+    Call<ProjectPhoto> deletePhoto (@Header("Authorization") String authorization, @Path("photoID") long photoID);
 
     @Headers({
             "Accept: application/json",

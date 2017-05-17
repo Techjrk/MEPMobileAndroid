@@ -28,30 +28,33 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
+                android:minHeight="34dp"
                 android:orientation="horizontal">
 
                 <!-- TITLE -->
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="8"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_weight="9"
                     android:textSize="18sp"
-                    android:maxLines="1"
+                    android:maxLines="2"
+                    android:textStyle="bold"
                     android:textColor="@color/pureBlack"
-                    android:gravity="bottom"
                     android:text="@{viewModel.title}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="Note Title Placeholder"/>
+                    tools:text="This is my New Post Title"/>
 
                 <!-- EDIT ICON -->
                 <ImageView
-                    android:scaleType="fitCenter"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:padding="5dp"
-                    android:adjustViewBounds="false"
+                    android:paddingBottom="4dp"
                     android:visibility="@{viewModel.canEdit ? View.VISIBLE : View.GONE}"
                     android:src="@drawable/ic_pencil_blue"
                     android:onClick="@{viewModel::onEditButtonClick}"/>
@@ -102,8 +105,7 @@
                     android:maxLines="1"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:id="@+id/textView"
-                    tools:text="Erin Bernardin"
-                    android:onClick="@{viewModel::onAuthorNameClick}"/>
+                    tools:text="Erin Bernardin"/>
 
                 <!-- TIMESTAMP -->
                 <TextView
