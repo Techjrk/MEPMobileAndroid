@@ -45,9 +45,9 @@
         android:id="@+id/button_clear"
         android:layout_width="48dp"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/button_filter"
         android:scaleType="center"
         android:src="@drawable/ic_action_clear_near_me"
         android:visibility="gone" />

@@ -9,7 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -59,6 +62,7 @@ public class ProjectDetailActivity extends LecetBaseActivity {
         // set up TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_project_detail);
         tabLayout.setupWithViewPager(viewPager);
+        setupToolbar();
     }
 
     @Override
@@ -142,5 +146,22 @@ public class ProjectDetailActivity extends LecetBaseActivity {
         super.onDestroy();
 
         viewModel.cancelGetProjectDetailRequest();
+    }
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setContentInsetStartWithNavigation(0);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            LayoutInflater inflater = getLayoutInflater();
+            //View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
+            //viewModel.setToolbar(searchBarView);
+            //  actionBar.setCustomView(searchBarView);
+            //actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowCustomEnabled(false);
+        }
     }
 }

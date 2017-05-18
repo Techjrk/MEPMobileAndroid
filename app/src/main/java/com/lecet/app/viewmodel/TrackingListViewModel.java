@@ -131,16 +131,16 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     public void setToolbar(View toolbar, String title, String subtitle) {
         titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
         subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
-        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
+    //    backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
         //Check the binding in the layout, which is not triggering the button clicks in this VM
-        backButton.setOnClickListener(new View.OnClickListener() {
+ /*       backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackButtonClick(v);
             }
-        });
+        });*/
 
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override

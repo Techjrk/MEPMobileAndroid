@@ -1,5 +1,9 @@
 package com.lecet.app.content;
 
+import android.content.Intent;
+import android.util.Log;
+import android.view.KeyEvent;
+
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -54,7 +58,5 @@ public class ProjectTrackingListActivity extends TrackingListActivity<ProjectTra
 
         return subtitleSb.toString();
     }
-
 }
-
 
