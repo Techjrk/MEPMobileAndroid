@@ -379,5 +379,6 @@
     <string name="project_title">Project Title</string>
     <string name="street_1">Street 1</string>
     <string name="street_2">Street 2</string>
-
+    <string name="reg_pre_bid">Pre Bid</string>
+    <string name="reg_post_bid">Post Bid</string>
 </resources>

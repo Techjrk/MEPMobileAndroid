@@ -9,16 +9,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,7 +29,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
-import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -36,6 +37,9 @@ import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
 import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -59,7 +63,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     boolean isLocationManagerConnected;
     Location lastKnowLocation;
     private final String TAG = "ProjectsNearMeActivity";
-
+    ViewPager viewPager;
+    TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +76,13 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupToolbar();
         setupLocationManager();
         checkPermissions();
+        viewPager = (ViewPager) findViewById(R.id.view_pager_bid);
+        setupViewPager(viewPager);
+//        setupViewPager(viewPager, projectId, projectDomain);
+// set up TabLayout
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout_bid_detail);
+        tabLayout.setupWithViewPager(viewPager);
+        setupViewPager(viewPager);
     }
 
     private void continueSetup() {
@@ -642,5 +654,45 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     }
     public void onBidTableViewPressed(View view) {
      Log.d("tableView pressed","tableView pressed");
+        viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
+
+    }
+    private void setupViewPager(ViewPager viewPager) {
+//        private void setupViewPager(ViewPager viewPager, long projectId, ProjectDomain projectDomain) {
+        ProjectsNearMeActivity.ViewPagerAdapter adapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(PrePostBidFragment.newInstance(viewModel), getResources().getString(R.string.reg_pre_bid));
+        adapter.addFragment(PrePostBidFragment.newInstance(viewModel), getResources().getString(R.string.reg_post_bid));
+        viewPager.setAdapter(adapter);
+    }
+    /**
+     * Inner ViewPagerAdapter class
+     */
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragmentList.add(fragment);
+            fragmentTitleList.add("               "+title+"               ");
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitleList.get(position);
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.Bindable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -38,6 +40,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -229,6 +232,12 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private void populateMap(List<Project> projects) {
         if (isActivityAlive()) {
+            if (prebid == null) {
+                prebid = new ArrayList<Project>();
+                postbid = new ArrayList<Project>();
+            } else {
+                prebid.clear(); postbid.clear();
+            }
 
             // Clear existing markers
             map.clear();
@@ -240,9 +249,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     BitmapDescriptor icon;
 
                     if (project.getProjectStage() == null) {
-                        icon = greenMarker;
+                        icon = greenMarker; prebid.add(project);
+
                     } else {
-                        icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
+                        if (project.getProjectStage().getParentId() == 102) {
+                            prebid.add(project);
+                            icon = greenMarker;
+                        } else {
+                            postbid.add(project); icon =  redMarker;
+                        }
                     }
 
                     Marker marker = map.addMarker(new MarkerOptions()
@@ -434,5 +449,34 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         } catch (IOException e) {
         }
         return p1;
+    }
+    List<Project> prebid, postbid;
+
+    public List<Project> getPrebid() {
+        return prebid;
+    }
+
+    public void setPrebid(List<Project> prebid) {
+        this.prebid = prebid;
+    }
+
+    public List<Project> getPostbid() {
+        return postbid;
+    }
+
+    public void setPostbid(List<Project> postbid) {
+        this.postbid = postbid;
+    }
+
+    private boolean tableViewDisplay;
+
+    @Bindable
+    public boolean getTableViewDisplay() {
+        return tableViewDisplay;
+    }
+
+    public void setTableViewDisplay(boolean tableViewDisplay) {
+        this.tableViewDisplay = tableViewDisplay;
+        notifyPropertyChanged(BR.tableViewDisplay);
     }
 }
