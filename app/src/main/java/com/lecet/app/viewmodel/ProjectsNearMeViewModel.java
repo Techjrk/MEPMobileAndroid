@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -17,12 +19,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -78,6 +83,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
     private BitmapDescriptor currentLocationMarker;
+    private BitmapDescriptor customPinMarker;
 
     //Toolbar views
     private EditText search;
@@ -112,10 +118,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     public void setMap(GoogleMap map) {
-        this.redMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
-        this.greenMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
-        this.yellowMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
+        this.redMarker             = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
+        this.greenMarker           = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
+        this.yellowMarker          = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
         this.currentLocationMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
+        this.customPinMarker       = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
         this.map = map;
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
@@ -277,7 +284,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(getActivityWeakReference().get().getString(R.string.my_location));
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         currLocationMarker = map.addMarker(markerOptions);
     }
 
@@ -300,10 +307,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         // my location marker, which uses its own info window adapter and layout
         if (isMyLocationMarker) {
             map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity));
-            icon = currentLocationMarker;
-            if (lastMarkerTapped != null) {
+            icon = customPinMarker;
+            //TODO - change to pin icon
+            /*if (lastMarkerTapped != null) {
                 lastMarkerTapped.setIcon(icon);
-            }
+            }*/
+
+            marker.setIcon(icon);
+            bounceMarker(marker);
+
         }
 
         // fetched project markers
@@ -331,6 +343,40 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         return false;
     }
 
+    private void bounceMarker(final Marker marker) {
+        Log.d(TAG, "bounceMarker: " + marker.getTitle());
+
+        //Make the marker bounce
+        final Handler handler = new Handler();
+        final long startTime = SystemClock.uptimeMillis();
+        final long duration = 2000;
+        final int yOffset = -500;
+
+        Projection proj = map.getProjection();
+        final LatLng markerLatLng = marker.getPosition();
+        Point startPoint = proj.toScreenLocation(markerLatLng);
+        startPoint.offset(0, yOffset);
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+
+        final Interpolator interpolator = new BounceInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - startTime;
+                float t = interpolator.getInterpolation((float) elapsed / duration);
+                double lng = t * markerLatLng.longitude + (1 - t) * startLatLng.longitude;
+                double lat = t * markerLatLng.latitude + (1 - t) * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
+    }
+
     public void onNavigationClicked(View view) {
 
         //TODO center map on current location
@@ -348,7 +394,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         if (context != null) {
 
-            // TODO - add case for going to New Project Activity here, based on the ProjectDetailActivity layout *********************
             if(marker.getTitle() != null && marker.getTitle().equals(context.getString(R.string.my_location))) {
                 Intent intent = new Intent(context, AddProjectActivity.class);
                 intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");   //TODO - hardcoded
@@ -388,13 +433,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onClick(View v) {
         Log.d(TAG, "onClick: view id: " + v.getId());
+
         int id = v.getId();
+
         if (id == R.id.button_clear) { //the x in the search bar
             search.setText(null);
-        } else if (id == R.id.button_search) {
+        }
+        else if (id == R.id.button_search) {
             setProjectFilter("default");
             searchAddress(search.getText().toString());
-        } else if (id == R.id.button_filter) {
+        }
+        else if (id == R.id.button_filter) {
             search.setText(null);
             setProjectFilter("default");
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
