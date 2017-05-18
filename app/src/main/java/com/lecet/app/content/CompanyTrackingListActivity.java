@@ -54,9 +54,4 @@ public class CompanyTrackingListActivity extends TrackingListActivity<CompanyTra
 
         return subtitleSb.toString();
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == MainActivity.RETURN_TO_HOME)   finish();
-    }
 }
