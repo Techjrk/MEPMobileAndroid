@@ -168,7 +168,12 @@
         <activity
             android:name=".content.ProjectDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.SearchFilterMPSActivity"
             android:screenOrientation="portrait"
@@ -272,7 +277,12 @@
             android:name=".content.CompanyDetailActivity"
             android:label="@string/title_activity_company_detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.CompanyAssociatedProjectsActivity"
             android:label="@string/title_activity_company_associated_projects"
@@ -308,10 +318,6 @@
             android:name=".content.DashboardIntermediaryActivity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".content.CompanyContactsActivity" />
-        <activity
-            android:name=".content.ReturnToHomeActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
-
     </application>
 
 </manifest>
