@@ -51,7 +51,8 @@ public class CompanyDomain {
 
     public RealmResults<Company> fetchCompany(long companyId) {
 
-        RealmResults<Company> results = realm.where(Company.class).equalTo("contactId", companyId).findAll();
+        RealmResults<Company> results = realm.where(Company.class).equalTo("id", companyId).findAll();
+//        RealmResults<Company> results = realm.where(Company.class).equalTo("contactId", companyId).findAll();
         return results;
     }
 
