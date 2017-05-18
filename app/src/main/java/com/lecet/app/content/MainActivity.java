@@ -81,7 +81,6 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
 
     private static final String TAG = "MainActivity";
-    public static final int RETURN_TO_HOME = 8;
     private MainViewModel viewModel;
     private SearchDomain searchDomain;
 
