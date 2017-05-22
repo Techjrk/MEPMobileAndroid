@@ -79,7 +79,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
     private BitmapDescriptor currentLocationMarker;
-
+    private ArrayList<Project> prebid, postbid;
     //Toolbar views
     private EditText search;
     private View buttonClear;
@@ -454,7 +454,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         }
         return p1;
     }
-    ArrayList<Project> prebid, postbid;
+
     @Bindable
     public ArrayList<Project> getPrebid() {
         return prebid;

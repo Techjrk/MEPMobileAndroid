@@ -2,6 +2,7 @@ package com.lecet.app.adapters;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -32,16 +33,21 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @SearchViewModel.SearchAdapterType
     private final int adapterType;
-    ProjectsNearMeActivity activity;
+    //ProjectsNearMeActivity activity;
+    FragmentActivity factivity;
     private List data = Collections.emptyList();
 
-    public BidProjectListRecyclerViewAdapter(ProjectsNearMeActivity activity, int adapterType, List data) {
-        this.activity = activity;
+ /*   public BidProjectListRecyclerViewAdapter(ProjectsNearMeActivity activity, int adapterType, List data) {
+       // this.activity = activity;
         this.adapterType = adapterType;
         this.data = data;
     }
-
-
+*/
+    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, int adapterType, List data) {
+        this.factivity = activity;
+        this.adapterType = adapterType;
+        this.data = data;
+    }
     public void setData(List data) {
         this.data = data;
     }
@@ -59,8 +65,8 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
 //        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
-        final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
-
+//        final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
+        final String mapsApiKey = factivity.getBaseContext().getResources().getString(google_api_key);
         BidProjectViewHolder viewHolder = (BidProjectViewHolder) holder;
         BidItemViewModel vm = new BidItemViewModel((Project) data.get(position), mapsApiKey);
         viewHolder.getBinding().setViewModel(vm);

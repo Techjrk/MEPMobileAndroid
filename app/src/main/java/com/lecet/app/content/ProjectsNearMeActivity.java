@@ -673,8 +673,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         }
 
         pagerAdapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(PreBidFragment.newInstance(this, viewModel.getPrebid()), getResources().getString(R.string.reg_pre_bid),preSize);
-        pagerAdapter.addFragment(PostBidFragment.newInstance(this, viewModel.getPostbid()), getResources().getString(R.string.reg_post_bid),postSize);
+        pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebid()), getResources().getString(R.string.reg_pre_bid),preSize);
+        pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbid()), getResources().getString(R.string.reg_post_bid),postSize);
         viewPager.setAdapter(pagerAdapter);
     }
     /**

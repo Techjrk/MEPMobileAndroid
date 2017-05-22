@@ -1,6 +1,5 @@
 package com.lecet.app.content;
 
-
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.BidProjectListRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.FragmentPrePostBidBinding;
-import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
@@ -24,13 +22,10 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class PostBidFragment extends Fragment {
-    static private ProjectsNearMeViewModel viewModel;
-    static private ProjectsNearMeActivity activity;
     static private ArrayList<Project> bidData;
 
-    public static PostBidFragment newInstance(ProjectsNearMeActivity ac, ArrayList<Project> data) {
+    public static PostBidFragment newInstance(ArrayList<Project> data) {
         PostBidFragment fragmentInstance = new PostBidFragment();
-        activity = ac;
         bidData = data;
 
         return fragmentInstance;
@@ -38,16 +33,6 @@ public class PostBidFragment extends Fragment {
 
     public PostBidFragment() {
         // Required empty public constructor
-    }
-
-    BidProjectListRecyclerViewAdapter searchAdapterProjectAll;
-
-    public BidProjectListRecyclerViewAdapter getSearchAdapterProjectAll() {
-        return searchAdapterProjectAll;
-    }
-
-    public void setSearchAdapterProjectAll(BidProjectListRecyclerViewAdapter searchAdapterProjectAll) {
-        this.searchAdapterProjectAll = searchAdapterProjectAll;
     }
 
     @Override
@@ -60,26 +45,20 @@ public class PostBidFragment extends Fragment {
         return view;
     }
 
-    private FragmentPrePostBidBinding binding;
 
     private View initDataBinding(LayoutInflater inflater, ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pre_post_bid, container, false);
+        FragmentPrePostBidBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pre_post_bid, container, false);
 
-        binding.setViewModel(viewModel);
-
-        View view = binding.getRoot();
-
-        return view;
+        return binding.getRoot();
     }
 
     void initAdapter(View view) {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_prepostbid);
-//        RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_prepostbid);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayout.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         BidProjectListRecyclerViewAdapter searchAdapterProjectAll =
-                new BidProjectListRecyclerViewAdapter(activity, SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, bidData);
+                new BidProjectListRecyclerViewAdapter(getActivity(), SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, bidData);
         //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
     }
