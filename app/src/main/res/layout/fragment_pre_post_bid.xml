@@ -8,7 +8,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context="com.lecet.app.content.ProjectsNearMeViewModel"
-        android:background="@color/pureWhite">
+        android:background="@color/lecetDeepBlue">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_prepostbid"
