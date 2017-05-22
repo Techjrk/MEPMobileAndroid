@@ -1,7 +1,6 @@
 package com.lecet.app.content;
 
 
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import android.widget.LinearLayout;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.BidProjectListRecyclerViewAdapter;
-import com.lecet.app.adapters.SearchAllProjectRecyclerViewAdapter;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -32,12 +30,14 @@ import io.realm.Realm;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PrePostBidFragment extends Fragment {
+
+//TODO: make an inheritance for this fragment and all common attributes and methods for PreBid and postbid.
+public class PreBidFragment extends Fragment {
 static private ProjectsNearMeViewModel viewModel;
 static private ProjectsNearMeActivity activity;
 static private ArrayList<Project> bidData;
-    public static PrePostBidFragment newInstance(ProjectsNearMeActivity ac, ArrayList<Project> data) {
-        PrePostBidFragment fragmentInstance = new PrePostBidFragment();
+    public static PreBidFragment newInstance(ProjectsNearMeActivity ac, ArrayList<Project> data) {
+        PreBidFragment fragmentInstance = new PreBidFragment();
        // viewModel = vm;
         activity = ac;
         bidData = data;
@@ -47,7 +47,7 @@ static private ArrayList<Project> bidData;
 
         return fragmentInstance;
     }
-    public PrePostBidFragment() {
+    public PreBidFragment() {
         // Required empty public constructor
     }
     BidProjectListRecyclerViewAdapter searchAdapterProjectAll;
