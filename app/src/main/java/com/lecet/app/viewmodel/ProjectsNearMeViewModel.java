@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.ProjectsNearMeActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.content.widget.LecetInfoWindowCreatePinAdapter;
@@ -161,8 +162,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    search.setText(search.getText().toString().trim());
                     onClick(buttonSearch);
                 }
+
                 return false;
             }
         });
@@ -194,7 +197,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     populateMap(projects);
 
                     dismissProgressDialog();
-
+                    ((ProjectsNearMeActivity)activity).updateTableViewPager();
                     if (projects == null || projects.size() == 0) {
 
                         showCancelAlertDialog("", getActivityWeakReference().get().getString(R.string.no_projects_found));
@@ -394,6 +397,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         } else if (id == R.id.button_search) {
             setProjectFilter("default");
             searchAddress(search.getText().toString());
+          //  ((ProjectsNearMeActivity) activity).setupViewPager();
         } else if (id == R.id.button_filter) {
             search.setText(null);
             setProjectFilter("default");

@@ -655,15 +655,26 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     public void onBidTableViewPressed(View view) {
      Log.d("tableView pressed","tableView pressed");
         viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
-        pagerAdapter.getFragmentList().clear(); pagerAdapter.getFragmentTitleList().clear();
-        setupViewPager(viewPager);
+       // pagerAdapter.getFragmentList().clear(); pagerAdapter.getFragmentTitleList().clear();
+      //  setupViewPager(viewPager);
 
     }
-
+    public void updateTableViewPager() {
+        setupViewPager(viewPager);
+        pagerAdapter.notifyDataSetChanged();
+    }
     private void setupViewPager(ViewPager viewPager) {
+        int preSize = 0, postSize = 0;
+        if (viewModel.getPrebid()!=null) {
+            preSize = viewModel.getPrebid().size();
+        }
+        if (viewModel.getPostbid()!=null) {
+            postSize = viewModel.getPostbid().size();
+        }
+
         pagerAdapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(PreBidFragment.newInstance(this, viewModel.getPrebid()), getResources().getString(R.string.reg_pre_bid));
-        pagerAdapter.addFragment(PostBidFragment.newInstance(this, viewModel.getPostbid()), getResources().getString(R.string.reg_post_bid));
+        pagerAdapter.addFragment(PreBidFragment.newInstance(this, viewModel.getPrebid()), getResources().getString(R.string.reg_pre_bid),preSize);
+        pagerAdapter.addFragment(PostBidFragment.newInstance(this, viewModel.getPostbid()), getResources().getString(R.string.reg_post_bid),postSize);
         viewPager.setAdapter(pagerAdapter);
     }
     /**
@@ -687,9 +698,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             return fragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void addFragment(Fragment fragment, String title, int size) {
             fragmentList.add(fragment);
-            fragmentTitleList.add("               "+title+"               ");
+            fragmentTitleList.add("     "+size+" "+title+"     ");
         }
 
         public List<Fragment> getFragmentList() {
