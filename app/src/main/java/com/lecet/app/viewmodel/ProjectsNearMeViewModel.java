@@ -450,21 +450,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         }
         return p1;
     }
-    List<Project> prebid, postbid;
-
-    public List<Project> getPrebid() {
+    ArrayList<Project> prebid, postbid;
+    @Bindable
+    public ArrayList<Project> getPrebid() {
         return prebid;
     }
 
-    public void setPrebid(List<Project> prebid) {
+    public void setPrebid(ArrayList<Project> prebid) {
         this.prebid = prebid;
     }
 
-    public List<Project> getPostbid() {
+    @Bindable
+    public ArrayList<Project> getPostbid() {
         return postbid;
     }
 
-    public void setPostbid(List<Project> postbid) {
+    public void setPostbid(ArrayList<Project> postbid) {
         this.postbid = postbid;
     }
 
