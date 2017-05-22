@@ -17,6 +17,8 @@ public class LecetApplication extends Application {
         super.onCreate();
 
         Realm.init(this);
+
     }
+
 
 }

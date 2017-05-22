@@ -1,5 +1,6 @@
 package com.lecet.app.data.api.service;
 
+import com.lecet.app.data.api.request.ProjectNotifyRequest;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
@@ -140,4 +141,10 @@ public interface ProjectService {
     @GET("Projects/{projectID}/images")
     Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("Projects/Project_notify")
+    Call<ResponseBody> projectNotify(@Body ProjectNotifyRequest notifyRequest);
 }
