@@ -1,6 +1,7 @@
 package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.api.request.ChangePasswordRequest;
+import com.lecet.app.data.api.request.FirebaseTokenRequest;
 import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;
@@ -60,4 +61,11 @@ public interface UserService {
     @PUT("LecetUsers/{userId}")
     @FormUrlEncoded
     Call<User> changePassword(@Header("Authorization") String token, @Path("userId") long userId, @Field("oldPassword") String oldPassword, @Field("password") String password, @Field("confirmation") String confirmation);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("installations")
+    Call<ResponseBody> registerFirebaseToken(@Header("Authorization") String token, @Body FirebaseTokenRequest request);
 }

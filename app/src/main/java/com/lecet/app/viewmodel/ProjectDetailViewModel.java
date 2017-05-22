@@ -1,5 +1,8 @@
 package com.lecet.app.viewmodel;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
@@ -13,7 +16,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectDetailAdapter;
 import com.lecet.app.adapters.ProjectNotesAdapter;
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
@@ -28,11 +31,9 @@ import com.lecet.app.utility.DateUtility;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.realm.Realm;
@@ -48,7 +49,7 @@ import retrofit2.Response;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class ProjectDetailViewModel extends BaseObservableViewModel implements ClickableMapInterface {
+public class ProjectDetailViewModel extends BaseMapObservableViewModel implements ClickableMapInterface, BaseMapObservableViewModel.OnBaseViewModelMapReady {
 
     private static final String TAG = "ProjectDetailViewModel";
 
@@ -58,6 +59,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
     private final WeakReference<ProjectDetailActivity> activityWeakReference;
     private final ProjectDomain projectDomain;
     private List<ProjectAdditionalData> additionalNotes;
+    private boolean mapReady;
     //private List<ProjectAdditionalData> additionalImages;
 
     private Project project;
@@ -71,8 +73,18 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
     private Call<List<ProjectNote>> additonalNotesCall;
     private Call<List<ProjectPhoto>> additonalImagesCall;
 
+
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectID, double bidAmount, String mapsApiKey, ProjectDomain projectDomain) {
-        super(activity);
+
+        super(activity, new GoogleMapOptions().rotateGesturesEnabled(false)
+                        .rotateGesturesEnabled(false)
+                        .scrollGesturesEnabled(false)
+                        .tiltGesturesEnabled(false)
+                        .zoomControlsEnabled(false)
+                        .zoomGesturesEnabled(false),
+                R.id.map_container);
+
+        setListener(this);
 
         this.activityWeakReference = new WeakReference<>(activity);
         this.projectID = projectID;
@@ -134,7 +146,10 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
                             initProjectDetailAdapter(activity, project);
 
                             // Setup paralax imageview
-                            initMapImageView(activity, getMapUrl(project));
+                            //initMapImageView(activity, getMapUrl(project));
+                            if (mapReady) {
+                                addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+                            }
 
                         }
                     }, new Realm.Transaction.OnError() {
@@ -279,15 +294,15 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         bidsCopy.addAll(bids);
 
         // add sorted Bids with value more than zero first
-        for(Bid bid : bidsCopy) {
-            if(bid.getAmount() > 0) {
+        for (Bid bid : bidsCopy) {
+            if (bid.getAmount() > 0) {
                 resortedBids.add(bid);
             }
         }
 
         // add Bids with value of 0 last
-        for(Bid bid : bidsCopy) {
-            if(bid.getAmount() == 0) {
+        for (Bid bid : bidsCopy) {
+            if (bid.getAmount() == 0) {
                 resortedBids.add(bid);
             }
         }
@@ -323,7 +338,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         Picasso.with(imageView.getContext()).load(mapUrl).fit().into(imageView);
     }
 
-    public void getAdditionalNotes(final boolean refresh){
+    public void getAdditionalNotes(final boolean refresh) {
         if (refresh) {
             additionalNotes.clear();
         }
@@ -333,21 +348,21 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
             public void onResponse(Call<List<ProjectNote>> call, Response<List<ProjectNote>> response) {
                 List<ProjectNote> responseBody = response.body();
 
-                if(responseBody != null && additionalNotes != null) {
+                if (responseBody != null && additionalNotes != null) {
                     additionalNotes.addAll(responseBody);
                     projectNotesAdapter.notifyDataSetChanged();
                 }
 
-                if(additionalNotes != null) {
+                if (additionalNotes != null) {
                     Collections.sort(additionalNotes);
                     Collections.reverse(additionalNotes);
                     projectNotesAdapter.notifyDataSetChanged();
                 }
                 long[] ids = new long[additionalNotes.size()];
-                for (int i = 0; i < additionalNotes.size() ; i++) {
-                    if(additionalNotes.get(i) instanceof ProjectNote){
+                for (int i = 0; i < additionalNotes.size(); i++) {
+                    if (additionalNotes.get(i) instanceof ProjectNote) {
                         ids[i] = ((ProjectNote) additionalNotes.get(i)).getId();
-                    }else{
+                    } else {
                         ids[i] = ((ProjectPhoto) additionalNotes.get(i)).getId();
                     }
                 }
@@ -373,21 +388,21 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
 
                 List<ProjectPhoto> responseBody = response.body();
 
-                if(responseBody != null && additionalNotes != null) {
+                if (responseBody != null && additionalNotes != null) {
                     additionalNotes.addAll(responseBody);
                     projectNotesAdapter.notifyDataSetChanged();
                 }
 
-                if(additionalNotes != null) {
+                if (additionalNotes != null) {
                     Collections.sort(additionalNotes);
                     Collections.reverse(additionalNotes);
                     projectNotesAdapter.notifyDataSetChanged();
                 }
                 long[] ids = new long[additionalNotes.size()];
-                for (int i = 0; i < additionalNotes.size() ; i++) {
-                    if(additionalNotes.get(i) instanceof ProjectNote){
+                for (int i = 0; i < additionalNotes.size(); i++) {
+                    if (additionalNotes.get(i) instanceof ProjectNote) {
                         ids[i] = ((ProjectNote) additionalNotes.get(i)).getId();
-                    }else{
+                    } else {
                         ids[i] = ((ProjectPhoto) additionalNotes.get(i)).getId();
                     }
                 }
@@ -412,9 +427,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
     }
 
 
-
-
-    public void getAdditionalImages(final boolean refresh){
+    public void getAdditionalImages(final boolean refresh) {
         additonalImagesCall = projectDomain.fetchProjectImages(projectID, new Callback<List<ProjectPhoto>>() {
             @Override
             public void onResponse(Call<List<ProjectPhoto>> call, Response<List<ProjectPhoto>> response) {
@@ -426,7 +439,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
                     additionalNotes.clear();
                 }
 
-                if(responseBody != null && additionalNotes != null) {
+                if (responseBody != null && additionalNotes != null) {
                     additionalNotes.addAll(responseBody);
                     projectNotesAdapter.notifyDataSetChanged();
                 }
@@ -448,6 +461,9 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         });
     }
 
+    /**
+     * MAPS
+     **/
 
     public String getMapUrl(Project project) {
 
@@ -521,5 +537,11 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
 
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public void onMapSetup(GoogleMap googleMap) {
+
+        mapReady = true;
     }
 }
