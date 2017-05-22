@@ -5,6 +5,15 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import android.util.Log;
 
+import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.domain.UserDomain;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 /**
  * File: LecetFirebaseInstanceIdService
  * Created: 5/15/17
@@ -45,6 +54,13 @@ public class LecetFirebaseInstanceIdService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+
+        UserDomain domain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplicationContext()), null);
+        Call<ResponseBody> call = domain.registerFirebaseToken(token);
+        try {
+            call.execute();
+        } catch (IOException e) {
+            Log.getStackTraceString(e);
+        }
     }
 }

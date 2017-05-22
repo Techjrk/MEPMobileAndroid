@@ -49,8 +49,6 @@ public class LecetFirebaseMessagingService extends FirebaseMessagingService {
             
         }
 
-
-
         /*
                 NSDictionary *aps = userInfo[@"aps"];
        id payLoad = aps[@"alert"];

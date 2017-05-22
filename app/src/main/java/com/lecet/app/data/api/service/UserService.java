@@ -67,5 +67,5 @@ public interface UserService {
             "Content-Type: application/json"
     })
     @POST("installations")
-    Call<ResponseBody> registerFirebaseToken(@Header("Authorization") String token, @Body FirebaseTokenRequest request);
+    Call<ResponseBody> registerFirebaseToken(@Header("Authorization") String authToken, @Body FirebaseTokenRequest request);
 }
