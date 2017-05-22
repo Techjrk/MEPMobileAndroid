@@ -21,6 +21,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_BODY_EXTRA;
+import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_ID_EXTRA;
+import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_TITLE_EXTRA;
+
 /**
  * Created by ludwigvondrake on 3/23/17.
  */
@@ -40,9 +44,11 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         this.note = note;
         this.activity = activity;
 
-        setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
-        setCanEdit(note.getAuthorId() == getLoggedInUserId());
-        fetchNoteAuthor(note, userDomain);
+        if(userDomain.fetchLoggedInUser() != null) {
+            setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
+            setCanEdit(note.getAuthorId() == getLoggedInUserId());
+            fetchNoteAuthor(note, userDomain);
+        }
     }
 
     private void fetchNoteAuthor(final ProjectNote note, final UserDomain userDomain) {
@@ -123,9 +129,9 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         Log.d(TAG, "onEditButtonClick");
 
         Intent intent = new Intent(activity, ProjectAddNoteActivity.class);
-        intent.putExtra(ProjectAddNoteActivity.NOTE_ID_EXTRA, note.getId());
-        intent.putExtra(ProjectAddNoteActivity.NOTE_TITLE_EXTRA, note.getTitle());
-        intent.putExtra(ProjectAddNoteActivity.NOTE_BODY_EXTRA, note.getText());
+        intent.putExtra(NOTE_ID_EXTRA, note.getId());
+        intent.putExtra(NOTE_TITLE_EXTRA, note.getTitle());
+        intent.putExtra(NOTE_BODY_EXTRA, note.getText());
         activity.startActivity(intent);
     }
 

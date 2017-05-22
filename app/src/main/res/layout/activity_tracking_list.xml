@@ -19,11 +19,12 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+            android:background="@color/lecetShareBlue"
                 android:orientation="vertical">
 
             <!-- App Bar -->
             <include layout="@layout/include_app_bar_layout"
-                     bind:viewModel="@{viewModel}"/>
+                bind:viewModel="@{viewModel}"/>
 
             <!-- Content -->
             <include

@@ -27,9 +27,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:background="@color/lecetButtonDarkBlue"
+                android:background="@color/lecetShareBlue"
                 android:orientation="horizontal">
-
+                <FrameLayout
+                    android:layout_width="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="-5dp"
+                    android:layout_height="wrap_content" >
+                    <!-- App Bar -->
+                    <include layout="@layout/include_activity_bar_layout" />
+                </FrameLayout>
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"

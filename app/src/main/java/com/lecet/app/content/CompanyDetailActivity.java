@@ -3,6 +3,9 @@ package com.lecet.app.content;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -34,6 +37,7 @@ public class CompanyDetailActivity extends LecetBaseActivity {
         viewModel = new CompanyDetailViewModel(this, companyId, companyDomain, projectDomain);
 
         binding.setViewModel(viewModel);
+        setupToolbar();
     }
 
     @Override
@@ -61,5 +65,21 @@ public class CompanyDetailActivity extends LecetBaseActivity {
 
         viewModel.cancelGetCompanyDetailRequest();
     }
-
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setContentInsetStartWithNavigation(0);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            LayoutInflater inflater = getLayoutInflater();
+            //View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
+            //viewModel.setToolbar(searchBarView);
+            //  actionBar.setCustomView(searchBarView);
+            //actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowCustomEnabled(false);
+        }
+    }
 }

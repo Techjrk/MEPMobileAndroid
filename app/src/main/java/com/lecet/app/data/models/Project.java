@@ -205,6 +205,10 @@ public class Project extends RealmObject implements TrackedObject {
         return address1;
     }
 
+    public void setAddress1(String address1) {
+        this.address1 =  address1;
+    }
+
     public String getAddress2() {
         return address2;
     }
@@ -331,6 +335,10 @@ public class Project extends RealmObject implements TrackedObject {
 
     public Geocode getGeocode() {
         return geocode;
+    }
+
+    public void setGeocode(Geocode geocode) {
+        this.geocode = geocode;
     }
 
     public String getZipPlus4() {

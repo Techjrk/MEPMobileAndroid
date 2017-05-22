@@ -83,17 +83,17 @@ public abstract class TrackingListActivity<T extends TrackingListViewModel> exte
 
     private void setupToolbar(String title, int listItemSize) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setContentInsetStartWithNavigation(0);
+        //toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             LayoutInflater inflater = getLayoutInflater();
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);
-
+ //           View tb = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
             // subtitle, handle plural or singular
             String subTitle = getActionBarSubtitle(listItemSize);
 

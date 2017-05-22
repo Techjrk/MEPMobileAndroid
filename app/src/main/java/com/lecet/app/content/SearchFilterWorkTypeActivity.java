@@ -3,7 +3,9 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.lecet.app.R;
@@ -28,6 +30,7 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
             viewModel.setLastChecked(null);
         }
         sfilter.setViewModel(viewModel);
+        setupToolbar();
     }
 
     @Override
@@ -35,5 +38,16 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
         super.onBackPressed();
         //  SearchFilterWorkTypeViewModel.lastChecked=null;
         viewModel.setLastChecked(null);
+    }
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(false);
+        }
     }
 }

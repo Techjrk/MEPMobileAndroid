@@ -39,8 +39,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 
-import com.lecet.app.content.ProjectAddImageActivity;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,7 +51,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
@@ -70,8 +67,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     private final int MAX_IMAGE_SIZE = 700000;
     private final int REDUCED_IMAGE_AMT = 10;
 
-    private static List<String> rotatedCameraManufacturers =
-            new ArrayList<String>(Arrays.asList("samsung"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
+    private static List<String> rotatedCameraManufacturers = new ArrayList<String>(Arrays.asList("samsung"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
     private static CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
 
@@ -106,6 +102,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     //Releases the camera so it won't mess with any other classes, activities, or apps. static for use in any fragments/activites
     public static void releaseCamera(){
         if(cameraPreview != null){
+            Log.d(TAG, "releaseCamera");
             cameraPreview.closeCamera();
         }
     }
@@ -119,8 +116,10 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     }
 
 
-    //Class that holds all the code that is needed for the camera preview and picture taking.
-    public class CameraPreview{
+    /**
+     * CameraPreview: Inner Class that holds all the code that is needed for the camera preview and picture taking.
+     */
+    private class CameraPreview{
         private final String TAG = "CameraPreviewAPI21";
 
         /*Sizes for Display*/
@@ -129,6 +128,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         private int sensorOrientation;//orientation of sensor. Default is 90.
         private Fragment fragment;
+        private int cameraIdInUse = 0;
         private Boolean isFlashable = false;
         private boolean isSwapableCamera = false;
         private TextureView textureView;//The textureView that is holding the camera preview
@@ -139,7 +139,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         private CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {//Callback used with most camera actions.
             @Override
             public void onOpened(CameraDevice camera) {
-                cameraDevice=camera;
+                cameraDevice = camera;
                 startCamera();
             }
 
@@ -158,13 +158,13 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                openCamera(0);
+                openCamera(cameraIdInUse);
                 previewRotation(textureView.getWidth(), textureView.getHeight());
             }
 
             @Override
             public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                openCamera(0);
+                openCamera(cameraIdInUse);
                 previewRotation(textureView.getWidth(), textureView.getHeight());
             }
 
@@ -180,9 +180,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             }
         };
 
-        /************************************END OF VARIABLES**************************************/
 
-        public CameraPreview(TextureView textureView, Fragment fragment){
+        private CameraPreview(TextureView textureView, Fragment fragment){
             this.textureView = textureView;
             this.fragment = fragment;
             textureView.setSurfaceTextureListener(surfaceTextureListener);
@@ -200,21 +199,18 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             }
         }
 
-        public void getPicture(){//Takes the picture but also does a lot of attachement of the callbacks and listeners
+        private void getPicture(){//Takes the picture but also does a lot of attachement of the callbacks and listeners
             if(cameraDevice == null){
                 Log.e(TAG, "getPicture: No Camera Device");
                 return;
             }
 
-            CameraManager cameraManager = (CameraManager)fragment.getActivity()
-                    .getSystemService(Context.CAMERA_SERVICE);
+            CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
 
             try{
-                CameraCharacteristics cameraCharacteristics
-                        = cameraManager.getCameraCharacteristics(cameraDevice.getId());
+                CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraDevice.getId());
 
-                jpegSizes = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                        .getOutputSizes(ImageFormat.JPEG);
+                jpegSizes = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
 
 
                 int width = 640, height = 480;//Size just in case one isn't provided
@@ -304,9 +300,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                         Log.e(TAG, "onPictureTaken: Image Write Failure");
                                     }
 
-                                    // start next Activity
+                                    // finish Activity with the imagePath extra
                                     String imagePath = file.getAbsolutePath();
-                                    //fragment.getActivity().finish();
                                     finishActivityWithResult(imagePath);
                                 }
                                 catch (FileNotFoundException e) {
@@ -334,8 +329,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 reader.setOnImageAvailableListener(imageAvailableListener, handler);
 
 
-                final CameraCaptureSession.CaptureCallback previewSession
-                        = new CameraCaptureSession.CaptureCallback() {
+                final CameraCaptureSession.CaptureCallback previewSession = new CameraCaptureSession.CaptureCallback() {
                     @Override
                     public void onCaptureStarted(@NonNull CameraCaptureSession session,
                                                  @NonNull CaptureRequest request, long timestamp,
@@ -375,12 +369,17 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
-        /*public void openCameraById(int id) {
-
-        }*/
+        private void toggleCameraId() {
+            if(cameraIdInUse == 0) {
+                cameraIdInUse = 1;
+            }
+            else cameraIdInUse = 0;
+        }
 
         //SETS THE VALUES FOR cameraDevice AND SETS THE previewSize
-        public void openCamera(int id){
+        private void openCamera(int id){
+            Log.d(TAG, "openCamera: id: " + id);
+
             CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
 
             try{
@@ -415,11 +414,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //SETS UP THE PREVIEW USING THE previewBuilder
-        public void startCamera(){
+        private void startCamera(){
             if(cameraDevice == null || !textureView.isAvailable() || previewSize == null){
                 Log.e(TAG, "startCamera: Missing Required Field");
                 if(cameraDevice == null) {
-                    openCamera(0);
+                    openCamera(cameraIdInUse);
                 }
                 return;
             }
@@ -461,10 +460,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
-        public void swapCamera() {
+        private void swapCamera() {
             //TODO - add an check for if the camera is already previewing with existing camera
 
             releaseCamera();
+            toggleCameraId();
 
             //Log.d(TAG, "swapCamera: " + cameraDevice.getId());
             CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
@@ -488,24 +488,19 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             }
 
             if(cc0 != null && cc1 != null) {
-                boolean camera0isFront = (cc0.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT);
-                boolean camera0isBack  = (cc0.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK);
-                boolean camera1isFront = (cc1.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT);
-                boolean camera1isBack  = (cc1.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK);
-                Log.d(TAG, "swapCamera: cc0 is front? " + camera0isFront);
-                Log.d(TAG, "swapCamera: cc0 is back? " + camera0isBack);
-                Log.d(TAG, "swapCamera: cc1 is front? " + camera1isFront);
-                Log.d(TAG, "swapCamera: cc1 is back? " + camera1isBack);
+                //boolean camera0isFront = (cc0.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT);
+                //boolean camera0isBack  = (cc0.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK);
+                //boolean camera1isFront = (cc1.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT);
+                //boolean camera1isBack  = (cc1.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK);
+                //Log.d(TAG, "swapCamera: cc0 is front? " + camera0isFront);
+                //Log.d(TAG, "swapCamera: cc0 is back? " + camera0isBack);
+                //Log.d(TAG, "swapCamera: cc1 is front? " + camera1isFront);
+                //Log.d(TAG, "swapCamera: cc1 is back? " + camera1isBack);
 
                 closeCamera();
 
                 if (ActivityCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    if(camera0isFront) {
-                        openCamera(0);
-                    }
-                    else {
-                        openCamera(1);
-                    }
+                    openCamera(cameraIdInUse);
                 }
                 else {
                     Log.e(TAG, "swapCamera: No camera permissions.");
@@ -514,15 +509,16 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         }
 
-        public void closeCamera(){
-            if(cameraDevice !=  null){
+        private void closeCamera(){
+            if(cameraDevice != null) {
+                Log.d(TAG, "closeCamera");
                 cameraDevice.close();
                 cameraDevice = null;
             }
         }
 
         //Updates the preview over and over giving a steady stream of feed from the camera
-        public void updatePreviewChange(){
+        private void updatePreviewChange(){
             if(cameraDevice == null){
                 Log.e(TAG, "updatePreviewChange: camera not set");
                 return;
@@ -542,7 +538,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //This rotates the preview of devices that do not support the natural camera architecture
-        public void previewRotation(int width, int height){
+        private void previewRotation(int width, int height){
             if(previewSize == null || textureView == null){
                 return;
             }
@@ -570,9 +566,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         //Gets a new file for the use of a new
         private File getOutputMediaFile() {
-            File mediaStorageDir = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "Lecet");
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Lecet");
             if (!mediaStorageDir.exists()) {
                 if (!mediaStorageDir.mkdirs()) {
                     Log.d("Lecet", "failed to create directory");
@@ -580,11 +574,9 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 }
             }
             // Create a media file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                    .format(new Date());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File mediaFile;
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
             return mediaFile;
         }
 
@@ -598,7 +590,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         }
 
         //Rotates images to the correct perspective. This can make images very big.
-        public Bitmap rotateImage(Bitmap image,float angle){
+        private Bitmap rotateImage(Bitmap image,float angle){
             Log.d(TAG, "rotateImage: angle of rotation:" + angle);
             int w = image.getWidth();
             int h = image.getHeight();

@@ -9,7 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,7 +29,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
-import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -34,11 +38,17 @@ import com.lecet.app.utility.LocationManager;
 import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
-        , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
+        , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener  {
 
+    public static final String EXTRA_MARKER_ADDRESS   = "com.lecet.app.content.ProjectsNearMeActivity.marker.address.extra";
+    public static final String EXTRA_MARKER_LATITUDE  = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
+    public static final String EXTRA_MARKER_LONGITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.longitude.extra";
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
     public static final String EXTRA_LOCATION_MANAGER_CONNECTED = "location_manager_connected";
@@ -53,7 +63,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     boolean isLocationManagerConnected;
     Location lastKnowLocation;
     private final String TAG = "ProjectsNearMeActivity";
-
+    ViewPager viewPager;
+    TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +76,13 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupToolbar();
         setupLocationManager();
         checkPermissions();
+        viewPager = (ViewPager) findViewById(R.id.view_pager_bid);
+        setupViewPager(viewPager);
+//        setupViewPager(viewPager, projectId, projectDomain);
+// set up TabLayout
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout_bid_detail);
+        tabLayout.setupWithViewPager(viewPager);
+        setupViewPager(viewPager);
     }
 
     private void continueSetup() {
@@ -82,6 +100,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
         binding.setViewModel(viewModel);
     }
+
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,14 +127,14 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap map) {
         MapsInitializer.initialize(this);
-        map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));
+        //map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));     // TODO - this is where the info_window_layout is set as the default info window for the map
         viewModel.setMap(map);
         lastKnowLocation = locationManager.retrieveLastKnownLocation();
         fetchProjects(false);
     }
 
 
-        private void fetchProjects(boolean animateCamera) {
+    private void fetchProjects(boolean animateCamera) {
 
         if (!viewModel.isMapReady()) return;
 
@@ -632,5 +651,48 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             fetchProjects(true);
         }
         locationManager.startLocationUpdates();
+    }
+    public void onBidTableViewPressed(View view) {
+     Log.d("tableView pressed","tableView pressed");
+        viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
+
+    }
+    private void setupViewPager(ViewPager viewPager) {
+//        private void setupViewPager(ViewPager viewPager, long projectId, ProjectDomain projectDomain) {
+        ProjectsNearMeActivity.ViewPagerAdapter adapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(PrePostBidFragment.newInstance(viewModel), getResources().getString(R.string.reg_pre_bid));
+        adapter.addFragment(PrePostBidFragment.newInstance(viewModel), getResources().getString(R.string.reg_post_bid));
+        viewPager.setAdapter(adapter);
+    }
+    /**
+     * Inner ViewPagerAdapter class
+     */
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragmentList.add(fragment);
+            fragmentTitleList.add("               "+title+"               ");
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitleList.get(position);
+        }
     }
 }

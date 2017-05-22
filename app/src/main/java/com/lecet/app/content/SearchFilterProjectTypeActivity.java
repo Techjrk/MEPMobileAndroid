@@ -1,11 +1,14 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 
 import com.lecet.app.R;
 
@@ -31,5 +34,17 @@ public class SearchFilterProjectTypeActivity extends AppCompatActivity {
         ActivitySearchFilterProjectTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_project_type);
         SearchFilterProjectTypeViewModel viewModel = new SearchFilterProjectTypeViewModel(this);
         sfilter.setViewModel(viewModel);
+        setupToolbar();
+    }
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(false);
+        }
     }
 }

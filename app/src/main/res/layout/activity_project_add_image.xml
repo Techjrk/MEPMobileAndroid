@@ -199,6 +199,15 @@
                     bind:typeface="@{`Lato-Bold.ttf`}"
                     android:text="@={viewModel.body}"/>
 
+                <!-- DELETE BUTTON -->
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delete Photo"
+                    android:textAllCaps="false"
+                    android:visibility="@{viewModel.canDelete ? View.GONE : View.VISIBLE}"
+                    android:onClick="@{viewModel::onClickDelete}"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="20dp"

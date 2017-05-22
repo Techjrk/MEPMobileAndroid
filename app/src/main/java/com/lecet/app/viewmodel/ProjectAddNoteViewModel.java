@@ -59,7 +59,7 @@ public class ProjectAddNoteViewModel extends BaseObservable {
     }
 
     public void onClickAdd(View view){
-        DialogInterface.OnClickListener onCLick = new DialogInterface.OnClickListener(){//On Click Listener For Dialog
+        DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener(){//On Click Listener For Dialog
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -78,7 +78,30 @@ public class ProjectAddNoteViewModel extends BaseObservable {
             }
         };
 
-        showAlertDialog(view, onCLick);
+        showPostNoteAlertDialog(view, onClickAddListener);
+    }
+
+    public void onClickDelete(View view) {
+        DialogInterface.OnClickListener onClickDeleteListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        deleteNote();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showDeleteNoteAlertDialog(view, onClickDeleteListener);
     }
 
     private void postNote(boolean replaceExisting) {
@@ -121,6 +144,35 @@ public class ProjectAddNoteViewModel extends BaseObservable {
         });
     }
 
+    private void deleteNote() {
+        Log.d(TAG, "deleteNote");
+
+        Call<ProjectNote> call = projectDomain.deleteNote(noteId);
+
+        call.enqueue(new Callback<ProjectNote>() {
+            @Override
+            public void onResponse(Call<ProjectNote> call, Response<ProjectNote> response) {
+
+                if (response.isSuccessful()) {
+
+                    Log.d(TAG, "deleteNote: onResponse: note deletion successful");
+                    activity.setResult(RESULT_OK);
+                    activity.finish();
+
+                } else {
+                    Log.e(TAG, "deleteNote: onResponse: note deletion failed");
+                    // TODO: Alert HTTP call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProjectNote> call, Throwable t) {
+                Log.e(TAG, "deleteNote: onFailure: note deletion failed");
+                //TODO: Display alert noting network failure
+            }
+        });
+    }
+
     public void onClickUpdate(View view) {
         DialogInterface.OnClickListener onClick = new DialogInterface.OnClickListener() {
             @Override
@@ -141,16 +193,16 @@ public class ProjectAddNoteViewModel extends BaseObservable {
             }
         };
 
-        showAlertDialog(view, onClick);
+        showPostNoteAlertDialog(view, onClick);
     }
 
-    private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+    private void showPostNoteAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
-        //Required Content of note
-        if(body.equals("")) {
+        //Required body content of note
+        if(body == null || body.isEmpty()) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
-            alert.setMessage("Note content is required.");
+            alert.setMessage("Note body is required.");
             alert.show();
         }
         //Are you sure?
@@ -160,6 +212,16 @@ public class ProjectAddNoteViewModel extends BaseObservable {
             alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
             alert.show();
         }
+    }
+
+    private void showDeleteNoteAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+        alert = new AlertDialog.Builder(view.getContext()).create();
+
+        //Are you sure?
+        alert.setMessage("Are you sure you want to delete this note?");
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Delete", onClick);
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
+        alert.show();
     }
 
     @Bindable
@@ -191,6 +253,10 @@ public class ProjectAddNoteViewModel extends BaseObservable {
 
     public boolean getEditMode() {
         return noteId > -1;
+    }
+
+    public boolean canDelete() {
+        return false;   //TODO - ADD USER ID CHECK TO ALLOW ONLY AUTHOR TO DELETE
     }
 
 

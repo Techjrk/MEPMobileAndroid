@@ -1,15 +1,14 @@
 package com.lecet.app.viewmodel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -20,7 +19,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.lecet.app.content.ProjectAddImageActivity;
 import com.lecet.app.content.ProjectTakeCameraPhotoFragment;
 
 import java.io.File;
@@ -30,7 +28,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
@@ -38,7 +35,7 @@ import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 /**
  * Created by jasonm on 3/29/17.
  */
-public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements Camera.PictureCallback*/ {
+public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
 
     private static final String TAG = "ProjCameraTakePhotoVM";
 
@@ -60,8 +57,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
         frameLayout.addView(cameraPreview);
         orientationEventListener = cameraPreview.createOrientationListener();
     }
-
-
 
     private static Uri getOutputMediaFileUri(){
         return Uri.fromFile(getOutputMediaFile());
@@ -151,12 +146,14 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
         fragment.getActivity().startActivity(intent);
     }*/
 
-    private void startProjectDetailAddImageActivity() {
-        Intent intent = new Intent(fragment.getContext(), ProjectAddImageActivity.class);
+    private void finishActivityWithResult(String imagePath) {
+        Intent intent = fragment.getActivity().getIntent();
         intent.putExtra(FROM_CAMERA, true);
         intent.putExtra(IMAGE_PATH, imagePath);
-        fragment.getActivity().startActivity(intent);
+        fragment.getActivity().setResult(Activity.RESULT_OK, intent);
+        fragment.getActivity().finish();
     }
+
 
     /**
      * Click Events
@@ -196,6 +193,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                 }
             };
         }
+
         public CameraPreview(Context context) {
             super(context);
 
@@ -255,8 +253,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                 camera.setDisplayOrientation(0);
             }
         }
-
-
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
@@ -319,9 +315,9 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable /*implements
                     Log.e(TAG, "onPictureTaken: Image Write Failure");
                 }
 
-                // start next Activity
+                // finish Activity with the imagePath extra
                 imagePath = imageFile.getAbsolutePath();
-                startProjectDetailAddImageActivity();       //TODO - skips preview, goes straight to Add Image
+                finishActivityWithResult(imagePath);
             }
             catch (FileNotFoundException e) {
                 Log.e(TAG, "onPictureTaken ***: File Not Found: " + e.getMessage());

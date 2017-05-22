@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_return_to_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#C0000000"
+    android:alpha="1.2"
+    android:onClick="onLayoutClick">
+    <!-- App Bar -->
+    <include layout="@layout/include_activity_bar_layout" />
+
+</LinearLayout>
+

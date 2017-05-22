@@ -1,8 +1,10 @@
 package com.lecet.app.viewmodel;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -10,7 +12,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -28,14 +32,18 @@ import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
+import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_ASK_PERMISSIONS;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
 /**
@@ -55,7 +63,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private long projectId;
     private boolean replaceImage;
     private long photoID;
-    private static Bitmap bitmap;
+    private static Bitmap bitmap;   //TODO - does this need to be static?
     private String imagePath;
     private Uri uri;
     private String title;
@@ -152,11 +160,13 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     public void onClickReplaceImage(View view) {
         Log.d(TAG, "onClickReplaceImage");
-        Intent intent = new Intent(activity, ProjectImageChooserActivity.class);    //TODO - launch Chooser Activity, which immediately launches
-        intent.putExtra(PROJECT_ID_EXTRA, projectId);
-        intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
+        if (canSetup()) {
+            Intent intent = new Intent(activity, ProjectImageChooserActivity.class);    //TODO - launch Chooser Activity, which immediately launches
+            intent.putExtra(PROJECT_ID_EXTRA, projectId);
+            intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
 
-        activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
+            activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
+        }
     }
 
     public void onClickAdd(View view){
@@ -179,8 +189,65 @@ public class ProjectAddImageViewModel extends BaseObservable {
             }
         };
 
-        showAlertDialog(view, onClick);
+        showPostPhotoAlertDialog(view, onClick);
     }
+
+    public void onClickDelete(View view) {
+        DialogInterface.OnClickListener onClickDeleteListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        deletePhoto();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showDeletePhotoAlertDialog(view, onClickDeleteListener);
+    }
+
+    private boolean canSetup(){
+        if(Build.VERSION.SDK_INT >= 23) {
+            List<String> permissionNeeded = new ArrayList<String>();//list of permissions that aren't allowed
+
+            if(!hasPermission(Manifest.permission.CAMERA)){//has Camera permissions
+                permissionNeeded.add(Manifest.permission.CAMERA);
+            }
+
+            if(!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                permissionNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            Log.d(TAG, "canSetup: NeededPermission(s) = " + permissionNeeded.size());
+
+            if(permissionNeeded.size() > 0) {
+                String[] tempList = new String[permissionNeeded.size()];//TODO: write actual converter from List<String> to String[]
+                ActivityCompat.requestPermissions(activity, permissionNeeded.toArray(tempList), REQUEST_CODE_ASK_PERMISSIONS);
+            }else {
+                return true;//none were needed
+            }
+
+            return false;//if less then 1 then there are no permissions so return true. you can now set up
+        }
+        return true;
+    }
+
+    private boolean hasPermission(String permission){
+        if(ActivityCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        return  true;
+    }
+
+
 
     private void postImage(boolean replaceExisting) {
         Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
@@ -234,6 +301,35 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     }
 
+    private void deletePhoto() {
+        Log.d(TAG, "deletePhoto");
+
+        Call<ProjectPhoto> call = projectDomain.deletePhoto(photoID);
+
+        call.enqueue(new Callback<ProjectPhoto>() {
+            @Override
+            public void onResponse(Call<ProjectPhoto> call, Response<ProjectPhoto> response) {
+
+                if (response.isSuccessful()) {
+
+                    Log.d(TAG, "deletePhoto: onResponse: photo deletion successful");
+                    activity.setResult(RESULT_OK);
+                    activity.finish();
+
+                } else {
+                    Log.e(TAG, "deletePhoto: onResponse: photo deletion failed");
+                    // TODO: Alert HTTP call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProjectPhoto> call, Throwable t) {
+                Log.e(TAG, "deletePhoto: onFailure: photo deletion failed");
+                //TODO: Display alert noting network failure
+            }
+        });
+    }
+
     public void onClickUpdate(View view) {
         DialogInterface.OnClickListener onClick = new DialogInterface.OnClickListener() {
             @Override
@@ -254,7 +350,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             }
         };
 
-        showAlertDialog(view, onClick);
+        showPostPhotoAlertDialog(view, onClick);
     }
 
     private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
@@ -340,11 +436,11 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return  compressedBase64Image;
     }
 
-    private void showAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+    private void showPostPhotoAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         //Required Content of image
-        if(body.equals("")) {
+        if(getBitmap() == null || getBitmap().getByteCount() == 0) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
             alert.setMessage("Image content is required.");
             alert.show();
@@ -357,6 +453,17 @@ public class ProjectAddImageViewModel extends BaseObservable {
             alert.show();
         }
     }
+
+    private void showDeletePhotoAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+        alert = new AlertDialog.Builder(view.getContext()).create();
+
+        //Are you sure?
+        alert.setMessage("Are you sure you want to delete this photo?");
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Delete", onClick);
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
+        alert.show();
+    }
+
 
     public static void setBitmapData(Bitmap bmp) {
         Log.d(TAG, "setBitmapData");
@@ -392,6 +499,10 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     public boolean getEditMode() {
         return photoID > -1;
+    }
+
+    public boolean canDelete() {
+        return false;   //TODO - ADD USER ID CHECK TO ALLOW ONLY AUTHOR TO DELETE
     }
 
     @Bindable
