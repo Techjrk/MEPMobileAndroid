@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * File: LecetFirebaseInstanceIdService
@@ -55,12 +56,30 @@ public class LecetFirebaseInstanceIdService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
 
-        UserDomain domain = new UserDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplicationContext()), null);
-        Call<ResponseBody> call = domain.registerFirebaseToken(token);
-        try {
-            call.execute();
-        } catch (IOException e) {
-            Log.getStackTraceString(e);
+        LecetSharedPreferenceUtil sharedPref = LecetSharedPreferenceUtil.getInstance(getApplicationContext());
+        if (sharedPref.getAccessToken() != null) {
+
+            // We can assume a new token has been created and we should update the server.
+
+            UserDomain domain = new UserDomain(LecetClient.getInstance(), sharedPref, null);
+            Call<ResponseBody> call = domain.registerFirebaseToken(token);
+            try {
+                Response<ResponseBody> response = call.execute();
+                if (response.isSuccessful()) {
+
+                    Log.d(TAG, "Firebase token successfully registered");
+                } else {
+
+                    Log.e(TAG, response.message());
+                }
+
+            } catch (IOException e) {
+                Log.getStackTraceString(e);
+            }
+        } else {
+
+            // User not registered yet, store token for later.
+            sharedPref.setFirebaseToken(token);
         }
     }
 }

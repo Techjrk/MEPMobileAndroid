@@ -15,6 +15,7 @@ public class LecetSharedPreferenceUtil {
     private static final String ACCESS_TOKEN = "accessToken";
     private static final String ID = "id";
     private static final String NOTIFICATIONS = "notification_settings";
+    private static final String FIREBASE_TOKEN = "firebaseToken";
 
 
     private static LecetSharedPreferenceUtil mInstance;
@@ -88,6 +89,14 @@ public class LecetSharedPreferenceUtil {
 
     public Boolean getNotificationsSetting() {
         return getBooleanPreferences(NOTIFICATIONS);
+    }
+
+    public void setFirebaseToken(String value) {
+        putStringPreferences(FIREBASE_TOKEN, value);
+    }
+
+    public String getFirebaseToken() {
+        return getStringPreferences(FIREBASE_TOKEN);
     }
 
     public void clearPreferences() {

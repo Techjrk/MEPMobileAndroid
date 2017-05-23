@@ -31,7 +31,8 @@ public interface UserService {
     })
     @POST("LecetUsers/login")
     @FormUrlEncoded
-    Call<Access> login(@Field("email") String email, @Field("password") String password);
+    Call<Access> login(@Field("email") String email, @Field("password") String password,
+                       @Field("deviceToken") String deviceToken, @Field("deviceType") String deviceType);
 
     @Headers({
             "Accept: application/json",
