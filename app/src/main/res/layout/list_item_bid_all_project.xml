@@ -23,28 +23,28 @@
         android:layout_marginTop="6dp"
         android:background="@drawable/shape_rect_list_item_bg_1"
         android:orientation="vertical"
-        android:paddingBottom="6dp"
-
         >
 
         <!-- Details Map and Text Layout -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
             android:gravity="center_vertical"
             android:onClick="@{viewModel.onProjectClick}"
-            android:orientation="horizontal">
+           >
 
             <!-- Map Image -->
             <ImageView
+                android:id="@+id/map"
                 style="@style/ListItemProjectTrackingImage.DetailMap"
-                bind:imageUrl="@{viewModel.mapUrl}" />
+                bind:imageUrl="@{viewModel.mapUrl}"
+                android:layout_alignParentLeft="true"
+                />
 
             <!-- Details -->
             <LinearLayout
+                android:layout_toRightOf="@id/map"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -91,7 +91,16 @@
                         tools:text="Tampa, FL" />
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/star_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                />
+                />
+        </RelativeLayout>
     </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 
