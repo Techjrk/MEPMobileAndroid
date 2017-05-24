@@ -128,16 +128,11 @@
             android:name=".content.ProjectViewFullscreenImageActivity"
             android:label="ProjectViewFullscreenImage"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".content.ProjectPreviewImageActivity"
-            android:label="ProjectPreviewImage"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".content.AddProjectActivity"
-            android:label="AddProject"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+        <!--activity
+                android:name=".content.ProjectPreviewImageActivity"
+                android:label="ProjectPreviewImage"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme"/-->
         <activity
             android:name=".content.ProjectsNearMeActivity"
             android:parentActivityName=".content.MainActivity"
@@ -146,6 +141,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".content.MainActivity" />
+        </activity>
+        <activity
+                android:name=".content.AddProjectActivity"
+                android:label="AddProject"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".content.ProjectTrackingListActivity"
