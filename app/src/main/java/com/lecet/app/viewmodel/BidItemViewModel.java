@@ -3,27 +3,16 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.content.CompanyDetailActivity;
-import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.content.ProjectsNearMeActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.SearchDomain;
 
-import java.io.IOException;
-import java.io.Serializable;
-
 import io.realm.Realm;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom
@@ -38,20 +27,28 @@ public class BidItemViewModel extends BaseObservable {
     private Contact contact;
     private String mapsApiKey;
     private boolean isClientLocation2;
+    private boolean hasStarCard;
     SearchDomain searchDomain;
     ProjectsNearMeViewModel viewModel;
 
     public BidItemViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
-        searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
-    //    this.viewModel =viewModel;
+        searchDomain = new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        if (project.getImageTotal() > 0 || project.getNoteTotal() > 0) setHasStarCard(true);
 
     }
-
-
-    ////////////////////////////////////
+////////////////////////////////////
     // PROJECT
+
+    @Bindable
+    public boolean getHasStarCard() {
+        return hasStarCard;
+    }
+
+    public void setHasStarCard(boolean hasStarCard) {
+        this.hasStarCard = hasStarCard;
+    }
 
     public String getTitle() {
         //    if (project == null) return "Unknown";
@@ -115,7 +112,6 @@ public class BidItemViewModel extends BaseObservable {
             if (company.getCity() != null) sb.append(company.getCity() + ",");
             if (company.getState() != null) sb.append(company.getState());
             sb.append("&key=" + mapsApiKey);
-            //mapStr = String.format((sb.toString().replace(" ", "+")), null);
             mapStr = sb.toString().replace(" ", "+");
             return mapStr;
         }
@@ -126,29 +122,15 @@ public class BidItemViewModel extends BaseObservable {
     ////////////////////////////////////
     // CLICK HANDLERS
 
-/*
-    public void onProjectSavedClick(View view) {
-        if (viewModel !=null) viewModel.setDetailVisible(true);
-        if (project == null) {
-            onCompanyClick(view);
-            return;
-        }
-        Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
-        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
-        Log.d("projectsaved","projectsaved");
-       // saveRecentlyProject(SearchActivity.USER_ID,LecetSharedPreferenceUtil.getInstance(getContext()));
-        view.getContext().startActivity(intent);
-    }
-*/
 
-//event for clicking the Saved Search Project Detail item
+    //event for clicking the Saved Search Project Detail item
     public void onProjectClick(View view) {
-       // if (viewModel !=null) viewModel.setDetailVisible(true);
         if (project == null) return;
+
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
-      //  viewModel.setDetailVisible(true);
         view.getContext().startActivity(intent);
+        // Log.d("projectid", "projectid:" + project.getId() + " imageTotal:" + project.getImageTotal() + " noteTotal:" + project.getNoteTotal());
     }
 
 }
