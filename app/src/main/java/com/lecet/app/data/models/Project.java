@@ -1,10 +1,8 @@
 package com.lecet.app.data.models;
 
-import com.google.gson.annotations.SerializedName;
-
-import android.content.Context;
 import android.support.annotation.Nullable;
 
+import com.google.gson.annotations.SerializedName;
 import com.lecet.app.interfaces.TrackedObject;
 
 import java.util.Date;
@@ -17,7 +15,7 @@ import io.realm.annotations.PrimaryKey;
 
 /**
  * File: Project Created: 10/5/16 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
@@ -189,8 +187,30 @@ public class Project extends RealmObject implements TrackedObject {
     private boolean mraItem; // Mobile projects recently added
 
     private boolean mruItem; // Mobile projects recently updated
+    @SerializedName("imageTotal")
+    private int imageTotal;
+
+    @SerializedName("noteTotal")
+    private int noteTotal;
+
 
     public Project() {
+    }
+
+    public int getImageTotal() {
+        return imageTotal;
+    }
+
+    public void setImageTotal(int imageTotal) {
+        this.imageTotal = imageTotal;
+    }
+
+    public int getNoteTotal() {
+        return noteTotal;
+    }
+
+    public void setNoteTotal(int noteTotal) {
+        this.noteTotal = noteTotal;
     }
 
     public String getBidSubmitTo() {
@@ -201,16 +221,24 @@ public class Project extends RealmObject implements TrackedObject {
         return state;
     }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getAddress1() {
         return address1;
     }
 
     public void setAddress1(String address1) {
-        this.address1 =  address1;
+        this.address1 = address1;
     }
 
     public String getAddress2() {
         return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
     }
 
     public String getStatusText() {
@@ -225,12 +253,24 @@ public class Project extends RealmObject implements TrackedObject {
         return estLow;
     }
 
+    public String getEstLowStr() {
+        return Double.toString(estLow);
+    }
+
+    public void setEstLow(double estLow) {
+        this.estLow = estLow;
+    }
+
     public Date getBidDate() {
         return bidDate;
     }
 
     public String getCity() {
         return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public long getPrimaryProjectTypeId() {
@@ -245,12 +285,20 @@ public class Project extends RealmObject implements TrackedObject {
         return zip5;
     }
 
+    public void setZip5(String zip5) {
+        this.zip5 = zip5;
+    }
+
     public String getCnProjectUrl() {
         return cnProjectUrl;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContractNbr() {
@@ -321,6 +369,10 @@ public class Project extends RealmObject implements TrackedObject {
         return estHigh;
     }
 
+    public void setEstHigh(double estHigh) {
+        this.estHigh = estHigh;
+    }
+
     public String getStdIncludes() {
         return stdIncludes;
     }
@@ -357,12 +409,20 @@ public class Project extends RealmObject implements TrackedObject {
         return targetStartDate;
     }
 
+    public void setTargetStartDate(Date targetStartDate) {
+        this.targetStartDate = targetStartDate;
+    }
+
     public String getGeoLocationType() {
         return geoLocationType;
     }
 
     public String getCounty() {
         return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 
     public Date getFirstPublishDate() {
@@ -610,7 +670,7 @@ public class Project extends RealmObject implements TrackedObject {
         this.planInd = project.getPlanInd();
         this.dodgeVersion = project.getDodgeVersion();
         if (project.getPrimaryProjectType() != null) {
-             this.primaryProjectType = realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
+            this.primaryProjectType = realm.copyToRealmOrUpdate(project.getPrimaryProjectType());
         }
         this.specAvailable = project.getSpecAvailable();
         this.fipsCounty = project.getFipsCounty();
@@ -687,11 +747,112 @@ public class Project extends RealmObject implements TrackedObject {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Project)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Project project = (Project) o;
 
-        return id != project.id;
+        if (Double.compare(project.estLow, estLow) != 0) return false;
+        if (primaryProjectTypeId != project.primaryProjectTypeId) return false;
+        if (id != project.id) return false;
+        if (Double.compare(project.estHigh, estHigh) != 0) return false;
+        if (hidden != project.hidden) return false;
+        if (mbsItem != project.mbsItem) return false;
+        if (mraItem != project.mraItem) return false;
+        if (mruItem != project.mruItem) return false;
+        if (imageTotal != project.imageTotal) return false;
+        if (noteTotal != project.noteTotal) return false;
+        if (bidSubmitTo != null ? !bidSubmitTo.equals(project.bidSubmitTo) : project.bidSubmitTo != null)
+            return false;
+        if (state != null ? !state.equals(project.state) : project.state != null) return false;
+        if (address1 != null ? !address1.equals(project.address1) : project.address1 != null)
+            return false;
+        if (address2 != null ? !address2.equals(project.address2) : project.address2 != null)
+            return false;
+        if (statusText != null ? !statusText.equals(project.statusText) : project.statusText != null)
+            return false;
+        if (projectStage != null ? !projectStage.equals(project.projectStage) : project.projectStage != null)
+            return false;
+        if (bidDate != null ? !bidDate.equals(project.bidDate) : project.bidDate != null)
+            return false;
+        if (city != null ? !city.equals(project.city) : project.city != null) return false;
+        if (zip5 != null ? !zip5.equals(project.zip5) : project.zip5 != null) return false;
+        if (cnProjectUrl != null ? !cnProjectUrl.equals(project.cnProjectUrl) : project.cnProjectUrl != null)
+            return false;
+        if (title != null ? !title.equals(project.title) : project.title != null) return false;
+        if (contractNbr != null ? !contractNbr.equals(project.contractNbr) : project.contractNbr != null)
+            return false;
+        if (numberOfFloorsAboveGround != null ? !numberOfFloorsAboveGround.equals(project.numberOfFloorsAboveGround) : project.numberOfFloorsAboveGround != null)
+            return false;
+        if (details != null ? !details.equals(project.details) : project.details != null)
+            return false;
+        if (dodgeNumber != null ? !dodgeNumber.equals(project.dodgeNumber) : project.dodgeNumber != null)
+            return false;
+        if (lastPublishDate != null ? !lastPublishDate.equals(project.lastPublishDate) : project.lastPublishDate != null)
+            return false;
+        if (contractType != null ? !contractType.equals(project.contractType) : project.contractType != null)
+            return false;
+        if (projDlvrySys != null ? !projDlvrySys.equals(project.projDlvrySys) : project.projDlvrySys != null)
+            return false;
+        if (planInd != null ? !planInd.equals(project.planInd) : project.planInd != null)
+            return false;
+        if (dodgeVersion != null ? !dodgeVersion.equals(project.dodgeVersion) : project.dodgeVersion != null)
+            return false;
+        if (primaryProjectType != null ? !primaryProjectType.equals(project.primaryProjectType) : project.primaryProjectType != null)
+            return false;
+        if (specAvailable != null ? !specAvailable.equals(project.specAvailable) : project.specAvailable != null)
+            return false;
+        if (fipsCounty != null ? !fipsCounty.equals(project.fipsCounty) : project.fipsCounty != null)
+            return false;
+        if (targetFinishDate != null ? !targetFinishDate.equals(project.targetFinishDate) : project.targetFinishDate != null)
+            return false;
+        if (priorPublishDate != null ? !priorPublishDate.equals(project.priorPublishDate) : project.priorPublishDate != null)
+            return false;
+        if (numberOfBuildings != null ? !numberOfBuildings.equals(project.numberOfBuildings) : project.numberOfBuildings != null)
+            return false;
+        if (statusProjDlvrySys != null ? !statusProjDlvrySys.equals(project.statusProjDlvrySys) : project.statusProjDlvrySys != null)
+            return false;
+        if (stdIncludes != null ? !stdIncludes.equals(project.stdIncludes) : project.stdIncludes != null)
+            return false;
+        if (currencyType != null ? !currencyType.equals(project.currencyType) : project.currencyType != null)
+            return false;
+        if (country != null ? !country.equals(project.country) : project.country != null)
+            return false;
+        if (geocode != null ? !geocode.equals(project.geocode) : project.geocode != null)
+            return false;
+        if (zipPlus4 != null ? !zipPlus4.equals(project.zipPlus4) : project.zipPlus4 != null)
+            return false;
+        if (projectStageId != null ? !projectStageId.equals(project.projectStageId) : project.projectStageId != null)
+            return false;
+        if (projectNotes != null ? !projectNotes.equals(project.projectNotes) : project.projectNotes != null)
+            return false;
+        if (targetStartDate != null ? !targetStartDate.equals(project.targetStartDate) : project.targetStartDate != null)
+            return false;
+        if (geoLocationType != null ? !geoLocationType.equals(project.geoLocationType) : project.geoLocationType != null)
+            return false;
+        if (county != null ? !county.equals(project.county) : project.county != null) return false;
+        if (firstPublishDate != null ? !firstPublishDate.equals(project.firstPublishDate) : project.firstPublishDate != null)
+            return false;
+        if (addendaInd != null ? !addendaInd.equals(project.addendaInd) : project.addendaInd != null)
+            return false;
+        if (availableFrom != null ? !availableFrom.equals(project.availableFrom) : project.availableFrom != null)
+            return false;
+        if (geoType != null ? !geoType.equals(project.geoType) : project.geoType != null)
+            return false;
+        if (unionDesignation != null ? !unionDesignation.equals(project.unionDesignation) : project.unionDesignation != null)
+            return false;
+        if (bidTimeZone != null ? !bidTimeZone.equals(project.bidTimeZone) : project.bidTimeZone != null)
+            return false;
+        if (bondInformation != null ? !bondInformation.equals(project.bondInformation) : project.bondInformation != null)
+            return false;
+        if (ownerClass != null ? !ownerClass.equals(project.ownerClass) : project.ownerClass != null)
+            return false;
+        if (contacts != null ? !contacts.equals(project.contacts) : project.contacts != null)
+            return false;
+        if (bids != null ? !bids.equals(project.bids) : project.bids != null) return false;
+        if (updates != null ? !updates.equals(project.updates) : project.updates != null)
+            return false;
+        return recentUpdate != null ? recentUpdate.equals(project.recentUpdate) : project.recentUpdate == null;
+
     }
 
     @Override
@@ -754,6 +915,11 @@ public class Project extends RealmObject implements TrackedObject {
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (updates != null ? updates.hashCode() : 0);
         result = 31 * result + (recentUpdate != null ? recentUpdate.hashCode() : 0);
+        result = 31 * result + (mbsItem ? 1 : 0);
+        result = 31 * result + (mraItem ? 1 : 0);
+        result = 31 * result + (mruItem ? 1 : 0);
+        result = 31 * result + imageTotal;
+        result = 31 * result + noteTotal;
         return result;
     }
 
@@ -817,6 +983,8 @@ public class Project extends RealmObject implements TrackedObject {
                 ", mbsItem=" + mbsItem +
                 ", mraItem=" + mraItem +
                 ", mruItem=" + mruItem +
+                ", imageTotal=" + imageTotal +
+                ", noteTotal=" + noteTotal +
                 '}';
     }
 }

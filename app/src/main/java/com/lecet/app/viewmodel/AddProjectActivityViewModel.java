@@ -1,5 +1,8 @@
 package com.lecet.app.viewmodel;
 
+import com.google.gson.Gson;
+
+import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -9,12 +12,18 @@ import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Geocode;
+import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.R.string.google_api_key;
 
 /**
@@ -28,6 +37,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private AppCompatActivity activity;
     private final String mapsApiKey;
     private Project project;
+    private ProjectDomain projectDomain;
+    private double latitude;
+    private double longitude;
+
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
         super(appCompatActivity);
@@ -37,6 +50,9 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Log.d(TAG, "Constructor: longitude: " + longitude);
 
         this.activity = appCompatActivity;
+        this.projectDomain = projectDomain;
+        this.latitude = latitude;
+        this.longitude = longitude;
 
         mapsApiKey = activity.getResources().getString(google_api_key);
 
@@ -77,6 +93,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             sb2.append("&markers=color:blue|");
             sb2.append(generatedAddress);
             sb2.append("&key=" + mapsApiKey);
+
             mapStr = String.format((sb2.toString().replace(' ', '+')), null);
 
             return mapStr;
@@ -125,6 +142,54 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         return stringBuilder.toString();
     }
 
+    private void postProject(String title, boolean replaceExisting) {
+        Log.d(TAG, "postProject");
+
+        Call<Project> call;
+        ProjectPost projectPost;
+
+        // for a new post
+        //if (!replaceExisting) {
+            projectPost = new ProjectPost(title, latitude, longitude);
+            Log.d(TAG, "postProject: ******** new project post: " + projectPost);
+            call = projectDomain.postProject(projectPost);
+        //}
+        // for updating an existing post
+        /*else {
+            Log.d(TAG, "postProject: update to existing project post");
+            call = projectDomain.updateProject(projectId, new ProjectPost(title, body, true));
+        }*/
+
+        call.enqueue(new Callback<Project>() {
+            @Override
+            public void onResponse(Call<Project> call, Response<Project> response) {
+
+                if (response.isSuccessful()) {
+
+                    Log.d(TAG, "postProject: onResponse: project post successful");
+                    activity.setResult(RESULT_OK);
+                    activity.finish();
+
+                } else {
+                    Log.e(TAG, "postProject: onResponse: project post failed");
+                    // TODO: Alert HTTP call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Project> call, Throwable t) {
+                Log.e(TAG, "postProject: onFailure: project post failed");
+                //TODO: Display alert noting network failure
+            }
+        });
+    }
+
+
+    
+    /*
+     * Clicks 
+     */
+
     public void onClicked(View view) {
         Log.d(TAG, "onClicked: " + view.getContext().getResources().getResourceEntryName(view.getId()));
     }
@@ -137,6 +202,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     public void onClickSave(View view) {
         Log.d(TAG, "onClickSave: posting Project...");  //TODO - post project
+
+        String title = "TEST PROJECT 1";
+        postProject(title, false);
+        
     }
 
     public void onClickCounty(View view) {
@@ -149,4 +218,18 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     public void onMapSelected(View view) {
         Log.d(TAG, "onMapSelected");
     }
+
+
+
+    /*
+     * Bindings
+     */
+
+    @Bindable
+    public Project getProject() {
+        return project;
+    }
+
+
+
 }

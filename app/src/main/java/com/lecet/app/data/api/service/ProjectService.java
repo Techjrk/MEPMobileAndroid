@@ -7,10 +7,12 @@ import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
+import com.lecet.app.data.models.ProjectPost;
 
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -54,6 +56,28 @@ public interface ProjectService {
     })
     @GET("Projects/{projectID}")
     Call<Project> project(@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
+
+
+
+
+    /*@Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("Projects/createInstance")
+    Call<Project> addProject (@Header("Authorization") String authorization, @Body ProjectPost projectPost);
+*/
+
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("Projects/createInstance")
+    Call<Project> addProject (@Header("Authorization") String authorization, @Body String body);
+
+
+
 
 
     @Headers({

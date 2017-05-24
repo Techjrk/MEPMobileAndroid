@@ -28,7 +28,8 @@
             <EditText
                     android:id="@+id/title"
                     style="@style/AddProjectField"
-                    android:hint="@string/project_title"/>
+                    android:hint="@string/project_title"
+                    android:text="@={viewModel.project.title}"/>
 
         <!-- Address -->
             <TextView
@@ -40,17 +41,20 @@
             <EditText
                     android:id="@+id/address1"
                     style="@style/AddProjectField"
-                    android:hint="@string/street_1"/>
+                    android:hint="@string/street_1"
+                    android:text="@={viewModel.project.address1}"/>
 
             <EditText
                     android:id="@+id/address2"
                     style="@style/AddProjectField"
-                    android:hint="@string/street_2"/>
+                    android:hint="@string/street_2"
+                    android:text="@={viewModel.project.address2}"/>
 
             <EditText
                     android:id="@+id/city"
                     style="@style/AddProjectField"
-                    android:hint="@string/city"/>
+                    android:hint="@string/city"
+                    android:text="@={viewModel.project.city}"/>
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content">
@@ -61,14 +65,16 @@
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
                         android:hint="@string/state"
-                        android:textAllCaps="true"/>
+                        android:textAllCaps="true"
+                        android:text="@={viewModel.project.state}"/>
 
                 <EditText
-                        android:id="@+id/zip"
+                        android:id="@+id/zip5"
                         style="@style/AddProjectField"
                         android:layout_weight="1"
                         android:layout_marginStart="4dp"
-                        android:hint="@string/zip"/>
+                        android:hint="@string/zip"
+                        android:text="@={viewModel.project.zip5}"/>
 
             </LinearLayout>
 
@@ -87,7 +93,8 @@
                 <TextView
                         android:id="@+id/county"
                         style="@style/AddProjectFieldLabel"
-                        android:hint="@string/select"/>
+                        android:hint="@string/select"
+                        android:text="@={viewModel.project.county}"/>
 
             </LinearLayout>
 
@@ -137,7 +144,8 @@
 
                 <TextView
                         style="@style/AddProjectFieldLabel"
-                        android:onClick="@{viewModel::onClicked}"/>
+                        android:onClick="@{viewModel::onClicked}"
+                        android:text="@{viewModel.project.getEstLowStr}"/>
 
             </LinearLayout>
 
@@ -157,7 +165,8 @@
                 <TextView
                         android:id="@+id/stage"
                         style="@style/AddProjectFieldLabel"
-                        android:onClick="@{viewModel::onClicked}"/>
+                        android:onClick="@{viewModel::onClicked}"
+                        android:text="@{viewModel.project.projectStage.toString()}"/>
 
             </LinearLayout>
 
@@ -177,7 +186,8 @@
                 <TextView
                         android:id="@+id/target_set_date"
                         style="@style/AddProjectFieldLabel"
-                        android:onClick="@{viewModel::onClicked}"/>
+                        android:onClick="@{viewModel::onClicked}"
+                        android:text="@{viewModel.project.targetStartDate.toString()}"/>
 
             </LinearLayout>
 

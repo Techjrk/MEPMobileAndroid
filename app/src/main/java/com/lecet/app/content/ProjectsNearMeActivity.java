@@ -65,6 +65,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     private final String TAG = "ProjectsNearMeActivity";
     ViewPager viewPager;
     TabLayout tabLayout;
+    ProjectsNearMeActivity.ViewPagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +79,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupLocationManager();
         checkPermissions();
         viewPager = (ViewPager) findViewById(R.id.view_pager_bid);
-        setupViewPager(viewPager);
-//        setupViewPager(viewPager, projectId, projectDomain);
 // set up TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_bid_detail);
         tabLayout.setupWithViewPager(viewPager);
@@ -100,7 +100,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
         binding.setViewModel(viewModel);
     }
-
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -239,6 +238,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//TODO: in future, each filter should have each request code and create a ticket to fogbugz - backlog,lecetv2 android .
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOCATION_SETTINGS) {
             new Handler().postDelayed(new Runnable() {
@@ -655,14 +655,27 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     public void onBidTableViewPressed(View view) {
      Log.d("tableView pressed","tableView pressed");
         viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
+       // pagerAdapter.getFragmentList().clear(); pagerAdapter.getFragmentTitleList().clear();
+      //  setupViewPager(viewPager);
 
     }
+    public void updateTableViewPager() {
+        setupViewPager(viewPager);
+        pagerAdapter.notifyDataSetChanged();
+    }
     private void setupViewPager(ViewPager viewPager) {
-//        private void setupViewPager(ViewPager viewPager, long projectId, ProjectDomain projectDomain) {
-        ProjectsNearMeActivity.ViewPagerAdapter adapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(PrePostBidFragment.newInstance(viewModel), getResources().getString(R.string.reg_pre_bid));
-        adapter.addFragment(PrePostBidFragment.newInstance(viewModel), getResources().getString(R.string.reg_post_bid));
-        viewPager.setAdapter(adapter);
+        int preSize = 0, postSize = 0;
+        if (viewModel.getPrebid()!=null) {
+            preSize = viewModel.getPrebid().size();
+        }
+        if (viewModel.getPostbid()!=null) {
+            postSize = viewModel.getPostbid().size();
+        }
+
+        pagerAdapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
+        pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebid()), getResources().getString(R.string.reg_pre_bid),preSize);
+        pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbid()), getResources().getString(R.string.reg_post_bid),postSize);
+        viewPager.setAdapter(pagerAdapter);
     }
     /**
      * Inner ViewPagerAdapter class
@@ -685,14 +698,30 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             return fragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void addFragment(Fragment fragment, String title, int size) {
             fragmentList.add(fragment);
-            fragmentTitleList.add("               "+title+"               ");
+            fragmentTitleList.add("     "+size+" "+title+"     ");
+        }
+
+        public List<Fragment> getFragmentList() {
+            return fragmentList;
+        }
+
+        public List<String> getFragmentTitleList() {
+            return fragmentTitleList;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             return fragmentTitleList.get(position);
         }
+    }
+
+    public ProjectsNearMeViewModel getViewModel() {
+        return viewModel;
+    }
+
+    public void setViewModel(ProjectsNearMeViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 }

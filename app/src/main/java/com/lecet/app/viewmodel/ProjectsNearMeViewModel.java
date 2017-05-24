@@ -36,12 +36,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.ProjectsNearMeActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.content.widget.LecetInfoWindowAdapter;
 import com.lecet.app.content.widget.LecetInfoWindowCreatePinAdapter;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
 
 import java.io.IOException;
@@ -84,7 +87,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private BitmapDescriptor yellowMarker;
     private BitmapDescriptor currentLocationMarker;
     private BitmapDescriptor customPinMarker;
-
+    private ArrayList<Project> prebid, postbid;
     //Toolbar views
     private EditText search;
     private View buttonClear;
@@ -168,8 +171,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    search.setText(search.getText().toString().trim());
                     onClick(buttonSearch);
                 }
+
                 return false;
             }
         });
@@ -201,7 +206,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     populateMap(projects);
 
                     dismissProgressDialog();
-
+                    ((ProjectsNearMeActivity) activity).updateTableViewPager();
                     if (projects == null || projects.size() == 0) {
 
                         showCancelAlertDialog("", getActivityWeakReference().get().getString(R.string.no_projects_found));
@@ -243,7 +248,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 prebid = new ArrayList<Project>();
                 postbid = new ArrayList<Project>();
             } else {
-                prebid.clear(); postbid.clear();
+                prebid.clear();
+                postbid.clear();
             }
 
             // Clear existing markers
@@ -254,16 +260,19 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 if (!markers.containsKey(project.getId())) {
 
                     BitmapDescriptor icon;
-
+                    noteCountCard(project);
+                    imageCountCard(project);
                     if (project.getProjectStage() == null) {
-                        icon = greenMarker; prebid.add(project);
+                        icon = greenMarker;
+                        prebid.add(project);
 
                     } else {
                         if (project.getProjectStage().getParentId() == 102) {
                             prebid.add(project);
                             icon = greenMarker;
                         } else {
-                            postbid.add(project); icon =  redMarker;
+                            postbid.add(project);
+                            icon = redMarker;
                         }
                     }
 
@@ -276,6 +285,46 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 }
             }
         }
+    }
+
+    public void noteCountCard(final Project project) {
+        projectDomain.fetchProjectNotes(project.getId(), new Callback<List<ProjectNote>>() {
+            @Override
+            public void onResponse(Call<List<ProjectNote>> call, Response<List<ProjectNote>> response) {
+                List<ProjectNote> responseBody = response.body();
+                if (responseBody != null) {
+                    project.setNoteTotal(responseBody.size());
+                } else project.setNoteTotal(0);
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectNote>> call, Throwable t) {
+                // LecetSharedPreferenceUtil.getInstance(activity.getApplication();
+                //  activity.showNetworkAlert();
+            }
+        });
+    }
+
+
+    public void imageCountCard(final Project project) {
+        projectDomain.fetchProjectImages(project.getId(), new Callback<List<ProjectPhoto>>() {
+            @Override
+            public void onResponse(Call<List<ProjectPhoto>> call, Response<List<ProjectPhoto>> response) {
+                Log.d(TAG, "getAdditionalImages: onResponse");
+
+                List<ProjectPhoto> responseBody = response.body();
+                if (responseBody != null) {
+                    project.setImageTotal(responseBody.size());
+                } else project.setImageTotal(0);
+            }
+
+            @Override
+            public void onFailure(Call<List<ProjectPhoto>> call, Throwable t) {
+                Log.e(TAG, "getAdditionalImages: onFailure");
+
+                //activity.showNetworkAlert();
+            }
+        });
     }
 
     private void placeMapMarker(LatLng location) {
@@ -300,7 +349,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         BitmapDescriptor icon;
 
         boolean isMyLocationMarker = false;
-        if(marker != null && marker.getTitle() != null) {
+        if (marker != null && marker.getTitle() != null) {
             isMyLocationMarker = marker.getTitle().equals(getActivityWeakReference().get().getString(R.string.my_location));
         }
 
@@ -349,7 +398,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         //Make the marker bounce
         final Handler handler = new Handler();
         final long startTime = SystemClock.uptimeMillis();
-        final long duration = 2000;
+        final long duration = 1000;
         final int yOffset = -500;
 
         Projection proj = map.getProjection();
@@ -394,6 +443,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         if (context != null) {
 
+            // TODO - add case for going to New Project Activity here, based on the ProjectDetailActivity layout *********************
             if(marker.getTitle() != null && marker.getTitle().equals(context.getString(R.string.my_location))) {
                 Intent intent = new Intent(context, AddProjectActivity.class);
                 intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");   //TODO - hardcoded
@@ -442,8 +492,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         else if (id == R.id.button_search) {
             setProjectFilter("default");
             searchAddress(search.getText().toString());
-        }
-        else if (id == R.id.button_filter) {
+            //  ((ProjectsNearMeActivity) activity).setupViewPager();
+        } else if (id == R.id.button_filter) {
             search.setText(null);
             setProjectFilter("default");
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
@@ -499,21 +549,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         }
         return p1;
     }
-    List<Project> prebid, postbid;
 
-    public List<Project> getPrebid() {
+    @Bindable
+    public ArrayList<Project> getPrebid() {
         return prebid;
     }
 
-    public void setPrebid(List<Project> prebid) {
+    public void setPrebid(ArrayList<Project> prebid) {
         this.prebid = prebid;
     }
 
-    public List<Project> getPostbid() {
+    @Bindable
+    public ArrayList<Project> getPostbid() {
         return postbid;
     }
 
-    public void setPostbid(List<Project> postbid) {
+    public void setPostbid(ArrayList<Project> postbid) {
         this.postbid = postbid;
     }
 
