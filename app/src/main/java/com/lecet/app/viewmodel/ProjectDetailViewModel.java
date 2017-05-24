@@ -239,7 +239,7 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
         } else {
 
             // Not in Bidding/Participating Stage so we will display $0
-            details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", 0)));
+            details.add(new ProjDetailItemViewModel(activity.getString(R.string.value), String.format("$ %,.0f", 0.0f)));
         }
 
         // Remaining details
