@@ -190,7 +190,7 @@
                         android:id="@+id/target_set_date"
                         style="@style/AddProjectFieldLabel"
                         android:onClick="@{viewModel::onClicked}"
-                        android:text="@{viewModel.project.targetStartDate.toString()}"/>
+                        android:text="@{viewModel.targetStartDate}"/>
 
             </LinearLayout>
 
