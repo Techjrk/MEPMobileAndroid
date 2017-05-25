@@ -70,10 +70,10 @@ public class ProjectPost {
     private String currencyType;
 
     @SerializedName("estLow")
-    private int estLow;
+    private double estLow;
 
     @SerializedName("estHigh")
-    private int estHigh;
+    private double estHigh;
 
     @SerializedName("bidDate")
     private String bidDate;
@@ -177,6 +177,398 @@ public class ProjectPost {
         geocode.setLng(longitude);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDodgeNumber() {
+        return dodgeNumber;
+    }
+
+    public void setDodgeNumber(String dodgeNumber) {
+        this.dodgeNumber = dodgeNumber;
+    }
+
+    public long getDodgeVersion() {
+        return dodgeVersion;
+    }
+
+    public void setDodgeVersion(long dodgeVersion) {
+        this.dodgeVersion = dodgeVersion;
+    }
+
+    public String getFirstPublishDate() {
+        return firstPublishDate;
+    }
+
+    public void setFirstPublishDate(String firstPublishDate) {
+        this.firstPublishDate = firstPublishDate;
+    }
+
+    public String getLastPublishDate() {
+        return lastPublishDate;
+    }
+
+    public void setLastPublishDate(String lastPublishDate) {
+        this.lastPublishDate = lastPublishDate;
+    }
+
+    public String getPriorPublishDate() {
+        return priorPublishDate;
+    }
+
+    public void setPriorPublishDate(String priorPublishDate) {
+        this.priorPublishDate = priorPublishDate;
+    }
+
+    public String getCnProjectUrl() {
+        return cnProjectUrl;
+    }
+
+    public void setCnProjectUrl(String cnProjectUrl) {
+        this.cnProjectUrl = cnProjectUrl;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getFipsCounty() {
+        return fipsCounty;
+    }
+
+    public void setFipsCounty(String fipsCounty) {
+        this.fipsCounty = fipsCounty;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getZip5() {
+        return zip5;
+    }
+
+    public void setZip5(String zip5) {
+        this.zip5 = zip5;
+    }
+
+    public String getZipPlus4() {
+        return zipPlus4;
+    }
+
+    public void setZipPlus4(String zipPlus4) {
+        this.zipPlus4 = zipPlus4;
+    }
+
+    public String getStatusText() {
+        return statusText;
+    }
+
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
+    }
+
+    public String getStatusProjDlvrySys() {
+        return statusProjDlvrySys;
+    }
+
+    public void setStatusProjDlvrySys(String statusProjDlvrySys) {
+        this.statusProjDlvrySys = statusProjDlvrySys;
+    }
+
+    public String getCurrencyType() {
+        return currencyType;
+    }
+
+    public void setCurrencyType(String currencyType) {
+        this.currencyType = currencyType;
+    }
+
+    public double getEstLow() {
+        return estLow;
+    }
+
+    public void setEstLow(int estLow) {
+        this.estLow = estLow;
+    }
+
+    public String getEstLowStr() {
+        return Double.toString(estLow);
+    }
+
+    public void setEstLowStr(String estLow) {
+        this.estLow = Double.parseDouble(estLow);
+    }
+
+    public double getEstHigh() {
+        return estHigh;
+    }
+
+    public void setEstHigh(int estHigh) {
+        this.estHigh = estHigh;
+    }
+
+    public String getBidDate() {
+        return bidDate;
+    }
+
+    public void setBidDate(String bidDate) {
+        this.bidDate = bidDate;
+    }
+
+    public String getBidTimeZone() {
+        return bidTimeZone;
+    }
+
+    public void setBidTimeZone(String bidTimeZone) {
+        this.bidTimeZone = bidTimeZone;
+    }
+
+    public String getBidSubmitTo() {
+        return bidSubmitTo;
+    }
+
+    public void setBidSubmitTo(String bidSubmitTo) {
+        this.bidSubmitTo = bidSubmitTo;
+    }
+
+    public String getContractNbr() {
+        return contractNbr;
+    }
+
+    public void setContractNbr(String contractNbr) {
+        this.contractNbr = contractNbr;
+    }
+
+    public String getProjDlvrySys() {
+        return projDlvrySys;
+    }
+
+    public void setProjDlvrySys(String projDlvrySys) {
+        this.projDlvrySys = projDlvrySys;
+    }
+
+    public String getTargetStartDate() {
+        return targetStartDate;
+    }
+
+    public void setTargetStartDate(String targetStartDate) {
+        this.targetStartDate = targetStartDate;
+    }
+
+    public String getTargetFinishDate() {
+        return targetFinishDate;
+    }
+
+    public void setTargetFinishDate(String targetFinishDate) {
+        this.targetFinishDate = targetFinishDate;
+    }
+
+    public String getOwnerClass() {
+        return ownerClass;
+    }
+
+    public void setOwnerClass(String ownerClass) {
+        this.ownerClass = ownerClass;
+    }
+
+    public String getAvailableFrom() {
+        return availableFrom;
+    }
+
+    public void setAvailableFrom(String availableFrom) {
+        this.availableFrom = availableFrom;
+    }
+
+    public boolean isAddendaInd() {
+        return addendaInd;
+    }
+
+    public void setAddendaInd(boolean addendaInd) {
+        this.addendaInd = addendaInd;
+    }
+
+    public boolean isPlanInd() {
+        return planInd;
+    }
+
+    public void setPlanInd(boolean planInd) {
+        this.planInd = planInd;
+    }
+
+    public boolean isSpecAvailable() {
+        return specAvailable;
+    }
+
+    public void setSpecAvailable(boolean specAvailable) {
+        this.specAvailable = specAvailable;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public String getBondInformation() {
+        return bondInformation;
+    }
+
+    public void setBondInformation(String bondInformation) {
+        this.bondInformation = bondInformation;
+    }
+
+    public String getGeoLocationType() {
+        return geoLocationType;
+    }
+
+    public void setGeoLocationType(String geoLocationType) {
+        this.geoLocationType = geoLocationType;
+    }
+
+    public String getGeoType() {
+        return geoType;
+    }
+
+    public void setGeoType(String geoType) {
+        this.geoType = geoType;
+    }
+
+    public String getUnionDesignation() {
+        return unionDesignation;
+    }
+
+    public void setUnionDesignation(String unionDesignation) {
+        this.unionDesignation = unionDesignation;
+    }
+
+    public String getProjectNotes() {
+        return projectNotes;
+    }
+
+    public void setProjectNotes(String projectNotes) {
+        this.projectNotes = projectNotes;
+    }
+
+    public String getStdIncludes() {
+        return stdIncludes;
+    }
+
+    public void setStdIncludes(String stdIncludes) {
+        this.stdIncludes = stdIncludes;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public int getNumberOfBuildings() {
+        return numberOfBuildings;
+    }
+
+    public void setNumberOfBuildings(int numberOfBuildings) {
+        this.numberOfBuildings = numberOfBuildings;
+    }
+
+    public int getNumberOfFloorsAboveGround() {
+        return numberOfFloorsAboveGround;
+    }
+
+    public void setNumberOfFloorsAboveGround(int numberOfFloorsAboveGround) {
+        this.numberOfFloorsAboveGround = numberOfFloorsAboveGround;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getPrimaryProjectTypeId() {
+        return primaryProjectTypeId;
+    }
+
+    public void setPrimaryProjectTypeId(int primaryProjectTypeId) {
+        this.primaryProjectTypeId = primaryProjectTypeId;
+    }
+
+    public int getProjectStageId() {
+        return projectStageId;
+    }
+
+    public void setProjectStageId(int projectStageId) {
+        this.projectStageId = projectStageId;
+    }
+
+    public int getJurisdictionCityId() {
+        return jurisdictionCityId;
+    }
+
+    public void setJurisdictionCityId(int jurisdictionCityId) {
+        this.jurisdictionCityId = jurisdictionCityId;
+    }
+
+    public Geocode getGeocode() {
+        return geocode;
+    }
+
+    public void setGeocode(Geocode geocode) {
+        this.geocode = geocode;
+    }
+
     public String toConvertedString() {
         return "ProjectPost{" +
                 "\"title\":\"" + title + "\"" +
@@ -185,13 +577,11 @@ public class ProjectPost {
 
     }
 
-
     @Override
     public String toString() {
         return "ProjectPost{" +
                 "title='" + title + '\'' +
-                ", geoCode=" + geocode +
-                ", isPublic=" + isPublic +
+                ", geocode=" + geocode +
                 ", dodgeNumber='" + dodgeNumber + '\'' +
                 ", dodgeVersion=" + dodgeVersion +
                 ", firstPublishDate='" + firstPublishDate + '\'' +
@@ -240,7 +630,6 @@ public class ProjectPost {
                 ", jurisdictionCityId=" + jurisdictionCityId +
                 '}';
     }
-
 
 
 }

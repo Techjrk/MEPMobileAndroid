@@ -29,7 +29,7 @@
                     android:id="@+id/title"
                     style="@style/AddProjectField"
                     android:hint="@string/project_title"
-                    android:text="@={viewModel.project.title}"/>
+                    android:text="@={viewModel.projectPost.title}"/>
 
         <!-- Address -->
             <TextView
@@ -42,19 +42,19 @@
                     android:id="@+id/address1"
                     style="@style/AddProjectField"
                     android:hint="@string/street_1"
-                    android:text="@={viewModel.project.address1}"/>
+                    android:text="@={viewModel.projectPost.address1}"/>
 
             <EditText
                     android:id="@+id/address2"
                     style="@style/AddProjectField"
                     android:hint="@string/street_2"
-                    android:text="@={viewModel.project.address2}"/>
+                    android:text="@={viewModel.projectPost.address2}"/>
 
             <EditText
                     android:id="@+id/city"
                     style="@style/AddProjectField"
                     android:hint="@string/city"
-                    android:text="@={viewModel.project.city}"/>
+                    android:text="@={viewModel.projectPost.city}"/>
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content">
@@ -65,8 +65,7 @@
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
                         android:hint="@string/state"
-                        android:textAllCaps="true"
-                        android:text="@={viewModel.project.state}"/>
+                        android:text="@={viewModel.projectPost.state}"/>
 
                 <EditText
                         android:id="@+id/zip5"
@@ -74,34 +73,31 @@
                         android:layout_weight="1"
                         android:layout_marginStart="4dp"
                         android:hint="@string/zip"
-                        android:text="@={viewModel.project.zip5}"/>
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:text="@={viewModel.projectPost.zip5}"/>
 
             </LinearLayout>
 
 
-            <!-- County-->
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:onClick="@{viewModel::onClickCounty}">
+            <!-- County -->
+            <TextView
+                    style="@style/AddProjectFieldTitle"
+                    android:text="@string/county"
+                    android:textAllCaps="true"
+                    bind:typeface="@{`Lato-Bold.ttf`}"/>
 
-                <TextView
-                        style="@style/AddProjectFieldTitle.WithSpacing"
-                        android:text="@string/county"
-                        android:textAllCaps="true"
-                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+            <EditText
+                    android:id="@+id/county"
+                    style="@style/AddProjectField"
+                    android:hint="@string/county"
+                    android:text="@={viewModel.projectPost.county}"/>
 
-                <TextView
-                        android:id="@+id/county"
-                        style="@style/AddProjectFieldLabel"
-                        android:hint="@string/select"
-                        android:text="@={viewModel.project.county}"/>
-
-            </LinearLayout>
 
             <include layout="@layout/rule_horiz_light"/>
 
-            <!-- Bid Status-->
-            <LinearLayout android:layout_width="match_parent"
+            <!-- Bid Status (dupe of Stage) -->
+            <!--LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content">
 
                 <TextView
@@ -118,7 +114,7 @@
 
             </LinearLayout>
 
-            <include layout="@layout/rule_horiz_light"/>
+            <include layout="@layout/rule_horiz_light"/-->
 
 
             <!-- Type -->
@@ -131,25 +127,24 @@
             <TextView
                     android:id="@+id/add_project_type"
                     style="@style/AddProjectField"
+                    android:hint="@string/project_type"
                     android:text="@{viewModel.typeSelect}"
                     android:onClick="@{viewModel::onClicked}"/>
 
             <!-- Est Low -->
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
+            <TextView
+                    style="@style/AddProjectFieldTitle"
+                    android:text="@string/est_low"
+                    android:textAllCaps="true"
+                    bind:typeface="@{`Lato-Bold.ttf`}"/>
 
-                <TextView
-                        style="@style/AddProjectFieldTitle.WithSpacing"
-                        android:text="@string/est_low"
-                        android:textAllCaps="true"
-                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+            <EditText
+                    android:id="@+id/est_low"
+                    style="@style/AddProjectField"
+                    android:hint="@string/est_low"
+                    android:inputType="number"
+                    android:text="@={viewModel.projectPost.estLowStr}"/>
 
-                <TextView
-                        style="@style/AddProjectFieldLabel"
-                        android:onClick="@{viewModel::onClicked}"
-                        android:text="@{viewModel.project.getEstLowStr}"/>
-
-            </LinearLayout>
 
             <include layout="@layout/rule_horiz_light"/>
 
@@ -168,8 +163,7 @@
                         android:id="@+id/stage"
                         style="@style/AddProjectFieldLabel"
                         android:onClick="@{viewModel::onClicked}"
-                        android:text="@{viewModel.stageSelect}"
-                    />
+                        android:text="@{viewModel.stageSelect}"/>
 
             </LinearLayout>
 

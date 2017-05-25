@@ -1,7 +1,6 @@
 package com.lecet.app.viewmodel;
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.TimePicker;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -46,13 +44,17 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     private AppCompatActivity activity;
     private final String mapsApiKey;
-    private Project project;
     private ProjectDomain projectDomain;
+
+    // values for posting to API or which can be displayed as native value
+    private ProjectPost projectPost;
     private double latitude;
     private double longitude;
+    private String targetStartDate;
+
+    // values for display only
     private String typeSelect;
     private String stageSelect;
-    private String targetStartDate;
 
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
@@ -69,33 +71,33 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         mapsApiKey = activity.getResources().getString(google_api_key);
 
-        // create the new project obj
-        project = new Project();
+        // create the new projectPost obj
+        projectPost = new ProjectPost(null, latitude, longitude);
 
         // add address if it has been passed
         if (address != null && address.isEmpty()) {
-            project.setAddress1(address);   //TODO - this only handles address line 1
+            projectPost.setAddress1(address);   //TODO - this only handles address line 1
         }
 
         // add lat and long in the form of Geocode obj if they have been passed
-        if (project.getGeocode() == null) {
+        if (projectPost.getGeocode() == null) {
             Geocode geocode = new Geocode();
             geocode.setLat(latitude);
             geocode.setLng(longitude);
-            project.setGeocode(geocode);
+            projectPost.setGeocode(geocode);
         }
 
-        initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(project));
+        initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
 
     }
 
-    public String getMapUrl(Project project) {
+    public String getMapUrl(ProjectPost projectPost) {
 
-        if (project.getGeocode() == null) {
+        if (projectPost.getGeocode() == null) {
 
             String mapStr;
 
-            String generatedAddress = generateCenterPointAddress(project);
+            String generatedAddress = generateCenterPointAddress(projectPost);
 
             StringBuilder sb2 = new StringBuilder();
             sb2.append("https://maps.googleapis.com/maps/api/staticmap");
@@ -113,8 +115,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         }
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=800x500&" +
-                        "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
-                project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
+                        "markers=color:blue|%.6f,%.6f&key=%s", projectPost.getGeocode().getLat(), projectPost.getGeocode().getLng(),
+                projectPost.getGeocode().getLat(), projectPost.getGeocode().getLng(), mapsApiKey);
     }
 
     private void initMapImageView(AddProjectActivity activity, String mapUrl) {
@@ -123,32 +125,32 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Picasso.with(imageView.getContext()).load(mapUrl).fit().into(imageView);
     }
 
-    private String generateCenterPointAddress(Project project) {
+    private String generateCenterPointAddress(ProjectPost projectPost) {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (project.getAddress1() != null) {
-            stringBuilder.append(project.getAddress1());
+        if (projectPost.getAddress1() != null) {
+            stringBuilder.append(projectPost.getAddress1());
             stringBuilder.append(",");
         }
 
-        if (project.getAddress2() != null) {
-            stringBuilder.append(project.getAddress2());
+        if (projectPost.getAddress2() != null) {
+            stringBuilder.append(projectPost.getAddress2());
             stringBuilder.append(",");
         }
 
-        if (project.getCity() != null) {
-            stringBuilder.append(project.getCity());
+        if (projectPost.getCity() != null) {
+            stringBuilder.append(projectPost.getCity());
             stringBuilder.append(",");
         }
 
-        if (project.getState() != null) {
-            stringBuilder.append(project.getState());
+        if (projectPost.getState() != null) {
+            stringBuilder.append(projectPost.getState());
         }
 
-        if (project.getZipPlus4() != null) {
+        if (projectPost.getZipPlus4() != null) {
             stringBuilder.append(",");
-            stringBuilder.append(project.getZipPlus4());
+            stringBuilder.append(projectPost.getZipPlus4());
         }
 
 
@@ -159,17 +161,17 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Log.d(TAG, "postProject");
 
         Call<Project> call;
-        ProjectPost projectPost;
+        //ProjectPost projectPost;
 
         // for a new post
         //if (!replaceExisting) {
-        projectPost = new ProjectPost(title, latitude, longitude);
-        Log.d(TAG, "postProject: ******** new project post: " + projectPost);
+        //projectPost = new ProjectPost(title, latitude, longitude);
+        Log.d(TAG, "postProject: ******** projectPost post: " + projectPost);
         call = projectDomain.postProject(projectPost);
         //}
         // for updating an existing post
         /*else {
-            Log.d(TAG, "postProject: update to existing project post");
+            Log.d(TAG, "postProject: update to existing projectPost post");
             call = projectDomain.updateProject(projectId, new ProjectPost(title, body, true));
         }*/
 
@@ -179,19 +181,19 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                 if (response.isSuccessful()) {
 
-                    Log.d(TAG, "postProject: onResponse: project post successful");
+                    Log.d(TAG, "postProject: onResponse: projectPost post successful");
                     activity.setResult(RESULT_OK);
                     activity.finish();
 
                 } else {
-                    Log.e(TAG, "postProject: onResponse: project post failed");
+                    Log.e(TAG, "postProject: onResponse: projectPost post failed");
                     // TODO: Alert HTTP call error
                 }
             }
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
-                Log.e(TAG, "postProject: onFailure: project post failed");
+                Log.e(TAG, "postProject: onFailure: projectPost post failed");
                 //TODO: Display alert noting network failure
             }
         });
@@ -253,7 +255,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     public void onClickSave(View view) {
-        Log.d(TAG, "onClickSave: posting Project...");  //TODO - post project
+        Log.d(TAG, "onClickSave: posting Project...");  //TODO - post projectPost
 
         String title = "TEST PROJECT 1";
         postProject(title, false);
@@ -273,13 +275,28 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
 
     /*
-     * Bindings
+     * Bindings for values to be posted to the API or which can be displayed as native values
      */
 
     @Bindable
-    public Project getProject() {
-        return project;
+    public ProjectPost getProjectPost() {
+        return projectPost;
     }
+
+    @Bindable
+    public String getTargetStartDate() {
+        return targetStartDate;
+    }
+
+    public void setTargetStartDate(String targetStartDate) {
+        this.targetStartDate = targetStartDate;
+        notifyPropertyChanged(BR.targetStartDate);
+    }
+
+
+    /*
+     * Bindings for values to be used for visual display only
+     */
 
     @Bindable
     public String getStageSelect() {
@@ -301,15 +318,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         notifyPropertyChanged(BR.typeSelect);
     }
 
-    @Bindable
-    public String getTargetStartDate() {
-        return targetStartDate;
-    }
 
-    public void setTargetStartDate(String targetStartDate) {
-        this.targetStartDate = targetStartDate;
-        notifyPropertyChanged(BR.targetStartDate);
-    }
 
 
 }

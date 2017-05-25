@@ -81,11 +81,7 @@ public class AddProjectActivity extends AppCompatActivity {
 
     /**
      * Process the Project Type Bundle extra data
-     * Single type grandchild selection (500-level): projectTypeId":{"inq":[503]}
-     * Multiple type grandchild selection (500-level) in different categories: projectTypeId":{"inq":[503,508]}
-     * Multiple type grandchild selection (500-level) in single category: projectTypeId":{"inq":[503,504,505]}
-     * Single type child subcategory selection Engineering:Dams: projectTypeId":{"inq":[503,504,505]}
-     * Single type parent category selection Engineering: projectTypeId":{"inq":[501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530]}
+     * Single type selection: "primaryProjectTypeId":503
      */
     private void processProjectType(final Bundle bundle) {
 
@@ -94,23 +90,21 @@ public class AddProjectActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String displayStr = ""; // = "\r\n";          // text display - removed line break as it was unnecessary
-                String types = "";
-                Set<Integer> idSet = new TreeSet<Integer>();        // using a Set to prevent dupes and maintain ascending order
-                List<Integer> idList;
+                String displayStr = "";   // text display
+                int primaryProjectTypeId = -1;
 
-                // add each parent type ID
+                // find the relevant project type ID
                 for (String key : bundle.keySet()) {
 
                     Object value = bundle.get(key);
                     Log.d(TAG, "processProjectType: " + key + ": " + value);
-                    displayStr += value + ", ";
 
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
                     if (primaryType != null) {
                         Log.d(TAG, "processProjectType: " + key + " is a Primary Type ID.");
-                        idSet.add(primaryType.getId());
+                        primaryProjectTypeId = primaryType.getId();
+                        break;
                     }
 
                     // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
@@ -118,9 +112,8 @@ public class AddProjectActivity extends AppCompatActivity {
                         SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
                         if (category != null) {
                             Log.d(TAG, "processProjectType: " + key + " is a Category ID.");
-                            for (PrimaryProjectType primaryProjectType : category.getProjectTypes()) {
-                                idSet.add(primaryProjectType.getId());
-                            }
+                            primaryProjectTypeId = category.getId();
+                            break;
                         }
 
                         // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
@@ -128,38 +121,28 @@ public class AddProjectActivity extends AppCompatActivity {
                             SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
                             if (mainType != null) {
                                 Log.d(TAG, "processProjectType: " +  key + " is a Main Type ID.");
-                                for (SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
-                                    for (PrimaryProjectType primary : projectCategory.getProjectTypes()) {
-                                        idSet.add(primary.getId());
-                                    }
-                                }
+                                primaryProjectTypeId = mainType.getId();
+                                break;
                             }
                         }
                     }
                 }
 
-                if (displayStr.length() > 2) {
-                    displayStr = displayStr.substring(0, displayStr.length() - 2);         //trim trailing ", "
-                }
-                idList = new ArrayList<>(idSet);
-                Log.d(TAG, "processProjectType: " +  "displayStr: " + displayStr);
-                Log.d(TAG, "processProjectType: " + "ids: " + idList);
-                int MAXCHARFIELD = 16;
-                if (displayStr != null && displayStr.length() > MAXCHARFIELD)
-                    displayStr = "\r\n" + displayStr;
+                Log.d(TAG, "processProjectType: " + "displayStr: " + displayStr);
+                Log.d(TAG, "processProjectType: " + "primaryProjectTypeId: " + primaryProjectTypeId);
 
-                // viewModel.setPersistedProjectTypeId(displayStr);
+                // value for API
+                viewModel.getProjectPost().setPrimaryProjectTypeId(primaryProjectTypeId);
+
+                // values for display
                 viewModel.setTypeSelect(displayStr);
-
-                // types = "\"projectTypeId\":{\"inq\":" + idList + "}";
-                // viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
-            }  //end of public void execute()
+            }
         });
     }
 
     /**
-     * Process the Stage input data based on the received list of Stages persisted in Realm
-     * Ex: "projectStageId":{"inq":[208,209,210,211]}}
+     * Process the Stage input data
+     * Ex: "projectStageId":208
      */
     private void processStage(final Bundle bundle) {
 
@@ -168,57 +151,28 @@ public class AddProjectActivity extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                int viewType = -1;
                 String stageStr;
-                String stageId;
-                String stages;
+                int stageId;
 
                 try {
-                    viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
                     stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
-                    stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
-                    stages = "";
-                } catch (Exception e) {
+                    stageId = Integer.parseInt(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID));         // ID
+                }
+                catch (Exception e) {
                     Log.e(TAG, "processStage: Error parsing bundle.");
                     return;
                 }
 
-                // build the list of IDs for the query, which include the parent ID and any of its child IDs
-                List<String> sList = new ArrayList<>();
-
-                // GrandChild view type (2): should not occur since Stage does not have grandchild list view items
-                if (viewType == SearchFilterStageAdapter.GRAND_CHILD_VIEW_TYPE) {
-                    Log.w(TAG, "processStage: Warning: GrandChild Type Selected. Not Supported.");
-                }
-                // Child view type (1): just use the selected child's ID
-                else if (viewType == SearchFilterStageAdapter.CHILD_VIEW_TYPE) {
-                    Log.d(TAG, "processStage: Child Type Selected.");
-                    sList.add(stageId);
-                }
-                // Parent view type (0): build a list of all child types under that parent ID
-                else if (viewType == SearchFilterStageAdapter.PARENT_VIEW_TYPE) {
-                    Log.d(TAG, "processStage: Parent Type Selected.");
-                    SearchFilterStagesMain selectedParentStage = realm.where(SearchFilterStagesMain.class).equalTo("id", Integer.valueOf(stageId)).findFirst();
-                    for (SearchFilterStage childStage : selectedParentStage.getStages()) {
-                        sList.add(Integer.toString(childStage.getId()));
-                    }
-                } else {
-                    Log.e(TAG, "processStage: Unsupported viewType: " + viewType);
-                }
-
                 if (stageStr != null && !stageStr.trim().equals("")) {
-
-                    Log.d(TAG, "processStage: viewType: " + viewType);
                     Log.d(TAG, "processStage: input Stage name: " + stageStr);
-                    Log.d(TAG, "processStage: IDs: " + sList);
-
-                    stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
+                    Log.d(TAG, "processStage: ID: " + stageId);
                 }
-                //  viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
 
-                // display
-                if (stageStr == null || stageStr.equals("")) stageStr = "Any";
-                //   viewModel.setPersistedStage(stageStr);
+                // API value
+                viewModel.getProjectPost().setProjectStageId(stageId);
+
+                // display value
+                if (stageStr == null || stageStr.equals("")) stageStr = "None";
                 viewModel.setStageSelect(stageStr);
             }
         });
