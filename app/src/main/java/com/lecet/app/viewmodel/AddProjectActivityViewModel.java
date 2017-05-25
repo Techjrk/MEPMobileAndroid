@@ -1,19 +1,21 @@
 package com.lecet.app.viewmodel;
 
-import com.google.gson.Gson;
-
+import android.content.Intent;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
+import com.lecet.app.content.SearchFilterProjectTypeActivity;
+import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Geocode;
-import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
@@ -40,7 +42,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private ProjectDomain projectDomain;
     private double latitude;
     private double longitude;
-
+    private String typeSelect;
+    private String stageSelect;
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
         super(appCompatActivity);
@@ -60,12 +63,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         project = new Project();
 
         // add address if it has been passed
-        if(address != null && address.isEmpty()) {
+        if (address != null && address.isEmpty()) {
             project.setAddress1(address);   //TODO - this only handles address line 1
         }
 
         // add lat and long in the form of Geocode obj if they have been passed
-        if(project.getGeocode() == null) {
+        if (project.getGeocode() == null) {
             Geocode geocode = new Geocode();
             geocode.setLat(latitude);
             geocode.setLng(longitude);
@@ -150,9 +153,9 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         // for a new post
         //if (!replaceExisting) {
-            projectPost = new ProjectPost(title, latitude, longitude);
-            Log.d(TAG, "postProject: ******** new project post: " + projectPost);
-            call = projectDomain.postProject(projectPost);
+        projectPost = new ProjectPost(title, latitude, longitude);
+        Log.d(TAG, "postProject: ******** new project post: " + projectPost);
+        call = projectDomain.postProject(projectPost);
         //}
         // for updating an existing post
         /*else {
@@ -183,8 +186,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             }
         });
     }
-
-
     
     /*
      * Clicks 
@@ -192,6 +193,23 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     public void onClicked(View view) {
         Log.d(TAG, "onClicked: " + view.getContext().getResources().getResourceEntryName(view.getId()));
+        Intent i = null;
+        int id = view.getId();
+        int section = 0;
+        switch (id) {
+            case R.id.add_project_type:
+                section = SearchFilterAllTabbedViewModel.TYPE;
+                i = new Intent(activity, SearchFilterProjectTypeActivity.class);
+                break;
+            case R.id.stage:
+                section = SearchFilterAllTabbedViewModel.STAGE;
+                i = new Intent(activity, SearchFilterStageActivity.class);
+                break;
+            default:
+                Log.w(TAG, "onClicked: Warning: Unsupported view id clicked: " + id);
+                return;
+        }
+        activity.startActivityForResult(i, section);
     }
 
     public void onClickCancel(View view) {
@@ -205,13 +223,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         String title = "TEST PROJECT 1";
         postProject(title, false);
-        
+
     }
 
     public void onClickCounty(View view) {
         Log.d(TAG, "onClickCounty");
     }
-
 
 
     @Override
@@ -230,6 +247,24 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         return project;
     }
 
+    @Bindable
+    public String getStageSelect() {
+        return stageSelect;
+    }
 
+    public void setStageSelect(String stageSelect) {
+        this.stageSelect = stageSelect;
+        notifyPropertyChanged(BR.stageSelect);
+    }
+
+    @Bindable
+    public String getTypeSelect() {
+        return typeSelect;
+    }
+
+    public void setTypeSelect(String typeSelect) {
+        this.typeSelect = typeSelect;
+        notifyPropertyChanged(BR.typeSelect);
+    }
 
 }
