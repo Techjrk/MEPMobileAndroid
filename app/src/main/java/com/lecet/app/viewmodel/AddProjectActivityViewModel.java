@@ -1,11 +1,15 @@
 package com.lecet.app.viewmodel;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -19,6 +23,10 @@ import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +52,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private double longitude;
     private String typeSelect;
     private String stageSelect;
+    private String targetStartDate;
+    @Bindable
+    public String getTargetStartDate() {
+        return targetStartDate;
+    }
+
+    public void setTargetStartDate(String targetStartDate) {
+        this.targetStartDate = targetStartDate;
+        notifyPropertyChanged(BR.targetStartDate);
+    }
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
         super(appCompatActivity);
@@ -190,7 +208,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     /*
      * Clicks 
      */
-
+     Calendar myCalendar;
     public void onClicked(View view) {
         Log.d(TAG, "onClicked: " + view.getContext().getResources().getResourceEntryName(view.getId()));
         Intent i = null;
@@ -205,6 +223,24 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 section = SearchFilterAllTabbedViewModel.STAGE;
                 i = new Intent(activity, SearchFilterStageActivity.class);
                 break;
+            case R.id.target_set_date:
+                myCalendar = Calendar.getInstance();
+                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabel();
+                    }
+
+                };
+                new DatePickerDialog(activity, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             default:
                 Log.w(TAG, "onClicked: Warning: Unsupported view id clicked: " + id);
                 return;
@@ -212,6 +248,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         activity.startActivityForResult(i, section);
     }
 
+    private void updateLabel() {
+
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        setTargetStartDate(sdf.format(myCalendar.getTime()));
+    }
     public void onClickCancel(View view) {
         Log.d(TAG, "onClickCancel");
         activity.setResult(RESULT_CANCELED);
