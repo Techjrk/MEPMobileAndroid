@@ -55,6 +55,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     // values for display only
     private String typeSelect;
     private String stageSelect;
+    private Calendar calendar;
 
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
@@ -72,7 +73,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         mapsApiKey = activity.getResources().getString(google_api_key);
 
         // create the new projectPost obj
-        projectPost = new ProjectPost(null, latitude, longitude);
+        projectPost = new ProjectPost(latitude, longitude);
 
         // add address if it has been passed
         if (address != null && address.isEmpty()) {
@@ -157,35 +158,22 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         return stringBuilder.toString();
     }
 
-    private void postProject(String title, boolean replaceExisting) {
-        Log.d(TAG, "postProject");
+    private void postProject() {
+        Log.d(TAG, "postProject: projectPost post: " + projectPost);
 
-        Call<Project> call;
-        //ProjectPost projectPost;
-
-        // for a new post
-        //if (!replaceExisting) {
-        //projectPost = new ProjectPost(title, latitude, longitude);
-        Log.d(TAG, "postProject: ******** projectPost post: " + projectPost);
-        call = projectDomain.postProject(projectPost);
-        //}
-        // for updating an existing post
-        /*else {
-            Log.d(TAG, "postProject: update to existing projectPost post");
-            call = projectDomain.updateProject(projectId, new ProjectPost(title, body, true));
-        }*/
+        Call<Project> call = projectDomain.postProject(projectPost);
 
         call.enqueue(new Callback<Project>() {
             @Override
             public void onResponse(Call<Project> call, Response<Project> response) {
 
                 if (response.isSuccessful()) {
-
-                    Log.d(TAG, "postProject: onResponse: projectPost post successful");
+                    Project createdProject = response.body();
+                    Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project ID: " + createdProject.getId());
                     activity.setResult(RESULT_OK);
                     activity.finish();
-
-                } else {
+                }
+                else {
                     Log.e(TAG, "postProject: onResponse: projectPost post failed");
                     // TODO: Alert HTTP call error
                 }
@@ -198,11 +186,39 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             }
         });
     }
-    
+
+    private void updateProject(long projectId) {
+        Log.d(TAG, "updateProject: projectPost post: " + projectPost);
+
+        Call<Project> call = projectDomain.updateProject(projectId, projectPost);
+
+        call.enqueue(new Callback<Project>() {
+            @Override
+            public void onResponse(Call<Project> call, Response<Project> response) {
+
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "updateProject: onResponse: projectPost update successful");
+                    activity.setResult(RESULT_OK);
+                    activity.finish();
+                }
+                else {
+                    Log.e(TAG, "updateProject: onResponse: projectPost update failed");
+                    // TODO: Alert HTTP call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Project> call, Throwable t) {
+                Log.e(TAG, "updateProject: onFailure: projectPost update failed");
+                //TODO: Display alert noting network failure
+            }
+        });
+    }
+
+
     /*
      * Clicks 
      */
-     Calendar myCalendar;
     public void onClicked(View view) {
         Log.d(TAG, "onClicked: " + view.getContext().getResources().getResourceEntryName(view.getId()));
         Intent i = null;
@@ -218,23 +234,23 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 i = new Intent(activity, SearchFilterStageActivity.class);
                 break;
             case R.id.target_set_date:
-                myCalendar = Calendar.getInstance();
+                calendar = Calendar.getInstance();
                 DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear,
                                           int dayOfMonth) {
                         // TODO Auto-generated method stub
-                        myCalendar.set(Calendar.YEAR, year);
-                        myCalendar.set(Calendar.MONTH, monthOfYear);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         updateLabel();
                     }
 
                 };
-                new DatePickerDialog(activity, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(activity, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
             default:
                 Log.w(TAG, "onClicked: Warning: Unsupported view id clicked: " + id);
                 return;
@@ -246,7 +262,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        setTargetStartDate(sdf.format(myCalendar.getTime()));
+        setTargetStartDate(sdf.format(calendar.getTime()));
     }
     public void onClickCancel(View view) {
         Log.d(TAG, "onClickCancel");
@@ -255,11 +271,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     public void onClickSave(View view) {
-        Log.d(TAG, "onClickSave: posting Project...");  //TODO - post projectPost
-
-        String title = "TEST PROJECT 1";
-        postProject(title, false);
-
+        Log.d(TAG, "onClickSave: posting Project");
+        postProject();
     }
 
     public void onClickCounty(View view) {

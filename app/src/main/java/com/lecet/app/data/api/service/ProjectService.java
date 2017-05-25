@@ -12,12 +12,10 @@ import com.lecet.app.data.models.ProjectPost;
 
 import java.util.List;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -34,6 +32,9 @@ import retrofit2.http.Query;
 
 public interface ProjectService {
 
+    /*
+     * Get projects
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -41,7 +42,9 @@ public interface ProjectService {
     @GET("Projects")
     Call<List<Project>> projects(@Header("Authorization") String authorization, @Query("filter") String filter);
 
-
+    /*
+     * Get projects nearby
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -49,7 +52,9 @@ public interface ProjectService {
     @GET("Projects/near")
     Call<ProjectsNearResponse> projectsNear(@Header("Authorization") String authorization, @Query("lat") double lat, @Query("lng") double lng, @Query("dist") int dist, @Query("filter") String filter);
 
-
+    /*
+     * Get project
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -57,29 +62,30 @@ public interface ProjectService {
     @GET("Projects/{projectID}")
     Call<Project> project(@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
 
-
-
-
-    /*@Headers({
-            "Accept: application/json",
-            "Content-Type: application/json"
-    })
-    @POST("Projects/createInstance")
-    Call<Project> addProject (@Header("Authorization") String authorization, @Body ProjectPost projectPost);
-*/
-
-
+    /*
+     * Post new project
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
     })
     @POST("Projects/createInstance")
-    Call<Project> addProject (@Header("Authorization") String authorization, @Body String body);
+    Call<Project> addProject (@Header("Authorization") String authorization, @Body ProjectPost projectPost);
+
+    /*
+     * Update project
+     */
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @PUT("Projects/{projectID}/editInstance")
+    Call<Project> updateProject (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Body ProjectPost projectPost);
 
 
-
-
-
+    /*
+     * Get project jurisdiction
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -87,6 +93,9 @@ public interface ProjectService {
     @GET("Projects/{projectID}/jurisdiction")
     Call<List<Jurisdiction>> projectJurisdiction(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
+    /*
+     * Hide project
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -94,6 +103,9 @@ public interface ProjectService {
     @PUT("Projects/{projectID}/hide")
     Call<ResponseBody> hide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
+    /*
+     * Unhide project
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -101,6 +113,9 @@ public interface ProjectService {
     @PUT("Projects/{projectID}/unhide")
     Call<ResponseBody> unhide(@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
+    /*
+     * Get hidden projects
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -108,6 +123,9 @@ public interface ProjectService {
     @GET("LecetUsers/{user_id}/hiddenProjects")
     Call<List<Project>> hiddenProjects(@Header("Authorization") String authorization, @Path("user_id") long user_id);
 
+    /*
+     * Post new project note
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -115,6 +133,9 @@ public interface ProjectService {
     @POST("Projects/{projectID}/userNotes")
     Call<ProjectNote> addNote (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Body NotePost notePost);
 
+    /*
+     * Update project note
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -122,6 +143,9 @@ public interface ProjectService {
     @PUT("Notes/{noteID}")
     Call<ProjectNote> updateNote (@Header("Authorization") String authorization, @Path("noteID") long noteID, @Body NotePost notePost);
 
+    /*
+     * Delete project note
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -129,6 +153,9 @@ public interface ProjectService {
     @DELETE("Notes/{noteID}")
     Call<ProjectNote> deleteNote (@Header("Authorization") String authorization, @Path("noteID") long noteID);
 
+    /*
+     * Get project notes
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -136,6 +163,9 @@ public interface ProjectService {
     @GET("Projects/{projectID}/userNotes")
     Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID);
 
+    /*
+     * Post new project photo
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -143,6 +173,9 @@ public interface ProjectService {
     @POST("Projects/{projectID}/uploadImage")
     Call<ProjectPhoto> addPhoto (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Body PhotoPost photoPost);
 
+    /*
+     * Update project photo
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -150,6 +183,9 @@ public interface ProjectService {
     @PUT("Images/{photoID}")
     Call<ProjectPhoto> updatePhoto (@Header("Authorization") String authorization, @Path("photoID") long photoID, @Body PhotoPost photoPost);
 
+    /*
+     * Delete project photo
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
@@ -157,6 +193,9 @@ public interface ProjectService {
     @DELETE("Images/{photoID}")
     Call<ProjectPhoto> deletePhoto (@Header("Authorization") String authorization, @Path("photoID") long photoID);
 
+    /*
+     * Get project images
+     */
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"

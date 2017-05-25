@@ -28,11 +28,9 @@ import com.lecet.app.utility.DateUtility;
 import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.realm.Realm;
@@ -244,7 +242,12 @@ public class ProjectDetailViewModel extends BaseObservableViewModel implements C
 
         // Remaining details
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity), Realm.getDefaultInstance()), projectID, activity.getString(R.string.jurisdiction)));
-        details.add(new ProjDetailItemViewModel(activity.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
+
+        String info = "";
+        if(project.getPrimaryProjectType() != null && project.getPrimaryProjectType().getBuildingOrHighway() != null) {
+            info = project.getPrimaryProjectType().getBuildingOrHighway();
+        }
+        details.add(new ProjDetailItemViewModel(activity.getString(R.string.b_h), info));
 
         // Notes
         String notes = null;

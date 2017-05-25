@@ -12,9 +12,6 @@ public class ProjectPost {
     @SerializedName("title")
     private String title;
 
-    @SerializedName("public")
-    private boolean isPublic;
-
     @SerializedName("dodgeNumber")
     private String dodgeNumber;
 
@@ -117,9 +114,6 @@ public class ProjectPost {
     @SerializedName("bondInformation")
     private String bondInformation;
 
-    //@SerializedName("geocode")
-    //private String geocode;     //TODO - required type in API is GeoPoint
-
     @SerializedName("geoLocationType")
     private String geoLocationType;    // takes ROOFTOP, RANGE_INTERPOLATED, GEOMETRIC_CENTER, or APPROXIMATE
 
@@ -144,8 +138,8 @@ public class ProjectPost {
     @SerializedName("numberOfFloorsAboveGround")
     private int numberOfFloorsAboveGround;
 
-    @SerializedName("id")
-    private long id;
+    /*@SerializedName("id")
+    private long id;*/
 
     @SerializedName("primaryProjectTypeId")
     private int primaryProjectTypeId;
@@ -156,22 +150,11 @@ public class ProjectPost {
     @SerializedName("jurisdictionCityId")
     private int jurisdictionCityId;
 
-    //TODO - add GeoPoint obj
-
-    //@SerializedName("latitude")
-    //private double latitude;
-
-    //@SerializedName("longitude")
-    //private double longitude;
-
     @SerializedName("geocode")
     private Geocode geocode;
 
-    public ProjectPost(String title, double latitude, double longitude) {
-        this.title = title;
-        //this.latitude = latitude;
-        //this.longitude = longitude;
 
+    public ProjectPost(double latitude, double longitude) {
         this.geocode = new Geocode();
         geocode.setLat(latitude);
         geocode.setLng(longitude);
@@ -529,13 +512,13 @@ public class ProjectPost {
         this.numberOfFloorsAboveGround = numberOfFloorsAboveGround;
     }
 
-    public long getId() {
+    /*public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
-    }
+    }*/
 
     public int getPrimaryProjectTypeId() {
         return primaryProjectTypeId;
@@ -624,7 +607,6 @@ public class ProjectPost {
                 ", contractType='" + contractType + '\'' +
                 ", numberOfBuildings=" + numberOfBuildings +
                 ", numberOfFloorsAboveGround=" + numberOfFloorsAboveGround +
-                ", id=" + id +
                 ", primaryProjectTypeId=" + primaryProjectTypeId +
                 ", projectStageId=" + projectStageId +
                 ", jurisdictionCityId=" + jurisdictionCityId +
@@ -633,3 +615,4 @@ public class ProjectPost {
 
 
 }
+
