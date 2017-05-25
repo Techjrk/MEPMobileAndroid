@@ -53,15 +53,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private String typeSelect;
     private String stageSelect;
     private String targetStartDate;
-    @Bindable
-    public String getTargetStartDate() {
-        return targetStartDate;
-    }
 
-    public void setTargetStartDate(String targetStartDate) {
-        this.targetStartDate = targetStartDate;
-        notifyPropertyChanged(BR.targetStartDate);
-    }
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
         super(appCompatActivity);
@@ -308,5 +300,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         this.typeSelect = typeSelect;
         notifyPropertyChanged(BR.typeSelect);
     }
+
+    @Bindable
+    public String getTargetStartDate() {
+        return targetStartDate;
+    }
+
+    public void setTargetStartDate(String targetStartDate) {
+        this.targetStartDate = targetStartDate;
+        notifyPropertyChanged(BR.targetStartDate);
+    }
+
 
 }

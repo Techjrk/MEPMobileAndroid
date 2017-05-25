@@ -103,13 +103,13 @@ public class AddProjectActivity extends AppCompatActivity {
                 for (String key : bundle.keySet()) {
 
                     Object value = bundle.get(key);
-                    Log.d("processProjectType: ", key + ": " + value);
+                    Log.d(TAG, "processProjectType: " + key + ": " + value);
                     displayStr += value + ", ";
 
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
                     if (primaryType != null) {
-                        Log.d("processProjectType: ", key + " is a Primary Type ID.");
+                        Log.d(TAG, "processProjectType: " + key + " is a Primary Type ID.");
                         idSet.add(primaryType.getId());
                     }
 
@@ -117,7 +117,7 @@ public class AddProjectActivity extends AppCompatActivity {
                     else {
                         SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
                         if (category != null) {
-                            Log.d("processProjectType: ", key + " is a Category ID.");
+                            Log.d(TAG, "processProjectType: " + key + " is a Category ID.");
                             for (PrimaryProjectType primaryProjectType : category.getProjectTypes()) {
                                 idSet.add(primaryProjectType.getId());
                             }
@@ -127,7 +127,7 @@ public class AddProjectActivity extends AppCompatActivity {
                         else {
                             SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
                             if (mainType != null) {
-                                Log.d("processProjectType: ", key + " is a Main Type ID.");
+                                Log.d(TAG, "processProjectType: " +  key + " is a Main Type ID.");
                                 for (SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
                                     for (PrimaryProjectType primary : projectCategory.getProjectTypes()) {
                                         idSet.add(primary.getId());
@@ -142,8 +142,8 @@ public class AddProjectActivity extends AppCompatActivity {
                     displayStr = displayStr.substring(0, displayStr.length() - 2);         //trim trailing ", "
                 }
                 idList = new ArrayList<>(idSet);
-                Log.d("processProjectType", "displayStr: " + displayStr);
-                Log.d("processProjectType", "ids: " + idList);
+                Log.d(TAG, "processProjectType: " +  "displayStr: " + displayStr);
+                Log.d(TAG, "processProjectType: " + "ids: " + idList);
                 int MAXCHARFIELD = 16;
                 if (displayStr != null && displayStr.length() > MAXCHARFIELD)
                     displayStr = "\r\n" + displayStr;
@@ -179,6 +179,7 @@ public class AddProjectActivity extends AppCompatActivity {
                     stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
                     stages = "";
                 } catch (Exception e) {
+                    Log.e(TAG, "processStage: Error parsing bundle.");
                     return;
                 }
 
@@ -202,7 +203,7 @@ public class AddProjectActivity extends AppCompatActivity {
                         sList.add(Integer.toString(childStage.getId()));
                     }
                 } else {
-                    Log.e("processJurisdiction: ", "Unsupported viewType: " + viewType);
+                    Log.e(TAG, "processStage: Unsupported viewType: " + viewType);
                 }
 
                 if (stageStr != null && !stageStr.trim().equals("")) {
