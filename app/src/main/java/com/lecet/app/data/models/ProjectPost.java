@@ -321,11 +321,15 @@ public class ProjectPost {
     }
 
     public String getEstLowStr() {
-        return Double.toString(estLow);
+        if(this.estLow == 0) return "0";
+
+        return Double.toString(Math.floor(estLow));
     }
 
     public void setEstLowStr(String estLow) {
-        this.estLow = Double.parseDouble(estLow);
+        if (estLow != null && !estLow.isEmpty()) {
+            this.estLow = Double.parseDouble(estLow);
+        }
     }
 
     public double getEstHigh() {

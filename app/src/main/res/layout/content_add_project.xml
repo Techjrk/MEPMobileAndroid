@@ -142,7 +142,8 @@
                     android:id="@+id/est_low"
                     style="@style/AddProjectField"
                     android:hint="@string/est_low"
-                    android:inputType="number"
+                    android:inputType="number|none"
+                    android:digits="0123456789"
                     android:text="@={viewModel.projectPost.estLowStr}"/>
 
 
