@@ -179,7 +179,6 @@ public class AddProjectActivity extends AppCompatActivity {
                     stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
                     stages = "";
                 } catch (Exception e) {
-                    Log.e("processJurisdiction: ", "Error parsing bundle.");
                     return;
                 }
 
