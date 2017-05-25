@@ -1,6 +1,8 @@
 package com.lecet.app.viewmodel;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private AppCompatActivity activity;
     private final String mapsApiKey;
     private ProjectDomain projectDomain;
+    private AlertDialog alert;
 
     // values for posting to API or which can be displayed as native value
     private ProjectPost projectPost;
@@ -215,6 +218,27 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         });
     }
 
+    private void showPostProjectAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+
+        alert = new AlertDialog.Builder(view.getContext()).create();
+
+        // Required content of project post
+        if(projectPost == null || projectPost.getGeocode() == null) {
+            alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
+            alert.setMessage("A location is required.");
+            alert.show();
+        }
+
+        // Are you sure?
+        else {
+            alert.setMessage("You are about to save this new project.");
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Save Project", onClick);
+            alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
+            alert.show();
+        }
+    }
+
+
 
     /*
      * Clicks 
@@ -271,8 +295,28 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     public void onClickSave(View view) {
-        Log.d(TAG, "onClickSave: posting Project");
-        postProject();
+        Log.d(TAG, "onClickSave");
+
+        DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        postProject();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showPostProjectAlertDialog(view, onClickAddListener);
     }
 
     public void onClickCounty(View view) {
