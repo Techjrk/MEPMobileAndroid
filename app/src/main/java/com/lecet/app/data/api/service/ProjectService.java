@@ -1,5 +1,7 @@
 package com.lecet.app.data.api.service;
 
+import android.location.Address;
+
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
@@ -202,5 +204,17 @@ public interface ProjectService {
     })
     @GET("Projects/{projectID}/images")
     Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID);
+
+
+    /*
+     * Google Maps API: Get address from location lat/lng
+     */
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("https://maps.googleapis.com/maps/api/geocode/json")
+    Call<List<Address>> getAddressFromLocation(@Query("latlng") String latlng, @Query("key") String key);
+
 
 }

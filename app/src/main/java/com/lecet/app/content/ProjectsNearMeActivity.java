@@ -3,6 +3,7 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.location.Address;
 import android.location.Location;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -62,6 +63,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     boolean isAskingForPermission;
     boolean isLocationManagerConnected;
     Location lastKnowLocation;
+    //Address lastKnownAddress;
     private final String TAG = "ProjectsNearMeActivity";
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -74,9 +76,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         enableLocationUpdates = false;
         isAskingForPermission = false;
         isLocationManagerConnected = false;
+        setupLocationManager();
         setupBinding();
         setupToolbar();
-        setupLocationManager();
         checkPermissions();
         viewPager = (ViewPager) findViewById(R.id.view_pager_bid);
 // set up TabLayout
@@ -97,7 +99,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     private void setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_projects_near_me);
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler());
+        viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler(), locationManager);
         binding.setViewModel(viewModel);
     }
 
@@ -128,8 +130,18 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         MapsInitializer.initialize(this);
         //map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));     // TODO - this is where the info_window_layout is set as the default info window for the map
         viewModel.setMap(map);
-        lastKnowLocation = locationManager.retrieveLastKnownLocation();
+        updateLocation();
         fetchProjects(false);
+    }
+
+    private void updateLocation() {
+        lastKnowLocation = locationManager.retrieveLastKnownLocation();
+        Log.d(TAG, "updateLocation: lastKnowLocation: " + lastKnowLocation);
+
+        /*if(lastKnowLocation != null) {
+            lastKnownAddress = locationManager.getAddressFromLocation(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
+            Log.d(TAG, "updateLocation: lastKnownAddress: " + lastKnownAddress);
+        }*/
     }
 
 
@@ -187,6 +199,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         if (location != null) {
             enableLocationUpdates = false;
             lastKnowLocation = location;
+            //lastKnownAddress = locationManager.getAddressFromLocation(location.getLatitude(), location.getLongitude());
+            Log.d(TAG, "onLocationChanged: lastKnowLocation: " + lastKnowLocation);
+            //Log.d(TAG, "onLocationChanged: lastKnownAddress: " + lastKnownAddress);
             locationManager.stopLocationUpdates();
             fetchProjects(true);
         }
@@ -391,7 +406,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             viewModel.searchAddress(mpnLocation);
         } else {
             enableLocationUpdates = true;
-            lastKnowLocation = locationManager.retrieveLastKnownLocation();
+            updateLocation();
             if (lastKnowLocation != null) {
                 Log.d("mpn2", "mpn2" + lastKnowLocation.getLongitude() + ":" + lastKnowLocation.getLatitude());
                 fetchProjects(true);
@@ -650,7 +665,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     public void onNavigationPressed(View view) {
         enableLocationUpdates = true;
-        lastKnowLocation = locationManager.retrieveLastKnownLocation();
+        updateLocation();
         if (lastKnowLocation != null) {
             fetchProjects(true);
         }

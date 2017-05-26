@@ -1,6 +1,7 @@
 package com.lecet.app.domain;
 
 
+import android.location.Address;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -332,6 +333,13 @@ public class ProjectDomain {
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<Project>> call = lecetClient.getProjectService().hiddenProjects(token, userID);
         call.enqueue(callback);
+    }
+
+    public Call<List<Address>> getAddressFromLocation(double lat, double lng, String key) {
+        String latlng = Double.toString(lat) + "," + Double.toString(lng);
+        Call<List<Address>> call = lecetClient.getProjectService().getAddressFromLocation(latlng, key);
+
+        return call;
     }
 
 

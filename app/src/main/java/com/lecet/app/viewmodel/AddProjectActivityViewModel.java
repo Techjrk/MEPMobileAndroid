@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.Bindable;
+import android.location.Address;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -93,6 +95,50 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
 
+        getAddressFromLocation(latitude, longitude);
+
+    }
+
+    private void getAddressFromLocation(double latitude, double longitude) {
+        Log.d(TAG, "getAddressFromLocation: lat, lng: " + latitude + ", " + longitude);
+
+        Call<List<Address>> call = projectDomain.getAddressFromLocation(latitude, longitude, mapsApiKey);
+
+        call.enqueue(new Callback<List<Address>>() {
+                @Override
+                public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+
+                    if (response.isSuccessful()) {
+                        Address address = response.body().get(0);
+                        Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. response: " + response);
+                        Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. response.errorBody: " + response.errorBody());
+                        Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. response.message: " + response.message());
+
+                        // set the address properties into the post object
+                        if(address != null) {
+                            populateFieldsFromAddress(address);
+                        }
+                    }
+                    else {
+                        Log.e(TAG, "getAddressFromLocation: onResponse: address request post failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Address>> call, Throwable t) {
+                    Log.e(TAG, "getAddressFromLocation: onFailure: address post failed");
+                }
+            });
+    }
+
+    private void populateFieldsFromAddress(Address address) {
+        if(!address.getAddressLine(0).isEmpty()) getProjectPost().setAddress1(address.getAddressLine(0));   // address line 1
+        if(!address.getAddressLine(1).isEmpty()) getProjectPost().setAddress2(address.getAddressLine(1));   // address line 2
+        if(!address.getLocality().isEmpty())     getProjectPost().setCity(address.getLocality());           // city
+        if(!address.getAdminArea().isEmpty())    getProjectPost().setState(address.getAdminArea());         // state
+        if(!address.getPostalCode().isEmpty())   getProjectPost().setZip5(address.getPostalCode());         // zip
+        if(!address.getSubAdminArea().isEmpty()) getProjectPost().setCounty(address.getSubAdminArea());     // county
+        if(!address.getCountryName().isEmpty())  getProjectPost().setCountry(address.getCountryName());     // country
     }
 
     public String getMapUrl(ProjectPost projectPost) {

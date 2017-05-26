@@ -46,6 +46,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.LocationManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,6 +78,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private static final int REQUEST_FILTER_MPN = 8;
     private AppCompatActivity activity;
     private ProjectDomain projectDomain;
+    private Handler timer;
+    private LocationManager locationManager;
     private GoogleMap map;
     private Marker currLocationMarker;
     private Marker lastMarkerTapped;
@@ -92,16 +95,16 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private EditText search;
     private View buttonClear;
     private View buttonSearch;
+
     private View buttonFilter;
 
-    private Handler timer;
-
-    public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer) {
+    public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer, LocationManager locationManager) {
         super(activity);
         this.activity = activity;
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
+        this.locationManager = locationManager;
     }
 
     public void setProjectFilter(String filter) {
@@ -443,10 +446,13 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         if (context != null) {
 
-            // TODO - add case for going to New Project Activity here, based on the ProjectDetailActivity layout *********************
             if(marker.getTitle() != null && marker.getTitle().equals(context.getString(R.string.my_location))) {
+                Log.d(TAG, "onInfoWindowClick: marker position: " + marker.getPosition());
+                Log.d(TAG, "onInfoWindowClick: marker lat: " + marker.getPosition().latitude);
+                Log.d(TAG, "onInfoWindowClick: marker lng: " + marker.getPosition().longitude);
+                Log.d(TAG, "onInfoWindowClick: context: " + context);
                 Intent intent = new Intent(context, AddProjectActivity.class);
-                intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");   //TODO - hardcoded
+                intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");   //TODO - hardcoded - add live address
                 intent.putExtra(EXTRA_MARKER_LATITUDE, marker.getPosition().latitude);
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);
