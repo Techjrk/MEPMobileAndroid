@@ -347,6 +347,10 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         // Value Filter
         String valueFilter = processValueFilter(data);
         if (valueFilter.length() > 0) {
+            if ( valueFilter.contains("MAX")) {
+                valueFilter = valueFilter.replace(",\"max\":MAX", "");
+            }
+
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(valueFilter);
         }
