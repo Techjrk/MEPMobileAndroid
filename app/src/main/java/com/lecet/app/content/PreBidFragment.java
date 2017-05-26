@@ -23,8 +23,6 @@ import java.util.ArrayList;
 
 //TODO: make an inheritance for this fragment and all common attributes and methods for PreBid and postbid.
 public class PreBidFragment extends Fragment {
-    //static private ProjectsNearMeViewModel viewModel;
-//static private ProjectsNearMeActivity activity;
     static private ArrayList<Project> bidData;
 
     public static PreBidFragment newInstance(ArrayList<Project> data) {

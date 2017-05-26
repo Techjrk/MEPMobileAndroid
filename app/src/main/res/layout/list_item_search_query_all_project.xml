@@ -11,88 +11,95 @@
 
         <import type="android.view.View" />
     </data>
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/shape_rect_list_item_bg_1"
-        android:orientation="vertical"
-        android:paddingBottom="6dp"
+        android:layout_height="wrap_content">
 
-        >
-
-        <!-- Details Map and Text Layout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center_vertical"
-            android:onClick="@{viewModel.onProjectClick}"
-            android:orientation="horizontal">
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/shape_rect_list_item_bg_1"
+            android:orientation="vertical">
 
-            <!-- Map Image -->
-            <ImageView
-                style="@style/ListItemProjectTrackingImage.DetailMap"
-                bind:imageUrl="@{viewModel.mapUrl}" />
-
-            <!-- Details -->
-            <LinearLayout
+            <!-- Details Map and Text Layout -->
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="12dp">
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:onClick="@{viewModel.onProjectClick}">
+                <!-- Map Image -->
+                <ImageView
+                    android:id="@+id/map"
+                    style="@style/ListItemProjectTrackingImage.DetailMap"
+                    android:layout_alignParentLeft="true"
+                    bind:imageUrl="@{viewModel.mapUrl}" />
 
-                <TextView
-                    style="@style/ListItemProjectTrackingTextView.Title"
-                    android:text="@{viewModel.title}"
-                    bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="Sims Bayou Line Work" />
-
-                <!-- Location -->
+                <!-- Details -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="22dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        style="@style/ListItemProjectTrackingImage.DetailIcon"
-                        android:src="@mipmap/ic_bid_location" />
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/map"
+                    android:orientation="vertical"
+                    android:paddingLeft="12dp">
 
                     <TextView
-                        style="@style/ListItemProjectTrackingTextView.Detail1"
-                        android:text="@{viewModel.clientLocation}"
+                        style="@style/ListItemProjectTrackingTextView.Title"
+                        android:text="@{viewModel.title}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Houston, TX" />
+                        tools:text="Sims Bayou Line Work" />
+
+                    <!-- Location -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            style="@style/ListItemProjectTrackingImage.DetailIcon"
+                            android:src="@mipmap/ic_bid_location" />
+
+                        <TextView
+                            style="@style/ListItemProjectTrackingTextView.Detail1"
+                            android:text="@{viewModel.clientLocation}"
+                            bind:typeface="@{`Lato-Regular.ttf`}"
+                            tools:text="Houston, TX" />
+                    </LinearLayout>
+
+                    <!-- Address -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            style="@style/ListItemProjectTrackingImage.DetailIcon"
+                            android:src="@mipmap/ic_bid_type"
+                            android:visibility="@{viewModel.isClientLocation2  ? View.VISIBLE : View.GONE }" />
+
+                        <TextView
+                            style="@style/ListItemProjectTrackingTextView.Detail1"
+                            android:text="@{viewModel.clientLocation2}"
+                            bind:typeface="@{`Lato-Regular.ttf`}"
+                            tools:text="Tampa, FL" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <!-- Address -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="22dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        style="@style/ListItemProjectTrackingImage.DetailIcon"
-                        android:src="@mipmap/ic_bid_type"
-                        android:visibility="@{viewModel.isClientLocation2  ? View.VISIBLE : View.GONE }" />
-
-                    <TextView
-                        style="@style/ListItemProjectTrackingTextView.Detail1"
-                        android:text="@{viewModel.clientLocation2}"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Tampa, FL" />
-                </LinearLayout>
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/star_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/star"
+                    android:visibility="@{viewModel.hasStarCard  ? View.VISIBLE : View.GONE }" />
+                />
+            </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 
 </layout>
