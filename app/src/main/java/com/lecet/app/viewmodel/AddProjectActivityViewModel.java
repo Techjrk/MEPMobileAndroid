@@ -268,10 +268,17 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         alert = new AlertDialog.Builder(view.getContext()).create();
 
+        String message = null;
+        if(projectPost.getGeocode() == null) message = "A location is required";
+        else if(projectPost.getTitle() == null    || projectPost.getTitle().isEmpty())    message = "A project title is required";
+        else if(projectPost.getAddress1() == null || projectPost.getAddress1().isEmpty()) message = "A project address is required";
+        else if(projectPost.getCity() == null     || projectPost.getCity().isEmpty())     message = "A project city is required";
+        else if(projectPost.getState() == null    || projectPost.getState().isEmpty())    message = "A project state is required";
+
         // Required content of project post
-        if(projectPost == null || projectPost.getGeocode() == null) {
+        if(message != null) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
-            alert.setMessage("A location is required.");
+            alert.setMessage(message);
             alert.show();
         }
 

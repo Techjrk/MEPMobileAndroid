@@ -18,12 +18,30 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.lecet.app.content.AddProjectActivity">
 
-            <!-- Project Title -->
+
+            <!-- Required Field -->
             <TextView
-                    style="@style/AddProjectFieldTitle"
-                    android:text="@string/title"
-                    android:textAllCaps="true"
-                    bind:typeface="@{`Lato-Bold.ttf`}"/>
+                style="@style/AddProjectRequiredField"
+                android:text="@string/required_field"
+                android:layout_gravity="right"
+                bind:typeface="@{`Lato-Bold.ttf`}"/>
+
+            <!-- Project Title -->
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/AddProjectFieldTitle"
+                        android:text="@string/title"
+                        android:textAllCaps="true"
+                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+
+                <TextView
+                        style="@style/AddProjectRequiredField"
+                        android:text="@string/asterisk_superscript"
+                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+
+            </LinearLayout>
 
             <EditText
                     android:id="@+id/title"
@@ -31,12 +49,22 @@
                     android:hint="@string/project_title"
                     android:text="@={viewModel.projectPost.title}"/>
 
-        <!-- Address -->
-            <TextView
-                    style="@style/AddProjectFieldTitle"
-                    android:text="@string/address"
-                    android:textAllCaps="true"
-                    bind:typeface="@{`Lato-Bold.ttf`}"/>
+            <!-- Address -->
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/AddProjectFieldTitle"
+                        android:text="@string/address"
+                        android:textAllCaps="true"
+                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+
+                <TextView
+                        style="@style/AddProjectRequiredField"
+                        android:text="@string/asterisk_superscript"
+                        bind:typeface="@{`Lato-Bold.ttf`}"/>
+
+            </LinearLayout>
 
             <EditText
                     android:id="@+id/address1"

@@ -381,4 +381,6 @@
     <string name="street_2">Street 2</string>
     <string name="reg_pre_bid">Pre Bid</string>
     <string name="reg_post_bid">Post Bid</string>
+    <string name="required_field">* required field</string>
+    <string name="asterisk_superscript">*</string>
 </resources>
