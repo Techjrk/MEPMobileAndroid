@@ -57,7 +57,8 @@ public class LecetFirebaseInstanceIdService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(String token) {
 
         LecetSharedPreferenceUtil sharedPref = LecetSharedPreferenceUtil.getInstance(getApplicationContext());
-        if (sharedPref.getAccessToken() != null) {
+        sharedPref.setFirebaseToken(token);
+        if (sharedPref.getId() != -1) {
 
             // We can assume a new token has been created and we should update the server.
 
@@ -76,10 +77,6 @@ public class LecetFirebaseInstanceIdService extends FirebaseInstanceIdService {
             } catch (IOException e) {
                 Log.getStackTraceString(e);
             }
-        } else {
-
-            // User not registered yet, store token for later.
-            sharedPref.setFirebaseToken(token);
         }
     }
 }

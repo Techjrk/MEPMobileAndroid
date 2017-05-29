@@ -57,18 +57,16 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
     private static final String TAG = "ProjectDetailAdapter";
 
-    private static final int PROJECT_HEADER = 0;
-    private static final int SECTION_HEADER = 1;
-    private static final int SHARE_HEADER = 2;
-    private static final int DETAIL_VIEW_TYPE = 3;
-    private static final int NOTE_VIEW_TYPE = 4;
-    private static final int PARTICIPANT_VIEW_TYPE = 5;
-    private static final int BID_VIEW_TYPE = 6;
-    private static final int FOOTER_VIEW_TYPE = 7;
+    private static final int SECTION_HEADER = 0;
+    private static final int SHARE_HEADER = 1;
+    private static final int DETAIL_VIEW_TYPE = 2;
+    private static final int NOTE_VIEW_TYPE = 3;
+    private static final int PARTICIPANT_VIEW_TYPE = 4;
+    private static final int BID_VIEW_TYPE = 5;
+    private static final int FOOTER_VIEW_TYPE = 6;
 
-    private static final int SECTION_TITLE = 0;
-    private static final int SECTION_DETAILS = 1;
-    private static final int SECTION_NOTES = 2;
+    private static final int SECTION_DETAILS = 0;
+    private static final int SECTION_NOTES = 1;
 
     // Default values;
 
@@ -108,14 +106,14 @@ public class ProjectDetailAdapter extends SectionedAdapter {
         this.bidsDisplayed = projectBids != null && projectBids.size() > 0;
         this.participantsDisplayed = projectParticipants != null && projectParticipants.size() > 0;
 
-        this.SECTION_PARTICIPANTS = notesDisplayed ? 3 : 2;
+        this.SECTION_PARTICIPANTS = notesDisplayed ? 2 : 3;
         if (notesDisplayed && participantsDisplayed) {
 
-            this.SECTION_BIDDERS = 4;
+            this.SECTION_BIDDERS = 3;
 
         } else if (!notesDisplayed || !participantsDisplayed) {
 
-            this.SECTION_BIDDERS = 3;
+            this.SECTION_BIDDERS = 4;
         }
     }
 
@@ -199,8 +197,6 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     @Override
     public int getHeaderViewType(int section) {
         switch (section) {
-            case SECTION_TITLE:
-                return PROJECT_HEADER;
             case SECTION_DETAILS:
                 return SHARE_HEADER;
             default:
@@ -344,11 +340,6 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         switch (viewType) {
-            case PROJECT_HEADER: {
-
-                ListItemHeaderProjectBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_header_project, parent, false);
-                return new ProjectHeaderViewHolder(binding);
-            }
 
             case SECTION_HEADER: {
 

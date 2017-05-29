@@ -2,6 +2,7 @@ package com.lecet.app.data.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -35,7 +36,8 @@ public class LecetSharedPreferenceUtil {
 
     private void initSharePreference(Context context) {
         if (!(mSharedPreferences instanceof SharedPreferences)) {
-            mSharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+            //mSharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
 
         if (!(mEditor instanceof SharedPreferences.Editor)) {

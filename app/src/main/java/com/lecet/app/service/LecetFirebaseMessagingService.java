@@ -40,7 +40,8 @@ public class LecetFirebaseMessagingService extends FirebaseMessagingService {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "RemoteMessage: " + remoteMessage.toString());
+        sendNotification("LECET", "TEST RECEIVED", 322385);
 
         // Check if the message contains a data payload
         if (remoteMessage.getData().size() > 0) {
