@@ -22,7 +22,7 @@ import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21;
 public class ProjectTakeCameraPhotoFragmentAPI21 extends Fragment {
 
     private static final String TAG = "TakeCamPhotoFragAPI21";
-
+    public ProjectTakeCameraPhotoViewModelApi21 viewModel;
     private FragmentProjectTakeCameraPhotoApi21Binding binding;
 
 
@@ -71,13 +71,18 @@ public class ProjectTakeCameraPhotoFragmentAPI21 extends Fragment {
 
     public void onPause() {
         super.onPause();
-        ProjectTakeCameraPhotoViewModelApi21.releaseCamera();
+        if(viewModel != null) {
+            viewModel.releaseCamera();
+        }
 
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        if(viewModel != null) {
+            viewModel.resetCamera();
+        }
     }
 
 

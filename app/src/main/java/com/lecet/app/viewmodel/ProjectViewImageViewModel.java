@@ -55,6 +55,11 @@ public class ProjectViewImageViewModel extends BaseObservable {
         intent.putExtra(IMAGE_BODY_EXTRA, body);
         intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
         activity.startActivity(intent);
+        activity.finish();
+    }
+
+    public void onCancelClick(View view){
+        activity.finish();
     }
 
     public Bitmap rotateImage(Bitmap image,float angle){

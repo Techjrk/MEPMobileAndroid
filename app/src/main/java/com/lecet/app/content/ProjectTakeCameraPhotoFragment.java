@@ -30,6 +30,7 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
 
     private FragmentProjectTakeCameraPhotoBinding binding;
     private FrameLayout frameLayout;
+    public ProjectTakeCameraPhotoViewModel viewModel;
 
 
     public static ProjectTakeCameraPhotoFragment newInstance() {
@@ -70,22 +71,27 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
         frameLayout = (FrameLayout) binding.getRoot().findViewById(R.id.camera_preview);
         ProjectTakeCameraPhotoViewModel viewModel = new ProjectTakeCameraPhotoViewModel(this, frameLayout);
         binding.setViewModel(viewModel);
-        View view = binding.getRoot();
-        return view;
+        this.viewModel = viewModel;
+        return binding.getRoot();
     }
 
 
 
     public void onPause() {
         super.onPause();
-        ProjectTakeCameraPhotoViewModel.releaseCamera();
+        if(viewModel != null) {
+            viewModel.releaseCamera();
+        }
 
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        ProjectTakeCameraPhotoViewModel.getCameraInstance();
+        if(viewModel != null) {
+            ProjectTakeCameraPhotoViewModel.getCameraInstance();
+            viewModel.resetCamera();
+        }
     }
 
 

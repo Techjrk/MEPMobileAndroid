@@ -46,12 +46,18 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
     private CameraPreview cameraPreview;
     private String imagePath;
     private ProjectTakeCameraPhotoFragment fragment;
+    private FrameLayout frameLayout;
     private OrientationEventListener orientationEventListener = null;
 
 
     public ProjectTakeCameraPhotoViewModel(ProjectTakeCameraPhotoFragment fragment, FrameLayout frameLayout) {
         super();
+        this.frameLayout = frameLayout;
         this.fragment = fragment;
+        resetCamera();
+    }
+
+    public void resetCamera(){
         getCameraInstance();
         cameraPreview = new CameraPreview(fragment.getActivity());
         frameLayout.addView(cameraPreview);
@@ -105,10 +111,12 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         return;// returns null if camera is unavailable
     }
 
-    public static void releaseCamera() {
+    public void releaseCamera() {
         if(camera != null){
             camera.release();
             camera = null;
+            orientationEventListener = null;
+            frameLayout.removeAllViews();
             Log.w(TAG, "releaseCamera: CameraReleased");
         }
     }
