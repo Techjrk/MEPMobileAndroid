@@ -61,7 +61,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_ADDRESS;
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LATITUDE;
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LONGITUDE;
 import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
@@ -547,7 +546,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 Log.d(TAG, "onInfoWindowClick: marker lng: " + marker.getPosition().longitude);
                 Log.d(TAG, "onInfoWindowClick: context: " + context);
                 Intent intent = new Intent(context, AddProjectActivity.class);
-                intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");   //TODO - hardcoded - add live address
+                //intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");
                 intent.putExtra(EXTRA_MARKER_LATITUDE, marker.getPosition().latitude);
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);

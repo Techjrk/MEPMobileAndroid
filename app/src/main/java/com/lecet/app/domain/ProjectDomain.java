@@ -11,6 +11,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.GeocodeAddress;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.PhotoPost;
@@ -21,6 +22,9 @@ import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -335,9 +339,9 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
-    public Call<List<Address>> getAddressFromLocation(double lat, double lng, String key) {
+    public Call<GeocodeAddress> getAddressFromLocation(double lat, double lng, String resultType, String key) {
         String latlng = Double.toString(lat) + "," + Double.toString(lng);
-        Call<List<Address>> call = lecetClient.getProjectService().getAddressFromLocation(latlng, key);
+        Call<GeocodeAddress> call = lecetClient.getProjectService().getAddressFromLocation(latlng, resultType, key);
 
         return call;
     }
