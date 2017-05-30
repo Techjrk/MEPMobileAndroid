@@ -29,11 +29,13 @@ public class MapInfoWindowCreatePinViewModel extends BaseObservable {
     private String address2;
     private boolean postBid;
     private String bidStatus;
+    private boolean showMyLocationHeader;
 
-    public MapInfoWindowCreatePinViewModel(Context context, Project project) {
+    public MapInfoWindowCreatePinViewModel(Context context, Project project, boolean showMyLocationHeader) {
 
         this.context = context;
         this.project = project;
+        this.showMyLocationHeader = !showMyLocationHeader;
 
         setProjectTitle(project.getTitle());
         setProjectLocation(String.format("%s, %s", project.getCity(), project.getState()));
@@ -111,6 +113,11 @@ public class MapInfoWindowCreatePinViewModel extends BaseObservable {
     public void setBidStatus(String bidStatus) {
         this.bidStatus = bidStatus;
         notifyPropertyChanged(BR.bidStatus);
+    }
+
+    @Bindable
+    public boolean getShowMyLocationHeader() {
+        return showMyLocationHeader;
     }
 
     @DrawableRes

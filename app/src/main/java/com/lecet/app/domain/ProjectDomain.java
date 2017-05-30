@@ -1,7 +1,6 @@
 package com.lecet.app.domain;
 
 
-import android.location.Address;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +10,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.PhotoPost;
@@ -335,9 +335,9 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
-    public Call<List<Address>> getAddressFromLocation(double lat, double lng, String key) {
+    public Call<GeocodeAddress> getAddressFromLocation(double lat, double lng, String resultType, String key) {
         String latlng = Double.toString(lat) + "," + Double.toString(lng);
-        Call<List<Address>> call = lecetClient.getProjectService().getAddressFromLocation(latlng, key);
+        Call<GeocodeAddress> call = lecetClient.getProjectService().getAddressFromLocation(latlng, resultType, key);
 
         return call;
     }

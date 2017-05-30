@@ -3,7 +3,6 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Address;
 import android.location.Location;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -47,7 +46,6 @@ import io.realm.Realm;
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
         , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener  {
 
-    public static final String EXTRA_MARKER_ADDRESS   = "com.lecet.app.content.ProjectsNearMeActivity.marker.address.extra";
     public static final String EXTRA_MARKER_LATITUDE  = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
     public static final String EXTRA_MARKER_LONGITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.longitude.extra";
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";

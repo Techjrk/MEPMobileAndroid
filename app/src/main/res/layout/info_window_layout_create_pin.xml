@@ -3,6 +3,16 @@
         xmlns:bind="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+                name="viewModel"
+                type="com.lecet.app.viewmodel.MapInfoWindowCreatePinViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,7 +47,8 @@
                         android:textColor="@color/lecetTextDarkGray"
                         android:textSize="16sp"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        android:text="My Location"/>
+                        android:text="My Location"
+                        android:visibility="@{viewModel.showMyLocationHeader  ? View.GONE : View.VISIBLE}"/>
 
                 <LinearLayout
                         android:layout_width="wrap_content"
