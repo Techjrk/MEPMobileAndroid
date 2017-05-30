@@ -1,4 +1,4 @@
-package com.lecet.app.data.models;
+package com.lecet.app.data.models.geocoding;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

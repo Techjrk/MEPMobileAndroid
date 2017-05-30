@@ -1,4 +1,4 @@
-package com.lecet.app.data.models;
+package com.lecet.app.data.models.geocoding;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -12,16 +12,16 @@ public class GeocodeAddress {
 
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<GeocodeResult> results = null;
     @SerializedName("status")
     @Expose
     private String status;
 
-    public List<Result> getResults() {
+    public List<GeocodeResult> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<GeocodeResult> results) {
         this.results = results;
     }
 

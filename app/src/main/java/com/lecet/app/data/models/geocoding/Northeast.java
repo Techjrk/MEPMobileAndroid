@@ -1,4 +1,4 @@
-package com.lecet.app.data.models;
+package com.lecet.app.data.models.geocoding;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

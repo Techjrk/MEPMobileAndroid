@@ -1,4 +1,4 @@
-package com.lecet.app.data.models;
+package com.lecet.app.data.models.geocoding;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jasonm on 5/30/17.
  */
 
-public class Result {
+public class GeocodeResult {
 
     @SerializedName("address_components")
     @Expose
@@ -68,7 +68,7 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Result{" +
+        return "GeocodeResult{" +
                 "addressComponents=" + addressComponents +
                 ", formattedAddress='" + formattedAddress + '\'' +
                 ", geometry=" + geometry +

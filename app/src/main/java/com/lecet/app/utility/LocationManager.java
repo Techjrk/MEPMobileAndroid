@@ -236,7 +236,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                 apiClient,
                 // This is the same pending intent that was used in addGeofences().
                 pendingIntent
-        ).setResultCallback(callback); // Result processed in onResult().
+        ).setResultCallback(callback); // GeocodeResult processed in onResult().
     }
 
     // Private

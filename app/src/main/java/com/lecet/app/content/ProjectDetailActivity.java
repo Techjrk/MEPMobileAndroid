@@ -73,7 +73,7 @@ public class ProjectDetailActivity extends LecetBaseActivity {
             viewModel.getAdditionalNotes(true);
             // TODO - conditions as per notes above
             viewModel.getAdditionalImages(false);
-            Log.d("ProjectDetailActivity", "Result Success");
+            Log.d("ProjectDetailActivity", "GeocodeResult Success");
         }
 
     }

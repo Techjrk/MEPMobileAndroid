@@ -1,9 +1,7 @@
 package com.lecet.app.data.api.service;
 
-import android.location.Address;
-
 import com.lecet.app.data.api.response.ProjectsNearResponse;
-import com.lecet.app.data.models.GeocodeAddress;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.PhotoPost;
@@ -12,9 +10,6 @@ import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.ProjectPost;
 
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 

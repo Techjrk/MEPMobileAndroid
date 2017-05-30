@@ -17,12 +17,12 @@ import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
-import com.lecet.app.data.models.AddressComponent;
+import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.Geocode;
-import com.lecet.app.data.models.GeocodeAddress;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectPost;
-import com.lecet.app.data.models.Result;
+import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
@@ -116,7 +116,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     if (response.isSuccessful()) {
                         GeocodeAddress geocodeAddress = response.body();
                         if(geocodeAddress != null) {
-                            Result firstResult = geocodeAddress.getResults().get(0);
+                            GeocodeResult firstResult = geocodeAddress.getResults().get(0);
                             if(firstResult != null) {
                                 String formattedAddress = firstResult.getFormattedAddress();    // the one-line formatted address for display
                                 Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. formattedAddress: " + formattedAddress);
