@@ -15,7 +15,6 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.BidProjectListRecyclerViewAdapter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.databinding.FragmentPrePostBidBinding;
-import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,9 @@ import java.util.ArrayList;
 
 public class BidFragment extends Fragment {
     static ArrayList<Project> bidData;
-    public BidFragment(){ }
+
+    public BidFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +38,7 @@ public class BidFragment extends Fragment {
         return view;
     }
 
-     View initDataBinding(LayoutInflater inflater, ViewGroup container) {
+    View initDataBinding(LayoutInflater inflater, ViewGroup container) {
         FragmentPrePostBidBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pre_post_bid, container, false);
         return binding.getRoot();
     }
@@ -48,7 +49,8 @@ public class BidFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         BidProjectListRecyclerViewAdapter searchAdapterProjectAll =
-                new BidProjectListRecyclerViewAdapter(getActivity(), SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, bidData);
+                new BidProjectListRecyclerViewAdapter(getActivity(), bidData);
+//        new BidProjectListRecyclerViewAdapter(getActivity(), SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, bidData);
         //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
     }
