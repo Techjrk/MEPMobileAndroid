@@ -63,6 +63,13 @@ public class BaseMapObservableViewModel extends BaseObservableViewModel implemen
     }
 
     /**
+     * Clear SupportMapFragment's markers.
+     */
+    public void clearMap() {
+        map.clear();
+    }
+
+    /**
      * Add a Marker to a Google Map
      *
      * @param drawableResId drawable resource id that will be used to create BitMapDescriptor as an

@@ -33,7 +33,6 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
 
     private static final String TAG = "ProjectDetailViewModel";
 
-
     private boolean mapReady;
     private long projectId;
     private String title;
@@ -41,6 +40,8 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+
+    private Project project;
 
 
     public ProjectDetailViewModel(ProjectDetailActivity activity, long projectId, String mapsApiKey) {
@@ -88,14 +89,50 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     /* Helper */
     public void onProjectReady(Project project) {
 
+        this.project = project;
+
         if (mapReady) {
-            addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+
+            // If the project does not have dodge number, then we know it is user
+            // created.
+            if (project.getDodgeNumber() == null) {
+
+                addMarker(R.drawable.ic_user_project, project.getGeocode().toLatLng(), 16);
+
+            } else {
+
+                addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+            }
+
         }
 
         setTitle(project.getTitle());
         setAddress(getProjectAddress(project));
     }
 
+    public void onNotesReady(int count) {
+
+        if (mapReady) {
+            clearMap();
+
+            // If the notes count is greater than zero, then we can assume there
+            // was an update to the project.
+            if (count > 0) {
+
+                // If the project does not have dodge number, then we know it is user
+                // created.
+                if (project.getDodgeNumber() == null) {
+
+                    addMarker(R.drawable.ic_user_project_updates, project.getGeocode().toLatLng(), 16);
+
+                } else {
+
+                    addMarker(R.drawable.ic_dodge_project_updates, project.getGeocode().toLatLng(), 16);
+                }
+
+            }
+        }
+    }
 
     public String getProjectAddress(Project project) {
 

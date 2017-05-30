@@ -26,6 +26,8 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
     private static final String TAG = "ProjectNotesUpdatesFrag";
 
     private ProjectNotesFragmentDataSource dataSource;
+    private ProjectNotesFragmentListener listener;
+
     private ProjectNotesAndUpdatesViewModel viewModel;
     private long projectId;
 
@@ -60,13 +62,19 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement ProjectNotesFragmentDataSource");
         }
+
+        try {
+            listener = (ProjectNotesFragmentListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement ProjectNotesFragmentListener");
+        }
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        viewModel = new ProjectNotesAndUpdatesViewModel(this, projectId, dataSource.domainDataSource());
+        viewModel = new ProjectNotesAndUpdatesViewModel(this, projectId, dataSource.domainDataSource(), listener);
 
         FragmentProjectNotesAndUpdatesBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_notes_and_updates, container, false);
         binding.setViewModel(viewModel);
@@ -86,4 +94,8 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
         ProjectDomain domainDataSource();
     }
 
+    public interface ProjectNotesFragmentListener {
+
+        void onPhotosAndNotesUpdated(int count);
+    }
 }

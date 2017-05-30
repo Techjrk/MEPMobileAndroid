@@ -19,6 +19,7 @@ import com.lecet.app.adapters.ProjectNotesAdapter;
 import com.lecet.app.content.ProjectAddImageActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
+import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
@@ -48,29 +49,31 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
     private static final String TAG = "ProjectNotesUpdatesVM";
 
 	public static final int NOTE_REQUEST_CODE = 880;
-    public static final int RESULT_CODE_PROJECT_ADD_IMAGE = 991;       //TODO - move to activity?
-    public static final int RESULT_CODE_PROJECT_CAMERA_IMAGE = 992;    //TODO - move to activity?
-    public static final int RESULT_CODE_PROJECT_LIBRARY_IMAGE = 993;   //TODO - move to activity?
+    public static final int RESULT_CODE_PROJECT_ADD_IMAGE = 991;
+    public static final int RESULT_CODE_PROJECT_CAMERA_IMAGE = 992;
+    public static final int RESULT_CODE_PROJECT_LIBRARY_IMAGE = 993;
 	public static final int REQUEST_CODE_NEW_IMAGE = 994;
-    public static final int REQUEST_CODE_REPLACE_IMAGE = 995;          //TODO - move to activity?
+    public static final int REQUEST_CODE_REPLACE_IMAGE = 995;
     public static final int REQUEST_CODE_ASK_PERMISSIONS = 1115;
 
     private final Fragment fragment;
     private final long projectId;
-
     private final ProjectDomain projectDomain;
+    private final  ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener listener;
+
     private ProjectNotesAdapter projectNotesAdapter;
     private List<ProjectAdditionalData> additionalNotes;
 
     private Call<List<ProjectNote>> additonalNotesCall;
     private Call<List<ProjectPhoto>> additonalImagesCall;
 
-    public ProjectNotesAndUpdatesViewModel(Fragment fragment, long projectId, ProjectDomain projectDomain) {
+    public ProjectNotesAndUpdatesViewModel(Fragment fragment, long projectId, ProjectDomain projectDomain, ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener listener) {
         super((AppCompatActivity) fragment.getActivity());
 
         this.fragment = fragment;
         this.projectId = projectId;
         this.projectDomain = projectDomain;
+        this.listener = listener;
     }
 
     /* Lifecycle */
@@ -174,6 +177,9 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
 
                     List<ProjectNote> responseBody = response.body();
 
+                    // Notify listener of notes count so we can update map in project detail.
+                    listener.onPhotosAndNotesUpdated(responseBody != null ? responseBody.size() : 0);
+
                     if (responseBody != null && additionalNotes != null) {
                         additionalNotes.addAll(responseBody);
                         projectNotesAdapter.notifyDataSetChanged();
@@ -232,6 +238,9 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
 
                     List<ProjectPhoto> responseBody = response.body();
 
+                    // Notify listener of notes count so we can update map in project detail.
+                    listener.onPhotosAndNotesUpdated(responseBody != null ? responseBody.size() : 0);
+
                     if (responseBody != null && additionalNotes != null) {
                         additionalNotes.addAll(responseBody);
                         projectNotesAdapter.notifyDataSetChanged();
@@ -283,15 +292,30 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
             public void onResponse(Call<List<ProjectPhoto>> call, Response<List<ProjectPhoto>> response) {
                 Log.d(TAG, "getAdditionalImages: onResponse");
 
-                List<ProjectPhoto> responseBody = response.body();
+                if (response.isSuccessful()) {
 
-                if (refresh) {
-                    additionalNotes.clear();
-                }
+                    List<ProjectPhoto> responseBody = response.body();
 
-                if (responseBody != null && additionalNotes != null) {
-                    additionalNotes.addAll(responseBody);
-                    projectNotesAdapter.notifyDataSetChanged();
+                    // Notify listener of notes count so we can update map in project detail.
+                    listener.onPhotosAndNotesUpdated(responseBody != null ? responseBody.size() : 0);
+
+                    if (refresh) {
+                        additionalNotes.clear();
+                    }
+
+                    if (responseBody != null && additionalNotes != null) {
+                        additionalNotes.addAll(responseBody);
+                        projectNotesAdapter.notifyDataSetChanged();
+                    }
+
+                } else {
+
+                    AppCompatActivity activity = getActivityWeakReference().get();
+
+                    dismissProgressDialog();
+
+                    showCancelAlertDialog(activity.getString(R.string.error_network_title),
+                            response.message());
                 }
 
             }

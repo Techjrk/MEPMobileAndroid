@@ -23,7 +23,8 @@ import io.realm.Realm;
 import static com.lecet.app.R.string.google_api_key;
 
 public class ProjectDetailActivity extends LecetBaseActivity implements ProjectDetailFragment.ProjectDetailFragmentDataSource,
-        ProjectDetailFragment.ProjectDetailFragmentListener, ProjectNotesAndUpdatesFragment.ProjectNotesFragmentDataSource {
+        ProjectDetailFragment.ProjectDetailFragmentListener, ProjectNotesAndUpdatesFragment.ProjectNotesFragmentDataSource,
+        ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener {
 
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
 
@@ -100,5 +101,11 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
     public void onProjectDetailsReceived(Project project) {
 
         viewModel.onProjectReady(project);
+    }
+
+
+    @Override
+    public void onPhotosAndNotesUpdated(int count) {
+
     }
 }
