@@ -6,6 +6,7 @@ import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -20,6 +21,7 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
     private static final String TAG = "ProjectViewFullImageVM";
     private Activity activity;
     private long projectId;
+    private boolean backVisable = false;
     private String title;
     private String body;
     private String imageUrl;
@@ -41,6 +43,19 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+    }
+
+    public void onClickImage(View view){
+        backVisable = !backVisable;
+        notifyChange();
+    }
+
+    public void onClickBackButton(View view){
+        activity.finish();
+    }
+
+    public int canView(){
+        return backVisable ? View.VISIBLE : View.INVISIBLE;
     }
 
     public String getImageUrl() {
