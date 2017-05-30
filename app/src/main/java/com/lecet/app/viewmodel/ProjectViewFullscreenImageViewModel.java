@@ -33,6 +33,8 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
         this.body = body;
         this.imageUrl = imageUrl;
 
+        Log.d(TAG, "ProjectViewFullscreenImageViewModel: ImageViewWidth" );
+
         Log.d(TAG, "Constructor: projectId: " + projectId);
         Log.d(TAG, "Constructor: title: " + title);
         Log.d(TAG, "Constructor: body: " + body);
