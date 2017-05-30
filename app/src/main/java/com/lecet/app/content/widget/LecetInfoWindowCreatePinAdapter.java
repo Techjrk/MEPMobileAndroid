@@ -21,9 +21,11 @@ public class LecetInfoWindowCreatePinAdapter implements GoogleMap.InfoWindowAdap
 
     Context context;
     InfoWindowLayoutCreatePinBinding binding;
+    boolean showMyLocationHeader;
 
-    public LecetInfoWindowCreatePinAdapter(Context context) {
+    public LecetInfoWindowCreatePinAdapter(Context context, boolean showMyLocationHeader) {
         this.context = context;
+        this.showMyLocationHeader = showMyLocationHeader;
     }
 
     @Override
@@ -32,7 +34,8 @@ public class LecetInfoWindowCreatePinAdapter implements GoogleMap.InfoWindowAdap
 
         if (marker.getTag() != null && marker.getTag() instanceof Project) {
 
-            final MapInfoWindowCreatePinViewModel viewModel = new MapInfoWindowCreatePinViewModel(context, (Project) marker.getTag());
+            final MapInfoWindowCreatePinViewModel viewModel = new MapInfoWindowCreatePinViewModel(context, (Project) marker.getTag(), showMyLocationHeader);
+            binding.setViewModel(viewModel);
 
             /*binding.bidingStatus.setBackgroundResource(viewModel.getBidBackground());
             binding.bidingStatus.setText(viewModel.getBidStatus());

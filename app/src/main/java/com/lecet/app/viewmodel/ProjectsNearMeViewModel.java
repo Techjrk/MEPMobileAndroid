@@ -8,6 +8,7 @@ import android.databinding.Bindable;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -30,6 +31,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -69,7 +72,8 @@ import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 
 public class ProjectsNearMeViewModel extends BaseObservableViewModel implements GoogleMap.OnMarkerClickListener
         , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener
-        , View.OnClickListener, GoogleMap.OnCameraMoveListener {
+        , View.OnClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnMyLocationChangeListener
+        , GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCircleClickListener {
 
     private static final String TAG = "ProjectsNearMeViewModel";
 
@@ -84,11 +88,14 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private Marker currLocationMarker;
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
+    private Location currentLocation;
+    private Circle locationCircle;
+    private CircleOptions circleOptions;
 
     private BitmapDescriptor redMarker;
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
-    private BitmapDescriptor currentLocationMarker;
+    private BitmapDescriptor currentLocationMarkerIcon;
     private BitmapDescriptor customPinMarker;
     private ArrayList<Project> prebid, postbid;
     //Toolbar views
@@ -124,16 +131,20 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     public void setMap(GoogleMap map) {
-        this.redMarker             = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
-        this.greenMarker           = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
-        this.yellowMarker          = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
-        this.currentLocationMarker = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
-        this.customPinMarker       = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
+        this.redMarker                 = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
+        this.greenMarker               = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
+        this.yellowMarker              = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
+        this.currentLocationMarkerIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
+        this.customPinMarker           = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
         this.map = map;
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
         this.map.setOnInfoWindowCloseListener(this);
         this.map.setOnCameraMoveListener(this);
+        this.map.setOnMyLocationChangeListener(this);
+        this.map.setOnMyLocationButtonClickListener(this);
+        this.map.setOnMapLongClickListener(this);
+        this.map.setOnCircleClickListener(this);
 
         AppCompatActivity activity = getActivityWeakReference().get();
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -142,6 +153,91 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         }
         this.map.setMyLocationEnabled(true);
     }
+
+    private void updateLocationCircle(GoogleMap map, LatLng latLng) {
+        //Log.d(TAG, "updateLocationCircle: " + latLng);
+        circleOptions = new CircleOptions();
+        circleOptions.center(latLng);
+        circleOptions.radius(100);
+        circleOptions.strokeColor(R.color.transparent);
+        circleOptions.fillColor(R.color.transparent);
+
+        //remove old circle
+        if(locationCircle != null) {
+            locationCircle.remove();
+            locationCircle = null;
+        }
+
+        locationCircle = map.addCircle(circleOptions);
+        locationCircle.setCenter(latLng);
+        locationCircle.setClickable(true);
+        locationCircle.setVisible(false);
+    }
+
+    @Override
+    public void onMyLocationChange(Location location) {
+        //Log.d(TAG, "onMyLocationChange: " + location);
+
+        currentLocation = location;
+        updateLocationCircle(this.map, new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    @Override
+    public void onCircleClick(Circle circle) {
+        Log.d(TAG, "onCircleClick: " + circle);
+        if(circle.equals(locationCircle)) {
+            Log.d(TAG, "locationCircle: locationCircle clicked");
+            //placeMapMarker(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            placeCustomPin(latLng, true);
+
+            locationCircle.setClickable(false);
+            circle.remove();
+            circle = null;
+        }
+    }
+
+    private void placeCustomPin(LatLng latLng, boolean labelForMyLocation) {
+        Log.d(TAG, "placeCustomPin: " + latLng);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.icon(customPinMarker);
+        if(labelForMyLocation) {
+            markerOptions.title(activity.getString(R.string.my_location));
+            map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, true));
+        }
+        else {
+            markerOptions.title("");
+            map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, false));
+        }
+        clearCurrLocationMarker();
+        currLocationMarker = map.addMarker(markerOptions);
+        bounceMarker(currLocationMarker);
+    }
+
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        Log.d(TAG, "onMapLongClick: " + latLng);
+        clearCurrLocationMarker();
+    }
+
+    private void clearCurrLocationMarker() {
+        if (currLocationMarker != null) {
+            currLocationMarker.remove();
+            currLocationMarker = null;
+        }
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Log.d(TAG, "onMyLocationButtonClick: *** (this is the UI button, not the blue dot)");
+        return false;
+    }
+
 
     public void setToolbar(View toolbar) {
         search = (EditText) toolbar.findViewById(R.id.search_entry);
@@ -215,7 +311,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                         showCancelAlertDialog("", getActivityWeakReference().get().getString(R.string.no_projects_found));
                     }
 
-                    placeMapMarker(location);   //TODO - move to method responding to map press. only works on success
+                    //placeMapMarker(location);   //TODO - move to method responding to map press. only works on success
 
                 } else {
 
@@ -330,20 +426,19 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         });
     }
 
-    private void placeMapMarker(LatLng location) {
+    /*private void placeMapMarker(LatLng location) {
         Log.d(TAG, "placeMapMarker");
         LatLng latLng = new LatLng(location.latitude, location.longitude);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(getActivityWeakReference().get().getString(R.string.my_location));
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         currLocationMarker = map.addMarker(markerOptions);
-    }
+    }*/
 
     public void onMapClick(View view) {
         Log.d(TAG, "onMapClick: " + view.getId());
     }
-
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -351,22 +446,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         BitmapDescriptor icon;
 
-        boolean isMyLocationMarker = false;
-        if (marker != null && marker.getTitle() != null) {
+        boolean isMyLocationMarker = (marker.equals(currLocationMarker));
+        /*if (marker != null && marker.getTitle() != null) {
             isMyLocationMarker = marker.getTitle().equals(getActivityWeakReference().get().getString(R.string.my_location));
-        }
+        }*/
 
         // my location marker, which uses its own info window adapter and layout
         if (isMyLocationMarker) {
-            map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity));
-            icon = customPinMarker;
+            map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, true));
+            //icon = customPinMarker;
             //TODO - change to pin icon
             /*if (lastMarkerTapped != null) {
                 lastMarkerTapped.setIcon(icon);
             }*/
 
-            marker.setIcon(icon);
-            bounceMarker(marker);
+            //marker.setIcon(icon);
+            //bounceMarker(marker);
 
         }
 
@@ -527,8 +622,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         if (!TextUtils.isEmpty(query)) {
             LatLng location = getLocationFromAddress(query);
             if (location == null) {
+                Log.e(TAG, "searchAddress: No location found for: " + query);
                 Toast.makeText(getActivityWeakReference().get(), R.string.error_fetching_address, Toast.LENGTH_SHORT).show();
             } else {
+                Log.d(TAG, "searchAddress: Location found from address. Location: " + location);
                 moveMapCamera(location); //this will move and handle the download of projects
                 fetchProjectsNearMe(location);
             }
@@ -552,6 +649,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             location.getLongitude();
             p1 = new LatLng(location.getLatitude(), location.getLongitude());
         } catch (IOException e) {
+            Log.e(TAG, "getLocationFromAddress: Error. " + e.getMessage());
         }
         return p1;
     }
@@ -585,4 +683,5 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.tableViewDisplay = tableViewDisplay;
         notifyPropertyChanged(BR.tableViewDisplay);
     }
+
 }
