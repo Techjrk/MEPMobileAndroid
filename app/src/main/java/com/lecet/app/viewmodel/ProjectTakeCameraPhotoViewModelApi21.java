@@ -287,11 +287,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                     Log.e(TAG, "save: sensorOrientationAngel" + sensorOrientation);
                                     if(Surface.ROTATION_0 == orientation) {
                                         resizedImage = rotateImage(realImage, sensorOrientation);
-                                    }
-                                    else if(Surface.ROTATION_270 == orientation){
+                                    }else if(Surface.ROTATION_270 == orientation) {
                                         resizedImage = rotateImage(realImage, 180);
-                                    }
-                                    else{
+                                    }else if(Surface.ROTATION_90 == orientation){
+                                        resizedImage = rotateImage(realImage, 0);
+                                    }else{
                                         resizedImage = rotateImage(realImage, 90 + sensorOrientation);
                                     }
 
