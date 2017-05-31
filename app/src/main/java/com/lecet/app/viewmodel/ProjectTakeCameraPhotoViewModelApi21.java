@@ -67,7 +67,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     private final int MAX_IMAGE_SIZE = 700000;
     private final int REDUCED_IMAGE_AMT = 10;
 
-    private static List<String> rotatedCameraManufacturers = new ArrayList<String>(Arrays.asList("samsung"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
+    private static List<String> rotatedCameraManufacturers = new ArrayList<String>(Arrays.asList("samsung", "asus"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
     private static CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
 
@@ -287,11 +287,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                     Log.e(TAG, "save: sensorOrientationAngel" + sensorOrientation);
                                     if(Surface.ROTATION_0 == orientation) {
                                         resizedImage = rotateImage(realImage, sensorOrientation);
-                                    }
-                                    else if(Surface.ROTATION_270 == orientation){
+                                    }else if(Surface.ROTATION_270 == orientation) {
                                         resizedImage = rotateImage(realImage, 180);
-                                    }
-                                    else{
+                                    }else if(Surface.ROTATION_90 == orientation){
+                                        resizedImage = rotateImage(realImage, 0);
+                                    }else{
                                         resizedImage = rotateImage(realImage, 90 + sensorOrientation);
                                     }
 

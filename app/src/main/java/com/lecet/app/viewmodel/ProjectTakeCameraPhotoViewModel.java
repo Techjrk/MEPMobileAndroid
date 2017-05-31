@@ -54,14 +54,22 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         super();
         this.frameLayout = frameLayout;
         this.fragment = fragment;
-        resetCamera();
-    }
-
-    public void resetCamera(){
         getCameraInstance();
         cameraPreview = new CameraPreview(fragment.getActivity());
         frameLayout.addView(cameraPreview);
         orientationEventListener = cameraPreview.createOrientationListener();
+    }
+
+    public void resetCamera(){
+        getCameraInstance();
+        frameLayout.removeView(cameraPreview);
+        cameraPreview = new CameraPreview(fragment.getActivity());
+        frameLayout.addView(cameraPreview);
+        if(orientationEventListener == null){
+            orientationEventListener = cameraPreview.createOrientationListener();
+        }else{
+            orientationEventListener.enable();
+        }
     }
 
     private static Uri getOutputMediaFileUri(){
@@ -115,8 +123,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         if(camera != null){
             camera.release();
             camera = null;
-            orientationEventListener = null;
-            frameLayout.removeAllViews();
+            orientationEventListener.disable();
             Log.w(TAG, "releaseCamera: CameraReleased");
         }
     }
@@ -265,7 +272,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             releaseCamera();
-            orientationEventListener.disable();
         }
 
         @Override

@@ -63,6 +63,7 @@ public class ProjectTakeCameraPhotoFragmentAPI21 extends Fragment {
 
         ProjectTakeCameraPhotoViewModelApi21 viewModel = new ProjectTakeCameraPhotoViewModelApi21(this, binding.textureViewApi21);
         binding.setViewModel(viewModel);
+        this.viewModel = viewModel;
         View view = binding.getRoot();
         return view;
     }

@@ -108,8 +108,11 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         }
         // library
         else if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.library))) {
-            takePhotoFragment.viewModel.releaseCamera();
-            takePhotoFragmentAPI21.viewModel.releaseCamera();  // release the camera which may have been activated in the Take Photo tab
+            if(Build.VERSION.SDK_INT < 21){
+                takePhotoFragment.viewModel.releaseCamera();
+            }else{
+                takePhotoFragmentAPI21.viewModel.releaseCamera();
+            }// release the camera which may have been activated in the Take Photo tab
             selectPhotoFragment.initImageChooser();
         }
     }
