@@ -139,24 +139,37 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             });
     }
 
+    /**
+     * Maps nodes from a Google Maps response into the address vars we need
+     */
     private void populateFieldsFromAddress(List<AddressComponent> address) {
 
-        String streetNum = address.get(0).getShortName();
-        String addr1     = address.get(1).getShortName();
-        String addr2     = address.get(2).getShortName();
-        String neigb     = address.get(3).getShortName();
-        String city      = address.get(4).getShortName();
-        String county    = address.get(5).getShortName();
-        String state     = address.get(6).getShortName();
-        String country   = address.get(7).getShortName();
-        String zip5      = address.get(8).getShortName();
+        String streetNum = null;
+        String addr1 = null;
+        String addr2 = null;
+        String neigb = null;
+        String city = null;
+        String county = null;
+        String state = null;
+        String country = null;
+        String zip5 = null;
+
+        if(address.size() >= 0) streetNum   = address.get(0).getShortName();
+        if(address.size() >= 1) addr1       = address.get(1).getShortName();
+        if(address.size() >= 2) addr2       = address.get(2).getShortName();
+        if(address.size() >= 3) neigb       = address.get(3).getShortName();
+        if(address.size() >= 4) city        = address.get(4).getShortName();
+        if(address.size() >= 5) county      = address.get(5).getShortName();
+        if(address.size() >= 6) state       = address.get(6).getShortName();
+        if(address.size() >= 7) country     = address.get(7).getShortName();
+        if(address.size() >= 8) zip5        = address.get(8).getShortName();
 
         String streetAddr = "";
         if(streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
         if(addr1 != null && !addr1.isEmpty()) streetAddr += (" " + addr1);
 
         if(streetAddr != null) getProjectPost().setAddress1(streetAddr);   // address line 1
-        //if(addr2 != null)      getProjectPost().setAddress2(addr2);        // address line 2
+        //if(addr2 != null)      getProjectPost().setAddress2(addr2);      // address line 2, prob not avail from the response (like Apt / Floor#)
         if(city != null)       getProjectPost().setCity(city);             // city
         if(state != null)      getProjectPost().setState(state);           // state
         if(zip5 != null)       getProjectPost().setZip5(zip5);             // zip
