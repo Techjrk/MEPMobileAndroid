@@ -115,7 +115,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                     if (response.isSuccessful()) {
                         GeocodeAddress geocodeAddress = response.body();
-                        if(geocodeAddress != null) {
+                        if(geocodeAddress != null && geocodeAddress.getResults().size() > 0) {
                             GeocodeResult firstResult = geocodeAddress.getResults().get(0);
                             if(firstResult != null) {
                                 String formattedAddress = firstResult.getFormattedAddress();    // the one-line formatted address for display
