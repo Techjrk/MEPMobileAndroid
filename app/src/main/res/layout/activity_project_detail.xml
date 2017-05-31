@@ -13,11 +13,11 @@
             tools:context="com.lecet.app.content.ProjectDetailActivity">
 
         <!-- App Bar -->
-        <include layout="@layout/include_collapsing_app_bar_layout"
-            bind:mapInterface="@{viewModel}"/>
+        <include layout="@layout/include_collapsing_map_bar_layout"/>
 
         <!-- Content -->
-        <include layout="@layout/content_project_detail"/>
+        <include layout="@layout/content_project_detail"
+                 bind:viewModel="@{viewModel}"/>
 
 
     </android.support.design.widget.CoordinatorLayout>

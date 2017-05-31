@@ -11,7 +11,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
     <string name="county">County</string>
-    <string name="project_id">Project ID</string>
+    <string name="project_ids">Project ID</string>
     <string name="project_type">Project Type</string>
     <string name="project_types">Project Type(s)</string>
     <string name="est_low">Est. Low</string>
