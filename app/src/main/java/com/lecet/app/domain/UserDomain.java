@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.request.ChangePasswordRequest;
+import com.lecet.app.data.api.request.FirebaseTokenRequest;
 import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;
@@ -31,6 +32,10 @@ public class UserDomain {
         this.realm = realm;
     }
 
+    public LecetSharedPreferenceUtil getSharedPreferenceUtil() {
+        return sharedPreferenceUtil;
+    }
+
     /**
      * VALIDATION
      **/
@@ -51,9 +56,9 @@ public class UserDomain {
      * API
      **/
 
-    public void login(String email, String password, Callback<Access> callback) {
+    public void login(String email, String password, String firebaseToken, Callback<Access> callback) {
 
-        Call<Access> call = lecetClient.getUserService().login(email, password);
+        Call<Access> call = lecetClient.getUserService().login(email, password, firebaseToken, "android");
         call.enqueue(callback);
     }
 
@@ -87,6 +92,13 @@ public class UserDomain {
         String token = sharedPreferenceUtil.getAccessToken();
         Call<User> call = lecetClient.getUserService().changePassword(token, fetchLoggedInUser().getId(), oldPassword, newPassword, confirmPassword);
         call.enqueue(callback);
+    }
+
+    public Call<ResponseBody> registerFirebaseToken(String firebaseToken) {
+
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<ResponseBody> call = lecetClient.getUserService().registerFirebaseToken(token, new FirebaseTokenRequest("android", firebaseToken));
+        return call;
     }
 
     /**

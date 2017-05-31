@@ -100,11 +100,15 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     }
 
     //Releases the camera so it won't mess with any other classes, activities, or apps. static for use in any fragments/activites
-    public static void releaseCamera(){
+    public void releaseCamera(){
         if(cameraPreview != null){
             Log.d(TAG, "releaseCamera");
             cameraPreview.closeCamera();
         }
+    }
+
+    public void resetCamera(){
+        ProjectTakeCameraPhotoViewModelApi21.cameraPreview = new CameraPreview(cameraPreview.textureView, cameraPreview.fragment);
     }
 
     public int canSwap(){
@@ -198,6 +202,8 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 Log.e(TAG, "CameraPreview: " + e.getMessage());
             }
         }
+
+
 
         private void getPicture(){//Takes the picture but also does a lot of attachement of the callbacks and listeners
             if(cameraDevice == null){

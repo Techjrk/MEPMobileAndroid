@@ -32,7 +32,7 @@ import static com.lecet.app.R.string.google_api_key;
 public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @SearchViewModel.SearchAdapterType
-    private final int adapterType;
+   // private final int adapterType;
     //ProjectsNearMeActivity activity;
     FragmentActivity factivity;
     private List data = Collections.emptyList();
@@ -43,9 +43,10 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         this.data = data;
     }
 */
-    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, int adapterType, List data) {
+//    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, int adapterType, List data) {
+    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, List data) {
         this.factivity = activity;
-        this.adapterType = adapterType;
+       // this.adapterType = adapterType;
         this.data = data;
     }
     public void setData(List data) {
@@ -80,11 +81,13 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         return data.size();
     }
 
+/*
     @Override
     public int getItemViewType(int position) {
 
         return adapterType;
     }
+*/
 
     /**
      * View Holder class

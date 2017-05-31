@@ -316,9 +316,24 @@
             android:label="@string/title_activity_company_project_bids"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".content.DashboardIntermediaryActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".content.CompanyContactsActivity" />
+                android:name=".content.DashboardIntermediaryActivity"
+                android:theme="@style/AppTheme.FullScreen">
+        </activity>
+        <activity android:name=".content.CompanyContactsActivity">
+        </activity>
+
+        <service android:name=".service.LecetFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".service.LecetFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

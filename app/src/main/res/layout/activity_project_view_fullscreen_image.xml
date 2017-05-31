@@ -23,6 +23,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    android:onClick="@{viewModel::onClickImage}"
                     app:projectImageUrl="@{viewModel.imageUrl}" />
 
             <TextView
@@ -52,6 +53,16 @@
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:textColor="@color/pureWhite"
                     android:text="@{viewModel.body}"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:visibility="@{viewModel.canView()}"
+            android:src="@drawable/ic_back_button"
+            android:scaleType="fitCenter"
+            android:onClick="@{viewModel::onClickBackButton}"/>
 
     </RelativeLayout>
 

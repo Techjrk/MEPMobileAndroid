@@ -26,7 +26,6 @@ public class CompanyDetailBidViewModel extends BaseObservable {
     private final String mapsApiKey;
     private final AppCompatActivity activity;
 
-
     public CompanyDetailBidViewModel(AppCompatActivity activity, String mapsApiKey, Bid bid) {
         this.bid = bid;
         this.mapsApiKey = mapsApiKey;
@@ -44,12 +43,12 @@ public class CompanyDetailBidViewModel extends BaseObservable {
     public String getStartDateString() {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
+        if (project.getBidDate() == null) return ""; //NOTE: Based on HockeyApp, dated 2017-05-26 . added this code just in case it was not resolved yet to prevent NullPointerException error from keep crashing the app.
         return simpleDateFormat.format(project.getBidDate());
     }
 
     public String getProjectName() {
-
+        if (project.getTitle() == null) return ""; //NOTE: Based on HockeyApp, dated 2017-04-03 . added this code just in case it was not resolved yet to prevent NullPointerException error from keep crashing the app.
         return project.getTitle();
     }
 
