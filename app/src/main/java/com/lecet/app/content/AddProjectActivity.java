@@ -7,13 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
-import com.lecet.app.data.models.SearchFilterStage;
-import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityAddProjectBinding;
 import com.lecet.app.domain.ProjectDomain;
@@ -21,12 +18,6 @@ import com.lecet.app.viewmodel.AddProjectActivityViewModel;
 import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import io.realm.Realm;
 
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_ADDRESS;
@@ -99,6 +90,7 @@ public class AddProjectActivity extends AppCompatActivity {
                     Object value = bundle.get(key);
                     Log.d(TAG, "processProjectType: " + key + ": " + value);
 
+                    displayStr += value + ", "; //In case 9588 - It's present here in this case. This was deleted n bringing it back again for case 9929.
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
                     if (primaryType != null) {
