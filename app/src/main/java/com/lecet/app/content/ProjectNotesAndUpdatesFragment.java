@@ -79,6 +79,8 @@ public class ProjectNotesAndUpdatesFragment extends Fragment {
         FragmentProjectNotesAndUpdatesBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_notes_and_updates, container, false);
         binding.setViewModel(viewModel);
 
+        viewModel.onCreateView(binding.getRoot());
+
         return binding.getRoot();
     }
 
