@@ -53,6 +53,16 @@
                     android:textColor="@color/lecetButtonDarkBlue"
                     android:text="@{viewModel.body}"/>
 
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_width="15dp"
+            android:layout_height="25dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_back_button_blue"
+            android:scaleType="fitCenter"
+            android:onClick="@{viewModel::onCancelClick}"/>
+
     </RelativeLayout>
 
 </layout>

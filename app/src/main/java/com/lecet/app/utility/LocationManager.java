@@ -60,7 +60,6 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
     }
 
     // Must be called in the Activity onStart
@@ -236,7 +235,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                 apiClient,
                 // This is the same pending intent that was used in addGeofences().
                 pendingIntent
-        ).setResultCallback(callback); // Result processed in onResult().
+        ).setResultCallback(callback); // GeocodeResult processed in onResult().
     }
 
     // Private

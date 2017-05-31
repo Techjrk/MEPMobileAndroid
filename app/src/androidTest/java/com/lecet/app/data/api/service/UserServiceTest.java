@@ -59,7 +59,7 @@ public class UserServiceTest {
                         "\"ttl\": 1209600," + "\"created\": \"2016-10-03T20:47:20.536Z\"," + "\"userId\": 5" + "}"));
 
 
-        Call<Access> call = userService.login("test@test.com", "password");
+        Call<Access> call = userService.login("test@test.com", "password", "token", "android");
         Response<Access> response = call.execute();
 
         Assert.assertTrue(response.isSuccessful());

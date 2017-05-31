@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "522623457735",
+    "firebase_url": "https://lecet-temp.firebaseio.com",
+    "project_id": "lecet-temp",
+    "storage_bucket": "lecet-temp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522623457735:android:67c79551ab2a5b2d",
+        "android_client_info": {
+          "package_name": "com.lecet.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522623457735-458cat3v0q1ljhjf45upi1nb16qdp221.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lecet.app",
+            "certificate_hash": "f897303327fc7d3100345c7d5635348f33dd61d9"
+          }
+        },
+        {
+          "client_id": "522623457735-v7b65b982lga4ao7qindapffra3go0vd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZbkk6a6rdVg8Hd0SsujiJJZE5d6RqG6A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522623457735-v7b65b982lga4ao7qindapffra3go0vd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,7 +11,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
     <string name="county">County</string>
-    <string name="project_id">Project ID</string>
+    <string name="project_ids">Project ID</string>
     <string name="project_type">Project Type</string>
     <string name="project_types">Project Type(s)</string>
     <string name="est_low">Est. Low</string>
@@ -381,4 +381,6 @@
     <string name="street_2">Street 2</string>
     <string name="reg_pre_bid">Pre Bid</string>
     <string name="reg_post_bid">Post Bid</string>
+    <string name="required_field">* required field</string>
+    <string name="asterisk_superscript">*</string>
 </resources>

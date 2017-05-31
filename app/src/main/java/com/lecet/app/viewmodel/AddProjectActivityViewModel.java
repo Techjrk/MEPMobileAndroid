@@ -17,15 +17,19 @@ import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.Geocode;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectPost;
+import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -61,10 +65,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private Calendar calendar;
 
 
-    public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, String address, double latitude, double longitude, ProjectDomain projectDomain) {
+    public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, ProjectDomain projectDomain) {
         super(appCompatActivity);
 
-        Log.d(TAG, "Constructor: address: " + address);
+        //Log.d(TAG, "Constructor: address: " + address);
         Log.d(TAG, "Constructor: latitude: " + latitude);
         Log.d(TAG, "Constructor: longitude: " + longitude);
 
@@ -79,9 +83,9 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         projectPost = new ProjectPost(latitude, longitude);
 
         // add address if it has been passed
-        if (address != null && address.isEmpty()) {
+        /*if (address != null && address.isEmpty()) {
             projectPost.setAddress1(address);   //TODO - this only handles address line 1
-        }
+        }*/
 
         // add lat and long in the form of Geocode obj if they have been passed
         if (projectPost.getGeocode() == null) {
@@ -93,6 +97,84 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
 
+        getAddressFromLocation(latitude, longitude);
+
+    }
+
+    private void getAddressFromLocation(double latitude, double longitude) {
+        Log.d(TAG, "getAddressFromLocation: lat, lng: " + latitude + ", " + longitude);
+
+        Call<GeocodeAddress> call = projectDomain.getAddressFromLocation(latitude, longitude, "street_address", mapsApiKey);
+
+        call.enqueue(new Callback<GeocodeAddress>() {
+                @Override
+                public void onResponse(Call<GeocodeAddress> call, Response<GeocodeAddress> response) {
+                    //Log.d(TAG, "getAddressFromLocation: onResponse: success? " + response.isSuccessful());
+                    //Log.d(TAG, "getAddressFromLocation: onResponse: response: " + response);
+                    Log.d(TAG, "getAddressFromLocation: onResponse: response.body: " + response.body());
+
+                    if (response.isSuccessful()) {
+                        GeocodeAddress geocodeAddress = response.body();
+                        if(geocodeAddress != null) {
+                            GeocodeResult firstResult = geocodeAddress.getResults().get(0);
+                            if(firstResult != null) {
+                                String formattedAddress = firstResult.getFormattedAddress();    // the one-line formatted address for display
+                                Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. formattedAddress: " + formattedAddress);
+                                List<AddressComponent> addressComponents = firstResult.getAddressComponents();
+                                if(addressComponents != null && !addressComponents.isEmpty()) {
+                                    populateFieldsFromAddress(addressComponents);
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        Log.e(TAG, "getAddressFromLocation: onResponse: get address failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GeocodeAddress> call, Throwable t) {
+                    Log.e(TAG, "getAddressFromLocation: onFailure: get address failed");
+                }
+            });
+    }
+
+    /**
+     * Maps nodes from a Google Maps response into the address vars we need
+     */
+    private void populateFieldsFromAddress(List<AddressComponent> address) {
+
+        String streetNum = null;
+        String addr1 = null;
+        String addr2 = null;
+        String neigb = null;
+        String city = null;
+        String county = null;
+        String state = null;
+        String country = null;
+        String zip5 = null;
+
+        if(address.size() >= 0) streetNum   = address.get(0).getShortName();
+        if(address.size() >= 1) addr1       = address.get(1).getShortName();
+        if(address.size() >= 2) addr2       = address.get(2).getShortName();
+        if(address.size() >= 3) neigb       = address.get(3).getShortName();
+        if(address.size() >= 4) city        = address.get(4).getShortName();
+        if(address.size() >= 5) county      = address.get(5).getShortName();
+        if(address.size() >= 6) state       = address.get(6).getShortName();
+        if(address.size() >= 7) country     = address.get(7).getShortName();
+        if(address.size() >= 8) zip5        = address.get(8).getShortName();
+
+        String streetAddr = "";
+        if(streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
+        if(addr1 != null && !addr1.isEmpty()) streetAddr += (" " + addr1);
+
+        if(streetAddr != null) getProjectPost().setAddress1(streetAddr);   // address line 1
+        //if(addr2 != null)      getProjectPost().setAddress2(addr2);      // address line 2, prob not avail from the response (like Apt / Floor#)
+        if(city != null)       getProjectPost().setCity(city);             // city
+        if(state != null)      getProjectPost().setState(state);           // state
+        if(zip5 != null)       getProjectPost().setZip5(zip5);             // zip
+        if(county != null)     getProjectPost().setCounty(county);         // county
+        if(country != null)    getProjectPost().setCountry(country);       // country
     }
 
     public String getMapUrl(ProjectPost projectPost) {
@@ -222,10 +304,17 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         alert = new AlertDialog.Builder(view.getContext()).create();
 
+        String message = null;
+        if(projectPost.getGeocode() == null) message = "A location is required";
+        else if(projectPost.getTitle() == null    || projectPost.getTitle().isEmpty())    message = "A project title is required";
+        else if(projectPost.getAddress1() == null || projectPost.getAddress1().isEmpty()) message = "A project address is required";
+        else if(projectPost.getCity() == null     || projectPost.getCity().isEmpty())     message = "A project city is required";
+        else if(projectPost.getState() == null    || projectPost.getState().isEmpty())    message = "A project state is required";
+
         // Required content of project post
-        if(projectPost == null || projectPost.getGeocode() == null) {
+        if(message != null) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
-            alert.setMessage("A location is required.");
+            alert.setMessage(message);
             alert.show();
         }
 
@@ -264,7 +353,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear,
                                           int dayOfMonth) {
-                        // TODO Auto-generated method stub
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);

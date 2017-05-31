@@ -20,7 +20,6 @@ import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 import io.realm.Realm;
 
-import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_ADDRESS;
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LATITUDE;
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LONGITUDE;
 
@@ -33,7 +32,6 @@ public class AddProjectActivity extends AppCompatActivity {
     private static final String TAG = "AddProjectActivity";
 
     private AddProjectActivityViewModel viewModel;
-    private String address;
     private double latitude;
     private double longitude;
 
@@ -43,16 +41,14 @@ public class AddProjectActivity extends AppCompatActivity {
 
         ActivityAddProjectBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_add_project);
 
-        address = getIntent().getStringExtra(EXTRA_MARKER_ADDRESS);
         latitude = getIntent().getDoubleExtra(EXTRA_MARKER_LATITUDE, -1);
         longitude = getIntent().getDoubleExtra(EXTRA_MARKER_LONGITUDE, -1);
 
-        Log.d(TAG, "onCreate: address: " + address);
         Log.d(TAG, "onCreate: latitude: " + latitude);
         Log.d(TAG, "onCreate: longitude: " + longitude);
 
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-        viewModel = new AddProjectActivityViewModel(this, address, latitude, longitude, projectDomain);
+        viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectDomain);
 
         binding.setViewModel(viewModel);
     }

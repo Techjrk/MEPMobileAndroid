@@ -1,6 +1,8 @@
 package com.lecet.app.data.api.service;
 
+import com.lecet.app.data.api.request.ProjectNotifyRequest;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.PhotoPost;
@@ -202,5 +204,21 @@ public interface ProjectService {
     })
     @GET("Projects/{projectID}/images")
     Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID);
+
+    /*
+     * Google Maps API: Get address from location lat/lng
+     */
+    @GET("https://maps.googleapis.com/maps/api/geocode/json")
+    Call<GeocodeAddress> getAddressFromLocation(@Query("latlng") String latlng, @Query("result_type") String resultType, @Query("key") String key);
+
+    /*
+     * Project notify
+     */
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("Projects/Project_notify")
+    Call<ResponseBody> projectNotify(@Body ProjectNotifyRequest notifyRequest);
 
 }

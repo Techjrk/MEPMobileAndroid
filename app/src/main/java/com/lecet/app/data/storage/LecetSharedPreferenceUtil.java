@@ -2,6 +2,7 @@ package com.lecet.app.data.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -15,6 +16,7 @@ public class LecetSharedPreferenceUtil {
     private static final String ACCESS_TOKEN = "accessToken";
     private static final String ID = "id";
     private static final String NOTIFICATIONS = "notification_settings";
+    private static final String FIREBASE_TOKEN = "firebaseToken";
 
 
     private static LecetSharedPreferenceUtil mInstance;
@@ -34,7 +36,8 @@ public class LecetSharedPreferenceUtil {
 
     private void initSharePreference(Context context) {
         if (!(mSharedPreferences instanceof SharedPreferences)) {
-            mSharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+            //mSharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
 
         if (!(mEditor instanceof SharedPreferences.Editor)) {
@@ -88,6 +91,14 @@ public class LecetSharedPreferenceUtil {
 
     public Boolean getNotificationsSetting() {
         return getBooleanPreferences(NOTIFICATIONS);
+    }
+
+    public void setFirebaseToken(String value) {
+        putStringPreferences(FIREBASE_TOKEN, value);
+    }
+
+    public String getFirebaseToken() {
+        return getStringPreferences(FIREBASE_TOKEN);
     }
 
     public void clearPreferences() {

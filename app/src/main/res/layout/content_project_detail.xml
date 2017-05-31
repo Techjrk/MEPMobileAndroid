@@ -1,40 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-              tools:context="com.lecet.app.content.ProjectDetailActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout_project_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:tabTextAppearance="@style/ProjectDetailTabLayout"
-            app:tabTextColor="@color/pureWhite"
-            app:tabMode="fixed"
-            app:tabIndicatorHeight="3dp"
-            app:tabGravity="center"
-            app:tabSelectedTextColor="@color/pureWhite"
-            app:tabIndicatorColor="@color/lecetMediumOrange">
-    </android.support.design.widget.TabLayout>
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectDetailViewModel"/>
+    </data>
 
-    <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_project_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    </android.support.v4.view.ViewPager>
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                  tools:context="com.lecet.app.content.ProjectDetailActivity">
 
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lecetBidGray">
+        <!-- Content -->
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:paddingTop="5dp"
+                      android:orientation="vertical"
+                      android:background="@color/lecetDetailHeaderBlue">
 
-    </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lecetDarkOrange">
 
-</LinearLayout>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:paddingTop="10dp"
+                          android:paddingLeft="10dp"
+                          android:paddingRight="10dp"
+                          android:textSize="20sp"
+                          android:textColor="@color/pureWhite"
+                          android:text="@{viewModel.title}"
+                          android:maxLines="2"
+                          bind:typeface="@{`Lato-Black.ttf`}"
+                          tools:text="Updated Primary Clarifier 1/ Aeration Basin 2 Rehabilitation"/>
+
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:layout_marginLeft="10dp"
+                              android:orientation="horizontal">
+
+                    <ImageView android:layout_width="8dp"
+                               android:layout_height="12dp"
+                               android:layout_gravity="center_vertical"
+                               android:src="@drawable/proj_location_icon"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:padding="10dp"
+                              android:textSize="14sp"
+                              android:textColor="@color/pureWhite"
+                              android:text="@{viewModel.address}"
+                              android:maxLines="2"
+                              bind:typeface="@{`Lato-Regular.ttf`}"
+                              tools:text="South Lake Tahoe, CA"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout_project_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:tabTextAppearance="@style/ProjectDetailTabLayout"
+                app:tabTextColor="@color/pureWhite"
+                app:tabMode="fixed"
+                app:tabIndicatorHeight="3dp"
+                app:tabGravity="center"
+                app:tabSelectedTextColor="@color/pureWhite"
+                app:tabIndicatorColor="@color/lecetMediumOrange">
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager_project_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
+
+</layout>
+
+

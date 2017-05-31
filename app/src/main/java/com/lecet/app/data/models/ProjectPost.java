@@ -2,12 +2,17 @@ package com.lecet.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.lecet.app.BR;
+
 /**
  * Created by jasonm
  * See http://lecet.dt-staging.com/explorer/#!/Project/Project_createInstance
  */
 
-public class ProjectPost {
+public class ProjectPost extends BaseObservable {
 
     @SerializedName("title")
     private String title;
@@ -216,76 +221,94 @@ public class ProjectPost {
         this.cnProjectUrl = cnProjectUrl;
     }
 
+    @Bindable
     public String getAddress1() {
         return address1;
     }
 
     public void setAddress1(String address1) {
         this.address1 = address1;
+        notifyPropertyChanged(BR.address1);
     }
 
+    @Bindable
     public String getAddress2() {
         return address2;
     }
 
     public void setAddress2(String address2) {
         this.address2 = address2;
+        notifyPropertyChanged(BR.address2);
     }
 
+    @Bindable
     public String getCounty() {
         return county;
     }
 
     public void setCounty(String county) {
         this.county = county;
+        notifyPropertyChanged(BR.county);
     }
 
+    @Bindable
     public String getFipsCounty() {
         return fipsCounty;
     }
 
     public void setFipsCounty(String fipsCounty) {
         this.fipsCounty = fipsCounty;
+        notifyPropertyChanged(BR.fipsCounty);
     }
 
+    @Bindable
     public String getCity() {
         return city;
     }
 
     public void setCity(String city) {
         this.city = city;
+        notifyPropertyChanged(BR.city);
     }
 
+    @Bindable
     public String getState() {
         return state;
     }
 
     public void setState(String state) {
         this.state = state;
+        notifyPropertyChanged(BR.state);
     }
 
+    @Bindable
     public String getCountry() {
         return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
+        notifyPropertyChanged(BR.country);
     }
 
+    @Bindable
     public String getZip5() {
         return zip5;
     }
 
     public void setZip5(String zip5) {
         this.zip5 = zip5;
+        notifyPropertyChanged(BR.zip5);
     }
 
+    @Bindable
     public String getZipPlus4() {
         return zipPlus4;
     }
 
     public void setZipPlus4(String zipPlus4) {
         this.zipPlus4 = zipPlus4;
+        notifyPropertyChanged(BR.zipPlus4);
     }
 
     public String getStatusText() {
@@ -312,12 +335,14 @@ public class ProjectPost {
         this.currencyType = currencyType;
     }
 
+    @Bindable
     public double getEstLow() {
         return estLow;
     }
 
     public void setEstLow(int estLow) {
         this.estLow = estLow;
+        notifyPropertyChanged(BR.estLow);
     }
 
     public String getEstLowStr() {
@@ -380,12 +405,14 @@ public class ProjectPost {
         this.projDlvrySys = projDlvrySys;
     }
 
+    @Bindable
     public String getTargetStartDate() {
         return targetStartDate;
     }
 
     public void setTargetStartDate(String targetStartDate) {
         this.targetStartDate = targetStartDate;
+        notifyPropertyChanged(BR.targetStartDate);
     }
 
     public String getTargetFinishDate() {
@@ -524,28 +551,34 @@ public class ProjectPost {
         this.id = id;
     }*/
 
+    @Bindable
     public int getPrimaryProjectTypeId() {
         return primaryProjectTypeId;
     }
 
     public void setPrimaryProjectTypeId(int primaryProjectTypeId) {
         this.primaryProjectTypeId = primaryProjectTypeId;
+        notifyPropertyChanged(BR.primaryProjectTypeId);
     }
 
+    @Bindable
     public int getProjectStageId() {
         return projectStageId;
     }
 
     public void setProjectStageId(int projectStageId) {
         this.projectStageId = projectStageId;
+        notifyPropertyChanged(BR.projectStageId);
     }
 
+    @Bindable
     public int getJurisdictionCityId() {
         return jurisdictionCityId;
     }
 
     public void setJurisdictionCityId(int jurisdictionCityId) {
         this.jurisdictionCityId = jurisdictionCityId;
+        notifyPropertyChanged(BR.jurisdictionCityId);
     }
 
     public Geocode getGeocode() {

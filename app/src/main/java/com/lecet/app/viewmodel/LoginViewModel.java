@@ -92,9 +92,12 @@ public class LoginViewModel extends BaseObservableViewModel {
         setEmailValid(userDomain.isValidEmail(email));
         setPasswordValid(userDomain.isValidPassword(password));
 
+        LecetSharedPreferenceUtil sp = userDomain.getSharedPreferenceUtil();
+        String firebaseToken = sp.getFirebaseToken();
+
         if (emailValid && passwordValid) {
 
-            userDomain.login(email, password, new Callback<Access>() {
+            userDomain.login(email, password, firebaseToken, new Callback<Access>() {
                 @Override
                 public void onResponse(Call<Access> call, Response<Access> response) {
 
