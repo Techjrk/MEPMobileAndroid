@@ -60,6 +60,7 @@ public class AddProjectActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
         Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);
         if (requestCode == SearchFilterAllTabbedViewModel.TYPE) {
             processProjectType(bundle);
