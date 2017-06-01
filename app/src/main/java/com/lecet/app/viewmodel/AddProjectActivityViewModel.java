@@ -255,7 +255,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                 if (response.isSuccessful()) {
                     Project createdProject = response.body();
-                    Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project ID: " + createdProject.getId());
+                    Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 }

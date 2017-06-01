@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.R;
@@ -25,6 +26,7 @@ import com.lecet.app.interfaces.ProjectAdditionalData;
 import com.lecet.app.utility.DateUtility;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatConversionException;
 import java.util.List;
 
 import io.realm.Realm;
@@ -199,13 +201,20 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
         } else {
 
             // Not in Bidding/Participating Stage so we will display $0
-            details.add(new ProjDetailItemViewModel(context.getString(R.string.value), String.format("$ %,.0f", 0)));
+            String str = "0";
+            try {
+                str = String.format("$ %,.0f", 0);
+            } catch (IllegalFormatConversionException e) {
+                Log.e("ProjectDetailFragmentVM", "initProjectDetailAdapter: FORMAT CONVERSION ERROR");
+            }
+            details.add(new ProjDetailItemViewModel(context.getString(R.string.value), str));
         }
-
         // Remaining details
         details.add(new ProjectDetailJurisdictionViewModel(new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(context),
                 Realm.getDefaultInstance()), project.getId(), context.getString(R.string.jurisdiction)));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
+        if(project.getPrimaryProjectType() != null) {
+            details.add(new ProjDetailItemViewModel(context.getString(R.string.b_h), project.getPrimaryProjectType().getBuildingOrHighway()));
+        }
 
         // Notes
         String notes = null;
