@@ -31,7 +31,7 @@ import static com.lecet.app.R.string.google_api_key;
 
 public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    @SearchViewModel.SearchAdapterType
+ //   @SearchViewModel.SearchAdapterType
    // private final int adapterType;
     //ProjectsNearMeActivity activity;
     FragmentActivity factivity;
