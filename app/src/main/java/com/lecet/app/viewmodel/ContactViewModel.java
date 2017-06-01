@@ -86,12 +86,12 @@ public class ContactViewModel {
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
         sortButton.setVisibility(View.INVISIBLE);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+       /* backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackButtonClick(v);
             }
-        });
+        });*/
 
         titleTextView.setText(contact.getName());
     }

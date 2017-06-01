@@ -159,7 +159,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         saveButton = (TextView) toolbar.findViewById(R.id.save_text_view);
 
-        backButton.setVisibility(View.INVISIBLE);
+        // backButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.INVISIBLE);
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);

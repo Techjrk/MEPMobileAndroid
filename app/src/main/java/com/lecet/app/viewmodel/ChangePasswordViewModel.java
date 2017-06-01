@@ -89,7 +89,7 @@ public class ChangePasswordViewModel extends BaseObservable {
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         saveButton = (TextView) toolbar.findViewById(R.id.save_text_view);
 
-        backButton.setVisibility(View.INVISIBLE);
+        //backButton.setVisibility(View.INVISIBLE);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
