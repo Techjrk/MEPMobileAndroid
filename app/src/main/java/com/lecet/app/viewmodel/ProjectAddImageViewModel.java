@@ -10,6 +10,7 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -91,9 +92,10 @@ public class ProjectAddImageViewModel extends BaseObservable {
         Log.d(TAG, "Constructor 1: imagePath: " + imagePath);
 
         this.bitmap = BitmapFactory.decodeFile(imagePath);  //TODO - access of static var
+
     }
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long photoID, String title, String body, Uri uri, ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long photoID, String title, String body, Uri uri, ProjectDomain projectDomain, final float neededRotation) {
         this.activity = activity;
         this.projectId = projectId;
         this.replaceImage = replaceImage;
@@ -120,6 +122,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Log.d(TAG, "onBitmapLoaded");
+
                     ProjectAddImageViewModel.setBitmapData(bitmap);
                 }
 
@@ -141,7 +144,9 @@ public class ProjectAddImageViewModel extends BaseObservable {
         catch (RuntimeException e1) {
             Log.e(TAG, "ProjectAddImageViewModel: RuntimeException. Error converting URI to bitmap: " + uri);
         }
-
+        if(bitmap != null){
+            bitmap = rotateImage(bitmap, neededRotation);
+        }
     }
 
     private void startProjectDetailActivity() {
@@ -519,7 +524,17 @@ public class ProjectAddImageViewModel extends BaseObservable {
         view.setImageBitmap(bitmap);
     }
 
+    //Rotates images to the correct perspective. This can make images very big.
+    private Bitmap rotateImage(Bitmap image,float angle){
+        Log.d(TAG, "rotateImage: angle of rotation:" + angle);
+        int w = image.getWidth();
+        int h = image.getHeight();
 
+        Matrix mtx = new Matrix();
+        mtx.setRotate(angle);
+
+        return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
+    }
 
 
 }
