@@ -21,7 +21,7 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
     private static final String TAG = "ProjectViewFullImageVM";
     private Activity activity;
     private long projectId;
-    private boolean backVisable = false;
+    private boolean canView = false;
     private String title;
     private String body;
     private String imageUrl;
@@ -48,7 +48,7 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
     }
 
     public void onClickImage(View view){
-        backVisable = !backVisable;
+        canView = !canView;
         notifyChange();
     }
 
@@ -57,7 +57,7 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
     }
 
     public int canView(){
-        return backVisable ? View.VISIBLE : View.INVISIBLE;
+        return canView ? View.VISIBLE : View.INVISIBLE;
     }
 
     public String getImageUrl() {
