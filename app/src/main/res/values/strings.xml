@@ -384,4 +384,6 @@
     <string name="required_field">* required field</string>
     <string name="asterisk_superscript">*</string>
     <string name="create_pin">Create Pin</string>
+    <string name="char_max_exceed_title">Maximum Numbers Exceeded</string>
+    <string name="char_max_message">Please limit the number up to 8 digits only</string>
 </resources>
