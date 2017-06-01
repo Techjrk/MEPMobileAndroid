@@ -10,10 +10,15 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.content.DashboardIntermediaryActivity;
 import com.lecet.app.content.ProjectDetailActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -40,82 +45,65 @@ public class LecetFirebaseMessagingService extends FirebaseMessagingService {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "RemoteMessage: " + remoteMessage.toString());
-        sendNotification("LECET", "TEST RECEIVED", 322385);
 
         // Check if the message contains a data payload
         if (remoteMessage.getData().size() > 0) {
+
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
+            Map<String, String> payload = remoteMessage.getData();
+
+            try {
+
+                StringBuilder titleSb = new StringBuilder();
+                titleSb.append(payload.get("title"));
+
+                JSONObject body = new JSONObject(payload.get("body"));
+
+                if (!body.isNull("type") && !body.getString("type").equals("updatedProject")) {
+                    titleSb.append("\n");
+                    titleSb.append(body.getString("text"));
+                }
+
+                StringBuilder addySb = new StringBuilder();
+                if (!body.isNull("address1")) {
+                    addySb.append(body.getString("address1"));
+                    addySb.append(" ");
+                }
+
+                if (!body.isNull("address2")) {
+                    addySb.append(body.getString("address2"));
+                    addySb.append(" ");
+                }
+
+                if (!body.isNull("city")) {
+                    addySb.append(body.getString("city"));
+                    addySb.append(" ");
+                }
+
+                if (!body.isNull("state")) {
+                    addySb.append(body.getString("state"));
+                    addySb.append(" ");
+                }
+
+                if (!body.isNull("zip")) {
+                    addySb.append(body.getString("zip"));
+                    addySb.append(" ");
+                }
+
+                long projectId = -1;
+
+                if (!body.isNull("projectId")) {
+
+                    projectId = body.getLong("projectId");
+                }
+
+                sendNotification(titleSb.toString(), addySb.toString(), projectId);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
-        /*
-                NSDictionary *aps = userInfo[@"aps"];
-       id payLoad = aps[@"alert"];
-
-       NSString *message = @"";
-       if ([payLoad isKindOfClass:[NSDictionary class]]) {
-
-           NSDictionary *alert = aps[@"alert"];
-           NSDictionary *body = alert[@"body"];
-
-           NSString *type = body[@"type"];
-
-           NSString *title = alert[@"title"];
-           NSString *detail = @"";
-
-           if (![type isEqualToString:@"updatedProject"]) {
-               detail = body[@"text"];
-           }
-
-           NSString *address = @"";
-
-           NSString *address1 = [DerivedNSManagedObject objectOrNil:body[@"address1"]];
-           NSString *address2 = [DerivedNSManagedObject objectOrNil:body[@"address2"]];
-           NSString *city = [DerivedNSManagedObject objectOrNil:body[@"city"]];
-           NSString *state = [DerivedNSManagedObject objectOrNil:body[@"state"]];
-           NSString *zip = [DerivedNSManagedObject objectOrNil:body[@"zip5"]];
-
-           if ( address1!= nil) {
-
-               address = [[address stringByAppendingString:address1] stringByAppendingString:@" "];
-               address = [address stringByAppendingString:[self addComma:address2]];
-           }
-
-
-           if (address2 != nil) {
-               address = [[address stringByAppendingString:address2] stringByAppendingString:@" "];
-               address = [address stringByAppendingString:[self addComma:city]];
-           }
-
-           if (city != nil) {
-               address = [[address stringByAppendingString:city] stringByAppendingString:@" "];
-               address = [address stringByAppendingString:[self addComma:state]];
-           }
-
-           if (state != nil) {
-               address = [[address stringByAppendingString:state] stringByAppendingString:@" "];
-               address = [address stringByAppendingString:[self addComma:zip]];
-
-           }
-
-           if (zip != nil) {
-               address = [address stringByAppendingString:zip];
-           }
-
-           if (detail.length>0) {
-               title = [[title stringByAppendingString:@"\n"] stringByAppendingString:detail];
-           }
-
-           message = [NSString stringWithFormat:@"%@\n%@", title, address];
-
-       } else {
-           message = payLoad;
-       }
-        [[DataManager sharedManager] promptMessage:message];
-    }
-         */
-
     }
 
     /**
@@ -129,8 +117,12 @@ public class LecetFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, projectId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(DashboardIntermediaryActivity.class);
+        stackBuilder.addNextIntentWithParentStack(intent);
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
