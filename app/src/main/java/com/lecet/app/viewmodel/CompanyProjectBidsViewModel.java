@@ -119,12 +119,12 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
         //Check the binding in the layout, which is not triggering the button clicks in this VM
-   /*     backButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackButtonClick(v);
             }
-        });*/
+        });
 
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
