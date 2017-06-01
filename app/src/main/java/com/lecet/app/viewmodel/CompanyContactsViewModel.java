@@ -49,7 +49,7 @@ public class CompanyContactsViewModel extends BaseActivityViewModel {
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
         sortButton.setVisibility(View.INVISIBLE);
-        backButton.setVisibility(View.INVISIBLE);
+//        backButton.setVisibility(View.INVISIBLE);
 
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);
