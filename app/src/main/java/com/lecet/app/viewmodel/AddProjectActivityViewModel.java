@@ -154,15 +154,15 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         String country = null;
         String zip5 = null;
 
-        if(address.size() >= 0) streetNum   = address.get(0).getShortName();
-        if(address.size() >= 1) addr1       = address.get(1).getShortName();
-        if(address.size() >= 2) addr2       = address.get(2).getShortName();
-        if(address.size() >= 3) neigb       = address.get(3).getShortName();
-        if(address.size() >= 4) city        = address.get(4).getShortName();
-        if(address.size() >= 5) county      = address.get(5).getShortName();
-        if(address.size() >= 6) state       = address.get(6).getShortName();
-        if(address.size() >= 7) country     = address.get(7).getShortName();
-        if(address.size() >= 8) zip5        = address.get(8).getShortName();
+        if(address.size() > 0) streetNum   = address.get(0).getShortName();
+        if(address.size() > 1) addr1       = address.get(1).getShortName();
+        if(address.size() > 2) addr2       = address.get(2).getShortName();
+        if(address.size() > 3) neigb       = address.get(3).getShortName();
+        if(address.size() > 4) city        = address.get(4).getShortName();
+        if(address.size() > 5) county      = address.get(5).getShortName();
+        if(address.size() > 6) state       = address.get(6).getShortName();
+        if(address.size() > 7) country     = address.get(7).getShortName();
+        if(address.size() > 8) zip5        = address.get(8).getShortName();
 
         String streetAddr = "";
         if(streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
