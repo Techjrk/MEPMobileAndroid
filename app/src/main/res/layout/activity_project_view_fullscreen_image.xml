@@ -12,18 +12,20 @@
             android:layout_width="match_parent"
             tools:context="com.lecet.app.content.ProjectViewFullscreenImageActivity">
 
+
+
         <FrameLayout
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical"
-             android:background="@color/pureWhite"/>
+             android:background="@color/pureBlack"/>
 
-            <ImageView
+            <com.lecet.app.content.widget.PannableImageView
                     android:id="@+id/image_view_fullscreen"
+                    android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:onClick="@{viewModel::onClickImage}"
+                    android:adjustViewBounds="true"
                     app:projectImageUrl="@{viewModel.imageUrl}" />
 
             <TextView
@@ -34,7 +36,6 @@
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
                     android:layout_above="@+id/image_body"
-                    android:visibility="@{viewModel.canView()}"
                     tools:text="Photo Title"
                     android:textSize="16sp"
                     android:gravity="bottom"
@@ -50,7 +51,6 @@
                     android:layout_marginBottom="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:visibility="@{viewModel.canView()}"
                     android:textSize="14sp"
                     tools:text="This is a new note consectetur adipiscing elit. Fusce sit amet massa consectetur, vestibulum eros ut, commodo orci."
                     bind:typeface="@{`Lato-Regular.ttf`}"
@@ -62,7 +62,6 @@
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:visibility="@{viewModel.canView()}"
             android:src="@drawable/ic_back_button"
             android:scaleType="fitCenter"
             android:onClick="@{viewModel::onClickBackButton}"/>
