@@ -115,7 +115,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                     if (response.isSuccessful()) {
                         GeocodeAddress geocodeAddress = response.body();
-                        if(geocodeAddress != null) {
+                        if(geocodeAddress != null && geocodeAddress.getResults().size() > 0) {
                             GeocodeResult firstResult = geocodeAddress.getResults().get(0);
                             if(firstResult != null) {
                                 String formattedAddress = firstResult.getFormattedAddress();    // the one-line formatted address for display
@@ -154,15 +154,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         String country = null;
         String zip5 = null;
 
-        if(address.size() >= 0) streetNum   = address.get(0).getShortName();
-        if(address.size() >= 1) addr1       = address.get(1).getShortName();
-        if(address.size() >= 2) addr2       = address.get(2).getShortName();
-        if(address.size() >= 3) neigb       = address.get(3).getShortName();
-        if(address.size() >= 4) city        = address.get(4).getShortName();
-        if(address.size() >= 5) county      = address.get(5).getShortName();
-        if(address.size() >= 6) state       = address.get(6).getShortName();
-        if(address.size() >= 7) country     = address.get(7).getShortName();
-        if(address.size() >= 8) zip5        = address.get(8).getShortName();
+        for(AddressComponent component : address) {
+            if(component.getTypes().contains("street_number"))               streetNum = component.getShortName();
+            if(component.getTypes().contains("route"))                       addr1 = component.getShortName();
+            if(component.getTypes().contains("neighborhood"))                neigb = component.getShortName();
+            if(component.getTypes().contains("sublocality_level_1"))         city = component.getShortName();
+            if(component.getTypes().contains("administrative_area_level_2")) county = component.getShortName();
+            if(component.getTypes().contains("administrative_area_level_1")) state = component.getShortName();
+            if(component.getTypes().contains("country"))                     country = component.getShortName();
+            if(component.getTypes().contains("postal_code"))                 zip5 = component.getShortName();
+        }
 
         String streetAddr = "";
         if(streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
@@ -254,7 +255,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                 if (response.isSuccessful()) {
                     Project createdProject = response.body();
-                    Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project ID: " + createdProject.getId());
+                    Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 }

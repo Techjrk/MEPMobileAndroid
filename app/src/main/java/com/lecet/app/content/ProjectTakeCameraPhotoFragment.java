@@ -88,8 +88,8 @@ public class ProjectTakeCameraPhotoFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        ProjectTakeCameraPhotoViewModel.getCameraInstance();
         if(viewModel != null) {
-            ProjectTakeCameraPhotoViewModel.getCameraInstance();
             viewModel.resetCamera();
         }
     }

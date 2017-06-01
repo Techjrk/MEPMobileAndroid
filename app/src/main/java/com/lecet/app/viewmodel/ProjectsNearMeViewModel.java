@@ -72,7 +72,7 @@ import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 public class ProjectsNearMeViewModel extends BaseObservableViewModel implements GoogleMap.OnMarkerClickListener
         , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener
         , View.OnClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnMyLocationChangeListener
-        , GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCircleClickListener {
+        , GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCircleClickListener {
 
     private static final String TAG = "ProjectsNearMeViewModel";
 
@@ -142,6 +142,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.map.setOnCameraMoveListener(this);
         this.map.setOnMyLocationChangeListener(this);
         this.map.setOnMyLocationButtonClickListener(this);
+        this.map.setOnMapClickListener(this);
         this.map.setOnMapLongClickListener(this);
         this.map.setOnCircleClickListener(this);
 
@@ -190,12 +191,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
 
             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            placeCustomPin(latLng, true);
-
             locationCircle.setClickable(false);
-            circle.remove();
-            circle = null;
+            clearLocationCircle(circle);
+            placeCustomPin(latLng, true);
         }
+    }
+
+    private void clearLocationCircle(Circle circle) {
+        circle.remove();
+        circle = null;
     }
 
     private void placeCustomPin(LatLng latLng, boolean labelForMyLocation) {
@@ -217,6 +221,12 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         bounceMarker(currLocationMarker);
     }
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Log.d(TAG, "onMapClick: " + latLng);
+        clearCurrLocationMarker();
+        placeCustomPin(latLng, true);
+    }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
