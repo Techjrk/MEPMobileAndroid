@@ -51,10 +51,10 @@ public class ProjectParticipantViewModel {
         subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
-        sortButton.setVisibility(View.INVISIBLE);
+        if (sortButton !=null) sortButton.setVisibility(View.INVISIBLE);
 
         //Check the binding in the layout, which is not triggering the button clicks in this VM
-        backButton.setOnClickListener(new View.OnClickListener() {
+        if (backButton !=null) backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackButtonClick(v);
