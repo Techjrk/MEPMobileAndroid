@@ -383,4 +383,5 @@
     <string name="reg_post_bid">Post Bid</string>
     <string name="required_field">* required field</string>
     <string name="asterisk_superscript">*</string>
+    <string name="create_pin">Create Pin</string>
 </resources>
