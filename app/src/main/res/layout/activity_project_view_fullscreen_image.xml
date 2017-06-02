@@ -7,24 +7,35 @@
         <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectViewFullscreenImageViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@color/pureWhite"
+            android:onClick="@{viewModel::onClickImage}"
             tools:context="com.lecet.app.content.ProjectViewFullscreenImageActivity">
 
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_back_button_blue"
+            android:scaleType="fitCenter"
+            android:visibility="@{viewModel.canView()}"
+            android:onClick="@{viewModel::onClickBackButton}"/>
 
-
-        <FrameLayout
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical"
-             android:background="@color/pureBlack"/>
-
-            <com.lecet.app.content.widget.PannableImageView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
+            <ImageView
                     android:id="@+id/image_view_fullscreen"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
+                    android:layout_centerInParent="true"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
                     app:projectImageUrl="@{viewModel.imageUrl}" />
 
             <TextView
@@ -35,6 +46,7 @@
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
                     android:layout_above="@+id/image_body"
+                    android:visibility="@{viewModel.canView()}"
                     tools:text="Photo Title"
                     android:textSize="16sp"
                     android:gravity="bottom"
@@ -46,25 +58,20 @@
                     android:id="@+id/image_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignBottom="@id/image_view_fullscreen"
                     android:layout_marginBottom="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="@{viewModel.canView()}"
                     android:textSize="14sp"
                     tools:text="This is a new note consectetur adipiscing elit. Fusce sit amet massa consectetur, vestibulum eros ut, commodo orci."
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:textColor="@color/pureWhite"
                     android:text="@{viewModel.body}"/>
+        </RelativeLayout>
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_back_button"
-            android:scaleType="fitCenter"
-            android:onClick="@{viewModel::onClickBackButton}"/>
 
-    </RelativeLayout>
+
+    </LinearLayout>
 
 </layout>

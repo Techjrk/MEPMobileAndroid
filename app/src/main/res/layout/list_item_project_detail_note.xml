@@ -51,10 +51,11 @@
 
                 <!-- EDIT ICON -->
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:layout_marginTop="4dp"
                     android:paddingBottom="4dp"
                     android:visibility="@{viewModel.canEdit ? View.VISIBLE : View.GONE}"
                     android:src="@drawable/ic_pencil_blue"

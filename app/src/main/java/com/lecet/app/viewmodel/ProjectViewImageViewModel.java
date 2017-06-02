@@ -58,23 +58,7 @@ public class ProjectViewImageViewModel extends BaseObservable {
 
     public void onImageClick(View view) {
         Log.d(TAG, "onImageClick");
-
-        if(!canView){
-            if((body.isEmpty() && title.isEmpty())){
-                onWhiteSpaceClick(view);
-                onImageClick(view);
-            }else {
-                onWhiteSpaceClick(view);
-            }
-        }else {
-            Intent intent = new Intent(activity, ProjectViewFullscreenImageActivity.class);
-            intent.putExtra(PROJECT_ID_EXTRA, projectId);
-            intent.putExtra(IMAGE_TITLE_EXTRA, title);
-            intent.putExtra(IMAGE_BODY_EXTRA, body);
-            intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
-            activity.startActivity(intent);
-            activity.finish();
-        }
+        onWhiteSpaceClick(view);
     }
 
     public void onCancelClick(View view){
