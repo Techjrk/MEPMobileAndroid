@@ -62,7 +62,7 @@ public class ProjectTrackingListViewModel extends TrackingListViewModel {
 
     public void getProjectTrackingListUpdates(final long projectTrackingListId) {
 
-        showProgressDialog(getAppCompatActivity().getString(R.string.updating), "");
+        showProgressDialog();
 
         trackingListDomain.getProjectTrackingListDetails(projectTrackingListId, new Callback<List<Project>>() {
             @Override

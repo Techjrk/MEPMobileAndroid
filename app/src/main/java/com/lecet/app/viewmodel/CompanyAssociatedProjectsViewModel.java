@@ -88,12 +88,15 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
         //Check the binding in the layout, which is not triggering the button clicks in this VM
+/*
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackButtonClick(v);
             }
         });
+*/
 
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +111,7 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
     // TODO: When returning from a different activity, the data seems to be null
     public void refreshData() {
 
-        showProgressDialog(appCompatActivity.getString(R.string.updating), "");
+        showProgressDialog();
 
         companyCall = companyDomain.getCompanyDetails(companyId, new Callback<Company>() {
             @Override

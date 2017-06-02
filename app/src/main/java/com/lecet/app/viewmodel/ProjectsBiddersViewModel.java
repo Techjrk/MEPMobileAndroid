@@ -80,12 +80,12 @@ public class ProjectsBiddersViewModel {
         sortButton.setVisibility(View.INVISIBLE);
 
         //Check the binding in the layout, which is not triggering the button clicks in this VM
-        backButton.setOnClickListener(new View.OnClickListener() {
+ /*       backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackButtonClick(v);
             }
-        });
+        });*/
 
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);

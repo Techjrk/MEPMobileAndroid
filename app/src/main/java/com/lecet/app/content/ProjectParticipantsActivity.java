@@ -49,7 +49,6 @@ public class ProjectParticipantsActivity extends LecetBaseActivity {
             LayoutInflater inflater = getLayoutInflater();
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);
-
             viewModel.setToolbar(tb, title, subTitle);
 
             actionBar.setCustomView(tb);

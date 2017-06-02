@@ -83,7 +83,7 @@ public class CompanyDetailViewModel extends BaseObservableViewModel implements C
 
         if (activity == null) return;
 
-        showProgressDialog(activity.getString(R.string.updating), "");
+        showProgressDialog();
 
         companyDetailCall = companyDomain.getCompanyDetails(companyID, new Callback<Company>() {
             @Override
