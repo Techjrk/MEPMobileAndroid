@@ -31,6 +31,7 @@ public class ProjectViewImageViewModel extends BaseObservable {
     private String title;
     private String body;
     private String imageUrl;
+    private boolean canView = false;
 
     public ProjectViewImageViewModel(Activity activity, long projectId, String title, String body, String imageUrl) {
         this.activity = activity;
@@ -46,16 +47,34 @@ public class ProjectViewImageViewModel extends BaseObservable {
         Log.d(TAG, "Constructor: imageUrl: " + imageUrl);
     }
 
+    public void onWhiteSpaceClick(View view){
+        canView = !canView;
+        notifyChange();
+    }
+
+    public int canView(){
+        return canView ? View.VISIBLE : View.INVISIBLE;
+    }
+
     public void onImageClick(View view) {
         Log.d(TAG, "onImageClick");
 
-        Intent intent = new Intent(activity, ProjectViewFullscreenImageActivity.class);
-        intent.putExtra(PROJECT_ID_EXTRA, projectId);
-        intent.putExtra(IMAGE_TITLE_EXTRA, title);
-        intent.putExtra(IMAGE_BODY_EXTRA, body);
-        intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
-        activity.startActivity(intent);
-        activity.finish();
+        if(!canView){
+            if((body.isEmpty() && title.isEmpty())){
+                onWhiteSpaceClick(view);
+                onImageClick(view);
+            }else {
+                onWhiteSpaceClick(view);
+            }
+        }else {
+            Intent intent = new Intent(activity, ProjectViewFullscreenImageActivity.class);
+            intent.putExtra(PROJECT_ID_EXTRA, projectId);
+            intent.putExtra(IMAGE_TITLE_EXTRA, title);
+            intent.putExtra(IMAGE_BODY_EXTRA, body);
+            intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
+            activity.startActivity(intent);
+            activity.finish();
+        }
     }
 
     public void onCancelClick(View view){

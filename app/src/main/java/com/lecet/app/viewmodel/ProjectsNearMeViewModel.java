@@ -296,7 +296,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     public void fetchProjectsNearMe(final LatLng location) {
 
-        showProgressDialog("", getActivityWeakReference().get().getString(R.string.updating));
+        showProgressDialog();
 
         projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
