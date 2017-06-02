@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectViewFullscreenImageActivity;
 import com.lecet.app.content.ProjectViewImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.User;
@@ -46,11 +48,12 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
     private boolean canEdit;
+    private ImageView imageView;
 
-    public ListItemProjectImageViewModel(ProjectPhoto photo, AppCompatActivity activity, final UserDomain userDomain) {
+    public ListItemProjectImageViewModel(ProjectPhoto photo, AppCompatActivity activity, final UserDomain userDomain, ImageView imageView) {
         this.photo = photo;
         this.activity = activity;
-
+        this.imageView = imageView;
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
             setCanEdit(photo.getAuthorId() == getLoggedInUserId());
@@ -147,8 +150,12 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
     public void onImageClick(View view) {
         Log.d(TAG, "onImageClick");
-
-        Intent intent = new Intent(activity, ProjectViewImageActivity.class);
+        Intent intent;
+        if(imageView.getDrawable().getIntrinsicWidth() > imageView.getDrawable().getIntrinsicHeight()){
+            intent = new Intent(activity, ProjectViewImageActivity.class);
+        }else{
+            intent = new Intent(activity, ProjectViewFullscreenImageActivity.class);
+        }
         intent.putExtra(PROJECT_ID_EXTRA, photo.getProjectId());
         intent.putExtra(IMAGE_ID_EXTRA, photo.getId());
         intent.putExtra(IMAGE_TITLE_EXTRA, photo.getTitle());
