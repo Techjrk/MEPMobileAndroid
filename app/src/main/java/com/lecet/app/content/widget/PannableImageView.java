@@ -24,7 +24,6 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
     private float yPos = getY();
 
     private float lastTouchX;
-    private float imageWidth = 0;
     private float minX = 0;
     private float maxX = 0;
 
@@ -117,16 +116,12 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
     protected void onDraw(Canvas canvas) {
         canvas.save();
         if(maxX == 0){
-            imageWidth = (getDrawable().getIntrinsicWidth() * (getMeasuredHeight()/ getDrawable().getIntrinsicHeight()));
-            maxX = (imageWidth - getMeasuredWidth())/ 2;
+            float imageWidth = (getDrawable().getIntrinsicWidth() * (getHeight()/ getDrawable().getIntrinsicHeight()));
+            maxX = (imageWidth - getWidth())/ 2;
             minX = maxX * -1;
-            Log.d(TAG, "onDraw: Intrinsic Width: " + getDrawable().getIntrinsicWidth());
-            Log.d(TAG, "onDraw: \nMin X: " + minX + "\nMax X: " + maxX);
-            Log.d(TAG, "onDraw: Height: " + getHeight());
-            Log.d(TAG, "onDraw: Width: " + getWidth());
+
         }
 
-        Log.d(TAG, "onDraw: X Pos: " +  xPos);
         xPos = Math.min(maxX, Math.max(minX, xPos));
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             scrollTo((int) xPos, (int) yPos);

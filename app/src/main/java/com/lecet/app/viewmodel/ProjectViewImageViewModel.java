@@ -60,7 +60,7 @@ public class ProjectViewImageViewModel extends BaseObservable {
         Log.d(TAG, "onImageClick");
 
         if(!canView){
-            if((!body.isEmpty() || !title.isEmpty())){
+            if((body.isEmpty() && title.isEmpty())){
                 onWhiteSpaceClick(view);
                 onImageClick(view);
             }else {
