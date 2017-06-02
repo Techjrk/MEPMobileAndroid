@@ -12,9 +12,11 @@
         <item name="android:screenOrientation">portrait</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:homeAsUpIndicator">@drawable/home</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.FullScreen" parent="AppTheme">
         <item name="windowNoTitle">true</item>
@@ -480,7 +482,7 @@
         <item name="android:background">@drawable/shape_rect_list_item_expand_2</item>
     </style>
 
-    <style name="ListItemProjectTrackingImage"/>
+    <style name="ListItemProjectTrackingImage" />
 
     <style name="ListItemProjectTrackingImage.DetailMap">
         <item name="android:layout_width">60dp</item>
@@ -568,12 +570,14 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/lecetButtonDarkBlue</item>
     </style>
+
     <style name="SearchFilterSectionButton">
         <item name="android:layout_margin">10dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
     </style>
+
     <style name="SearchFilterSectionDownArrow">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -582,6 +586,7 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:src">@android:drawable/arrow_down_float</item>
     </style>
+
     <style name="SearchFilterSectionMPS30">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -589,12 +594,14 @@
         <item name="android:textColor">@color/lecetDarkestBlue</item>
         <item name="android:layout_marginTop">5dp</item>
     </style>
+
     <style name="SearchFilterSectionFieldValue">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/shape_rect_solid_border_1</item>
         <item name="android:padding">11dp</item>
     </style>
+
     <style name="ImageDownArrow">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">25dp</item>
@@ -611,6 +618,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/lecetTextDarkGray</item>
     </style>
+
     <style name="Theme.AppCompat.Translucent" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -627,10 +635,12 @@
         <item name="android:textColor">@color/lecetButtonDarkerBlue</item>
         <item name="android:layout_marginTop">8dp</item>
     </style>
+
     <style name="AddProjectFieldTitle.WithSpacing">
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:layout_marginBottom">12dp</item>
     </style>
+
     <style name="AddProjectField">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -639,6 +649,7 @@
         <item name="android:padding">11dp</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="AddProjectFieldLabel">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -648,7 +659,9 @@
         <item name="android:gravity">right</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/lecetTextDarkGray</item>
-    </style> 
+    </style>
+     
+
     <style name="AddProjectRequiredField">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
