@@ -8,6 +8,7 @@ import com.lecet.app.content.MainActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.CompanyTrackingList;
+import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
@@ -48,6 +49,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     private boolean fetchedStageList;
     private boolean fetchedProjectType;
     private boolean fetchedJurisdiction;
+    private boolean fetchedCounties;
     private boolean fetchedMBR;
     private boolean fetchedMHS;
     private boolean fetchedMRA;
@@ -75,7 +77,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
     /* Navigation Logic */
     private void checkDataDownloaded() {
 
-        if (fetchedJurisdiction && fetchedProjectType && fetchedStageList && fetchedMBR && fetchedMHS && fetchedMRA && fetchedMRU && fetchedCompTracking && fetchedProjTracking && !launched) {
+        if (fetchedJurisdiction && fetchedProjectType && fetchedStageList && fetchedCounties && fetchedMBR && fetchedMHS && fetchedMRA && fetchedMRU && fetchedCompTracking && fetchedProjTracking && !launched) {
 
             launched = true;
 
@@ -96,6 +98,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
         calls.add(getSearchStageList());
         calls.add(getJurisdictionList());
         calls.add(getProjectTypeList());
+        calls.add(getCounties());
         calls.add(getBidsRecentlyMade());
         calls.add(getProjectsHappeningSoon());
         calls.add(getProjectsRecentlyAdded());
@@ -188,6 +191,33 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                     checkDataDownloaded();
                 }
             }
+        });
+    }
+
+    private Call<List<County>> getCounties() {
+
+        return searchDomain.generateRealmCountyList(new LecetCallback<List<County>>() {
+            @Override
+            public void onSuccess(List<County> result) {
+                fetchedCounties = true;
+                checkDataDownloaded();
+            }
+
+            @Override
+            public void onFailure(int code, String message) {
+
+                if (code == 401) {
+
+                    displayUnauthorizedUserDialog();      //TODO - ******* REMOVE AFTER BACKEND FIX IS IMPLEMENTED ALLOWING ALL USERS TO RECEIVE COUNTY DATA *******
+                    //fetchedCounties = true;
+                    //checkDataDownloaded();
+                } else {
+
+                    fetchedCounties = true;
+                    checkDataDownloaded();
+                }
+            }
+
         });
     }
 

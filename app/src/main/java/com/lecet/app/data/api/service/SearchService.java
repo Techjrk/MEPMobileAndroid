@@ -1,6 +1,7 @@
 package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
@@ -104,6 +105,14 @@ public interface SearchService {
     //*** Stage content items
     @GET("ProjectParentStages")
     Call<List<SearchFilterStagesMain>> getSearchFilterStagesItems(@Header("Authorization") String token, @Query("filter[include]") String filter);
+
+    //*** Counties
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("Counties")
+    Call<List<County>> getCounties(@Header("Authorization") String token);
 
     //*** Save User recently viewed
     @Headers({

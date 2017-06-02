@@ -90,12 +90,14 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private Location currentLocation;
     private Circle locationCircle;
     private CircleOptions circleOptions;
+    private boolean infoWindowOpen;
 
     private BitmapDescriptor redMarker;
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
     private BitmapDescriptor currentLocationMarkerIcon;
-    private BitmapDescriptor customPinMarker;
+    private BitmapDescriptor existingCustomPinMarker;
+    private BitmapDescriptor newCustomPinMarker;
     private ArrayList<Project> prebid, postbid;
     //Toolbar views
     private EditText search;
@@ -134,7 +136,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.greenMarker               = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
         this.yellowMarker              = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
         this.currentLocationMarkerIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
-        this.customPinMarker           = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
+        this.existingCustomPinMarker   = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_yellow);
+        this.newCustomPinMarker        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
         this.map = map;
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
@@ -207,7 +210,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.icon(customPinMarker);
+        markerOptions.icon(newCustomPinMarker);
         if(labelForMyLocation) {
             markerOptions.title(activity.getString(R.string.my_location));
             map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, true));
@@ -224,14 +227,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d(TAG, "onMapClick: " + latLng);
-        clearCurrLocationMarker();
-        placeCustomPin(latLng, true);
+        if (!infoWindowOpen) {
+            clearCurrLocationMarker();
+            placeCustomPin(latLng, true);
+        }
+        else infoWindowOpen = false;
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
         Log.d(TAG, "onMapLongClick: " + latLng);
-        clearCurrLocationMarker();
+        //clearCurrLocationMarker();
     }
 
     private void clearCurrLocationMarker() {
@@ -370,11 +376,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     BitmapDescriptor icon;
                     noteCountCard(project);
                     imageCountCard(project);
+
+                    // no project stage? use the green marker and assume pre-bid
                     if (project.getProjectStage() == null) {
                         icon = greenMarker;
                         prebid.add(project);
+                    }
 
-                    } else {
+                    // style marker for pre-bid or post-bid color
+                    else {
                         if (project.getProjectStage().getParentId() == 102) {
                             prebid.add(project);
                             icon = greenMarker;
@@ -382,6 +392,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                             postbid.add(project);
                             icon = redMarker;
                         }
+                    }
+
+                    // for user-created projects
+                    if(project.getDodgeNumber() == null) {
+                        icon = existingCustomPinMarker;
                     }
 
                     Marker marker = map.addMarker(new MarkerOptions()
@@ -451,27 +466,16 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d(TAG, "onMarkerClick: " + marker.getTitle());
+        Log.d(TAG, "onMarkerClick: " + marker.getTag());
 
         BitmapDescriptor icon;
+        Project project;
 
         boolean isMyLocationMarker = (marker.equals(currLocationMarker));
-        /*if (marker != null && marker.getTitle() != null) {
-            isMyLocationMarker = marker.getTitle().equals(getActivityWeakReference().get().getString(R.string.my_location));
-        }*/
 
         // my location marker, which uses its own info window adapter and layout
         if (isMyLocationMarker) {
             map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, true));
-            //icon = customPinMarker;
-            //TODO - change to pin icon
-            /*if (lastMarkerTapped != null) {
-                lastMarkerTapped.setIcon(icon);
-            }*/
-
-            //marker.setIcon(icon);
-            //bounceMarker(marker);
-
         }
 
         // fetched project markers
@@ -480,11 +484,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
             if (lastMarkerTapped != null) {
 
-                Project project = (Project) lastMarkerTapped.getTag();
+                project = (Project) lastMarkerTapped.getTag();
 
                 if (project.getProjectStage() == null) {
                     icon = greenMarker;
-                } else {
+                }
+                else if(project.getDodgeNumber() == null) {
+                    icon = existingCustomPinMarker;
+                }
+                else {
                     icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
                 }
 
@@ -492,9 +500,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             }
 
             lastMarkerTapped = marker;
-            lastMarkerTapped.setIcon(yellowMarker);
+            project = (Project) lastMarkerTapped.getTag();
 
+            // change marker style if it's not a user-created project
+            if(project != null && project.getDodgeNumber() != null) {
+                lastMarkerTapped.setIcon(yellowMarker);
+            }
         }
+
+        infoWindowOpen = true;
 
         return false;
     }
@@ -583,6 +597,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 icon = greenMarker;
             } else {
                 icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
+            }
+
+            // for user-created projects
+            if(project.getDodgeNumber() == null) {
+                icon = existingCustomPinMarker;
             }
 
             lastMarkerTapped.setIcon(icon);
