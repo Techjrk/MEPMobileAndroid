@@ -28,11 +28,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:background="@color/lecetShareBlue">
+
                 <FrameLayout
                     android:id="@+id/activity_return_to_home"
-                    android:layout_width="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="wrap_content" >
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp">
                     <!-- App Bar -->
                     <include layout="@layout/include_activity_bar_layout" />
                 </FrameLayout>
@@ -41,33 +42,34 @@
                     android:id="@+id/apply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="5dp"
                     android:background="@null"
+                    android:lines="1"
                     android:onClick="@{viewModel.onApplyButtonClicked}"
                     android:text="@string/mseapply"
                     android:textAllCaps="true"
-                    android:lines="1"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="13sp"
-                    android:layout_alignParentRight="true"
                     bind:typeface="@{`Lato-Bold.ttf`}" />
+
                 <RelativeLayout
                     android:id="@+id/search_bar"
                     android:layout_width="280dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@id/activity_return_to_home"
                     android:layout_toLeftOf="@id/apply"
+                    android:layout_toRightOf="@id/activity_return_to_home"
                     android:background="@drawable/rounded_edittext">
 
                     <EditText
-                        android:layout_marginLeft="10dp"
                         android:id="@+id/search_edit_text"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="0dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_toStartOf="@id/close_image_button"
                         android:background="@null"
                         android:drawableStart="@drawable/ic_action_search"
@@ -82,7 +84,6 @@
                 </RelativeLayout>
 
 
-
             </RelativeLayout>
 
 
@@ -90,7 +91,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>

@@ -73,7 +73,7 @@ public class CompanyTrackingListViewModel extends TrackingListViewModel<RealmRes
 
     private void getUpdates(long listId) {
 
-        showProgressDialog(getAppCompatActivity().getString(R.string.updating), "");
+        showProgressDialog();
 
         trackingListDomain.getCompanyTrackingListUpdates(listId, DateUtility.addDays(-1), new Callback<List<ActivityUpdate>>() {
             @Override
