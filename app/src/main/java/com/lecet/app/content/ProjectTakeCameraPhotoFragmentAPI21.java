@@ -82,6 +82,7 @@ public class ProjectTakeCameraPhotoFragmentAPI21 extends Fragment {
     public void onResume(){
         super.onResume();
         if(viewModel != null) {
+            Log.d(TAG, "onResume: Called");
             viewModel.resetCamera();
         }
     }

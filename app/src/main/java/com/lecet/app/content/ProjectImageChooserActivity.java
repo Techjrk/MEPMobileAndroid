@@ -104,7 +104,6 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     private void handleTabSelection(TabLayout.Tab tab) {
         // take photo
         if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.photo))) {
-            // TODO - anything needed here?
             //takePhotoFragment.initImageChooser();
         }
         // library
