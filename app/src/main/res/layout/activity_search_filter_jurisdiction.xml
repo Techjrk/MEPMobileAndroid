@@ -30,7 +30,7 @@
                 android:background="@color/lecetShareBlue">
                 <FrameLayout
                     android:id="@+id/activity_return_to_home"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content" >
                     <!-- App Bar -->
