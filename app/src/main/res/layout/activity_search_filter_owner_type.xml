@@ -29,15 +29,16 @@
                 android:layout_height="50dp"
                 android:background="@color/lecetShareBlue"
                 android:orientation="horizontal">
+
                 <FrameLayout
-                    android:layout_width="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="-5dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
-                    >
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="-5dp">
                     <!-- App Bar -->
                     <include layout="@layout/include_activity_bar_layout" />
                 </FrameLayout>
+
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"
@@ -87,8 +88,8 @@
                     <CheckBox
                         android:id="@+id/ownerfederal"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/federal"
                         android:onClick="@{viewModel.onSelected}"
+                        android:text="@string/federal"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>
@@ -102,8 +103,8 @@
                     <CheckBox
                         android:id="@+id/ownerlocalgovt"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/local_government"
                         android:onClick="@{viewModel.onSelected}"
+                        android:text="@string/local_government"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
@@ -117,8 +118,8 @@
                     <CheckBox
                         android:id="@+id/ownermilitary"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/military"
                         android:onClick="@{viewModel.onSelected}"
+                        android:text="@string/military"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
@@ -132,8 +133,8 @@
                     <CheckBox
                         android:id="@+id/ownerprivate"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/private_name"
                         android:onClick="@{viewModel.onSelected}"
+                        android:text="@string/private_name"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>
@@ -148,8 +149,8 @@
                     <CheckBox
                         android:id="@+id/ownerstate"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/state"
                         android:onClick="@{viewModel.onSelected}"
+                        android:text="@string/state"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
