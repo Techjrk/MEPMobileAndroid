@@ -1,6 +1,7 @@
 package com.lecet.app.content.widget;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MotionEventCompat;
@@ -115,14 +116,21 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        if(imageWidth == 0){
-            imageWidth = getMeasuredWidth() * (getMeasuredHeight()/getDrawable().getIntrinsicHeight());
-
-            maxX = (imageWidth - getWidth())/2;
-            minX = (imageWidth - getWidth())/-2;
+        if(maxX == 0){
+            imageWidth = (getDrawable().getIntrinsicWidth() * (getMeasuredHeight()/ getDrawable().getIntrinsicHeight()));
+            maxX = (imageWidth - getMeasuredWidth())/ 2;
+            minX = maxX * -1;
+            Log.d(TAG, "onDraw: Intrinsic Width: " + getDrawable().getIntrinsicWidth());
+            Log.d(TAG, "onDraw: \nMin X: " + minX + "\nMax X: " + maxX);
+            Log.d(TAG, "onDraw: Height: " + getHeight());
+            Log.d(TAG, "onDraw: Width: " + getWidth());
         }
+
+        Log.d(TAG, "onDraw: X Pos: " +  xPos);
         xPos = Math.min(maxX, Math.max(minX, xPos));
-        scrollTo((int)xPos, (int)yPos);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            scrollTo((int) xPos, (int) yPos);
+        }
         super.onDraw(canvas);
         canvas.restore();
     }
