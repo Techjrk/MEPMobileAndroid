@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
+import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
@@ -314,7 +315,55 @@ public class SearchDomain {
         return call;
     }
 
+    /**
+     * To call the retrofit service for the server-stored list of Counties and related data
+     *
+     * @param callback
+     */
+    public Call<List<County>> getCountyList(Callback<List<County>> callback) {
+        String token = sharedPreferenceUtil.getAccessToken();
+        Call<List<County>> call = lecetClient.getSearchService().getCounties(token);
+        call.enqueue(callback);
 
+        return call;
+    }
+
+    /**
+     * Retrieve the list of Counties and store them
+     */
+    public Call<List<County>> generateRealmCountyList(@NonNull final LecetCallback<List<County>> callback) {
+
+        Call<List<County>> call = getCountyList(new Callback<List<County>>() {
+            @Override
+            public void onResponse(final Call<List<County>> call, Response<List<County>> response) {
+                Log.d(TAG,"Create List of Counties");
+                if (response.isSuccessful()) {
+                    final List<County> counties = response.body();
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            Log.d("SearchDomain:","counties: size: " + counties.size());
+                            Log.d("SearchDomain:","counties: " + counties);
+                            realm.copyToRealmOrUpdate(counties);
+                            callback.onSuccess(counties);
+                        }
+                    });
+
+                } else {
+                    callback.onFailure(response.code(), response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<County>> call, Throwable t) {
+                callback.onFailure(-999, "Please check your internet connection and try again");
+            }
+        });
+
+        return call;
+    }
 
     public void getSearchRecentlyViewed(long userId, Callback<List<SearchResult>> callback) {
         String token = sharedPreferenceUtil.getAccessToken();

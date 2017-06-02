@@ -17,6 +17,7 @@ import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.Geocode;
 import com.lecet.app.data.models.geocoding.GeocodeAddress;
@@ -32,6 +33,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -154,6 +157,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         String country = null;
         String zip5 = null;
 
+        //TODO - this loop could be optimized
         for(AddressComponent component : address) {
             if(component.getTypes().contains("street_number"))               streetNum = component.getShortName();
             if(component.getTypes().contains("route"))                       addr1 = component.getShortName();
@@ -165,6 +169,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             if(component.getTypes().contains("postal_code"))                 zip5 = component.getShortName();
         }
 
+        String fipsCounty = getFipsCounty(state, county);
+
         String streetAddr = "";
         if(streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
         if(addr1 != null && !addr1.isEmpty()) streetAddr += (" " + addr1);
@@ -175,8 +181,44 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if(state != null)      getProjectPost().setState(state);           // state
         if(zip5 != null)       getProjectPost().setZip5(zip5);             // zip
         if(county != null)     getProjectPost().setCounty(county);         // county
+        if(fipsCounty != null) getProjectPost().setFipsCounty(fipsCounty); // FIPS county
         if(country != null)    getProjectPost().setCountry(country);       // country
     }
+
+    private String getFipsCounty(final String projectState, final String projectCounty) {
+        Log.d(TAG, "getFipsCounty: " + projectCounty);
+        if(projectState == null || projectCounty == null) return null;
+
+        final String[] fipsCounty = new String[1];
+
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<County> realmCounties = realm.where(County.class).findAll();
+                    Log.d(TAG, "getFipsCounty: realmCounties size: " + realmCounties.size());
+                    if(realmCounties != null) {
+                        for(County realmCounty : realmCounties) {
+                            if(realmCounty.getState().equals(projectState)) {
+                                if (projectCounty.toUpperCase().contains(realmCounty.getCountyName())) {
+                                    fipsCounty[0] = realmCounty.getFipsCountyId();
+                                    Log.d(TAG, "getFipsCounty: found match: project county:" + projectCounty.toUpperCase() + ", realm county:" + realmCounty.getCountyName() + ", fipsCounty:" + fipsCounty[0]);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+        catch (Exception e) {
+            Log.e(TAG, "getFipsCounty: EXCEPTION", e);
+        }
+
+        return fipsCounty[0];   // could be valid string or null
+    }
+
 
     public String getMapUrl(ProjectPost projectPost) {
 
