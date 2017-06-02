@@ -7,6 +7,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -20,6 +21,7 @@ public class SearchFilterValueViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String min = "", max = "";
     private AlertDialog minMaxDialog = null;
+    private final static int MAX_CHAR=8;
 
     /**
      * Constructor
@@ -29,7 +31,14 @@ public class SearchFilterValueViewModel extends BaseObservable {
     }
 
     public void onApplyButtonClick(View view) {
+    if (getMin() != null && getMax()!= null) {
+        Log.d("maxchar", "maxchar" + getMin().length());
 
+        if (getMax().length() > MAX_CHAR || getMin().length() > MAX_CHAR) {
+            showCharMaxDialog();
+            return;
+        }
+    }
         if ((getMin() == null || getMin().equals("")) && (getMax() == null || getMax().equals(""))) {
             min = "";
             max = "";
@@ -75,6 +84,26 @@ public class SearchFilterValueViewModel extends BaseObservable {
         minMaxDialog.setTitle(this.activity.getResources().getString(R.string.value_min_max_dialog_title));
         minMaxDialog.setMessage(this.activity.getResources().getString(R.string.value_min_max_dialog_msg));
 
+        minMaxDialog.setButton(AlertDialog.BUTTON_POSITIVE, this.activity.getResources().getString(android.R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        minMaxDialog.show();
+    }
+    /**
+     * Show the min/max validation dialog
+     */
+    public void showCharMaxDialog() {
+        if (minMaxDialog != null && minMaxDialog.isShowing()) {
+            minMaxDialog.dismiss();
+        }
+
+        minMaxDialog = new AlertDialog.Builder(this.activity).create();
+        minMaxDialog.setTitle(activity.getString(R.string.char_max_exceed_title));
+        minMaxDialog.setMessage(activity.getString(R.string.char_max_message));
         minMaxDialog.setButton(AlertDialog.BUTTON_POSITIVE, this.activity.getResources().getString(android.R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

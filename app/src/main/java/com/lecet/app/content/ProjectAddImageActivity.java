@@ -22,6 +22,7 @@ import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 import static com.lecet.app.viewmodel.ProjectImageChooserViewModel.IMAGE_URI;
+import static com.lecet.app.viewmodel.ProjectImageChooserViewModel.NEEDED_ROTATION;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_NEW_IMAGE;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
@@ -42,6 +43,7 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
     private long projectId;
     private boolean fromCamera;
     private String imageUri;
+    private float neededRotation = 0;
     private String url;
     private String imagePath;
     private long photoId;
@@ -59,7 +61,10 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
         Bundle extras = getIntent().getExtras();
         projectId = extras.getLong(PROJECT_ID_EXTRA, -1);
         replaceImage = extras.getBoolean(PROJECT_REPLACE_IMAGE_EXTRA, false);
+
         fromCamera = extras.getBoolean(FROM_CAMERA);
+
+        neededRotation = extras.getFloat(NEEDED_ROTATION);
         imagePath = extras.getString(IMAGE_PATH);
         imageUri = extras.getString(IMAGE_URI);
         url = extras.getString(IMAGE_URL_EXTRA);
@@ -125,7 +130,7 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
     private void setupBinding(ProjectDomain projectDomain) {
         ActivityProjectAddImageBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_image);
         if(!fromCamera) {
-            viewModel = new ProjectAddImageViewModel(this, projectId, replaceImage, photoId, title, body, selectedImageUri, projectDomain);
+            viewModel = new ProjectAddImageViewModel(this, projectId, replaceImage, photoId, title, body, selectedImageUri, projectDomain, neededRotation);
         }
         else {
             if (imagePath != null) {
@@ -154,6 +159,7 @@ public class ProjectAddImageActivity extends LecetBaseActivity {
             String imagePath   = data.getStringExtra(IMAGE_PATH);
             String imageUri    = data.getStringExtra(IMAGE_URI);
             boolean fromCamera = data.getBooleanExtra(FROM_CAMERA, false);
+            neededRotation     = data.getFloatExtra(NEEDED_ROTATION, 0);
 
             Log.d(TAG, "onActivityResult: fromCamera: " + fromCamera);
             Log.d(TAG, "onActivityResult: imagePath: " + imagePath);

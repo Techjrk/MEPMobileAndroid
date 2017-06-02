@@ -18,7 +18,6 @@ import com.lecet.app.viewmodel.AddProjectActivityViewModel;
 import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
-
 import io.realm.Realm;
 
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LATITUDE;
@@ -57,6 +56,7 @@ public class AddProjectActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
         Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);
         if (requestCode == SearchFilterAllTabbedViewModel.TYPE) {
             processProjectType(bundle);
@@ -87,6 +87,7 @@ public class AddProjectActivity extends AppCompatActivity {
                     Object value = bundle.get(key);
                     Log.d(TAG, "processProjectType: " + key + ": " + value);
 
+                    displayStr += value + ", "; //In case 9588 - It's present here in this case. This was deleted n bringing it back again for case 9929.
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
                     if (primaryType != null) {

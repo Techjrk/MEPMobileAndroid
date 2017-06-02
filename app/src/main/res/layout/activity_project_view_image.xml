@@ -10,30 +10,37 @@
     <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:onClick="@{viewModel::onWhiteSpaceClick}"
             tools:context="com.lecet.app.content.ProjectViewImageActivity">
 
-        <FrameLayout
+        <LinearLayout
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_marginTop="70dp"
              android:orientation="vertical"
-             android:background="@color/pureWhite"/>
+             android:background="@color/pureWhite">
 
             <ImageView
                     android:id="@+id/image_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="20dp"
+                    android:scaleType="fitCenter"
                     android:onClick="@{viewModel::onImageClick}"
-                    app:projectImageUrl="@{viewModel.imageUrl}" />
+                    app:projectImageUrl="@{viewModel.imageUrl}"
+                    android:adjustViewBounds="true"/>
 
             <TextView
                     android:id="@+id/image_title"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_above="@+id/image_body"
+                    android:visibility="@{viewModel.canView()}"
                     tools:text="Photo Title"
+                    android:gravity="bottom"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:textColor="@color/lecetButtonDarkBlue"
@@ -43,21 +50,25 @@
                     android:id="@+id/image_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginBottom="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
+                    android:visibility="@{viewModel.canView()}"
                     android:textSize="14sp"
                     tools:text="This is a new note consectetur adipiscing elit. Fusce sit amet massa consectetur, vestibulum eros ut, commodo orci."
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:textColor="@color/lecetButtonDarkBlue"
                     android:text="@{viewModel.body}"/>
 
+            </LinearLayout>
         <ImageView
+            android:id="@+id/homeButton"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:layout_width="15dp"
             android:layout_height="25dp"
+            android:visibility="@{viewModel.canView()}"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_back_button_blue"
             android:scaleType="fitCenter"
