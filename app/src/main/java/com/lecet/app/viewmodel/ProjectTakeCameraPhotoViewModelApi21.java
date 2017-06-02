@@ -68,7 +68,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     private final int REDUCED_IMAGE_AMT = 10;
 
     private static List<String> rotatedCameraManufacturers = new ArrayList<String>(Arrays.asList("samsung", "asus"));//A list of all manufacturers that have non-standard camera implimentations. Used to decide camera rotation.
-    private static CameraPreview cameraPreview;
+    private CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
 
     /* THIS MAKES IT HAPPEN ONCE IN MEMORY! GOOD FOR SETUP OF A SPARSE ARRAY*/
@@ -108,7 +108,9 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     }
 
     public void resetCamera(){
-        ProjectTakeCameraPhotoViewModelApi21.cameraPreview = new CameraPreview(cameraPreview.textureView, cameraPreview.fragment);
+        if(cameraPreview.cameraIdInUse != -1 && cameraPreview != null && cameraPreview.textureView != null) {
+            cameraPreview.updateCamera();
+        }
     }
 
     public int canSwap(){
@@ -445,7 +447,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 Log.e(TAG, "startCamera: " + e.getMessage());
             }
 
-            previewBuilder.addTarget(surface);
+            if(previewBuilder!= null) {
+                previewBuilder.addTarget(surface);
+            }else{
+                return;
+            }
 
             try{
                 cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
@@ -464,6 +470,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                 Log.e(TAG, "startCamera: " + e.getMessage());
             }
 
+        }
+
+        private void updateCamera(){
+            CameraManager cameraManager = (CameraManager)fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
+            openCamera(cameraIdInUse);
         }
 
         private void swapCamera() {

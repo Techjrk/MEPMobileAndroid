@@ -111,7 +111,7 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
     // TODO: When returning from a different activity, the data seems to be null
     public void refreshData() {
 
-        showProgressDialog(appCompatActivity.getString(R.string.updating), "");
+        showProgressDialog();
 
         companyCall = companyDomain.getCompanyDetails(companyId, new Callback<Company>() {
             @Override

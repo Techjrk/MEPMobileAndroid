@@ -82,16 +82,8 @@ public class ContactViewModel {
 
         titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
         subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
-        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
         sortButton.setVisibility(View.INVISIBLE);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClick(v);
-            }
-        });
 
         titleTextView.setText(contact.getName());
     }

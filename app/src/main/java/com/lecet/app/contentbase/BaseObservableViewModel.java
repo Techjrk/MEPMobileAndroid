@@ -6,11 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lecet.app.R;
 import com.lecet.app.content.LauncherActivity;
+import com.lecet.app.content.LoadingDialogFragment;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import java.lang.ref.WeakReference;
@@ -30,7 +34,6 @@ public class BaseObservableViewModel extends BaseObservable {
 
     private final WeakReference<AppCompatActivity> activityWeakReference;
 
-    private ProgressDialog progressDialog;
     private Dialog alertDialog;
 
 
@@ -53,22 +56,44 @@ public class BaseObservableViewModel extends BaseObservable {
         }
     }
 
-    public void showProgressDialog(String title, String message) {
+    public void showProgressDialog() {
 
         // If activity is not alive. Don't do anything.
         if (! isActivityAlive()) return;
 
-        AppCompatActivity appCompatActivity = activityWeakReference.get();
+        AppCompatActivity activity = activityWeakReference.get();
 
         dismissAlertDialog();
         dismissProgressDialog();
 
-        progressDialog = ProgressDialog.show(appCompatActivity, title, message, true, false);
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+        Fragment prev = activity.getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = LoadingDialogFragment.newInstance();
+        newFragment.show(ft, "dialog");
     }
 
     public void dismissProgressDialog() {
 
-        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+        // If activity is not alive. Don't do anything.
+        if (! isActivityAlive()) return;
+
+        AppCompatActivity activity = activityWeakReference.get();
+
+        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+        DialogFragment prev = (DialogFragment) activity.getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            prev.dismiss();
+            ft.remove(prev);
+        }
     }
 
     public void showCancelAlertDialog(String title, String message) {

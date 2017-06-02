@@ -29,14 +29,16 @@
                 android:layout_height="55dp"
                 android:background="@color/lecetShareBlue"
                 android:orientation="horizontal">
+
                 <FrameLayout
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_height="wrap_content" >
+                    android:layout_marginTop="-5dp">
                     <!-- App Bar -->
                     <include layout="@layout/include_activity_bar_layout" />
                 </FrameLayout>
+
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"
@@ -99,9 +101,9 @@
                     <RadioButton
                         android:id="@+id/time_24h"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="@{viewModel.daysInt.equals(`1`)}"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="1"
-                        android:checked="@{viewModel.daysInt.equals(`1`)}"
                         android:text="@string/time_last_24_hours" />
 
                     <View
@@ -112,9 +114,9 @@
                     <RadioButton
                         android:id="@+id/time_7d"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="@{viewModel.daysInt.equals(`7`)}"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="7"
-                        android:checked="@{viewModel.daysInt.equals(`7`)}"
                         android:text="@string/time_last_7_days" />
 
                     <View
@@ -125,9 +127,9 @@
                     <RadioButton
                         android:id="@+id/time_30d"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="@{viewModel.daysInt.equals(`30`)}"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="30"
-                        android:checked="@{viewModel.daysInt.equals(`30`)}"
 
                         android:text="@string/time_last_30_days" />
 
@@ -139,9 +141,9 @@
                     <RadioButton
                         android:id="@+id/time_last_14d"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="@{viewModel.daysInt.equals(`90`)}"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="90"
-                        android:checked="@{viewModel.daysInt.equals(`90`)}"
                         android:text="@string/time_last_90_days" />
 
                     <View
@@ -152,9 +154,9 @@
                     <RadioButton
                         android:id="@+id/time_last_21d"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="@{viewModel.daysInt.equals(`180`)}"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="180"
-                        android:checked="@{viewModel.daysInt.equals(`180`)}"
                         android:text="@string/time_last_6_months" />
 
                     <View
@@ -165,9 +167,9 @@
                     <RadioButton
                         android:id="@+id/time_last_30d"
                         style="@style/SearchFilterSectionButton"
+                        android:checked="@{viewModel.daysInt.equals(`360`)}"
                         android:onClick="@{viewModel.onSelected}"
                         android:tag="360"
-                        android:checked="@{viewModel.daysInt.equals(`360`)}"
                         android:text="@string/time_last_12_months" />
                 </RadioGroup>
 

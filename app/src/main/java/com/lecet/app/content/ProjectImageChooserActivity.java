@@ -1,6 +1,7 @@
 package com.lecet.app.content;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -103,15 +104,18 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     private void handleTabSelection(TabLayout.Tab tab) {
         // take photo
         if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.photo))) {
-            // TODO - anything needed here?
             //takePhotoFragment.initImageChooser();
         }
         // library
         else if(tab.getText() != null && tab.getText().toString().equals(getResources().getString(R.string.library))) {
             if(Build.VERSION.SDK_INT < 21){
-                takePhotoFragment.viewModel.releaseCamera();
+                if(takePhotoFragment.viewModel != null) {
+                    takePhotoFragment.viewModel.releaseCamera();
+                }
             }else{
-                takePhotoFragmentAPI21.viewModel.releaseCamera();
+                if(takePhotoFragmentAPI21.viewModel != null) {
+                    takePhotoFragmentAPI21.viewModel.releaseCamera();
+                }
             }// release the camera which may have been activated in the Take Photo tab
             selectPhotoFragment.initImageChooser();
         }
@@ -171,6 +175,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         Log.d(TAG, "onActivityResult: requestCode: " + requestCode);
 
         if(resultCode == RESULT_OK) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             Log.d(TAG, "onActivityResult: RESULT_OK, " + resultCode);
             Uri uri = data.getData();
             Log.d(TAG, "onActivityResult: uri: " + uri);

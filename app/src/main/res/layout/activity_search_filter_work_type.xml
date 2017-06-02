@@ -28,15 +28,16 @@
                 android:layout_height="50dp"
                 android:background="@color/lecetShareBlue"
                 android:orientation="horizontal">
+
                 <FrameLayout
-                    android:layout_width="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="-5dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
-                    >
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="-5dp">
                     <!-- App Bar -->
                     <include layout="@layout/include_activity_bar_layout" />
                 </FrameLayout>
+
                 <Button
                     android:id="@+id/cancel_button"
                     android:layout_width="0dp"
@@ -86,9 +87,9 @@
                     <CheckBox
                         android:id="@+id/workadditions"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/additions"
-                        android:tag="1"
                         android:onClick="@{viewModel.onSelected}"
+                        android:tag="1"
+                        android:text="@string/additions"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>
@@ -105,9 +106,9 @@
                         style="@style/SearchFilterSectionButton"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="@string/alterations"
-                        android:tag="2"
                         android:onClick="@{viewModel.onSelected}"
+                        android:tag="2"
+                        android:text="@string/alterations"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
@@ -121,9 +122,9 @@
                     <CheckBox
                         android:id="@+id/workinteriors"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/interiors"
-                        android:tag="3"
                         android:onClick="@{viewModel.onSelected}"
+                        android:tag="3"
+                        android:text="@string/interiors"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
                 </RelativeLayout>
 
@@ -137,9 +138,9 @@
                     <CheckBox
                         android:id="@+id/worknewproject"
                         style="@style/SearchFilterSectionButton"
-                        android:text="@string/new_project"
-                        android:tag="4"
                         android:onClick="@{viewModel.onSelected}"
+                        android:tag="4"
+                        android:text="@string/new_project"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
 
                 </RelativeLayout>

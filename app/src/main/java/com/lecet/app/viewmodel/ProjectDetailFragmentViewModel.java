@@ -96,6 +96,8 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
 
         if (activity == null) return;
 
+        showProgressDialog();
+
         projectDetailCall = projectDomain.getProjectDetail(projectID, new Callback<Project>() {
             @Override
             public void onResponse(Call<Project> call, Response<Project> response) {
@@ -168,7 +170,7 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
         List<ProjDetailItemViewModel> details = new ArrayList<>();
 
         details.add(new ProjDetailItemViewModel(context.getString(R.string.county), project.getCounty()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.project_id), project.getDodgeNumber()));
+        details.add(new ProjDetailItemViewModel(context.getString(R.string.project_ids), project.getDodgeNumber()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
