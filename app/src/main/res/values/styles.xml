@@ -655,5 +655,9 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/lecetLightOrange</item>
     </style>
+    <style name="DialogFragment" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
 
 </resources>

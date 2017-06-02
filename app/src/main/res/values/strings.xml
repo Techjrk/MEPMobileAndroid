@@ -63,7 +63,9 @@
     <string name="powered_by_domandtom">Powered by Dom &amp; Tom</string>
     <string name="new_create_account">New? Create an Account</string>
     <string name="login">Login</string>
-    <string name="sign_up_for_mep_access"><u>Sign Up for MEP Access</u></string>
+    <string name="sign_up_for_mep_access">
+        <u>Sign Up for MEP Access</u>
+    </string>
 
     <!-- Dashboard -->
     <string name="title_fragment_bids_recently_made">Bids Recently Made</string>
@@ -118,7 +120,9 @@
     <string name="projects">Projects</string>
     <string name="company">Company</string>
     <string name="companies">Companies</string>
-    <string name="pending_changes">There are pending changes to your list. Would you like to discard them?</string>
+    <string name="pending_changes">There are pending changes to your list. Would you like to discard
+        them?
+    </string>
 
     <!-- MSE: Search Page -->
     <string name="project_saved_searches">PROJECT SAVED SEARCHES</string>
@@ -311,7 +315,8 @@
     <string name="total_projects">Total Projects</string>
     <string name="total_valuation">Total Valuation</string>
     <string name="title_activity_company_detail">CompanyDetailActivity</string>
-    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity</string>
+    <string name="title_activity_company_associated_projects">CompanyAssociatedProjectsActivity
+    </string>
     <string name="title_activity_project_bidders">ProjectBiddersActivity</string>
     <string name="title_activity_project_participants">ProjectParticipantsActivity</string>
     <string name="bid_tab_title_past">%d Past</string>
@@ -365,7 +370,14 @@
     <string name="optional">Optional</string>
     <string name="title_all_caps">TITLE</string>
     <string name="body_all_caps">BODY</string>
-    <string name="testing_purposes_lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="testing_purposes_lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and
+        typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the
+        1500s, when an unknown printer took a galley of type and scrambled it to make a type
+        specimen book. It has survived not only five centuries, but also the leap into electronic
+        typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+        release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+        publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    </string>
     <string name="use">Use</string>
     <string name="photo">Photo</string>
     <string name="library">Library</string>

@@ -96,6 +96,8 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
 
         if (activity == null) return;
 
+        showProgressDialog();
+
         projectDetailCall = projectDomain.getProjectDetail(projectID, new Callback<Project>() {
             @Override
             public void onResponse(Call<Project> call, Response<Project> response) {
