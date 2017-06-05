@@ -99,7 +99,7 @@ public class ProjectViewImageViewModel extends BaseObservable {
         return body;
     }
 
-    @BindingAdapter("bind:projectImageUrl")
+    @BindingAdapter("{projectImageUrl}")
     public static void loadImage(ImageView view, String url) {
         Log.d(TAG, "loadImage: url: " + url);
 
