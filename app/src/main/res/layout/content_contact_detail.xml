@@ -26,7 +26,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/pureWhite"
-                android:onClick="@{viewModel.onJobTitleSelected}">
+                android:onClick="@{viewModel::onJobTitleSelected}">
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/pureWhite"
-                android:onClick="@{viewModel.onAddressSelected}">
+                android:onClick="@{viewModel::onAddressSelected}">
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"

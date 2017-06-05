@@ -25,7 +25,7 @@
                 <ImageView android:id="@+id/parallax_image_view"
                            android:layout_width="match_parent"
                            android:layout_height="match_parent"
-                           android:onClick="@{mapInterface.onMapSelected}"/>
+                           android:onClick="@{mapInterface::onMapSelected}"/>
 
                 <View android:layout_width="match_parent"
                       android:layout_height="match_parent"

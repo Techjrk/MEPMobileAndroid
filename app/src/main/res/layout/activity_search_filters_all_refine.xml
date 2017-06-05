@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onClicked}"
+                    android:onClick="@{viewModel::onClicked}"
                     android:text="@string/msecancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onClicked}"
+                    android:onClick="@{viewModel::onClicked}"
                     android:text="@string/mseapply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -101,7 +101,7 @@
                         <TextView
                             android:id="@+id/location"
                             style="@style/SearchFilterSectionFieldValue"
-                            android:onClick="@{viewModel.onClicked}"
+                            android:onClick="@{viewModel::onClicked}"
                             android:text="@{viewModel.location_select}" />
 
                         <TextView
@@ -113,7 +113,7 @@
                         <TextView
                             android:id="@+id/type"
                             style="@style/SearchFilterSectionFieldValue"
-                            android:onClick="@{viewModel.onClicked}"
+                            android:onClick="@{viewModel::onClicked}"
                             android:text="@{viewModel.type_select}" />
 
                         <TextView
@@ -125,14 +125,14 @@
                         <TextView
                             android:id="@+id/value"
                             style="@style/SearchFilterSectionFieldValue"
-                            android:onClick="@{viewModel.onClicked}"
+                            android:onClick="@{viewModel::onClicked}"
                             android:text="@{viewModel.value_select}" />
 
                         <RelativeLayout
                             android:id="@+id/updated_within"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{viewModel.onClicked}">
+                            android:onClick="@{viewModel::onClicked}">
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
@@ -156,7 +156,7 @@
                             android:id="@+id/jurisdiction"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{viewModel.onClicked}">
+                            android:onClick="@{viewModel::onClicked}">
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
@@ -180,7 +180,7 @@
                             android:id="@+id/stage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{viewModel.onClicked}">
+                            android:onClick="@{viewModel::onClicked}">
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
@@ -204,7 +204,7 @@
                             android:id="@+id/bidding_within"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{viewModel.onClicked}">
+                            android:onClick="@{viewModel::onClicked}">
 
                             <TextView
                                 style="@style/SearchFilterSectionTextView"
@@ -227,7 +227,7 @@
                             android:id="@+id/option"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{viewModel.onClicked}"
+                            android:onClick="@{viewModel::onClicked}"
                             android:visibility="@{viewModel.moreOption ? View.GONE : View.VISIBLE }">
 
                             <TextView
@@ -255,7 +255,7 @@
                                 android:id="@+id/bh"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{viewModel.onClicked}">
+                                android:onClick="@{viewModel::onClicked}">
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
@@ -277,7 +277,7 @@
                                 android:id="@+id/ownertype"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{viewModel.onClicked}">
+                                android:onClick="@{viewModel::onClicked}">
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
@@ -300,7 +300,7 @@
                                 android:id="@+id/worktype"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{viewModel.onClicked}">
+                                android:onClick="@{viewModel::onClicked}">
 
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
@@ -323,7 +323,7 @@
                                 android:id="@+id/feweroption"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{viewModel.onClicked}">
+                                android:onClick="@{viewModel::onClicked}">
 
                                 <TextView
                                     android:id="@+id/text_fewer_option"

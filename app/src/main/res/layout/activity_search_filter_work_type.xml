@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onCancelButtonClick}"
+                    android:onClick="@{viewModel::onCancelButtonClick}"
                     android:text="@string/cancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:onClick="@{viewModel.onApplyButtonClick}"
+                    android:onClick="@{viewModel::onApplyButtonClick}"
                     android:text="@string/apply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -87,7 +87,7 @@
                     <CheckBox
                         android:id="@+id/workadditions"
                         style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="1"
                         android:text="@string/additions"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -106,7 +106,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="2"
                         android:text="@string/alterations"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -122,7 +122,7 @@
                     <CheckBox
                         android:id="@+id/workinteriors"
                         style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="3"
                         android:text="@string/interiors"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
@@ -138,7 +138,7 @@
                     <CheckBox
                         android:id="@+id/worknewproject"
                         style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="4"
                         android:text="@string/new_project"
                         bind:typeface="@{`Lato-Bold.ttf`}" />
