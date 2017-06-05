@@ -335,13 +335,6 @@ public class ProjectDomain {
         call.enqueue(callback);
     }
 
-    public Call<GeocodeAddress> getAddressFromLocation(double lat, double lng, String resultType, String key) {
-        String latlng = Double.toString(lat) + "," + Double.toString(lng);
-        Call<GeocodeAddress> call = lecetClient.getProjectService().getAddressFromLocation(latlng, resultType, key);
-
-        return call;
-    }
-
 
     /**
      * Persisted
