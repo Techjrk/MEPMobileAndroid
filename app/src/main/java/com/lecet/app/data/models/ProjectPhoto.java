@@ -51,6 +51,9 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     @SerializedName("url")
     private String url;
 
+    @SerializedName("user")
+    private User author;
+
     /*Made For Realm*/
     public ProjectPhoto(){}//TODO: Understand why this is not working.
 
@@ -115,6 +118,10 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     public void setProjectId(long projectId) {this.projectId = projectId;}
 
     public long getAuthorId() {return authorId;}
+
+    public User getAuthor(){
+        return author;
+    }
 
     public void setAuthorId(long authorId) {this.authorId = authorId;}
 

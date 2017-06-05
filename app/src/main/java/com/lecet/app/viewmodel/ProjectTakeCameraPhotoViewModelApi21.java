@@ -108,7 +108,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     }
 
     public void resetCamera(){
-        if(cameraPreview.cameraIdInUse != -1 && cameraPreview != null && cameraPreview.textureView != null) {
+        if(cameraPreview.cameraIdInUse != -1  && cameraPreview.textureView != null) {
             cameraPreview.updateCamera();
         }
     }
