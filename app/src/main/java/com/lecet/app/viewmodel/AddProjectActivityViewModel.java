@@ -238,7 +238,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             sb2.append(generatedAddress);
             sb2.append("&key=" + mapsApiKey);
 
-            mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+            mapStr = String.format((sb2.toString().replace(' ', '+')), (Object) null);
 
             return mapStr;
         }
