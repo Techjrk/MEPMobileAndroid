@@ -6,11 +6,13 @@ import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.content.ProjectViewFullscreenImageActivity;
+import com.lecet.app.content.ProjectViewPannableImageActivity;
 import com.squareup.picasso.Picasso;
 
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
@@ -58,7 +60,17 @@ public class ProjectViewImageViewModel extends BaseObservable {
 
     public void onImageClick(View view) {
         Log.d(TAG, "onImageClick");
-        onWhiteSpaceClick(view);
+        if(!canView) {
+            onWhiteSpaceClick(view);
+        }else{
+            Intent intent = new Intent(activity, ProjectViewPannableImageActivity.class);
+            intent.putExtra(PROJECT_ID_EXTRA, projectId);
+            intent.putExtra(IMAGE_TITLE_EXTRA, title);
+            intent.putExtra(IMAGE_BODY_EXTRA, body);
+            intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
+            activity.startActivity(intent);
+            activity.finish();
+        }
     }
 
     public void onCancelClick(View view){

@@ -1,0 +1,107 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectViewPannableImageViewModel" />
+    </data>
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@color/pureWhite"
+            android:onClick="@{viewModel::onClickImage}"
+            tools:context="com.lecet.app.content.ProjectViewFullscreenImageActivity">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+
+            <com.lecet.app.content.widget.PannableImageView
+                    android:id="@+id/image_view_fullscreen"
+                    android:scaleType="centerCrop"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:onClick="@{viewModel::onClickImage}"
+                    app:projectImageUrl="@{viewModel.imageUrl}" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_back_button"
+                android:scaleType="fitCenter"
+                android:visibility="@{viewModel.canView()}"
+                android:onClick="@{viewModel::onClickBackButton}"/>
+
+            <TextView
+                    android:id="@+id/image_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_above="@+id/image_body"
+                    android:visibility="@{viewModel.canView()}"
+                    tools:text="Photo Title"
+                    android:textSize="16sp"
+                    android:gravity="bottom"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:textColor="@color/pureWhite"
+                    android:text="@{viewModel.title}"/>
+
+            <TextView
+                    android:id="@+id/image_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/image_view_fullscreen"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="@{viewModel.canView()}"
+                    android:textSize="14sp"
+                    tools:text="This is a new note consectetur adipiscing elit. Fusce sit amet massa consectetur, vestibulum eros ut, commodo orci."
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    android:textColor="@color/pureWhite"
+                    android:text="@{viewModel.body}"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp">
+
+            <ImageView
+                android:id="@+id/image_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitCenter"
+                app:projectImageUrl="@{viewModel.imageUrl}" />
+
+            <com.lecet.app.content.widget.ControllableImageView
+                android:id="@+id/phone_location_cursor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/shape_rect_frame"
+                android:scaleType="fitCenter"/>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+</layout>
