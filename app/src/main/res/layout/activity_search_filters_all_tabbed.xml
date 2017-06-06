@@ -172,6 +172,7 @@
                                 style="@style/SearchFilterSectionMPS30"
                                 android:text="@string/mselocation"
                                 android:textAllCaps="true"
+                                android:visibility="@{viewModel.usingProjectNearMe ? View.GONE : View.VISIBLE }"
                                 bind:typeface="@{`Lato-Bold.ttf`}" />
 
                             <TextView
@@ -179,7 +180,8 @@
                                 style="@style/SearchFilterSectionFieldValue"
                                 android:hint="@string/everywhere"
                                 android:onClick="@{viewModel.onClicked}"
-                                android:text="@{viewModel.location_select}" />
+                                android:text="@{viewModel.location_select}"
+                                android:visibility="@{viewModel.usingProjectNearMe ? View.GONE : View.VISIBLE }" />
 
                             <TextView
                                 style="@style/SearchFilterSectionMPS30"
