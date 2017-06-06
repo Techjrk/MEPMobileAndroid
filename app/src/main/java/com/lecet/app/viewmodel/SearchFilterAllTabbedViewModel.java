@@ -107,7 +107,41 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private String[] persistedBuildingOrHighway;
     private String persistedOwnerType;
     private String persistedWorkType;
+    private boolean usingProjectNearMe;
 
+
+    /**
+     * Constructor
+     */
+    public SearchFilterAllTabbedViewModel(AppCompatActivity activity) {
+        this.activity = activity;
+        setLocation_select("");
+        setType_select("");
+        setValue_select("");
+        setUpdated_within_select(ANY);
+        setJurisdiction_select(ANY);
+        setStage_select(ANY);
+        setBidding_within_select(ANY);
+        setBh_select(ANY);
+        setOwner_type_select(ANY);
+        setWork_type_select(ANY);
+        setCjurisdictionSelect(ANY);
+        setCbiddingWithinSelect(ANY);
+        setCtypeSelect(ANY);
+
+        intent = activity.getIntent();
+
+        setUsingProjectNearMe(intent.getBooleanExtra(activity.getString(R.string.using_project_near_me),false));
+    }
+    @Bindable
+    public boolean getUsingProjectNearMe() {
+        return usingProjectNearMe;
+    }
+
+    public void setUsingProjectNearMe(boolean usingProjectNearMe) {
+        this.usingProjectNearMe = usingProjectNearMe;
+        notifyPropertyChanged(BR.usingProjectNearMe);
+    }
 
     public String getPersistedLocationCity() {
         return persistedLocationCity;
@@ -391,27 +425,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
     }
 
-    /**
-     * Constructor
-     */
-    public SearchFilterAllTabbedViewModel(AppCompatActivity activity) {
-        this.activity = activity;
-        setLocation_select("");
-        setType_select("");
-        setValue_select("");
-        setUpdated_within_select(ANY);
-        setJurisdiction_select(ANY);
-        setStage_select(ANY);
-        setBidding_within_select(ANY);
-        setBh_select(ANY);
-        setOwner_type_select(ANY);
-        setWork_type_select(ANY);
-        setCjurisdictionSelect(ANY);
-        setCbiddingWithinSelect(ANY);
-        setCtypeSelect(ANY);
-
-        intent = activity.getIntent();
-    }
 
     public AppCompatActivity getActivity() {
         return activity;
