@@ -190,15 +190,6 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
                         Collections.reverse(additionalNotes);
                         projectNotesAdapter.notifyDataSetChanged();
                     }
-                    long[] ids = new long[additionalNotes.size()];
-                    for (int i = 0; i < additionalNotes.size(); i++) {
-                        if (additionalNotes.get(i) instanceof ProjectNote) {
-                            ids[i] = ((ProjectNote) additionalNotes.get(i)).getId();
-                        } else {
-                            ids[i] = ((ProjectPhoto) additionalNotes.get(i)).getId();
-                        }
-                    }
-                    Log.d(TAG, "getAdditionalNotes: IdList: \n" + Arrays.toString(ids));
 
                 } else {
 

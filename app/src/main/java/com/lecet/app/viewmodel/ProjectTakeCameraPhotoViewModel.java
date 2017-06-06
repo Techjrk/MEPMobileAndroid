@@ -63,7 +63,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
     }
 
     public void resetCamera(){
-        if(setup == true) {
+        if(setup) {
             getCameraInstance();
             frameLayout.removeView(cameraPreview);
             cameraPreview = new CameraPreview(fragment.getActivity());
