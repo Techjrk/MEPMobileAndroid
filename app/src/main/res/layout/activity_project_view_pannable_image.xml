@@ -33,11 +33,11 @@
                     app:projectImageUrl="@{viewModel.imageUrl}" />
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/ic_back_button"
+                android:src="@drawable/home"
                 android:scaleType="fitCenter"
                 android:visibility="@{viewModel.canView()}"
                 android:onClick="@{viewModel::onClickBackButton}"/>

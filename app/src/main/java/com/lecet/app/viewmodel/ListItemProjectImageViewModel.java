@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectViewFullscreenImageActivity;
 import com.lecet.app.content.ProjectViewImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
@@ -149,7 +150,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         intent.putExtra(IMAGE_TITLE_EXTRA, photo.getTitle());
         intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
         intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, ProjectDetailActivity.REQUEST_CODE_HOME);
     }
 
     public void onEditButtonClick(View view) {

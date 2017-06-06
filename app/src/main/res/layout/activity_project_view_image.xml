@@ -67,7 +67,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:layout_width="15dp"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:visibility="@{viewModel.canView()}"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_back_button_blue"

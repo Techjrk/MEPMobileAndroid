@@ -53,6 +53,7 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
     }
 
     public void onClickBackButton(View view){
+        activity.setResult(Activity.RESULT_OK);
         activity.finish();
     }
 
