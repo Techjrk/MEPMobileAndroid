@@ -86,7 +86,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE) {
+        if (resultCode == RESULT_OK && requestCode == NOTE_REQUEST_CODE) {
             getAdditionalNotes(true);
             getAdditionalImages(false);
         }
@@ -98,7 +98,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
         Log.d(TAG, "onClickAddNote: Launch Add Note Activity");
         Intent intent = new Intent(this.fragment.getActivity(), ProjectAddNoteActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
-        fragment.getActivity().startActivityForResult(intent, NOTE_REQUEST_CODE);
+        fragment.startActivityForResult(intent, NOTE_REQUEST_CODE);
     }
 
     public void onClickAddImage(View view){
