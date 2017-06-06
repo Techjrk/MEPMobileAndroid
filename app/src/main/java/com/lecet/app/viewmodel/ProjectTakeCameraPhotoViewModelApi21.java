@@ -83,7 +83,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
 
     public ProjectTakeCameraPhotoViewModelApi21(Fragment fragment,TextureView textureView) {
-        cameraPreview = new CameraPreview(textureView, fragment);
+        if((!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE ,fragment) || !hasPermission(Manifest.permission.CAMERA, fragment) )){
+            fragment.getActivity().finish();
+        }else {
+            cameraPreview = new CameraPreview(textureView, fragment);
+        }
     }
 
     public void onSwapCameraClick(View view) {
@@ -112,6 +116,13 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         if(cameraPreview.cameraIdInUse != -1  && cameraPreview.textureView != null && cameraPreview.setup) {
             cameraPreview.updateCamera();
         }
+    }
+
+    private boolean hasPermission(String permission, Fragment fragment){
+        if(ActivityCompat.checkSelfPermission(fragment.getActivity(), permission) == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        return  true;
     }
 
     public int canSwap(){
