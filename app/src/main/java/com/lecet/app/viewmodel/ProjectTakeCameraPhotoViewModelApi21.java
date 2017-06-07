@@ -71,6 +71,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     private CameraPreview cameraPreview;
     private static SparseIntArray ORIENTATIONS;
 
+
     /* THIS MAKES IT HAPPEN ONCE IN MEMORY! GOOD FOR SETUP OF A SPARSE ARRAY*/
     static{
         ORIENTATIONS = new SparseIntArray();
@@ -82,7 +83,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
 
     public ProjectTakeCameraPhotoViewModelApi21(Fragment fragment,TextureView textureView) {
-        cameraPreview = new CameraPreview(textureView, fragment);
+        if((!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE ,fragment) || !hasPermission(Manifest.permission.CAMERA, fragment) )){
+            fragment.getActivity().finish();
+        }else {
+            cameraPreview = new CameraPreview(textureView, fragment);
+        }
     }
 
     public void onSwapCameraClick(View view) {
@@ -101,16 +106,23 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
     //Releases the camera so it won't mess with any other classes, activities, or apps. static for use in any fragments/activites
     public void releaseCamera(){
-        if(cameraPreview != null){
+        if(cameraPreview != null && cameraPreview.setup){
             Log.d(TAG, "releaseCamera");
             cameraPreview.closeCamera();
         }
     }
 
     public void resetCamera(){
-        if(cameraPreview.cameraIdInUse != -1 && cameraPreview != null && cameraPreview.textureView != null) {
+        if(cameraPreview.cameraIdInUse != -1  && cameraPreview.textureView != null && cameraPreview.setup) {
             cameraPreview.updateCamera();
         }
+    }
+
+    private boolean hasPermission(String permission, Fragment fragment){
+        if(ActivityCompat.checkSelfPermission(fragment.getActivity(), permission) == PackageManager.PERMISSION_DENIED){
+            return false;
+        }
+        return  true;
     }
 
     public int canSwap(){
@@ -141,12 +153,14 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
         private CameraDevice cameraDevice;//This is the actual camera that is used. it does not hold its own characteristics. us CameraCharacteristics class for that
         private CaptureRequest.Builder previewBuilder;//This creates the preview, it is called repetatively to update the visual effect
         private CameraCaptureSession previewSession;//The class that handles the capture of an image that the CameraDevice percieves
+        private boolean setup = false;
 
         private CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {//Callback used with most camera actions.
             @Override
             public void onOpened(CameraDevice camera) {
                 cameraDevice = camera;
                 startCamera();
+                setup = true;
             }
 
 

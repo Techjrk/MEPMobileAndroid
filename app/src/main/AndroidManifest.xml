@@ -128,6 +128,10 @@
         <activity
             android:name=".content.ProjectViewFullscreenImageActivity"
             android:label="ProjectViewFullscreenImage"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".content.ProjectViewPannableImageActivity"
+            android:label="ProjectViewPannableImage"
             android:theme="@style/AppTheme" />
         <!--activity
                 android:name=".content.ProjectPreviewImageActivity"

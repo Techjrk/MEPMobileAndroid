@@ -272,19 +272,23 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClick(v);
-            }
-        });
+        if(backButton != null) {
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackButtonClick(v);
+                }
+            });
+        }
 
-        sortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSortButtonClick(v);
-            }
-        });
+        if(sortButton != null) {
+            sortButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSortButtonClick(v);
+                }
+            });
+        }
         titleTextView.setText(title);
         subtitleTextView.setText(subtitle);
     }

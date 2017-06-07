@@ -24,8 +24,6 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
     @SerializedName("title")
     private String title;
 
-
-
     @SerializedName("text")
     private String text;
 
@@ -49,6 +47,9 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
 
     @SerializedName("updatedAt")
     private Date updatedAt;
+
+    @SerializedName("author")
+    private User author;
 
     public ProjectNote(){}
 
@@ -132,6 +133,14 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.authorId = authorId;
     }
 
+    public User getAuthor(){
+        return author;
+    }
+
+    public void setAuthor(User author){
+        author = author;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -148,20 +157,7 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "ProjectNote{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", isPublic=" + isPublic +
-                ", pending=" + pending +
-                ", companyId=" + companyId +
-                ", projectId=" + projectId +
-                ", authorId=" + authorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+
 
     @Override
     public int compareTo(@NonNull ProjectAdditionalData other) {
@@ -170,6 +166,23 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         }else{
             return (int)(updatedAt.getTime() - ((ProjectPhoto) other).getUpdatedAt().getTime());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectNote{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", isPublic=" + isPublic +
+                ", pending=" + pending +
+                ", companyId=" + companyId +
+                ", projectId=" + projectId +
+                ", authorId=" + authorId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", author=" + author +
+                '}';
     }
 
     @Override
@@ -185,16 +198,20 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         if (companyId != that.companyId) return false;
         if (projectId != that.projectId) return false;
         if (authorId != that.authorId) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (text != null ? !text.equals(that.text) : that.text != null) return false;
         if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null)
             return false;
-        return updatedAt != null ? updatedAt.equals(that.updatedAt) : that.updatedAt == null;
+        if (updatedAt != null ? !updatedAt.equals(that.updatedAt) : that.updatedAt != null)
+            return false;
+        return author != null ? author.equals(that.author) : that.author == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (isPublic ? 1 : 0);
         result = 31 * result + (pending ? 1 : 0);
@@ -203,8 +220,7 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         result = 31 * result + (int) (authorId ^ (authorId >>> 32));
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
         return result;
     }
-
-
 }

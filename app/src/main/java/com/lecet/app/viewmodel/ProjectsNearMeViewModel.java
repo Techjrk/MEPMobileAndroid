@@ -623,10 +623,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             searchAddress(search.getText().toString());
             //  ((ProjectsNearMeActivity) activity).setupViewPager();
         } else if (id == R.id.button_filter) {
-            search.setText(null);
+            //search.setText(null);
             setProjectFilter("default");
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
             intent.putExtra(FILTER_INSTANT_SEARCH, false);
+            intent.putExtra(activity.getString(R.string.using_project_near_me),true);
             Activity activity = getActivityWeakReference().get();
             activity.startActivityForResult(intent, REQUEST_FILTER_MPN);
         }

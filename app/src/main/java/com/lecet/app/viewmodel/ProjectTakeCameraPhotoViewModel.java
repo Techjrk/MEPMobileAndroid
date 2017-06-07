@@ -44,6 +44,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
 
     private static Camera camera;
     private CameraPreview cameraPreview;
+    private boolean setup = false;
     private String imagePath;
     private ProjectTakeCameraPhotoFragment fragment;
     private FrameLayout frameLayout;
@@ -58,17 +59,20 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         cameraPreview = new CameraPreview(fragment.getActivity());
         frameLayout.addView(cameraPreview);
         orientationEventListener = cameraPreview.createOrientationListener();
+        setup = true;
     }
 
     public void resetCamera(){
-        getCameraInstance();
-        frameLayout.removeView(cameraPreview);
-        cameraPreview = new CameraPreview(fragment.getActivity());
-        frameLayout.addView(cameraPreview);
-        if(orientationEventListener == null){
-            orientationEventListener = cameraPreview.createOrientationListener();
-        }else{
-            orientationEventListener.enable();
+        if(setup) {
+            getCameraInstance();
+            frameLayout.removeView(cameraPreview);
+            cameraPreview = new CameraPreview(fragment.getActivity());
+            frameLayout.addView(cameraPreview);
+            if (orientationEventListener == null) {
+                orientationEventListener = cameraPreview.createOrientationListener();
+            } else {
+                orientationEventListener.enable();
+            }
         }
     }
 

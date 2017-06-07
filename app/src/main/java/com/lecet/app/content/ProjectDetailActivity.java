@@ -27,7 +27,7 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
         ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener {
 
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
-
+    public static final int REQUEST_CODE_HOME = 1116;
     private ProjectDetailViewModel viewModel;
     private ProjectDomain projectDomain;
 
@@ -55,6 +55,9 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(resultCode == RESULT_OK && REQUEST_CODE_HOME == requestCode){
+            finish();
+        }
         viewModel.onActivityResult(requestCode, resultCode, data);
     }
 

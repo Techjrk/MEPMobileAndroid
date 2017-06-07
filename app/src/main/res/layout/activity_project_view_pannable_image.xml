@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectViewFullscreenImageViewModel" />
+        <variable name="viewModel" type="com.lecet.app.viewmodel.ProjectViewPannableImageViewModel" />
     </data>
 
     <LinearLayout
@@ -15,28 +15,32 @@
             android:onClick="@{viewModel::onClickImage}"
             tools:context="com.lecet.app.content.ProjectViewFullscreenImageActivity">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_back_button_blue"
-            android:scaleType="fitCenter"
-            android:visibility="@{viewModel.canView()}"
-            android:onClick="@{viewModel::onClickBackButton}"/>
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp">
-            <ImageView
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+
+            <com.lecet.app.content.widget.PannableImageView
                     android:id="@+id/image_view_fullscreen"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerCrop"
                     android:layout_centerInParent="true"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:adjustViewBounds="true"
+                    android:onClick="@{viewModel::onClickImage}"
                     app:projectImageUrl="@{viewModel.imageUrl}" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/home"
+                android:scaleType="fitCenter"
+                android:visibility="@{viewModel.canView()}"
+                android:onClick="@{viewModel::onClickBackButton}"/>
 
             <TextView
                     android:id="@+id/image_title"
@@ -68,6 +72,32 @@
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     android:textColor="@color/pureWhite"
                     android:text="@{viewModel.body}"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp">
+
+            <ImageView
+                android:id="@+id/image_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitCenter"
+                app:projectImageUrl="@{viewModel.imageUrl}" />
+
+            <com.lecet.app.content.widget.ControllableImageView
+                android:id="@+id/phone_location_cursor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/shape_rect_frame"
+                android:scaleType="fitCenter"/>
+
         </RelativeLayout>
 
 

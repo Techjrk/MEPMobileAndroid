@@ -540,8 +540,9 @@ public class ProjectDomain {
     public Call<List<ProjectNote>> fetchProjectNotes(long projectID, Callback<List<ProjectNote>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
+        String filter = "{\"include\":[\"author\"]}";
 
-        Call<List<ProjectNote>> call = lecetClient.getProjectService().projectNotes(token, projectID);
+        Call<List<ProjectNote>> call = lecetClient.getProjectService().projectNotes(token, projectID, filter);
         call.enqueue(callback);
 
         return call;
@@ -550,8 +551,9 @@ public class ProjectDomain {
     public Call<List<ProjectPhoto>> fetchProjectImages(long projectID, Callback<List<ProjectPhoto>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
+        String filter = "{\"include\":[\"user\"]}";
 
-        Call<List<ProjectPhoto>> call = lecetClient.getProjectService().projectImages(token, projectID);
+        Call<List<ProjectPhoto>> call = lecetClient.getProjectService().projectImages(token, projectID, filter);
         call.enqueue(callback);
 
         return call;

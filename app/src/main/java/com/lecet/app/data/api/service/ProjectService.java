@@ -163,7 +163,7 @@ public interface ProjectService {
             "Content-Type: application/json"
     })
     @GET("Projects/{projectID}/userNotes")
-    Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID);
+    Call<List<ProjectNote>> projectNotes (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
 
     /*
      * Post new project photo
@@ -203,7 +203,7 @@ public interface ProjectService {
             "Content-Type: application/json"
     })
     @GET("Projects/{projectID}/images")
-    Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID);
+    Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
 
     /*
      * Project notify

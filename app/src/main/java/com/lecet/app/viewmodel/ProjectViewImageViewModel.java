@@ -6,13 +6,17 @@ import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectViewFullscreenImageActivity;
+import com.lecet.app.content.ProjectViewPannableImageActivity;
 import com.squareup.picasso.Picasso;
 
+import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_URL_EXTRA;
@@ -58,27 +62,29 @@ public class ProjectViewImageViewModel extends BaseObservable {
 
     public void onImageClick(View view) {
         Log.d(TAG, "onImageClick");
-
-        if(!canView){
-            if((body.isEmpty() && title.isEmpty())){
-                onWhiteSpaceClick(view);
-                onImageClick(view);
-            }else {
-                onWhiteSpaceClick(view);
-            }
-        }else {
-            Intent intent = new Intent(activity, ProjectViewFullscreenImageActivity.class);
+        if(!canView) {
+            onWhiteSpaceClick(view);
+        }else{
+            Intent intent = new Intent(activity, ProjectViewPannableImageActivity.class);
             intent.putExtra(PROJECT_ID_EXTRA, projectId);
             intent.putExtra(IMAGE_TITLE_EXTRA, title);
             intent.putExtra(IMAGE_BODY_EXTRA, body);
             intent.putExtra(IMAGE_URL_EXTRA, imageUrl);
-            activity.startActivity(intent);
-            activity.finish();
+            activity.startActivityForResult(intent, ProjectDetailActivity.REQUEST_CODE_HOME);
         }
     }
 
     public void onCancelClick(View view){
+        activity.setResult(RESULT_OK);
         activity.finish();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK && requestCode == ProjectDetailActivity.REQUEST_CODE_HOME){
+            activity.setResult(Activity.RESULT_OK);
+            activity.finish();
+            Log.d(TAG, "onActivityResult: SET RESULT");
+        }
     }
 
     public Bitmap rotateImage(Bitmap image,float angle){

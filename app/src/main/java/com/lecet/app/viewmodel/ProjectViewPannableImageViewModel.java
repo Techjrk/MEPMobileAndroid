@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.content.widget.ControllableImageView;
+import com.lecet.app.content.widget.PannableImageView;
 import com.squareup.picasso.Picasso;
 
 
@@ -16,7 +21,7 @@ import com.squareup.picasso.Picasso;
  * Created by jasonm on 4/11/17.
  */
 
-public class ProjectViewFullscreenImageViewModel extends BaseObservable {
+public class ProjectViewPannableImageViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectViewFullImageVM";
     private Activity activity;
@@ -25,13 +30,48 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
     private String title;
     private String body;
     private String imageUrl;
+    private ControllableImageView phoneLocation;
+    private PannableImageView pannableImageView;
+    private ImageView mapImage;
+    private boolean setBounds = false;
 
-    public ProjectViewFullscreenImageViewModel(Activity activity, long projectId, String title, String body, String imageUrl) {
+    private PannableImageView.OnDrawListener onDrawListener = new PannableImageView.OnDrawListener(){
+        @Override
+        public void onDrawCallback(Canvas canvas) {
+            if(!setBounds){
+                float intrinsicWidth = pannableImageView.getDrawable().getIntrinsicWidth();
+                float imageWidth = (intrinsicWidth * ((float)mapImage.getHeight()/ (float)mapImage.getDrawable().getIntrinsicHeight()));
+                phoneLocation.setImageWidth(imageWidth/2);
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+                int height = phoneLocation.getHeight();
+                int width = (int)((float)height * ((float)displayMetrics.widthPixels/(float)displayMetrics.heightPixels));
+                Log.d(TAG, "onDrawCallback: Width: " + width);
+
+                phoneLocation.setViewBounds(width);
+                setBounds = true;
+            }
+            phoneLocation.setTranslateValues(pannableImageView.getxPosPercentage(), 0);
+        }
+    };
+
+
+
+
+    public ProjectViewPannableImageViewModel(Activity activity, long projectId, String title, String body, String imageUrl, PannableImageView pannableImageView, ImageView mapImage , ControllableImageView phoneLocation) {
         this.activity = activity;
         this.projectId = projectId;
         this.title = title;
         this.body = body;
         this.imageUrl = imageUrl;
+        this.pannableImageView = pannableImageView;
+        this.phoneLocation = phoneLocation;
+        this.mapImage = mapImage;
+        pannableImageView.setOnDrawListener(onDrawListener);
+
+
 
         Log.d(TAG, "ProjectViewFullscreenImageViewModel: ImageViewWidth" );
 
@@ -73,7 +113,7 @@ public class ProjectViewFullscreenImageViewModel extends BaseObservable {
         return body;
     }
 
-    @BindingAdapter("{projectImageUrl}")
+    @BindingAdapter("bind:projectImageUrl")
     public static void loadImage(ImageView view, String url) {
         Log.d(TAG, "loadImage: url: " + url);
 

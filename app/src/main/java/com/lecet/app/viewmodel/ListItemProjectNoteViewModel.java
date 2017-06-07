@@ -44,33 +44,21 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         this.note = note;
         this.activity = activity;
 
+        setAuthorName(note);
+
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
             setCanEdit(note.getAuthorId() == getLoggedInUserId());
-            fetchNoteAuthor(note, userDomain);
         }
     }
 
-    private void fetchNoteAuthor(final ProjectNote note, final UserDomain userDomain) {
-        final User noteAuthor = userDomain.fetchUser(note.getAuthorId());
+    private void setAuthorName(ProjectNote note) {
+        User noteAuthor = note.getAuthor();
+
         if(noteAuthor == null){
-            userDomain.getUser(note.getAuthorId(), new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if(response.isSuccessful()) {
-                        userDomain.copyToRealmTransaction(response.body());
-                        setAuthorName(response.body().getFirstName() + " " + response.body().getLastName());
-                        notifyChange();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-
-                }
-            });
-        }
-        else {
+            Log.e(TAG, "fetchNoteAuthor: User Author is null");
+        } else {
+            Log.d(TAG, "fetchNoteAuthor: Set Author Name");
             setAuthorName(noteAuthor.getFirstName() + " " + noteAuthor.getLastName());
         }
     }
@@ -99,6 +87,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
     private void setAuthorName(String name){
         authorName = name;
+        notifyChange();
     }
 
     public long getLoggedInUserId() {

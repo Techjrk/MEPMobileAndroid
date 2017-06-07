@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 
+import javax.security.auth.login.LoginException;
+
 /**
  * Created by alionque on 6/1/17.
  */
@@ -20,12 +22,21 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
     private static final String TAG = "PannableImageView";
     private static final int INVALID_POINTER_ID = -1;
 
+    private OnDrawListener onDrawListener = new OnDrawListener() {
+        @Override
+        public void onDrawCallback(Canvas canvas) {
+            return;
+        }
+    };
+
     private float xPos = getX();
     private float yPos = getY();
+    private float xPosPercentage = 0;
 
     private float lastTouchX;
     private float minX = 0;
     private float maxX = 0;
+    private float intrinsicWidth = 0;
 
 
     private int firstTouchId = -1;
@@ -111,24 +122,56 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
         return true;
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        if(maxX == 0){
-            float imageWidth = (getDrawable().getIntrinsicWidth() * (getHeight()/ getDrawable().getIntrinsicHeight()));
+        if(intrinsicWidth != getDrawable().getIntrinsicWidth()){
+            intrinsicWidth = getDrawable().getIntrinsicWidth();
+
+            float imageWidth = (intrinsicWidth * ((float)getHeight()/ (float)getDrawable().getIntrinsicHeight()));
+
             maxX = (imageWidth - getWidth())/ 2;
             minX = maxX * -1;
 
         }
 
-        xPos = Math.min(maxX, Math.max(minX, xPos));
+        xPos = Math.max(minX, Math.min(maxX, xPos));
+
+        xPosPercentage = xPos/maxX;
+
+        xPosPercentage = Math.min(1, Math.max(-1, xPosPercentage));
+
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            scrollTo((int) xPos, (int) yPos);
+            scrollTo((int) (xPosPercentage * maxX), (int) yPos);
         }
         super.onDraw(canvas);
         canvas.restore();
+        onDrawListener.onDrawCallback(canvas);
     }
 
 
+    public interface OnDrawListener{
+        void onDrawCallback(Canvas canvas);
+    }
+
+    public void setOnDrawListener(OnDrawListener onDrawListener){
+        this.onDrawListener = onDrawListener;
+    }
+
+    public float getXPos(){
+        return xPos;
+    }
+
+    public float getxPosPercentage(){
+        return xPosPercentage;
+    }
+
+    public float getYPos(){
+        return yPos;
+    }
 }
