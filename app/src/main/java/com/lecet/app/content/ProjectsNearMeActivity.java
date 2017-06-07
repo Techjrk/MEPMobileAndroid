@@ -146,21 +146,24 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     private void fetchProjects(boolean animateCamera) {
 
         if (!viewModel.isMapReady()) return;
-
-        if (lastKnowLocation != null) {
-            LatLng location = new LatLng(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
-            if (animateCamera) {
-                viewModel.animateMapCamera(location);
-            } else {
-                viewModel.moveMapCamera(location);
-            }
-            viewModel.fetchProjectsNearMe(location);
+try { //Adding try-catch block for any runtime exception occurred when GoogleApiClient is not connected yet.
+    if (lastKnowLocation != null) {
+        LatLng location = new LatLng(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
+        if (animateCamera) {
+            viewModel.animateMapCamera(location);
         } else {
-            enableLocationUpdates = true;
-            if (isLocationManagerConnected) {
-                locationManager.startLocationUpdates();
-            }
+            viewModel.moveMapCamera(location);
         }
+        viewModel.fetchProjectsNearMe(location);
+    } else {
+        enableLocationUpdates = true;
+        if (isLocationManagerConnected) {
+            locationManager.startLocationUpdates();
+        }
+    }
+} catch (Exception e) {
+    Log.d("fetchProject","fetchProject exception"+e.getMessage());
+}
     }
 
     @Override
