@@ -8,6 +8,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 
+import com.lecet.app.R;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
@@ -121,7 +122,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         intent.putExtra(NOTE_ID_EXTRA, note.getId());
         intent.putExtra(NOTE_TITLE_EXTRA, note.getTitle());
         intent.putExtra(NOTE_BODY_EXTRA, note.getText());
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE);
     }
 
     //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
