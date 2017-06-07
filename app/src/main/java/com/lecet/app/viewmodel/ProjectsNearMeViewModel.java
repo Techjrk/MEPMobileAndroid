@@ -136,9 +136,9 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.redMarker                 = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
         this.greenMarker               = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
         this.yellowMarker              = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
-        this.currentLocationMarkerIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
-        this.existingCustomPinMarker   = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_yellow);
-        this.newCustomPinMarker        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker);
+        this.currentLocationMarkerIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
+        this.existingCustomPinMarker   = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected);
+        this.newCustomPinMarker        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
         this.map = map;
         this.map.setOnMarkerClickListener(this);
         this.map.setOnInfoWindowClickListener(this);
@@ -418,7 +418,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private PointF getInfoWindowAnchorPosition(Project project) {
 
         PointF defaultPos = new PointF(5.4f, 5f);
-        PointF customPos  = new PointF(5.4f, 3.6f);
+        PointF customPos  = new PointF(8.3f, 6.0f);
 
         if(project.getDodgeNumber() != null) {
             return defaultPos;
