@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -370,6 +371,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             map.clear();
             markers.clear();
 
+            PointF infoWindowAnchorPos;
+
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
@@ -399,8 +402,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                         icon = existingCustomPinMarker;
                     }
 
+                    infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
+
                     Marker marker = map.addMarker(new MarkerOptions()
-                            .infoWindowAnchor(5.4f, 5f)
+                            .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
                             .icon(icon)
                             .position(project.getGeocode().toLatLng()));
                     marker.setTag(project);
@@ -408,6 +413,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 }
             }
         }
+    }
+
+    private PointF getInfoWindowAnchorPosition(Project project) {
+
+        PointF defaultPos = new PointF(5.4f, 5f);
+        PointF customPos  = new PointF(5.4f, 3.6f);
+
+        if(project.getDodgeNumber() != null) {
+            return defaultPos;
+        }
+        else return customPos;
     }
 
     public void noteCountCard(final Project project) {
