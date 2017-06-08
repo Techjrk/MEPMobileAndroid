@@ -190,6 +190,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
             viewModel.setBitmapFromUri(uri);
         }
         else if (resultCode == RESULT_CANCELED) {
+            tabLayout.getTabAt(0).select();//Return to cameraTab
             Log.d(TAG, "onActivityResult: RESULT_CANCELED, " + resultCode);
         }
         else Log.e(TAG, "onActivityResult: WARNING: RESULT CODE NOT SUPPORTED: " + resultCode);
