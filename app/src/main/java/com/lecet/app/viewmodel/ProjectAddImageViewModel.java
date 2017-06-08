@@ -403,8 +403,11 @@ public class ProjectAddImageViewModel extends BaseObservable {
         int compressionRate = 30;
         int h = image.getHeight();
         int w = image.getWidth();
-        int newW = 400;
+        float aspectRatio = (float)w/(float)h; //Multiply this by the new H to get the new W
+
         int newH = 400;
+        int newW = (int)(newH * aspectRatio);
+        Log.d(TAG, "resizeBase64Image: aspectRatio: " + aspectRatio);
 
         ByteArrayOutputStream baos = new  ByteArrayOutputStream();
         byte [] byteArray;
@@ -413,8 +416,9 @@ public class ProjectAddImageViewModel extends BaseObservable {
         // increase dimensions and quality until just before the image data is too large to post
         for(int i=1; i<20; i++) {
             compressionRate += 2;
-            newW += 100;
             newH += 100;
+            newW += (int)(newH * aspectRatio);
+            Log.d(TAG, "resizeBase64Image: newWidth: " + newW);
             image = Bitmap.createScaledBitmap(image, newW, newH, false);
 
             // compress
@@ -430,12 +434,11 @@ public class ProjectAddImageViewModel extends BaseObservable {
             String nextLargerSizeImage = Base64.encodeToString(byteArray, Base64.NO_WRAP);
             Log.d(TAG, "resizeBase64Image: nextLargerSizeImage length: " + nextLargerSizeImage.length());
             if(nextLargerSizeImage.length() > MAX_IMAGE_DATA_SIZE) {
-                break;
+                Log.d(TAG, "resizeBase64Image: compressedBase64Image length: " + compressedBase64Image.length());
+                return compressedBase64Image;
             }
             else compressedBase64Image = nextLargerSizeImage;
         }
-
-        Log.d(TAG, "resizeBase64Image: compressedBase64Image length: " + compressedBase64Image.length());
 
         return  compressedBase64Image;
     }
@@ -530,9 +533,13 @@ public class ProjectAddImageViewModel extends BaseObservable {
         int h = image.getHeight();
 
         Matrix mtx = new Matrix();
-        mtx.setRotate(angle);
+        mtx.postRotate(angle);
 
-        return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
+        Bitmap bm = Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
+        Log.d(TAG, "rotateImage: width: " + bm.getWidth());
+        Log.d(TAG, "rotateImage: height: " + bm.getHeight());
+        return bm;
+
     }
 
 
