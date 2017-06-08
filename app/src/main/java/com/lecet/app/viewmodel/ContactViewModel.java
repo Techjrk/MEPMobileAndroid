@@ -86,6 +86,7 @@ public class ContactViewModel {
         sortButton.setVisibility(View.INVISIBLE);
 
         titleTextView.setText(contact.getName());
+        titleTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
     }
 
     public void onBackButtonClick(View view) {

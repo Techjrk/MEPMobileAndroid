@@ -60,14 +60,13 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             LayoutInflater inflater = getLayoutInflater();
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);
-
             viewModel.setToolbar(tb);
-
             actionBar.setCustomView(tb);
             actionBar.setDisplayShowCustomEnabled(true);
         }
