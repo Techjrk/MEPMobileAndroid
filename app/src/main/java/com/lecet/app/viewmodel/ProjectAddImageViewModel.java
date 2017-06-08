@@ -287,8 +287,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
                 if (response.isSuccessful()) {
                     Log.d(TAG, "postImage: onResponse: image post successful");
-                    startProjectDetailActivity();
-                    //activity.setResult(RESULT_OK);
+                    activity.setResult(RESULT_OK);
                     activity.finish();
                 }
                 else {

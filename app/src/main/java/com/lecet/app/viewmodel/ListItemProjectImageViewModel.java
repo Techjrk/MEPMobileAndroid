@@ -163,7 +163,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
         intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
         intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
-        activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
+        activity.startActivityForResult(intent, ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE);
     }
 
     //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
