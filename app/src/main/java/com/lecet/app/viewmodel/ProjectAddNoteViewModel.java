@@ -255,9 +255,6 @@ public class ProjectAddNoteViewModel extends BaseObservable {
         return noteId > -1;
     }
 
-    public boolean canDelete() {
-        return false;   //TODO - ADD USER ID CHECK TO ALLOW ONLY AUTHOR TO DELETE
-    }
 
 
 

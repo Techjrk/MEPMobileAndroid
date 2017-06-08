@@ -205,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:text="Delete Photo"
                     android:textAllCaps="false"
-                    android:visibility="@{viewModel.canDelete ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
                     android:onClick="@{viewModel::onClickDelete}"/>
 
                 <TextView

@@ -507,7 +507,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     }
 
     public boolean canDelete() {
-        return false;   //TODO - ADD USER ID CHECK TO ALLOW ONLY AUTHOR TO DELETE
+        return replaceImage;
     }
 
     @Bindable
