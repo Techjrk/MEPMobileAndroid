@@ -59,7 +59,7 @@ public class BaseObservableViewModel extends BaseObservable {
     public void showProgressDialog() {
 
         // If activity is not alive. Don't do anything.
-        if (! isActivityAlive()) return;
+        if (!isActivityAlive()) return;
 
         AppCompatActivity activity = activityWeakReference.get();
 
@@ -84,15 +84,13 @@ public class BaseObservableViewModel extends BaseObservable {
     public void dismissProgressDialog() {
 
         // If activity is not alive. Don't do anything.
-        if (! isActivityAlive()) return;
+        if (!isActivityAlive()) return;
 
         AppCompatActivity activity = activityWeakReference.get();
 
-        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         DialogFragment prev = (DialogFragment) activity.getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             prev.dismiss();
-            ft.remove(prev);
         }
     }
 
