@@ -3,10 +3,13 @@ package com.lecet.app.content;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +40,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
 
     public static final String PROJECT_REPLACE_IMAGE_EXTRA = "com.lecet.app.content.ProjectImageChooserActivity.extra.replace.image";
 
+    private static final String BITMAP_PARC_NAME = "image";
     private ProjectImageChooserViewModel viewModel;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -48,7 +52,6 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Bundle extras = getIntent().getExtras();
         replaceImage = extras.getBoolean(PROJECT_REPLACE_IMAGE_EXTRA);
 
@@ -58,6 +61,14 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         setupFragments();
         setUpViewPager();
         setUpTabLayout();
+        if(savedInstanceState != null){
+            Uri bitmap = savedInstanceState.getParcelable(BITMAP_PARC_NAME);
+            if(bitmap != null) {
+                viewModel.setBitmapFromUri(bitmap);
+            }else{
+                Log.d(TAG, "onCreate: bitmap is null");
+            }
+        }
     }
 
     private void setupBinding() {
@@ -172,18 +183,25 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        if(viewModel.getSelectedImageUri() != null) {
+            Uri uri =  viewModel.getSelectedImageUri();
+            Log.d(TAG, "onSaveInstanceState: URI: " + uri);
+            outState.putParcelable(BITMAP_PARC_NAME, uri);
+        }else{
+            Log.d(TAG, "onSaveInstanceState: Bitmap was null b4 save");
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: requestCode: " + requestCode);
 
         if(resultCode == RESULT_OK) {
-            if(requestCode == ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE){
-
-            }else if(requestCode == ProjectSelectLibraryPhotoViewModel.REQUEST_CODE_GALLERY_IMAGE){
-                setResult(RESULT_OK);
-                finish();
-            }
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             Log.d(TAG, "onActivityResult: RESULT_OK, " + resultCode);
             Uri uri = data.getData();
             Log.d(TAG, "onActivityResult: uri: " + uri);

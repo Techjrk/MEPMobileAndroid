@@ -171,6 +171,10 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         return bitmap;
     }
 
+    public Uri getSelectedImageUri() {
+        return selectedImageUri;
+    }
+
     public void setBitmap(Bitmap bitmap) {
         Log.d(TAG, "setBitmap");
         this.bitmap = bitmap;
