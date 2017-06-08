@@ -109,8 +109,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
             Intent intent = new Intent(activity, ProjectAddImageActivity.class);
             intent.putExtra(PROJECT_ID_EXTRA, projectId);
             intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, false);
-            //activity.startActivityForResult(intent, RESULT_CODE_PROJECT_CAMERA_IMAGE);
-            activity.startActivity(intent);
+            activity.startActivityForResult(intent, NOTE_REQUEST_CODE);
         }
     }
 

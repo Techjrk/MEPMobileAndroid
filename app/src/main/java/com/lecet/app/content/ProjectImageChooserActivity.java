@@ -18,6 +18,8 @@ import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectImageChooserBinding;
 import com.lecet.app.viewmodel.ProjectImageChooserViewModel;
+import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
+import com.lecet.app.viewmodel.ProjectSelectLibraryPhotoViewModel;
 import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
 import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21;
 
@@ -175,6 +177,12 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         Log.d(TAG, "onActivityResult: requestCode: " + requestCode);
 
         if(resultCode == RESULT_OK) {
+            if(requestCode == ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE){
+
+            }else if(requestCode == ProjectSelectLibraryPhotoViewModel.REQUEST_CODE_GALLERY_IMAGE){
+                setResult(RESULT_OK);
+                finish();
+            }
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             Log.d(TAG, "onActivityResult: RESULT_OK, " + resultCode);
             Uri uri = data.getData();
