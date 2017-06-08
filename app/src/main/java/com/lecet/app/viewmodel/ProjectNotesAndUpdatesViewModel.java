@@ -88,7 +88,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == NOTE_REQUEST_CODE) {
             getAdditionalNotes(true);
-            getAdditionalImages(false);
+            getImages();
         }
     }
 
@@ -286,6 +286,12 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
 
                     if (responseBody != null && additionalNotes != null) {
                         additionalNotes.addAll(responseBody);
+                        projectNotesAdapter.notifyDataSetChanged();
+                    }
+
+                    if (additionalNotes != null) {
+                        Collections.sort(additionalNotes);
+                        Collections.reverse(additionalNotes);
                         projectNotesAdapter.notifyDataSetChanged();
                     }
 
