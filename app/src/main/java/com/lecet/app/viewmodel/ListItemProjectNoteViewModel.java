@@ -177,12 +177,12 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
         difference /= 60L;//to hours
 
-        if(difference < 60L){
+        if(difference < 24L){
             return difference + " Hour(s) Ago";
         }
-        difference /= 60L;
+        difference /= 24L;
 
-        if(difference < 24L) {//less then a Day
+        if(difference < 365) {//less then a Day
             return difference + " Days(s) Ago";
         }
         difference /= 365L;//to Years

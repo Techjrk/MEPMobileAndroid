@@ -226,7 +226,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         if(difference < 60L){
             return difference + " Hour(s) Ago";
         }
-        difference /= 60L;
+        difference /= 24L;
 
         if(difference < 24L) {//less then a Day
             return difference + " Days(s) Ago";
