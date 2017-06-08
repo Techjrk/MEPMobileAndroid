@@ -94,7 +94,7 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
 
         AppCompatActivity activity = getActivityWeakReference().get();
 
-        if (activity == null) return;
+        if (!isActivityAlive()) return;
 
         showProgressDialog();
 
@@ -104,7 +104,7 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
 
                 final AppCompatActivity activity = getActivityWeakReference().get();
 
-                if (activity == null) return;
+                if (!isActivityAlive()) return;
 
                 if (response.isSuccessful()) {
 
@@ -149,10 +149,11 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
 
-                final AppCompatActivity activity = getActivityWeakReference().get();
+                if (!isActivityAlive()) return;
 
                 dismissProgressDialog();
 
+                final AppCompatActivity activity = getActivityWeakReference().get();
                 showCancelAlertDialog(activity.getString(R.string.error_network_title),
                         activity.getString(R.string.error_network_message));
             }
