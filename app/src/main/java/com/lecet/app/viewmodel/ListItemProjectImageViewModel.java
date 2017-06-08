@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddImageActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectViewFullscreenImageActivity;
 import com.lecet.app.content.ProjectViewImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
@@ -54,34 +55,22 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         this.photo = photo;
         this.activity = activity;
         this.imageView = imageView;
+
+        fetchImageAuthor(photo, userDomain);
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
             setCanEdit(photo.getAuthorId() == getLoggedInUserId());
-            fetchImageAuthor(photo, userDomain);
         }
     }
 
-    private void fetchImageAuthor(ProjectPhoto photo, final UserDomain userDomain) {
-        final User imageAuthor = userDomain.fetchUser(photo.getAuthorId());
+    private void fetchImageAuthor(ProjectPhoto photo, UserDomain userDomain) {
+        final User imageAuthor = photo.getAuthor();
         if(imageAuthor == null){
-            userDomain.getUser(photo.getAuthorId(), new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if(response.isSuccessful()) {
-                        userDomain.copyToRealmTransaction(response.body());
-                        setAuthorName(response.body().getFirstName() + " " + response.body().getLastName());
-                        notifyChange();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-
-                }
-            });
+            Log.e(TAG, "fetchImageAuthor: No Author Attached");
         }
         else {
             setAuthorName(imageAuthor.getFirstName() + " " + imageAuthor.getLastName());
+            notifyChange();
         }
     }
 
@@ -161,7 +150,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         intent.putExtra(IMAGE_TITLE_EXTRA, photo.getTitle());
         intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
         intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, ProjectDetailActivity.REQUEST_CODE_HOME);
     }
 
     public void onEditButtonClick(View view) {

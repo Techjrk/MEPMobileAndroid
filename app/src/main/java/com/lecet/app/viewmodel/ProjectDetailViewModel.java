@@ -3,6 +3,7 @@ package com.lecet.app.viewmodel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.Bindable;
@@ -12,6 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -20,6 +23,9 @@ import com.lecet.app.content.ProjectDetailFragment;
 import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.models.Project;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,7 +44,9 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     private String title;
     private String address;
 
+
     private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
     private TabLayout tabLayout;
 
     private Project project;
@@ -58,8 +66,10 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: Inside ProjDetailViewModel");
         if (resultCode == RESULT_OK && requestCode == ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE) {
-
+            ProjectNotesAndUpdatesFragment fragment = (ProjectNotesAndUpdatesFragment) findFragmentByPosition(ViewPagerAdapter.NOTES_POSITION);
+            fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -158,7 +168,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         this.viewPager = viewPager;
 
         AppCompatActivity activity = getActivityWeakReference().get();
-        ViewPagerAdapter adapter = new ViewPagerAdapter(activity, activity.getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(activity, activity.getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         setUpTabLayout(tabLayout, this.viewPager);
@@ -176,13 +186,24 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         mapReady = true;
     }
 
+    public Fragment findFragmentByPosition(int position) {
+        AppCompatActivity activity = getActivityWeakReference().get();
+
+        return activity.getSupportFragmentManager().findFragmentByTag("android:switcher:" + viewPager.getId() + ":"
+        + adapter.getItemId(position));
+    }
+
     /**
      * Inner ViewPagerAdapter class
      */
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private static final int ITEM_COUNT = 2;
 
+        public static final int DETAIL_POSITION = 0;
+        public static final int NOTES_POSITION = 1;
+
+        private static final int ITEM_COUNT = 2;
         private Context context;
+        private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
         public ViewPagerAdapter(Context context, FragmentManager manager) {
             super(manager);
@@ -205,6 +226,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         public int getCount() {
             return ITEM_COUNT;
         }
+
 
         @Override
         public CharSequence getPageTitle(int position) {

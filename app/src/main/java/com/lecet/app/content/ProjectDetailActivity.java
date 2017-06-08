@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -17,6 +18,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectDetailBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ProjectDetailViewModel;
+import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
 
 import io.realm.Realm;
 
@@ -25,11 +27,12 @@ import static com.lecet.app.R.string.google_api_key;
 public class ProjectDetailActivity extends LecetBaseActivity implements ProjectDetailFragment.ProjectDetailFragmentDataSource,
         ProjectDetailFragment.ProjectDetailFragmentListener, ProjectNotesAndUpdatesFragment.ProjectNotesFragmentDataSource,
         ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener {
-
+    private static final String TAG = "ProjectDetailAct";
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
-
+    public static final int REQUEST_CODE_HOME = 1116;
     private ProjectDetailViewModel viewModel;
     private ProjectDomain projectDomain;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,13 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        viewModel.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && REQUEST_CODE_HOME == requestCode){
+            finish();
+        }else {
+            Log.d(TAG, "onActivityResult: Inside Proj Det Act");
+            viewModel.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 
 
