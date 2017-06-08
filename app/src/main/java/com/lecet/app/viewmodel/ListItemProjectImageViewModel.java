@@ -202,7 +202,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
 
-        long difference =  currentTime - photo.getUpdatedAt().getTime();
+        long difference =  currentTime - photo.getCreatedAt().getTime();
 
         if(difference < 0){
             Log.e(TAG, "getTimeDifference: Less then 0");

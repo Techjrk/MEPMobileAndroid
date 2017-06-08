@@ -156,7 +156,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
 
-        long difference =  currentTime - note.getUpdatedAt().getTime();
+        long difference =  currentTime - note.getCreatedAt().getTime();
 
         if(difference < 0){
             Log.d(TAG, "getTimeDifference: Less then 0");
