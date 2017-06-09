@@ -627,7 +627,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             int h = image.getHeight();
 
             Matrix mtx = new Matrix();
-            mtx.setRotate(angle);
+            mtx.postRotate(angle);
 
             return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
         }

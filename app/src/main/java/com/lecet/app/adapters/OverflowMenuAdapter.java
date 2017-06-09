@@ -75,7 +75,11 @@ public class OverflowMenuAdapter extends BaseAdapter {
             holder.text2.setText(user.getEmail());
             Picasso.with(context).load(R.drawable.ic_user_placeholder).into(holder.imageView1);
         } else {
-            holder.text1.setText(item.toString()); //should be String object
+            if(item != null) {
+                holder.text1.setText(item.toString()); //should be String object
+            }else{
+                //TODO: should there be functionality if the item is null?
+            }
         }
 
         return convertView;

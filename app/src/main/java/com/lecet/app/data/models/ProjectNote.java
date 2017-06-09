@@ -164,7 +164,7 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         if(other instanceof ProjectNote){
             return (int)(id - ((ProjectNote) other).getId());
         }else{
-            return (int)(updatedAt.getTime() - ((ProjectPhoto) other).getUpdatedAt().getTime());
+            return (int)(createdAt.getTime() - ((ProjectPhoto) other).getCreatedAt().getTime());
         }
     }
 

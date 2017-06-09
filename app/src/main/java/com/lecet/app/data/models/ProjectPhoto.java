@@ -86,7 +86,7 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     @Override
     public int compareTo(@NonNull ProjectAdditionalData other) {
         if(other instanceof ProjectNote){
-            return (int)(updatedAt.getTime() - ((ProjectNote) other).getUpdatedAt().getTime());
+            return (int)(createdAt.getTime() - ((ProjectNote) other).getCreatedAt().getTime());
         }else{
             return (int)(id - ((ProjectPhoto) other).getId());
         }
