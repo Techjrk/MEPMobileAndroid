@@ -1,5 +1,6 @@
 package com.lecet.app.adapters;
 
+import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,10 +41,17 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private static final int CHILD_VIEW_TYPE = 1;
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
     public static boolean customSearch;
+
+    //***
+    private CheckBox cb = null;
+    //***
     private List<Parent> data;
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
+
+    private Bundle selectedParent = new Bundle(); //list of user's selected parent items
+    private Bundle selectedChild = new Bundle();  //list of user's selected child items
 
     public SearchFilterProjectTypeAdapter(List<Parent> data, SearchFilterProjectTypeViewModel viewModel) {
 
@@ -53,7 +61,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
         // Expanded grandChildrens, we need to keep track of section and then subtype position
         expandedChildren = new HashMap<>();
-
     }
 
     @Override
@@ -127,39 +134,69 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     public int getFooterViewType(int section) {
         return 0;
     }
-
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
-        Parent parent = data.get(section);
+        final Parent parent = data.get(section);
         boolean isChild = isChild(section, position);
+
         if (holder instanceof ChildViewHolder && isChild) {
 
-            Integer truePosition = childPositionInIndex(section, position);
+            final Integer truePosition = childPositionInIndex(section, position);
             final Child child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
+
             childViewHolder.imgView.setVisibility(View.GONE);
+            childViewHolder.checkView.setChecked(false);
 
             if (child.getGrandChildren() != null)
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
+
             childViewHolder.checkView.setText(child.name);
-            if (child.isExpanded)
+
+            if (selectedChild.containsKey(childViewHolder.checkView.getText().toString()))
+            {
+                childViewHolder.checkView.setChecked(true);
+            }
+
+        if (!parent.isExpanded) childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+
+            TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
+
+            if (child.isExpanded && expanded !=null  )
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
             else
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
-            childViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    customSearch=false;
-                    if (b) {
-                        viewModel.addProjectTypeData(child.getId(), childViewHolder.checkView.getText().toString());
-                    } else {
-                        viewModel.removeProjectTypeData(child.getId());
-                    }
-                }
-            });
+            childViewHolder.checkView.setOnClickListener(null);
+            childViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customSearch = false;
+                            cb = (CheckBox) view;
+                            child.setSelected(cb.isChecked());
 
+                            if (child.getSelected()) {
+                                child.setSelected(true);
+                                //viewModel.setLastChecked(childViewHolder.checkView);
+                                selectedChild.putInt(child.getName(), truePosition);
+                                viewModel.addProjectTypeData(child.getId(), childViewHolder.checkView.getText().toString());
+
+                            } else {
+                                child.setSelected(false);
+                                selectedChild.remove(child.getName());
+                                viewModel.removeProjectTypeData(child.getId());
+                            }
+                   //             viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getRegionId(), child.getName(), child.getAbbreviation(), child.getLongName());
+                            notifyDataSetChanged();
+                        }
+
+                    }
+
+            );
+
+            childViewHolder.imgView.setOnClickListener(null);
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -172,7 +209,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
                     // If the position is already in the expanded list, then we need to remove it
                     if (expanded.containsKey(position)) {
-
+                        child.isExpanded = false;
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
                         TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
@@ -205,7 +242,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                         expanded.putAll(toBeAdded);
 
                     } else {
-
+                        child.isExpanded = true;
                         // Keep track of what needs to be added and removed.
                         List<Integer> toBeRemoved = new ArrayList<>();
                         TreeMap<Integer, Integer> toBeAdded = new TreeMap<>();
@@ -246,54 +283,94 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
             final GrandChildTypeViewHolder grandChildViewHolder = (GrandChildTypeViewHolder) holder;
 
-            Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
-            Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
-            Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
+            final Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
+            final Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
+            final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
             final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
-            grandChildViewHolder.checkView.setText(grandChild.getName());
-            grandChildViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        viewModel.addProjectTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
-                    } else {
-                        viewModel.removeProjectTypeData(grandChild.getId());
+
+            grandChildViewHolder.checkView.setText(grandChild.name);
+            grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
+
+            grandChildViewHolder.checkView.setOnClickListener(null);
+            grandChildViewHolder.checkView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customSearch = false;
+                            CheckBox cb = (CheckBox) view;
+
+                            grandChild.setSelected(cb.isChecked());
+                            if (grandChild.getSelected()){
+                                // viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), -1, grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());    //NOTE - we are not using regionId as it is not easily avail from here. we look up regionId in the main activity's processing function.
+                                viewModel.addProjectTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
+                            } else {
+                                viewModel.removeProjectTypeData(grandChild.getId());
+                            }
+
+                            notifyDataSetChanged();
+                        }
+
                     }
-                }
-            });
+
+            );
         }
     }
 
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
-
         // Parent denoted by section number
         final Parent parent = data.get(section);
+       // parentViewHolder.imgView.setVisibility(View.GONE);
+        parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
         // parentViewHolder.id = parent.getId();
-        parentViewHolder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                customSearch=false;
-                if (b) {
-                    viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
-                } else {
-                    viewModel.removeProjectTypeData(parent.getId());
+
+        if (selectedParent.containsKey(parentViewHolder.checkView.getText().toString()))
+        {
+            parentViewHolder.checkView.setChecked(true);
+//                childViewHolder.checkView.setChecked(child.getSelected());
+        }
+        if (parent.isExpanded)
+            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+        else
+            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+
+        parentViewHolder.checkView.setOnClickListener(null);
+        parentViewHolder.checkView.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        customSearch = false;
+                        cb = (CheckBox) view;
+
+                        parent.setSelected(cb.isChecked());
+
+                        if (parent.getSelected()) {
+                            parent.setSelected(true);
+                            selectedParent.putInt(parent.getName(),section);
+                            viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
+                        } else {
+                            parent.setSelected(false);
+                            selectedParent.remove(parent.getName());
+                            viewModel.removeProjectTypeData(parent.getId());
+                        }
+                        notifyDataSetChanged();
+                    } //end of onClick();
                 }
-            }
-        });
+        );
+
         ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 customSearch=false;
                 if (expandedParents.contains(section)) {
-
+                    parent.isExpanded=false;
                     expandedParents.remove(Integer.valueOf(section));
                     expandedChildren.remove(Integer.valueOf(section));
 
                 } else {
-
+                    parent.isExpanded=true;
                     expandedParents.add(section);
                 }
 
@@ -482,6 +559,15 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         private String id;
         private List<Child> children;
         public boolean isExpanded;
+        private boolean isSelected = false;
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public String getId() {
             return id;
@@ -513,6 +599,16 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         private String id;
         private List<SearchFilterProjectTypeAdapter.GrandChild> grandChildren;
         public boolean isExpanded;
+        public boolean isSelected = false;
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
+
         public String getId() {
             return id;
         }
@@ -542,6 +638,14 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
         private String name;
         private String id;
+        boolean isSelected = false;
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
 
         public String getId() {
             return id;
