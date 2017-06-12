@@ -178,43 +178,11 @@ public class Project extends RealmObject implements TrackedObject {
     @SerializedName("updates")
     private RealmList<ActivityUpdate> updates;
 
-    @SerializedName("imageTotal")
-    private int imageTotal;
-
-    @SerializedName("noteTotal")
-    private int noteTotal;
-
     @SerializedName("userNotes")
-    private RealmList<ProjectNote> userNotes;     //TODO - ADD A SIMILAR LIST FOR USERNOTES AND IMAGES
+    private RealmList<ProjectNote> userNotes;
 
     @SerializedName("images")
     private RealmList<ProjectPhoto> images;
-
-    /*
-    DeVon Jackson [5:21 PM]
-    okay just make sure your filter includes userNotes and images
-
-    [5:22]
-    `{"include": ["images","userNotes"]}` (edited)
-
-    Jason Mortara [5:22 PM]
-    yeah but does userNotes mean notes from the current user? or notes from all users?
-
-    [5:26]
-    i see there is both projectNotes and userNotes as fields
-
-    DeVon Jackson [5:26 PM]
-    all users
-
-    [5:26]
-    projectNotes is a property on project
-
-    [5:26]
-    userNotes is a relation
-
-    [5:26]
-    to the notes table
-     */
 
     private boolean hidden;
 
@@ -245,22 +213,6 @@ public class Project extends RealmObject implements TrackedObject {
 
     public void setImages(RealmList<ProjectPhoto> images) {
         this.images = images;
-    }
-
-    public int getImageTotal() {
-        return imageTotal;
-    }
-
-    public void setImageTotal(int imageTotal) {
-        this.imageTotal = imageTotal;
-    }
-
-    public int getNoteTotal() {
-        return noteTotal;
-    }
-
-    public void setNoteTotal(int noteTotal) {
-        this.noteTotal = noteTotal;
     }
 
     public String getBidSubmitTo() {
@@ -848,8 +800,6 @@ public class Project extends RealmObject implements TrackedObject {
                 ", contacts=" + contacts +
                 ", bids=" + bids +
                 ", updates=" + updates +
-                ", imageTotal=" + imageTotal +
-                ", noteTotal=" + noteTotal +
                 ", userNotes=" + userNotes +
                 ", images=" + images +
                 ", hidden=" + hidden +
@@ -871,8 +821,6 @@ public class Project extends RealmObject implements TrackedObject {
         if (Double.compare(project.estLow, estLow) != 0) return false;
         if (Double.compare(project.estHigh, estHigh) != 0) return false;
         if (primaryProjectTypeId != project.primaryProjectTypeId) return false;
-        if (imageTotal != project.imageTotal) return false;
-        if (noteTotal != project.noteTotal) return false;
         if (hidden != project.hidden) return false;
         if (mbsItem != project.mbsItem) return false;
         if (mraItem != project.mraItem) return false;
@@ -1032,8 +980,6 @@ public class Project extends RealmObject implements TrackedObject {
         result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
         result = 31 * result + (bids != null ? bids.hashCode() : 0);
         result = 31 * result + (updates != null ? updates.hashCode() : 0);
-        result = 31 * result + imageTotal;
-        result = 31 * result + noteTotal;
         result = 31 * result + (userNotes != null ? userNotes.hashCode() : 0);
         result = 31 * result + (images != null ? images.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);

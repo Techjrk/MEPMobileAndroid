@@ -459,9 +459,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
-                    //noteCountCard(project);
-                    //imageCountCard(project);
-
                     BitmapDescriptor icon = getMarkerIcon(project);
 
                     // define as pre- or post-bid
