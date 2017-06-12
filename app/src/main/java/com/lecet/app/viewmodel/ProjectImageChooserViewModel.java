@@ -181,7 +181,7 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         notifyPropertyChanged(BR.bitmap);
     }
 
-    @BindingAdapter("bind:imageBitmap")
+    @BindingAdapter("{imageBitmap}")
     public static void loadImage(ImageView view, Bitmap bitmap) {
         Log.d(TAG, "loadImage");
         view.setImageBitmap(bitmap);

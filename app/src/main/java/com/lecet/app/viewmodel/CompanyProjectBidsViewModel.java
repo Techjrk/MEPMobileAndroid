@@ -310,35 +310,60 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
     private class BidDateComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getProject().getBidDate().before(b.getProject().getBidDate()) ? 1 : -1;
+            try {
+                return a.getProject().getBidDate().before(b.getProject().getBidDate()) ? 1 : -1;
+            }
+            catch (NullPointerException e) {
+                return -1;
+            }
         }
     }
 
     private class BidAddedComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getProject().getFirstPublishDate().before(b.getProject().getFirstPublishDate()) ? 1 : -1;
+            try {
+                return a.getProject().getFirstPublishDate().before(b.getProject().getFirstPublishDate()) ? 1 : -1;
+            }
+            catch (NullPointerException e) {
+                return -1;
+            }
         }
     }
 
     private class BidLastUpdatedComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getProject().getLastPublishDate().before(b.getProject().getLastPublishDate()) ? 1 : -1;
+            try {
+                return a.getProject().getLastPublishDate().before(b.getProject().getLastPublishDate()) ? 1 : -1;
+            }
+            catch (NullPointerException e) {
+                return -1;
+            }
         }
     }
 
     private class BidAmountHighComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getAmount() < b.getAmount() ? 1 : -1;
+            try {
+                return a.getAmount() < b.getAmount() ? 1 : -1;
+            }
+                catch (NullPointerException e) {
+                return -1;
+            }
         }
     }
 
     private class BidAmountLowComparator implements Comparator<Bid> {
         @Override
         public int compare(Bid a, Bid b) {
-            return a.getAmount() > b.getAmount() ? 1 : -1;
+            try {
+                return a.getAmount() > b.getAmount() ? 1 : -1;
+            }
+            catch (NullPointerException e) {
+                return -1;
+            }
         }
     }
 }

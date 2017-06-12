@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onCancelButtonClick}"
+                    android:onClick="@{viewModel::onCancelButtonClick}"
                     android:text="@string/cancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onApplyButtonClick}"
+                    android:onClick="@{viewModel::onApplyButtonClick}"
                     android:text="@string/mseapply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -90,7 +90,7 @@
                         style="@style/SearchFilterSectionButton"
                         android:checked="true"
                         android:tag="A"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:text="@string/both" />
 
                     <View
@@ -101,7 +101,7 @@
                     <RadioButton
                         android:id="@+id/building"
                         style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:text="@string/building"
                         android:tag="B"
                         android:checked="@{viewModel.tagBH.equals(`B`)}"/>
@@ -115,7 +115,7 @@
                     <RadioButton
                         android:id="@+id/heavyhighway"
                         style="@style/SearchFilterSectionButton"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:text="@string/heavy_highway"
                         android:tag="H"
                         android:checked="@{viewModel.tagBH.equals(`H`)}"/>

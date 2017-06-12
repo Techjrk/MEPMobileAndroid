@@ -13,6 +13,7 @@ import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityAddProjectBinding;
+import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.AddProjectActivityViewModel;
 import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
@@ -48,7 +49,8 @@ public class AddProjectActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: longitude: " + longitude);
 
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-        viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectDomain);
+        LocationDomain locationDomain = new LocationDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
+        viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectDomain, locationDomain);
 
         binding.setViewModel(viewModel);
     }

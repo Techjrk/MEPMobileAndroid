@@ -16,13 +16,13 @@
     <ImageButton
             android:id="@+id/dashboard_page_left_button"
             style="@style/ViewPagerArrowButton.Left"
-            android:onClick="@{viewModel.onPageLeftClicked}"/>
+            android:onClick="@{viewModel::onPageLeftClicked}"/>
 
     <ImageButton
             android:id="@+id/dashboard_page_right_button"
             style="@style/ViewPagerArrowButton.Right"
 
-            android:onClick="@{viewModel.onPageRightClicked}"/>
+            android:onClick="@{viewModel::onPageRightClicked}"/>
 
     </RelativeLayout>
 
