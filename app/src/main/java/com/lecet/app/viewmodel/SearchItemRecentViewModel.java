@@ -133,7 +133,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getHasStarCard() {
-        if (project.getNoteTotal() > 0 || project.getImageTotal()>0){
+        if (project.getUserNotes().size() > 0 || project.getImages().size() > 0) {
             hasStarCard=true;
         }
         return hasStarCard;

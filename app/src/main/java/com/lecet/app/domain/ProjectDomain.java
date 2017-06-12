@@ -88,7 +88,7 @@ public class ProjectDomain {
     }
 
     void initFilter() {
-        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"],\"limit\":200, \"order\":\"id DESC\"}";
         setFilterMPN(filter);
     }
 
