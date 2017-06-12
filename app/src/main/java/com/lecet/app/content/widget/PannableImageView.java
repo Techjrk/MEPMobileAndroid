@@ -24,29 +24,37 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
 
     private OnDrawListener onDrawListener = new OnDrawListener() {
         @Override
-        public void onDrawCallback(Canvas canvas) {
-            return;
-        }
+        public void onDrawCallback(Canvas canvas) { }
     };
 
     private float xPos = getX();
     private float yPos = getY();
     private float xPosPercentage = 0;
+    private float yPosPercentage = 0;
+
+    private float lastTouchY;
+    private float minY = 0;
+    private float maxY = 0;
 
     private float lastTouchX;
     private float minX = 0;
     private float maxX = 0;
-    private float intrinsicWidth = 0;
+
+    private ScaleGestureDetector scaleGestureDetector;
+    private float scaleFactor = 1f;
+    private boolean needsUpdate = true;
 
 
     private int firstTouchId = -1;
 
     public PannableImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public PannableImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     @Override
@@ -60,14 +68,18 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
         // Let the ScaleGestureDetector inspect all events.
 
         final int action = MotionEventCompat.getActionMasked(event);
+        scaleGestureDetector.onTouchEvent(event);
 
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
                 final int pointerIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointerIndex);
+                final float y = MotionEventCompat.getY(event, pointerIndex);
 
                 // Remember where we started (for dragging)
                 lastTouchX = x;
+                lastTouchY = y;
+
                 // Save the ID of this pointer (for dragging)
                 firstTouchId = MotionEventCompat.getPointerId(event, 0);
                 break;
@@ -79,17 +91,21 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
                         MotionEventCompat.findPointerIndex(event, firstTouchId);
 
                 final float x = MotionEventCompat.getX(event, pointerIndex);
+                final float y = MotionEventCompat.getY(event, pointerIndex);
 
                 // Calculate the distance moved
                 final float dx = x - lastTouchX;
+                final float dy = y - lastTouchY;
 
                 xPos -= dx;
+                yPos -= dy;
 
                 super.
                 invalidate();
 
                 // Remember this touch position for the next move event
                 lastTouchX = x;
+                lastTouchY = y;
 
                 break;
             }
@@ -114,6 +130,7 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
                     // active pointer and adjust accordingly.
                     final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
                     lastTouchX = MotionEventCompat.getX(event, newPointerIndex);
+                    lastTouchY = MotionEventCompat.getY(event, newPointerIndex);
                     firstTouchId = MotionEventCompat.getPointerId(event, newPointerIndex);
                 }
                 break;
@@ -122,38 +139,60 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
         return true;
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        if(intrinsicWidth != getDrawable().getIntrinsicWidth()){
-            intrinsicWidth = getDrawable().getIntrinsicWidth();
+        if(needsUpdate){
 
-            float imageWidth = (intrinsicWidth * ((float)getHeight()/ (float)getDrawable().getIntrinsicHeight()));
+            float imageWidth = ((float) getDrawable().getIntrinsicWidth() * ((float)getHeight()/
+                    (float)getDrawable().getIntrinsicHeight()))* scaleFactor;
 
+            float imageHeight = imageWidth * ((float)getDrawable().getIntrinsicHeight()/
+                    (float)getDrawable().getIntrinsicWidth())
+                    * scaleFactor;
             maxX = (imageWidth - getWidth())/ 2;
             minX = maxX * -1;
 
+            maxY = (imageHeight - getHeight())/2;
+            minY = maxY * -1;
+
+            needsUpdate = false;
         }
 
         xPos = Math.max(minX, Math.min(maxX, xPos));
+        yPos = Math.max(minY, Math.min(maxY, yPos));
 
         xPosPercentage = xPos/maxX;
+        yPosPercentage = yPos/maxY;
 
         xPosPercentage = Math.min(1, Math.max(-1, xPosPercentage));
+        yPosPercentage = Math.min(1, Math.max(-1, yPosPercentage));
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            scrollTo((int) (xPosPercentage * maxX), (int) yPos);
+            canvas.scale(scaleFactor, scaleFactor);
+            scrollTo((int) (xPosPercentage * maxX), (int) (yPosPercentage * maxY));
         }
         super.onDraw(canvas);
         canvas.restore();
         onDrawListener.onDrawCallback(canvas);
     }
 
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            scaleFactor *= detector.getScaleFactor();
+
+            needsUpdate = true;
+
+            // Don't let the object get too small or too large.
+            scaleFactor = Math.max(1f, Math.min(scaleFactor, 5f));
+
+            invalidate();
+            return true;
+        }
+    }
 
     public interface OnDrawListener{
         void onDrawCallback(Canvas canvas);

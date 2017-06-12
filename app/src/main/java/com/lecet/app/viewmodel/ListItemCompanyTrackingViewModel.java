@@ -107,7 +107,7 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
         sb2.append("&markers=color:blue|");
         sb2.append(generatedAddress);
         sb2.append("&key=" + mapsApiKey);
-        mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+        mapStr = String.format((sb2.toString().replace(' ', '+')), (Object) null);
 
         return mapStr;
     }

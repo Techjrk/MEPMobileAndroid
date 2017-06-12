@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onCancelButtonClick}"
+                    android:onClick="@{viewModel::onCancelButtonClick}"
                     android:text="@string/cancel"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{viewModel.onApplyButtonClick}"
+                    android:onClick="@{viewModel::onApplyButtonClick}"
                     android:text="@string/mseapply"
                     android:textColor="@color/lecetTextWhite"
                     android:textSize="15sp"
@@ -89,7 +89,7 @@
                         android:id="@+id/time_any"
                         style="@style/SearchFilterSectionButton"
                         android:checked="true"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="any"
                         android:text="@string/time_any" />
 
@@ -102,7 +102,7 @@
                         android:id="@+id/time_24h"
                         style="@style/SearchFilterSectionButton"
                         android:checked="@{viewModel.daysInt.equals(`1`)}"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="1"
                         android:text="@string/time_last_24_hours" />
 
@@ -115,7 +115,7 @@
                         android:id="@+id/time_7d"
                         style="@style/SearchFilterSectionButton"
                         android:checked="@{viewModel.daysInt.equals(`7`)}"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="7"
                         android:text="@string/time_last_7_days" />
 
@@ -128,7 +128,7 @@
                         android:id="@+id/time_30d"
                         style="@style/SearchFilterSectionButton"
                         android:checked="@{viewModel.daysInt.equals(`30`)}"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="30"
 
                         android:text="@string/time_last_30_days" />
@@ -142,7 +142,7 @@
                         android:id="@+id/time_last_14d"
                         style="@style/SearchFilterSectionButton"
                         android:checked="@{viewModel.daysInt.equals(`90`)}"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="90"
                         android:text="@string/time_last_90_days" />
 
@@ -155,7 +155,7 @@
                         android:id="@+id/time_last_21d"
                         style="@style/SearchFilterSectionButton"
                         android:checked="@{viewModel.daysInt.equals(`180`)}"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="180"
                         android:text="@string/time_last_6_months" />
 
@@ -168,7 +168,7 @@
                         android:id="@+id/time_last_30d"
                         style="@style/SearchFilterSectionButton"
                         android:checked="@{viewModel.daysInt.equals(`360`)}"
-                        android:onClick="@{viewModel.onSelected}"
+                        android:onClick="@{viewModel::onSelected}"
                         android:tag="360"
                         android:text="@string/time_last_12_months" />
                 </RadioGroup>

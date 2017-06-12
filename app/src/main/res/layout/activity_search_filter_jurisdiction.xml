@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@null"
-                    android:onClick="@{viewModel.onApplyButtonClicked}"
+                    android:onClick="@{viewModel::onApplyButtonClicked}"
                     android:text="@string/mseapply"
                     android:textAllCaps="true"
                     android:lines="1"
