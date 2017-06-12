@@ -146,16 +146,15 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
         if(needsUpdate){
 
             float imageWidth = ((float) getDrawable().getIntrinsicWidth() * ((float)getHeight()/
-                    (float)getDrawable().getIntrinsicHeight()))* scaleFactor;
+                    (float)getDrawable().getIntrinsicHeight()));
 
-            float imageHeight = imageWidth * ((float)getDrawable().getIntrinsicHeight()/
-                    (float)getDrawable().getIntrinsicWidth())
-                    * scaleFactor;
-            maxX = (imageWidth - getWidth())/ 2;
-            minX = maxX * -1;
+            float imageHeight = getHeight();
 
-            maxY = (imageHeight - getHeight())/2;
-            minY = maxY * -1;
+            maxX = (imageWidth - ((float)getWidth()/scaleFactor)) * scaleFactor /2;
+            minX = (((imageWidth) - ((float)getWidth())) * scaleFactor)/ - 2;
+
+            maxY = ((imageHeight * scaleFactor) - imageHeight) /2;
+            minY = 0;
 
             needsUpdate = false;
         }
@@ -163,15 +162,29 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
         xPos = Math.max(minX, Math.min(maxX, xPos));
         yPos = Math.max(minY, Math.min(maxY, yPos));
 
-        xPosPercentage = xPos/maxX;
-        yPosPercentage = yPos/maxY;
+        if(xPos > 0) {
+            xPosPercentage = xPos / maxX;
+        }else{
+            xPosPercentage = xPos * -1 / minX;
+        }
+
+        yPosPercentage = yPos / maxY;
+
 
         xPosPercentage = Math.min(1, Math.max(-1, xPosPercentage));
         yPosPercentage = Math.min(1, Math.max(-1, yPosPercentage));
 
+        Log.d(TAG, "onDraw: Y Pos: " + yPos);
+        Log.d(TAG, "onDraw: ScaleFactor: " + scaleFactor);
+        Log.d(TAG, "onDraw: Max Y: " + maxY);
+        Log.d(TAG, "onDraw: Y Position Percentage: " + yPosPercentage);
+        Log.d(TAG, "onDraw: X Pos: " + xPos);
+        Log.d(TAG, "onDraw: Max X: " + maxX);
+        Log.d(TAG, "onDraw: X Position Percentage: " + xPosPercentage);
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            scrollTo((int) xPos, (int) yPos);
             canvas.scale(scaleFactor, scaleFactor);
-            scrollTo((int) (xPosPercentage * maxX), (int) (yPosPercentage * maxY));
+
         }
         super.onDraw(canvas);
         canvas.restore();
