@@ -3,6 +3,7 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.CompanyDetailActivity;
@@ -67,7 +68,10 @@ public class CompanyDetailBidViewModel extends BaseObservable {
     }
 
     public void onBidSelected(View view) {
-
+        if(project == null){
+            //TODO: Handle gracefully
+            return;
+        }
         Intent intent = new Intent(activity, ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         activity.startActivity(intent);
