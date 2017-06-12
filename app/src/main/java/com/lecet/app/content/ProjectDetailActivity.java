@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -59,7 +60,7 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK && REQUEST_CODE_HOME == requestCode){
-            finish();
+            NavUtils.navigateUpFromSameTask(this);
         }else {
             Log.d(TAG, "onActivityResult: Inside Proj Det Act");
             viewModel.onActivityResult(requestCode, resultCode, data);

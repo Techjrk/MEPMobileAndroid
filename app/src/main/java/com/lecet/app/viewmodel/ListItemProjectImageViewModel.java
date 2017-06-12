@@ -163,7 +163,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         intent.putExtra(IMAGE_BODY_EXTRA, photo.getText());
         intent.putExtra(IMAGE_URL_EXTRA, photo.getUrl());
         intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
-        activity.startActivityForResult(intent, REQUEST_CODE_REPLACE_IMAGE);
+        activity.startActivityForResult(intent, ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE);
     }
 
     //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
@@ -202,7 +202,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
 
-        long difference =  currentTime - photo.getUpdatedAt().getTime();
+        long difference =  currentTime - photo.getCreatedAt().getTime();
 
         if(difference < 0){
             Log.e(TAG, "getTimeDifference: Less then 0");
@@ -226,7 +226,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         if(difference < 60L){
             return difference + " Hour(s) Ago";
         }
-        difference /= 60L;
+        difference /= 24L;
 
         if(difference < 24L) {//less then a Day
             return difference + " Days(s) Ago";

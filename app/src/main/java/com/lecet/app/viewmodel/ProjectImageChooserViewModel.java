@@ -171,6 +171,10 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         return bitmap;
     }
 
+    public Uri getSelectedImageUri() {
+        return selectedImageUri;
+    }
+
     public void setBitmap(Bitmap bitmap) {
         Log.d(TAG, "setBitmap");
         this.bitmap = bitmap;
@@ -190,7 +194,7 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         int h = image.getHeight();
 
         Matrix mtx = new Matrix();
-        mtx.setRotate(angle);
+        mtx.postRotate(angle);
 
         return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
     }
