@@ -166,7 +166,6 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         activity.startActivityForResult(intent, ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE);
     }
 
-    //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
     public void onAuthorNameClick(View view) {
         Log.d(TAG, "onAuthorNameClick");
         //Log.d(TAG, "onAuthorNameClick: logged in user id: " + getLoggedInUserId());

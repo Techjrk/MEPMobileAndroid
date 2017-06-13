@@ -432,7 +432,6 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             } catch (CameraAccessException e) {
                 Log.e(TAG, "openCamera: " + e.getMessage());
             }
-            //notifyAll();  //TODO - removed as this was causing a crash; uncertain of intention
         }
 
         //SETS UP THE PREVIEW USING THE previewBuilder
