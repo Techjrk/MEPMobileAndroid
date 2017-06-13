@@ -192,7 +192,7 @@ public class CompanyDetailViewModel extends BaseObservableViewModel implements C
         sb2.append("&markers=color:blue|");
         sb2.append(generatedAddress);
         sb2.append("&key=" + activity.getString(R.string.google_maps_key));
-        mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+        mapStr = String.format((sb2.toString().replace(' ', '+')), (Object) null);
 
         return mapStr;
     }

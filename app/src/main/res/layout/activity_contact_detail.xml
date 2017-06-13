@@ -13,11 +13,11 @@
             android:fitsSystemWindows="true"
             tools:context="com.lecet.app.content.ContactDetailActivity">
 
-        <!-- Toolbar -->
         <include layout="@layout/include_activity_bar_layout"/>
 
         <include layout="@layout/content_contact_detail"
                  bind:viewModel="@{viewModel}"/>
+
 
     </android.support.design.widget.CoordinatorLayout>
 

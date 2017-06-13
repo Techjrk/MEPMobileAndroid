@@ -9,7 +9,8 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/LacetToolbar" />
+        style="@style/LacetToolbar"
+        android:background="@color/lecetShareBlue" />
 
 </android.support.design.widget.AppBarLayout>
 

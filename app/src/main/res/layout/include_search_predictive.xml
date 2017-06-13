@@ -27,7 +27,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickSeeAllProject}"
+                android:onClick="@{viewModel::onClickSeeAllProject}"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.hideProjectSummary}">
 
@@ -68,7 +68,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickSeeAllCompany}"
+                android:onClick="@{viewModel::onClickSeeAllCompany}"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.hideCompanySummary}">
 
@@ -114,7 +114,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickSeeAllContact}"
+                android:onClick="@{viewModel::onClickSeeAllContact}"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.hideContactSummary}">>
                 <!-- TITLE - CONTACTS -->
@@ -197,7 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="@{viewModel.onClickSeeAllProject}"
+                        android:onClick="@{viewModel::onClickSeeAllProject}"
                         android:visibility="@{viewModel.displaySeeAllProject  ? View.VISIBLE : View.GONE}" >
 
                         <TextView
@@ -243,7 +243,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="@{viewModel.onClickSeeAllCompany}"
+                        android:onClick="@{viewModel::onClickSeeAllCompany}"
                         android:visibility="@{viewModel.displaySeeAllCompany  ? View.VISIBLE : View.GONE}" >
 
                         <TextView
@@ -289,7 +289,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="@{viewModel.onClickSeeAllContact}"
+                        android:onClick="@{viewModel::onClickSeeAllContact}"
                         android:visibility="@{viewModel.displaySeeAllContact  ? View.VISIBLE : View.GONE}" >
 
                         <TextView

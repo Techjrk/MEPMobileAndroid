@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
 
 import com.lecet.app.R;
 
@@ -30,7 +31,7 @@ public class SearchFilterProjectTypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ActivitySearchFilterProjectTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_project_type);
         SearchFilterProjectTypeViewModel viewModel = new SearchFilterProjectTypeViewModel(this);
         sfilter.setViewModel(viewModel);

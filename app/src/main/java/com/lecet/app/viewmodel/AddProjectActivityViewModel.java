@@ -24,6 +24,7 @@ import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.data.models.geocoding.GeocodeResult;
+import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
@@ -54,6 +55,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private AppCompatActivity activity;
     private final String mapsApiKey;
     private ProjectDomain projectDomain;
+    private LocationDomain locationDomain;
     private AlertDialog alert;
 
     // values for posting to API or which can be displayed as native value
@@ -68,15 +70,15 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private Calendar calendar;
 
 
-    public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, ProjectDomain projectDomain) {
+    public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, ProjectDomain projectDomain, LocationDomain locationDomain) {
         super(appCompatActivity);
 
-        //Log.d(TAG, "Constructor: address: " + address);
         Log.d(TAG, "Constructor: latitude: " + latitude);
         Log.d(TAG, "Constructor: longitude: " + longitude);
 
         this.activity = appCompatActivity;
         this.projectDomain = projectDomain;
+        this.locationDomain = locationDomain;
         this.latitude = latitude;
         this.longitude = longitude;
 
@@ -84,11 +86,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         // create the new projectPost obj
         projectPost = new ProjectPost(latitude, longitude);
-
-        // add address if it has been passed
-        /*if (address != null && address.isEmpty()) {
-            projectPost.setAddress1(address);   //TODO - this only handles address line 1
-        }*/
 
         // add lat and long in the form of Geocode obj if they have been passed
         if (projectPost.getGeocode() == null) {
@@ -107,7 +104,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private void getAddressFromLocation(double latitude, double longitude) {
         Log.d(TAG, "getAddressFromLocation: lat, lng: " + latitude + ", " + longitude);
 
-        Call<GeocodeAddress> call = projectDomain.getAddressFromLocation(latitude, longitude, "street_address", mapsApiKey);
+        Call<GeocodeAddress> call = locationDomain.getAddressFromLocation(latitude, longitude, "street_address", mapsApiKey);
 
         call.enqueue(new Callback<GeocodeAddress>() {
                 @Override
@@ -238,7 +235,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             sb2.append(generatedAddress);
             sb2.append("&key=" + mapsApiKey);
 
-            mapStr = String.format((sb2.toString().replace(' ', '+')), null);
+            mapStr = String.format((sb2.toString().replace(' ', '+')), (Object) null);
 
             return mapStr;
         }
@@ -419,6 +416,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         setTargetStartDate(sdf.format(calendar.getTime()));
     }
+
     public void onClickCancel(View view) {
         Log.d(TAG, "onClickCancel");
         activity.setResult(RESULT_CANCELED);

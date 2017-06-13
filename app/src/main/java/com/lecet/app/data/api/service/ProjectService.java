@@ -206,12 +206,6 @@ public interface ProjectService {
     Call<List<ProjectPhoto>> projectImages (@Header("Authorization") String authorization, @Path("projectID") long projectID, @Query("filter") String filter);
 
     /*
-     * Google Maps API: Get address from location lat/lng
-     */
-    @GET("https://maps.googleapis.com/maps/api/geocode/json")
-    Call<GeocodeAddress> getAddressFromLocation(@Query("latlng") String latlng, @Query("result_type") String resultType, @Query("key") String key);
-
-    /*
      * Project notify
      */
     @Headers({

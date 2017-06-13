@@ -91,7 +91,12 @@
             android:name=".content.ContactDetailActivity"
             android:label="@string/title_activity_change_password"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:parentActivityName=".content.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
+            </activity>
         <activity
             android:name=".content.SettingsActivity"
             android:label="@string/title_activity_settings"

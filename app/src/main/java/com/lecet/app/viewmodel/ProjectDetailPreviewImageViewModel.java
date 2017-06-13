@@ -117,7 +117,7 @@ public class ProjectDetailPreviewImageViewModel extends BaseObservable {
         this.bitmap = bitmap;
     }
 
-    @BindingAdapter("bind:imageBitmap")
+    @BindingAdapter("{imageBitmap}")
     public static void loadImage(ImageView view, Bitmap bitmap) {view.setImageBitmap(bitmap);}
 
 }

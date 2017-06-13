@@ -20,7 +20,7 @@
                 android:layout_height="88dp"
                 android:elevation="2dp"
                 android:background="@drawable/rounded_white"
-                android:onClick="@{viewModel.onContactSelected}">
+                android:onClick="@{viewModel::onContactSelected}">
 
             <ImageView android:layout_width="60dp"
                        android:layout_height="60dp"

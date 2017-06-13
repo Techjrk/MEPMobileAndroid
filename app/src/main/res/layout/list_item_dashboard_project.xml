@@ -15,7 +15,7 @@
             android:layout_margin="10dp"
             android:baselineAligned="false"
             android:orientation="vertical"
-            android:onClick="@{viewModel.onItemClick}">
+            android:onClick="@{viewModel::onItemClick}">
 
 
         <RelativeLayout android:layout_width="match_parent"

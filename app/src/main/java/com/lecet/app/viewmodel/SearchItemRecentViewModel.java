@@ -63,47 +63,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
         this.viewModel =viewModel;
         projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(viewModel.getActivity().getApplication()), Realm.getDefaultInstance());
-    noteCountCard(project);
-    imageCountCard(project);
-    }
-    public void noteCountCard(final Project project) {
-        projectDomain.fetchProjectNotes(project.getId(), new Callback<List<ProjectNote>>() {
-            @Override
-            public void onResponse(Call<List<ProjectNote>> call, Response<List<ProjectNote>> response) {
-                List<ProjectNote> responseBody = response.body();
-                if (responseBody !=null) {
-                    project.setNoteTotal(responseBody.size());
-                } else project.setNoteTotal(0);
-            }
-
-            @Override
-            public void onFailure(Call<List<ProjectNote>> call, Throwable t) {
-                // LecetSharedPreferenceUtil.getInstance(activity.getApplication();
-                //  activity.showNetworkAlert();
-            }
-        });
-    }
-
-
-    public void imageCountCard(final Project project) {
-        projectDomain.fetchProjectImages(project.getId(), new Callback<List<ProjectPhoto>>() {
-            @Override
-            public void onResponse(Call<List<ProjectPhoto>> call, Response<List<ProjectPhoto>> response) {
-             //   Log.d(TAG, "getAdditionalImages: onResponse");
-
-                List<ProjectPhoto> responseBody = response.body();
-                if (responseBody !=null) {
-                    project.setImageTotal(responseBody.size());
-                } else project.setImageTotal(0);
-            }
-
-            @Override
-            public void onFailure(Call<List<ProjectPhoto>> call, Throwable t) {
-               // Log.e(TAG, "getAdditionalImages: onFailure");
-
-                //activity.showNetworkAlert();
-            }
-        });
     }
 
     /**
@@ -133,7 +92,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getHasStarCard() {
-        if (project.getNoteTotal() > 0 || project.getImageTotal()>0){
+        if (project.getUserNotes().size() > 0 || project.getImages().size() > 0) {
             hasStarCard=true;
         }
         return hasStarCard;

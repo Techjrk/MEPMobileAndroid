@@ -88,7 +88,7 @@ public class ProjectDomain {
     }
 
     void initFilter() {
-        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
+        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"],\"limit\":200, \"order\":\"id DESC\"}";
         setFilterMPN(filter);
     }
 
@@ -333,13 +333,6 @@ public class ProjectDomain {
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<Project>> call = lecetClient.getProjectService().hiddenProjects(token, userID);
         call.enqueue(callback);
-    }
-
-    public Call<GeocodeAddress> getAddressFromLocation(double lat, double lng, String resultType, String key) {
-        String latlng = Double.toString(lat) + "," + Double.toString(lng);
-        Call<GeocodeAddress> call = lecetClient.getProjectService().getAddressFromLocation(latlng, resultType, key);
-
-        return call;
     }
 
 
