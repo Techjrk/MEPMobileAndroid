@@ -211,7 +211,13 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
     @Override
     protected void onStart() {
         super.onStart();
-        locationManager.handleOnStart();
+
+        try {
+            locationManager.handleOnStart();
+        }
+        catch (NullPointerException e) {
+            this.showNetworkAlert();
+        }
     }
 
     @Override
