@@ -28,7 +28,7 @@
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:scaleType="centerCrop"
-                       android:src="@drawable/ic_contact_Icon_large"/>
+                       android:src="@drawable/ic_contact_icon_large"/>
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
