@@ -3,7 +3,6 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailActivity;
@@ -29,8 +28,7 @@ public class BidItemViewModel extends BaseObservable {
     private String mapsApiKey;
     private boolean isClientLocation2;
     private boolean hasStarCard;
-    SearchDomain searchDomain;
-    ProjectsNearMeViewModel viewModel;
+    private SearchDomain searchDomain;
 
     public BidItemViewModel(Project project, String mapsApiKey) {
         this.project = project;
@@ -38,13 +36,20 @@ public class BidItemViewModel extends BaseObservable {
 
         searchDomain = new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
 
-        //Log.d("BidItemViewModel", "Constructor");
+        setStarCardStatus();
+    }
+
+    private void setStarCardStatus() {
+        if(project == null) return;
+        if(project.getImages() == null) return;
+        if(project.getUserNotes() == null) return;
 
         if (project.getImages().size() > 0 || project.getUserNotes().size() > 0) {
             setHasStarCard(true);
         }
     }
-////////////////////////////////////
+
+    ////////////////////////////////////
     // PROJECT
 
     @Bindable
@@ -57,7 +62,6 @@ public class BidItemViewModel extends BaseObservable {
     }
 
     public String getTitle() {
-        //    if (project == null) return "Unknown";
         return project != null ? project.getTitle() : company != null ? company.getName() : "Unknown";
     }
 
