@@ -51,7 +51,6 @@ public class ProjectImageChooserViewModel extends BaseObservable {
     private float neededRotation = 0;
     private Uri selectedImageUri;
     private Bitmap bitmap;
-    private boolean showImagePreview;   //TODO - may not be necessary if layout can use bitmap != null instead
 
     public ProjectImageChooserViewModel(Activity activity, boolean replaceImage){
         this.activity = activity;
@@ -154,15 +153,9 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         activity.finish();
     }
 
-    @Bindable
-    public void setShowImagePreview(boolean showImagePreview) {
-        Log.d(TAG, "setShowImagePreview:");
-        this.showImagePreview = showImagePreview;
-    }
-
     public boolean getShowImagePreview() {
         Log.d(TAG, "getShowImagePreview:");
-        return this.showImagePreview;
+        return selectedImageUri != null;
     }
 
     @Bindable
