@@ -18,7 +18,7 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 /**
  * Created by jasonm on 4/11/17.
  */
-
+@Deprecated
 public class ProjectDetailAddImageViewModel extends BaseObservable {
 
     private static final String TAG = "ProjectDetailAddImageVM";
@@ -47,7 +47,7 @@ public class ProjectDetailAddImageViewModel extends BaseObservable {
     public void onAddImageButtonClick(View view) {
         Log.d(TAG, "onAddImageButtonClick: *** needs startActivity() ***");
 
-        Intent intent = new Intent(activity, ProjectDetailActivity.class);  //TODO - go to correct Activity
+        Intent intent = new Intent(activity, ProjectDetailActivity.class);
         intent.putExtra(PROJECT_ID_EXTRA, projectId);
         activity.startActivity(intent);
     }

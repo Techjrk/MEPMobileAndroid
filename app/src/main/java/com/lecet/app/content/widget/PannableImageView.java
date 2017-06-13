@@ -200,7 +200,7 @@ public class PannableImageView extends android.support.v7.widget.AppCompatImageV
             needsUpdate = true;
 
             // Don't let the object get too small or too large.
-            scaleFactor = Math.max(1f, Math.min(scaleFactor, 5f));
+            scaleFactor = Math.max(1f, Math.min(scaleFactor, 2f));
 
             invalidate();
             return true;

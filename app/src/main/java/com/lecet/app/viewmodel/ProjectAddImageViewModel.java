@@ -400,7 +400,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         Bitmap image = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length, options);
 
         // create new bitmap at specific scaled-down size
-        int compressionRate = 30;
+        int compressionRate = 50;
         int h = image.getHeight();
         int w = image.getWidth();
         float aspectRatio = (float)w/(float)h; //Multiply this by the new H to get the new W
@@ -415,9 +415,9 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
         // increase dimensions and quality until just before the image data is too large to post
         for(int i=1; i<20; i++) {
-            compressionRate += 2;
+            compressionRate += 1;
             newH += 100;
-            newW += (int)(newH * aspectRatio);
+            newW = (int)(newH * aspectRatio);
             Log.d(TAG, "resizeBase64Image: newWidth: " + newW);
             image = Bitmap.createScaledBitmap(image, newW, newH, false);
 

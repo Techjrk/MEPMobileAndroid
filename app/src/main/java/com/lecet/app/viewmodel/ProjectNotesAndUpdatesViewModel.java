@@ -127,7 +127,7 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
             Log.d(TAG, "canSetup: NeededPermission(s) = " + permissionNeeded.size());
 
             if(permissionNeeded.size() > 0) {
-                String[] tempList = new String[permissionNeeded.size()];//TODO: write actual converter from List<String> to String[]
+                String[] tempList = (String[])permissionNeeded.toArray();
                 ActivityCompat.requestPermissions(fragment.getActivity(), permissionNeeded.toArray(tempList), REQUEST_CODE_ASK_PERMISSIONS);
             }else {
                 return true;//none were needed

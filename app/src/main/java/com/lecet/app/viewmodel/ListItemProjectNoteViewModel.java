@@ -125,11 +125,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         activity.startActivityForResult(intent, ProjectNotesAndUpdatesViewModel.NOTE_REQUEST_CODE);
     }
 
-    //TODO - check that IDs are resulting in correct behavior in ContactDetailActivity
     public void onAuthorNameClick(View view) {
-        Log.d(TAG, "onAuthorNameClick");
-        //Log.d(TAG, "onAuthorNameClick: logged in user id: " + getLoggedInUserId());
-        //Log.d(TAG, "onAuthorNameClick: note author id: " + note.getAuthorId());
 
         if(note.getAuthorId() == getLoggedInUserId()) {
             Log.d(TAG, "onAuthorNameClick: using logged in user id: " + getLoggedInUserId());

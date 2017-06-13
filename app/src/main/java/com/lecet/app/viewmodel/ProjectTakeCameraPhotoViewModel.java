@@ -299,7 +299,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
                 Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
 
                 if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
-                    int resizedWidth  = realImage.getWidth() / REDUCED_IMAGE_AMT;       //TODO - create helper which progressively resizes until best sized reached
+                    int resizedWidth  = realImage.getWidth() / REDUCED_IMAGE_AMT;
                     int resizedHeight = realImage.getHeight() / REDUCED_IMAGE_AMT;
                     resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
                     Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);

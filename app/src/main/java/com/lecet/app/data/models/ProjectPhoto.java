@@ -55,7 +55,7 @@ public class ProjectPhoto extends RealmObject implements ProjectAdditionalData {
     private User author;
 
     /*Made For Realm*/
-    public ProjectPhoto(){}//TODO: Understand why this is not working.
+    public ProjectPhoto(){}
 
     public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src, String url) {
         this.id = id;
