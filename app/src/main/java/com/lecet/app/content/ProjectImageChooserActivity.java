@@ -41,6 +41,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
     public static final String PROJECT_REPLACE_IMAGE_EXTRA = "com.lecet.app.content.ProjectImageChooserActivity.extra.replace.image";
 
     private static final String BITMAP_PARC_NAME = "image";
+    private static final String SELECT_PHOTO_FRAG_TAG = "android:switcher:" + R.id.view_pager_take_photo + ":" + 1;
     private ProjectImageChooserViewModel viewModel;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -58,7 +59,7 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         Log.d(TAG, "onCreate: replaceImage: " + replaceImage);
 
         setupBinding();
-        setupFragments();
+        setupFragments(savedInstanceState);
         setUpViewPager();
         setUpTabLayout();
         if(savedInstanceState != null){
@@ -77,14 +78,23 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
         binding.setViewModel(viewModel);
     }
 
-    private void setupFragments() {
-        if(Build.VERSION.SDK_INT >= 21) {
-            takePhotoFragmentAPI21 = ProjectTakeCameraPhotoFragmentAPI21.newInstance();
+    private void setupFragments(Bundle savedInstanceState) {
+        FragmentManager manager = getSupportFragmentManager();
+        if(savedInstanceState == null) {
+            if (Build.VERSION.SDK_INT >= 21) {
+                takePhotoFragmentAPI21 = ProjectTakeCameraPhotoFragmentAPI21.newInstance();
+            } else {
+                takePhotoFragment = ProjectTakeCameraPhotoFragment.newInstance();
+            }
+            selectPhotoFragment = ProjectSelectLibraryPhotoFragment.newInstance();
+        }else{
+            if (Build.VERSION.SDK_INT >= 21) {
+                takePhotoFragmentAPI21 = ProjectTakeCameraPhotoFragmentAPI21.newInstance();
+            } else {
+                takePhotoFragment = ProjectTakeCameraPhotoFragment.newInstance();
+            }
+            selectPhotoFragment = (ProjectSelectLibraryPhotoFragment) manager.findFragmentByTag(SELECT_PHOTO_FRAG_TAG);
         }
-        else {
-            takePhotoFragment = ProjectTakeCameraPhotoFragment.newInstance();
-        }
-        selectPhotoFragment = ProjectSelectLibraryPhotoFragment.newInstance();
     }
 
     private void setUpViewPager() {
