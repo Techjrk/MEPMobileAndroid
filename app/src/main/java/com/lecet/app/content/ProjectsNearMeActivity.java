@@ -672,29 +672,31 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
         }
         locationManager.startLocationUpdates();
     }
-    public void onBidTableViewPressed(View view) {
-     Log.d("tableView pressed","tableView pressed");
-        viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
-       // pagerAdapter.getFragmentList().clear(); pagerAdapter.getFragmentTitleList().clear();
-      //  setupViewPager(viewPager);
 
+    public void onBidTableViewPressed(View view) {
+        Log.d(TAG, "onBidTableViewPressed");
+        viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
     }
+
     public void updateTableViewPager() {
         setupViewPager(viewPager);
         pagerAdapter.notifyDataSetChanged();
     }
+
     private void setupViewPager(ViewPager viewPager) {
-        int preSize = 0, postSize = 0;
-        if (viewModel.getPrebid()!=null) {
-            preSize = viewModel.getPrebid().size();
+        int preSize = 0;
+        int postSize = 0;
+
+        if (viewModel.getPrebidProjects()!= null) {
+            preSize = viewModel.getPrebidProjects().size();
         }
-        if (viewModel.getPostbid()!=null) {
-            postSize = viewModel.getPostbid().size();
+        if (viewModel.getPostbidProjects()!= null) {
+            postSize = viewModel.getPostbidProjects().size();
         }
 
         pagerAdapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebid()), getResources().getString(R.string.reg_pre_bid),preSize);
-        pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbid()), getResources().getString(R.string.reg_post_bid),postSize);
+        pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebidProjects()), getResources().getString(R.string.reg_pre_bid),preSize);
+        pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbidProjects()), getResources().getString(R.string.reg_post_bid),postSize);
         viewPager.setAdapter(pagerAdapter);
     }
     /**

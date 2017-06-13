@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.location.Address;
@@ -48,14 +47,11 @@ import com.lecet.app.content.widget.LecetInfoWindowCreatePinAdapter;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectNote;
-import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -94,7 +90,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private Circle locationCircle;
     private CircleOptions circleOptions;
     private boolean infoWindowOpen;
+    private ArrayList<Project> prebidProjects;
+    private ArrayList<Project> postbidProjects;
+    private boolean tableViewDisplay;
 
+    //Toolbar views
+    private EditText search;
+    private View buttonClear;
+    private View buttonSearch;
+    private View buttonFilter;
+
+    // map marker assets
     private BitmapDescriptor redMarker;
     private BitmapDescriptor greenMarker;
     private BitmapDescriptor yellowMarker;
@@ -109,15 +115,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private BitmapDescriptor pinMarkerPostBidWithUpdate;
     private BitmapDescriptor pinMarkerSelected;
     private BitmapDescriptor pinMarkerSelectedWithUpdate;
-
-
-    private ArrayList<Project> prebid, postbid;
-    //Toolbar views
-    private EditText search;
-    private View buttonClear;
-    private View buttonSearch;
-
-    private View buttonFilter;
 
     public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer, LocationManager locationManager) {
         super(activity);
@@ -305,6 +302,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     private boolean projectHasUpdates(Project project) {
+        if(project == null) return false;
+        if(project.getUserNotes() == null || project.getImages() == null) {
+            return false;
+        }
         return (project.getImages().size() > 0 || project.getUserNotes().size() > 0);
     }
 
@@ -442,12 +443,12 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private void populateMap(List<Project> projects) {
         if (isActivityAlive()) {
-            if (prebid == null) {
-                prebid = new ArrayList<>();
-                postbid = new ArrayList<>();
+            if (prebidProjects == null || postbidProjects == null) {
+                prebidProjects = new ArrayList<>();
+                postbidProjects = new ArrayList<>();
             } else {
-                prebid.clear();
-                postbid.clear();
+                prebidProjects.clear();
+                postbidProjects.clear();
             }
 
             // Clear existing markers
@@ -459,22 +460,25 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
+                    // set the map marker style
                     BitmapDescriptor icon = getMarkerIcon(project);
 
                     // define as pre- or post-bid
                     if (project.getProjectStage() == null) {
-                        prebid.add(project);
+                        prebidProjects.add(project);
                     }
                     else {
                         if (project.getProjectStage().getParentId() == 102) {
-                            prebid.add(project);
+                            prebidProjects.add(project);
                         } else {
-                            postbid.add(project);
+                            postbidProjects.add(project);
                         }
                     }
 
+                    // set the position of the info window
                     infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
 
+                    // add the marker to the map, add the Project as its Tag, and add the marker to a list
                     Marker marker = map.addMarker(new MarkerOptions()
                             .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
                             .icon(icon)
@@ -533,7 +537,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                 project = (Project) lastMarkerTapped.getTag();
 
-                if (project.getProjectStage() == null) {
+                if (project.getProjectStage() == null) {    //TODO - update marker asset assignment to use method
                     icon = greenMarker;
                 }
                 else if(project.getDodgeNumber() == null) {
@@ -731,24 +735,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     @Bindable
-    public ArrayList<Project> getPrebid() {
-        return prebid;
+    public ArrayList<Project> getPrebidProjects() {
+        return prebidProjects;
     }
 
-    public void setPrebid(ArrayList<Project> prebid) {
-        this.prebid = prebid;
+    public void setPrebidProjects(ArrayList<Project> prebidProjects) {
+        this.prebidProjects = prebidProjects;
     }
 
     @Bindable
-    public ArrayList<Project> getPostbid() {
-        return postbid;
+    public ArrayList<Project> getPostbidProjects() {
+        return postbidProjects;
     }
 
-    public void setPostbid(ArrayList<Project> postbid) {
-        this.postbid = postbid;
+    public void setPostbidProjects(ArrayList<Project> postbidProjects) {
+        this.postbidProjects = postbidProjects;
     }
-
-    private boolean tableViewDisplay;
 
     @Bindable
     public boolean getTableViewDisplay() {

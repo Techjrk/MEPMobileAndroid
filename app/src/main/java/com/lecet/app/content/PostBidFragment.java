@@ -9,11 +9,13 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+
 public class PostBidFragment extends BidFragment {
 
     public static PostBidFragment newInstance(ArrayList<Project> data) {
         PostBidFragment fragmentInstance = new PostBidFragment();
-        bidData = data;
+        fragmentInstance.setBidData(data);
 
         return fragmentInstance;
     }
