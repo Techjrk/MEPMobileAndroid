@@ -59,7 +59,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public static final String EXTRA_OWNER_TYPE = "persistedOwnerType";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
     public static final String ANY = "Any";
-
+    public static boolean userCreated;
     private AppCompatActivity activity;
     private int id;
     private Intent intent;

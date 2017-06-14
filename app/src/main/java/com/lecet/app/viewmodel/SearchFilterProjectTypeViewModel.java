@@ -9,10 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterProjectTypeAdapter;
+import com.lecet.app.adapters.SearchFilterProjectTypeUserCreatedAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
@@ -36,6 +38,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
     private Bundle bundle;
     private RealmResults<SearchFilterProjectTypesMain> realmProjectTypes;
     private String query;
+    private CheckBox lastChecked;
 
     @Bindable
     public String getQuery() {
@@ -169,7 +172,28 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             }
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
-        SearchFilterProjectTypeAdapter adapter = new SearchFilterProjectTypeAdapter(data, this);
-        recyclerView.setAdapter(adapter);
+
+//SearchFilterAllTabbedViewModel.userCreated=true;
+        if (SearchFilterAllTabbedViewModel.userCreated) {
+            SearchFilterProjectTypeUserCreatedAdapter adapter = new SearchFilterProjectTypeUserCreatedAdapter(data, this);
+            recyclerView.setAdapter(adapter);
+        } else {
+            SearchFilterProjectTypeAdapter adapter = new SearchFilterProjectTypeAdapter(data, this);
+            recyclerView.setAdapter(adapter);
+        }
     }
+
+
+    public void clearBundle() {
+        bundle.clear();
+    }
+
+    public CheckBox getLastChecked() {
+        return lastChecked;
+    }
+
+    public void setLastChecked(CheckBox lastChecked) {
+        this.lastChecked = lastChecked;
+    }
+
 }

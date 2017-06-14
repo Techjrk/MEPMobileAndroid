@@ -90,8 +90,8 @@ public class AddProjectActivity extends AppCompatActivity {
 
                     Object value = bundle.get(key);
                     Log.d(TAG, "processProjectType: " + key + ": " + value);
-
-                    displayStr += value + ", "; //In case 9588 - It's present here in this case. This was deleted n bringing it back again for case 9929.
+                    displayStr = ""+value;  //for case 10627 - Single select Type only.
+                 //   displayStr += value + ", "; //In case 9588 - It's present here in this case. This was deleted n bringing it back again for case 9929.
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
                     if (primaryType != null) {

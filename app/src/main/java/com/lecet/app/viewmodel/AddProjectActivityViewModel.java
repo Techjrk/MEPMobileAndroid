@@ -18,11 +18,11 @@ import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.County;
-import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.Geocode;
-import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectPost;
+import com.lecet.app.data.models.geocoding.AddressComponent;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
@@ -107,36 +107,35 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Call<GeocodeAddress> call = locationDomain.getAddressFromLocation(latitude, longitude, "street_address", mapsApiKey);
 
         call.enqueue(new Callback<GeocodeAddress>() {
-                @Override
-                public void onResponse(Call<GeocodeAddress> call, Response<GeocodeAddress> response) {
-                    //Log.d(TAG, "getAddressFromLocation: onResponse: success? " + response.isSuccessful());
-                    //Log.d(TAG, "getAddressFromLocation: onResponse: response: " + response);
-                    Log.d(TAG, "getAddressFromLocation: onResponse: response.body: " + response.body());
+            @Override
+            public void onResponse(Call<GeocodeAddress> call, Response<GeocodeAddress> response) {
+                //Log.d(TAG, "getAddressFromLocation: onResponse: success? " + response.isSuccessful());
+                //Log.d(TAG, "getAddressFromLocation: onResponse: response: " + response);
+                Log.d(TAG, "getAddressFromLocation: onResponse: response.body: " + response.body());
 
-                    if (response.isSuccessful()) {
-                        GeocodeAddress geocodeAddress = response.body();
-                        if(geocodeAddress != null && geocodeAddress.getResults().size() > 0) {
-                            GeocodeResult firstResult = geocodeAddress.getResults().get(0);
-                            if(firstResult != null) {
-                                String formattedAddress = firstResult.getFormattedAddress();    // the one-line formatted address for display
-                                Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. formattedAddress: " + formattedAddress);
-                                List<AddressComponent> addressComponents = firstResult.getAddressComponents();
-                                if(addressComponents != null && !addressComponents.isEmpty()) {
-                                    populateFieldsFromAddress(addressComponents);
-                                }
+                if (response.isSuccessful()) {
+                    GeocodeAddress geocodeAddress = response.body();
+                    if (geocodeAddress != null && geocodeAddress.getResults().size() > 0) {
+                        GeocodeResult firstResult = geocodeAddress.getResults().get(0);
+                        if (firstResult != null) {
+                            String formattedAddress = firstResult.getFormattedAddress();    // the one-line formatted address for display
+                            Log.d(TAG, "getAddressFromLocation: onResponse: address request successful. formattedAddress: " + formattedAddress);
+                            List<AddressComponent> addressComponents = firstResult.getAddressComponents();
+                            if (addressComponents != null && !addressComponents.isEmpty()) {
+                                populateFieldsFromAddress(addressComponents);
                             }
                         }
                     }
-                    else {
-                        Log.e(TAG, "getAddressFromLocation: onResponse: get address failed");
-                    }
+                } else {
+                    Log.e(TAG, "getAddressFromLocation: onResponse: get address failed");
                 }
+            }
 
-                @Override
-                public void onFailure(Call<GeocodeAddress> call, Throwable t) {
-                    Log.e(TAG, "getAddressFromLocation: onFailure: get address failed");
-                }
-            });
+            @Override
+            public void onFailure(Call<GeocodeAddress> call, Throwable t) {
+                Log.e(TAG, "getAddressFromLocation: onFailure: get address failed");
+            }
+        });
     }
 
     /**
@@ -155,36 +154,40 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         String zip5 = null;
 
         //TODO - this loop could be optimized
-        for(AddressComponent component : address) {
-            if(component.getTypes().contains("street_number"))               streetNum = component.getShortName();
-            if(component.getTypes().contains("route"))                       addr1 = component.getShortName();
-            if(component.getTypes().contains("neighborhood"))                neigb = component.getShortName();
-            if(component.getTypes().contains("sublocality_level_1"))         city = component.getShortName();
-            if(component.getTypes().contains("administrative_area_level_2")) county = component.getShortName();
-            if(component.getTypes().contains("administrative_area_level_1")) state = component.getShortName();
-            if(component.getTypes().contains("country"))                     country = component.getShortName();
-            if(component.getTypes().contains("postal_code"))                 zip5 = component.getShortName();
+        for (AddressComponent component : address) {
+            if (component.getTypes().contains("street_number"))
+                streetNum = component.getShortName();
+            if (component.getTypes().contains("route")) addr1 = component.getShortName();
+            if (component.getTypes().contains("neighborhood")) neigb = component.getShortName();
+            if (component.getTypes().contains("sublocality_level_1"))
+                city = component.getShortName();
+            if (component.getTypes().contains("administrative_area_level_2"))
+                county = component.getShortName();
+            if (component.getTypes().contains("administrative_area_level_1"))
+                state = component.getShortName();
+            if (component.getTypes().contains("country")) country = component.getShortName();
+            if (component.getTypes().contains("postal_code")) zip5 = component.getShortName();
         }
 
         String fipsCounty = getFipsCounty(state, county);
 
         String streetAddr = "";
-        if(streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
-        if(addr1 != null && !addr1.isEmpty()) streetAddr += (" " + addr1);
+        if (streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
+        if (addr1 != null && !addr1.isEmpty()) streetAddr += (" " + addr1);
 
-        if(streetAddr != null) getProjectPost().setAddress1(streetAddr);   // address line 1
+        if (streetAddr != null) getProjectPost().setAddress1(streetAddr);   // address line 1
         //if(addr2 != null)      getProjectPost().setAddress2(addr2);      // address line 2, prob not avail from the response (like Apt / Floor#)
-        if(city != null)       getProjectPost().setCity(city);             // city
-        if(state != null)      getProjectPost().setState(state);           // state
-        if(zip5 != null)       getProjectPost().setZip5(zip5);             // zip
-        if(county != null)     getProjectPost().setCounty(county);         // county
-        if(fipsCounty != null) getProjectPost().setFipsCounty(fipsCounty); // FIPS county
-        if(country != null)    getProjectPost().setCountry(country);       // country
+        if (city != null) getProjectPost().setCity(city);             // city
+        if (state != null) getProjectPost().setState(state);           // state
+        if (zip5 != null) getProjectPost().setZip5(zip5);             // zip
+        if (county != null) getProjectPost().setCounty(county);         // county
+        if (fipsCounty != null) getProjectPost().setFipsCounty(fipsCounty); // FIPS county
+        if (country != null) getProjectPost().setCountry(country);       // country
     }
 
     private String getFipsCounty(final String projectState, final String projectCounty) {
         Log.d(TAG, "getFipsCounty: " + projectCounty);
-        if(projectState == null || projectCounty == null) return null;
+        if (projectState == null || projectCounty == null) return null;
 
         final String[] fipsCounty = new String[1];
 
@@ -195,9 +198,9 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 public void execute(Realm realm) {
                     RealmResults<County> realmCounties = realm.where(County.class).findAll();
                     Log.d(TAG, "getFipsCounty: realmCounties size: " + realmCounties.size());
-                    if(realmCounties != null) {
-                        for(County realmCounty : realmCounties) {
-                            if(realmCounty.getState().equals(projectState)) {
+                    if (realmCounties != null) {
+                        for (County realmCounty : realmCounties) {
+                            if (realmCounty.getState().equals(projectState)) {
                                 if (projectCounty.toUpperCase().contains(realmCounty.getCountyName())) {
                                     fipsCounty[0] = realmCounty.getFipsCountyId();
                                     Log.d(TAG, "getFipsCounty: found match: project county:" + projectCounty.toUpperCase() + ", realm county:" + realmCounty.getCountyName() + ", fipsCounty:" + fipsCounty[0]);
@@ -208,8 +211,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 }
             });
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "getFipsCounty: EXCEPTION", e);
         }
 
@@ -297,8 +299,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
                     activity.setResult(RESULT_OK);
                     activity.finish();
-                }
-                else {
+                } else {
                     Log.e(TAG, "postProject: onResponse: projectPost post failed");
                     // TODO: Alert HTTP call error
                 }
@@ -325,8 +326,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     Log.d(TAG, "updateProject: onResponse: projectPost update successful");
                     activity.setResult(RESULT_OK);
                     activity.finish();
-                }
-                else {
+                } else {
                     Log.e(TAG, "updateProject: onResponse: projectPost update failed");
                     // TODO: Alert HTTP call error
                 }
@@ -345,14 +345,18 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         String message = null;
-        if(projectPost.getGeocode() == null) message = "A location is required";
-        else if(projectPost.getTitle() == null    || projectPost.getTitle().isEmpty())    message = "A project title is required";
-        else if(projectPost.getAddress1() == null || projectPost.getAddress1().isEmpty()) message = "A project address is required";
-        else if(projectPost.getCity() == null     || projectPost.getCity().isEmpty())     message = "A project city is required";
-        else if(projectPost.getState() == null    || projectPost.getState().isEmpty())    message = "A project state is required";
+        if (projectPost.getGeocode() == null) message = "A location is required";
+        else if (projectPost.getTitle() == null || projectPost.getTitle().isEmpty())
+            message = "A project title is required";
+        else if (projectPost.getAddress1() == null || projectPost.getAddress1().isEmpty())
+            message = "A project address is required";
+        else if (projectPost.getCity() == null || projectPost.getCity().isEmpty())
+            message = "A project city is required";
+        else if (projectPost.getState() == null || projectPost.getState().isEmpty())
+            message = "A project state is required";
 
         // Required content of project post
-        if(message != null) {
+        if (message != null) {
             alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
             alert.setMessage(message);
             alert.show();
@@ -368,7 +372,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
 
-
     /*
      * Clicks 
      */
@@ -381,6 +384,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             case R.id.add_project_type:
                 section = SearchFilterAllTabbedViewModel.TYPE;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
+                SearchFilterAllTabbedViewModel.userCreated = true;
                 break;
             case R.id.stage:
                 section = SearchFilterAllTabbedViewModel.STAGE;
@@ -503,8 +507,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         this.typeSelect = typeSelect;
         notifyPropertyChanged(BR.typeSelect);
     }
-
-
 
 
 }
