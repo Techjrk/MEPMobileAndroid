@@ -23,14 +23,13 @@ import java.util.ArrayList;
  */
 
 public class BidFragment extends Fragment {
-    static ArrayList<Project> bidData;
+    private ArrayList<Project> bidData;
 
     public BidFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = initDataBinding(inflater, container);
 
         initAdapter(view);
@@ -44,14 +43,20 @@ public class BidFragment extends Fragment {
     }
 
     void initAdapter(View view) {
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_prepostbid);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        BidProjectListRecyclerViewAdapter searchAdapterProjectAll =
-                new BidProjectListRecyclerViewAdapter(getActivity(), bidData);
+        BidProjectListRecyclerViewAdapter searchAdapterProjectAll = new BidProjectListRecyclerViewAdapter(getActivity(), bidData);
 //        new BidProjectListRecyclerViewAdapter(getActivity(), SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, bidData);
         //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
+    }
+
+    protected ArrayList<Project> getBidData() {
+        return bidData;
+    }
+
+    protected void setBidData(ArrayList<Project> bidData) {
+        this.bidData = bidData;
     }
 }

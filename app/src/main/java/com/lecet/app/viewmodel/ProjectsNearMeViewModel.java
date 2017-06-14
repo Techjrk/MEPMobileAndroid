@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.location.Address;
@@ -48,14 +47,11 @@ import com.lecet.app.content.widget.LecetInfoWindowCreatePinAdapter;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectNote;
-import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -94,13 +90,25 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private Circle locationCircle;
     private CircleOptions circleOptions;
     private boolean infoWindowOpen;
+    private ArrayList<Project> prebidProjects;
+    private ArrayList<Project> postbidProjects;
+    private boolean tableViewDisplay;
 
-    private BitmapDescriptor redMarker;
-    private BitmapDescriptor greenMarker;
-    private BitmapDescriptor yellowMarker;
-    //private BitmapDescriptor currentLocationMarkerIcon;
-    //private BitmapDescriptor existingCustomPinMarker;
-    //private BitmapDescriptor newCustomPinMarker;
+    //Toolbar views
+    private EditText search;
+    private View buttonClear;
+    private View buttonSearch;
+    private View buttonFilter;
+
+    // map marker assets
+    private BitmapDescriptor standardMarkerStatic;
+    private BitmapDescriptor standardMarkerStaticWithUpdate;
+    private BitmapDescriptor standardMarkerPostBid;
+    private BitmapDescriptor standardMarkerPostBidWithUpdate;
+    private BitmapDescriptor standardMarkerPreBid;
+    private BitmapDescriptor standardMarkerPreBidWithUpdate;
+    private BitmapDescriptor standardMarkerSelected;
+    private BitmapDescriptor standardMarkerSelectedWithUpdate;
     private BitmapDescriptor pinMarkerStatic;
     private BitmapDescriptor pinMarkerStaticWithUpdate;
     private BitmapDescriptor pinMarkerPreBid;
@@ -110,14 +118,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private BitmapDescriptor pinMarkerSelected;
     private BitmapDescriptor pinMarkerSelectedWithUpdate;
 
-
-    private ArrayList<Project> prebid, postbid;
-    //Toolbar views
-    private EditText search;
-    private View buttonClear;
-    private View buttonSearch;
-
-    private View buttonFilter;
 
     public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer, LocationManager locationManager) {
         super(activity);
@@ -168,21 +168,25 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     private void initMarkerAssets() {
-        this.redMarker                   = BitmapDescriptorFactory.fromResource(R.drawable.ic_red_marker);
-        this.greenMarker                 = BitmapDescriptorFactory.fromResource(R.drawable.ic_green_marker);
-        this.yellowMarker                = BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_marker);
-        //this.currentLocationMarkerIcon   = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
-        //this.existingCustomPinMarker     = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected);
-        //this.newCustomPinMarker          = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
+        // standard project markers
+        this.standardMarkerStatic             = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_static);
+        this.standardMarkerStaticWithUpdate   = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_static_update);
+        this.standardMarkerPreBid             = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_pre_bid);
+        this.standardMarkerPreBidWithUpdate   = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_pre_bid_update);
+        this.standardMarkerPostBid            = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_post_bid);
+        this.standardMarkerPostBidWithUpdate  = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_post_bid_update);
+        this.standardMarkerSelected           = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_selected);
+        this.standardMarkerSelectedWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_selected_update);
 
-        this.pinMarkerStatic             = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
-        this.pinMarkerStaticWithUpdate   = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static_update);
-        this.pinMarkerPreBid             = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid);
-        this.pinMarkerPreBidWithUpdate   = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid_update);
-        this.pinMarkerPostBid            = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid);
-        this.pinMarkerPostBidWithUpdate  = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid_update);
-        this.pinMarkerSelected           = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected);
-        this.pinMarkerSelectedWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected_update);
+        // custom (user-created) pin markers
+        this.pinMarkerStatic                  = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
+        this.pinMarkerStaticWithUpdate        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static_update);
+        this.pinMarkerPreBid                  = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid);
+        this.pinMarkerPreBidWithUpdate        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid_update);
+        this.pinMarkerPostBid                 = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid);
+        this.pinMarkerPostBidWithUpdate       = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid_update);
+        this.pinMarkerSelected                = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected);
+        this.pinMarkerSelectedWithUpdate      = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected_update);
     }
 
     private void updateLocationCircle(GoogleMap map, LatLng latLng) {
@@ -252,52 +256,51 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         bounceMarker(currLocationMarker);
     }
 
-    private BitmapDescriptor getMarkerIcon(Project project) {
+    private BitmapDescriptor getMarkerIcon(Project project, boolean selected) {
 
-        // for projects with Dodge numbers
+        boolean hasUpdates = projectHasUpdates(project);
+
+        // for standard projects, i.e. with Dodge numbers
         if(project.getDodgeNumber() != null) {
 
+            if(selected) {
+                return hasUpdates ? standardMarkerSelectedWithUpdate : standardMarkerSelected;
+            }
+
             if (project.getProjectStage() == null) {
-                return greenMarker;
+                return hasUpdates ? standardMarkerPreBidWithUpdate : standardMarkerPreBid;
             }
 
             // style marker for pre-bid or post-bid color
             else {
                 if (project.getProjectStage().getParentId() == 102) {
-                    return greenMarker;
+                    return hasUpdates ? standardMarkerPreBidWithUpdate : standardMarkerPreBid;
                 }
                 else {
-                    return redMarker;
+                    return hasUpdates ? standardMarkerPostBidWithUpdate : standardMarkerPostBid;
                 }
             }
         }
 
-        // for user-created projects, which have no Dodge number
+        // for custom (user-created) projects, which have no Dodge number
         else {
 
-            boolean hasUpdates = projectHasUpdates(project);
+            if(selected) {
+                return hasUpdates ? pinMarkerSelectedWithUpdate : pinMarkerSelected;
+            }
 
             // pre-bid user-created projects
             if(project.getProjectStage() == null) {
-                if(hasUpdates) {
-                    return pinMarkerPreBidWithUpdate;
-                }
-                else return pinMarkerPreBid;
+                return hasUpdates ? pinMarkerPreBidWithUpdate : pinMarkerPreBid;
             }
 
             // post-bid user-created projects
             else {
                 if(project.getProjectStage().getParentId() == 102) {
-                    if (hasUpdates) {
-                        return pinMarkerPreBidWithUpdate;
-                    }
-                    else return pinMarkerPreBid;
+                    return hasUpdates ? pinMarkerPreBidWithUpdate : pinMarkerPreBid;
                 }
                 else {
-                    if (hasUpdates) {
-                        return pinMarkerPostBidWithUpdate;
-                    }
-                    else return pinMarkerPostBid;
+                    return hasUpdates ? pinMarkerPostBidWithUpdate : pinMarkerPostBid;
                 }
             }
         }
@@ -305,6 +308,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     private boolean projectHasUpdates(Project project) {
+        if(project == null) return false;
+        if(project.getUserNotes() == null || project.getImages() == null) {
+            return false;
+        }
         return (project.getImages().size() > 0 || project.getUserNotes().size() > 0);
     }
 
@@ -442,12 +449,12 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private void populateMap(List<Project> projects) {
         if (isActivityAlive()) {
-            if (prebid == null) {
-                prebid = new ArrayList<>();
-                postbid = new ArrayList<>();
+            if (prebidProjects == null || postbidProjects == null) {
+                prebidProjects = new ArrayList<>();
+                postbidProjects = new ArrayList<>();
             } else {
-                prebid.clear();
-                postbid.clear();
+                prebidProjects.clear();
+                postbidProjects.clear();
             }
 
             // Clear existing markers
@@ -459,22 +466,25 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
-                    BitmapDescriptor icon = getMarkerIcon(project);
+                    // set the map marker style
+                    BitmapDescriptor icon = getMarkerIcon(project, false);
 
                     // define as pre- or post-bid
                     if (project.getProjectStage() == null) {
-                        prebid.add(project);
+                        prebidProjects.add(project);
                     }
                     else {
                         if (project.getProjectStage().getParentId() == 102) {
-                            prebid.add(project);
+                            prebidProjects.add(project);
                         } else {
-                            postbid.add(project);
+                            postbidProjects.add(project);
                         }
                     }
 
+                    // set the position of the info window
                     infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
 
+                    // add the marker to the map, add the Project as its Tag, and add the marker to a list
                     Marker marker = map.addMarker(new MarkerOptions()
                             .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
                             .icon(icon)
@@ -516,6 +526,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         Log.d(TAG, "onMarkerClick: " + marker.getTag());
 
         BitmapDescriptor icon;
+        BitmapDescriptor lastMarkerTappedIcon;
         Project project;
 
         boolean isMyLocationMarker = (marker.equals(currLocationMarker));
@@ -529,30 +540,18 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         else {
             map.setInfoWindowAdapter(new LecetInfoWindowAdapter(activity));
 
+            project = (Project) marker.getTag();
+            icon = getMarkerIcon(project, true);
+            marker.setIcon(icon);
+
+            // reset the last marker selected back to its normal state
             if (lastMarkerTapped != null) {
-
                 project = (Project) lastMarkerTapped.getTag();
-
-                if (project.getProjectStage() == null) {
-                    icon = greenMarker;
-                }
-                else if(project.getDodgeNumber() == null) {
-                    icon = pinMarkerSelected;
-                }
-                else {
-                    icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
-                }
-
-                lastMarkerTapped.setIcon(icon);
+                lastMarkerTappedIcon = getMarkerIcon(project, false);
+                lastMarkerTapped.setIcon(lastMarkerTappedIcon);
             }
 
             lastMarkerTapped = marker;
-            project = (Project) lastMarkerTapped.getTag();
-
-            // change marker style if it's not a user-created project
-            if(project != null && project.getDodgeNumber() != null) {
-                lastMarkerTapped.setIcon(yellowMarker);
-            }
         }
 
         infoWindowOpen = true;
@@ -635,22 +634,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onInfoWindowClose(Marker marker) {
         if (lastMarkerTapped != null) {
-
             Project project = (Project) lastMarkerTapped.getTag();
-
-            BitmapDescriptor icon;
-
-            if (project.getProjectStage() == null) {
-                icon = greenMarker;
-            } else {
-                icon = project.getProjectStage().getParentId() == 102 ? greenMarker : redMarker;
-            }
-
-            // for user-created projects
-            if(project.getDodgeNumber() == null) {
-                icon = pinMarkerSelected;
-            }
-
+            BitmapDescriptor icon = getMarkerIcon(project, false);
             lastMarkerTapped.setIcon(icon);
         }
         lastMarkerTapped = null;
@@ -731,24 +716,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     @Bindable
-    public ArrayList<Project> getPrebid() {
-        return prebid;
+    public ArrayList<Project> getPrebidProjects() {
+        return prebidProjects;
     }
 
-    public void setPrebid(ArrayList<Project> prebid) {
-        this.prebid = prebid;
+    public void setPrebidProjects(ArrayList<Project> prebidProjects) {
+        this.prebidProjects = prebidProjects;
     }
 
     @Bindable
-    public ArrayList<Project> getPostbid() {
-        return postbid;
+    public ArrayList<Project> getPostbidProjects() {
+        return postbidProjects;
     }
 
-    public void setPostbid(ArrayList<Project> postbid) {
-        this.postbid = postbid;
+    public void setPostbidProjects(ArrayList<Project> postbidProjects) {
+        this.postbidProjects = postbidProjects;
     }
-
-    private boolean tableViewDisplay;
 
     @Bindable
     public boolean getTableViewDisplay() {
