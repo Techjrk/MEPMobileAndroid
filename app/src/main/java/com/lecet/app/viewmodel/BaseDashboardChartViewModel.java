@@ -70,6 +70,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     protected float b_chartX;
     protected float h_chartX;
+    private long selectedChart = 0;
 
     protected Fragment fragment;
     protected String subtitleNum = "";
@@ -472,11 +473,13 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         View iconToShow = null;
 
         if (label.equals(Long.toString(CONSOLIDATED_CODE_B))) {
+            selectedChart = CONSOLIDATED_CODE_B;
             buttonToSelect = b_button;
             iconToShow = b_icon;
             notifyDelegateOfSelection(CONSOLIDATED_CODE_B);
         }
         else if (label.equals(Long.toString(CONSOLIDATED_CODE_H))) {
+            selectedChart = CONSOLIDATED_CODE_H;
             buttonToSelect = h_button;
             iconToShow = h_icon;
             notifyDelegateOfSelection(CONSOLIDATED_CODE_H);
@@ -563,7 +566,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     @Override
     public void onNothingSelected() {
-        //Log.d(TAG, "onNothingSelected ");
+        Log.d(TAG, "onNothingSelected ");
 
         // hide chart values
         try {
@@ -573,8 +576,10 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
             pieChartView.setHoleRadius(CHART_HOLE_RADIUS_UNSELECTED);
             pieChartView.invalidate();
 
+            selectedChart = 0;
             resetButtonStates();
             hideCategoryIcons();
+            fetchData();
         }
         catch (NullPointerException e) {
             Log.w(TAG, "onNothingSelected: chart data may be null");
@@ -588,14 +593,27 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
 
     public void onButtonClickH(View view) {
         //Log.d(TAG, "onButtonClickH");
-        pieChartView.highlightValue(h_chartX, 0);
-        setCategoryButtonState(view);
+
+        if(selectedChart == CONSOLIDATED_CODE_H){//Deselect if selected twice
+            pieChartView.highlightValue(h_chartX, 1);
+            onNothingSelected();
+        }else {
+            selectedChart = CONSOLIDATED_CODE_H;
+            pieChartView.highlightValue(h_chartX, 0);
+            setCategoryButtonState(view);
+        }
     }
 
     public void onButtonClickB(View view) {
         //Log.d(TAG, "onButtonClickB");
-        pieChartView.highlightValue(b_chartX, 0);
-        setCategoryButtonState(view);
+        if(selectedChart == CONSOLIDATED_CODE_B) {
+            pieChartView.highlightValue(b_chartX, 1);
+            onNothingSelected();
+        }else{
+            selectedChart = CONSOLIDATED_CODE_B;
+            pieChartView.highlightValue(b_chartX, 0);
+            setCategoryButtonState(view);
+        }
     }
 
     /**
