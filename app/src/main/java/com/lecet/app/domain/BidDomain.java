@@ -74,7 +74,7 @@ public class BidDomain {
 //        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
 //                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
 
-        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
+        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
                 ", \"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardType\":true}";
 
         String filter = String.format(rawQuery, limit, formattedDate);
