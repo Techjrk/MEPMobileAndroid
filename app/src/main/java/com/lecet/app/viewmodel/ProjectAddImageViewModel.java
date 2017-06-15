@@ -28,6 +28,7 @@ import com.lecet.app.content.ProjectImageChooserActivity;
 import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -166,7 +167,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     public void onClickReplaceImage(View view) {
         Log.d(TAG, "onClickReplaceImage");
         if (canSetup()) {
-            Intent intent = new Intent(activity, ProjectImageChooserActivity.class);    //TODO - launch Chooser Activity, which immediately launches
+            Intent intent = new Intent(activity, ProjectImageChooserActivity.class);
             intent.putExtra(PROJECT_ID_EXTRA, projectId);
             intent.putExtra(PROJECT_REPLACE_IMAGE_EXTRA, true);
 
@@ -292,14 +293,16 @@ public class ProjectAddImageViewModel extends BaseObservable {
                 }
                 else {
                     Log.e(TAG, "postImage: onResponse: image post failed");
-                    // TODO: Alert HTTP call error
+                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<ProjectPhoto> call, Throwable t) {
                 Log.e(TAG, "postImage: onFailure: image post failed");
-                //TODO: Display alert noting network failure
+                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
+                alert.show();
             }
         });
 
@@ -322,14 +325,16 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
                 } else {
                     Log.e(TAG, "deletePhoto: onResponse: photo deletion failed");
-                    // TODO: Alert HTTP call error
+                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<ProjectPhoto> call, Throwable t) {
                 Log.e(TAG, "deletePhoto: onFailure: photo deletion failed");
-                //TODO: Display alert noting network failure
+                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
+                alert.show();
             }
         });
     }
