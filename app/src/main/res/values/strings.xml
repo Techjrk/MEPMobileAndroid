@@ -399,4 +399,13 @@
     <string name="char_max_exceed_title">Maximum Numbers Exceeded</string>
     <string name="char_max_message">Please limit the number up to 8 digits only</string>
     <string name="using_project_near_me">Using Project Near Me</string>
+    <string name="save_project">Save Project</string>
+    <string name="update_project">Update Project</string>
+    <string name="save_project_confirm">You are about to save this new project.</string>
+    <string name="update_project_confirm">You are about to update this project.</string>
+    <string name="save_project_location_required">A project location is required.</string>
+    <string name="save_project_address_required">A project address is required.</string>
+    <string name="save_project_city_required">A project city is required.</string>
+    <string name="save_project_state_required">A project state is required.</string>
+    <string name="save_project_title_required">A project title is required.</string>
 </resources>

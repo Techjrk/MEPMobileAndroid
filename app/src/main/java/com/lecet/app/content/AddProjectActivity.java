@@ -35,6 +35,7 @@ public class AddProjectActivity extends AppCompatActivity {
     private AddProjectActivityViewModel viewModel;
     private double latitude;
     private double longitude;
+    private long projectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +43,17 @@ public class AddProjectActivity extends AppCompatActivity {
 
         ActivityAddProjectBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_add_project);
 
-        latitude = getIntent().getDoubleExtra(EXTRA_MARKER_LATITUDE, -1);
+        latitude  = getIntent().getDoubleExtra(EXTRA_MARKER_LATITUDE, -1);
         longitude = getIntent().getDoubleExtra(EXTRA_MARKER_LONGITUDE, -1);
+        projectId = getIntent().getLongExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, -1);
 
         Log.d(TAG, "onCreate: latitude: " + latitude);
         Log.d(TAG, "onCreate: longitude: " + longitude);
+        Log.d(TAG, "onCreate: projectId: " + projectId);
 
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         LocationDomain locationDomain = new LocationDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
-        viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectDomain, locationDomain);
+        viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectId, projectDomain, locationDomain);
 
         binding.setViewModel(viewModel);
     }

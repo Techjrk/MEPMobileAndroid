@@ -60,6 +60,13 @@
                               bind:typeface="@{`Lato-Regular.ttf`}"
                               tools:text="South Lake Tahoe, CA"/>
 
+                    <!-- TODO - MAKE VISIBLE AFTER CONVERTING BUTTON TO FAB OR OTHER FLOATING BUTTON PER DESIGNS -->
+                    <ImageView android:layout_width="20dp"
+                               android:layout_height="match_parent"
+                               android:visibility="invisible"
+                               android:onClick="@{viewModel::onEditButtonClick}"
+                               android:src="@drawable/ic_pencil_blue"/>
+
                 </LinearLayout>
 
             </LinearLayout>

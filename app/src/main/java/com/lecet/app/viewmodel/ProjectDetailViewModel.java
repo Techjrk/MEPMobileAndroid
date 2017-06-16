@@ -14,10 +14,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectDetailFragment;
 import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
@@ -93,6 +96,11 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     public void setTitle(String title) {
         this.title = title;
         notifyPropertyChanged(BR.title);
+    }
+
+    @Bindable
+    public boolean isEditable() {
+        return true;    //TODO - CHECK IF THE CURRENT USER HAS PERMISSION TO EDIT AND IF NOT, RETURN FALSE **************
     }
 
 
@@ -193,6 +201,16 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         + adapter.getItemId(position));
     }
 
+    public void onEditButtonClick(View view) {
+        Log.d(TAG, "onEditButtonClick");
+
+        // pass the projectId to the Add Project Activity for editing
+        Intent intent = new Intent(view.getContext(), AddProjectActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, projectId);
+        view.getContext().startActivity(intent);
+    }
+
+
     /**
      * Inner ViewPagerAdapter class
      */
@@ -239,5 +257,6 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
                     return context.getResources().getString(R.string.notes_and_updates);
             }
         }
+
     }
 }

@@ -147,7 +147,7 @@ public class ProjectPost extends BaseObservable {
     private long id;*/
 
     @SerializedName("primaryProjectTypeId")
-    private int primaryProjectTypeId;
+    private long primaryProjectTypeId;
 
     @SerializedName("projectStageId")
     private int projectStageId;
@@ -340,7 +340,7 @@ public class ProjectPost extends BaseObservable {
         return estLow;
     }
 
-    public void setEstLow(int estLow) {
+    public void setEstLow(double estLow) {
         this.estLow = estLow;
         notifyPropertyChanged(BR.estLow);
     }
@@ -543,20 +543,12 @@ public class ProjectPost extends BaseObservable {
         this.numberOfFloorsAboveGround = numberOfFloorsAboveGround;
     }
 
-    /*public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }*/
-
     @Bindable
-    public int getPrimaryProjectTypeId() {
+    public long getPrimaryProjectTypeId() {
         return primaryProjectTypeId;
     }
 
-    public void setPrimaryProjectTypeId(int primaryProjectTypeId) {
+    public void setPrimaryProjectTypeId(long primaryProjectTypeId) {
         this.primaryProjectTypeId = primaryProjectTypeId;
         notifyPropertyChanged(BR.primaryProjectTypeId);
     }

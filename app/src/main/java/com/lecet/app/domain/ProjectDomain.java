@@ -4,6 +4,7 @@ package com.lecet.app.domain;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.response.ProjectsNearResponse;
@@ -108,6 +109,8 @@ public class ProjectDomain {
     }
 
     public Call<Project> updateProject(long projectId, ProjectPost projectPost) {
+        Log.d(TAG, "updateProject() called with: projectId = [" + projectId + "], projectPost = [" + projectPost + "]");
+
         String token = sharedPreferenceUtil.getAccessToken();
         Call<Project> call = lecetClient.getProjectService().updateProject(token, projectId, projectPost);
 
