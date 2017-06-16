@@ -485,8 +485,13 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.value:
                 section = VALUE;
                 i = new Intent(activity, SearchFilterValueActivity.class);
-                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
-                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
+                String value = getValue_select();
+                if (value !=null && value.length() > 0) {
+                    i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, value.substring(1, value.indexOf('-')).trim());
+                    i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, value.substring(value.indexOf('-')+3, value.length()).trim());
+                }
+//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
+//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
                 break;
 
             case R.id.updated_within:
@@ -621,8 +626,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         edit.putString(EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
         edit.putString(EXTRA_JURISDICTION, getJurisdiction_select());
         edit.putString(EXTRA_STAGE, getStage_select());
+
         edit.putString(EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
         edit.putString(EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
+
         edit.putString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select());
         edit.putString(EXTRA_OWNER_TYPE, getOwner_type_select());
         edit.putString(EXTRA_WORK_TYPE, getWork_type_select());
@@ -638,17 +645,17 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
     void getPrefFilterFieldValues(SharedPreferences spref) {
 
-        // spref.getString(EXTRA_VALUE_MIN,persistedValueMin);
-        // spref.getString(EXTRA_VALUE_MAX,persistedValueMax);
-        // spref.getString(EXTRA_UPDATED_WITHIN_DAYS_INT,getPersistedUpdatedWithin());
-        // spref.getString(EXTRA_BIDDING_WITHIN_DAYS_INT,getPersistedBiddingWithin());
-
         setLocation_select(spref.getString(EXTRA_LOCATION_CITY, getLocation_select()));
         setType_select(spref.getString(EXTRA_PROJECT_TYPE_ID, getType_select()));
         setUpdated_within_select(spref.getString(EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select()));
+        setPersistedUpdatedWithin(spref.getString(EXTRA_UPDATED_WITHIN_DAYS_INT,getPersistedUpdatedWithin()));
+
         setJurisdiction_select(spref.getString(EXTRA_JURISDICTION, getJurisdiction_select()));
         setStage_select(spref.getString(EXTRA_STAGE, getStage_select()));
+
         setBidding_within_select(spref.getString(EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select()));
+        setPersistedBiddingWithin(spref.getString(EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin()));
+
         setBh_select(spref.getString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select()));
         setOwner_type_select(spref.getString(EXTRA_OWNER_TYPE, getOwner_type_select()));
         setWork_type_select(spref.getString(EXTRA_WORK_TYPE, getWork_type_select()));
