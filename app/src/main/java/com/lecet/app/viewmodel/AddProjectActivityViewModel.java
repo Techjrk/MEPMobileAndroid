@@ -27,6 +27,7 @@ import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -301,14 +302,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     activity.finish();
                 } else {
                     Log.e(TAG, "postProject: onResponse: projectPost post failed");
-                    // TODO: Alert HTTP call error
+                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
                 Log.e(TAG, "postProject: onFailure: projectPost post failed");
-                //TODO: Display alert noting network failure
+                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
+                alert.show();
             }
         });
     }
@@ -328,14 +331,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     activity.finish();
                 } else {
                     Log.e(TAG, "updateProject: onResponse: projectPost update failed");
-                    // TODO: Alert HTTP call error
+                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
                 Log.e(TAG, "updateProject: onFailure: projectPost update failed");
-                //TODO: Display alert noting network failure
+                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
+                alert.show();
             }
         });
     }
@@ -361,7 +366,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             alert.setMessage(message);
             alert.show();
         }
-
         // Are you sure?
         else {
             alert.setMessage("You are about to save this new project.");

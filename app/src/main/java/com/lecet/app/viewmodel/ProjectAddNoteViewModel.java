@@ -12,6 +12,7 @@ import com.lecet.app.BR;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,14 +133,16 @@ public class ProjectAddNoteViewModel extends BaseObservable {
 
                 } else {
                     Log.e(TAG, "postNote: onResponse: note post failed");
-                    // TODO: Alert HTTP call error
+                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<ProjectNote> call, Throwable t) {
                 Log.e(TAG, "postNote: onFailure: note post failed");
-                //TODO: Display alert noting network failure
+                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
+                alert.show();
             }
         });
     }
@@ -161,14 +164,16 @@ public class ProjectAddNoteViewModel extends BaseObservable {
 
                 } else {
                     Log.e(TAG, "deleteNote: onResponse: note deletion failed");
-                    // TODO: Alert HTTP call error
+                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<ProjectNote> call, Throwable t) {
                 Log.e(TAG, "deleteNote: onFailure: note deletion failed");
-                //TODO: Display alert noting network failure
+                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
+                alert.show();
             }
         });
     }
