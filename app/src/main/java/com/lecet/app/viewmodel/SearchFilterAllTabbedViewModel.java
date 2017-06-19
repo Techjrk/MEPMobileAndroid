@@ -48,6 +48,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
     public static final String EXTRA_LOCATION_ZIP = "persistedLocationZip";
     public static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
+    public static final String EXTRA_PROJECT_TYPE_ID_INT = "persistedProjectTypeIdInt";
+
     public static final String EXTRA_VALUE_MIN = "persistedValueMin";
     public static final String EXTRA_VALUE_MAX = "persistedValueMax";
     public static final String EXTRA_VALUE = "persistedValue";
@@ -77,7 +79,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private Intent intent;
     private boolean isProjectViewVisible = true;
     private boolean moreOption;
-
+    private String persistProjectTypeIdInt;
     /**
      * User's selected filter item - values for Project display
      */
@@ -477,8 +479,11 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.ctype:
             case R.id.type:
                 section = TYPE;
+                SearchFilterAllTabbedViewModel.userCreated = false;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
+                //i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_DISPLAY_STR, getPRO));
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
+                i.putExtra(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt());
                 break;
 
             case R.id.cvalue:
@@ -619,6 +624,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         SharedPreferences.Editor edit = spref.edit();
         edit.putString(EXTRA_LOCATION_CITY, getLocation_select());
         edit.putString(EXTRA_PROJECT_TYPE_ID, getType_select());
+        edit.putString(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt());
+
         edit.putString(EXTRA_VALUE, getValue_select());
         edit.putString(EXTRA_VALUE_MIN, persistedValueMin);
         edit.putString(EXTRA_VALUE_MAX, persistedValueMax);
@@ -646,7 +653,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     void getPrefFilterFieldValues(SharedPreferences spref) {
 
         setLocation_select(spref.getString(EXTRA_LOCATION_CITY, getLocation_select()));
+
         setType_select(spref.getString(EXTRA_PROJECT_TYPE_ID, getType_select()));
+        setPersistProjectTypeIdInt(spref.getString(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt()));
+
         setUpdated_within_select(spref.getString(EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select()));
         setPersistedUpdatedWithin(spref.getString(EXTRA_UPDATED_WITHIN_DAYS_INT,getPersistedUpdatedWithin()));
 
@@ -669,4 +679,11 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCtypeSelect(spref.getString(EXTRA_PROJECT_TYPE_ID, getCtypeSelect()));
     }
 
+
+    public String getPersistProjectTypeIdInt() {
+        return persistProjectTypeIdInt;
+    }
+    public void setPersistProjectTypeIdInt(String persistProjectTypeIdInt) {
+        this.persistProjectTypeIdInt = persistProjectTypeIdInt;
+    }
 }
