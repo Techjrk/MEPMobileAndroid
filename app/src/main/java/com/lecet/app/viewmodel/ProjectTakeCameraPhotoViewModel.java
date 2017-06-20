@@ -44,7 +44,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
 
     private static Camera camera;
     private CameraPreview cameraPreview;
-    private static boolean setup = false;
+    private boolean setup = false;
     private String imagePath;
     private ProjectTakeCameraPhotoFragment fragment;
     private FrameLayout frameLayout;
@@ -59,7 +59,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         cameraPreview = new CameraPreview(fragment.getActivity());
         frameLayout.addView(cameraPreview);
         orientationEventListener = cameraPreview.createOrientationListener();
-
+        setup = true;
     }
 
     public void resetCamera(){
@@ -123,13 +123,47 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         return;// returns null if camera is unavailable
     }
 
-    public static void releaseCamera() {
+    public void releaseCamera() {
         if(camera != null){
             camera.release();
             camera = null;
+            orientationEventListener.disable();
             Log.w(TAG, "releaseCamera: CameraReleased");
         }
     }
+
+    /*@Override
+    public void onPictureTaken(byte[] data, Camera camera) {
+
+        File pictureFile = getOutputMediaFile();
+        if(pictureFile == null) {
+            Log.d(TAG, "onPictureTaken: Error creating media file, check storage permissions.");
+            return;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            fos.write(data);
+            fos.close();
+            Log.d(TAG, "onPictureTaken: Picture saved.");
+        }
+        catch (FileNotFoundException e) {
+            Log.d(TAG, "onPictureTaken: File Not Found: " + e.getMessage());
+        }
+        catch (IOException e) {
+            Log.d(TAG, "onPictureTaken: Error accessing file: " + e.getMessage());
+        }
+
+    }*/
+
+    /*@Deprecated
+    private void startImagePreviewActivity(String imagePath) {
+        Intent intent = new Intent(fragment.getContext(), ProjectPreviewImageActivity.class);
+        intent.putExtra(PROJECT_ID_EXTRA, projectId);
+        intent.putExtra(FROM_CAMERA, true);
+        intent.putExtra(IMAGE_PATH, imagePath);
+        fragment.getActivity().startActivity(intent);
+    }*/
 
     private void finishActivityWithResult(String imagePath) {
         Intent intent = fragment.getActivity().getIntent();
@@ -150,7 +184,9 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
 
     public void onTakePhotoClick(View view) {
         Log.d(TAG, "onTakePhotoClick");
-        camera.takePicture(null, null, cameraPreview);
+        if(camera != null) {
+            camera.takePicture(null, null, new CameraPreview(this.fragment.getContext()));
+        }
 
     }
 
@@ -163,15 +199,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
         private static final String TAG = "CameraPreview";
         private SurfaceHolder mHolder;
         private Camera.CameraInfo cameraInfo;
-        private Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback(){
-            @Override
-            public void onAutoFocus(boolean success, Camera camera) {
-                if(success){
-                    camera.takePicture(null, null, cameraPreview);
-                }
-            }
-        };
-
         private OrientationEventListener createOrientationListener() {
             return new OrientationEventListener(fragment.getActivity()) {
                 public void onOrientationChanged(int orientation) {
@@ -195,7 +222,6 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
             mHolder.addCallback(this);
             // deprecated setting, but required on Android versions prior to 3.0
             mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-            setup = true;
         }
 
         public void surfaceCreated(SurfaceHolder holder) {
@@ -296,7 +322,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
                     resizedImage = rotateImage(resizedImage, 0);
                 }
 
-                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, fos);
 
                 fos.close();
 
@@ -323,14 +349,12 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
 
         }
 
-
-
         public Bitmap rotateImage(Bitmap image,float angle){
             int w = image.getWidth();
             int h = image.getHeight();
 
             Matrix mtx = new Matrix();
-            mtx.setRotate(angle);
+            mtx.postRotate(angle);
 
             return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
         }
