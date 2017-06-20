@@ -3,6 +3,7 @@ package com.lecet.app.data.models;
 import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
+import com.lecet.app.domain.BidDomain;
 import com.lecet.app.interfaces.TrackedObject;
 
 import java.util.Date;
@@ -252,7 +253,22 @@ public class Project extends RealmObject implements TrackedObject {
     }
 
     public double getEstLow() {
+        if(estLow == 0 && estHigh != 0){
+            return estHigh;
+        }
         return estLow;
+    }
+
+    public double getEstHigh() {
+        if(estHigh == 0 && estLow != 0) {
+            return estLow;
+        }
+
+        return estHigh;
+    }
+
+    public void setEstHigh(double estHigh) {
+        this.estHigh = estHigh;
     }
 
     public String getEstLowStr() {
@@ -365,14 +381,6 @@ public class Project extends RealmObject implements TrackedObject {
 
     public String getStatusProjDlvrySys() {
         return statusProjDlvrySys;
-    }
-
-    public double getEstHigh() {
-        return estHigh;
-    }
-
-    public void setEstHigh(double estHigh) {
-        this.estHigh = estHigh;
     }
 
     public String getStdIncludes() {
