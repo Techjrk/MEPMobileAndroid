@@ -459,6 +459,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         Intent i = null;
         id = view.getId();
         int section = 0;
+        SearchFilterAllTabbedViewModel.userCreated = false;
         switch (id) {
 
             case R.id.clocation:
@@ -479,7 +480,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.ctype:
             case R.id.type:
                 section = TYPE;
-                SearchFilterAllTabbedViewModel.userCreated = false;
+               // SearchFilterAllTabbedViewModel.userCreated = false;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
                 //i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_DISPLAY_STR, getPRO));
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
