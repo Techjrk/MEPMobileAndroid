@@ -28,7 +28,7 @@ import java.util.TreeMap;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class SearchFilterStageAdapter extends SectionedAdapter {
+public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
@@ -54,7 +54,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public SearchFilterStageAdapter(List<Parent> data, SearchFilterStageViewModel viewModel) {
+    public SearchFilterStageSingleSelectAdapter(List<Parent> data, SearchFilterStageViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;

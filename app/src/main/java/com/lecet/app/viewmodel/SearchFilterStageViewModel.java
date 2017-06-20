@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
-import com.lecet.app.adapters.SearchFilterStageAdapter;
+import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 
@@ -37,7 +37,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
     private RealmResults<SearchFilterStagesMain> realmStages;
     private String query;
     private CheckBox lastChecked;
-    private SearchFilterStageAdapter adapter;
+    private SearchFilterStageSingleSelectAdapter adapter;
 
     public CheckBox getLastChecked() {
         return lastChecked;
@@ -138,21 +138,21 @@ public class SearchFilterStageViewModel extends BaseObservable {
         hasChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterStageAdapter.customSearch = true;
+            SearchFilterStageSingleSelectAdapter.customSearch = true;
         } else {
-            SearchFilterStageAdapter.customSearch = false;
+            SearchFilterStageSingleSelectAdapter.customSearch = false;
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        List<SearchFilterStageAdapter.Parent> data = new ArrayList<>();
-        List<SearchFilterStageAdapter.Child> children = null;
+        List<SearchFilterStageSingleSelectAdapter.Parent> data = new ArrayList<>();
+        List<SearchFilterStageSingleSelectAdapter.Child> children = null;
         for (SearchFilterStagesMain parentStage : getRealmStages()) {
             hasChild = false;
             foundParent = false;
             foundChild = false;
-            SearchFilterStageAdapter.Parent parent = new SearchFilterStageAdapter.Parent();
+            SearchFilterStageSingleSelectAdapter.Parent parent = new SearchFilterStageSingleSelectAdapter.Parent();
             parent.setId(parentStage.getId());
             parent.setName(parentStage.getName());
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
@@ -162,7 +162,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
             for (SearchFilterStage childStage : parentStage.getStages()) {
                 if (childStage != null) {
                     foundChild = false;
-                    SearchFilterStageAdapter.Child child = new SearchFilterStageAdapter.Child();
+                    SearchFilterStageSingleSelectAdapter.Child child = new SearchFilterStageSingleSelectAdapter.Child();
                     child.setId(childStage.getId());
                     child.setName(childStage.getName());
                     if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
@@ -181,7 +181,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
 
             if (parent != null && (hasChild || foundParent)) data.add(parent);
         }
-        adapter = new SearchFilterStageAdapter(data, this);
+        adapter = new SearchFilterStageSingleSelectAdapter(data, this);
         recyclerView.setAdapter(adapter);
     }
 

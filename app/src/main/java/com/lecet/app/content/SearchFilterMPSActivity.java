@@ -8,11 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
-import com.lecet.app.adapters.SearchFilterStageAdapter;
+import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
@@ -544,16 +543,16 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 List<String> sList = new ArrayList<>();
 
                 // GrandChild view type (2): should not occur since Stage does not have grandchild list view items
-                if(viewType == SearchFilterStageAdapter.GRAND_CHILD_VIEW_TYPE) {
+                if(viewType == SearchFilterStageSingleSelectAdapter.GRAND_CHILD_VIEW_TYPE) {
                     Log.w(TAG, "processStage: Warning: GrandChild Type Selected. Not Supported.");
                 }
                 // Child view type (1): just use the selected child's ID
-                else if(viewType == SearchFilterStageAdapter.CHILD_VIEW_TYPE) {
+                else if(viewType == SearchFilterStageSingleSelectAdapter.CHILD_VIEW_TYPE) {
                     Log.d(TAG, "processStage: Child Type Selected.");
                     sList.add(stageId);
                 }
                 // Parent view type (0): build a list of all child types under that parent ID
-                else if(viewType == SearchFilterStageAdapter.PARENT_VIEW_TYPE) {
+                else if(viewType == SearchFilterStageSingleSelectAdapter.PARENT_VIEW_TYPE) {
                     Log.d(TAG, "processStage: Parent Type Selected.");
                     SearchFilterStagesMain selectedParentStage = realm.where(SearchFilterStagesMain.class).equalTo("id", Integer.valueOf(stageId)).findFirst();
                     for(SearchFilterStage childStage : selectedParentStage.getStages()) {
