@@ -8,11 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
-import com.lecet.app.adapters.SearchFilterStageAdapter;
+import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
@@ -24,10 +23,10 @@ import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
 import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel;
 import com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel;
-import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
@@ -69,6 +68,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         setupToolbar();
     }
+
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.setContentInsetStartWithNavigation(0);
@@ -86,6 +86,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             actionBar.setDisplayShowCustomEnabled(false);
         }
     }
+
     /**
      * Get data back from user input from a Filter Activity
      * and put that data into the View Model
@@ -103,7 +104,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             String[] extrasArr = null;
             if (bundle == null) {
                 extrasArr = data.getStringArrayExtra(SearchViewModel.FILTER_EXTRA_DATA);
-                if(extrasArr == null || extrasArr.length == 0) {
+                if (extrasArr == null || extrasArr.length == 0) {
                     Log.w(TAG, "onActivityResult: WARNING: no valid Bundle or String extras was received from the exiting activity.");
                 }
             }
@@ -220,7 +221,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         // StringBuilder used for generating query with commas as appropriate
         StringBuilder sb = new StringBuilder();
         String projectLocation = "";
-        String companyLocation ="";
+        String companyLocation = "";
 
         if (city.length() > 0) {
             sb.append("\"city\":\"" + city + "\"");
@@ -252,7 +253,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             }
 
             viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, companyLocation);  // this should work whether or not companyLocation is empty
-            Log.d("companyresult","companyresult:"+companyLocation);
+            Log.d("companyresult", "companyresult:" + companyLocation);
         }
         projectLocation = sb.toString();
 
@@ -291,7 +292,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
-                    if(primaryType != null) {
+                    if (primaryType != null) {
                         Log.d("processProjectType: ", key + " is a Primary Type ID.");
                         idSet.add(primaryType.getId());
                     }
@@ -309,10 +310,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
                         else {
                             SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
-                            if(mainType != null) {
+                            if (mainType != null) {
                                 Log.d("processProjectType: ", key + " is a Main Type ID.");
-                                for(SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
-                                    for(PrimaryProjectType primary : projectCategory.getProjectTypes()) {
+                                for (SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
+                                    for (PrimaryProjectType primary : projectCategory.getProjectTypes()) {
                                         idSet.add(primary.getId());
                                     }
                                 }
@@ -359,20 +360,21 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         String valueStr = "$" + min + " - $" + max;   // text for display
         String projectValue = "";
-        if ((min == null || min.equals(""))&& (max == null|| max.equals(""))) {
+        if ((min == null || min.equals("")) && (max == null || max.equals(""))) {
             valueStr = "";
         }
         if (valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
         }
 
-       // Log.d("valuestr","valuestr"+valueStr);
+        // Log.d("valuestr","valuestr"+valueStr);
 
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
             viewModel.setCvalueSelect(valueStr);
         } else {
             viewModel.setPersistedValueMin(min);
-            if (!max.equals("MAX"))  viewModel.setPersistedValueMax(max); else viewModel.setPersistedValueMax("");
+            if (!max.equals("MAX")) viewModel.setPersistedValueMax(max);
+            else viewModel.setPersistedValueMax("");
             viewModel.setValue_select(valueStr);
         }
 
@@ -422,10 +424,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 try {
                     jurisdictionViewType = Integer.valueOf(bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_VIEW_TYPE));
-                    jurisdictionId       = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
+                    jurisdictionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ID);
                     jurisdictionRegionId = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_REGION_ID);
-                    jurisdictionName     = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);
-                    jurisdictionAbbrev   = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ABBREVIATION);
+                    jurisdictionName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_NAME);
+                    jurisdictionAbbrev = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ABBREVIATION);
                     jurisdictionLongName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_LONG_NAME);
                 } catch (Exception e) {
                     Log.e("processJurisdiction: ", "Error parsing bundle.");
@@ -517,7 +519,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Process the Stage input data based on the received list of Stages persisted in Realm
      * Ex: "projectStageId":{"inq":[208,209,210,211]}}
      */
-    private void processStage(final Bundle bundle) {
+    private void processStage(final Bundle b) {
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -525,44 +527,50 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 int viewType = -1;
-                String stageStr;
-                String stageId;
-                String stages;
-
-                try {
-                    viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
-                    stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
-                    stageId  = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
-                    stages = "";
-                }
-                catch (Exception e) {
-                    Log.e("processJurisdiction: ", "Error parsing bundle.");
-                    return;
-                }
+                String stageStr = "";
+                String stageId = "";
+                String stages = "";
 
                 // build the list of IDs for the query, which include the parent ID and any of its child IDs
                 List<String> sList = new ArrayList<>();
 
-                // GrandChild view type (2): should not occur since Stage does not have grandchild list view items
-                if(viewType == SearchFilterStageAdapter.GRAND_CHILD_VIEW_TYPE) {
-                    Log.w(TAG, "processStage: Warning: GrandChild Type Selected. Not Supported.");
-                }
-                // Child view type (1): just use the selected child's ID
-                else if(viewType == SearchFilterStageAdapter.CHILD_VIEW_TYPE) {
-                    Log.d(TAG, "processStage: Child Type Selected.");
-                    sList.add(stageId);
-                }
-                // Parent view type (0): build a list of all child types under that parent ID
-                else if(viewType == SearchFilterStageAdapter.PARENT_VIEW_TYPE) {
-                    Log.d(TAG, "processStage: Parent Type Selected.");
-                    SearchFilterStagesMain selectedParentStage = realm.where(SearchFilterStagesMain.class).equalTo("id", Integer.valueOf(stageId)).findFirst();
-                    for(SearchFilterStage childStage : selectedParentStage.getStages()) {
-                        sList.add(Integer.toString(childStage.getId()));
+                // add each parent type ID
+                for (String key : b.keySet()) {
+                    try {
+                        Bundle bundle = b.getBundle(key);
+                        viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
+                        stageStr += bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME) + ", ";                        // text display
+//                    stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
+                        stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
+                        stages = "";
+                    } catch (Exception e) {
+                        Log.e("processStage: ", "Error parsing bundle. str=" + stageStr + " error:" + e.getLocalizedMessage());
+                        return;
                     }
-                }
-                else {
-                    Log.e("processJurisdiction: ", "Unsupported viewType: " + viewType);
-                }
+
+                    // build the list of IDs for the query, which include the parent ID and any of its child IDs
+                    //List<String> sList = new ArrayList<>();
+
+                    // GrandChild view type (2): should not occur since Stage does not have grandchild list view items
+                    if (viewType == SearchFilterStageSingleSelectAdapter.GRAND_CHILD_VIEW_TYPE) {
+                        Log.w(TAG, "processStage: Warning: GrandChild Type Selected. Not Supported.");
+                    }
+                    // Child view type (1): just use the selected child's ID
+                    else if (viewType == SearchFilterStageSingleSelectAdapter.CHILD_VIEW_TYPE) {
+                        Log.d(TAG, "processStage: Child Type Selected.");
+                        sList.add(stageId);
+                    }
+                    // Parent view type (0): build a list of all child types under that parent ID
+                    else if (viewType == SearchFilterStageSingleSelectAdapter.PARENT_VIEW_TYPE) {
+                        Log.d(TAG, "processStage: Parent Type Selected.");
+                        SearchFilterStagesMain selectedParentStage = realm.where(SearchFilterStagesMain.class).equalTo("id", Integer.valueOf(stageId)).findFirst();
+                        for (SearchFilterStage childStage : selectedParentStage.getStages()) {
+                            sList.add(Integer.toString(childStage.getId()));
+                        }
+                    } else {
+                        Log.e("processStage: ", "Unsupported viewType: " + viewType);
+                    }
+                } // end of for-loop
 
                 if (stageStr != null && !stageStr.trim().equals("")) {
 
@@ -572,8 +580,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                     stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
                 }
+                Log.d("slistid", "slistid" + sList.toString());
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
-
+                if (stageStr.length() > 2) {
+                    stageStr = stageStr.substring(0, stageStr.length() - 2);         //trim trailing ", "
+                }
                 // display
                 if (stageStr == null || stageStr.equals("")) stageStr = "Any";
                 viewModel.setPersistedStage(stageStr);
@@ -607,10 +618,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      */
     private void processBuildingOrHighway(Bundle bundle) {
 
-        final String BUILDING      = getApplicationContext().getResources().getString(R.string.building);
+        final String BUILDING = getApplicationContext().getResources().getString(R.string.building);
         final String HEAVY_HIGHWAY = getApplicationContext().getResources().getString(R.string.heavy_highway);
 
-        String bhDisplayStr =  bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
+        String bhDisplayStr = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
         String bhChar = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG); // arr[1];
         viewModel.setPersistedBuildingOrHighway(bundle);
         viewModel.setBh_select(bhDisplayStr);

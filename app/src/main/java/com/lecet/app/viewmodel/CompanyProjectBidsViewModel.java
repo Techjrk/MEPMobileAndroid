@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
@@ -164,6 +165,7 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
                     results.toArray(bids);
                     data.clear();
                     data.addAll(new ArrayList<>(Arrays.asList(bids)));
+
                     listAdapter.notifyDataSetChanged();
                 }
             }

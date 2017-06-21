@@ -100,7 +100,6 @@ public class CompanyShareToolbarViewModel extends ShareToolbarViewModel<Company,
             public void onResponse(Call<CompanyTrackingList> call, Response<CompanyTrackingList> response) {
 
                 if (response.isSuccessful()) {
-
                     getTrackingListDomain().copyToRealmTransaction(response.body());
 
                     List<Long> selectedItems = new ArrayList<>();
@@ -136,7 +135,6 @@ public class CompanyShareToolbarViewModel extends ShareToolbarViewModel<Company,
             public void onResponse(Call<CompanyTrackingList> call, Response<CompanyTrackingList> response) {
 
                 if (response.isSuccessful()) {
-
                     getTrackingListDomain().copyToRealmTransaction(response.body());
                     dismissProgressDialog();
 

@@ -384,11 +384,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Intent i = null;
         int id = view.getId();
         int section = 0;
+        SearchFilterAllTabbedViewModel.userCreated = true;
         switch (id) {
             case R.id.add_project_type:
                 section = SearchFilterAllTabbedViewModel.TYPE;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
-                SearchFilterAllTabbedViewModel.userCreated = true;
+                //SearchFilterAllTabbedViewModel.userCreated = true;
                 break;
             case R.id.stage:
                 section = SearchFilterAllTabbedViewModel.STAGE;

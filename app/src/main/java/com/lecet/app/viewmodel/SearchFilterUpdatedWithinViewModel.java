@@ -6,6 +6,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -29,6 +30,13 @@ public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
     public SearchFilterUpdatedWithinViewModel(AppCompatActivity activity) {
         this.activity = activity;
         bundle = new Bundle();
+        Intent i = activity.getIntent();
+        String display = i.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR);
+        String dayValue = i.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT);
+        Log.d("display","display"+display+" dayValue"+dayValue);
+        if (display !=null && !display.isEmpty() && dayValue !=null && !dayValue.isEmpty()) {
+            setUpdatedWithinData(i.getStringExtra(display), i.getStringExtra(dayValue));
+        }
     }
 
     public void onApplyButtonClick(View view) {
