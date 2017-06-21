@@ -32,18 +32,8 @@ public class LecetInfoWindowCreatePinAdapter implements GoogleMap.InfoWindowAdap
     public View getInfoWindow(Marker marker) {
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.info_window_layout_create_pin, null, false);
 
-        if (marker.getTag() != null && marker.getTag() instanceof Project) {
-
-            final MapInfoWindowCreatePinViewModel viewModel = new MapInfoWindowCreatePinViewModel(context, (Project) marker.getTag(), showMyLocationHeader);
-            binding.setViewModel(viewModel);
-
-            /*binding.bidingStatus.setBackgroundResource(viewModel.getBidBackground());
-            binding.bidingStatus.setText(viewModel.getBidStatus());
-            binding.projectName.setText(viewModel.getProjectTitle());
-            binding.location.setText(viewModel.getProjectLocation());
-            binding.address1.setText(viewModel.getAddress1());
-            binding.address2.setText(viewModel.getAddress2());*/
-        }
+        final MapInfoWindowCreatePinViewModel viewModel = new MapInfoWindowCreatePinViewModel(context, new Project(), showMyLocationHeader);
+        binding.setViewModel(viewModel);
 
         return binding.getRoot();
     }
