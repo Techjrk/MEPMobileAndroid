@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +97,6 @@ public class CompanyDetailAdapter extends SectionedAdapter {
 
         // Get a list of the company contact info we need.
         companyInfo = new ArrayList<>();
-
         if (company.getContacts() != null && company.getContacts().size() > 0) {
 
             Contact contact = company.getContacts().get(0);
