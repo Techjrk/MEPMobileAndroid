@@ -245,26 +245,22 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                         public void onClick(View view) {
                             customSearch = false;
                             cb = (CheckBox) view;
-                            if (cb.isChecked()) {
-                               /* if (viewModel.getLastChecked() != null) {
-                                    viewModel.getLastChecked().setChecked(false);
-                                    checkLastSelect(false);
-                                }
+                            child.setSelected(cb.isChecked());
 
-                                viewModel.setLastChecked(childViewHolder.checkView);
-                                lastFamilyChecked = CHILD_VIEW_TYPE;
-                                lastPosition = Integer.valueOf(truePosition);
-                                lastSection = section;
-                                lastName = cb.getText().toString().trim();
-                                */
+                            if (child.getSelected()) {
+                                child.setSelected(true);
+                                viewModel.setStageData(CHILD_VIEW_TYPE, child.getId(), child.getName());
                             } else {
-                                clearLast();
-                                viewModel.clearBundle();
+                                child.setSelected(false);
+                                viewModel.removeStageData(Integer.toString(child.getId()));
+                                //clearLast();
+                                //viewModel.clearBundle();
                             }
 
-                            child.setSelected(cb.isChecked());
+                          /*  child.setSelected(cb.isChecked());
                             if (child.getSelected())
-                                viewModel.setStageData(CHILD_VIEW_TYPE, child.getId(), child.getName());
+                                viewModel.setStageData(CHILD_VIEW_TYPE, child.getId(), child.getName());*/
+
                             notifyDataSetChanged();
                         }
 
@@ -374,26 +370,20 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                         public void onClick(View view) {
                             customSearch = false;
                             CheckBox cb = (CheckBox) view;
-                            if (cb.isChecked()) {
-                               /* if (viewModel.getLastChecked() != null) {
-                                    viewModel.getLastChecked().setChecked(false);
-                                    checkLastSelect(false);
-                                }
-
-                                viewModel.setLastChecked(grandChildViewHolder.checkView);
-                                lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
-                                lastPosition = Integer.valueOf(grandChildIndex);
-                                lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
-                                lastSection = section;
-                                lastName = cb.getText().toString().trim();
-                            */
-                            } else {
-                                clearLast();
-                                viewModel.clearBundle();
-                            }
                             grandChild.setSelected(cb.isChecked());
-                            if (grandChild.getSelected())
+                            if (grandChild.getSelected()){
+                          //  if (cb.isChecked()) {
                                 viewModel.setStageData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName());
+
+                            } else {
+                                viewModel.removeStageData(Integer.toString(grandChild.getId()));
+                              //  clearLast();
+                              //  viewModel.clearBundle();
+                            }
+                           /* grandChild.setSelected(cb.isChecked());
+                            if (grandChild.getSelected())
+                                viewModel.setStageData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName());*/
+
                             notifyDataSetChanged();
                         }
 
@@ -449,26 +439,20 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     public void onClick(View view) {
                         customSearch = false;
                         CheckBox cb = (CheckBox) view;
-                        if (cb.isChecked()) {
-                            /*if (viewModel.getLastChecked() != null) {
-                                viewModel.getLastChecked().setChecked(false);
-                                checkLastSelect(false);
-                            }
-
-                            viewModel.setLastChecked(parentViewHolder.checkView);
-                            lastFamilyChecked = PARENT_VIEW_TYPE;
-                            lastSection = section;
-                            lastName = cb.getText().toString().trim();
-                            */
-                        } else {
-                            clearLast();
-                            viewModel.clearBundle();
-                        }
-
                         parent.setSelected(cb.isChecked());
 
-                        if (parent.getSelected())
+                        if (parent.getSelected()) {
+                            parent.setSelected(true);
                             viewModel.setStageData(PARENT_VIEW_TYPE, parent.getId(), parent.getName());
+                        } else {
+                            parent.setSelected(false);
+                            viewModel.removeStageData(Integer.toString(parent.getId()));
+                        }
+
+                        /*parent.setSelected(cb.isChecked());
+                        if (parent.getSelected())
+                            viewModel.setStageData(PARENT_VIEW_TYPE, parent.getId(), parent.getName());*/
+
                         notifyDataSetChanged();
                     }
                 }

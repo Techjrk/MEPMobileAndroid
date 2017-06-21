@@ -118,16 +118,31 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public void setStageData(int viewType, int id, String name) {
         // overwrite the Bundle instance with each selection since Stage only supports single-selection
-        bundle = new Bundle();
-        setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
-        setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
-        setBundleData(BUNDLE_KEY_NAME, name);
+       Bundle  b = new Bundle();
+        setBundleData(b, BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
+        setBundleData(b, BUNDLE_KEY_ID, Integer.toString(id));
+        setBundleData(b, BUNDLE_KEY_NAME, name);
+        bundle.putBundle(Integer.toString(id),b);
+      //  setBundleData(Integer.toString(id), name);
     }
 
-    private void setBundleData(String key, String value) {
+    public void setStageDataold(int viewType, int id, String name) {
+        // overwrite the Bundle instance with each selection since Stage only supports single-selection
+        //bundle = new Bundle();
+       // setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
+       // setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
+       // setBundleData(BUNDLE_KEY_NAME, name);
+    }
+    public void removeStageData(String key) {
+        bundle.remove(key);
+    }
+
+    private void setBundleData(Bundle b, String key, String value) {
+        b.putString(key, value);
+    }
+    private void setBundleDataold (String key, String value) {
         bundle.putString(key, value);
     }
-
     public RealmResults<SearchFilterStagesMain> getRealmStages() {
         return realmStages;
     }
