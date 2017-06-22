@@ -72,8 +72,8 @@ public class SearchFilterValueViewModel extends BaseObservable {
             try {
                 maxInt = Integer.valueOf(getMax());
             } catch (NumberFormatException ne) {
-                maxInt = 0;
-                setMax("");
+                maxInt = SearchFilterAllTabbedViewModel.VALUE_MAX;
+                max = String.valueOf(SearchFilterAllTabbedViewModel.VALUE_MAX);
             }
         }
         if (minInt <= maxInt) {
