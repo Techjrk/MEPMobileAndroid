@@ -38,7 +38,7 @@ public class CompanyProjectBidsActivity extends LecetBaseActivity {
         Company company = companyDomain.fetchCompany(companyId).first();
         BidDomain bidDomain = new BidDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
 
-        viewModel = new CompanyProjectBidsViewModel(this, company, bidDomain);
+        viewModel = new CompanyProjectBidsViewModel(this, company, bidDomain , companyDomain) ;
         binding.setViewModel(viewModel);
 
         setupToolbar(viewModel, company.getName(), getString(R.string.project_bids));
@@ -50,7 +50,11 @@ public class CompanyProjectBidsActivity extends LecetBaseActivity {
 
         viewModel.refreshData();
     }
-
+    @Override
+    public void onPause(){
+        super.onPause();
+        viewModel.cancelRequest();
+    }
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
 
