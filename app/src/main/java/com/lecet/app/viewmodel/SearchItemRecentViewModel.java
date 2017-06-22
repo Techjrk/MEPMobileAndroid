@@ -1,31 +1,24 @@
 package com.lecet.app.viewmodel;
 
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.content.SearchActivity;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectNote;
-import com.lecet.app.data.models.ProjectPhoto;
-import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.SearchDomain;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -53,6 +46,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     /**
      * This is for viewing all section for project, company and contacts with SearchViewModel
+     *
      * @param project
      * @param mapsApiKey
      * @param viewModel
@@ -60,31 +54,31 @@ public class SearchItemRecentViewModel extends BaseObservable {
     public SearchItemRecentViewModel(Project project, String mapsApiKey, SearchViewModel viewModel) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
-        searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
-        this.viewModel =viewModel;
+        searchDomain = new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel = viewModel;
         projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(viewModel.getActivity().getApplication()), Realm.getDefaultInstance());
     }
 
     /**
-     *
      * This is for Recently viewed section
-
-      public SearchItemRecentViewModel(Project project, String mapsApiKey) {
-        this.project = project;
-        this.mapsApiKey = mapsApiKey;
-        searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
-        this.viewModel =viewModel;
-    }*/
+     * <p>
+     * public SearchItemRecentViewModel(Project project, String mapsApiKey) {
+     * this.project = project;
+     * this.mapsApiKey = mapsApiKey;
+     * searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+     * this.viewModel =viewModel;
+     * }
+     */
     public SearchItemRecentViewModel(Company company, String mapsApiKey, SearchViewModel viewModel) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
-        searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
-        this.viewModel=viewModel;
+        searchDomain = new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
+        this.viewModel = viewModel;
     }
 
     public SearchItemRecentViewModel(Contact contact, SearchViewModel viewModel) {
         this.contact = contact;
-        this.viewModel=viewModel;
+        this.viewModel = viewModel;
     }
 
     ////////////////////////////////////
@@ -92,8 +86,12 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getHasStarCard() {
-        if (project.getUserNotes().size() > 0 || project.getImages().size() > 0) {
-            hasStarCard=true;
+        if (project != null) {
+            if (project.getUserNotes() != null && project.getUserNotes().size() > 0) {
+                hasStarCard = true;
+            } else if (project.getImages() != null && project.getImages().size() > 0) {
+                hasStarCard = true;
+            }
         }
         return hasStarCard;
     }
@@ -246,42 +244,43 @@ public class SearchItemRecentViewModel extends BaseObservable {
     // CLICK HANDLERS
 
     public void onProjectSavedClick(View view) {
-        if (viewModel !=null) viewModel.setDetailVisible(true);
+        if (viewModel != null) viewModel.setDetailVisible(true);
         if (project == null) {
             onCompanyClick(view);
             return;
         }
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
-        Log.d("projectsaved","projectsaved");
-       // saveRecentlyProject(SearchActivity.USER_ID,LecetSharedPreferenceUtil.getInstance(getContext()));
+        Log.d("projectsaved", "projectsaved");
+        // saveRecentlyProject(SearchActivity.USER_ID,LecetSharedPreferenceUtil.getInstance(getContext()));
         view.getContext().startActivity(intent);
     }
 
-//event for clicking the Saved Search Project Detail item
+    //event for clicking the Saved Search Project Detail item
     public void onProjectClick(View view) {
-        if (viewModel !=null) viewModel.setDetailVisible(true);
+        if (viewModel != null) viewModel.setDetailVisible(true);
         if (project == null) return;
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         viewModel.setDetailVisible(true);
         view.getContext().startActivity(intent);
-        Log.d("project","project");
+        Log.d("project", "project");
         saveRecentlyProject(project.getId());
     }
-//event for clicking the Saved Search Company Detail item
+
+    //event for clicking the Saved Search Company Detail item
     public void onCompanyClick(View view) {
-        if (viewModel !=null) viewModel.setDetailVisible(true);
+        if (viewModel != null) viewModel.setDetailVisible(true);
         if (company == null) return;
         Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
         view.getContext().startActivity(intent);
-        Log.d("company","company");
+        Log.d("company", "company");
         saveRecentlyCompany(company.getId());
     }
 
     public void onContactClick(View view) {
-        if (viewModel !=null) viewModel.setDetailVisible(true);
+        if (viewModel != null) viewModel.setDetailVisible(true);
         if (contact == null) return;
         Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
         intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
@@ -291,14 +290,14 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public void saveRecentlyProject(final long projectId) {
-       searchDomain.saveRecentProject(projectId, new Callback<ResponseBody>() {
+        searchDomain.saveRecentProject(projectId, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 String slist;
                 if (response.isSuccessful()) {
-                   // slist = response.body();
+                    // slist = response.body();
                     try {
-                        Log.d("saverecentproject","saverecentproject"+response.body().string()+":"+projectId);
+                        Log.d("saverecentproject", "saverecentproject" + response.body().string() + ":" + projectId);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -306,10 +305,10 @@ public class SearchItemRecentViewModel extends BaseObservable {
                 } else {
                     //errorDisplayMsg(response.message());
                     try {
-                        Log.e("unsuccessful","unsuccessul response : "+response.errorBody().string()+":"+projectId);
+                        Log.e("unsuccessful", "unsuccessul response : " + response.errorBody().string() + ":" + projectId);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.e("unsuccessful","unsuccessul response ioexception");
+                        Log.e("unsuccessful", "unsuccessul response ioexception");
                     }
                 }
             }
@@ -317,7 +316,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //errorDisplayMsg(t.getLocalizedMessage());
-                Log.e("unsuccessful","unsuccessul response failure");
+                Log.e("unsuccessful", "unsuccessul response failure");
             }
         });
     }
@@ -334,7 +333,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     // slist = response.body();
                     try {
-                        Log.d("saverecentcompany","saverecentcompany"+response.body().string()+":"+companyId);
+                        Log.d("saverecentcompany", "saverecentcompany" + response.body().string() + ":" + companyId);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -342,10 +341,10 @@ public class SearchItemRecentViewModel extends BaseObservable {
                 } else {
                     //errorDisplayMsg(response.message());
                     try {
-                        Log.e("unsuccessful","unsuccessul response : "+response.errorBody().string()+":"+companyId);
+                        Log.e("unsuccessful", "unsuccessul response : " + response.errorBody().string() + ":" + companyId);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.e("unsuccessful","unsuccessul response ioexception");
+                        Log.e("unsuccessful", "unsuccessul response ioexception");
                     }
                 }
             }
@@ -353,7 +352,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //errorDisplayMsg(t.getLocalizedMessage());
-                Log.e("unsuccessful","unsuccessul response failure");
+                Log.e("unsuccessful", "unsuccessul response failure");
             }
         });
     }

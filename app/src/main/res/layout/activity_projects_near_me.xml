@@ -55,15 +55,14 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/view_pager_bid"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+                    android:layout_height="wrap_content"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_bid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/lecetBidGray">
+                    android:background="@color/lecetBidGray"/>
 
-                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
 
             <ImageButton

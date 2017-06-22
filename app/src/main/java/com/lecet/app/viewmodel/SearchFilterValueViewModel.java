@@ -21,7 +21,7 @@ public class SearchFilterValueViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String min = "", max = "";
     private AlertDialog minMaxDialog = null;
-    private final static int MAX_CHAR=8;
+    private final static int MAX_CHAR = 8;
 
     /**
      * Constructor
@@ -34,14 +34,14 @@ public class SearchFilterValueViewModel extends BaseObservable {
     }
 
     public void onApplyButtonClick(View view) {
-    if (getMin() != null && getMax()!= null) {
-        Log.d("maxchar", "maxchar" + getMin().length());
+        if (getMin() != null && getMax() != null) {
+            Log.d("maxchar", "maxchar" + getMin().length());
 
-        if (getMax().length() > MAX_CHAR || getMin().length() > MAX_CHAR) {
-            showCharMaxDialog();
-            return;
+            if (getMax().length() > MAX_CHAR || getMin().length() > MAX_CHAR) {
+                showCharMaxDialog();
+                return;
+            }
         }
-    }
         if ((getMin() == null || getMin().equals("")) && (getMax() == null || getMax().equals(""))) {
             min = "";
             max = "";
@@ -55,15 +55,26 @@ public class SearchFilterValueViewModel extends BaseObservable {
             minInt = 0;
             min = "0";
         } else {
-            minInt = Integer.valueOf(getMin());
+            try {
+                minInt = Integer.valueOf(getMin());
+            } catch (NumberFormatException ne) {
+                minInt = 0;
+                setMin("");
+            }
+
         }
 
         Integer maxInt = 0;
-        if (getMax() == null || getMax().equals("")) {
+        if (getMax() == null || getMax().equals("") || getMax().equals(activity.getString(R.string.MAX))) {
             maxInt = SearchFilterAllTabbedViewModel.VALUE_MAX;
             max = String.valueOf(SearchFilterAllTabbedViewModel.VALUE_MAX);
         } else {
-            maxInt = Integer.valueOf(getMax());
+            try {
+                maxInt = Integer.valueOf(getMax());
+            } catch (NumberFormatException ne) {
+                maxInt = SearchFilterAllTabbedViewModel.VALUE_MAX;
+                max = String.valueOf(SearchFilterAllTabbedViewModel.VALUE_MAX);
+            }
         }
         if (minInt <= maxInt) {
             Intent intent = activity.getIntent();
@@ -96,6 +107,7 @@ public class SearchFilterValueViewModel extends BaseObservable {
 
         minMaxDialog.show();
     }
+
     /**
      * Show the min/max validation dialog
      */

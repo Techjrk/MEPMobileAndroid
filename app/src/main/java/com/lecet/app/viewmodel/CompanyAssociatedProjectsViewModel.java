@@ -68,7 +68,7 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
     private Company company;
     private Call<Company> companyCall;
     private RealmResults<Project> data;
-
+    private int sortPosition = -1;
 
     public CompanyAssociatedProjectsViewModel(AppCompatActivity appCompatActivity, CompanyDomain companyDomain, long companyId) {
         super(appCompatActivity);
@@ -156,8 +156,14 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
     private void initializeAdapter(Company company) {
 
         data = defaultSortedData(company.getProjects());
-        listAdapter = new CompanyAssociatedProjectAdapter(data);
-        recyclerView.setAdapter(listAdapter);
+        if(sortPosition == -1){
+            listAdapter = new CompanyAssociatedProjectAdapter(data);
+            recyclerView.setAdapter(listAdapter);
+        }
+        else{
+            handleSortSelection(sortPosition);
+        }
+
     }
 
     /** Sort Menu **/
@@ -207,8 +213,8 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (position > 0) {
                         mtmSortMenu.dismiss();
-
-                        handleSortSelection(position - 1); // removing title
+                        sortPosition = position -1;
+                        handleSortSelection(sortPosition); // removing title
                     }
                 }
             }); // the callback for when a list item is selected

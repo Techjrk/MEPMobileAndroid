@@ -19,10 +19,15 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyProjectBidsAdapter;
 import com.lecet.app.adapters.MenuTitleListAdapter;
+import com.lecet.app.content.CompanyDetailActivity;
+import com.lecet.app.content.CompanyProjectBidsActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.domain.BidDomain;
+import com.lecet.app.domain.CompanyDomain;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +37,9 @@ import java.util.List;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * File: CompanyProjectBidsViewModel Created: 2/2/17 Author: domandtom
@@ -39,7 +47,7 @@ import io.realm.Sort;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class CompanyProjectBidsViewModel extends BaseObservable {
+public class CompanyProjectBidsViewModel extends BaseObservableViewModel {
 
     private static final String UPCOMING_TAG = "tab.upcoming";
     private static final String PAST_TAG = "tab.past";
@@ -59,8 +67,9 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
     private CompanyProjectBidsAdapter listAdapter;
     private List<Bid> data;
 
-    private final Company company;
+    private Company company;
     private final BidDomain bidDomain;
+    private final CompanyDomain companyDomain;
     @CompanyProjectBidsAdapter.NavigationMode
     private int navigationMode;
 
@@ -76,12 +85,17 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
     private static final int SORT_VALUE_HIGH = 3;
     private static final int SORT_VALUE_LOW = 4;
 
+    private Call<Company> companyCall;
+    private final WeakReference<CompanyProjectBidsActivity> activityWeakReference;
 
-    public CompanyProjectBidsViewModel(AppCompatActivity appCompatActivity, Company company, BidDomain bidDomain) {
+    public CompanyProjectBidsViewModel(CompanyProjectBidsActivity appCompatActivity, Company company, BidDomain bidDomain , CompanyDomain companyDomain) {
+        super(appCompatActivity);
+
         this.appCompatActivity = appCompatActivity;
         this.company = company;
         this.bidDomain = bidDomain;
-
+        this.companyDomain = companyDomain;
+        activityWeakReference = new WeakReference<>(appCompatActivity);
         // Default to create date
         RealmResults<Bid> results = bidDomain.fetchBidsByCompanyGreaterThanDate(company.getId(), "amount", Sort.DESCENDING, new Date());
         Bid[] bids = new Bid[results.size()];
@@ -98,7 +112,7 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
 
         // TODO: No need to refresh, data is still there. Why is this occuring?
         // Default to create date
-        RealmResults<Bid> results = bidDomain.fetchBidsByCompanyGreaterThanDate(company.getId(), "amount", Sort.DESCENDING, new Date());
+       /* RealmResults<Bid> results = bidDomain.fetchBidsByCompanyGreaterThanDate(company.getId(), "amount", Sort.DESCENDING, new Date());
         Bid[] bids = new Bid[results.size()];
         results.toArray(bids);
         data = new ArrayList<>(Arrays.asList(bids));
@@ -107,9 +121,49 @@ public class CompanyProjectBidsViewModel extends BaseObservable {
         initRecyclerView(this.company);
 
         // Set Tablayout to default position
-        tabLayout.getTabAt(0).select();
-    }
+        tabLayout.getTabAt(0).select();*/
 
+        CompanyProjectBidsActivity activity = activityWeakReference.get();
+
+        if (activity == null) return;
+
+
+        showProgressDialog();
+
+        companyCall = companyDomain.getCompanyDetails(company.getId(), new Callback<Company>() {
+            @Override
+            public void onResponse(Call<Company> call, Response<Company> response) {
+
+                if (response.isSuccessful()) {
+
+                    companyDomain.copyToRealmTransaction(response.body());
+                    company = companyDomain.fetchCompany(company.getId()).first();
+                    initRecyclerView(company);
+
+                    dismissProgressDialog();
+
+                } else {
+
+                    dismissProgressDialog();
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), response.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Company> call, Throwable t) {
+
+                dismissProgressDialog();
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+            }
+        });
+
+    }
+    public void cancelRequest(){
+        if(companyCall != null){
+            companyCall.cancel();
+        }
+    }
     /**
      * Toolbar
      **/
