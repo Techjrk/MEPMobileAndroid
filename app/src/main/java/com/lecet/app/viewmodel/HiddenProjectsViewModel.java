@@ -15,6 +15,7 @@ import com.lecet.app.adapters.HiddenProjectsAdapter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
@@ -41,7 +42,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
     private RecyclerView recyclerView;
     private HiddenProjectsAdapter listAdapter;
-    private RealmResults<Project> results;
+    private List<Project> results;
 
     private TextView titleTextView;
     private TextView subtitleTextView;
@@ -90,7 +91,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
                         @Override
                         public void onSuccess() {
 
-                            results = projectDomain.fetchHiddenProjects();
+                            results = projectDomain.getRealm().copyFromRealm(projectDomain.fetchHiddenProjects());
                             projectsCount = results.size();
                             initializeAdapter(results);
                             updateSubTitle();
@@ -128,7 +129,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
      * Adapter Data Management: Project List
      **/
 
-    private void initializeAdapter(RealmResults<Project> hiddenProjects) {
+    private void initializeAdapter(List<Project> hiddenProjects) {
 
         recyclerView = getRecyclerView(R.id.recycler_view);
         setupRecyclerView(recyclerView);

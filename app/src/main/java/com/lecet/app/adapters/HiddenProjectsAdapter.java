@@ -11,6 +11,8 @@ import com.lecet.app.databinding.ListItemHiddenProjectBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.viewmodel.ListItemHiddenProjectViewModel;
 
+import java.util.List;
+
 import io.realm.RealmResults;
 
 /**
@@ -22,10 +24,10 @@ import io.realm.RealmResults;
 public class HiddenProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final ProjectDomain projectDomain;
-    private final RealmResults<Project> data;
+    private final List<Project> data;
     private final String mapsAPIKey;
 
-    public HiddenProjectsAdapter(ProjectDomain projectDomain, RealmResults<Project> data, String mapsAPIKey) {
+    public HiddenProjectsAdapter(ProjectDomain projectDomain, List<Project> data, String mapsAPIKey) {
 
         this.projectDomain = projectDomain;
         this.data = data;

@@ -72,7 +72,7 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
                         isHidden = false;
-                        projectDomain.setProjectHidden(getProject(), isHidden);
+                        projectDomain.setProjectHiddenAsync(getProject(), isHidden);
                         setHideTitle(context.getString(R.string.hide));
                         setHiddenTextViewColor(R.color.lecetHideBlue);
                     }
@@ -91,7 +91,7 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
                         isHidden = true;
-                        projectDomain.setProjectHidden(getProject(), isHidden);
+                        projectDomain.setProjectHiddenAsync(getProject(), isHidden);
                         setHideTitle(context.getString(R.string.unhide));
                         setHiddenTextViewColor(R.color.lecetUnhideBlue);
                     }

@@ -570,6 +570,24 @@ public class ProjectDomain {
         realm.commitTransaction();
     }
 
+    public void setProjectHiddenAsync(Project project, final boolean hidden) {
+
+        final long projectID = project.getId();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm asyncRealm) {
+
+                RealmResults<Project> results = asyncRealm.where(Project.class).equalTo("id", projectID).findAll();
+                if (results.size() > 0) {
+
+                    Project p = results.first();
+                    p.setHidden(hidden);
+                }
+            }
+        });
+    }
+
     public Project copyToRealmTransaction(Project project) {
 
         realm.beginTransaction();
