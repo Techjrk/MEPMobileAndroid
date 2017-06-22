@@ -19,12 +19,15 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyProjectBidsAdapter;
 import com.lecet.app.adapters.MenuTitleListAdapter;
+import com.lecet.app.content.CompanyDetailActivity;
+import com.lecet.app.content.CompanyProjectBidsActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.CompanyDomain;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,15 +86,16 @@ public class CompanyProjectBidsViewModel extends BaseObservableViewModel {
     private static final int SORT_VALUE_LOW = 4;
 
     private Call<Company> companyCall;
+    private final WeakReference<CompanyProjectBidsActivity> activityWeakReference;
 
-
-    public CompanyProjectBidsViewModel(AppCompatActivity appCompatActivity, Company company, BidDomain bidDomain , CompanyDomain companyDomain) {
+    public CompanyProjectBidsViewModel(CompanyProjectBidsActivity appCompatActivity, Company company, BidDomain bidDomain , CompanyDomain companyDomain) {
         super(appCompatActivity);
 
         this.appCompatActivity = appCompatActivity;
         this.company = company;
         this.bidDomain = bidDomain;
         this.companyDomain = companyDomain;
+        activityWeakReference = new WeakReference<>(appCompatActivity);
         // Default to create date
         RealmResults<Bid> results = bidDomain.fetchBidsByCompanyGreaterThanDate(company.getId(), "amount", Sort.DESCENDING, new Date());
         Bid[] bids = new Bid[results.size()];
@@ -118,6 +122,10 @@ public class CompanyProjectBidsViewModel extends BaseObservableViewModel {
 
         // Set Tablayout to default position
         tabLayout.getTabAt(0).select();*/
+
+        CompanyProjectBidsActivity activity = activityWeakReference.get();
+
+        if (activity == null) return;
 
 
         showProgressDialog();
