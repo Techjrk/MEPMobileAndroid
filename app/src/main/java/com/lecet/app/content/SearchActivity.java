@@ -210,7 +210,7 @@ if (category !=null){
         String valueFilter = processValueFilter(data);
         if (valueFilter.length() > 0) {
 
-            if ( valueFilter.contains("MAX")) {
+            if ( valueFilter.contains(getString(R.string.MAX))) {
                  valueFilter = valueFilter.replace(",\"max\":MAX", "");
             }
 

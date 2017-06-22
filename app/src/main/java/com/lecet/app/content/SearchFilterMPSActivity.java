@@ -356,7 +356,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String max = arr[1];                          // int for query
 
         if (max.trim().equals(String.valueOf(viewModel.VALUE_MAX))) {
-            max = "MAX";
+            max = getString(R.string.MAX);
         }
         String valueStr = "$" + min + " - $" + max;   // text for display
         String projectValue = "";
@@ -373,7 +373,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             viewModel.setCvalueSelect(valueStr);
         } else {
             viewModel.setPersistedValueMin(min);
-            if (!max.equals("MAX")) viewModel.setPersistedValueMax(max);
+            if (!max.equals(getString(R.string.MAX))) viewModel.setPersistedValueMax(max);
             else viewModel.setPersistedValueMax("");
             viewModel.setValue_select(valueStr);
         }
