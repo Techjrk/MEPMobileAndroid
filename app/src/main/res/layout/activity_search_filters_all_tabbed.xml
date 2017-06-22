@@ -262,18 +262,21 @@
                                 android:layout_height="wrap_content"
                                 android:onClick="@{viewModel::onClicked}">
 
+
                                 <TextView
+                                    android:id="@+id/txtStage"
+                                    android:layout_alignParentLeft="true"
                                     style="@style/SearchFilterSectionTextView"
                                     android:text="@string/stage"
                                     android:textAllCaps="true"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
-
                                 <TextView
                                     style="@style/SearchFilterSectionTextView"
                                     android:layout_alignParentRight="true"
                                     android:text="@{viewModel.stage_select}"
                                     android:textColor="@color/lecetLightGray"
-
+                                    android:layout_toRightOf="@id/txtStage"
+                                    android:textAlignment="textEnd"
                                     bind:typeface="@{`Lato-Bold.ttf`}" />
                             </RelativeLayout>
 
