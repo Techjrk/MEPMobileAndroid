@@ -1,5 +1,12 @@
 package com.lecet.app.content;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -22,12 +29,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
@@ -43,10 +44,10 @@ import java.util.List;
 
 import io.realm.Realm;
 
-public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback
-        , LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener  {
+public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback,
+        LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
 
-    public static final String EXTRA_MARKER_LATITUDE  = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
+    public static final String EXTRA_MARKER_LATITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
     public static final String EXTRA_MARKER_LONGITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.longitude.extra";
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
     public static final String EXTRA_ASKING_FOR_PERMISSION = "asking_for_permission";
@@ -146,24 +147,31 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     private void fetchProjects(boolean animateCamera) {
 
         if (!viewModel.isMapReady()) return;
-try { //Adding try-catch block for any runtime exception occurred when GoogleApiClient is not connected yet.
-    if (lastKnowLocation != null) {
-        LatLng location = new LatLng(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
-        if (animateCamera) {
-            viewModel.animateMapCamera(location);
-        } else {
-            viewModel.moveMapCamera(location);
-        }
-        viewModel.fetchProjectsNearMe(location);
-    } else {
-        enableLocationUpdates = true;
-        if (isLocationManagerConnected) {
-            locationManager.startLocationUpdates();
+        try { //Adding try-catch block for any runtime exception occurred when GoogleApiClient is not connected yet.
+            if (lastKnowLocation != null) {
+                LatLng location = new LatLng(lastKnowLocation.getLatitude(), lastKnowLocation.getLongitude());
+                if (animateCamera) {
+                    viewModel.animateMapCamera(location);
+                } else {
+                    viewModel.moveMapCamera(location);
+                }
+                viewModel.fetchProjectsNearMe(location);
+            } else {
+                enableLocationUpdates = true;
+                if (isLocationManagerConnected) {
+                    locationManager.startLocationUpdates();
+                }
+            }
+        } catch (Exception e) {
+            Log.d("fetchProject", "fetchProject exception" + e.getMessage());
         }
     }
-} catch (Exception e) {
-    Log.d("fetchProject","fetchProject exception"+e.getMessage());
-}
+
+    private void fetchProjects(LatLng latLng) {
+
+        if (!viewModel.isMapReady()) return;
+
+        viewModel.fetchProjectsNearMe(latLng);
     }
 
     @Override
@@ -214,8 +222,7 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
 
         try {
             locationManager.handleOnStart();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             this.showNetworkAlert();
         }
     }
@@ -290,7 +297,7 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
         // Project Location Filter e.g. {"projectLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
         String projectLocationFilter = processProjectLocationFilter(data);
         if (projectLocationFilter.length() > 0) {
-           // projectsSb.append(projectLocationFilter); //uncomment if mpnLocation will no longer be used.
+            // projectsSb.append(projectLocationFilter); //uncomment if mpnLocation will no longer be used.
 
             mpnLocation = projectLocationFilter.substring(projectLocationFilter.indexOf(':') + 2, projectLocationFilter.lastIndexOf('}'));
             mpnLocation = mpnLocation.replaceAll(":", " ");
@@ -369,7 +376,7 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
         // Value Filter
         String valueFilter = processValueFilter(data);
         if (valueFilter.length() > 0) {
-            if ( valueFilter.contains(getString(R.string.MAX))) {
+            if (valueFilter.contains(getString(R.string.max))) {
                 valueFilter = valueFilter.replace(",\"max\":MAX", "");
             }
 
@@ -693,18 +700,19 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
         int preSize = 0;
         int postSize = 0;
 
-        if (viewModel.getPrebidProjects()!= null) {
+        if (viewModel.getPrebidProjects() != null) {
             preSize = viewModel.getPrebidProjects().size();
         }
-        if (viewModel.getPostbidProjects()!= null) {
+        if (viewModel.getPostbidProjects() != null) {
             postSize = viewModel.getPostbidProjects().size();
         }
 
         pagerAdapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebidProjects()), getResources().getString(R.string.reg_pre_bid),preSize);
-        pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbidProjects()), getResources().getString(R.string.reg_post_bid),postSize);
+        pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebidProjects()), getResources().getString(R.string.reg_pre_bid), preSize);
+        pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbidProjects()), getResources().getString(R.string.reg_post_bid), postSize);
         viewPager.setAdapter(pagerAdapter);
     }
+
     /**
      * Inner ViewPagerAdapter class
      */
@@ -728,7 +736,7 @@ try { //Adding try-catch block for any runtime exception occurred when GoogleApi
 
         public void addFragment(Fragment fragment, String title, int size) {
             fragmentList.add(fragment);
-            fragmentTitleList.add("     "+size+" "+title+"     ");
+            fragmentTitleList.add("     " + size + " " + title + "     ");
         }
 
         public List<Fragment> getFragmentList() {

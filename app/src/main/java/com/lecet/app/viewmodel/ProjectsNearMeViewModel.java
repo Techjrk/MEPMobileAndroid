@@ -1,5 +1,16 @@
 package com.lecet.app.viewmodel;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -27,16 +38,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
@@ -71,7 +72,8 @@ import static com.lecet.app.viewmodel.SearchViewModel.FILTER_INSTANT_SEARCH;
 public class ProjectsNearMeViewModel extends BaseObservableViewModel implements GoogleMap.OnMarkerClickListener
         , GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener
         , View.OnClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnMyLocationChangeListener
-        , GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCircleClickListener {
+        , GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCircleClickListener,
+        GoogleMap.OnCameraIdleListener {
 
     private static final String TAG = "ProjectsNearMeViewModel";
 
@@ -158,6 +160,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.map.setOnMapClickListener(this);
         this.map.setOnMapLongClickListener(this);
         this.map.setOnCircleClickListener(this);
+        this.map.setOnCameraIdleListener(this);
 
         AppCompatActivity activity = getActivityWeakReference().get();
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -167,26 +170,30 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.map.setMyLocationEnabled(true);
     }
 
+    public GoogleMap getMap() {
+        return map;
+    }
+
     private void initMarkerAssets() {
         // standard project markers
-        this.standardMarkerStatic             = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_static);
-        this.standardMarkerStaticWithUpdate   = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_static_update);
-        this.standardMarkerPreBid             = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_pre_bid);
-        this.standardMarkerPreBidWithUpdate   = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_pre_bid_update);
-        this.standardMarkerPostBid            = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_post_bid);
-        this.standardMarkerPostBidWithUpdate  = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_post_bid_update);
-        this.standardMarkerSelected           = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_selected);
+        this.standardMarkerStatic = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_static);
+        this.standardMarkerStaticWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_static_update);
+        this.standardMarkerPreBid = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_pre_bid);
+        this.standardMarkerPreBidWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_pre_bid_update);
+        this.standardMarkerPostBid = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_post_bid);
+        this.standardMarkerPostBidWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_post_bid_update);
+        this.standardMarkerSelected = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_selected);
         this.standardMarkerSelectedWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_standard_marker_selected_update);
 
         // custom (user-created) pin markers
-        this.pinMarkerStatic                  = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
-        this.pinMarkerStaticWithUpdate        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static_update);
-        this.pinMarkerPreBid                  = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid);
-        this.pinMarkerPreBidWithUpdate        = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid_update);
-        this.pinMarkerPostBid                 = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid);
-        this.pinMarkerPostBidWithUpdate       = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid_update);
-        this.pinMarkerSelected                = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected);
-        this.pinMarkerSelectedWithUpdate      = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected_update);
+        this.pinMarkerStatic = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static);
+        this.pinMarkerStaticWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_static_update);
+        this.pinMarkerPreBid = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid);
+        this.pinMarkerPreBidWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_pre_bid_update);
+        this.pinMarkerPostBid = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid);
+        this.pinMarkerPostBidWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_post_bid_update);
+        this.pinMarkerSelected = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected);
+        this.pinMarkerSelectedWithUpdate = BitmapDescriptorFactory.fromResource(R.drawable.ic_custom_pin_marker_selected_update);
     }
 
     private void updateLocationCircle(GoogleMap map, LatLng latLng) {
@@ -198,7 +205,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         circleOptions.fillColor(R.color.transparent);
 
         //remove old circle
-        if(locationCircle != null) {
+        if (locationCircle != null) {
             locationCircle.remove();
             locationCircle = null;
         }
@@ -218,15 +225,14 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onCircleClick(Circle circle) {
         Log.d(TAG, "onCircleClick: " + circle);
-        if(circle.equals(locationCircle)) {
+        if (circle.equals(locationCircle)) {
             Log.d(TAG, "locationCircle: locationCircle clicked");
             //placeMapMarker(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
-            if(currLocationMarker != null){
+            if (currLocationMarker != null) {
                 onMarkerClick(currLocationMarker);
-            }
-            else{
-                placeCustomPin(currentLocation , true);
+            } else {
+                placeCustomPin(currentLocation, true);
             }
         }
     }
@@ -242,11 +248,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.icon(pinMarkerStatic);
-        if(labelForMyLocation) {
+        if (labelForMyLocation) {
             markerOptions.title(activity.getString(R.string.my_location));
             map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, true));
-        }
-        else {
+        } else {
             markerOptions.title("");
             map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, false));
         }
@@ -260,9 +265,9 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         boolean hasUpdates = projectHasUpdates(project);
 
         // for standard projects, i.e. with Dodge numbers
-        if(project.getDodgeNumber() != null) {
+        if (project.getDodgeNumber() != null) {
 
-            if(selected) {
+            if (selected) {
                 return hasUpdates ? standardMarkerSelectedWithUpdate : standardMarkerSelected;
             }
 
@@ -274,8 +279,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             else {
                 if (project.getProjectStage().getParentId() == 102) {
                     return hasUpdates ? standardMarkerPreBidWithUpdate : standardMarkerPreBid;
-                }
-                else {
+                } else {
                     return hasUpdates ? standardMarkerPostBidWithUpdate : standardMarkerPostBid;
                 }
             }
@@ -284,21 +288,20 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         // for custom (user-created) projects, which have no Dodge number
         else {
 
-            if(selected) {
+            if (selected) {
                 return hasUpdates ? pinMarkerSelectedWithUpdate : pinMarkerSelected;
             }
 
             // pre-bid user-created projects
-            if(project.getProjectStage() == null) {
+            if (project.getProjectStage() == null) {
                 return hasUpdates ? pinMarkerPreBidWithUpdate : pinMarkerPreBid;
             }
 
             // post-bid user-created projects
             else {
-                if(project.getProjectStage().getParentId() == 102) {
+                if (project.getProjectStage().getParentId() == 102) {
                     return hasUpdates ? pinMarkerPreBidWithUpdate : pinMarkerPreBid;
-                }
-                else {
+                } else {
                     return hasUpdates ? pinMarkerPostBidWithUpdate : pinMarkerPostBid;
                 }
             }
@@ -307,8 +310,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     private boolean projectHasUpdates(Project project) {
-        if(project == null) return false;
-        if(project.getUserNotes() == null || project.getImages() == null) {
+        if (project == null) return false;
+        if (project.getUserNotes() == null || project.getImages() == null) {
             return false;
         }
         return (project.getImages().size() > 0 || project.getUserNotes().size() > 0);
@@ -325,13 +328,19 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         clearCurrLocationMarker();
         placeCustomPin(latLng, true);
-        updateLocationCircle(map , latLng);
+        updateLocationCircle(map, latLng);
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
         Log.d(TAG, "onMapLongClick: " + latLng);
         //clearCurrLocationMarker();
+    }
+
+    @Override
+    public void onCameraIdle() {
+
+        fetchProjectsNearMe(map.getCameraPosition().target);
     }
 
     private void clearCurrLocationMarker() {
@@ -475,8 +484,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     // define as pre- or post-bid
                     if (project.getProjectStage() == null) {
                         prebidProjects.add(project);
-                    }
-                    else {
+                    } else {
                         if (project.getProjectStage().getParentId() == 102) {
                             prebidProjects.add(project);
                         } else {
@@ -502,12 +510,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private PointF getInfoWindowAnchorPosition(Project project) {
 
         PointF defaultPos = new PointF(5.4f, 5f);
-        PointF customPos  = new PointF(8.3f, 6.0f);
+        PointF customPos = new PointF(8.3f, 6.0f);
 
-        if(project.getDodgeNumber() != null) {
+        if (project.getDodgeNumber() != null) {
             return defaultPos;
-        }
-        else return customPos;
+        } else return customPos;
     }
 
     /*private void placeMapMarker(LatLng location) {
@@ -556,8 +563,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
             lastMarkerTapped = marker;
         }
-        if(!marker.isInfoWindowShown())
-        {
+        if (!marker.isInfoWindowShown()) {
             marker.showInfoWindow();
         }
         return false;
@@ -614,7 +620,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         if (context != null) {
 
-            if(marker.getTitle() != null && marker.getTitle().equals(context.getString(R.string.my_location))) {
+            if (marker.getTitle() != null && marker.getTitle().equals(context.getString(R.string.my_location))) {
                 Log.d(TAG, "onInfoWindowClick: marker position: " + marker.getPosition());
                 Log.d(TAG, "onInfoWindowClick: marker lat: " + marker.getPosition().latitude);
                 Log.d(TAG, "onInfoWindowClick: marker lng: " + marker.getPosition().longitude);
@@ -624,9 +630,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 intent.putExtra(EXTRA_MARKER_LATITUDE, marker.getPosition().latitude);
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);
-            }
-
-            else {
+            } else {
                 Project project = (Project) marker.getTag();
                 Intent intent = new Intent(context, ProjectDetailActivity.class);
                 intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
@@ -653,8 +657,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         if (id == R.id.button_clear) { //the x in the search bar
             search.setText(null);
-        }
-        else if (id == R.id.button_search) {
+        } else if (id == R.id.button_search) {
             setProjectFilter("default");
             searchAddress(search.getText().toString());
             //  ((ProjectsNearMeActivity) activity).setupViewPager();
@@ -663,7 +666,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             setProjectFilter("default");
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
             intent.putExtra(FILTER_INSTANT_SEARCH, false);
-            intent.putExtra(activity.getString(R.string.using_project_near_me),true);
+            intent.putExtra(activity.getString(R.string.using_project_near_me), true);
             Activity activity = getActivityWeakReference().get();
             activity.startActivityForResult(intent, REQUEST_FILTER_MPN);
         }
