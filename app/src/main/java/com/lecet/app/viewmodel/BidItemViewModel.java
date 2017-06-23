@@ -32,15 +32,15 @@ public class BidItemViewModel extends BaseObservable {
     private SearchDomain searchDomain;
 
     /*Created dummy server and upload these images on it and access it with piccasso*/
-    private final String STANDARD_PRE_BID_MARKER = "ic_standard_marker_pre_bid_kjselm.png";
-    private final String STANDARD_PRE_BID_MARKER_UPDATE = "ic_standard_marker_pre_bid_update_p25ao6.png";
-    private final String STANDARD_POST_BID_MARKER = "ic_standard_marker_post_bid_kkabhe.png";
-    private final String STANDARD_POST_BID_MARKER_UPDATE = "ic_standard_marker_post_bid_update_exicg2.png";
-    private final String CUSTOM_PRE_BID_MARKER = "ic_custom_pin_marker_pre_bid_tdocru.png";
-    private final String CUSTOM_PRE_BID_MARKER_UPDATE = "ic_custom_pin_marker_pre_bid_update_xzjl40.png";
-    private final String CUSTOM_POST_BID_MARKER = "ic_custom_pin_marker_post_bid_iwa8we.png";
-    private final String CUSTOM_POST_BID_MARKER_UPDATE = "ic_custom_pin_marker_post_bid_update_kzkxrw.png";
-    private final String url = "http://res.cloudinary.com/djakoy1gr/image/upload/v1498123162/";
+    public static final String STANDARD_PRE_BID_MARKER = "ic_standard_marker_pre_bid_kjselm.png";
+    public static final String STANDARD_PRE_BID_MARKER_UPDATE = "ic_standard_marker_pre_bid_update_p25ao6.png";
+    public static final String STANDARD_POST_BID_MARKER = "ic_standard_marker_post_bid_kkabhe.png";
+    public static final String STANDARD_POST_BID_MARKER_UPDATE = "ic_standard_marker_post_bid_update_exicg2.png";
+    public static final String CUSTOM_PRE_BID_MARKER = "ic_custom_pin_marker_pre_bid_tdocru.png";
+    public static final String CUSTOM_PRE_BID_MARKER_UPDATE = "ic_custom_pin_marker_pre_bid_update_xzjl40.png";
+    public static final String CUSTOM_POST_BID_MARKER = "ic_custom_pin_marker_post_bid_iwa8we.png";
+    public static final String CUSTOM_POST_BID_MARKER_UPDATE = "ic_custom_pin_marker_post_bid_update_kzkxrw.png";
+    public static final String url = "http://res.cloudinary.com/djakoy1gr/image/upload/v1498123162/";
     public BidItemViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;

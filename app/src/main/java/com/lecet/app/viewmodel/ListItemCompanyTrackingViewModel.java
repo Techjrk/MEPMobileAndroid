@@ -111,7 +111,7 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
 
         return mapStr;
     }
-
+    
     private String generateCenterPointAddress(Company company) {
 
         StringBuilder stringBuilder = new StringBuilder();

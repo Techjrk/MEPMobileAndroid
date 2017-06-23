@@ -17,15 +17,7 @@ public class CompanyDetailProjectViewModel extends BaseObservable {
 
     private final Project project;
     private final String mapsApiKey;
-    private final String STANDARD_PRE_BID_MARKER = "ic_standard_marker_pre_bid_kjselm.png";
-    private final String STANDARD_PRE_BID_MARKER_UPDATE = "ic_standard_marker_pre_bid_update_p25ao6.png";
-    private final String STANDARD_POST_BID_MARKER = "ic_standard_marker_post_bid_kkabhe.png";
-    private final String STANDARD_POST_BID_MARKER_UPDATE = "ic_standard_marker_post_bid_update_exicg2.png";
-    private final String CUSTOM_PRE_BID_MARKER = "ic_custom_pin_marker_pre_bid_tdocru.png";
-    private final String CUSTOM_PRE_BID_MARKER_UPDATE = "ic_custom_pin_marker_pre_bid_update_xzjl40.png";
-    private final String CUSTOM_POST_BID_MARKER = "ic_custom_pin_marker_post_bid_iwa8we.png";
-    private final String CUSTOM_POST_BID_MARKER_UPDATE = "ic_custom_pin_marker_post_bid_update_kzkxrw.png";
-    private final String url = "http://res.cloudinary.com/djakoy1gr/image/upload/v1498123162/";
+
     public CompanyDetailProjectViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
@@ -72,23 +64,23 @@ public class CompanyDetailProjectViewModel extends BaseObservable {
     }
 
     private String getMarkerIcon(Project project) {
-        StringBuilder urlBuilder = new StringBuilder(url);
+        StringBuilder urlBuilder = new StringBuilder(BidItemViewModel.url);
         boolean hasUpdates = projectHasUpdates(project);
 
         // for standard projects, i.e. with Dodge numbers
         if(project.getDodgeNumber() != null) {
 
             if (project.getProjectStage() == null) {
-                urlBuilder.append(hasUpdates ? STANDARD_PRE_BID_MARKER_UPDATE : STANDARD_PRE_BID_MARKER);
+                urlBuilder.append(hasUpdates ? BidItemViewModel.STANDARD_PRE_BID_MARKER_UPDATE : BidItemViewModel.STANDARD_PRE_BID_MARKER);
             }
 
             // style marker for pre-bid or post-bid color
             else {
                 if (project.getProjectStage().getParentId() == 102) {
-                    urlBuilder.append(hasUpdates ? STANDARD_PRE_BID_MARKER_UPDATE : STANDARD_PRE_BID_MARKER);
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.STANDARD_PRE_BID_MARKER_UPDATE : BidItemViewModel.STANDARD_PRE_BID_MARKER);
                 }
                 else {
-                    urlBuilder.append(hasUpdates ? STANDARD_POST_BID_MARKER_UPDATE : STANDARD_POST_BID_MARKER);
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.STANDARD_POST_BID_MARKER_UPDATE : BidItemViewModel.STANDARD_POST_BID_MARKER);
                 }
             }
         }
@@ -97,17 +89,17 @@ public class CompanyDetailProjectViewModel extends BaseObservable {
         else {
             // pre-bid user-created projects
             if(project.getProjectStage() == null) {
-                urlBuilder.append(hasUpdates ? CUSTOM_PRE_BID_MARKER_UPDATE : CUSTOM_PRE_BID_MARKER);
+                urlBuilder.append(hasUpdates ? BidItemViewModel.CUSTOM_PRE_BID_MARKER_UPDATE : BidItemViewModel.CUSTOM_PRE_BID_MARKER);
 
             }
 
             // post-bid user-created projects
             else {
                 if(project.getProjectStage().getParentId() == 102) {
-                    urlBuilder.append(hasUpdates ? CUSTOM_PRE_BID_MARKER_UPDATE : CUSTOM_PRE_BID_MARKER);
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.CUSTOM_PRE_BID_MARKER_UPDATE : BidItemViewModel.CUSTOM_PRE_BID_MARKER);
                 }
                 else {
-                    urlBuilder.append(hasUpdates ? CUSTOM_POST_BID_MARKER_UPDATE : CUSTOM_POST_BID_MARKER);
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.CUSTOM_POST_BID_MARKER_UPDATE : BidItemViewModel.CUSTOM_POST_BID_MARKER);
                 }
             }
         }
