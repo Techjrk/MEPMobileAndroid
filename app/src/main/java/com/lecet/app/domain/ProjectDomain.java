@@ -373,7 +373,7 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", start, end)
-                .findAllSorted("bidDate", Sort.DESCENDING);
+                .findAllSorted("bidDate", Sort.ASCENDING);
 
         return projectsResult;
     }
