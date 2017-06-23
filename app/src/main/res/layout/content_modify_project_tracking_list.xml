@@ -9,6 +9,8 @@
         <variable
             name="viewModel"
             type="com.lecet.app.viewmodel.ModifyTrackingListViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -66,10 +68,12 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/activity_bar_background"
             android:paddingLeft="8dp"
+
             android:paddingRight="8dp">
 
 
             <TextView
+                android:visibility="@{viewModel.hasSelected  ? View.VISIBLE : View.GONE}"
                 android:id="@+id/button_move"
                 android:layout_width="52dp"
                 android:layout_height="wrap_content"
@@ -85,6 +89,7 @@
                 bind:typeface="@{`Lato-Regular.ttf`}" />
 
             <TextView
+                android:visibility="@{viewModel.hasSelected  ? View.VISIBLE : View.GONE}"
                 android:layout_width="52dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -104,6 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:visibility="@{viewModel.hasSelected  ? View.VISIBLE : View.GONE}"
                 android:drawablePadding="5dp"
                 android:text="@={viewModel.objectsSelected}"
                 android:textColor="@color/lecetTextWhite"
