@@ -77,7 +77,7 @@ public class CompanyAssociatedProjectsViewModel extends BaseObservableViewModel 
         this.companyDomain = companyDomain;
         this.companyId = companyId;
 
-        refreshData();
+        //refreshData();
     }
 
 

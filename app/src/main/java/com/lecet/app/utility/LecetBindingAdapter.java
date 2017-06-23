@@ -24,7 +24,6 @@ public class LecetBindingAdapter {
 
     @BindingAdapter("bind:typeface")
     public static void textTypeface(TextView textView, String fontName) {
-
         textView.setTypeface(Typeface.createFromAsset(textView.getContext().getAssets(), "fonts/" + fontName));
     }
 
@@ -35,8 +34,8 @@ public class LecetBindingAdapter {
 
     @BindingAdapter("bind:spannableString")
     public static void setTextViewSpannableString(TextView textView, Spannable spannable) {
-
         textView.setText(spannable, TextView.BufferType.SPANNABLE);
     }
+
 
 }
