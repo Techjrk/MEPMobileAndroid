@@ -113,37 +113,37 @@ public class ProjectAddImageViewModel extends BaseObservable {
         Log.d(TAG, "Constructor 2: body: " + body);
         Log.d(TAG, "Constructor 2: uri: " + uri);
 
-        if(uri != null) {
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-            } catch (IOException e) {
-                Log.e(TAG, "IOException. Error converting URI to bitmap: " + e.getMessage());
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+        }
+        catch (IOException e){
+            Log.e(TAG, "IOException. Error converting URI to bitmap: " + e.getMessage());
 
-                picassoTarget = new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        Log.d(TAG, "onBitmapLoaded");
+            picassoTarget = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Log.d(TAG, "onBitmapLoaded");
 
-                        ProjectAddImageViewModel.setBitmapData(bitmap);
-                    }
+                    ProjectAddImageViewModel.setBitmapData(bitmap);
+                }
 
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        Log.e(TAG, "onBitmapFailed");
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    Log.e(TAG, "onBitmapFailed");
 
-                    }
+                }
 
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                    }
-                };
+                }
+            };
 
-                Picasso.with(activity).load(uri).into(picassoTarget);
+            Picasso.with(activity).load(uri).into(picassoTarget);
 
-            } catch (RuntimeException e1) {
-                Log.e(TAG, "ProjectAddImageViewModel: RuntimeException. Error converting URI to bitmap: " + uri);
-            }
+        }
+        catch (RuntimeException e1) {
+            Log.e(TAG, "ProjectAddImageViewModel: RuntimeException. Error converting URI to bitmap: " + uri);
         }
         if(bitmap != null){
             bitmap = rotateImage(bitmap, neededRotation);

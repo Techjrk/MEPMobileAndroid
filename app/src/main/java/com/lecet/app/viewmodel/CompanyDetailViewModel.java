@@ -14,6 +14,8 @@ import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Contact;
+import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
@@ -47,6 +49,7 @@ public class CompanyDetailViewModel extends BaseObservableViewModel implements C
 
     // Retrofit calls
     private Call<Company> companyDetailCall;
+
 
 
     public CompanyDetailViewModel(CompanyDetailActivity activity, long companyID, CompanyDomain companyDomain, ProjectDomain projectDomain) {
@@ -151,7 +154,7 @@ public class CompanyDetailViewModel extends BaseObservableViewModel implements C
     /**
      * View management
      **/
-    private void initCompanyDetailAdapter(CompanyDetailActivity activity, Company company) {
+    private void initCompanyDetailAdapter(CompanyDetailActivity activity, final Company company) {
 
         companyDetailAdapter = new CompanyDetailAdapter(activity, company, projectDomain);
         initRecyclerView(activity, companyDetailAdapter);
@@ -165,6 +168,7 @@ public class CompanyDetailViewModel extends BaseObservableViewModel implements C
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
     }
 
 

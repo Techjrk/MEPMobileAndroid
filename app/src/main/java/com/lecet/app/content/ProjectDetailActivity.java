@@ -28,6 +28,7 @@ import static com.lecet.app.R.string.google_api_key;
 public class ProjectDetailActivity extends LecetBaseActivity implements ProjectDetailFragment.ProjectDetailFragmentDataSource,
         ProjectDetailFragment.ProjectDetailFragmentListener, ProjectNotesAndUpdatesFragment.ProjectNotesFragmentDataSource,
         ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener {
+
     private static final String TAG = "ProjectDetailAct";
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
     public static final int REQUEST_CODE_HOME = 1116;

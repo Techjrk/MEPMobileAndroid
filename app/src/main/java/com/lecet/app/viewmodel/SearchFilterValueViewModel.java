@@ -28,6 +28,9 @@ public class SearchFilterValueViewModel extends BaseObservable {
      */
     public SearchFilterValueViewModel(AppCompatActivity activity) {
         this.activity = activity;
+        Intent intent = activity.getIntent();
+        setMin(intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN));
+        setMax(intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX));
     }
 
     public void onApplyButtonClick(View view) {

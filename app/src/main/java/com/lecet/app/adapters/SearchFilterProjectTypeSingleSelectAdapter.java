@@ -30,7 +30,7 @@ import java.util.TreeMap;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class SearchFilterProjectTypeUserCreatedAdapter extends SectionedAdapter {
+public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
@@ -61,7 +61,7 @@ public class SearchFilterProjectTypeUserCreatedAdapter extends SectionedAdapter 
     private Bundle selectedParent = new Bundle(); //list of user's selected parent items
     private Bundle selectedChild = new Bundle();  //list of user's selected child item
 //** end for single-item project near me section
-    public SearchFilterProjectTypeUserCreatedAdapter(List <SearchFilterProjectTypeAdapter.Parent>  data, SearchFilterProjectTypeViewModel viewModel) {
+    public SearchFilterProjectTypeSingleSelectAdapter(List <SearchFilterProjectTypeAdapter.Parent>  data, SearchFilterProjectTypeViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;

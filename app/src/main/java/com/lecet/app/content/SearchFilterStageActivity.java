@@ -28,7 +28,7 @@ public class SearchFilterStageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        viewModel.clearLast();
+      //  viewModel.clearLast();
         setResult(RESULT_CANCELED);
     }
 
