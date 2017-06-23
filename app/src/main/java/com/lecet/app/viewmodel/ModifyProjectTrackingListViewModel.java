@@ -161,6 +161,7 @@ public class ModifyProjectTrackingListViewModel extends ModifyTrackingListViewMo
         for (Project project : selectedItems) {
             ids.add(project.getId());
         }
+
         return ids;
     }
 
@@ -222,9 +223,7 @@ public class ModifyProjectTrackingListViewModel extends ModifyTrackingListViewMo
                 } else {
                     updateToolbarSubTitle(sourceIds.size(), getAppCompatActivity().getResources().getString(R.string.project));
                 }
-                //reset the view after success
-                setObjectsSelected(getAppCompatActivity().getString(R.string.x_selected, Integer.toString(0)));
-                setHasSelected(false);
+
 
                 // Remove items from Tracking list relationship
                 asyncDeleteProjects(toBeDeleted);
@@ -253,9 +252,6 @@ public class ModifyProjectTrackingListViewModel extends ModifyTrackingListViewMo
                     } else {
                         updateToolbarSubTitle(retainedItems.size(), getAppCompatActivity().getResources().getString(R.string.project));
                     }
-                    //reset the view after success
-                    setObjectsSelected(getAppCompatActivity().getString(R.string.x_selected, Integer.toString(0)));
-                    setHasSelected(false);
 
                     // Remove items from Tracking list relationship
                     asyncDeleteProjects(selectedItems);
