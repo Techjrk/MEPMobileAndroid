@@ -85,10 +85,23 @@ public class BidItemViewModel extends BaseObservable {
     }
 
     public String getClientLocation2() {
-        if (project != null && project.getAddress2() != null && !project.getAddress2().trim().equals(""))
+       /* if (project != null && project.getAddress2() != null && !project.getAddress2().trim().equals(""))
             setIsClientLocation2(true);
-        else setIsClientLocation2(false);
-        return project != null ? project.getAddress2() : "";
+        else setIsClientLocation2(false);*/
+       String address="";
+       if (project != null ) {
+            setIsClientLocation2(true);
+           if (project.getAddress1() != null && !project.getAddress1().trim().equals("")) {
+                address = project.getAddress1();
+           }
+           if (project.getAddress2() != null && !project.getAddress2().trim().equals("")) {
+               address += ", "+ project.getAddress2();
+           }
+          if ((project.getAddress1() == null || project.getAddress1().trim().equals("")) && (project.getAddress2() == null || project.getAddress2().trim().equals(""))) {
+              setIsClientLocation2(false);
+          }
+        } else setIsClientLocation2(false);
+        return project != null ? address : "";
     }
 
     @Bindable
