@@ -173,7 +173,6 @@ public class Company extends RealmObject implements TrackedObject, Serializable 
     public RealmList<Project> getProjects() {
         return projects;
     }
-
     public RealmList<Bid> getBids() {
         return bids;
     }

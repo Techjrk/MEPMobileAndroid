@@ -14,7 +14,7 @@ import android.widget.CheckBox;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterProjectTypeAdapter;
-import com.lecet.app.adapters.SearchFilterProjectTypeUserCreatedAdapter;
+import com.lecet.app.adapters.SearchFilterProjectTypeSingleSelectAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
@@ -175,7 +175,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
 
 //SearchFilterAllTabbedViewModel.userCreated=true;
         if (SearchFilterAllTabbedViewModel.userCreated) {
-            SearchFilterProjectTypeUserCreatedAdapter adapter = new SearchFilterProjectTypeUserCreatedAdapter(data, this);
+            SearchFilterProjectTypeSingleSelectAdapter adapter = new SearchFilterProjectTypeSingleSelectAdapter(data, this);
             recyclerView.setAdapter(adapter);
         } else {
             SearchFilterProjectTypeAdapter adapter = new SearchFilterProjectTypeAdapter(data, this);

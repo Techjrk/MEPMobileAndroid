@@ -1,6 +1,8 @@
 package com.lecet.app.content;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -16,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,9 +36,6 @@ import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
-import com.lecet.app.data.models.SearchFilterJurisdictionMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.User;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
@@ -116,6 +114,17 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             setupPageIndicator();
             setupPageButtons();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences spref = getSharedPreferences("Filter", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        edit.clear();
+        edit.commit();
+
     }
 
     @Override

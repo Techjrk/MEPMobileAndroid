@@ -86,7 +86,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private Marker currLocationMarker;
     private Marker lastMarkerTapped;
     private HashMap<Long, Marker> markers;
-    private Location currentLocation;
+    private LatLng currentLocation;
     private Circle locationCircle;
     private CircleOptions circleOptions;
     private boolean infoWindowOpen;
@@ -193,7 +193,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         //Log.d(TAG, "updateLocationCircle: " + latLng);
         circleOptions = new CircleOptions();
         circleOptions.center(latLng);
-        circleOptions.radius(100);
+        circleOptions.radius(25);
         circleOptions.strokeColor(R.color.transparent);
         circleOptions.fillColor(R.color.transparent);
 
@@ -202,7 +202,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             locationCircle.remove();
             locationCircle = null;
         }
-
+        currentLocation = latLng;
         locationCircle = map.addCircle(circleOptions);
         locationCircle.setCenter(latLng);
         locationCircle.setClickable(true);
@@ -212,8 +212,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onMyLocationChange(Location location) {
         //Log.d(TAG, "onMyLocationChange: " + location);
-
-        currentLocation = location;
         updateLocationCircle(this.map, new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
@@ -224,11 +222,12 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             Log.d(TAG, "locationCircle: locationCircle clicked");
             //placeMapMarker(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
-
-            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            locationCircle.setClickable(false);
-            clearLocationCircle(circle);
-            placeCustomPin(latLng, true);
+            if(currLocationMarker != null){
+                onMarkerClick(currLocationMarker);
+            }
+            else{
+                placeCustomPin(currentLocation , true);
+            }
         }
     }
 
@@ -318,11 +317,15 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d(TAG, "onMapClick: " + latLng);
-        if (!infoWindowOpen) {
+       /* if (!infoWindowOpen) {
             clearCurrLocationMarker();
             placeCustomPin(latLng, true);
         }
-        else infoWindowOpen = false;
+        else infoWindowOpen = false;*/
+
+        clearCurrLocationMarker();
+        placeCustomPin(latLng, true);
+        updateLocationCircle(map , latLng);
     }
 
     @Override
@@ -529,10 +532,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         BitmapDescriptor lastMarkerTappedIcon;
         Project project;
 
-        boolean isMyLocationMarker = (marker.equals(currLocationMarker));
+        //boolean isMyLocationMarker = (marker.equals(currLocationMarker));
 
         // my location marker, which uses its own info window adapter and layout
-        if (isMyLocationMarker) {
+        if (marker.getTag() == null) {
             map.setInfoWindowAdapter(new LecetInfoWindowCreatePinAdapter(activity, true));
         }
 
@@ -553,9 +556,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
             lastMarkerTapped = marker;
         }
-
-        infoWindowOpen = true;
-
+        if(!marker.isInfoWindowShown())
+        {
+            marker.showInfoWindow();
+        }
         return false;
     }
 
