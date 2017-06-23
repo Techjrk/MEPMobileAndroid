@@ -174,8 +174,17 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
         details.add(new ProjDetailItemViewModel(context.getString(R.string.project_ids), project.getDodgeNumber()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.est_low), String.format("$ %,.0f", project.getEstLow())));
-        details.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
+
+        if (project.getEstLow() > 0) {
+
+            details.add(new ProjDetailItemViewModel(context.getString(R.string.valuation), String.format("$ %,.0f", project.getEstLow())));
+        }
+
+        if (project.getEstHigh() > 0) {
+
+            details.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
+        }
+
         details.add(new ProjDetailItemViewModel(context.getString(R.string.stage_normal), project.getProjectStage() != null ? project.getProjectStage().getName() : ""));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.date_added), DateUtility.formatDateForDisplay(project.getFirstPublishDate())));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.bid_date), project.getBidDate() != null ? DateUtility.formatDateForDisplay(project.getBidDate()) : ""));
