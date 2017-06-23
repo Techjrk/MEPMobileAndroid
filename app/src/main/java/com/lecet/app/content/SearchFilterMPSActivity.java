@@ -78,7 +78,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-            LayoutInflater inflater = getLayoutInflater();
+            //LayoutInflater inflater = getLayoutInflater();
             //View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
             //viewModel.setToolbar(searchBarView);
             //  actionBar.setCustomView(searchBarView);

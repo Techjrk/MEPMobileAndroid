@@ -167,12 +167,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         }
     }
 
-    private void fetchProjects(LatLng latLng) {
-
-        if (!viewModel.isMapReady()) return;
-
-        viewModel.fetchProjectsNearMe(latLng);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -707,7 +701,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             postSize = viewModel.getPostbidProjects().size();
         }
 
-        pagerAdapter = new ProjectsNearMeActivity.ViewPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(PreBidFragment.newInstance(viewModel.getPrebidProjects()), getResources().getString(R.string.reg_pre_bid), preSize);
         pagerAdapter.addFragment(PostBidFragment.newInstance(viewModel.getPostbidProjects()), getResources().getString(R.string.reg_post_bid), postSize);
         viewPager.setAdapter(pagerAdapter);

@@ -61,6 +61,7 @@ public class CompanyAssociatedProjectsActivity extends LecetBaseActivity {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
+
             LayoutInflater inflater = getLayoutInflater();
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);

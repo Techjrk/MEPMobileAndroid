@@ -28,6 +28,7 @@
                 android:onClick="@{viewModel::onSortButtonClick}"
                 android:paddingRight="18dp"
 
+
                 android:src="@drawable/ic_sort_menu" />
             <TextView
                 android:id="@+id/title_text_view"

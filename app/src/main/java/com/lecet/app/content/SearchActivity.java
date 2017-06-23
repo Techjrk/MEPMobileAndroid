@@ -48,9 +48,10 @@ public class SearchActivity extends AppCompatActivity {
         setupBinding();
         setupToolbar();
     }
+
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // toolbar.setContentInsetStartWithNavigation(0);
+        // toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
@@ -60,10 +61,11 @@ public class SearchActivity extends AppCompatActivity {
             LayoutInflater inflater = getLayoutInflater();
             View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
             //viewModel.setToolbar(searchBarView);
-          //  actionBar.setCustomView(searchBarView);
+            //  actionBar.setCustomView(searchBarView);
             actionBar.setDisplayShowCustomEnabled(true);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -114,13 +116,13 @@ public class SearchActivity extends AppCompatActivity {
 
         // SEARCH CATEGORY (Project vs Company)
         String category = processSearchCategory(data); //processing the SearchViewModel.SAVE_SEARCH_CATEGORY  - Could be contact, company or project.
-       boolean isCompanyCateg=false;
-if (category !=null){
-    viewModel.setSaveSearchCategory(category);
-    if (category.equals(SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY)) {
-        isCompanyCateg=true;
-    }
-}
+        boolean isCompanyCateg = false;
+        if (category != null) {
+            viewModel.setSaveSearchCategory(category);
+            if (category.equals(SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY)) {
+                isCompanyCateg = true;
+            }
+        }
         StringBuilder projectsSb = new StringBuilder();     // used to construct the combined search filter
         StringBuilder companiesSb = new StringBuilder();    //used for combined company for searchFilter
         StringBuilder esFilterSb = new StringBuilder(); //used for combined company for esFilter;
@@ -201,25 +203,25 @@ if (category !=null){
             projectsSb.append(projectTypeIdFilter);
             //added to Companies filter the Project Type
             //if (isCompanyCateg) {
-                if (esFilterSb.length() > 0) esFilterSb.append(",");
-                esFilterSb.append(projectTypeIdFilter);
-           // }
+            if (esFilterSb.length() > 0) esFilterSb.append(",");
+            esFilterSb.append(projectTypeIdFilter);
+            // }
         }
 
         // Value Filter
         String valueFilter = processValueFilter(data);
         if (valueFilter.length() > 0) {
 
-            if ( valueFilter.contains(getString(R.string.MAX))) {
-                 valueFilter = valueFilter.replace(",\"max\":MAX", "");
+            if (valueFilter.contains(getString(R.string.MAX))) {
+                valueFilter = valueFilter.replace(",\"max\":MAX", "");
             }
 
             if (projectsSb.length() > 0) projectsSb.append(",");
             projectsSb.append(valueFilter);
             //if (isCompanyCateg) {
-                //added to Companies filter - the Project Value
-                    if (esFilterSb.length() > 0) esFilterSb.append(",");
-                    esFilterSb.append(valueFilter);
+            //added to Companies filter - the Project Value
+            if (esFilterSb.length() > 0) esFilterSb.append(",");
+            esFilterSb.append(valueFilter);
             //}
         }
 
@@ -230,8 +232,8 @@ if (category !=null){
             projectsSb.append(jurisdictionFilter);
             //added to Companies filter - Jurisdiction
             //if (isCompanyCateg) {
-                if (esFilterSb.length() > 0) esFilterSb.append(",");
-                esFilterSb.append(jurisdictionFilter);
+            if (esFilterSb.length() > 0) esFilterSb.append(",");
+            esFilterSb.append(jurisdictionFilter);
             //}
         }
 
@@ -242,9 +244,9 @@ if (category !=null){
             projectsSb.append(biddingWithinFilter);
             //added to Companies filter when this filter is supported by the API
             //if (isCompanyCateg) {
-                if (esFilterSb.length() > 0) esFilterSb.append(",");
-                esFilterSb.append(biddingWithinFilter);
-           // }
+            if (esFilterSb.length() > 0) esFilterSb.append(",");
+            esFilterSb.append(biddingWithinFilter);
+            // }
         }
 
         // prepend searchFilter param if there are any filters used
@@ -299,8 +301,8 @@ if (category !=null){
         }
 
 //    if (companiesSb !=null && esFilterSb !=null && !companiesSb.toString().trim().equals("") && !esFilterSb.toString().trim().equals("")){
-        if (esFilterSb !=null  && !esFilterSb.toString().trim().equals("")){
-            viewModel.setCompanySearchFilter(companyFilter,esFilterSb.toString());
+        if (esFilterSb != null && !esFilterSb.toString().trim().equals("")) {
+            viewModel.setCompanySearchFilter(companyFilter, esFilterSb.toString());
 //            viewModel.setCompanySearchFilter(companiesSb.toString(),esFilterSb.toString());
         }
         Log.d("companyfilterx", "companyfilterx:" + searchDomain.getCompanyFilter());

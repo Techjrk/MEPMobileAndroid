@@ -99,7 +99,7 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
         }
     }
 

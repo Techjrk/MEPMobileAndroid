@@ -62,13 +62,16 @@ public class CompanyProjectBidsActivity extends LecetBaseActivity {
 
     private void setupToolbar(CompanyProjectBidsViewModel viewModel, String title, String subtitle) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setContentInsetStartWithNavigation(0);
+        //toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(false);
+
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
+
             LayoutInflater inflater = getLayoutInflater();
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);
@@ -76,6 +79,7 @@ public class CompanyProjectBidsActivity extends LecetBaseActivity {
             viewModel.setToolbar(tb, title, subtitle);
 
             actionBar.setCustomView(tb);
+
             actionBar.setDisplayShowCustomEnabled(true);
         }
     }
