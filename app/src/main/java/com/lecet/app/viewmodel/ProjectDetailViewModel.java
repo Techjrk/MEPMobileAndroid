@@ -26,6 +26,7 @@ import com.lecet.app.content.ProjectDetailFragment;
 import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     private long projectId;
     private String title;
     private String address;
-
+    private Activity activity;
 
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -64,6 +65,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
                         .zoomGesturesEnabled(false),
                 R.id.map_container);
 
+        this.activity = activity;
         this.projectId = projectId;
         setListener(this);
     }
@@ -100,7 +102,10 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
 
     @Bindable
     public boolean isEditable() {
-        return true;    //TODO - CHECK IF THE CURRENT USER HAS PERMISSION TO EDIT AND IF NOT, RETURN FALSE **************
+        if(project == null || activity == null){
+            return false;
+        }
+        return LecetSharedPreferenceUtil.getInstance(activity).getId() == project.getUserId();    //TODO - CHECK IF THE CURRENT USER HAS PERMISSION TO EDIT AND IF NOT, RETURN FALSE **************
     }
 
 
@@ -126,6 +131,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
 
         setTitle(project.getTitle());
         setAddress(getProjectAddress(project));
+        notifyChange();
     }
 
     public void onNotesReady(int count) {
@@ -180,6 +186,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         viewPager.setAdapter(adapter);
 
         setUpTabLayout(tabLayout, this.viewPager);
+
     }
 
     private void setUpTabLayout(TabLayout tabLayout, ViewPager viewPager) {

@@ -5,21 +5,26 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.Bindable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.data.api.request.GeocodeRequest;
 import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.Geocode;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.geocoding.GeocodeAddress;
@@ -29,10 +34,12 @@ import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -43,6 +50,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.R.string.google_api_key;
+import static com.lecet.app.R.string.project;
 
 /**
  * Created by jasonm on 5/15/17.
@@ -95,9 +103,11 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         // if creating a new project
         if(!isEditMode()) {
+
+            //TODO: Is this always null? Seems so
             // add lat and long in the form of Geocode obj if they have been passed
             if (projectPost.getGeocode() == null) {
-                Geocode geocode = new Geocode();
+                GeocodeRequest geocode = new GeocodeRequest();
                 geocode.setLat(latitude);
                 geocode.setLng(longitude);
                 projectPost.setGeocode(geocode);
@@ -107,7 +117,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
             getAddressFromLocation(latitude, longitude);
         }
-
         // if editing an existing project via a passed projectId
         else {
             Log.d(TAG, "AddProjectActivityViewModel: EDITING PROJECT: " + this.projectId);
@@ -300,7 +309,9 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     private void getEditableProject(long projectId) {
-        project = projectDomain.fetchProjectById(projectId);        //TODO - should this be a Realm call?
+
+        project = projectDomain.fetchProjectById(projectId);
+
         if(project != null) {
             Log.d(TAG, "getEditableProject: FOUND PROJECT: " + project);
             projectPost.setGeocode(project.getGeocode());
@@ -327,8 +338,25 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     private void postProject() {
         Log.d(TAG, "postProject: projectPost post: " + projectPost);
+        Call<Project> call;
+        Log.d(TAG, "postProject: Project Post: " + projectPost);
 
-        Call<Project> call = projectDomain.postProject(projectPost);
+        if(isEditMode()){
+
+            if(projectPost.getAddress1() != project.getAddress1() ||
+                    projectPost.getState() != project.getState() ||
+                    projectPost.getCity() != project.getCity() ||
+                    projectPost.getAddress2()!= project.getAddress2()){
+//                Give the projectPost a new Lat and lng that acurately tracks its location.
+//                resetLngAndLat();
+            }
+
+            call = projectDomain.updateProject(projectId, projectPost);
+
+        }else {
+
+            call = projectDomain.postProject(projectPost);
+        }
 
         call.enqueue(new Callback<Project>() {
             @Override
@@ -336,6 +364,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                 if (response.isSuccessful()) {
                     Project createdProject = response.body();
+                    //TODO: Save returned project to realm
                     Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
                     activity.setResult(RESULT_OK);
                     activity.finish();
@@ -350,34 +379,9 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 Log.e(TAG, "postProject: onFailure: projectPost post failed");
                 //TODO: Display alert noting network failure
             }
+
         });
-    }
 
-    private void updateProject(long projectId) {
-        Log.d(TAG, "updateProject: updateProject: " + projectId + ", projectPost post: " + projectPost);
-
-        Call<Project> call = projectDomain.updateProject(projectId, projectPost);
-
-        call.enqueue(new Callback<Project>() {
-            @Override
-            public void onResponse(Call<Project> call, Response<Project> response) {
-
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "updateProject: onResponse: projectPost update successful");
-                    activity.setResult(RESULT_OK);
-                    activity.finish();
-                } else {
-                    Log.e(TAG, "updateProject: onResponse: projectPost update failed");
-                    // TODO: Alert HTTP call error
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Project> call, Throwable t) {
-                Log.e(TAG, "updateProject: onFailure: projectPost update failed");
-                //TODO: Display alert noting network failure
-            }
-        });
     }
 
     private void showPostProjectAlertDialog(View view, DialogInterface.OnClickListener onClick) {
@@ -492,10 +496,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        if(projectId < 0) {
-                            postProject();
-                        }
-                        else updateProject(projectId);
+                        dialog.dismiss();
+                        postProject();
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -587,4 +589,50 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
 
+    //Finds the Lng and Lat for the current text address.
+    private void resetLngAndLat(){
+        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+        try{
+            String strAddress = "";
+            if(projectPost.getAddress1().isEmpty()){
+                strAddress += projectPost.getAddress1();
+            }
+            if(projectPost.getCity().isEmpty()){
+                strAddress += " " + projectPost.getCity();
+            }
+            if(projectPost.getState().isEmpty()){
+                strAddress += " " + projectPost.getState();
+            }
+
+            List<Address> addresses = geocoder.getFromLocationName(strAddress ,5);
+            if(addresses.size() > 0){
+                projectPost.getGeocode().setLat(addresses.get(0).getLatitude());
+                projectPost.getGeocode().setLng(addresses.get(0).getLongitude());
+            }
+        }catch (IOException e){
+            Log.e(TAG, "getAddressFromString: " + e.getMessage());
+        }
+    }
+
+    private LatLng getLocationFromAddress(String strAddress) {
+        Log.d(TAG, "getLocationFromAddress: " + strAddress);
+
+        Geocoder coder = new Geocoder(getActivityWeakReference().get(), Locale.US);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 1);
+            if (address == null || address.size() == 0) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        } catch (IOException e) {
+            Log.e(TAG, "getLocationFromAddress: Error. " + e.getMessage());
+        }
+        return p1;
+    }
 }

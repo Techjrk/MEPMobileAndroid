@@ -34,6 +34,9 @@ public class Project extends RealmObject implements TrackedObject {
     @SerializedName("title")
     private String title;
 
+    @SerializedName("userId")
+    private long userId;
+
     @SerializedName("address1")
     private String address1;
 
@@ -229,6 +232,14 @@ public class Project extends RealmObject implements TrackedObject {
 
     public String getAddress1() {
         return address1;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public void setAddress1(String address1) {
