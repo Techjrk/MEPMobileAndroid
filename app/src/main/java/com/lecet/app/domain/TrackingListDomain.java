@@ -268,6 +268,7 @@ public class TrackingListDomain {
     public RealmResults<ProjectTrackingList> fetchProjectTrackingListsExcludingCurrentList(long trackingListId) {
 
         RealmResults<ProjectTrackingList> results = realm.where(ProjectTrackingList.class).notEqualTo("id", trackingListId).findAll();
+
         return results;
     }
 

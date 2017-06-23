@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Display;
 import android.view.View;
@@ -77,6 +78,7 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
+    private boolean hasSelected;
     private ListView listView;
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
@@ -96,6 +98,7 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
         this.dataItems = getData(trackingList, sortBy);
         setupAdapter(dataItems);
+
     }
 
     public int getSelectedSort() {
@@ -191,10 +194,13 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         if (moveMenu == null) {
             createMoveMenu(view);
         } else {
+
+
             moveToAdapter = getMoveToListAdapter(appCompatActivity, appCompatActivity.getResources().getString(R.string.move_to), this, getUserTrackingListsExcludingCurrentList(trackingList));
             moveMenu.setAdapter(moveToAdapter);
         }
         moveMenu.show();
+
     }
 
     private void createMoveMenu(View anchor) {
@@ -345,12 +351,13 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int selectedItemsCount = listView.getCheckedItemCount();
+        int selectedItemsCount = getSelectedItems().size();
         if (selectedItemsCount == 0) {
             setObjectsSelected(null);
         } else {
             setObjectsSelected(appCompatActivity.getString(R.string.x_selected, Integer.toString(selectedItemsCount)));
         }
+        setHasSelected(selectedItemsCount > 0);
     }
 
     public List<U> getSelectedItems() {
@@ -454,5 +461,14 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
         builder.setPositiveButton(getAppCompatActivity().getString(R.string.edit_upper), positive);
 
         alertDialog = builder.show();
+    }
+
+    @Bindable
+    public boolean getHasSelected(){
+        return hasSelected;
+    }
+    public void setHasSelected(boolean hasSelected){
+        this.hasSelected = hasSelected;
+        notifyPropertyChanged(BR.hasSelected);
     }
 }
