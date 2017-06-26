@@ -311,7 +311,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                         resizedImage = rotateImage(realImage, 90 + sensorOrientation);
                                     }
 
-                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
 
                                     outputStream.close();
 
