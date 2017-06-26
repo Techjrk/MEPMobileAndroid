@@ -41,15 +41,16 @@
                     android:onClick="@{viewModel::onClickCancel}"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:gravity="center_horizontal"
-                android:text="@string/new_project"
-                android:textColor="@color/lecetTextWhite"
-                android:textSize="16sp"
-                bind:typeface="@{`Lato-Bold.ttf`}" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:text="@{viewModel.activityTitle}"
+                    tools:text="@string/new_project"
+                    android:textColor="@color/lecetTextWhite"
+                    android:textSize="16sp"
+                    bind:typeface="@{`Lato-Bold.ttf`}" />
 
             <!-- Save Button -->
             <Button
@@ -58,7 +59,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:text="@string/save"
+                    android:text="@{viewModel.saveButtonText}"
+                    tools:text="@string/save"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
                     bind:typeface="@{`Lato-Bold.ttf`}"

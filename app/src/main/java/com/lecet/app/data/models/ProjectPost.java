@@ -6,6 +6,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.lecet.app.BR;
+import com.lecet.app.data.api.request.GeocodeRequest;
 
 /**
  * Created by jasonm
@@ -147,7 +148,7 @@ public class ProjectPost extends BaseObservable {
     private long id;*/
 
     @SerializedName("primaryProjectTypeId")
-    private int primaryProjectTypeId;
+    private long primaryProjectTypeId;
 
     @SerializedName("projectStageId")
     private int projectStageId;
@@ -156,11 +157,11 @@ public class ProjectPost extends BaseObservable {
     private int jurisdictionCityId;
 
     @SerializedName("geocode")
-    private Geocode geocode;
+    private GeocodeRequest geocode;
 
 
     public ProjectPost(double latitude, double longitude) {
-        this.geocode = new Geocode();
+        this.geocode = new GeocodeRequest();
         geocode.setLat(latitude);
         geocode.setLng(longitude);
     }
@@ -340,7 +341,7 @@ public class ProjectPost extends BaseObservable {
         return estLow;
     }
 
-    public void setEstLow(int estLow) {
+    public void setEstLow(double estLow) {
         this.estLow = estLow;
         notifyPropertyChanged(BR.estLow);
     }
@@ -543,20 +544,12 @@ public class ProjectPost extends BaseObservable {
         this.numberOfFloorsAboveGround = numberOfFloorsAboveGround;
     }
 
-    /*public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }*/
-
     @Bindable
-    public int getPrimaryProjectTypeId() {
+    public long getPrimaryProjectTypeId() {
         return primaryProjectTypeId;
     }
 
-    public void setPrimaryProjectTypeId(int primaryProjectTypeId) {
+    public void setPrimaryProjectTypeId(long primaryProjectTypeId) {
         this.primaryProjectTypeId = primaryProjectTypeId;
         notifyPropertyChanged(BR.primaryProjectTypeId);
     }
@@ -581,12 +574,17 @@ public class ProjectPost extends BaseObservable {
         notifyPropertyChanged(BR.jurisdictionCityId);
     }
 
-    public Geocode getGeocode() {
+    public GeocodeRequest getGeocode() {
         return geocode;
     }
 
-    public void setGeocode(Geocode geocode) {
+    public void setGeocode(GeocodeRequest geocode) {
         this.geocode = geocode;
+    }
+
+    public void setGeocode(Geocode geocode){
+        this.geocode.setLng(geocode.getLng());
+        this.geocode.setLat(geocode.getLat());
     }
 
     public String toConvertedString() {

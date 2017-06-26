@@ -14,15 +14,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectDetailFragment;
 import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +47,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     private long projectId;
     private String title;
     private String address;
-
+    private Activity activity;
 
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -61,6 +65,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
                         .zoomGesturesEnabled(false),
                 R.id.map_container);
 
+        this.activity = activity;
         this.projectId = projectId;
         setListener(this);
     }
@@ -95,6 +100,14 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         notifyPropertyChanged(BR.title);
     }
 
+    @Bindable
+    public boolean isEditable() {
+        if(project == null || activity == null){
+            return false;
+        }
+        return LecetSharedPreferenceUtil.getInstance(activity).getId() == project.getUserId();    //TODO - CHECK IF THE CURRENT USER HAS PERMISSION TO EDIT AND IF NOT, RETURN FALSE **************
+    }
+
 
     /* Helper */
     public void onProjectReady(Project project) {
@@ -118,6 +131,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
 
         setTitle(project.getTitle());
         setAddress(getProjectAddress(project));
+        notifyChange();
     }
 
     public void onNotesReady(int count) {
@@ -172,6 +186,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         viewPager.setAdapter(adapter);
 
         setUpTabLayout(tabLayout, this.viewPager);
+
     }
 
     private void setUpTabLayout(TabLayout tabLayout, ViewPager viewPager) {
@@ -192,6 +207,16 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         return activity.getSupportFragmentManager().findFragmentByTag("android:switcher:" + viewPager.getId() + ":"
         + adapter.getItemId(position));
     }
+
+    public void onEditButtonClick(View view) {
+        Log.d(TAG, "onEditButtonClick");
+
+        // pass the projectId to the Add Project Activity for editing
+        Intent intent = new Intent(view.getContext(), AddProjectActivity.class);
+        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, projectId);
+        view.getContext().startActivity(intent);
+    }
+
 
     /**
      * Inner ViewPagerAdapter class
@@ -239,5 +264,6 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
                     return context.getResources().getString(R.string.notes_and_updates);
             }
         }
+
     }
 }

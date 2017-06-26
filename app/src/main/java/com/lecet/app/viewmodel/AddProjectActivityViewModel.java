@@ -5,21 +5,26 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.Bindable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.data.api.request.GeocodeRequest;
 import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.Geocode;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.ProjectPost;
 import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.geocoding.GeocodeAddress;
@@ -27,13 +32,14 @@ import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
-import com.lecet.app.utility.SimpleLecetDefaultAlert;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -44,6 +50,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.R.string.google_api_key;
+import static com.lecet.app.R.string.project;
 
 /**
  * Created by jasonm on 5/15/17.
@@ -63,6 +70,11 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private ProjectPost projectPost;
     private double latitude;
     private double longitude;
+
+    // edit
+    private long projectId;
+    private Project project;
+
     private String targetStartDate;
 
     // values for display only
@@ -71,7 +83,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private Calendar calendar;
 
 
-    public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, ProjectDomain projectDomain, LocationDomain locationDomain) {
+    public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, long projectId, ProjectDomain projectDomain, LocationDomain locationDomain) {
         super(appCompatActivity);
 
         Log.d(TAG, "Constructor: latitude: " + latitude);
@@ -82,24 +94,34 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         this.locationDomain = locationDomain;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.projectId = projectId;
 
         mapsApiKey = activity.getResources().getString(google_api_key);
 
         // create the new projectPost obj
         projectPost = new ProjectPost(latitude, longitude);
 
-        // add lat and long in the form of Geocode obj if they have been passed
-        if (projectPost.getGeocode() == null) {
-            Geocode geocode = new Geocode();
-            geocode.setLat(latitude);
-            geocode.setLng(longitude);
-            projectPost.setGeocode(geocode);
+        // if creating a new project
+        if(!isEditMode()) {
+
+            //TODO: Is this always null? Seems so
+            // add lat and long in the form of Geocode obj if they have been passed
+            if (projectPost.getGeocode() == null) {
+                GeocodeRequest geocode = new GeocodeRequest();
+                geocode.setLat(latitude);
+                geocode.setLng(longitude);
+                projectPost.setGeocode(geocode);
+            }
+
+            initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
+
+            getAddressFromLocation(latitude, longitude);
         }
-
-        initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
-
-        getAddressFromLocation(latitude, longitude);
-
+        // if editing an existing project via a passed projectId
+        else {
+            Log.d(TAG, "AddProjectActivityViewModel: EDITING PROJECT: " + this.projectId);
+            getEditableProject(this.projectId);
+        }
     }
 
     private void getAddressFromLocation(double latitude, double longitude) {
@@ -286,10 +308,55 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         return stringBuilder.toString();
     }
 
+    private void getEditableProject(long projectId) {
+
+        project = projectDomain.fetchProjectById(projectId);
+
+        if(project != null) {
+            Log.d(TAG, "getEditableProject: FOUND PROJECT: " + project);
+            projectPost.setGeocode(project.getGeocode());
+            projectPost.setTitle(project.getTitle());
+            projectPost.setAddress1(project.getAddress1());
+            projectPost.setAddress2(project.getAddress2());
+            projectPost.setCity(project.getCity());
+            projectPost.setState(project.getState());
+            projectPost.setZip5(project.getZip5());
+            projectPost.setCounty(project.getCounty());
+            projectPost.setFipsCounty(project.getFipsCounty());
+            projectPost.setCountry(project.getCountry());
+            projectPost.setProjectStageId(Integer.parseInt(project.getProjectStageId()));
+            if(project.getBidDate() != null) projectPost.setBidDate(project.getBidDate().toString());
+            projectPost.setPrimaryProjectTypeId(project.getPrimaryProjectTypeId());
+            projectPost.setEstLow(project.getEstLow());
+            if(project.getTargetStartDate() != null) projectPost.setTargetStartDate(project.getTargetStartDate().toString());
+
+            // special cases for display purposes of Type and Stage etc
+            if(project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
+            if(project.getProjectStage() != null && project.getProjectStage().getName() != null) setStageSelect(project.getProjectStage().getName());
+        }
+    }
+
     private void postProject() {
         Log.d(TAG, "postProject: projectPost post: " + projectPost);
+        Call<Project> call;
+        Log.d(TAG, "postProject: Project Post: " + projectPost);
 
-        Call<Project> call = projectDomain.postProject(projectPost);
+        if(isEditMode()){
+
+            if(projectPost.getAddress1() != project.getAddress1() ||
+                    projectPost.getState() != project.getState() ||
+                    projectPost.getCity() != project.getCity() ||
+                    projectPost.getAddress2()!= project.getAddress2()){
+//                Give the projectPost a new Lat and lng that acurately tracks its location.
+//                resetLngAndLat();
+            }
+
+            call = projectDomain.updateProject(projectId, projectPost);
+
+        }else {
+
+            call = projectDomain.postProject(projectPost);
+        }
 
         call.enqueue(new Callback<Project>() {
             @Override
@@ -297,52 +364,24 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                 if (response.isSuccessful()) {
                     Project createdProject = response.body();
+                    //TODO: Save returned project to realm
                     Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 } else {
                     Log.e(TAG, "postProject: onResponse: projectPost post failed");
-                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
-                    alert.show();
+                    // TODO: Alert HTTP call error
                 }
             }
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
                 Log.e(TAG, "postProject: onFailure: projectPost post failed");
-                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
-                alert.show();
+                //TODO: Display alert noting network failure
             }
+
         });
-    }
 
-    private void updateProject(long projectId) {
-        Log.d(TAG, "updateProject: projectPost post: " + projectPost);
-
-        Call<Project> call = projectDomain.updateProject(projectId, projectPost);
-
-        call.enqueue(new Callback<Project>() {
-            @Override
-            public void onResponse(Call<Project> call, Response<Project> response) {
-
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "updateProject: onResponse: projectPost update successful");
-                    activity.setResult(RESULT_OK);
-                    activity.finish();
-                } else {
-                    Log.e(TAG, "updateProject: onResponse: projectPost update failed");
-                    alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
-                    alert.show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Project> call, Throwable t) {
-                Log.e(TAG, "updateProject: onFailure: projectPost update failed");
-                alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
-                alert.show();
-            }
-        });
     }
 
     private void showPostProjectAlertDialog(View view, DialogInterface.OnClickListener onClick) {
@@ -350,27 +389,45 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         String message = null;
-        if (projectPost.getGeocode() == null) message = "A location is required";
+        String confirmButtonText;
+
+        // Alert if any required fields are not filled in
+        if (projectPost.getGeocode() == null)
+            message = activity.getString(R.string.save_project_location_required);
+
         else if (projectPost.getTitle() == null || projectPost.getTitle().isEmpty())
-            message = "A project title is required";
+            message = activity.getString(R.string.save_project_title_required);
+
         else if (projectPost.getAddress1() == null || projectPost.getAddress1().isEmpty())
-            message = "A project address is required";
+            message = activity.getString(R.string.save_project_address_required);
+
         else if (projectPost.getCity() == null || projectPost.getCity().isEmpty())
-            message = "A project city is required";
+            message = activity.getString(R.string.save_project_city_required);
+
         else if (projectPost.getState() == null || projectPost.getState().isEmpty())
-            message = "A project state is required";
+            message = activity.getString(R.string.save_project_state_required);
 
         // Required content of project post
         if (message != null) {
-            alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
+            alert.setButton(DialogInterface.BUTTON_NEUTRAL, activity.getString(android.R.string.ok), onClick);
             alert.setMessage(message);
             alert.show();
         }
-        // Are you sure?
+
+        // Confirmation, if all fields are correct
         else {
-            alert.setMessage("You are about to save this new project.");
-            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Save Project", onClick);
-            alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", onClick);
+            if(!isEditMode()) {
+                message = activity.getString(R.string.save_project_confirm);
+                confirmButtonText = activity.getString(R.string.save_project);
+            }
+            else {
+                message = activity.getString(R.string.update_project_confirm);
+                confirmButtonText = activity.getString(R.string.update_project);
+            }
+
+            alert.setMessage(message);
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, confirmButtonText, onClick);
+            alert.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(android.R.string.cancel), onClick);
             alert.show();
         }
     }
@@ -384,12 +441,11 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Intent i = null;
         int id = view.getId();
         int section = 0;
-        SearchFilterAllTabbedViewModel.userCreated = true;
         switch (id) {
             case R.id.add_project_type:
                 section = SearchFilterAllTabbedViewModel.TYPE;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
-                //SearchFilterAllTabbedViewModel.userCreated = true;
+                SearchFilterAllTabbedViewModel.userCreated = true;
                 break;
             case R.id.stage:
                 section = SearchFilterAllTabbedViewModel.STAGE;
@@ -440,6 +496,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
+                        dialog.dismiss();
                         postProject();
                         break;
 
@@ -467,11 +524,29 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Log.d(TAG, "onMapSelected");
     }
 
-
+    private boolean isEditMode() {
+        return this.projectId > 0;
+    }
 
     /*
      * Bindings for values to be posted to the API or which can be displayed as native values
      */
+
+    @Bindable
+    public String getActivityTitle() {
+        if(!isEditMode()) {
+            return activity.getString(R.string.new_project);
+        }
+        else return activity.getString(R.string.update_project);
+    }
+
+    @Bindable
+    public String getSaveButtonText() {
+        if(!isEditMode()) {
+            return activity.getString(R.string.save);
+        }
+        else return activity.getString(R.string.update);
+    }
 
     @Bindable
     public ProjectPost getProjectPost() {
@@ -514,4 +589,50 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
 
+    //Finds the Lng and Lat for the current text address.
+    private void resetLngAndLat(){
+        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+        try{
+            String strAddress = "";
+            if(projectPost.getAddress1().isEmpty()){
+                strAddress += projectPost.getAddress1();
+            }
+            if(projectPost.getCity().isEmpty()){
+                strAddress += " " + projectPost.getCity();
+            }
+            if(projectPost.getState().isEmpty()){
+                strAddress += " " + projectPost.getState();
+            }
+
+            List<Address> addresses = geocoder.getFromLocationName(strAddress ,5);
+            if(addresses.size() > 0){
+                projectPost.getGeocode().setLat(addresses.get(0).getLatitude());
+                projectPost.getGeocode().setLng(addresses.get(0).getLongitude());
+            }
+        }catch (IOException e){
+            Log.e(TAG, "getAddressFromString: " + e.getMessage());
+        }
+    }
+
+    private LatLng getLocationFromAddress(String strAddress) {
+        Log.d(TAG, "getLocationFromAddress: " + strAddress);
+
+        Geocoder coder = new Geocoder(getActivityWeakReference().get(), Locale.US);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 1);
+            if (address == null || address.size() == 0) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        } catch (IOException e) {
+            Log.e(TAG, "getLocationFromAddress: Error. " + e.getMessage());
+        }
+        return p1;
+    }
 }

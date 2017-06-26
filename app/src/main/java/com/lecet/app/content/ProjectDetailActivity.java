@@ -29,7 +29,7 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
         ProjectDetailFragment.ProjectDetailFragmentListener, ProjectNotesAndUpdatesFragment.ProjectNotesFragmentDataSource,
         ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener {
 
-    private static final String TAG = "ProjectDetailAct";
+    private static final String TAG = "ProjectDetailActivity";
     public static final String PROJECT_ID_EXTRA = "com.lecet.app.content.ProjectDetailActivity.project.id.extra";
     public static final int REQUEST_CODE_HOME = 1116;
     private ProjectDetailViewModel viewModel;
@@ -43,6 +43,7 @@ public class ProjectDetailActivity extends LecetBaseActivity implements ProjectD
         ActivityProjectDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_detail);
 
         long projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
+
 
         projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance());
         viewModel = new ProjectDetailViewModel(this, projectId, getResources().getString(google_api_key));
