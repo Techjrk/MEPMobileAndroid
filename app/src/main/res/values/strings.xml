@@ -198,13 +198,13 @@
     <string name="error_last_name">Please enter your last name</string>
     <string name="error_login_title">Login Error</string>
     <string name="error_login_message">Please verify your email and password and try again</string>
-    <string name="error_access_denied">You don\’t have permission to access MEP using your account
-    </string>
+    <string name="error_access_denied">You don\’t have permission to access MEP using your account</string>
     <string name="error_network_title">Network Error</string>
-    <string name="error_network_message">Please check your internet connection and try again
-    </string>
+    <string name="error_network_message">Please check your internet connection and try again</string>
     <string name="error_fetching_address">Address not found.</string>
     <string name="error_unauthorized_user">Invalid Session. Please login again.</string>
+    <string name="error_user_not_found">User not found. Please login again.</string>
+
 
     <!-- Web links -->
     <string name="lecet_signup_url">http://lecet.dt-staging.com/#/onboarding</string>
