@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
@@ -366,6 +367,14 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     Project createdProject = response.body();
                     //TODO: Save returned project to realm
                     Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
+
+                    // view the project in Project Detail
+                    if(createdProject != null && createdProject.getId() > 0) {
+                        Intent intent = new Intent(activity, ProjectDetailActivity.class);
+                        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, createdProject.getId());
+                        activity.startActivity(intent);
+                    }
+
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 } else {
