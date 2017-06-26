@@ -27,6 +27,7 @@ import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +106,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         if(project == null || activity == null){
             return false;
         }
-        return LecetSharedPreferenceUtil.getInstance(activity).getId() == project.getUserId();    //TODO - CHECK IF THE CURRENT USER HAS PERMISSION TO EDIT AND IF NOT, RETURN FALSE **************
+        return LecetSharedPreferenceUtil.getInstance(activity).getId() == project.getUserId();
     }
 
 
@@ -113,6 +114,12 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
     public void onProjectReady(Project project) {
 
         this.project = project;
+
+        if(project.getGeocode() == null){
+            SimpleLecetDefaultAlert alert = SimpleLecetDefaultAlert.newInstance(activity , SimpleLecetDefaultAlert.CUSTIOM_DIALOG);
+            alert.setMessage("Internal Data Error.");
+            alert.show();
+        }
 
         if (mapReady) {
 
