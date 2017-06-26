@@ -54,7 +54,6 @@ public class ProjectAddNoteViewModel extends BaseObservable {
     }
 
     public void onClickCancel(View view){
-        Log.e(TAG, "onClickCancel");
         activity.setResult(RESULT_CANCELED);
         activity.finish();
     }

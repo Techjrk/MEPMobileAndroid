@@ -150,26 +150,35 @@ public class AddProjectActivity extends AppCompatActivity {
                 String stageStr;
                 int stageId;
 
-                try {
-                    stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
-                    stageId = Integer.parseInt(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID));         // ID
-                }
-                catch (Exception e) {
-                    Log.e(TAG, "processStage: Error parsing bundle.");
-                    return;
+                if (bundle != null) {
+                    for (String key : bundle.keySet()) {
+                        Object value = bundle.get(key);
+                        if(value instanceof Bundle){
+                            Bundle stageBundle = (Bundle)value;
+                            try {
+                                stageStr = stageBundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
+                                stageId = Integer.parseInt(stageBundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID));         // ID
+                            }
+                            catch (Exception e) {
+                                Log.e(TAG, "processStage: Error parsing bundle.");
+                                return;
+                            }
+
+                            if (stageStr != null && !stageStr.trim().equals("")) {
+                                Log.d(TAG, "processStage: input Stage name: " + stageStr);
+                                Log.d(TAG, "processStage: ID: " + stageId);
+                            }
+
+                            // API value
+                            viewModel.getProjectPost().setProjectStageId(stageId);
+
+                            // display value
+                            if (stageStr == null || stageStr.equals("")) stageStr = "None";
+                            viewModel.setStageSelect(stageStr);
+                        }
+                    }
                 }
 
-                if (stageStr != null && !stageStr.trim().equals("")) {
-                    Log.d(TAG, "processStage: input Stage name: " + stageStr);
-                    Log.d(TAG, "processStage: ID: " + stageId);
-                }
-
-                // API value
-                viewModel.getProjectPost().setProjectStageId(stageId);
-
-                // display value
-                if (stageStr == null || stageStr.equals("")) stageStr = "None";
-                viewModel.setStageSelect(stageStr);
             }
         });
     }
