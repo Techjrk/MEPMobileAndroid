@@ -55,6 +55,7 @@
     <string name="discard">Discard</string>
     <string name="select">Select</string>
     <string name="none">None</string>
+    <string name="valuation">Valuation</string>
 
 
     <!-- Splash, Login & Navigation Base -->

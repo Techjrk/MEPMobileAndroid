@@ -210,8 +210,8 @@ public class SearchItemRecentViewModel extends BaseObservable {
             if (project.getGeocode() == null) {
                 return null;
             } else
-                return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=16&size=400x400&" +
-                                "markers=color:blue|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
+                return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=20&size=400x400&" +
+                                "markers=icon:"+getMarkerIcon(project)+"|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
                         project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
         }
 
@@ -238,6 +238,55 @@ public class SearchItemRecentViewModel extends BaseObservable {
         }
 
         return null;
+    }
+    private String getMarkerIcon(Project project) {
+        StringBuilder urlBuilder = new StringBuilder(BidItemViewModel.url);
+        boolean hasUpdates = projectHasUpdates(project);
+
+        // for standard projects, i.e. with Dodge numbers
+        if(project.getDodgeNumber() != null) {
+
+            if (project.getProjectStage() == null) {
+                urlBuilder.append(hasUpdates ? BidItemViewModel.STANDARD_PRE_BID_MARKER_UPDATE : BidItemViewModel.STANDARD_PRE_BID_MARKER);
+            }
+
+            // style marker for pre-bid or post-bid color
+            else {
+                if (project.getProjectStage().getParentId() == 102) {
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.STANDARD_PRE_BID_MARKER_UPDATE : BidItemViewModel.STANDARD_PRE_BID_MARKER);
+                }
+                else {
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.STANDARD_POST_BID_MARKER_UPDATE : BidItemViewModel.STANDARD_POST_BID_MARKER);
+                }
+            }
+        }
+
+        // for custom (user-created) projects, which have no Dodge number
+        else {
+            // pre-bid user-created projects
+            if(project.getProjectStage() == null) {
+                urlBuilder.append(hasUpdates ? BidItemViewModel.CUSTOM_PRE_BID_MARKER_UPDATE : BidItemViewModel.CUSTOM_PRE_BID_MARKER);
+
+            }
+
+            // post-bid user-created projects
+            else {
+                if(project.getProjectStage().getParentId() == 102) {
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.CUSTOM_PRE_BID_MARKER_UPDATE : BidItemViewModel.CUSTOM_PRE_BID_MARKER);
+                }
+                else {
+                    urlBuilder.append(hasUpdates ? BidItemViewModel.CUSTOM_POST_BID_MARKER_UPDATE : BidItemViewModel.CUSTOM_POST_BID_MARKER);
+                }
+            }
+        }
+        return urlBuilder.toString();
+    }
+    private boolean projectHasUpdates(Project project) {
+        if(project == null) return false;
+        if(project.getUserNotes() == null || project.getImages() == null) {
+            return false;
+        }
+        return (project.getImages().size() > 0 || project.getUserNotes().size() > 0);
     }
 
     ////////////////////////////////////

@@ -216,6 +216,9 @@ public class ModifyCompanyTrackingListViewModel extends ModifyTrackingListViewMo
                 } else {
                     updateToolbarSubTitle(sourceIds.size(), getAppCompatActivity().getResources().getString(R.string.company));
                 }
+                //reset the view after success
+                setObjectsSelected(getAppCompatActivity().getString(R.string.x_selected, Integer.toString(0)));
+                setHasSelected(false);
 
                 // Remove items from Tracking list relationship
                 asyncDeleteProjects(toBeDeleted);
@@ -244,6 +247,9 @@ public class ModifyCompanyTrackingListViewModel extends ModifyTrackingListViewMo
                     } else {
                         updateToolbarSubTitle(retainedItems.size(), getAppCompatActivity().getResources().getString(R.string.company));
                     }
+                    //reset the view after success
+                    setObjectsSelected(getAppCompatActivity().getString(R.string.x_selected, Integer.toString(0)));
+                    setHasSelected(false);
 
                     // Remove items from Tracking list relationship
                     asyncDeleteProjects(selectedItems);
