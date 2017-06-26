@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.CheckBox;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterWorkTypeBinding;
@@ -22,12 +23,20 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
         ActivitySearchFilterWorkTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_work_type);
         Intent intent = getIntent();
         String sdata = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE);
-
+        String sdataId = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE_ID);
+      //  String sdataCB = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE_CB);
         viewModel = new SearchFilterWorkTypeViewModel(this);
+
         if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
             Log.d("anywork", "anywork");
             // SearchFilterWorkTypeViewModel.lastChecked=null;
             viewModel.setLastChecked(null);
+        }
+
+        if (sdataId != null && !sdataId.isEmpty())
+        {
+           // Log.d("ownertypeid","ownertypeid"+sdataId);
+            viewModel.setLastChecked((CheckBox)findViewById(Integer.valueOf(sdataId)));
         }
         sfilter.setViewModel(viewModel);
         setupToolbar();

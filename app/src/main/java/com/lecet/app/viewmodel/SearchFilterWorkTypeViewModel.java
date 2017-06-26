@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -16,7 +17,7 @@ public class SearchFilterWorkTypeViewModel extends BaseObservable {
     private String displayStr = "Any";
     private CheckBox lastChecked;
 
-    private String[] worktype = {"", ""};
+    private String[] worktype = {"", "",""};
 
     /**
      * Constructor
@@ -48,12 +49,19 @@ public class SearchFilterWorkTypeViewModel extends BaseObservable {
         displayStr = cb.getText().toString();
         worktype[0] = displayStr;
         worktype[1] = ((CheckBox) view).getTag().toString();
+        worktype[2] = String.valueOf(cb.getId());
 
         if (cb.isChecked()) {
             if (lastChecked != null) {
                 lastChecked.setChecked(false);
             }
             lastChecked = cb;
+        }  else {  //unchecked checkbox
+            worktype[0]="";
+            worktype[1]="";
+            worktype[2]="";
+            lastChecked=null;
+          //  Log.d("empty","empty"+worktype[1]);
         }
     }
 
@@ -63,5 +71,11 @@ public class SearchFilterWorkTypeViewModel extends BaseObservable {
 
     public void setLastChecked(CheckBox lastChecked) {
         this.lastChecked = lastChecked;
+        if (lastChecked !=null) {
+            lastChecked.setChecked(true);
+            worktype[0] = lastChecked.getText().toString();
+            worktype[1] = lastChecked.getTag().toString();
+            worktype[2] = String.valueOf(lastChecked.getId());
+        }
     }
 }
