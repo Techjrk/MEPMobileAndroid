@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.CheckBox;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.ActivitySearchFilterOwnerTypeBinding;
@@ -21,12 +22,19 @@ public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
         ActivitySearchFilterOwnerTypeBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_owner_type);
         Intent intent = getIntent();
         String sdata = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE);
+        String sdataId = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE_ID);
          viewModel = new SearchFilterOwnerTypeViewModel(this);
 
-        if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
+        if (sdata.equalsIgnoreCase(SearchFilterAllTabbedViewModel.ANY)) {
             Log.d("any","any");
             viewModel.setLastChecked(null);
         }
+
+            if (sdataId != null && !sdataId.isEmpty())
+            {
+                //Log.d("ownertypeid","ownertypeid"+sdataId);
+                viewModel.setLastChecked((CheckBox)findViewById(Integer.valueOf(sdataId)));
+            }
 
         sfilter.setViewModel(viewModel);
         setupToolbar();

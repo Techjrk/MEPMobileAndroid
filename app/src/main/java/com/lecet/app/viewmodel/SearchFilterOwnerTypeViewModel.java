@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -47,11 +48,19 @@ public class SearchFilterOwnerTypeViewModel extends BaseObservable {
         CheckBox cb = (CheckBox) view;
         displayStr = cb.getText().toString();
         ownertype[0] = displayStr;
+        ownertype[1] = String.valueOf(cb.getId());
+       // Log.d("checkselected","checkselected"+cb.isChecked());
         if (cb.isChecked()) {
             if (lastChecked != null) {
                 lastChecked.setChecked(false);
+
             }
             lastChecked = cb;
+        } else {  //unchecked checkbox
+            ownertype[0]="";
+            ownertype[1]="";
+            lastChecked=null;
+          //  Log.d("empty","empty"+ownertype[1]);
         }
     }
 
@@ -61,5 +70,10 @@ public class SearchFilterOwnerTypeViewModel extends BaseObservable {
 
     public void setLastChecked(CheckBox lastChecked) {
         this.lastChecked = lastChecked;
+        if (lastChecked !=null) {
+            lastChecked.setChecked(true);
+            ownertype[0] = lastChecked.getText().toString();
+            ownertype[1] = String.valueOf(lastChecked.getId());
+        }
     }
 }
