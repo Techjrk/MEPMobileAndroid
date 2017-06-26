@@ -50,8 +50,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    private Bundle selectedParent = new Bundle(); //list of user's selected parent items
-    private Bundle selectedChild = new Bundle();  //list of user's selected child items
+ //   private Bundle selectedParent = new Bundle(); //list of user's selected parent items
+ //   private Bundle selectedChild = new Bundle();  //list of user's selected child items
 
     public SearchFilterProjectTypeAdapter(List<Parent> data, SearchFilterProjectTypeViewModel viewModel) {
 
@@ -153,11 +153,11 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 childViewHolder.imgView.setVisibility(View.VISIBLE);
 
             childViewHolder.checkView.setText(child.name);
-
-            if (selectedChild.containsKey(childViewHolder.checkView.getText().toString()))
+            childViewHolder.checkView.setChecked(child.getSelected());
+            /*if (selectedChild.containsKey(childViewHolder.checkView.getText().toString()))
             {
                 childViewHolder.checkView.setChecked(true);
-            }
+            }*/
 
         if (!parent.isExpanded) childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
@@ -180,12 +180,12 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                             if (child.getSelected()) {
                                 child.setSelected(true);
                                 //viewModel.setLastChecked(childViewHolder.checkView);
-                                selectedChild.putInt(child.getName(), truePosition);
+                               // selectedChild.putInt(child.getName(), truePosition);
                                 viewModel.addProjectTypeData(child.getId(), childViewHolder.checkView.getText().toString());
 
                             } else {
                                 child.setSelected(false);
-                                selectedChild.remove(child.getName());
+                                //selectedChild.remove(child.getName());
                                 viewModel.removeProjectTypeData(child.getId());
                             }
                    //             viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getRegionId(), child.getName(), child.getAbbreviation(), child.getLongName());
@@ -326,11 +326,12 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         parentViewHolder.checkView.setText(parent.getName());
         // parentViewHolder.id = parent.getId();
 
-        if (selectedParent.containsKey(parentViewHolder.checkView.getText().toString()))
+//        if (selectedParent.containsKey(parentViewHolder.checkView.getText().toString()))
+        /*    if (viewModel.getSelectedParent().containsKey(parentViewHolder.checkView.getText().toString()))
         {
             parentViewHolder.checkView.setChecked(true);
-//                childViewHolder.checkView.setChecked(child.getSelected());
-        }
+        }*/
+        parentViewHolder.checkView.setChecked(parent.getSelected());
         if (parent.isExpanded)
             parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
         else
@@ -348,11 +349,12 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
                         if (parent.getSelected()) {
                             parent.setSelected(true);
-                            selectedParent.putInt(parent.getName(),section);
+//                            selectedParent.putInt(parent.getName(),section);
+                          //  viewModel.getSelectedParent().putInt(parent.getName(),section);
                             viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
                         } else {
                             parent.setSelected(false);
-                            selectedParent.remove(parent.getName());
+                          //  selectedParent.remove(parent.getName());
                             viewModel.removeProjectTypeData(parent.getId());
                         }
                         notifyDataSetChanged();

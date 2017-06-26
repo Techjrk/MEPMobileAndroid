@@ -400,6 +400,10 @@
     <string name="char_max_exceed_title">Maximum Numbers Exceeded</string>
     <string name="char_max_message">Please limit the number up to 8 digits only</string>
     <string name="using_project_near_me">Using Project Near Me</string>
+    <string name="FilterTypeData">FilterTypeData</string>
+    <string name="FilterJurisdictionData">JurisdictionData</string>
+    <string name="FilterStageData">FilterStageData</string>
+    <string name="Filter">Filter</string>
     <string name="MAX">MAX</string>
     <string name="save_project">Save Project</string>
     <string name="update_project">Update Project</string>

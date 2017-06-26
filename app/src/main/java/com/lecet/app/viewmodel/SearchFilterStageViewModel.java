@@ -1,7 +1,9 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import com.lecet.app.data.models.SearchFilterStagesMain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -35,6 +38,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
     public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterStageViewModel.name";
     private AppCompatActivity activity;
     private Bundle bundle;
+   // private Bundle bundleCheck;
     private RealmResults<SearchFilterStagesMain> realmStages;
     private String query;
     private CheckBox lastChecked;
@@ -64,7 +68,15 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public SearchFilterStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
-        bundle = new Bundle();
+        if (getPrefBundle() == null) {
+            bundle = new Bundle();
+            //bundleCheck = new Bundle();
+        }
+        else {
+            bundle = getPrefBundle();
+           // bundleCheck = getPrefBundle();
+        }
+        //bundle = new Bundle();
         getProjectStages();
         searchItem("");
     }
@@ -102,11 +114,13 @@ public class SearchFilterStageViewModel extends BaseObservable {
        // clearLast();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-        if (!bundle.isEmpty()) {
+       // intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundleCheck);
+        activity.setResult(Activity.RESULT_OK, intent);
+       /* if (!bundle.isEmpty()) {
             activity.setResult(Activity.RESULT_OK, intent);
         } else {
             activity.setResult(Activity.RESULT_CANCELED);
-        }
+        }*/
 
         activity.finish();
     }
@@ -116,13 +130,24 @@ public class SearchFilterStageViewModel extends BaseObservable {
      *
      * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, 2=grandchild)
      */
+
+ /*   public void setStageCheck(String id, String name) {
+//        public void setStageData(int viewType, int id, String name) {
+    //    bundle.putString(String.valueOf(id),name);
+       bundleCheck.putString(id,name);
+    }*/
+
+
     public void setStageData(int viewType, int id, String name) {
+
         // overwrite the Bundle instance with each selection since Stage only supports single-selection
-       Bundle  b = new Bundle();
+        Bundle  b = new Bundle();
         setBundleData(b, BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
         setBundleData(b, BUNDLE_KEY_ID, Integer.toString(id));
         setBundleData(b, BUNDLE_KEY_NAME, name);
-        bundle.putBundle(Integer.toString(id),b);
+        String sid = Integer.toString(id);
+        bundle.putBundle(sid,b);
+      //  setStageCheck(sid,name);
       //  setBundleData(Integer.toString(id), name);
     }
 
@@ -135,6 +160,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
     }
     public void removeStageData(String key) {
         bundle.remove(key);
+       // bundleCheck.remove(key);
     }
 
     private void setBundleData(Bundle b, String key, String value) {
@@ -176,6 +202,17 @@ public class SearchFilterStageViewModel extends BaseObservable {
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
                 foundParent = true;
             }
+            //***
+            if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(parent.getId())) ) {
+                parent.setSelected(true);
+                //  getSelectedParent().putInt(parent.getName(), Integer.parseInt(parent.getId()));
+               /* for (String parentSelected : getSelectedParent().keySet()) {
+                    Log.d("selectParent0", "selectParent0" + parentSelected);
+                }*/
+            }
+
+            //***
+
             children = new ArrayList<>();
             for (SearchFilterStage childStage : parentStage.getStages()) {
                 if (childStage != null) {
@@ -187,6 +224,11 @@ public class SearchFilterStageViewModel extends BaseObservable {
                         hasChild = true;
                         foundChild = true;
                     }
+                    if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(child.getId())) ) {
+                        child.setSelected(true);
+                    }
+
+
                     if (foundChild || foundParent) {
                         children.add(child);
                     }
@@ -210,5 +252,22 @@ public class SearchFilterStageViewModel extends BaseObservable {
             recyclerView.setAdapter(adapter);
         }
     }
+    public Bundle getPrefBundle() {
+        Bundle b = null;
+        SharedPreferences sprefName = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"name", Context.MODE_PRIVATE);
+        SharedPreferences sprefView = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"view", Context.MODE_PRIVATE);
+        if (sprefName != null) {
+            Set<String> sIDs = sprefName.getAll().keySet();
+            b = new Bundle();
 
+            for (String keyID : sIDs) {
+                Bundle b2 = new Bundle();
+                b2.putString(BUNDLE_KEY_ID,keyID);
+                b2.putString(BUNDLE_KEY_NAME, sprefName.getString(keyID, ""));
+                b2.putString(BUNDLE_KEY_VIEW_TYPE,sprefView.getString(keyID,""));
+                b.putBundle(keyID,b2);
+            }
+        }
+        return b;
+    }
 }

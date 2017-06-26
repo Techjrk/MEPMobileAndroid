@@ -231,7 +231,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             else
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
-            checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
+           // checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
             childViewHolder.checkView.setChecked(child.getSelected());
             childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
@@ -361,7 +361,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
             final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
-            checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
+            //checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
             grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
             grandChildViewHolder.checkView.setOnClickListener(null);
             grandChildViewHolder.checkView.setOnClickListener(
@@ -404,35 +404,15 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
         // Parent denoted by section number
         final Parent parent = data.get(section);
-
-        parentViewHolder.imgView.setOnClickListener(null);
-        parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                customSearch = false;
-
-                if (expandedParents.contains(section)) {
-                    parent.isExpanded = false;
-                    expandedParents.remove(Integer.valueOf(section));
-                    expandedChildren.remove(Integer.valueOf(section));
-                } else {
-                    parent.isExpanded = true;
-                    expandedParents.add(section);
-                }
-
-                notifyDataSetChanged();
-
-            }
-        });
+        parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
-
+        parentViewHolder.checkView.setChecked(parent.getSelected());
         if (parent.isExpanded)
             parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
         else
             parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
-        checkLastParentSelectName(true, parent, parentViewHolder, section);
-        parentViewHolder.checkView.setChecked(parent.getSelected());
 
+        parentViewHolder.checkView.setOnClickListener(null);
         parentViewHolder.checkView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -457,6 +437,59 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     }
                 }
         );
+
+        parentViewHolder.imgView.setOnClickListener(null);
+        parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customSearch = false;
+
+                if (expandedParents.contains(section)) {
+                    parent.isExpanded = false;
+                    expandedParents.remove(Integer.valueOf(section));
+                    expandedChildren.remove(Integer.valueOf(section));
+                } else {
+                    parent.isExpanded = true;
+                    expandedParents.add(section);
+                }
+
+                notifyDataSetChanged();
+
+            }
+        });
+      //  parentViewHolder.checkView.setText(parent.getName());
+
+ /*       if (parent.isExpanded)
+            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
+        else
+            parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);*/
+        //checkLastParentSelectName(true, parent, parentViewHolder, section);
+   //     parentViewHolder.checkView.setChecked(parent.getSelected());
+
+ /*       parentViewHolder.checkView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customSearch = false;
+                        CheckBox cb = (CheckBox) view;
+                        parent.setSelected(cb.isChecked());
+
+                        if (parent.getSelected()) {
+                            parent.setSelected(true);
+                            viewModel.setStageData(PARENT_VIEW_TYPE, parent.getId(), parent.getName());
+                        } else {
+                            parent.setSelected(false);
+                            viewModel.removeStageData(Integer.toString(parent.getId()));
+                        }
+
+                        *//*parent.setSelected(cb.isChecked());
+                        if (parent.getSelected())
+                            viewModel.setStageData(PARENT_VIEW_TYPE, parent.getId(), parent.getName());*//*
+
+                        notifyDataSetChanged();
+                    }
+                }
+        );*/
     }
 
     @Override

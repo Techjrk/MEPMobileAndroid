@@ -120,13 +120,21 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences spref = getSharedPreferences("Filter", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.clear();
-        edit.commit();
+
+        clearSharedPref(getString(R.string.Filter));
+        clearSharedPref(getString(R.string.FilterTypeData));
+        clearSharedPref(getString(R.string.FilterStageData)+"name");
+        clearSharedPref(getString(R.string.FilterStageData)+"view");
 
     }
 
+      private void clearSharedPref(String dataName) {
+          SharedPreferences spref = getSharedPreferences(dataName, Context.MODE_PRIVATE);
+          if (spref == null) return;
+          SharedPreferences.Editor editData = spref.edit();
+          editData.clear();
+          editData.commit();
+      }
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
 

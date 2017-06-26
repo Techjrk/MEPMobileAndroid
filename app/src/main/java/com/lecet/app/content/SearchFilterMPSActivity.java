@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
@@ -272,6 +271,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Single type parent category selection Engineering: projectTypeId":{"inq":[501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530]}
      */
     private void processProjectType(final Bundle bundle) {
+        viewModel.savePrefBundle(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -339,10 +339,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     viewModel.setPersistedProjectTypeId(displayStr);
                     viewModel.setType_select(displayStr);
                 }
-
-                types = "\"projectTypeId\":{\"inq\":" + idList + "}";
-
-                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
+                if (!idList.isEmpty()) {
+                    types = "\"projectTypeId\":{\"inq\":" + idList + "}";
+                    viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
+                }
             }
         });
     }
@@ -394,7 +394,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             viewModel.setPersistedUpdatedWithin(updatedWithinInt);
             viewModel.setUpdated_within_select(updatedWithinStr);
         }
-        if (updatedWithinInt != null && !updatedWithinInt.trim().equals("")) {
+        if (updatedWithinInt != null && !updatedWithinInt.trim().equals("") && !updatedWithinInt.equalsIgnoreCase(getString(R.string.any))) {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
@@ -408,7 +408,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Region (Parent) selection ex with IDs of Locals with and without District Councils: "jurisdictions": { "inq": [8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 1, 2, 3, 4, 5, 6] }
      */
     private void processJurisdiction(final Bundle bundle) {
-
+        viewModel.savePrefBundle(getString(R.string.FilterJurisdictionData), bundle); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -520,7 +520,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Ex: "projectStageId":{"inq":[208,209,210,211]}}
      */
     private void processStage(final Bundle b) {
-
+        viewModel.savePrefBundleStageOnly(getString(R.string.FilterStageData), b); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -528,6 +528,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 int viewType = -1;
                 String stageStr = "";
+                // String stageStrId="";
                 String stageId = "";
                 String stages = "";
 
@@ -538,10 +539,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 for (String key : b.keySet()) {
                     try {
                         Bundle bundle = b.getBundle(key);
+
                         viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
                         stageStr += bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME) + ", ";                        // text display
 //                    stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
-                        stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);                          // ID
+                        stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);
+                        //   stageStrId += String.valueOf(stageId)+", ";
+                        // ID
                         stages = "";
                     } catch (Exception e) {
                         Log.e("processStage: ", "Error parsing bundle. str=" + stageStr + " error:" + e.getLocalizedMessage());
@@ -579,6 +583,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     Log.d(TAG, "processStage: IDs: " + sList);
 
                     stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
+                    // viewModel.setPersistStage(stageStr);
                 }
                 Log.d("slistid", "slistid" + sList.toString());
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
@@ -607,7 +612,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             viewModel.setBidding_within_select(biddingWithinStr);
         }
 
-        if (biddingWithinInt != null && !biddingWithinInt.trim().equals("")) {
+        if (biddingWithinInt != null && !biddingWithinInt.trim().equals("") && !biddingWithinInt.equalsIgnoreCase(getString(R.string.any))) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
@@ -624,6 +629,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         String bhDisplayStr = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
         String bhChar = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_TAG); // arr[1];
         viewModel.setPersistedBuildingOrHighway(bundle);
+        if (bhDisplayStr == null || bhDisplayStr.equals("")) bhDisplayStr = "Any";
         viewModel.setBh_select(bhDisplayStr);
         if (bhDisplayStr != null && !bhDisplayStr.trim().equals("")) {
             List<String> bhList = new ArrayList<>();
@@ -636,6 +642,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
+
     }
 
     /**
@@ -643,18 +650,20 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      */
     private void processOwnerType(String[] arr) {
         String ownerTypeStr = arr[0];
+        String ownerTypeId = arr[1];
         String ownerType = "";
         if (ownerTypeStr == null || ownerTypeStr.equals("")) {
             ownerTypeStr = "Any";
         }
-        viewModel.setPersistedOwnerType(ownerTypeStr);
+        viewModel.setPersistedOwnerType(ownerTypeId);
         viewModel.setOwner_type_select(ownerTypeStr);
-        if (ownerTypeStr != null && !ownerTypeStr.trim().equals("")) {
+        if (ownerTypeStr != null && !ownerTypeStr.trim().equals("") && !ownerTypeStr.equalsIgnoreCase(getString(R.string.any))) {
             List<String> oList = new ArrayList<>();
             oList.add("\"" + ownerTypeStr + "\"");
             ownerType = "\"ownerType\":{\"inq\":" + oList.toString() + "}";
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE, ownerType);
+
     }
 
     /**
@@ -663,15 +672,16 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     private void processWorkType(final String[] arr) {
         String workTypeStr = arr[0];
         String workTypeInt = arr[1];
+        String workTypeCBId = arr[2]; //checkbox id
         String workType = "";
         if (workTypeStr == null || workTypeStr.equals("")) {
             workTypeStr = "Any";
         }
-        viewModel.setPersistedWorkType(workTypeStr);
         viewModel.setWork_type_select(workTypeStr);
-
+        viewModel.setPersistedWorkType(workTypeCBId);
+        // viewModel.setPersistedWorkType(workTypeInt);
         List<String> wList = new ArrayList<>();
-        if (workTypeInt != null && !workTypeInt.trim().equals("")) {
+        if (workTypeInt != null && !workTypeInt.trim().equals("") && !workTypeStr.equalsIgnoreCase(getString(R.string.any))) {
             wList.add(workTypeInt);
             workType = "\"workTypeId\":{\"inq\":" + wList.toString() + "}";
         }
