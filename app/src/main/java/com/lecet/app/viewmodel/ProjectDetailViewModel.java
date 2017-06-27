@@ -119,26 +119,27 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
             SimpleLecetDefaultAlert alert = SimpleLecetDefaultAlert.newInstance(activity , SimpleLecetDefaultAlert.CUSTIOM_DIALOG);
             alert.setMessage("Internal Data Error.");
             alert.show();
-        }
+        } else {
 
-        if (mapReady) {
+            if (mapReady) {
 
-            // If the project does not have dodge number, then we know it is user
-            // created.
-            if (project.getDodgeNumber() == null) {
+                // If the project does not have dodge number, then we know it is user
+                // created.
+                if (project.getDodgeNumber() == null) {
 
-                addMarker(R.drawable.ic_user_project, project.getGeocode().toLatLng(), 16);
+                    addMarker(R.drawable.ic_user_project, project.getGeocode().toLatLng(), 16);
 
-            } else {
+                } else {
 
-                addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+                    addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+                }
+
             }
 
+            setTitle(project.getTitle());
+            setAddress(getProjectAddress(project));
+            notifyChange();
         }
-
-        setTitle(project.getTitle());
-        setAddress(getProjectAddress(project));
-        notifyChange();
     }
 
     public void onNotesReady(int count) {

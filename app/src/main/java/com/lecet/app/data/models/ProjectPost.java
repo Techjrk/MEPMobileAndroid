@@ -583,6 +583,9 @@ public class ProjectPost extends BaseObservable {
     }
 
     public void setGeocode(Geocode geocode){
+        if(geocode == null){
+            this.geocode = null;
+        }
         this.geocode.setLng(geocode.getLng());
         this.geocode.setLat(geocode.getLat());
     }
