@@ -1,12 +1,16 @@
 package com.lecet.app.domain;
 
+import android.util.Log;
+
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.interfaces.RealmFetchCallback;
 
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -54,6 +58,22 @@ public class CompanyDomain {
         RealmResults<Company> results = realm.where(Company.class).equalTo("id", companyId).findAll();
 //        RealmResults<Company> results = realm.where(Company.class).equalTo("contactId", companyId).findAll();
         return results;
+    }
+
+
+    public void asyncFetchCompany(final long companyId, final RealmFetchCallback<Company> realmFetchCallback, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                Log.d("Test", "execute: Company ID" + companyId);
+                Company results = realm.where(Company.class).equalTo("id", companyId).findFirst();
+                realmFetchCallback.fetchComplete(results);
+
+            }
+        }, onSuccess, onError);
+
     }
 
     public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
