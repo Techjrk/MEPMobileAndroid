@@ -218,7 +218,9 @@ public class TrackingListDomain {
                         public void onResponse(Call<CompanyTrackingList> call, Response<CompanyTrackingList> response) {
 
                             if (response.isSuccessful()) {
-
+                                CompanyTrackingList companyTrackingList = response.body();
+                                CompanyTrackingList destination = fetchCompanyTrackingList(destinationTrackingListId);
+                                addCompaniesToTrackingList(destination, companyTrackingList.getCompanies());
                                 callback.onSuccess(null);
                             } else {
 
@@ -445,13 +447,12 @@ public class TrackingListDomain {
         return projects;
     }
 
-    public RealmList<Company> addCompaniesToTrackingList(CompanyTrackingList trackingList, List<Company> toBeDeleted) {
-
+    public RealmList<Company> addCompaniesToTrackingList(CompanyTrackingList trackingList, List<Company> tobeAdded) {
         RealmList<Company> companies = trackingList.getCompanies();
         realm.beginTransaction();
-        companies.addAll(toBeDeleted);
+        companies.clear();
+        companies.addAll(tobeAdded);
         realm.commitTransaction();
-
         return companies;
     }
 
