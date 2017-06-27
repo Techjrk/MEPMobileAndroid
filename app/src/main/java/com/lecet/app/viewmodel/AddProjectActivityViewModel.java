@@ -77,6 +77,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private Project project;
 
     private String targetStartDate;
+    private boolean countyIsEditable;
 
     // values for display only
     private String typeSelect;
@@ -207,6 +208,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if (county != null) getProjectPost().setCounty(county);         // county
         if (fipsCounty != null) getProjectPost().setFipsCounty(fipsCounty); // FIPS county
         if (country != null) getProjectPost().setCountry(country);       // country
+
+        // set the edit mode of the County field
+        if(county != null && !county.isEmpty()) {
+            countyIsEditable = false;
+        }
+        else countyIsEditable = true;
     }
 
     private String getFipsCounty(final String projectState, final String projectCounty) {
@@ -595,6 +602,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     public void setTypeSelect(String typeSelect) {
         this.typeSelect = typeSelect;
         notifyPropertyChanged(BR.typeSelect);
+    }
+
+    public boolean getCountyIsEditable() {
+        return countyIsEditable;
     }
 
 

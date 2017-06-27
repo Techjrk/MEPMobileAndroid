@@ -646,7 +646,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 Log.d(TAG, "onInfoWindowClick: marker lng: " + marker.getPosition().longitude);
                 Log.d(TAG, "onInfoWindowClick: context: " + context);
                 Intent intent = new Intent(context, AddProjectActivity.class);
-                //intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");
                 intent.putExtra(EXTRA_MARKER_LATITUDE, marker.getPosition().latitude);
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);
