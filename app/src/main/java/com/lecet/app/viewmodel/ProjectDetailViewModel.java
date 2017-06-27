@@ -27,6 +27,7 @@ import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +106,7 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
         if(project == null || activity == null){
             return false;
         }
-        return LecetSharedPreferenceUtil.getInstance(activity).getId() == project.getUserId();    //TODO - CHECK IF THE CURRENT USER HAS PERMISSION TO EDIT AND IF NOT, RETURN FALSE **************
+        return LecetSharedPreferenceUtil.getInstance(activity).getId() == project.getUserId();
     }
 
 
@@ -114,24 +115,31 @@ public class ProjectDetailViewModel extends BaseMapObservableViewModel implement
 
         this.project = project;
 
-        if (mapReady) {
+        if(project.getGeocode() == null){
+            SimpleLecetDefaultAlert alert = SimpleLecetDefaultAlert.newInstance(activity , SimpleLecetDefaultAlert.CUSTIOM_DIALOG);
+            alert.setMessage("Internal Data Error.");
+            alert.show();
+        } else {
 
-            // If the project does not have dodge number, then we know it is user
-            // created.
-            if (project.getDodgeNumber() == null) {
+            if (mapReady) {
 
-                addMarker(R.drawable.ic_user_project, project.getGeocode().toLatLng(), 16);
+                // If the project does not have dodge number, then we know it is user
+                // created.
+                if (project.getDodgeNumber() == null) {
 
-            } else {
+                    addMarker(R.drawable.ic_user_project, project.getGeocode().toLatLng(), 16);
 
-                addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+                } else {
+
+                    addMarker(R.drawable.ic_yellow_marker, project.getGeocode().toLatLng(), 16);
+                }
+
             }
 
+            setTitle(project.getTitle());
+            setAddress(getProjectAddress(project));
+            notifyChange();
         }
-
-        setTitle(project.getTitle());
-        setAddress(getProjectAddress(project));
-        notifyChange();
     }
 
     public void onNotesReady(int count) {
