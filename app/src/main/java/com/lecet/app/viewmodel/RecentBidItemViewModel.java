@@ -77,6 +77,10 @@ public class RecentBidItemViewModel extends BaseObservable{
     }
 
     public String getBidCompany() {
+        if(bid.getCompany() != null && bid.getCompany().getName().isEmpty()){
+            return bid.getCompany().getName();
+        }
+
         if(companyName != null && !companyName.isEmpty()){
             return companyName;
         }
