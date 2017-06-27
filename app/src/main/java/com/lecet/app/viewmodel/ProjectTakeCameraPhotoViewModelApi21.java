@@ -113,23 +113,30 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
     }
 
     public void resetCamera(){
+        if(cameraPreview == null){
+            return;
+        }
+
         if(cameraPreview.cameraIdInUse != -1  && cameraPreview.textureView != null && cameraPreview.setup) {
             cameraPreview.updateCamera();
         }
     }
 
     private boolean hasPermission(String permission, Fragment fragment){
-        if(ActivityCompat.checkSelfPermission(fragment.getActivity(), permission) == PackageManager.PERMISSION_DENIED){
-            return false;
-        }
-        return  true;
+        return !(ActivityCompat.checkSelfPermission(fragment.getActivity(), permission) == PackageManager.PERMISSION_DENIED);
     }
 
     public int canSwap(){
+        if(cameraPreview == null){
+            return View.INVISIBLE;
+        }
         return cameraPreview.isSwapableCamera ? View.VISIBLE : View.INVISIBLE;
     }
 
     public  int canFlash(){
+        if(cameraPreview == null){
+            return View.INVISIBLE;
+        }
         return cameraPreview.isFlashable ? View.VISIBLE : View.INVISIBLE;
     }
 
@@ -157,7 +164,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
         private CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {//Callback used with most camera actions.
             @Override
-            public void onOpened(CameraDevice camera) {
+            public void onOpened(@NonNull CameraDevice camera) {
                 cameraDevice = camera;
                 startCamera();
                 setup = true;
@@ -165,11 +172,11 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
 
             @Override
-            public void onDisconnected(CameraDevice camera) {
+            public void onDisconnected(@NonNull CameraDevice camera) {
             }
 
             @Override
-            public void onError(CameraDevice camera, int error) {
+            public void onError(@NonNull CameraDevice camera, int error) {
 
             }
         };
@@ -311,7 +318,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                         resizedImage = rotateImage(realImage, 90 + sensorOrientation);
                                     }
 
-                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
 
                                     outputStream.close();
 
@@ -415,7 +422,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
                 }
                 Integer sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
-                if(sensorOrientation != null && rotatedCameraManufacturers.contains(Build.MANUFACTURER)){
+                if(sensorOrientation != null){
                     this.sensorOrientation = sensorOrientation;
                 }else{
                     this.sensorOrientation = 0;
