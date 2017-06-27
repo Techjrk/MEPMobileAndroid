@@ -20,14 +20,17 @@ import io.realm.Realm;
 public class HiddenProjectsActivity extends AppCompatActivity {
 
     private HiddenProjectsViewModel viewModel;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        realm = Realm.getDefaultInstance();
+
         ActivityHiddenProjectsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_hidden_projects);
         viewModel = new HiddenProjectsViewModel(this, LecetSharedPreferenceUtil.getInstance(this).getId(),
-                new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), Realm.getDefaultInstance()));
+                new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(this), realm));
         binding.setViewModel(viewModel);
         setupToolbar(viewModel, getString(R.string.hidden_projects_title));
     }
@@ -50,5 +53,19 @@ public class HiddenProjectsActivity extends AppCompatActivity {
             actionBar.setCustomView(tb);
             actionBar.setDisplayShowCustomEnabled(true);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        realm.removeAllChangeListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        realm.removeAllChangeListeners();
+        realm.close();
     }
 }

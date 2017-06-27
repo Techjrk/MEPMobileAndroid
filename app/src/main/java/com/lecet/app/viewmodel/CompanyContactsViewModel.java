@@ -36,6 +36,7 @@ public class CompanyContactsViewModel extends BaseActivityViewModel {
 
 
     public CompanyContactsViewModel(AppCompatActivity appCompatActivity, CompanyDomain companyDomain, long companyID) {
+        super(appCompatActivity);
         this.appCompatActivity = appCompatActivity;
         this.companyDomain = companyDomain;
         this.companyID = companyID;

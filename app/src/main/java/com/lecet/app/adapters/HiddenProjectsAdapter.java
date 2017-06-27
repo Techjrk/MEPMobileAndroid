@@ -21,7 +21,7 @@ import io.realm.RealmResults;
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
-public class HiddenProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HiddenProjectsAdapter extends RecyclerView.Adapter<HiddenProjectsAdapter.ProjectViewHolder> {
 
     private final ProjectDomain projectDomain;
     private final List<Project> data;
@@ -35,17 +35,17 @@ public class HiddenProjectsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         ListItemHiddenProjectBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_hidden_project, parent, false);
         return new ProjectViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ProjectViewHolder holder, int position) {
 
         Project project = data.get(position);
-        ((ProjectViewHolder) holder).getBinding().setViewModel(new ListItemHiddenProjectViewModel(holder.itemView.getContext(), projectDomain, project, mapsAPIKey));
+        holder.getBinding().setViewModel(new ListItemHiddenProjectViewModel(holder.itemView.getContext(), projectDomain, project, mapsAPIKey));
     }
 
     @Override
@@ -53,7 +53,14 @@ public class HiddenProjectsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return data.size();
     }
 
-    private class ProjectViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onViewRecycled(ProjectViewHolder holder) {
+        super.onViewRecycled(holder);
+
+        holder.getBinding().getViewModel().removeChangeListener();
+    }
+
+    public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
         private final ListItemHiddenProjectBinding binding;
 
@@ -66,4 +73,5 @@ public class HiddenProjectsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return binding;
         }
     }
+
 }

@@ -10,6 +10,8 @@ import com.lecet.app.R;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 
+import io.realm.ObjectChangeSet;
+import io.realm.RealmObjectChangeListener;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,18 +29,39 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
     private final ProjectDomain projectDomain;
 
     private String hideTitle;
-    private boolean isHidden;
+    private boolean hidden;
 
     @ColorRes
     int hiddenTextViewColor;
+
+    private RealmObjectChangeListener<Project> objectChangeListener;
+    private Project resultProject;
 
     public ListItemHiddenProjectViewModel(Context context, ProjectDomain projectDomain, Project project, String mapsApiKey) {
         super(project, mapsApiKey);
         this.context = context;
         this.projectDomain = projectDomain;
-        this.isHidden = getProject().isHidden();
-        setHideTitle(isHidden ? context.getString(R.string.unhide) : context.getString(R.string.hide));
-        setHiddenTextViewColor(isHidden ? R.color.lecetHideBlue : R.color.lecetUnhideBlue);
+
+
+        // We will make an async call to get the Project and listen for any updates to update the UI
+        resultProject =  projectDomain.fetchProjectAsync(project.getId(), new RealmObjectChangeListener<Project>() {
+            @Override
+            public void onChange(Project object, ObjectChangeSet changeSet) {
+                if (changeSet == null) {
+                    // The first time async returns with an null changeSet.
+                    updateFields(object);
+                    resultProject.removeAllChangeListeners();
+                } else {
+                    // Called on every update.
+                    updateFields(object);
+                    resultProject.removeAllChangeListeners();
+                }
+            }
+        });
+    }
+
+    public void setObjectChangeListener(RealmObjectChangeListener<Project> objectChangeListener) {
+        this.objectChangeListener = objectChangeListener;
     }
 
     @Bindable
@@ -63,16 +86,23 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
         this.hiddenTextViewColor = hiddenTextViewColor;
     }
 
+    private void updateFields(Project project) {
+
+        hidden = project.isHidden();
+        setHideTitle(hidden ? context.getString(R.string.unhide) : context.getString(R.string.hide));
+        setHiddenTextViewColor(hidden ? R.color.lecetHideBlue : R.color.lecetUnhideBlue);
+    }
+
     public void onHideSelected(View view) {
 
-        if (isHidden) {
+        if (hidden) {
 
             projectDomain.unhideProject(getProject().getId(), new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        isHidden = false;
-                        projectDomain.setProjectHiddenAsync(getProject(), isHidden);
+                        hidden = false;
+                        projectDomain.setProjectHiddenAsync(getProject(), hidden);
                         setHideTitle(context.getString(R.string.hide));
                         setHiddenTextViewColor(R.color.lecetHideBlue);
                     }
@@ -80,6 +110,7 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+
 
                 }
             });
@@ -90,8 +121,8 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        isHidden = true;
-                        projectDomain.setProjectHiddenAsync(getProject(), isHidden);
+                        hidden = true;
+                        projectDomain.setProjectHiddenAsync(getProject(), hidden);
                         setHideTitle(context.getString(R.string.unhide));
                         setHiddenTextViewColor(R.color.lecetUnhideBlue);
                     }
@@ -102,6 +133,13 @@ public class ListItemHiddenProjectViewModel extends CompanyDetailProjectViewMode
 
                 }
             });
+        }
+    }
+
+    public void removeChangeListener() {
+
+        if (resultProject != null) {
+            resultProject.removeAllChangeListeners();
         }
     }
 }
