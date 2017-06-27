@@ -22,7 +22,7 @@ public class CompanyDetailProjectViewModel extends BaseObservable {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
     }
-
+    
     public Project getProject() {
         return project;
     }
