@@ -468,18 +468,16 @@
     </style>
 
     <style name="ListItemProjectTrackingTextView.ExpandableBody">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/pureWhite</item>
-        <item name="android:layout_marginRight">8dp</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">0dp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
         <item name="android:minLines">2</item>
         <item name="android:ellipsize">none</item>
-        <item name="android:background">@drawable/shape_rect_list_item_expand_2</item>
+    </style>
+
+    <style name="ListItemProjectTrackingTextView.ExpandableBody.Detail">
+        <item name="android:gravity">right</item>
     </style>
 
     <style name="ListItemProjectTrackingImage" />

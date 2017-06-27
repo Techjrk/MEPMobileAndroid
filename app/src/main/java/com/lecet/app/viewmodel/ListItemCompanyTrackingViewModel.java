@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
@@ -23,8 +24,8 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
     private String mapsApiKey;
     private ProjectDomain projectDomain;
 
-    public ListItemCompanyTrackingViewModel(ProjectDomain projectDomain, Company company, String mapsApiKey, boolean showUpdates) {
-        super(company, showUpdates);
+    public ListItemCompanyTrackingViewModel(Context context, ProjectDomain projectDomain, Company company, String mapsApiKey, boolean showUpdates) {
+        super(context, company, showUpdates);
 
         this.mapsApiKey = mapsApiKey;
         this.projectDomain = projectDomain;
@@ -61,7 +62,7 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
         } else {
 
             // Run an async fetch to see if there are any updates that might be available
-            projectDomain.fetchCompanyActivityUpdates(object.getId(), DateUtility.addDays(-1), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
+            projectDomain.fetchCompanyActivityUpdates(object.getId(), DateUtility.addDays(-700), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
                 @Override
                 public void onChange(RealmResults<ActivityUpdate> element) {
 
@@ -69,7 +70,7 @@ public class ListItemCompanyTrackingViewModel extends TrackingListItem<Company> 
 
                         ActivityUpdate update = element.first();
                         refreshActivityUpdateDisplay(update);
-                        element.removeChangeListeners();
+                        element.removeAllChangeListeners();
                     }
 
                 }

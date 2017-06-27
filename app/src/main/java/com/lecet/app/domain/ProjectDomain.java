@@ -535,7 +535,10 @@ public class ProjectDomain {
 
     public RealmResults<ActivityUpdate> fetchProjectActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
 
-        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("projectId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class)
+                .equalTo("projectId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate)
+                .findAllSortedAsync("updatedAt", Sort.DESCENDING);
+
         result.addChangeListener(listener);
 
         return result;
@@ -543,7 +546,9 @@ public class ProjectDomain {
 
     public RealmResults<ActivityUpdate> fetchCompanyActivityUpdates(long projectId, Date updateMinDate, RealmChangeListener<RealmResults<ActivityUpdate>> listener) {
 
-        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId).greaterThanOrEqualTo("updatedAt", updateMinDate).findAllAsync();
+        RealmResults<ActivityUpdate> result = realm.where(ActivityUpdate.class).equalTo("companyId", projectId)
+                .greaterThanOrEqualTo("updatedAt", updateMinDate)
+                .findAllSortedAsync("updatedAt", Sort.DESCENDING);
         result.addChangeListener(listener);
 
         return result;

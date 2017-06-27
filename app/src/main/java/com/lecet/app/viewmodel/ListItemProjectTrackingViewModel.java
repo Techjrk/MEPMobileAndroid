@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
@@ -26,8 +27,8 @@ public class ListItemProjectTrackingViewModel extends TrackingListItem<Project> 
     private ProjectDomain projectDomain;
     private String mapApiKey;
 
-    public ListItemProjectTrackingViewModel(ProjectDomain projectDomain, Project object, String mapApiKey, boolean displayUpdate) {
-        super(object, displayUpdate);
+    public ListItemProjectTrackingViewModel(Context context, ProjectDomain projectDomain, Project object, String mapApiKey, boolean displayUpdate) {
+        super(context, object, displayUpdate);
         this.projectDomain = projectDomain;
         this.mapApiKey = mapApiKey;
         init(object);
@@ -60,7 +61,7 @@ public class ListItemProjectTrackingViewModel extends TrackingListItem<Project> 
                             PrimaryProjectType result = element.first();
                             String keywords = generateProjectKeywords(result);
                             secondaryDetail.set(keywords);
-                            element.removeChangeListeners();
+                            element.removeAllChangeListeners();
                         }
                     }
                 };
@@ -112,7 +113,7 @@ public class ListItemProjectTrackingViewModel extends TrackingListItem<Project> 
         } else {
 
             // Run an async fetch to see if there are any updates that might be available
-            projectDomain.fetchProjectActivityUpdates(object.getId(), DateUtility.addDays(-1), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
+            projectDomain.fetchProjectActivityUpdates(object.getId(), DateUtility.addDays(-700), new RealmChangeListener<RealmResults<ActivityUpdate>>() {
                 @Override
                 public void onChange(RealmResults<ActivityUpdate> element) {
 
@@ -120,7 +121,7 @@ public class ListItemProjectTrackingViewModel extends TrackingListItem<Project> 
 
                         ActivityUpdate update = element.first();
                         refreshActivityUpdateDisplay(update);
-                        element.removeChangeListeners();
+                        element.removeAllChangeListeners();
                     }
 
                 }
