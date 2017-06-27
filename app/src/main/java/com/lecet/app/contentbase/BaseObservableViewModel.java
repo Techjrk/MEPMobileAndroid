@@ -78,7 +78,7 @@ public class BaseObservableViewModel extends BaseObservable {
 
         // Create and show the dialog.
         DialogFragment newFragment = LoadingDialogFragment.newInstance();
-        newFragment.show(ft, "dialog");
+        newFragment.show(activity.getSupportFragmentManager(), "dialog"); //change this fragment transaction to fragment manager to allow dismissAllowingStateLoss()
     }
 
     public void dismissProgressDialog() {
@@ -89,7 +89,7 @@ public class BaseObservableViewModel extends BaseObservable {
         AppCompatActivity activity = activityWeakReference.get();
         DialogFragment prev = (DialogFragment) activity.getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
-            prev.dismiss();
+            prev.dismissAllowingStateLoss();
         }
     }
 
