@@ -16,7 +16,7 @@
         <!-- Left View and Details -->
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="90dp"
                 android:weightSum="100">
 
             <!-- TextView -->
@@ -50,7 +50,8 @@
                         android:id="@+id/location"
                         tools:text="Saint Louis, MO"
                         style="@style/ListItemCompanyDetailProjectBidsTextView.Detail1"
-                        android:text="@{viewModel.location}"/>
+                        android:text="@{viewModel.location}"
+                    android:layout_height="32dp" />
 
                 <LinearLayout
                         android:layout_width="wrap_content"
