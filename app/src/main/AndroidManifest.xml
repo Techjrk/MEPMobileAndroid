@@ -76,17 +76,29 @@
             android:name=".content.CompanyDetailProjectBidsActivity"
             android:label="@string/title_activity_company_detail_project_bids"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.ModifyProjectTrackingListActivity"
             android:label="@string/title_activity_project_tracking_list"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.ModifyCompanyTrackingListActivity"
             android:label="@string/title_activity_project_tracking_list"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".content.MainActivity" />
+        </activity>
         <activity
             android:name=".content.ContactDetailActivity"
             android:label="@string/title_activity_change_password"
