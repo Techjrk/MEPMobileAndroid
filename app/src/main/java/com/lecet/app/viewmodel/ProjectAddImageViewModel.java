@@ -259,7 +259,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
 
         Log.d(TAG, "postImage: encoding to base64...");
-        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 70);
+        String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 90);
         Log.d(TAG, "postImage: encoded length: " + base64Image.length());
 
         Log.d(TAG, "postImage: compressing...");
@@ -538,7 +538,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         int h = image.getHeight();
 
         Matrix mtx = new Matrix();
-        mtx.postRotate(angle);
+        mtx.setRotate(angle);
 
         Bitmap bm = Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
         Log.d(TAG, "rotateImage: width: " + bm.getWidth());

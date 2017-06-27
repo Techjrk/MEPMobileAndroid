@@ -298,31 +298,20 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
                 Log.d(TAG, "onPictureTaken: realImage h: " + realImage.getHeight());
                 Log.d(TAG, "onPictureTaken: realImage size: " + realImage.getByteCount());
 
-                if(realImage.getByteCount() > MAX_IMAGE_SIZE) {
-                    int resizedWidth  = realImage.getWidth() / REDUCED_IMAGE_AMT;
-                    int resizedHeight = realImage.getHeight() / REDUCED_IMAGE_AMT;
-                    resizedImage = Bitmap.createScaledBitmap(realImage, resizedWidth, resizedHeight, true);
-                    Log.d(TAG, "onPictureTaken: resizedImage w:  " + resizedWidth);
-                    Log.d(TAG, "onPictureTaken: resizedImage h: " + resizedHeight);
-                    Log.d(TAG, "onPictureTaken: resizedImage size: " + resizedImage.getByteCount());
-                }
 
-                if(resizedImage == null) {
-                    resizedImage = realImage;
-                }
 
                 int orientation = fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation();
                 if(Surface.ROTATION_0 == orientation) {
-                    resizedImage = rotateImage(resizedImage, 90);
+                    realImage = rotateImage(realImage, 90);
                 }
                 else if(Surface.ROTATION_270 == orientation){
-                    resizedImage = rotateImage(resizedImage, 180);
+                    realImage = rotateImage(realImage, 180);
                 }
                 else {
-                    resizedImage = rotateImage(resizedImage, 0);
+                    realImage = rotateImage(realImage, 0);
                 }
 
-                boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                boolean writeSuccessful = realImage.compress(Bitmap.CompressFormat.JPEG, 88, fos);
 
                 fos.close();
 
@@ -354,7 +343,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
             int h = image.getHeight();
 
             Matrix mtx = new Matrix();
-            mtx.postRotate(angle);
+            mtx.setRotate(angle);
 
             return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
         }

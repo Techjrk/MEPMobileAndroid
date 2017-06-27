@@ -187,7 +187,7 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         int h = image.getHeight();
 
         Matrix mtx = new Matrix();
-        mtx.postRotate(angle);
+        mtx.setRotate(angle);
 
         return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
     }
