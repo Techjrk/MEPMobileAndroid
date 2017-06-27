@@ -104,7 +104,7 @@ public class ProjectPreviewImageViewModel extends BaseObservable {
 
     public Bitmap rotateImage(Bitmap image,float angle){
         Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
+        matrix.setRotate(angle);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
     }
 

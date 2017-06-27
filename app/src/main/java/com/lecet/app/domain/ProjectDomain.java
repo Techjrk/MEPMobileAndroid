@@ -34,6 +34,7 @@ import java.util.TreeSet;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmObjectChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import okhttp3.ResponseBody;
@@ -357,6 +358,14 @@ public class ProjectDomain {
     public Project fetchProjectById(long id) {
 
         return fetchProjectById(realm, id);
+    }
+
+    public Project fetchProjectAsync(final long id, RealmObjectChangeListener<Project> listener) {
+
+        Project results  = realm.where(Project.class).equalTo("id", id).findFirstAsync();
+        results.addChangeListener(listener);
+
+        return results;
     }
 
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {

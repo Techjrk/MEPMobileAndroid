@@ -103,6 +103,9 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private View buttonSearch;
     private View buttonFilter;
 
+    // Map Location for determining map panning API trigger
+    Location prevLocation;
+
     // map marker assets
     private BitmapDescriptor standardMarkerStatic;
     private BitmapDescriptor standardMarkerStaticWithUpdate;
@@ -341,10 +344,22 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onCameraIdle() {
-        if(!isSearching){
-            fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
-        }
+        if (!isSearching) {
+            if (prevLocation != null) {
 
+                // Check if current LatLng is greater than one kilometer
+                Location curr = new Location("Current");
+                curr.setLongitude(map.getCameraPosition().target.longitude);
+                curr.setLatitude(map.getCameraPosition().target.latitude);
+
+                double distance = prevLocation.distanceTo(curr);
+
+                if (distance > 1000) {
+
+                    fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
+                }
+            }
+        }
     }
 
     private void clearCurrLocationMarker() {
@@ -407,6 +422,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         return map != null;
     }
     public void fetchProjectsNearMe(final LatLng location) {
+
+        prevLocation = new Location("Prev");
+        prevLocation.setLatitude(location.latitude);
+        prevLocation.setLongitude(location.longitude);
 
         showProgressDialog();
         isSearching = true;

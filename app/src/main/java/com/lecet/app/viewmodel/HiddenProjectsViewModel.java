@@ -50,6 +50,9 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
     private TextView saveButton;
 
     public HiddenProjectsViewModel(AppCompatActivity appCompatActivity, long userID, ProjectDomain projectDomain) {
+
+        super(appCompatActivity);
+
         this.appCompatActivity = appCompatActivity;
         this.userID = userID;
         this.projectDomain = projectDomain;
@@ -79,7 +82,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
     private void getHiddenProjects() {
 
-        showProgressDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
+        showProgressDialog();
 
         projectDomain.getHiddenProjects(userID, new Callback<List<Project>>() {
             @Override
@@ -103,7 +106,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
                         public void onError(Throwable error) {
 
                             dismissProgressDialog();
-                            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), error.getMessage());
+                            showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), error.getMessage());
                         }
                     });
 
@@ -111,7 +114,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), response.message());
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -120,7 +123,7 @@ public class HiddenProjectsViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
             }
         });
     }
