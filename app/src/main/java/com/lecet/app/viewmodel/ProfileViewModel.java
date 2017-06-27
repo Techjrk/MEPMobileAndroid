@@ -52,6 +52,8 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
     public ProfileViewModel(AppCompatActivity context, UserDomain ud) {
 
+        super(context);
+
         this.context = context;
         this.userDomain = ud;
         this.user = userDomain.fetchLoggedInUser();
@@ -225,61 +227,61 @@ public class ProfileViewModel extends BaseActivityViewModel {
         if (TextUtils.isEmpty(firstName)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.first_name));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(lastName)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.last_name));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(email)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.email));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(title)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.title));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(phone) || !phone.matches("[0-9]+")) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.phone));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (!TextUtils.isEmpty(fax) && !fax.matches("[0-9]+")) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.fax));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(address)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.address));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(city)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.city));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(state)) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.state));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(zip) || !zip.matches("[0-9]+")) {
 
             String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.zip));
-            showCancelAlertDialog(context, context.getString(R.string.app_name), message);
+            showCancelAlertDialog(context.getString(R.string.app_name), message);
             return;
         }
     }
@@ -335,7 +337,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
      **/
     private void getUserProfile(final long userID) {
 
-        showProgressDialog(context, context.getString(R.string.app_name), context.getString(R.string.updating));
+        showProgressDialog();
 
         userDomain.getUser(userID, new Callback<User>() {
             @Override
@@ -353,7 +355,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(context, context.getString(R.string.error_network_title), response.message());
+                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -362,14 +364,14 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(context, context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
+                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
             }
         });
     }
 
     private void updateUser() {
 
-        showProgressDialog(context, context.getString(R.string.app_name), context.getString(R.string.updating));
+        showProgressDialog();
 
         UpdateUserProfileRequest.Builder builder = new UpdateUserProfileRequest.Builder(user.getId())
                 .firstName(getFirstName())
@@ -396,13 +398,13 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(context, context.getString(R.string.app_name), context.getString(R.string.successfully_updated));
+                    showCancelAlertDialog( context.getString(R.string.app_name), context.getString(R.string.successfully_updated));
 
                 } else {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(context, context.getString(R.string.error_network_title), response.message());
+                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -411,7 +413,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(context, context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
+                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
             }
         });
     }

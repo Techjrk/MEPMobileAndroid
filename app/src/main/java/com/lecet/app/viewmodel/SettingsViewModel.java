@@ -44,6 +44,7 @@ public class SettingsViewModel extends BaseActivityViewModel {
     private boolean enableNotifications;
 
     public SettingsViewModel(AppCompatActivity appCompatActivity, UserDomain userDomain, LecetSharedPreferenceUtil sharedPreferenceUtil) {
+        super(appCompatActivity);
         this.appCompatActivity = appCompatActivity;
         this.userDomain = userDomain;
         this.sharedPreferenceUtil = sharedPreferenceUtil;
@@ -89,7 +90,7 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
     private void logoutUser() {
 
-        showProgressDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.logging_out));
+        showProgressDialog();
 
         userDomain.logout(new Callback<ResponseBody>() {
             @Override
@@ -97,13 +98,13 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
                 if (response.isSuccessful()) {
 
-                    clearSessionData();
+                    handleUnAuthorizedUser();
 
                 } else {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), response.message());
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -112,36 +113,9 @@ public class SettingsViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
             }
         });
-    }
-
-    /** Session management **/
-    private void clearSessionData() {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                // Delete all data in realm and clear shard preferences
-                realm.deleteAll();
-                LecetSharedPreferenceUtil.getInstance(appCompatActivity).clearPreferences();
-                rerouteLoggedOutUser();
-            }
-        });
-    }
-
-    private void rerouteLoggedOutUser() {
-
-        dismissProgressDialog();
-
-        Intent i = new Intent(appCompatActivity, LauncherActivity.class);
-        // Clear activity stack
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        appCompatActivity.startActivity(i);
-        appCompatActivity.finish();
-
     }
 
     /** Toolbar **/
