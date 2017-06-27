@@ -318,7 +318,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
                                         resizedImage = rotateImage(realImage, 90 + sensorOrientation);
                                     }
 
-                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                                    boolean writeSuccessful = resizedImage.compress(Bitmap.CompressFormat.JPEG, 88, outputStream);
 
                                     outputStream.close();
 
@@ -633,7 +633,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
             int h = image.getHeight();
 
             Matrix mtx = new Matrix();
-            mtx.postRotate(angle);
+            mtx.setRotate(angle);
 
             return Bitmap.createBitmap(image, 0, 0, w, h, mtx, true);
         }
