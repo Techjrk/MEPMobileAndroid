@@ -3,6 +3,7 @@ package com.lecet.app.viewmodel;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.BaseObservable;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.BR;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +41,7 @@ import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 public class ProjectImageChooserViewModel extends BaseObservable {
 
+    private final int MAX_IMAGE_SIZE = 140000;
     private static final String TAG = "ProjectImageChooserVM";
     public static final String IMAGE_URI = "Image_URI";
     public static final String NEEDED_ROTATION = "Needed_Rotation";
@@ -63,15 +66,24 @@ public class ProjectImageChooserViewModel extends BaseObservable {
         Log.d(TAG, "setBitmapFromUri: uri: " + uri);
 
         try {
+
+            SimpleLecetDefaultAlert alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.CUSTIOM_DIALOG);
+            alert.setMessage("The selected Image's file size is too large. Panorama and 360 Images Are unsupported at this time.");
+
             Bitmap bm = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-            selectedImageUri = uri;
+            Log.d(TAG, "setBitmapFromUri: bitmap size: " + bm.getByteCount());
+            if(bm.getByteCount() >=  MAX_IMAGE_SIZE){
+                alert.show();
+            }else {
+                selectedImageUri = uri;
 
 
-            Log.e(TAG, "setBitmapFromUri: URI PATH, " + uri.getHost());
-            neededRotation = (float)getImageRotation(activity, selectedImageUri);
-            bm = rotateImage(bm, neededRotation);
-            setBitmap(bm);
-            Log.d(TAG, "setBitmapFromUri: bitmap size: " + bitmap.getByteCount());
+                Log.e(TAG, "setBitmapFromUri: URI PATH, " + uri.getHost());
+                neededRotation = (float) getImageRotation(activity, selectedImageUri);
+                bm = rotateImage(bm, neededRotation);
+                setBitmap(bm);
+
+            }
         }
         catch (IOException e) {
             Log.e(TAG, "setBitmapFromUri: ERROR CONVERTING URI TO BITMAP: " + uri);
