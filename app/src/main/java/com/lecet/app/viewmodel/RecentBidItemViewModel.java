@@ -1,21 +1,29 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
+import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.BidDomain;
+import com.lecet.app.domain.CompanyDomain;
+import com.lecet.app.interfaces.RealmFetchCallback;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
+import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 /**
  * File: RecentBidItemViewModel Created: 10/13/16 Author: domandtom
@@ -23,7 +31,7 @@ import io.realm.RealmList;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class RecentBidItemViewModel {
+public class RecentBidItemViewModel extends BaseObservable{
 
     private static final String TAG = "RecentBidItemViewModel";
 
@@ -32,12 +40,25 @@ public class RecentBidItemViewModel {
     private final String mapsApiKey;
     private final AppCompatActivity activity;
     private final Project project;
+    private String companyName;
+    private static CompanyDomain companyDomain;
+    private RealmFetchCallback<Company> realmFetchCallback = new RealmFetchCallback<Company>() {
+        @Override
+        public void fetchComplete(Company results) {
+            Log.d(TAG, "fetchComplete: Company: " + results);
+            companyName = results.getName();
+        }
+    };
+
     public RecentBidItemViewModel(BidDomain bidDomain, Bid bid, String mapsApiKey, AppCompatActivity activity) {
         this.bidDomain = bidDomain;
         this.bid = bid;
         this.mapsApiKey = mapsApiKey;
         this.activity = activity;
 
+        if(companyDomain == null){
+            companyDomain = new CompanyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(activity.getApplication()), Realm.getDefaultInstance());
+        }
         if (bid.getProject() != null) {
 
             this.project = bid.getProject();
@@ -56,6 +77,9 @@ public class RecentBidItemViewModel {
     }
 
     public String getBidCompany() {
+        if(companyName != null && !companyName.isEmpty()){
+            return companyName;
+        }
 
         Contact contact = bid.getContact();
 
@@ -66,6 +90,25 @@ public class RecentBidItemViewModel {
             if (company != null) {
 
                 return company.getName();
+            }else if (contact.getCompanyId() != 0 && companyDomain != null){
+
+                companyDomain.asyncFetchCompany(bid.getCompanyId(), realmFetchCallback,
+
+                        new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d(TAG, "onSuccess: Data successfully fetched.");
+                                notifyChange();
+                                //TODO:Celebrate?
+                            }
+                        },
+
+                        new Realm.Transaction.OnError() {
+                            @Override
+                            public void onError(Throwable error) {
+                                Log.e(TAG, "onError: Realm Transaction Thrown: " + error.getMessage());
+                            }
+                        });
             }
 
         } else {
