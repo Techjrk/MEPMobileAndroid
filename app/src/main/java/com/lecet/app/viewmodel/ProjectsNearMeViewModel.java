@@ -95,7 +95,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private ArrayList<Project> prebidProjects;
     private ArrayList<Project> postbidProjects;
     private boolean tableViewDisplay;
-
+    private boolean isSearching;
+    private Call<ProjectsNearResponse> projectsNearResponseCall;
     //Toolbar views
     private EditText search;
     private View buttonClear;
@@ -128,6 +129,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.markers = new HashMap<>();
         this.timer = timer;
         this.locationManager = locationManager;
+        this.isSearching = true;
     }
 
     public void setProjectFilter(String filter) {
@@ -218,7 +220,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onMyLocationChange(Location location) {
-        //Log.d(TAG, "onMyLocationChange: " + location);
+
         updateLocationCircle(this.map, new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
@@ -339,8 +341,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onCameraIdle() {
+        if(!isSearching){
+            fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
+        }
 
-        fetchProjectsNearMe(map.getCameraPosition().target);
     }
 
     private void clearCurrLocationMarker() {
@@ -402,16 +406,16 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         return map != null;
     }
-
     public void fetchProjectsNearMe(final LatLng location) {
 
         showProgressDialog();
-
+        isSearching = true;
         projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
             public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
 
                 // Activity dead
+                isSearching = false;
                 if (!isActivityAlive()) return;
 
                 if (response.isSuccessful()) {
@@ -441,12 +445,44 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
             @Override
             public void onFailure(Call<ProjectsNearResponse> call, Throwable t) {
-
+                isSearching = false;
                 // Activity dead
                 if (!isActivityAlive()) return;
 
                 dismissProgressDialog();
                 showCancelAlertDialog(getActivityWeakReference().get().getString(R.string.error_network_title), getActivityWeakReference().get().getString(R.string.error_network_message));
+            }
+        });
+    }
+    public void fetchProjectsNearMeOnCameraIdle(final LatLng location) {
+
+        if(projectsNearResponseCall != null){
+            projectsNearResponseCall.cancel();
+        }
+        projectsNearResponseCall = projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
+            @Override
+            public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
+
+                // Activity dead
+                if (!isActivityAlive()) return;
+
+                if (response.isSuccessful()) {
+
+                    List<Project> projects = response.body().getResults();
+                    populateMap(projects);
+
+                    ((ProjectsNearMeActivity) activity).updateTableViewPager();
+
+
+                }
+                projectsNearResponseCall = null;
+            }
+
+            @Override
+            public void onFailure(Call<ProjectsNearResponse> call, Throwable t) {
+                projectsNearResponseCall = null;
+                //remove the alert because of multiple socket timeout exception
+                //showCancelAlertDialog(getActivityWeakReference().get().getString(R.string.error_network_title), getActivityWeakReference().get().getString(R.string.error_network_message));
             }
         });
     }

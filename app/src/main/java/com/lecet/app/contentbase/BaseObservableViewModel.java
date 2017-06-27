@@ -87,7 +87,6 @@ public class BaseObservableViewModel extends BaseObservable {
         if (!isActivityAlive()) return;
 
         AppCompatActivity activity = activityWeakReference.get();
-
         DialogFragment prev = (DialogFragment) activity.getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             prev.dismiss();

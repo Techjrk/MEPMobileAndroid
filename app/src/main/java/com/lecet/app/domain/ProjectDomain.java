@@ -301,13 +301,14 @@ public class ProjectDomain {
         return getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
 
-    public void getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
+    public Call<ProjectsNearResponse> getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
 //        String filter = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
 //        Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, filter);
         Call<ProjectsNearResponse> call = lecetClient.getProjectService().projectsNear(token, lat, lng, distance, getFilterMPN());
         call.enqueue(callback);
+        return call;
     }
 
     public void getProjectJurisdiction(long projectId, Callback<List<Jurisdiction>> callback) {
