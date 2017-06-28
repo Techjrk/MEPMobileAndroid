@@ -41,7 +41,7 @@ import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 public class ProjectImageChooserViewModel extends BaseObservable {
 
-    private final int MAX_IMAGE_SIZE = 140000;
+    private final int MAX_IMAGE_SIZE = 70000000;
     private static final String TAG = "ProjectImageChooserVM";
     public static final String IMAGE_URI = "Image_URI";
     public static final String NEEDED_ROTATION = "Needed_Rotation";
