@@ -115,8 +115,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 projectPost.setGeocode(geocode);
             }
 
-            initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
-
             getAddressFromLocation(latitude, longitude);
         }
         // if editing an existing project via a passed projectId
@@ -124,6 +122,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             Log.d(TAG, "AddProjectActivityViewModel: EDITING PROJECT: " + this.projectId);
             getEditableProject(this.projectId);
         }
+
+        if(projectPost != null) initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
     }
 
     private void getAddressFromLocation(double latitude, double longitude) {
