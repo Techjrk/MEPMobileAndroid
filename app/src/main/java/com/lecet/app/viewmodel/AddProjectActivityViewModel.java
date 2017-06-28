@@ -172,26 +172,24 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         String addr1 = null;
         String addr2 = null;
         String neigb = null;
+        String locality = null;
         String city = null;
         String county = null;
         String state = null;
         String country = null;
         String zip5 = null;
 
-        //TODO - this loop could be optimized
+        //TODO - this loop could be optimized. Please retain formatting for readability.
         for (AddressComponent component : address) {
-            if (component.getTypes().contains("street_number"))
-                streetNum = component.getShortName();
-            if (component.getTypes().contains("route")) addr1 = component.getShortName();
-            if (component.getTypes().contains("neighborhood")) neigb = component.getShortName();
-            if (component.getTypes().contains("sublocality_level_1"))
-                city = component.getShortName();
-            if (component.getTypes().contains("administrative_area_level_2"))
-                county = component.getShortName();
-            if (component.getTypes().contains("administrative_area_level_1"))
-                state = component.getShortName();
-            if (component.getTypes().contains("country")) country = component.getShortName();
-            if (component.getTypes().contains("postal_code")) zip5 = component.getShortName();
+            if (component.getTypes().contains("street_number"))               streetNum = component.getShortName();
+            if (component.getTypes().contains("route"))                       addr1 = component.getShortName();
+            if (component.getTypes().contains("locality"))                    locality = component.getShortName();
+            if (component.getTypes().contains("neighborhood"))                neigb = component.getShortName();
+            if (component.getTypes().contains("sublocality_level_1"))         city = component.getShortName();
+            if (component.getTypes().contains("administrative_area_level_2")) county = component.getShortName();
+            if (component.getTypes().contains("administrative_area_level_1")) state = component.getShortName();
+            if (component.getTypes().contains("country"))                     country = component.getShortName();
+            if (component.getTypes().contains("postal_code"))                 zip5 = component.getShortName();
         }
 
         String fipsCounty = getFipsCounty(state, county);
@@ -200,14 +198,18 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if (streetNum != null & !streetNum.isEmpty()) streetAddr += streetNum;
         if (addr1 != null && !addr1.isEmpty()) streetAddr += (" " + addr1);
 
-        if (streetAddr != null) getProjectPost().setAddress1(streetAddr);   // address line 1
-        //if(addr2 != null)      getProjectPost().setAddress2(addr2);      // address line 2, prob not avail from the response (like Apt / Floor#)
-        if (city != null) getProjectPost().setCity(city);             // city
-        if (state != null) getProjectPost().setState(state);           // state
-        if (zip5 != null) getProjectPost().setZip5(zip5);             // zip
-        if (county != null) getProjectPost().setCounty(county);         // county
-        if (fipsCounty != null) getProjectPost().setFipsCounty(fipsCounty); // FIPS county
-        if (country != null) getProjectPost().setCountry(country);       // country
+        if (streetAddr != null)  getProjectPost().setAddress1(streetAddr);   // address line 1
+        //if(addr2 != null)      getProjectPost().setAddress2(addr2);        // address line 2, prob not avail from the response (like Apt / Floor#)
+        if (city != null)        getProjectPost().setCity(city);             // city
+        if (state != null)       getProjectPost().setState(state);           // state
+        if (zip5 != null)        getProjectPost().setZip5(zip5);             // zip
+        if (county != null)      getProjectPost().setCounty(county);         // county
+        if (fipsCounty != null)  getProjectPost().setFipsCounty(fipsCounty); // FIPS county
+        if (country != null)     getProjectPost().setCountry(country);       // country
+
+        // use locality as alternative to city if sublocality_level_1 is null
+        if (city == null && locality != null) getProjectPost().setCity(locality);
+
 
         // set the edit mode of the County field
         if(county != null && !county.isEmpty()) {
