@@ -145,6 +145,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
 
     private void fetchProjects(boolean animateCamera) {
+        Log.d(TAG, "fetchProjects: animateCamera: " + animateCamera);
 
         if (!viewModel.isMapReady()) return;
         try { //Adding try-catch block for any runtime exception occurred when GoogleApiClient is not connected yet.
@@ -163,7 +164,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
                 }
             }
         } catch (Exception e) {
-            Log.d("fetchProject", "fetchProject exception" + e.getMessage());
+            Log.e(TAG, "fetchProjects: exception" + e.getMessage());
         }
     }
 
@@ -240,9 +241,11 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume");
         if (enableLocationUpdates) {
             locationManager.startLocationUpdates();
         }
+        fetchProjects(false);
     }
 
     @Override
@@ -261,8 +264,12 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//TODO: in future, each filter should have each request code and create a ticket to fogbugz - backlog,lecetv2 android .
         super.onActivityResult(requestCode, resultCode, data);
+
+        //TODO: in future, each filter should have each request code and create a ticket to fogbugz - backlog,lecetv2 android .
+
+        Log.d(TAG, "onActivityResult: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+
         if (requestCode == REQUEST_LOCATION_SETTINGS) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -272,10 +279,12 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             }, 500);
         }
 
-        if (requestCode == REQUEST_FILTER_MPN) {
-            Log.d("filtermpn", "filtermpn");
+        else if (requestCode == REQUEST_FILTER_MPN) {
+            Log.d(TAG, "onActivityResult: filtermpn");
             processFilter(requestCode, data);
         }
+
+        else Log.w(TAG, "onActivityResult: WARNING: NO REQUEST CODE MATCH: requestCode: " + requestCode);
     }
 
     ///*** Begin Filter Processing
@@ -311,7 +320,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
                 }
             }
             mpnLocation = mpnLocation.replaceAll("\"", "");
-            Log.d("mpnLocation", "mpnLocation:" + mpnLocation);
+            Log.d(TAG, "processFilter: mpnLocation: " + mpnLocation);
         }
         // Updated Within Filter
         String updatedWithinFilter = processUpdatedWithinFilter(data);
@@ -416,7 +425,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             enableLocationUpdates = true;
             updateLocation();
             if (lastKnowLocation != null) {
-                Log.d("mpn2", "mpn2" + lastKnowLocation.getLongitude() + ":" + lastKnowLocation.getLatitude());
+                Log.d(TAG, "processFilter: pn2" + lastKnowLocation.getLongitude() + ":" + lastKnowLocation.getLatitude());
                 fetchProjects(true);
             }
             locationManager.startLocationUpdates();
