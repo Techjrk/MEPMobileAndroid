@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
@@ -50,6 +51,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
+import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -472,7 +474,18 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     public void moveMapCamera(LatLng location) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+        if(location == null){
+            SimpleLecetDefaultAlert alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.CUSTIOM_DIALOG, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.setMessage("Improper Location, Please Try Again.");
+            alert.show();
+        }else {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+        }
     }
 
     public void animateMapCamera(LatLng location) {
