@@ -336,11 +336,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             if(project.getBidDate() != null) projectPost.setBidDate(project.getBidDate().toString());
             projectPost.setPrimaryProjectTypeId(project.getPrimaryProjectTypeId());
             projectPost.setEstLow(project.getEstLow());
-            if(project.getTargetStartDate() != null) projectPost.setTargetStartDate(project.getTargetStartDate().toString());
+            if(project.getTargetStartDate() != null){
+                projectPost.setTargetStartDate(new SimpleDateFormat("MM/dd/yy").format(project.getTargetStartDate()));
+                setTargetStartDate(projectPost.getTargetStartDate());
+            }
 
             // special cases for display purposes of Type and Stage etc
             if(project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
             if(project.getProjectStage() != null && project.getProjectStage().getName() != null) setStageSelect(project.getProjectStage().getName());
+
+
         }
     }
 
@@ -575,6 +580,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     public void setTargetStartDate(String targetStartDate) {
+        projectPost.setTargetStartDate(targetStartDate);
         this.targetStartDate = targetStartDate;
         notifyPropertyChanged(BR.targetStartDate);
     }

@@ -41,6 +41,7 @@ public class BidItemViewModel extends BaseObservable {
     public static final String CUSTOM_POST_BID_MARKER = "ic_custom_pin_marker_post_bid_iwa8we.png";
     public static final String CUSTOM_POST_BID_MARKER_UPDATE = "ic_custom_pin_marker_post_bid_update_kzkxrw.png";
     public static final String url = "http://res.cloudinary.com/djakoy1gr/image/upload/v1498123162/";
+
     public BidItemViewModel(Project project, String mapsApiKey) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
