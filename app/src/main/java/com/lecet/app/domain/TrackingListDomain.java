@@ -162,6 +162,10 @@ public class TrackingListDomain {
                         public void onResponse(Call<ProjectTrackingList> call, Response<ProjectTrackingList> response) {
 
                             if (response.isSuccessful()) {
+                                
+                                ProjectTrackingList projectTrackingList = response.body();
+                                ProjectTrackingList destination = fetchProjectTrackingList(destinationTrackingListId);
+                                addProjectsToTrackingList(destination, projectTrackingList.getProjects());
 
                                 callback.onSuccess(null);
                             } else {
@@ -218,7 +222,9 @@ public class TrackingListDomain {
                         public void onResponse(Call<CompanyTrackingList> call, Response<CompanyTrackingList> response) {
 
                             if (response.isSuccessful()) {
-
+                                CompanyTrackingList companyTrackingList = response.body();
+                                CompanyTrackingList destination = fetchCompanyTrackingList(destinationTrackingListId);
+                                addCompaniesToTrackingList(destination, companyTrackingList.getCompanies());
                                 callback.onSuccess(null);
                             } else {
 
@@ -435,23 +441,20 @@ public class TrackingListDomain {
 
     // ADD
 
-    public RealmList<Project> addProjectsToTrackingList(ProjectTrackingList trackingList, List<Project> toBeDeleted) {
-
+    public RealmList<Project> addProjectsToTrackingList(ProjectTrackingList trackingList, List<Project> tobeAdded) {
         RealmList<Project> projects = trackingList.getProjects();
         realm.beginTransaction();
-        projects.addAll(toBeDeleted);
+        projects.clear();
+        projects.addAll(tobeAdded);
         realm.commitTransaction();
-
         return projects;
     }
-
-    public RealmList<Company> addCompaniesToTrackingList(CompanyTrackingList trackingList, List<Company> toBeDeleted) {
-
+    public RealmList<Company> addCompaniesToTrackingList(CompanyTrackingList trackingList, List<Company> tobeAdded) {
         RealmList<Company> companies = trackingList.getCompanies();
         realm.beginTransaction();
-        companies.addAll(toBeDeleted);
+        companies.clear();
+        companies.addAll(tobeAdded);
         realm.commitTransaction();
-
         return companies;
     }
 

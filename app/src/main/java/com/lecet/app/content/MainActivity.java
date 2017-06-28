@@ -429,6 +429,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             TrackingListDomain trackingListDomain = new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
             mtmAdapter.setCompanyTrackingList(trackingListDomain.fetchUserCompanyTrackingList());
             mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
+            mtmAdapter.notifyDataSetChanged();
         }
         mtmMenu.show();
     }

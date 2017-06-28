@@ -95,7 +95,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private ArrayList<Project> prebidProjects;
     private ArrayList<Project> postbidProjects;
     private boolean tableViewDisplay;
-
+    private boolean isSearching;
+    private Call<ProjectsNearResponse> projectsNearResponseCall;
     //Toolbar views
     private EditText search;
     private View buttonClear;
@@ -131,6 +132,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.markers = new HashMap<>();
         this.timer = timer;
         this.locationManager = locationManager;
+        this.isSearching = true;
     }
 
     public void setProjectFilter(String filter) {
@@ -221,7 +223,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onMyLocationChange(Location location) {
-        //Log.d(TAG, "onMyLocationChange: " + location);
+
         updateLocationCircle(this.map, new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
@@ -342,19 +344,20 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     @Override
     public void onCameraIdle() {
+        if (!isSearching) {
+            if (prevLocation != null) {
 
-        if (prevLocation != null) {
+                // Check if current LatLng is greater than one kilometer
+                Location curr = new Location("Current");
+                curr.setLongitude(map.getCameraPosition().target.longitude);
+                curr.setLatitude(map.getCameraPosition().target.latitude);
 
-            // Check if current LatLng is greater than one kilometer
-            Location curr = new Location("Current");
-            curr.setLongitude(map.getCameraPosition().target.longitude);
-            curr.setLatitude(map.getCameraPosition().target.latitude);
+                double distance = prevLocation.distanceTo(curr);
 
-            double distance = prevLocation.distanceTo(curr);
+                if (distance > 1000) {
 
-            if (distance > 1000) {
-
-                fetchProjectsNearMe(map.getCameraPosition().target);
+                    fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
+                }
             }
         }
     }
@@ -418,7 +421,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         return map != null;
     }
-
     public void fetchProjectsNearMe(final LatLng location) {
 
         prevLocation = new Location("Prev");
@@ -426,12 +428,13 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         prevLocation.setLongitude(location.longitude);
 
         showProgressDialog();
-
+        isSearching = true;
         projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
             @Override
             public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
 
                 // Activity dead
+                isSearching = false;
                 if (!isActivityAlive()) return;
 
                 if (response.isSuccessful()) {
@@ -461,12 +464,44 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
             @Override
             public void onFailure(Call<ProjectsNearResponse> call, Throwable t) {
-
+                isSearching = false;
                 // Activity dead
                 if (!isActivityAlive()) return;
 
                 dismissProgressDialog();
                 showCancelAlertDialog(getActivityWeakReference().get().getString(R.string.error_network_title), getActivityWeakReference().get().getString(R.string.error_network_message));
+            }
+        });
+    }
+    public void fetchProjectsNearMeOnCameraIdle(final LatLng location) {
+
+        if(projectsNearResponseCall != null){
+            projectsNearResponseCall.cancel();
+        }
+        projectsNearResponseCall = projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
+            @Override
+            public void onResponse(Call<ProjectsNearResponse> call, Response<ProjectsNearResponse> response) {
+
+                // Activity dead
+                if (!isActivityAlive()) return;
+
+                if (response.isSuccessful()) {
+
+                    List<Project> projects = response.body().getResults();
+                    populateMap(projects);
+
+                    ((ProjectsNearMeActivity) activity).updateTableViewPager();
+
+
+                }
+                projectsNearResponseCall = null;
+            }
+
+            @Override
+            public void onFailure(Call<ProjectsNearResponse> call, Throwable t) {
+                projectsNearResponseCall = null;
+                //remove the alert because of multiple socket timeout exception
+                //showCancelAlertDialog(getActivityWeakReference().get().getString(R.string.error_network_title), getActivityWeakReference().get().getString(R.string.error_network_message));
             }
         });
     }
@@ -646,7 +681,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 Log.d(TAG, "onInfoWindowClick: marker lng: " + marker.getPosition().longitude);
                 Log.d(TAG, "onInfoWindowClick: context: " + context);
                 Intent intent = new Intent(context, AddProjectActivity.class);
-                //intent.putExtra(EXTRA_MARKER_ADDRESS, "55 Broadway, New York NY 10006");
                 intent.putExtra(EXTRA_MARKER_LATITUDE, marker.getPosition().latitude);
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);

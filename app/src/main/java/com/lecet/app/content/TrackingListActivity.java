@@ -89,6 +89,7 @@ public abstract class TrackingListActivity<T extends TrackingListViewModel> exte
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             LayoutInflater inflater = getLayoutInflater();
 
