@@ -46,7 +46,6 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     private TextView subtitleTextView;
     private ImageView backButton;
     private ImageView sortButton;
-    private Switch showUpdatesToggle;
 
     private ListPopupWindow mtmSortMenu;
     private MenuTitleListAdapter mtmSortAdapter;
@@ -110,7 +109,6 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
     private void init() {
 
         initRecyclerView();
-        initShowUpdatesSwitch();
     }
 
     private void initRecyclerView() {
@@ -120,12 +118,6 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
         recyclerView.setLayoutManager(layoutManager);
 
         initializeAdapter();
-    }
-
-    private void initShowUpdatesSwitch() {
-        if (this.appCompatActivity != null) {
-            showUpdatesToggle = (Switch) appCompatActivity.findViewById(R.id.toggle_button);
-        }
     }
 
     public void setToolbar(View toolbar, String title, String subtitle) {
@@ -177,6 +169,7 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
         setupRecyclerView(recyclerView);
         listAdapter = recyclerViewAdapter();
         recyclerView.setAdapter(listAdapter);
+        setShowUpdates(true);
     }
 
     /**
