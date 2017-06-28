@@ -1,6 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.databinding.Bindable;
 import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
@@ -8,13 +9,18 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.lecet.app.R;
+import com.lecet.app.content.LauncherActivity;
 import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.User;
+import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.UserDomain;
 
+import io.realm.Realm;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +38,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
     private TextView saveButton;
 
 
-    private final AppCompatActivity context;
+    private final AppCompatActivity appCompatActivity;
     private final UserDomain userDomain;
     private User user;
 
@@ -50,17 +56,27 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
     private ProgressDialog progressDialog;
 
-    public ProfileViewModel(AppCompatActivity context, UserDomain ud) {
+    public ProfileViewModel(AppCompatActivity appCompatActivity, UserDomain ud) {
+        super(appCompatActivity);
 
-        super(context);
-
-        this.context = context;
+        this.appCompatActivity = appCompatActivity;
         this.userDomain = ud;
         this.user = userDomain.fetchLoggedInUser();
 
         // Fetch current user info from backend.
-        getUserProfile(user.getId());
+        try {
+            getUserProfile(user.getId());
+        }
+
+        // if user not found, return to login
+        catch (NullPointerException e) {
+            Toast.makeText(appCompatActivity, R.string.error_user_not_found, Toast.LENGTH_LONG).show();
+
+            //TODO - the logout code has been borrowed from BaseActivityViewModel. These could be moved to inherited methods.
+            logoutUser();
+        }
     }
+
 
     @Bindable
     public String getFirstName() {
@@ -226,62 +242,69 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
         if (TextUtils.isEmpty(firstName)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.first_name));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.first_name));
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(lastName)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.last_name));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.last_name));
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(email)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.email));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.email));
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(title)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.title));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.title));
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(phone) || !phone.matches("[0-9]+")) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.phone));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.phone));
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (!TextUtils.isEmpty(fax) && !fax.matches("[0-9]+")) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.fax));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.fax));
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(address)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.address));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.address));
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(city)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.city));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.city));
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(state)) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.state));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.state));
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(zip) || !zip.matches("[0-9]+")) {
 
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.zip));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
+            String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.zip));
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
             return;
         }
     }
@@ -329,7 +352,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
     public void onBackButtonClick(View view) {
 
-        context.onBackPressed();
+        appCompatActivity.onBackPressed();
     }
 
     /**
@@ -337,7 +360,9 @@ public class ProfileViewModel extends BaseActivityViewModel {
      **/
     private void getUserProfile(final long userID) {
 
-        showProgressDialog();
+
+        showProgressDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
+
 
         userDomain.getUser(userID, new Callback<User>() {
             @Override
@@ -354,8 +379,8 @@ public class ProfileViewModel extends BaseActivityViewModel {
                 } else {
 
                     dismissProgressDialog();
+                    showCancelAlertDialog( appCompatActivity.getString(R.string.error_network_title), response.message());
 
-                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -364,14 +389,15 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+
             }
         });
     }
 
     private void updateUser() {
 
-        showProgressDialog();
+        showProgressDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
 
         UpdateUserProfileRequest.Builder builder = new UpdateUserProfileRequest.Builder(user.getId())
                 .firstName(getFirstName())
@@ -398,13 +424,15 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog( context.getString(R.string.app_name), context.getString(R.string.successfully_updated));
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.successfully_updated));
+
 
                 } else {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), response.message());
+
                 }
             }
 
@@ -413,7 +441,8 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+
             }
         });
     }
@@ -437,4 +466,73 @@ public class ProfileViewModel extends BaseActivityViewModel {
         setState(user.getState());
         setZip(user.getZip());
     }
+
+    private void logoutUser() {
+
+        showProgressDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.logging_out));
+
+        userDomain.logout(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if (response.isSuccessful()) {
+
+                    clearSessionData();
+
+                } else {
+
+                    dismissProgressDialog();
+
+                    showCancelAlertDialog( appCompatActivity.getString(R.string.error_network_title), response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                dismissProgressDialog();
+
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+            }
+        });
+    }
+
+    /** Session management **/
+    @Override
+    public void clearSessionData() {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                // Delete all data in realm and clear shard preferences
+                realm.deleteAll();
+                LecetSharedPreferenceUtil.getInstance(appCompatActivity).clearPreferences();
+                rerouteLoggedOutUser();
+            }
+        });
+    }
+/* Progress Dialog */
+    public void showProgressDialog(String title, String message) {
+
+        dismissProgressDialog();
+
+        progressDialog = ProgressDialog.show(appCompatActivity, title, message, true, false);
+    }
+
+    public void dismissProgressDialog() {
+
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+    }
+    private void rerouteLoggedOutUser() {
+
+        dismissProgressDialog();
+
+        Intent i = new Intent(appCompatActivity, LauncherActivity.class);
+        // Clear activity stack
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        appCompatActivity.startActivity(i);
+        appCompatActivity.finish();
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.lecet.app.content;
 
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.lecet.app.R;
@@ -25,7 +24,17 @@ public class DashboardIntermediaryActivity extends LecetBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_intermediary);
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm;
+
+        // should catch any cases of Realm not already being inited
+        try {
+            realm = Realm.getDefaultInstance();
+        }
+        catch (IllegalStateException e) {
+            Realm.init(getApplication());
+            realm = Realm.getDefaultInstance();
+        }
+
         LecetClient client = LecetClient.getInstance();
         LecetSharedPreferenceUtil shardPref = LecetSharedPreferenceUtil.getInstance(this);
 

@@ -149,13 +149,19 @@ public class ProjectImageChooserActivity extends LecetBaseActivity {
 
         if(takePhotoFragment != null) {
             // add the Take Photo fragment
-            adapter.addFragment(takePhotoFragment, getResources().getString(R.string.photo));
+            if(!takePhotoFragment.isAdded()) {
+                adapter.addFragment(takePhotoFragment, getResources().getString(R.string.photo));
+            }
         }else{
-            adapter.addFragment(takePhotoFragmentAPI21, getResources().getString(R.string.photo));
+            if(!takePhotoFragmentAPI21.isAdded()) {
+                adapter.addFragment(takePhotoFragmentAPI21, getResources().getString(R.string.photo));
+            }
         }
 
         // add the Select Image from Library fragment
-        adapter.addFragment(selectPhotoFragment, getResources().getString(R.string.library));
+        if(!selectPhotoFragment.isAdded()) {
+            adapter.addFragment(selectPhotoFragment, getResources().getString(R.string.library));
+        }
 
         viewPager.setAdapter(adapter);
     }

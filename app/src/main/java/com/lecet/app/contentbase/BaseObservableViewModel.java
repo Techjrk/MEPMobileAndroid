@@ -8,7 +8,6 @@ import android.databinding.BaseObservable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -79,8 +78,7 @@ public class BaseObservableViewModel extends BaseObservable {
 
         // Create and show the dialog.
         DialogFragment newFragment = LoadingDialogFragment.newInstance();
-        FragmentManager manager = activity.getSupportFragmentManager();
-        newFragment.show(manager, "dialog");
+        newFragment.show(activity.getSupportFragmentManager(), "dialog"); //change this fragment transaction to fragment manager to allow dismissAllowingStateLoss()
     }
 
     public void dismissProgressDialog() {
@@ -89,7 +87,6 @@ public class BaseObservableViewModel extends BaseObservable {
         if (!isActivityAlive()) return;
 
         AppCompatActivity activity = activityWeakReference.get();
-
         DialogFragment prev = (DialogFragment) activity.getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             prev.dismissAllowingStateLoss();

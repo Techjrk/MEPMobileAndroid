@@ -85,9 +85,11 @@ public abstract class ModifyTrackingListActivity<T extends RealmObject & Trackin
 
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(false);
+//            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.activity_bar_background));
+           // actionBar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.activity_bar_background));
             LayoutInflater inflater = getLayoutInflater();
 
             View tb = inflater.inflate(R.layout.include_app_bar_layout_tracking_list, null);

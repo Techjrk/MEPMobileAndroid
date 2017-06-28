@@ -175,14 +175,10 @@ public class ProjectDetailFragmentViewModel extends BaseObservableViewModel {
         details.add(new ProjDetailItemViewModel(context.getString(R.string.address), project.getFullAddress()));
         details.add(new ProjDetailItemViewModel(context.getString(R.string.project_type), project.getProjectTypes()));
 
+        // We will no longer display EstLow and EstHigh and simply display valuation
         if (project.getEstLow() > 0) {
 
             details.add(new ProjDetailItemViewModel(context.getString(R.string.valuation), String.format("$ %,.0f", project.getEstLow())));
-        }
-
-        if (project.getEstHigh() > 0) {
-
-            details.add(new ProjDetailItemViewModel(context.getString(R.string.est_high), String.format("$ %,.0f", project.getEstHigh())));
         }
 
         details.add(new ProjDetailItemViewModel(context.getString(R.string.stage_normal), project.getProjectStage() != null ? project.getProjectStage().getName() : ""));

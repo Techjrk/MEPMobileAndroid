@@ -275,17 +275,17 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     public void setToolbar(View toolbar, String title, String subtitle) {
         titleTextView = (TextView) toolbar.findViewById(R.id.title_text_view);
         subtitleTextView = (TextView) toolbar.findViewById(R.id.subtitle_text_view);
-        backButton = (ImageView) toolbar.findViewById(R.id.back_button);
+        //backButton = (ImageView) toolbar.findViewById(R.id.back_button);
         sortButton = (ImageView) toolbar.findViewById(R.id.sort_menu_button);
 
-        if(backButton != null) {
+       /* if(backButton != null) {
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackButtonClick(v);
                 }
             });
-        }
+        }*/
 
         if(sortButton != null) {
             sortButton.setOnClickListener(new View.OnClickListener() {
