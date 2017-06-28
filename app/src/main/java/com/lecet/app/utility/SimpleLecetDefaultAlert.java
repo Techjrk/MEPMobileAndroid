@@ -51,7 +51,7 @@ public class SimpleLecetDefaultAlert extends AlertDialog {
         instance.setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                listener.onClick(instance, 1);
+                listener.onClick(instance, AlertDialog.BUTTON_NEUTRAL);
             }
         });
 
