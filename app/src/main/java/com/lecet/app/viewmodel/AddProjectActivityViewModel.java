@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
@@ -76,6 +77,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private Project project;
 
     private String targetStartDate;
+    private boolean countyIsEditable;
 
     // values for display only
     private String typeSelect;
@@ -113,8 +115,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 projectPost.setGeocode(geocode);
             }
 
-            initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
-
             getAddressFromLocation(latitude, longitude);
         }
         // if editing an existing project via a passed projectId
@@ -122,6 +122,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             Log.d(TAG, "AddProjectActivityViewModel: EDITING PROJECT: " + this.projectId);
             getEditableProject(this.projectId);
         }
+
+        if(projectPost != null) initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
     }
 
     private void getAddressFromLocation(double latitude, double longitude) {
@@ -206,6 +208,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if (county != null) getProjectPost().setCounty(county);         // county
         if (fipsCounty != null) getProjectPost().setFipsCounty(fipsCounty); // FIPS county
         if (country != null) getProjectPost().setCountry(country);       // country
+
+        // set the edit mode of the County field
+        if(county != null && !county.isEmpty()) {
+            countyIsEditable = false;
+        }
+        else countyIsEditable = true;
     }
 
     private String getFipsCounty(final String projectState, final String projectCounty) {
@@ -366,6 +374,14 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     Project createdProject = response.body();
                     //TODO: Save returned project to realm
                     Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
+
+                    // view the project in Project Detail
+                    if(createdProject != null && createdProject.getId() > 0) {
+                        Intent intent = new Intent(activity, ProjectDetailActivity.class);
+                        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, createdProject.getId());
+                        activity.startActivity(intent);
+                    }
+
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 } else {
@@ -586,6 +602,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     public void setTypeSelect(String typeSelect) {
         this.typeSelect = typeSelect;
         notifyPropertyChanged(BR.typeSelect);
+    }
+
+    public boolean getCountyIsEditable() {
+        return countyIsEditable;
     }
 
 
