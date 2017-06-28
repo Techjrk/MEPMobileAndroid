@@ -1,5 +1,6 @@
 package com.lecet.app.adapters;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lecet.app.data.api.LecetClient;
@@ -26,9 +27,9 @@ public class ProjectTrackingListAdapter extends TrackingListAdapter<RealmResults
     }
 
     @Override
-    public TrackingListItem viewModelForPosition(String mapsApiKey, int position, boolean showUpdates) {
+    public TrackingListItem viewModelForPosition(Context context, String mapsApiKey, int position, boolean showUpdates) {
 
-        ListItemProjectTrackingViewModel viewModel = new ListItemProjectTrackingViewModel(new ProjectDomain(LecetClient.getInstance(),
+        ListItemProjectTrackingViewModel viewModel = new ListItemProjectTrackingViewModel(context, new ProjectDomain(LecetClient.getInstance(),
                 LecetSharedPreferenceUtil.getInstance(getAppCompatActivity()),
                 Realm.getDefaultInstance()), getData().get(position), mapsApiKey, showUpdates);
 

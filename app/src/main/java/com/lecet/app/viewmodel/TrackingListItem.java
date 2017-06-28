@@ -1,5 +1,6 @@
 package com.lecet.app.viewmodel;
 
+import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -8,6 +9,8 @@ import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.ActivityUpdate;
+
+import java.text.DecimalFormat;
 
 import io.realm.RealmObject;
 
@@ -28,6 +31,7 @@ public abstract class TrackingListItem<T extends RealmObject> {
     // Update Related
     public final ObservableField<String> activityUpdateTitle = new ObservableField<>();
     public final ObservableField<String> activityUpdateMessage = new ObservableField<>();
+    public final ObservableField<String> activityUpdateDetail = new ObservableField<>();
 
     // UI Related
     public final ObservableBoolean displaySecondaryDetailIcon = new ObservableBoolean();
@@ -38,9 +42,11 @@ public abstract class TrackingListItem<T extends RealmObject> {
     public final ObservableInt activityUpdateIconResourceID = new ObservableInt();
 
     private final T object;
+    private final Context context;
 
-    public TrackingListItem(T object, boolean displayUpdate) {
+    public TrackingListItem(Context context, T object, boolean displayUpdate) {
 
+        this.context = context;
         this.object = object;
         displayActivityUpdate.set(displayUpdate);
         activityUpdateLayoutExpanded.set(false);
@@ -109,9 +115,42 @@ public abstract class TrackingListItem<T extends RealmObject> {
 
     public void refreshActivityUpdateDisplay(ActivityUpdate update) {
 
-        activityUpdateAvailable.set(update != null);
-        activityUpdateTitle.set(update.getModelTitle());
-        activityUpdateMessage.set(update.getSummary());
+        if (update == null) return;
+
+        activityUpdateAvailable.set(true);
+
+        switch (update.getModelType()) {
+            case "Bid":
+
+                activityUpdateTitle.set(context.getString(R.string.new_bid_placed));
+
+                DecimalFormat formatter = new DecimalFormat("$ #,###");
+                activityUpdateMessage.set(formatter.format(update.getBidUpdate().getAmount()));
+                activityUpdateDetail.set(update.getBidUpdate().getCompany().getName());
+                break;
+
+            case "ProjectStage":
+
+                StringBuilder stageSb = new StringBuilder(context.getString(R.string.new_stage));
+                stageSb.append(update.getStageUpdate().getName());
+                activityUpdateTitle.set(stageSb.toString());
+                break;
+
+            case "ProjectContact":
+
+                activityUpdateTitle.set(context.getString(R.string.new_contact_added));
+                activityUpdateMessage.set(update.getContactUpdate().getCompany().getName());
+                activityUpdateDetail.set(update.getContactUpdate().getTitle());
+                break;
+
+            case "WorkType":
+            case "ProjectType":
+                break;
+
+            default:
+                break;
+        }
+
         activityUpdateIconResourceID.set(activityUpdateIconResourceId());
     }
 

@@ -128,7 +128,7 @@ public class TrackingListDomain {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
-        String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtility.addDays(-1));
+        String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtility.addDays(-730));
         String unFormattedFilter = "{\"include\":[{\"relation\":\"updates\", \"scope\":{\"where\":{\"updatedAt\":{\"gte\":\"%s\"}}}},{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}]}";
         String filter = String.format(unFormattedFilter, formattedDate);
 

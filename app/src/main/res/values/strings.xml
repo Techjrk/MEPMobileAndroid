@@ -115,6 +115,9 @@
     <string name="new_bid_placed">A new bid has been placed</string>
     <string name="bid_placed_at">A bid was placed at</string>
     <string name="new_note_added">A new note has been added</string>
+    <string name="new_contact_added">A new contact has been added</string>
+    <string name="new_project_type_added">A new project type added</string>
+    <string name="new_stage">Stage is now </string>
     <string name="show_updates">Show Updates</string>
     <string name="edit">EDIT</string>
     <string name="project">Project</string>

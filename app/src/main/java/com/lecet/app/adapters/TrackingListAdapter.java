@@ -1,5 +1,6 @@
 package com.lecet.app.adapters;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,7 @@ public abstract class TrackingListAdapter<T extends RealmResults> extends Recycl
         this.appCompatActivity = appCompatActivity;
     }
 
-    public abstract TrackingListItem viewModelForPosition(String apiKey, int position, boolean showUpdates);
+    public abstract TrackingListItem viewModelForPosition(Context context, String apiKey, int position, boolean showUpdates);
 
     public AppCompatActivity getAppCompatActivity() {
         return appCompatActivity;
@@ -54,7 +55,7 @@ public abstract class TrackingListAdapter<T extends RealmResults> extends Recycl
     public void onBindViewHolder(final TrackingListViewHolderNew holder, int position) {
 
         final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
-        holder.getBinding().setViewModel(viewModelForPosition(mapsApiKey, position, showUpdates));
+        holder.getBinding().setViewModel(viewModelForPosition(holder.itemView.getContext(), mapsApiKey, position, showUpdates));
     }
 
 
