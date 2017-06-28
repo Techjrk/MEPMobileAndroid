@@ -41,8 +41,8 @@ public class SimpleLecetDefaultAlert extends AlertDialog {
         return instance;
     }
 
-    public static SimpleLecetDefaultAlert newInstance(final Activity activity, int dialogType, OnClickListener listener){
-        SimpleLecetDefaultAlert instance = new SimpleLecetDefaultAlert(activity);
+    public static SimpleLecetDefaultAlert newInstance(final Activity activity, int dialogType, final OnClickListener listener){
+        final SimpleLecetDefaultAlert instance = new SimpleLecetDefaultAlert(activity);
 
         instance.message = getMessage(dialogType);
         instance.setMessage(instance.message);
@@ -51,7 +51,7 @@ public class SimpleLecetDefaultAlert extends AlertDialog {
         instance.setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                activity.finish();
+                listener.onClick(instance, AlertDialog.BUTTON_NEUTRAL);
             }
         });
 

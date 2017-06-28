@@ -422,7 +422,7 @@ public class ProjectTakeCameraPhotoViewModelApi21 extends BaseObservable {
 
                 }
                 Integer sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
-                if(sensorOrientation != null){
+                if(sensorOrientation != null && rotatedCameraManufacturers.contains(Build.MANUFACTURER)){
                     this.sensorOrientation = sensorOrientation;
                 }else{
                     this.sensorOrientation = 0;

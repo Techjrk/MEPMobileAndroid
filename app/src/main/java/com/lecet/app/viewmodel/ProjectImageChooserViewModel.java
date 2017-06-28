@@ -71,6 +71,9 @@ public class ProjectImageChooserViewModel extends BaseObservable {
             alert.setMessage("The selected Image's file size is too large. Panorama and 360 Images Are unsupported at this time.");
 
             Bitmap bm = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+            if(bm == null){//Tried to Use a null bitmap, no reason to try to set it.
+                return;
+            }
             Log.d(TAG, "setBitmapFromUri: bitmap size: " + bm.getByteCount());
             if(bm.getByteCount() >=  MAX_IMAGE_SIZE){
                 alert.show();
