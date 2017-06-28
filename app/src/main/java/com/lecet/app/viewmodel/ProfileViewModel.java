@@ -57,14 +57,9 @@ public class ProfileViewModel extends BaseActivityViewModel {
     private ProgressDialog progressDialog;
 
     public ProfileViewModel(AppCompatActivity appCompatActivity, UserDomain ud) {
+        super(appCompatActivity);
 
-<<<<<<< HEAD
-        super(context);
-
-        this.context = context;
-=======
         this.appCompatActivity = appCompatActivity;
->>>>>>> origin/version_2_add_project
         this.userDomain = ud;
         this.user = userDomain.fetchLoggedInUser();
 
@@ -247,112 +242,69 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
         if (TextUtils.isEmpty(firstName)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.first_name));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.first_name));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(lastName)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.last_name));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.last_name));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(email)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.email));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.email));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
             return;
         }
         if (TextUtils.isEmpty(title)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.title));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.title));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(phone) || !phone.matches("[0-9]+")) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.phone));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.phone));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (!TextUtils.isEmpty(fax) && !fax.matches("[0-9]+")) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.fax));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.fax));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(address)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.address));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.address));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(city)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.city));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.city));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(state)) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.state));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.state));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog( appCompatActivity.getString(R.string.app_name), message);
+
             return;
         }
         if (TextUtils.isEmpty(zip) || !zip.matches("[0-9]+")) {
 
-<<<<<<< HEAD
-            String message = String.format(context.getString(R.string.profile_error_message), context.getString(R.string.zip));
-            showCancelAlertDialog(context.getString(R.string.app_name), message);
-=======
             String message = String.format(appCompatActivity.getString(R.string.profile_error_message), appCompatActivity.getString(R.string.zip));
-            showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), message);
->>>>>>> origin/version_2_add_project
+            showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), message);
             return;
         }
     }
@@ -408,11 +360,9 @@ public class ProfileViewModel extends BaseActivityViewModel {
      **/
     private void getUserProfile(final long userID) {
 
-<<<<<<< HEAD
-        showProgressDialog();
-=======
-        showProgressDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
->>>>>>> origin/version_2_add_project
+
+        showProgressDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
+
 
         userDomain.getUser(userID, new Callback<User>() {
             @Override
@@ -429,12 +379,8 @@ public class ProfileViewModel extends BaseActivityViewModel {
                 } else {
 
                     dismissProgressDialog();
+                    showCancelAlertDialog( appCompatActivity.getString(R.string.error_network_title), response.message());
 
-<<<<<<< HEAD
-                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
-=======
-                    showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), response.message());
->>>>>>> origin/version_2_add_project
                 }
             }
 
@@ -443,22 +389,15 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-<<<<<<< HEAD
-                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
-=======
-                showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
->>>>>>> origin/version_2_add_project
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+
             }
         });
     }
 
     private void updateUser() {
 
-<<<<<<< HEAD
-        showProgressDialog();
-=======
-        showProgressDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
->>>>>>> origin/version_2_add_project
+        showProgressDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.updating));
 
         UpdateUserProfileRequest.Builder builder = new UpdateUserProfileRequest.Builder(user.getId())
                 .firstName(getFirstName())
@@ -485,21 +424,15 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
-<<<<<<< HEAD
-                    showCancelAlertDialog( context.getString(R.string.app_name), context.getString(R.string.successfully_updated));
-=======
-                    showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.successfully_updated));
->>>>>>> origin/version_2_add_project
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.successfully_updated));
+
 
                 } else {
 
                     dismissProgressDialog();
 
-<<<<<<< HEAD
-                    showCancelAlertDialog(context.getString(R.string.error_network_title), response.message());
-=======
-                    showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), response.message());
->>>>>>> origin/version_2_add_project
+                    showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), response.message());
+
                 }
             }
 
@@ -508,11 +441,8 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-<<<<<<< HEAD
-                showCancelAlertDialog(context.getString(R.string.error_network_title), context.getString(R.string.error_network_message));
-=======
-                showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
->>>>>>> origin/version_2_add_project
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+
             }
         });
     }
@@ -539,7 +469,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
     private void logoutUser() {
 
-        showProgressDialog(appCompatActivity, appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.logging_out));
+        showProgressDialog(appCompatActivity.getString(R.string.app_name), appCompatActivity.getString(R.string.logging_out));
 
         userDomain.logout(new Callback<ResponseBody>() {
             @Override
@@ -553,7 +483,7 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                     dismissProgressDialog();
 
-                    showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), response.message());
+                    showCancelAlertDialog( appCompatActivity.getString(R.string.error_network_title), response.message());
                 }
             }
 
@@ -562,13 +492,14 @@ public class ProfileViewModel extends BaseActivityViewModel {
 
                 dismissProgressDialog();
 
-                showCancelAlertDialog(appCompatActivity, appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
+                showCancelAlertDialog(appCompatActivity.getString(R.string.error_network_title), appCompatActivity.getString(R.string.error_network_message));
             }
         });
     }
 
     /** Session management **/
-    private void clearSessionData() {
+    @Override
+    public void clearSessionData() {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -581,7 +512,18 @@ public class ProfileViewModel extends BaseActivityViewModel {
             }
         });
     }
+/* Progress Dialog */
+    public void showProgressDialog(String title, String message) {
 
+        dismissProgressDialog();
+
+        progressDialog = ProgressDialog.show(appCompatActivity, title, message, true, false);
+    }
+
+    public void dismissProgressDialog() {
+
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+    }
     private void rerouteLoggedOutUser() {
 
         dismissProgressDialog();
