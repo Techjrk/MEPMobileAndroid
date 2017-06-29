@@ -5,8 +5,13 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Calendar -->
-    <dimen name="calendar_cell_size">30dp</dimen>
-    <dimen name="calendar_cell_selected_size">30dp</dimen>
+    <dimen name="calendar_cell_size">29dp</dimen>
+    <dimen name="calendar_cell_size_420dp">28dp</dimen>
+
+    <dimen name="small_calendar_cell_size">23dp</dimen>
+    <dimen name="small_calendar_cell_size_420dp">28dp</dimen>
+
+    <dimen name="calendar_cell_selected_size">28dp</dimen>
     <dimen name="calendar_month_container_height">34dp</dimen>
     <dimen name="calendar_corner_radius">5dp</dimen>
     <dimen name="calendar_height">260dp</dimen>
