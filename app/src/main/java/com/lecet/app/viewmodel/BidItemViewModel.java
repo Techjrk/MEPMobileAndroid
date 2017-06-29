@@ -3,7 +3,7 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
+import android.location.Location;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailActivity;
@@ -12,6 +12,8 @@ import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.SearchDomain;
+
+import java.text.DecimalFormat;
 
 import io.realm.Realm;
 
@@ -30,6 +32,8 @@ public class BidItemViewModel extends BaseObservable {
     private boolean isClientLocation2;
     private boolean hasStarCard;
     private SearchDomain searchDomain;
+    private Location currentLocation;
+    private boolean isPrebid;
 
     /*Created dummy server and upload these images on it and access it with piccasso*/
     public static final String STANDARD_PRE_BID_MARKER = "ic_standard_marker_pre_bid_kjselm.png";
@@ -41,14 +45,18 @@ public class BidItemViewModel extends BaseObservable {
     public static final String CUSTOM_POST_BID_MARKER = "ic_custom_pin_marker_post_bid_iwa8we.png";
     public static final String CUSTOM_POST_BID_MARKER_UPDATE = "ic_custom_pin_marker_post_bid_update_kzkxrw.png";
     public static final String url = "http://res.cloudinary.com/djakoy1gr/image/upload/v1498123162/";
+    private final double METERS_PER_MILE = 1609.34;
+    private DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
 
-    public BidItemViewModel(Project project, String mapsApiKey) {
+    public BidItemViewModel(Project project, String mapsApiKey, Location currentLocation , boolean isPrebid) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
 
         searchDomain = new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
-
+        this.currentLocation = currentLocation;
+        this.isPrebid = isPrebid;
         setStarCardStatus();
+
     }
 
     private void setStarCardStatus() {
@@ -63,7 +71,30 @@ public class BidItemViewModel extends BaseObservable {
 
     ////////////////////////////////////
     // PROJECT
+    @Bindable
+    public String getDistToCurrentLocation(){
+        if(currentLocation == null || project.getGeocode() == null)
+            return "";
+        Location projectLocation = new Location("project_location");
+        projectLocation.setLatitude(project.getGeocode().getLat());
+        projectLocation.setLongitude(project.getGeocode().getLng());
+        String distanceBetween = decimalFormat.format(meterToMiles(currentLocation.distanceTo(projectLocation)));
+        
+        if(isPrebid){
+            return distanceBetween + " miles away";
+        }
+        else{
+            return distanceBetween + " miles away";
+        }
+    }
 
+    private double meterToMiles(double meters){
+        return meters / METERS_PER_MILE;
+    }
+
+    public boolean isPrebid(){
+        return isPrebid;
+    }
     @Bindable
     public boolean getHasStarCard() {
         return hasStarCard;
@@ -80,7 +111,9 @@ public class BidItemViewModel extends BaseObservable {
     public String getProjectName() {
         return project.getTitle();
     }
-
+    public String getProjectEstLow(){
+        return decimalFormat.format(project.getEstLow());
+    }
     public String getClientLocation() {
         return project != null ? project.getCity() + " , " + project.getState() : company != null ? company.getAddress1() : "";
     }
