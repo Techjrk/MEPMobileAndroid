@@ -249,6 +249,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             b = new Bundle();
             for (String keyID : sIDs) {
                 b.putString(keyID, spref.getString(keyID, ""));
+                Log.d("getPrefTypeBundle2","getPrefTypeBundle2"+keyID+" : "+spref.getString(keyID,""));
             }
         }
         return b;

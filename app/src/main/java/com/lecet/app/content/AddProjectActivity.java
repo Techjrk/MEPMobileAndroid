@@ -56,6 +56,7 @@ public class AddProjectActivity extends AppCompatActivity {
         viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectId, projectDomain, locationDomain);
 
         binding.setViewModel(viewModel);
+        viewModel.deletePrefFilterFieldValues();
     }
 
     @Override
@@ -141,7 +142,7 @@ public class AddProjectActivity extends AppCompatActivity {
      * Ex: "projectStageId":208
      */
     private void processStage(final Bundle bundle) {
-
+        viewModel.savePrefBundleStageOnly(getString(R.string.FilterStageData), bundle); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
