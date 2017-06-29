@@ -710,5 +710,14 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         editData.commit();
     }
 
+    public void savePrefBundle(String filterDataName, Bundle bundle) {
+        SharedPreferences spref = activity.getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        edit.clear();
+        for (String key: bundle.keySet()) {
+            edit.putString(key,bundle.getString(key));
+        }
+        edit.apply();
+    }
 
 }

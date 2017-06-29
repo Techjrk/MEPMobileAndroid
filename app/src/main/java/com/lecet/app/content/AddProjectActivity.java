@@ -80,6 +80,7 @@ public class AddProjectActivity extends AppCompatActivity {
      * Single type selection: "primaryProjectTypeId":503
      */
     private void processProjectType(final Bundle bundle) {
+        viewModel.savePrefBundle(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
 
         Realm realm = Realm.getDefaultInstance();
 
