@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -37,8 +38,33 @@ public class SearchFilterStageViewModel extends BaseObservable {
     public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterStageViewModel.id";
     public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterStageViewModel.name";
     private AppCompatActivity activity;
+    public static final int NO_TYPE = -1;
+
+    public static int lastFamilyChecked = NO_TYPE;
+    public static int lastSection; //keep track of last section used by the selected item
+    public static int lastPosition; //keep track of last position used by the selected item
+    public static int lastChildParentPosition; //keep track of last child parent used by the selected item
+    private  String lastName;
+
+    public  String getLastName() {
+        return lastName;
+    }
+
+    public  void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     private Bundle bundle;
-   // private Bundle bundleCheck;
+
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
+    }
+
+    // private Bundle bundleCheck;
     private RealmResults<SearchFilterStagesMain> realmStages;
     private String query;
     private CheckBox lastChecked;
@@ -68,6 +94,10 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public SearchFilterStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
+        getLastCheckedItems();
+        bundle = getPrefBundle();
+        if (bundle == null) bundle = new Bundle();
+/*
         if (getPrefBundle() == null) {
             bundle = new Bundle();
             //bundleCheck = new Bundle();
@@ -76,6 +106,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
             bundle = getPrefBundle();
            // bundleCheck = getPrefBundle();
         }
+*/
         //bundle = new Bundle();
         getProjectStages();
         searchItem("");
@@ -101,17 +132,37 @@ public class SearchFilterStageViewModel extends BaseObservable {
         });
     }
 
-/*
-    public void clearLast() {
-        adapter.clearLast();
-    }
-*/
+void saveLastCheckedItems() {
+    SharedPreferences spref = activity.getSharedPreferences("lastcheckedStageItems", Context.MODE_PRIVATE);
+    SharedPreferences.Editor edit = spref.edit();
+    //edit.clear();
+    edit.putInt("lastFamilyChecked",lastFamilyChecked);
+    edit.putString("lastName",lastName);
+    edit.putInt("lastChildParentPosition",lastChildParentPosition);
+    edit.putInt("lastSection",lastSection);
+    edit.putInt("lastPosition",lastPosition);
+    edit.apply();
+
+}
+void getLastCheckedItems(){
+    SharedPreferences spref = activity.getSharedPreferences("lastcheckedStageItems", Context.MODE_PRIVATE);
+    lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
+    lastName=spref.getString("lastName",lastName);
+    lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);
+    lastSection=spref.getInt("lastSection",lastSection);
+    lastPosition=spref.getInt("lastPosition",lastPosition);
+
+}
 
     /**
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-       // clearLast();
+        if (SearchFilterAllTabbedViewModel.userCreated) {
+            //setLastChecked(null);
+            //clearLast();
+            saveLastCheckedItems();
+        }
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
        // intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundleCheck);
@@ -256,8 +307,10 @@ public class SearchFilterStageViewModel extends BaseObservable {
         Bundle b = null;
         SharedPreferences sprefName = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"name", Context.MODE_PRIVATE);
         SharedPreferences sprefView = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"view", Context.MODE_PRIVATE);
+        Log.d("getPrefBundle","getPrefBundle"+sprefName);
         if (sprefName != null) {
             Set<String> sIDs = sprefName.getAll().keySet();
+            if (sIDs == null || sIDs.size() == 0) return null;
             b = new Bundle();
 
             for (String keyID : sIDs) {
@@ -266,6 +319,8 @@ public class SearchFilterStageViewModel extends BaseObservable {
                 b2.putString(BUNDLE_KEY_NAME, sprefName.getString(keyID, ""));
                 b2.putString(BUNDLE_KEY_VIEW_TYPE,sprefView.getString(keyID,""));
                 b.putBundle(keyID,b2);
+                Log.d("getPrefStageBundle2","getPrefStageBundle2"+keyID+" : "+sprefName.getString(keyID,"")+":"+sprefView.getString(keyID,""));
+
             }
         }
         return b;

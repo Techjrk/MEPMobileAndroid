@@ -86,9 +86,22 @@
 
                     <TextView
                         style="@style/ListItemProjectTrackingTextView.Detail1"
-                        android:text="@{viewModel.clientLocation2}"
+                        android:text="@{viewModel.getDistToCurrentLocation}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="Tampa, FL" />
+                    <TextView
+                        android:visibility="@{viewModel.isPrebid ? View.GONE : View.VISIBLE}"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="2dp"
+                        android:layout_height="18dp"
+                        android:background="@color/lecetBorderGray"/>
+
+                    <TextView
+                        style="@style/ListItemProjectTrackingTextView.Detail1"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        android:visibility="@{viewModel.isPrebid ? View.GONE : View.VISIBLE}"
+                        android:text="@{`$`+viewModel.getProjectEstLow}" />
                 </LinearLayout>
             </LinearLayout>
             <ImageView

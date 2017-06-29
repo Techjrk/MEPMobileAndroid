@@ -2,11 +2,14 @@ package com.lecet.app.viewmodel;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.Bindable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -465,6 +468,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         int id = view.getId();
         int section = 0;
         SearchFilterAllTabbedViewModel.userCreated = true;
+
         switch (id) {
             case R.id.add_project_type:
                 section = SearchFilterAllTabbedViewModel.TYPE;
@@ -513,7 +517,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     public void onClickSave(View view) {
         Log.d(TAG, "onClickSave");
-
+        deletePrefFilterFieldValues();
         DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -663,4 +667,59 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         }
         return p1;
     }
+    public void savePrefBundleStageOnly(String filterDataName, Bundle bundle) {
+        SharedPreferences spref = activity.getSharedPreferences(filterDataName+"name", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        edit.clear();
+        for (String key: bundle.keySet()) {
+            //  edit.putString(key,bundle.getString(key));
+            Bundle b = bundle.getBundle(key);
+
+            if (b == null) continue;
+            edit.putString(key,b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
+        }
+        edit.apply();
+        savePrefBundleStageViewOnly(filterDataName,bundle);
+    }
+    public void savePrefBundleStageViewOnly(String filterDataName, Bundle bundle) {
+        SharedPreferences spref = activity.getSharedPreferences(filterDataName+"view", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        edit.clear();
+        for (String key: bundle.keySet()) {
+            //  edit.putString(key,bundle.getString(key));
+            Bundle b = bundle.getBundle(key);
+            if (b == null) continue;
+            edit.putString(key,b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
+        }
+        edit.apply();
+    }
+
+    public void deletePrefFilterFieldValues() {
+        clearSharedPref("lastcheckedStageItems");
+        clearSharedPref("lastcheckedTypeItems");
+        clearSharedPref(activity.getString(R.string.Filter));
+        clearSharedPref(activity.getString(R.string.FilterTypeData));
+        clearSharedPref(activity.getString(R.string.FilterStageData)+"name");
+        clearSharedPref(activity.getString(R.string.FilterStageData)+"view");
+
+    }
+    private void clearSharedPref(String dataName) {
+        SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
+        if (spref == null) return;
+        SharedPreferences.Editor editData = spref.edit();
+      //  if (editData == null) return;
+        editData.clear();
+        editData.commit();
+    }
+
+    public void savePrefBundle(String filterDataName, Bundle bundle) {
+        SharedPreferences spref = activity.getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        edit.clear();
+        for (String key: bundle.keySet()) {
+            edit.putString(key,bundle.getString(key));
+        }
+        edit.apply();
+    }
+
 }

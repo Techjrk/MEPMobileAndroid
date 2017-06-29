@@ -2,6 +2,7 @@ package com.lecet.app.content;
 
 
 import android.databinding.DataBindingUtil;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +25,8 @@ import java.util.ArrayList;
 
 public class BidFragment extends Fragment {
     private ArrayList<Project> bidData;
-
+    private Location currentLocation;
+    private boolean isPreBid;
     public BidFragment() {
     }
 
@@ -46,7 +48,7 @@ public class BidFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_prepostbid);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        BidProjectListRecyclerViewAdapter searchAdapterProjectAll = new BidProjectListRecyclerViewAdapter(getActivity(), bidData);
+        BidProjectListRecyclerViewAdapter searchAdapterProjectAll = new BidProjectListRecyclerViewAdapter(getActivity(), bidData, currentLocation , isPreBid);
 //        new BidProjectListRecyclerViewAdapter(getActivity(), SearchViewModel.SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, bidData);
         //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
@@ -56,6 +58,12 @@ public class BidFragment extends Fragment {
         return bidData;
     }
 
+    public void setPreBid(boolean preBid) {
+        isPreBid = preBid;
+    }
+    public void setCurrentLocation(Location location){
+        this.currentLocation = location;
+    }
     protected void setBidData(ArrayList<Project> bidData) {
         this.bidData = bidData;
     }

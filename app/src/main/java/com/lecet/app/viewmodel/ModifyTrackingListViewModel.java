@@ -361,11 +361,10 @@ public abstract class ModifyTrackingListViewModel<T extends RealmObject & Tracki
     }
 
     public List<U> getSelectedItems() {
-        SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
         List<U> items = new ArrayList<>();
         ModifyListAdapter<RealmResults<U>, U> adapter = (ModifyListAdapter) listView.getAdapter();
-        for (int i = 0; i < checkedItems.size(); i++) {
-            if (checkedItems.valueAt(i)) {
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (listView.isItemChecked(i)) {
                 items.add(adapter.getItem(i));
             }
         }

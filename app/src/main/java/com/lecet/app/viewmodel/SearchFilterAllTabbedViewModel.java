@@ -682,9 +682,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCjurisdictionSelect(spref.getString(EXTRA_CJURISDICTION, getCjurisdictionSelect()));
         setCbiddingWithinSelect(spref.getString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect()));
         setCtypeSelect(spref.getString(EXTRA_PROJECT_TYPE_ID, getCtypeSelect()));
+
     }
-
-
 
     void savePrefFilterFieldValues() {
         SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);

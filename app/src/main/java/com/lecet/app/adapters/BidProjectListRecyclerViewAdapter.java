@@ -2,6 +2,7 @@ package com.lecet.app.adapters;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,7 +37,8 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     //ProjectsNearMeActivity activity;
     FragmentActivity factivity;
     private List data = Collections.emptyList();
-
+    private boolean isPreBid;
+    private Location currentLocation;
  /*   public BidProjectListRecyclerViewAdapter(ProjectsNearMeActivity activity, int adapterType, List data) {
        // this.activity = activity;
         this.adapterType = adapterType;
@@ -44,14 +46,17 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 */
 //    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, int adapterType, List data) {
-    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, List data) {
+    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, List data  , Location currentLocation , boolean isPreBid) {
         this.factivity = activity;
        // this.adapterType = adapterType;
         this.data = data;
+        this.isPreBid = isPreBid;
+        this.currentLocation = currentLocation;
     }
     public void setData(List data) {
         this.data = data;
     }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -69,7 +74,7 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 //        final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
         final String mapsApiKey = factivity.getBaseContext().getResources().getString(google_api_key);
         BidProjectViewHolder viewHolder = (BidProjectViewHolder) holder;
-        BidItemViewModel vm = new BidItemViewModel((Project) data.get(position), mapsApiKey);
+        BidItemViewModel vm = new BidItemViewModel((Project) data.get(position), mapsApiKey, currentLocation  , isPreBid);
         viewHolder.getBinding().setViewModel(vm);
     }
 
@@ -81,7 +86,8 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         return data.size();
     }
 
-/*
+
+    /*
     @Override
     public int getItemViewType(int position) {
 

@@ -43,27 +43,29 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
     private RealmResults<SearchFilterProjectTypesMain> realmProjectTypes;
     private String query;
     private CheckBox lastChecked;
-/*
-    private Bundle selectedParent; // = new Bundle(); //list of user's selected parent items
-    private Bundle selectedChild; //= new Bundle();  //list of user's selected child items
 
-    public Bundle getSelectedParent() {
-        return selectedParent;
+    public static final int NO_TYPE = -1;
+    public static int lastFamilyChecked = NO_TYPE;
+    public static int lastSection; //keep track of last section used by the selected item
+    public static int lastPosition; //keep track of last position used by the selected item
+    public static int lastChildParentPosition; //keep track of last child parent used by the selected item
+    private  String lastName;
+
+    public  String getLastName() {
+        return lastName;
     }
 
-    public void setSelectedParent(Bundle selectedParent) {
-        this.selectedParent = selectedParent;
+    public  void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public Bundle getSelectedChild() {
-        return selectedChild;
+    public Bundle getBundle() {
+        return bundle;
     }
 
-    public void setSelectedChild(Bundle selectedChild) {
-        this.selectedChild = selectedChild;
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
     }
-
-*/
 
     @Bindable
     public String getQuery() {
@@ -81,9 +83,12 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
      */
     public SearchFilterProjectTypeViewModel(AppCompatActivity activity) {
         this.activity = activity;
-        if (getPrefBundle() == null)
+        getLastCheckedItems();
+        bundle = getPrefBundle();
+        if (bundle == null) bundle = new Bundle();
+     /*   if (getPrefBundle() == null)
             bundle = new Bundle();
-        else bundle = getPrefBundle();
+        else bundle = getPrefBundle();*/
 
         getProjectTypes();
         searchItem("");
@@ -106,6 +111,9 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
+        if (SearchFilterAllTabbedViewModel.userCreated) {
+            saveLastCheckedItems();
+        }
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         activity.setResult(Activity.RESULT_OK, intent);
@@ -246,11 +254,35 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.FilterTypeData), Context.MODE_PRIVATE);
         if (spref != null) {
             Set<String> sIDs = spref.getAll().keySet();
+            if (sIDs == null || sIDs.size() == 0) return null;
             b = new Bundle();
             for (String keyID : sIDs) {
                 b.putString(keyID, spref.getString(keyID, ""));
+                Log.d("getPrefTypeBundle2","getPrefTypeBundle2"+keyID+" : "+spref.getString(keyID,""));
             }
         }
         return b;
     }
+    void saveLastCheckedItems() {
+        SharedPreferences spref = activity.getSharedPreferences("lastcheckedTypeItems", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        //edit.clear();
+        edit.putInt("lastFamilyChecked",lastFamilyChecked);
+        edit.putString("lastName",lastName);
+        edit.putInt("lastChildParentPosition",lastChildParentPosition);
+        edit.putInt("lastSection",lastSection);
+        edit.putInt("lastPosition",lastPosition);
+        edit.apply();
+
+    }
+    void getLastCheckedItems(){
+        SharedPreferences spref = activity.getSharedPreferences("lastcheckedTypeItems", Context.MODE_PRIVATE);
+        lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
+        lastName=spref.getString("lastName",lastName);
+        lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);
+        lastSection=spref.getInt("lastSection",lastSection);
+        lastPosition=spref.getInt("lastPosition",lastPosition);
+
+    }
+
 }
