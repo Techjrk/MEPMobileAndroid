@@ -2,6 +2,7 @@ package com.lecet.app.content.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ public class LecetCalendar extends FlexibleCalendarView {
     }
 
     private void initializeCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        final int maxWeeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+        final int screenDensity = getResources().getDisplayMetrics().densityDpi;
         setCalendarView(new CalendarView() {
             @Override
             public BaseCellView getCellView(int position, View convertView, ViewGroup parent, @BaseCellView.CellType int cellType) {
@@ -45,7 +49,15 @@ public class LecetCalendar extends FlexibleCalendarView {
                 if (cellView == null) {
                     LayoutInflater inflater = LayoutInflater.from(getContext());
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null, false);
-                    int size = getResources().getDimensionPixelSize(R.dimen.calendar_cell_size);
+                    int size = 0;
+                    if(screenDensity == DisplayMetrics.DENSITY_420){
+                        size = maxWeeks > 5 ? getResources().getDimensionPixelSize(R.dimen.small_calendar_cell_size_420dp) : getResources().getDimensionPixelSize(R.dimen.calendar_cell_size_420dp);
+
+                    }
+                    else{
+                        size = maxWeeks > 5 ? getResources().getDimensionPixelSize(R.dimen.small_calendar_cell_size) : getResources().getDimensionPixelSize(R.dimen.calendar_cell_size);
+
+                    }
                     ViewGroup.LayoutParams params = new GridView.LayoutParams(size, size);
                     cellView.setLayoutParams(params);
                 }
