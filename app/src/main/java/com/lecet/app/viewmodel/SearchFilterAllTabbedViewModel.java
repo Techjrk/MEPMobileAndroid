@@ -787,7 +787,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         t.start();
     }
 
-  
+
     public void savePrefBundle(final String filterDataName, final Bundle bundle) {
         Thread t = new Thread(
                 new Runnable() {

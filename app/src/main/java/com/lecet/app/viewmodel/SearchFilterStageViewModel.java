@@ -133,7 +133,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
     }
 
 void saveLastCheckedItems() {
-    SharedPreferences spref = activity.getSharedPreferences("lastcheckedStageItems", Context.MODE_PRIVATE);
+    SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
     SharedPreferences.Editor edit = spref.edit();
     //edit.clear();
     edit.putInt("lastFamilyChecked",lastFamilyChecked);
@@ -145,7 +145,7 @@ void saveLastCheckedItems() {
 
 }
 void getLastCheckedItems(){
-    SharedPreferences spref = activity.getSharedPreferences("lastcheckedStageItems", Context.MODE_PRIVATE);
+    SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
     lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
     lastName=spref.getString("lastName",lastName);
     lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);

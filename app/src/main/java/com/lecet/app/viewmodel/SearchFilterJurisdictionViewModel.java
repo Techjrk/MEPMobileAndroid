@@ -348,7 +348,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     setBundleData(BUNDLE_KEY_LONG_NAME, longName);
     */
     void saveLastCheckedItems() {
-        SharedPreferences spref = activity.getSharedPreferences("lastcheckedJurisdictionItems", Context.MODE_PRIVATE);
+        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = spref.edit();
         //edit.clear();
         edit.putInt("lastFamilyChecked",lastFamilyChecked);
@@ -360,7 +360,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
     }
     void getLastCheckedItems(){
-        SharedPreferences spref = activity.getSharedPreferences("lastcheckedJurisdictionItems", Context.MODE_PRIVATE);
+        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
         lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
         lastName=spref.getString("lastName",lastName);
         lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);

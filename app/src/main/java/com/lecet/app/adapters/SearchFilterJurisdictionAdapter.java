@@ -61,7 +61,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         // Expanded grandChildrens, we need to keep track of section and then subtype position
         expandedChildren = new HashMap<>();
-        checkLastSelect(true);
+     //   checkLastSelect(true);
     }
 
     public void clearLast() {
@@ -137,7 +137,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         if (viewModel.lastFamilyChecked != NO_TYPE) {
             if (viewModel.lastFamilyChecked == PARENT_VIEW_TYPE) {
-                if (data != null && pname != null) {
+                if (data != null && pname != null  && viewModel.getLastName() !=null) {
                     if (viewModel.getLastName().equals(pname.getName().trim())) {
                         checkLastSelect(false);
                         pname.setSelected(selected);
