@@ -68,6 +68,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         setupToolbar();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.savePrefFilterFieldValues();
+    }
+
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.setContentInsetStartWithNavigation(0);
@@ -341,7 +347,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 }
                 if (!idList.isEmpty()) {
                     types = "\"projectTypeId\":{\"inq\":" + idList + "}";
+                    viewModel.setResultProjectType(types);
                     viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
+                } else {
+                    viewModel.setResultProjectType("");
                 }
             }
         });
@@ -365,6 +374,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         if (valueStr != null && !valueStr.trim().equals("")) {
             projectValue = "\"projectValue\":{" + "\"min\":" + min + ",\"max\":" + max + "}";
+            viewModel.setResultValue(projectValue);
+        } else {
+            viewModel.setResultValue("");
         }
 
         // Log.d("valuestr","valuestr"+valueStr);
@@ -396,6 +408,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         if (updatedWithinInt != null && !updatedWithinInt.trim().equals("") && !updatedWithinInt.equalsIgnoreCase(getString(R.string.any))) {
             projectUpdatedWithin = "\"updatedInLast\":" + updatedWithinInt;
+            viewModel.setResultUpdateWithin(projectUpdatedWithin);
+        } else {
+            viewModel.setResultUpdateWithin("");
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, projectUpdatedWithin);
     }
@@ -408,7 +423,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Region (Parent) selection ex with IDs of Locals with and without District Councils: "jurisdictions": { "inq": [8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 1, 2, 3, 4, 5, 6] }
      */
     private void processJurisdiction(final Bundle bundle) {
-        viewModel.savePrefBundle(getString(R.string.FilterJurisdictionData), bundle); //saved the selected project type items to process later when needed.
+        viewModel.savePrefBundle(getString(R.string.FilterSharedJData), bundle); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -430,8 +445,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     jurisdictionAbbrev = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_ABBREVIATION);
                     jurisdictionLongName = bundle.getString(SearchFilterJurisdictionViewModel.BUNDLE_KEY_LONG_NAME);
                 } catch (Exception e) {
-                    Log.e("processJurisdiction: ", "Error parsing bundle.");
-                    return;
+                    Log.e("processJurisdiction: ", "Error parsing bundle. bundle is empty");
+                   // return;
                 }
 
                 // Build a single-element List based on the Jurisdiction ID and Name passed in the Bundle.
@@ -494,7 +509,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     Log.d(TAG, "processJurisdiction: jurisdictionLongName: " + jurisdictionLongName);
                     Log.d(TAG, "processJurisdiction: jList for filter: " + jList);
                     Log.d(TAG, "processJurisdiction: final filter for jurisdictions: " + jurisdictions);
+                    viewModel.setResultJurisdiction(jurisdictions);
+                } else {
+                    viewModel.setResultJurisdiction("");
                 }
+                Log.d("jurisdictiondata","jurisdictiondata"+jurisdictions);
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
 
                 // display
@@ -583,9 +602,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     Log.d(TAG, "processStage: IDs: " + sList);
 
                     stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
-                    // viewModel.setPersistStage(stageStr);
-                }
-                Log.d("slistid", "slistid" + sList.toString());
+                    viewModel.setResultStage(stages);
+                } else viewModel.setResultStage("");
+               // Log.d("slistid", "slistid" + sList.toString());
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
                 if (stageStr.length() > 2) {
                     stageStr = stageStr.substring(0, stageStr.length() - 2);         //trim trailing ", "
@@ -614,6 +633,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
         if (biddingWithinInt != null && !biddingWithinInt.trim().equals("") && !biddingWithinInt.equalsIgnoreCase(getString(R.string.any))) {
             projectBiddingWithin = "\"biddingInNext\":" + biddingWithinInt;
+            viewModel.setResultBiddingWithin(projectBiddingWithin);
+        } else {
+            viewModel.setResultBiddingWithin("");
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, projectBiddingWithin);
     }
@@ -640,7 +662,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 bhList.add("\"H\"");
             }
             bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
-        }
+            viewModel.setResultBH(bhChar);
+        } else viewModel.setResultBH("");
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
 
     }
@@ -661,7 +684,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             List<String> oList = new ArrayList<>();
             oList.add("\"" + ownerTypeStr + "\"");
             ownerType = "\"ownerType\":{\"inq\":" + oList.toString() + "}";
-        }
+            viewModel.setResultOwnerType(ownerType);
+        } else  viewModel.setResultOwnerType("");
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE, ownerType);
 
     }
@@ -684,10 +708,10 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         if (workTypeInt != null && !workTypeInt.trim().equals("") && !workTypeStr.equalsIgnoreCase(getString(R.string.any))) {
             wList.add(workTypeInt);
             workType = "\"workTypeId\":{\"inq\":" + wList.toString() + "}";
-        }
+            viewModel.setResultWorkType(workType);
+        } else viewModel.setResultWorkType("");
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, workType);
     }
-
 
     @Override
     public void onBackPressed() {

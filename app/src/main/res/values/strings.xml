@@ -406,6 +406,7 @@
     <string name="FilterTypeData">FilterTypeData</string>
     <string name="FilterJurisdictionData">JurisdictionData</string>
     <string name="FilterStageData">FilterStageData</string>
+    <string name="FilterSharedJData">FilterJurisdictionSP</string>
     <string name="Filter">Filter</string>
     <string name="MAX">MAX</string>
     <string name="save_project">Save Project</string>

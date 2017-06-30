@@ -24,8 +24,6 @@ import com.lecet.app.content.SearchFilterUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterValueActivity;
 import com.lecet.app.content.SearchFilterWorkTypeActivity;
 
-import java.util.Set;
-
 /**
  * Created by DomandTom 2016.
  */
@@ -139,12 +137,15 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private String persistedWorkType;
     private boolean usingProjectNearMe;
 
+    // SharedPreferences spref;
 
     /**
      * Constructor
      */
     public SearchFilterAllTabbedViewModel(AppCompatActivity activity) {
         this.activity = activity;
+        //   spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
+
         setLocation_select("");
         setType_select("");
         setValue_select("");
@@ -158,7 +159,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCjurisdictionSelect(ANY);
         setCbiddingWithinSelect(ANY);
         setCtypeSelect(ANY);
-
+        initResult();
         intent = activity.getIntent();
 
         setUsingProjectNearMe(intent.getBooleanExtra(activity.getString(R.string.using_project_near_me), false));
@@ -170,7 +171,19 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             Log.d("sprefnull", "sprefnull");
         }
     }
+    void initResult(){
+        setResultValue("");
+        setResultBiddingWithin("");
+        setResultUpdateWithin("");
 
+        setResultStage("");
+        setResultProjectType("");
+        setResultJurisdiction("");
+
+        setResultBH("");
+        setResultOwnerType("");
+        setResultWorkType("");
+    }
     @Bindable
     public boolean getUsingProjectNearMe() {
         return usingProjectNearMe;
@@ -497,11 +510,11 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.ctype:
             case R.id.type:
                 section = TYPE;
-               // SearchFilterAllTabbedViewModel.userCreated = false;
+                // SearchFilterAllTabbedViewModel.userCreated = false;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
                 //i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_DISPLAY_STR, getPRO));
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
-                i.putExtra(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt());
+                i.putExtra(EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt());
                 break;
 
             case R.id.cvalue:
@@ -509,9 +522,9 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                 section = VALUE;
                 i = new Intent(activity, SearchFilterValueActivity.class);
                 String value = getValue_select();
-                if (value !=null && value.length() > 0) {
+                if (value != null && value.length() > 0) {
                     i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, value.substring(1, value.indexOf('-')).trim());
-                    i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, value.substring(value.indexOf('-')+3, value.length()).trim());
+                    i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, value.substring(value.indexOf('-') + 3, value.length()).trim());
                 }
 //                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
 //                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
@@ -558,7 +571,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                 i = new Intent(activity, SearchFilterOwnerTypeActivity.class);
                 //setPersistedOwnerType(getOwner_type_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE, getOwner_type_select());
-                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE_ID,getPersistedOwnerType());
+                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE_ID, getPersistedOwnerType());
 //                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 
@@ -627,7 +640,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         } else {
             intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
-        savePrefFilterFieldValues();
+        //savePrefFilterFieldValues();
         activity.setResult(Activity.RESULT_OK, intent);
     }
 
@@ -645,10 +658,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public String getPersistProjectTypeIdInt() {
         return persistProjectTypeIdInt;
     }
+
     public void setPersistProjectTypeIdInt(String persistProjectTypeIdInt) {
         this.persistProjectTypeIdInt = persistProjectTypeIdInt;
     }
-
 
 
     void getPrefFilterFieldValues(SharedPreferences spref) {
@@ -656,10 +669,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setLocation_select(spref.getString(EXTRA_LOCATION_CITY, getLocation_select()));
 
         setType_select(spref.getString(EXTRA_PROJECT_TYPE_ID, getType_select()));
-        setPersistProjectTypeIdInt(spref.getString(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt()));
+        setPersistProjectTypeIdInt(spref.getString(EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt()));
 
         setUpdated_within_select(spref.getString(EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select()));
-        setPersistedUpdatedWithin(spref.getString(EXTRA_UPDATED_WITHIN_DAYS_INT,getPersistedUpdatedWithin()));
+        setPersistedUpdatedWithin(spref.getString(EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin()));
 
         setJurisdiction_select(spref.getString(EXTRA_JURISDICTION, getJurisdiction_select()));
         setStage_select(spref.getString(EXTRA_STAGE, getStage_select()));
@@ -669,11 +682,11 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
         setBh_select(spref.getString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select()));
         if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
-          persistedBuildingOrHighway[1] = spref.getString(EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
+            persistedBuildingOrHighway[1] = spref.getString(EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
         setOwner_type_select(spref.getString(EXTRA_OWNER_TYPE, getOwner_type_select()));
-        setPersistedOwnerType(spref.getString(EXTRA_OWNER_TYPE_ID,getPersistedOwnerType()));
+        setPersistedOwnerType(spref.getString(EXTRA_OWNER_TYPE_ID, getPersistedOwnerType()));
         setWork_type_select(spref.getString(EXTRA_WORK_TYPE, getWork_type_select()));
-        setPersistedWorkType(spref.getString(EXTRA_WORK_TYPE_ID,getPersistedWorkType()));
+        setPersistedWorkType(spref.getString(EXTRA_WORK_TYPE_ID, getPersistedWorkType()));
         setValue_select(spref.getString(EXTRA_VALUE, getValue_select()));
 
         //For Company
@@ -683,23 +696,197 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCbiddingWithinSelect(spref.getString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect()));
         setCtypeSelect(spref.getString(EXTRA_PROJECT_TYPE_ID, getCtypeSelect()));
 
+
+        //For Result
+        setResultUpdateWithin(spref.getString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin()));
+        setResultBiddingWithin(spref.getString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin()));
+        setResultValue(spref.getString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue()));
+
+        //Then set all the previous result to the intent
+        setAllFilterResults();
     }
 
-    void savePrefFilterFieldValues() {
-        SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.putString(EXTRA_LOCATION_CITY, getLocation_select());
-        edit.putString(EXTRA_PROJECT_TYPE_ID, getType_select());
-        edit.putString(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt());
+    ///
+    private String resultUpdateWithin;
+    private String resultBiddingWithin;
+    private String resultValue;
 
-        edit.putString(EXTRA_VALUE, getValue_select());
+    private String resultProjectType;
+    private String resultStage;
+    private String resultJurisdiction;
+
+    private String resultBH;
+    private String resultOwnerType;
+    private String resultWorkType;
+
+    public String getResultBH() {
+        return resultBH;
+    }
+
+    public void setResultBH(String resultBH) {
+        this.resultBH = resultBH;
+    }
+
+    public String getResultOwnerType() {
+        return resultOwnerType;
+    }
+
+    public void setResultOwnerType(String resultOwnerType) {
+        this.resultOwnerType = resultOwnerType;
+    }
+
+    public String getResultWorkType() {
+        return resultWorkType;
+    }
+
+    public void setResultWorkType(String resultWorkType) {
+        this.resultWorkType = resultWorkType;
+    }
+
+    public String getResultProjectType() {
+        return resultProjectType;
+    }
+
+    public void setResultProjectType(String resultProjectType) {
+        this.resultProjectType = resultProjectType;
+    }
+
+    public String getResultStage() {
+        return resultStage;
+    }
+
+    public void setResultStage(String resultStage) {
+        this.resultStage = resultStage;
+    }
+
+    public String getResultJurisdiction() {
+        return resultJurisdiction;
+    }
+
+    public void setResultJurisdiction(String resultJurisdiction) {
+        this.resultJurisdiction = resultJurisdiction;
+    }
+
+    public String getResultUpdateWithin() {
+        return resultUpdateWithin;
+    }
+
+    public void setResultUpdateWithin(String resultUpdateWithin) {
+        this.resultUpdateWithin = resultUpdateWithin;
+    }
+
+    public String getResultBiddingWithin() {
+        return resultBiddingWithin;
+    }
+
+    public void setResultBiddingWithin(String resultBiddingWithin) {
+        this.resultBiddingWithin = resultBiddingWithin;
+        Log.d("resultBW", "resultBW" + resultBiddingWithin);
+    }
+
+    public String getResultValue() {
+        return resultValue;
+    }
+
+    public void setResultValue(String resultValue) {
+        this.resultValue = resultValue;
+    }
+
+    void setAllFilterResults() {
+        setFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
+
+        setFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, getResultProjectType());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION,getResultJurisdiction());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_STAGE,getResultStage());
+
+        setFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, getResultWorkType());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE,getResultOwnerType());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY,getResultBH());
+    }
+
+    void setFilterResult(String key, String value) {
+        if (value != null && !value.isEmpty()) setSearchFilterResult(key, value);
+        else setSearchFilterResult(key, "");
+    }
+
+    public void savePref(SharedPreferences.Editor edit, String key, String values) {
+        // SharedPreferences.Editor edit = spref.edit();
+        if (values != null && !values.isEmpty()) edit.putString(key, values);
+    }
+
+    public void savePrefFilterFieldValues() {
+        Thread t = new Thread(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = spref.edit();
+                        edit.clear();
+                        savePref(edit, SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
+                        savePref(edit, SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
+                        savePref(edit, SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
+                        savePref(edit, EXTRA_LOCATION_CITY, getLocation_select());
+                        savePref(edit, EXTRA_PROJECT_TYPE_ID, getType_select());
+                        savePref(edit, EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt());
+
+                        savePref(edit, EXTRA_VALUE, getValue_select());
+                        savePref(edit, EXTRA_VALUE_MIN, persistedValueMin);
+                        savePref(edit, EXTRA_VALUE_MAX, persistedValueMax);
+
+                        savePref(edit, EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
+                        savePref(edit, EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
+
+                        savePref(edit, EXTRA_JURISDICTION, getJurisdiction_select());
+                        savePref(edit, EXTRA_STAGE, getStage_select());
+
+                        savePref(edit, EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
+                        savePref(edit, EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
+
+                        savePref(edit, EXTRA_BUILDING_OR_HIGHWAY, getBh_select());
+                        if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
+                            savePref(edit, EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
+
+                        savePref(edit, EXTRA_OWNER_TYPE, getOwner_type_select());
+                        savePref(edit, EXTRA_OWNER_TYPE_ID, getPersistedOwnerType());
+
+                        savePref(edit, EXTRA_WORK_TYPE, getWork_type_select());
+                        savePref(edit, EXTRA_WORK_TYPE_ID, getPersistedWorkType());
+
+                        //Company
+                        savePref(edit, EXTRA_CLOCATION_CITY, getClocationSelect());
+                        savePref(edit, EXTRA_CVALUE, getCvalueSelect());
+                        savePref(edit, EXTRA_CJURISDICTION, getCjurisdictionSelect());
+                        savePref(edit, EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect());
+                        savePref(edit, EXTRA_CPROJECT_TYPE_ID, getCtypeSelect());
+                        edit.apply();
+                    }
+                });
+        t.start();
+    }
+
+    public void savePrefFilterFieldValues1() {
+/*      SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = spref.edit();
+        //Saving Url result
+        edit.putString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST,getResultUpdateWithin());
+        edit.putString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
+        edit.putString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
+*/
+       /* edit.putString(EXTRA_LOCATION_CITY, getLocation_select());
+        edit.putString(EXTRA_PROJECT_TYPE_ID, getType_select());
+        edit.putString(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt());*/
+
+        /*edit.putString(EXTRA_VALUE, getValue_select());
         edit.putString(EXTRA_VALUE_MIN, persistedValueMin);
         edit.putString(EXTRA_VALUE_MAX, persistedValueMax);
         edit.putString(EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
         edit.putString(EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
-        edit.putString(EXTRA_JURISDICTION, getJurisdiction_select());
+*/
+    /*    edit.putString(EXTRA_JURISDICTION, getJurisdiction_select());
         edit.putString(EXTRA_STAGE, getStage_select());
-        // edit.putString(activity.getString(R.string.FilterStageData),getPersistStage());
 
         edit.putString(EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
         edit.putString(EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
@@ -707,8 +894,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         edit.putString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select());
         if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
         edit.putString(EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
-
-        edit.putString(EXTRA_OWNER_TYPE, getOwner_type_select());
+*/
+      /*  edit.putString(EXTRA_OWNER_TYPE, getOwner_type_select());
         edit.putString(EXTRA_OWNER_TYPE_ID,getPersistedOwnerType());
         //Log.d("ownertype","ownertype"+getOwner_type_select());
         edit.putString(EXTRA_WORK_TYPE, getWork_type_select());
@@ -721,44 +908,81 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         edit.putString(EXTRA_CJURISDICTION, getCjurisdictionSelect());
         edit.putString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect());
         edit.putString(EXTRA_CPROJECT_TYPE_ID, getCtypeSelect());
-        edit.apply();
+        edit.apply();*/
     }
 
-    public void savePrefBundle(String filterDataName, Bundle bundle) {
-        SharedPreferences spref = getActivity().getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.clear();
-        for (String key: bundle.keySet()) {
-            edit.putString(key,bundle.getString(key));
-        }
-        edit.apply();
+    public void savePrefBundle(final String filterDataName, final Bundle bundle) {
+        Thread t = new Thread(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        SharedPreferences spref = getActivity().getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = spref.edit();
+                        edit.clear();
+                        for (String key : bundle.keySet()) {
+                            edit.putString(key, bundle.getString(key));
+                        }
+                        edit.apply();
+                    }
+                });
+        t.start();
+
+    }
+/*    setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
+    setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
+    setBundleData(BUNDLE_KEY_REGION_ID, Integer.toString(regionId));
+    setBundleData(BUNDLE_KEY_NAME, name);
+    setBundleData(BUNDLE_KEY_ABBREVIATION, abbreviation);
+    setBundleData(BUNDLE_KEY_LONG_NAME, longName);
+    */
+
+    public void savePrefBundleStageOnly(String filterDataName, final Bundle bundle) {
+        final String fName = filterDataName + "name";
+        Thread t = new Thread(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        SharedPreferences spref = getActivity().getSharedPreferences(fName, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = spref.edit();
+                        edit.clear();
+                        for (String key : bundle.keySet()) {
+                            //  edit.putString(key,bundle.getString(key));
+                            Bundle b = bundle.getBundle(key);
+
+                            if (b == null) continue;
+                            edit.putString(key, b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
+                        }
+                        edit.apply();
+                    }
+                });
+        t.start();
+
+        savePrefBundleStageViewOnly(filterDataName, bundle);
     }
 
+    public void savePrefBundleStageViewOnly(String filterDataName, final Bundle bundle) {
+        final String fViewType = filterDataName + "view";
+        final SharedPreferences spref = getActivity().getSharedPreferences(fViewType, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor edit = spref.edit();
+        Thread t = new Thread(
+                new Runnable() {
 
-    public void savePrefBundleStageOnly(String filterDataName, Bundle bundle) {
-        SharedPreferences spref = getActivity().getSharedPreferences(filterDataName+"name", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.clear();
-        for (String key: bundle.keySet()) {
-          //  edit.putString(key,bundle.getString(key));
-            Bundle b = bundle.getBundle(key);
-
-            if (b == null) continue;
-               edit.putString(key,b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
-        }
-        edit.apply();
-        savePrefBundleStageViewOnly(filterDataName,bundle);
-    }
-    public void savePrefBundleStageViewOnly(String filterDataName, Bundle bundle) {
-        SharedPreferences spref = getActivity().getSharedPreferences(filterDataName+"view", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.clear();
-        for (String key: bundle.keySet()) {
-            //  edit.putString(key,bundle.getString(key));
-            Bundle b = bundle.getBundle(key);
-            if (b == null) continue;
-            edit.putString(key,b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
-        }
-        edit.apply();
+                    @Override
+                    public void run() {
+                        // SharedPreferences spref = getActivity().getSharedPreferences(fViewType, Context.MODE_PRIVATE);
+                        // SharedPreferences.Editor edit = spref.edit();
+                        edit.clear();
+                        for (String key : bundle.keySet()) {
+                            //  edit.putString(key,bundle.getString(key));
+                            Bundle b = bundle.getBundle(key);
+                            if (b == null) continue;
+                            edit.putString(key, b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
+                        }
+                        edit.apply();
+                    }
+                });
+        t.start();
     }
 }
