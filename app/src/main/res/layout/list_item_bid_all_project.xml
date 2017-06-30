@@ -94,12 +94,13 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_width="2dp"
-                        android:layout_height="18dp"
+                        android:layout_height="16dp"
                         android:background="@color/lecetBorderGray"/>
 
                     <TextView
                         style="@style/ListItemProjectTrackingTextView.Detail1"
                         bind:typeface="@{`Lato-Regular.ttf`}"
+                        android:textColor="@color/pureBlack"
                         android:visibility="@{viewModel.isPrebid ? View.GONE : View.VISIBLE}"
                         android:text="@{`$`+viewModel.getProjectEstLow}" />
                 </LinearLayout>

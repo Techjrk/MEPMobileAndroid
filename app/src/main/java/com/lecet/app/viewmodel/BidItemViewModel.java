@@ -46,7 +46,7 @@ public class BidItemViewModel extends BaseObservable {
     public static final String CUSTOM_POST_BID_MARKER_UPDATE = "ic_custom_pin_marker_post_bid_update_kzkxrw.png";
     public static final String url = "http://res.cloudinary.com/djakoy1gr/image/upload/v1498123162/";
     private final double METERS_PER_MILE = 1609.34;
-    private DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
+    private final DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
 
     public BidItemViewModel(Project project, String mapsApiKey, Location currentLocation , boolean isPrebid) {
         this.project = project;
@@ -78,8 +78,17 @@ public class BidItemViewModel extends BaseObservable {
         Location projectLocation = new Location("project_location");
         projectLocation.setLatitude(project.getGeocode().getLat());
         projectLocation.setLongitude(project.getGeocode().getLng());
-        String distanceBetween = decimalFormat.format(meterToMiles(currentLocation.distanceTo(projectLocation)));
-        
+        double distanceBetweenDouble = meterToMiles(currentLocation.distanceTo(projectLocation));
+
+        if(distanceBetweenDouble < 10){ //add decimal places when distanceBetweenDouble > 10 miles
+            decimalFormat.setMinimumFractionDigits(0);
+            decimalFormat.setMaximumFractionDigits(2);
+        }
+        else{ //remove decimal places when distanceBetweenDouble > 10 miles
+            decimalFormat.setMinimumFractionDigits(0);
+            decimalFormat.setMaximumFractionDigits(0);
+        }
+        String distanceBetween = decimalFormat.format(distanceBetweenDouble);
         if(isPrebid){
             return distanceBetween + " miles away";
         }
@@ -112,6 +121,8 @@ public class BidItemViewModel extends BaseObservable {
         return project.getTitle();
     }
     public String getProjectEstLow(){
+        decimalFormat.setMinimumFractionDigits(0);
+        decimalFormat.setMaximumFractionDigits(0);
         return decimalFormat.format(project.getEstLow());
     }
     public String getClientLocation() {
