@@ -85,15 +85,19 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private boolean isProjectViewVisible = true;
     private boolean moreOption;
     private String persistProjectTypeIdInt;
-   /* private String persistStage;
+    ///
+    private String resultUpdateWithin;
+    private String resultBiddingWithin;
+    private String resultValue;
 
-    public String getPersistStage() {
-        return persistStage;
-    }
+    private String resultProjectType;
+    private String resultStage;
+    private String resultJurisdiction;
 
-    public void setPersistStage(String persistStage) {
-        this.persistStage = persistStage;
-    }*/
+    private String resultBH;
+    private String resultOwnerType;
+    private String resultWorkType;
+
 
     /**
      * User's selected filter item - values for Project display
@@ -706,91 +710,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setAllFilterResults();
     }
 
-    ///
-    private String resultUpdateWithin;
-    private String resultBiddingWithin;
-    private String resultValue;
 
-    private String resultProjectType;
-    private String resultStage;
-    private String resultJurisdiction;
-
-    private String resultBH;
-    private String resultOwnerType;
-    private String resultWorkType;
-
-    public String getResultBH() {
-        return resultBH;
-    }
-
-    public void setResultBH(String resultBH) {
-        this.resultBH = resultBH;
-    }
-
-    public String getResultOwnerType() {
-        return resultOwnerType;
-    }
-
-    public void setResultOwnerType(String resultOwnerType) {
-        this.resultOwnerType = resultOwnerType;
-    }
-
-    public String getResultWorkType() {
-        return resultWorkType;
-    }
-
-    public void setResultWorkType(String resultWorkType) {
-        this.resultWorkType = resultWorkType;
-    }
-
-    public String getResultProjectType() {
-        return resultProjectType;
-    }
-
-    public void setResultProjectType(String resultProjectType) {
-        this.resultProjectType = resultProjectType;
-    }
-
-    public String getResultStage() {
-        return resultStage;
-    }
-
-    public void setResultStage(String resultStage) {
-        this.resultStage = resultStage;
-    }
-
-    public String getResultJurisdiction() {
-        return resultJurisdiction;
-    }
-
-    public void setResultJurisdiction(String resultJurisdiction) {
-        this.resultJurisdiction = resultJurisdiction;
-    }
-
-    public String getResultUpdateWithin() {
-        return resultUpdateWithin;
-    }
-
-    public void setResultUpdateWithin(String resultUpdateWithin) {
-        this.resultUpdateWithin = resultUpdateWithin;
-    }
-
-    public String getResultBiddingWithin() {
-        return resultBiddingWithin;
-    }
-
-    public void setResultBiddingWithin(String resultBiddingWithin) {
-        this.resultBiddingWithin = resultBiddingWithin;
-        Log.d("resultBW", "resultBW" + resultBiddingWithin);
-    }
-
-    public String getResultValue() {
-        return resultValue;
-    }
-
-    public void setResultValue(String resultValue) {
-        this.resultValue = resultValue;
-    }
 
     void setAllFilterResults() {
         setFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
@@ -867,50 +787,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         t.start();
     }
 
-    public void savePrefFilterFieldValues1() {
-/*      SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        //Saving Url result
-        edit.putString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST,getResultUpdateWithin());
-        edit.putString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
-        edit.putString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
-*/
-       /* edit.putString(EXTRA_LOCATION_CITY, getLocation_select());
-        edit.putString(EXTRA_PROJECT_TYPE_ID, getType_select());
-        edit.putString(EXTRA_PROJECT_TYPE_ID_INT,getPersistProjectTypeIdInt());*/
-
-        /*edit.putString(EXTRA_VALUE, getValue_select());
-        edit.putString(EXTRA_VALUE_MIN, persistedValueMin);
-        edit.putString(EXTRA_VALUE_MAX, persistedValueMax);
-        edit.putString(EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
-        edit.putString(EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
-*/
-    /*    edit.putString(EXTRA_JURISDICTION, getJurisdiction_select());
-        edit.putString(EXTRA_STAGE, getStage_select());
-
-        edit.putString(EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
-        edit.putString(EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
-
-        edit.putString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select());
-        if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
-        edit.putString(EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
-*/
-      /*  edit.putString(EXTRA_OWNER_TYPE, getOwner_type_select());
-        edit.putString(EXTRA_OWNER_TYPE_ID,getPersistedOwnerType());
-        //Log.d("ownertype","ownertype"+getOwner_type_select());
-        edit.putString(EXTRA_WORK_TYPE, getWork_type_select());
-        edit.putString(EXTRA_WORK_TYPE_ID,getPersistedWorkType());
-        //Log.d("workertype","workertype"+getWork_type_select());
-
-        //Company
-        edit.putString(EXTRA_CLOCATION_CITY, getClocationSelect());
-        edit.putString(EXTRA_CVALUE, getCvalueSelect());
-        edit.putString(EXTRA_CJURISDICTION, getCjurisdictionSelect());
-        edit.putString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect());
-        edit.putString(EXTRA_CPROJECT_TYPE_ID, getCtypeSelect());
-        edit.apply();*/
-    }
-
+  
     public void savePrefBundle(final String filterDataName, final Bundle bundle) {
         Thread t = new Thread(
                 new Runnable() {
@@ -929,13 +806,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         t.start();
 
     }
-/*    setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
-    setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
-    setBundleData(BUNDLE_KEY_REGION_ID, Integer.toString(regionId));
-    setBundleData(BUNDLE_KEY_NAME, name);
-    setBundleData(BUNDLE_KEY_ABBREVIATION, abbreviation);
-    setBundleData(BUNDLE_KEY_LONG_NAME, longName);
-    */
 
     public void savePrefBundleStageOnly(String filterDataName, final Bundle bundle) {
         final String fName = filterDataName + "name";
@@ -984,5 +854,79 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                     }
                 });
         t.start();
+    }
+
+
+    public String getResultBH() {
+        return resultBH;
+    }
+
+    public void setResultBH(String resultBH) {
+        this.resultBH = resultBH;
+    }
+
+    public String getResultOwnerType() {
+        return resultOwnerType;
+    }
+
+    public void setResultOwnerType(String resultOwnerType) {
+        this.resultOwnerType = resultOwnerType;
+    }
+
+    public String getResultWorkType() {
+        return resultWorkType;
+    }
+
+    public void setResultWorkType(String resultWorkType) {
+        this.resultWorkType = resultWorkType;
+    }
+
+    public String getResultProjectType() {
+        return resultProjectType;
+    }
+
+    public void setResultProjectType(String resultProjectType) {
+        this.resultProjectType = resultProjectType;
+    }
+
+    public String getResultStage() {
+        return resultStage;
+    }
+
+    public void setResultStage(String resultStage) {
+        this.resultStage = resultStage;
+    }
+
+    public String getResultJurisdiction() {
+        return resultJurisdiction;
+    }
+
+    public void setResultJurisdiction(String resultJurisdiction) {
+        this.resultJurisdiction = resultJurisdiction;
+    }
+
+    public String getResultUpdateWithin() {
+        return resultUpdateWithin;
+    }
+
+    public void setResultUpdateWithin(String resultUpdateWithin) {
+        this.resultUpdateWithin = resultUpdateWithin;
+    }
+
+    public String getResultBiddingWithin() {
+        return resultBiddingWithin;
+    }
+
+    public void setResultBiddingWithin(String resultBiddingWithin) {
+        this.resultBiddingWithin = resultBiddingWithin;
+        Log.d("resultBW", "resultBW" + resultBiddingWithin);
+    }
+
+    public String getResultValue() {
+        return resultValue;
+    }
+
+    public void setResultValue(String resultValue) {
+        this.resultValue = resultValue;
     }
 }
