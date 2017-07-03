@@ -120,6 +120,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     @Override
     protected void onResume() {
         super.onResume();
+        SearchViewModel.companyInstantSearch=false;
         //clear the Shared pref for Project Type
         clearSharedPref(getString(R.string.FilterTypeData));
         //clear the Shared pref for Stage with name content

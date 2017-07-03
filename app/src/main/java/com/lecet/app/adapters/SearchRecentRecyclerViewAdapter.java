@@ -61,11 +61,19 @@ public class SearchRecentRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         RecentViewHolder viewHolder = (RecentViewHolder) holder;
         SearchItemRecentViewModel vm = null;
 
-        if (((SearchResult) data.get(position)).getProject() != null) {
+        if (SearchViewModel.companyInstantSearch && ((SearchResult)data.get(position)).getCompany() !=null) {
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey, activity.getViewModel());
+        } else if (((SearchResult) data.get(position)).getProject() != null &&  ((SearchResult)data.get(position)).getProject() !=null ) {
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), mapsApiKey,activity.getViewModel());
+        } else {
+            vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey, activity.getViewModel());
+        }
+     /*   if (((SearchResult) data.get(position)).getProject() != null) {
             vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getProject(), mapsApiKey,activity.getViewModel());
         }
         else
             vm = new SearchItemRecentViewModel( ((SearchResult) data.get(position)).getCompany(), mapsApiKey, activity.getViewModel());
+            */
 
         viewHolder.getBinding().setViewModel(vm);
     }

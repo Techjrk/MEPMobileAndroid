@@ -618,9 +618,12 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         isProjectViewVisible = view.getId() == R.id.btn_project;
         if (getIsProjectViewVisible()) {
             Log.d("SearchFilterMPFVM", "project tab clicked");
+            SearchViewModel.companyInstantSearch=false;
             //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
         } else {
             Log.d("SearchFilterMPFVM", "company tab clicked");
+            //Focus in company. Search for the Company.
+            SearchViewModel.companyInstantSearch=true;
             //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
         notifyPropertyChanged(BR.isProjectViewVisible);
@@ -698,8 +701,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCvalueSelect(spref.getString(EXTRA_CVALUE, getCvalueSelect()));
         setCjurisdictionSelect(spref.getString(EXTRA_CJURISDICTION, getCjurisdictionSelect()));
         setCbiddingWithinSelect(spref.getString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect()));
-        setCtypeSelect(spref.getString(EXTRA_PROJECT_TYPE_ID, getCtypeSelect()));
-
+        setCtypeSelect(spref.getString(EXTRA_CPROJECT_TYPE_ID, getCtypeSelect()));
 
         //For Result
         setResultUpdateWithin(spref.getString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin()));

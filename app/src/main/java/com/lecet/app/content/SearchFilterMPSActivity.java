@@ -55,7 +55,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         //Log.d(TAG, "onCreate: instantSearch: " + instantSearch);
 
         // if coming from Search Activity when no text has been input or Saved Search used, use the tabbed Projects/Companies filter layout
-        if (instantSearch) {
+        if (SearchViewModel.usingInstantSearch) {
+//            if (instantSearch) {
             ActivitySearchFiltersAllTabbedBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filters_all_tabbed);       //Projects/Companies
             sfilter.setViewModel(viewModel);
         }
