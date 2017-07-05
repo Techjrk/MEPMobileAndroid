@@ -421,4 +421,13 @@
     <string name="LastCheckedJurisdictionItems">lastcheckedJurisdictionItems</string>
     <string name="lastcheckedTypeItems">lastcheckedTypeItems</string>
     <string name="lastcheckedStageItems">lastcheckedStageItems</string>
+    <string name="FilterResultJurisdiction">FilterResultJurisdiction</string>
+    <string name="FilterResultProjectType">FilterResultProjectType</string>
+    <string name="FilterResultValue">FilterResultValue</string>
+    <string name="FilterResultUpdatedWithin">FilterResultUpdatedWithin</string>
+    <string name="FilterResultStage">FilterResultStage</string>
+    <string name="FilterResultBiddingWithin">FilterResultBiddingWithin</string>
+    <string name="FilterResultBH">FilterResultBH</string>
+    <string name="FilterResultOwnerType">FilterResultOwnerType</string>
+    <string name="FilterResultWorkType">FilterResultWorkType</string>
 </resources>

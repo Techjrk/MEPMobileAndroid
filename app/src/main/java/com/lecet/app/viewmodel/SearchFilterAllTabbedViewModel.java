@@ -163,9 +163,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCjurisdictionSelect(ANY);
         setCbiddingWithinSelect(ANY);
         setCtypeSelect(ANY);
-        initResult();
+       // initResult();
         intent = activity.getIntent();
-
+        //Then set all the previous result to the intent
+       // setAllFilterResults();
         setUsingProjectNearMe(intent.getBooleanExtra(activity.getString(R.string.using_project_near_me), false));
         SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
         if (spref != null) {
@@ -708,6 +709,18 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setResultBiddingWithin(spref.getString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin()));
         setResultValue(spref.getString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue()));
 
+        //For FilterResult
+        setResultProjectType(spref.getString(activity.getString(R.string.FilterResultProjectType),""));
+        setResultValue(spref.getString(activity.getString(R.string.FilterResultValue),""));
+        setResultUpdateWithin(spref.getString(activity.getString(R.string.FilterResultUpdatedWithin),""));
+        setResultJurisdiction(spref.getString(activity.getString(R.string.FilterResultJurisdiction),""));
+        setResultStage(spref.getString(activity.getString(R.string.FilterResultStage),""));
+        setResultBiddingWithin(spref.getString(activity.getString(R.string.FilterResultBiddingWithin),""));
+        setResultBH(spref.getString(activity.getString(R.string.FilterResultBH),""));
+        setResultOwnerType(spref.getString(activity.getString(R.string.FilterResultOwnerType),""));
+        setResultWorkType(spref.getString(activity.getString(R.string.FilterResultWorkType),""));
+
+
         //Then set all the previous result to the intent
         setAllFilterResults();
     }
@@ -721,11 +734,14 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
         setFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, getResultProjectType());
         setFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION,getResultJurisdiction());
+
         setFilterResult(SearchViewModel.FILTER_PROJECT_STAGE,getResultStage());
 
         setFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, getResultWorkType());
         setFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE,getResultOwnerType());
         setFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY,getResultBH());
+
+        Log.d("jnoel","jnoel"+intent.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION));
     }
 
     void setFilterResult(String key, String value) {
@@ -747,6 +763,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                         SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
                         SharedPreferences.Editor edit = spref.edit();
                         edit.clear();
+
+                        //Saving the Project Filter display values that could be used later
                         savePref(edit, SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
                         savePref(edit, SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
                         savePref(edit, SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
@@ -773,16 +791,26 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
                         savePref(edit, EXTRA_OWNER_TYPE, getOwner_type_select());
                         savePref(edit, EXTRA_OWNER_TYPE_ID, getPersistedOwnerType());
-
                         savePref(edit, EXTRA_WORK_TYPE, getWork_type_select());
                         savePref(edit, EXTRA_WORK_TYPE_ID, getPersistedWorkType());
 
-                        //Company
+                        //Saving the Company Filter display values that could be used later
                         savePref(edit, EXTRA_CLOCATION_CITY, getClocationSelect());
                         savePref(edit, EXTRA_CVALUE, getCvalueSelect());
                         savePref(edit, EXTRA_CJURISDICTION, getCjurisdictionSelect());
                         savePref(edit, EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect());
                         savePref(edit, EXTRA_CPROJECT_TYPE_ID, getCtypeSelect());
+
+                        //Saving the Project/Company Filter Final Result values that could be used later
+                        savePref(edit,activity.getString(R.string.FilterResultProjectType),getResultProjectType());
+                        savePref(edit,activity.getString(R.string.FilterResultValue),getResultValue());
+                        savePref(edit,activity.getString(R.string.FilterResultUpdatedWithin),getResultUpdateWithin());
+                        savePref(edit,activity.getString(R.string.FilterResultJurisdiction),getResultJurisdiction());
+                        savePref(edit,activity.getString(R.string.FilterResultStage),getResultStage());
+                        savePref(edit,activity.getString(R.string.FilterResultBiddingWithin),getResultBiddingWithin());
+                        savePref(edit,activity.getString(R.string.FilterResultBH),getResultBH());
+                        savePref(edit,activity.getString(R.string.FilterResultOwnerType),getResultOwnerType());
+                        savePref(edit,activity.getString(R.string.FilterResultWorkType),getResultWorkType());
                         edit.apply();
                     }
                 });
