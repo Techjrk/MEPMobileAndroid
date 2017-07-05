@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
@@ -26,10 +27,13 @@ import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.request.GeocodeRequest;
 import com.lecet.app.data.models.County;
-import com.lecet.app.data.models.Geocode;
+import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
-import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.ProjectPost;
+import com.lecet.app.data.models.SearchFilterProjectTypesMain;
+import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
+import com.lecet.app.data.models.SearchFilterStage;
+import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.geocoding.GeocodeResult;
@@ -43,7 +47,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -54,7 +57,6 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.lecet.app.R.string.google_api_key;
-import static com.lecet.app.R.string.project;
 
 /**
  * Created by jasonm on 5/15/17.
@@ -87,7 +89,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private String stageSelect;
     private Calendar calendar;
 
-
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, long projectId, ProjectDomain projectDomain, LocationDomain locationDomain) {
         super(appCompatActivity);
 
@@ -107,7 +108,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         projectPost = new ProjectPost(latitude, longitude);
 
         // if creating a new project
-        if(!isEditMode()) {
+        if (!isEditMode()) {
 
             //TODO: Is this always null? Seems so
             // add lat and long in the form of Geocode obj if they have been passed
@@ -126,7 +127,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             getEditableProject(this.projectId);
         }
 
-        if(projectPost != null) initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
+        if (projectPost != null)
+            initMapImageView((AddProjectActivity) appCompatActivity, getMapUrl(projectPost));
     }
 
     private void getAddressFromLocation(double latitude, double longitude) {
@@ -213,12 +215,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         // use locality as alternative to city if sublocality_level_1 is null
         if (city == null && locality != null) getProjectPost().setCity(locality);
 
-
         // set the edit mode of the County field
-        if(county != null && !county.isEmpty()) {
+        if (county != null && !county.isEmpty()) {
             countyIsEditable = false;
-        }
-        else countyIsEditable = true;
+        } else countyIsEditable = true;
     }
 
     private String getFipsCounty(final String projectState, final String projectCounty) {
@@ -325,7 +325,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         project = projectDomain.fetchProjectById(projectId);
 
-        if(project != null) {
+        if (project != null) {
             Log.d(TAG, "getEditableProject: FOUND PROJECT: " + project);
             projectPost.setGeocode(project.getGeocode());
             projectPost.setTitle(project.getTitle());
@@ -338,20 +338,37 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             projectPost.setFipsCounty(project.getFipsCounty());
             projectPost.setCountry(project.getCountry());
             projectPost.setProjectStageId(Integer.parseInt(project.getProjectStageId()));
-            if(project.getBidDate() != null) projectPost.setBidDate(project.getBidDate().toString());
+            if (project.getBidDate() != null)
+                projectPost.setBidDate(project.getBidDate().toString());
             projectPost.setPrimaryProjectTypeId(project.getPrimaryProjectTypeId());
             projectPost.setEstLow(project.getEstLow());
-            if(project.getTargetStartDate() != null){
+            if (project.getTargetStartDate() != null) {
                 projectPost.setTargetStartDate(new SimpleDateFormat("MM/dd/yy").format(project.getTargetStartDate()));
                 setTargetStartDate(projectPost.getTargetStartDate());
             }
 
             // special cases for display purposes of Type and Stage etc
-            if(project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
-            if(project.getProjectStage() != null && project.getProjectStage().getName() != null) setStageSelect(project.getProjectStage().getName());
+            //Note: Since the rule in selecting the project type in the custom project is just a single item, and the parent items are not allowed,
+            // the code below is no longer applicable
+//            if (project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
+//            if (project.getProjectStage() != null && project.getProjectStage().getName() != null)
+//                setStageSelect(project.getProjectStage().getName());
+/*
 
+            Log.w("eprostage", "eprostage:" + project.getProjectStage());
+            Log.w("eproprojprimId", "eprojprimid:" + project.getPrimaryProjectTypeId());
+            Log.w("eprostageId", "eprostageId" + project.getProjectStageId());
+            PrimaryProjectType ppt = project.getPrimaryProjectType();
+            if (ppt != null) Log.d("eproProjTypePrim", "eproProjPrim" + ppt.toString());
+            Log.d("eproProjTypes", "eproProjTypes" + project.getProjectTypes());
+*/
 
-        }
+          //  if (getStageSelect() == null || getTypeSelect().isEmpty())
+                searchBackStageName(String.valueOf(project.getProjectStageId()));
+        //    if (getTypeSelect() == null || getTypeSelect().isEmpty())
+                searchBackProjectTypeName(String.valueOf(project.getPrimaryProjectTypeId()));
+
+        }  //if project !=null
     }
 
     private void postProject() {
@@ -359,19 +376,19 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Call<Project> call;
         Log.d(TAG, "postProject: Project Post: " + projectPost);
 
-        if(isEditMode()){
+        if (isEditMode()) {
 
-            if(projectPost.getAddress1() != project.getAddress1() ||
+            if (projectPost.getAddress1() != project.getAddress1() ||
                     projectPost.getState() != project.getState() ||
                     projectPost.getCity() != project.getCity() ||
-                    projectPost.getAddress2()!= project.getAddress2()){
+                    projectPost.getAddress2() != project.getAddress2()) {
 //                Give the projectPost a new Lat and lng that acurately tracks its location.
 //                resetLngAndLat();
             }
 
             call = projectDomain.updateProject(projectId, projectPost);
 
-        }else {
+        } else {
 
             call = projectDomain.postProject(projectPost);
         }
@@ -386,7 +403,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     Log.d(TAG, "postProject: onResponse: projectPost post successful. Created project: " + createdProject);
 
                     // view the project in Project Detail
-                    if(createdProject != null && createdProject.getId() > 0) {
+                    if (createdProject != null && createdProject.getId() > 0) {
                         Intent intent = new Intent(activity, ProjectDetailActivity.class);
                         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, createdProject.getId());
                         activity.startActivity(intent);
@@ -402,7 +419,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
-                Log.e(TAG, "postProject: onFailure: projectPost post failed");
+                Log.e(TAG, "postProject: onFailure: projectPost post failed"+t.getMessage());
                 //TODO: Display alert noting network failure
             }
 
@@ -442,11 +459,10 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         // Confirmation, if all fields are correct
         else {
-            if(!isEditMode()) {
+            if (!isEditMode()) {
                 message = activity.getString(R.string.save_project_confirm);
                 confirmButtonText = activity.getString(R.string.save_project);
-            }
-            else {
+            } else {
                 message = activity.getString(R.string.update_project_confirm);
                 confirmButtonText = activity.getString(R.string.update_project);
             }
@@ -525,6 +541,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
                         postProject();
+                        //dialog.dismiss();
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -561,18 +578,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     @Bindable
     public String getActivityTitle() {
-        if(!isEditMode()) {
+        if (!isEditMode()) {
             return activity.getString(R.string.new_project);
-        }
-        else return activity.getString(R.string.update_project);
+        } else return activity.getString(R.string.update_project);
     }
 
     @Bindable
     public String getSaveButtonText() {
-        if(!isEditMode()) {
+        if (!isEditMode()) {
             return activity.getString(R.string.save);
-        }
-        else return activity.getString(R.string.update);
+        } else return activity.getString(R.string.update);
     }
 
     @Bindable
@@ -622,26 +637,26 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
 
     //Finds the Lng and Lat for the current text address.
-    private void resetLngAndLat(){
+    private void resetLngAndLat() {
         Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
-        try{
+        try {
             String strAddress = "";
-            if(projectPost.getAddress1().isEmpty()){
+            if (projectPost.getAddress1().isEmpty()) {
                 strAddress += projectPost.getAddress1();
             }
-            if(projectPost.getCity().isEmpty()){
+            if (projectPost.getCity().isEmpty()) {
                 strAddress += " " + projectPost.getCity();
             }
-            if(projectPost.getState().isEmpty()){
+            if (projectPost.getState().isEmpty()) {
                 strAddress += " " + projectPost.getState();
             }
 
-            List<Address> addresses = geocoder.getFromLocationName(strAddress ,5);
-            if(addresses.size() > 0){
+            List<Address> addresses = geocoder.getFromLocationName(strAddress, 5);
+            if (addresses.size() > 0) {
                 projectPost.getGeocode().setLat(addresses.get(0).getLatitude());
                 projectPost.getGeocode().setLng(addresses.get(0).getLongitude());
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             Log.e(TAG, "getAddressFromString: " + e.getMessage());
         }
     }
@@ -667,29 +682,41 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         }
         return p1;
     }
-    public void savePrefBundleStageOnly(String filterDataName, Bundle bundle) {
-        SharedPreferences spref = activity.getSharedPreferences(filterDataName+"name", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.clear();
-        for (String key: bundle.keySet()) {
-            //  edit.putString(key,bundle.getString(key));
-            Bundle b = bundle.getBundle(key);
 
-            if (b == null) continue;
-            edit.putString(key,b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
-        }
-        edit.apply();
-        savePrefBundleStageViewOnly(filterDataName,bundle);
+    public void savePrefBundleStageOnly(final String filterDataName, final Bundle bundle) {
+
+        Thread t = new Thread(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        SharedPreferences spref = activity.getSharedPreferences(filterDataName + "name", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = spref.edit();
+                        edit.clear();
+                        for (String key : bundle.keySet()) {
+                            //  edit.putString(key,bundle.getString(key));
+                            Bundle b = bundle.getBundle(key);
+
+                            if (b == null) continue;
+                            edit.putString(key, b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
+                        }
+                        edit.apply();
+                        savePrefBundleStageViewOnly(filterDataName, bundle);
+
+                    }
+                });
+        t.start();
     }
+
     public void savePrefBundleStageViewOnly(String filterDataName, Bundle bundle) {
-        SharedPreferences spref = activity.getSharedPreferences(filterDataName+"view", Context.MODE_PRIVATE);
+        SharedPreferences spref = activity.getSharedPreferences(filterDataName + "view", Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = spref.edit();
         edit.clear();
-        for (String key: bundle.keySet()) {
+        for (String key : bundle.keySet()) {
             //  edit.putString(key,bundle.getString(key));
             Bundle b = bundle.getBundle(key);
             if (b == null) continue;
-            edit.putString(key,b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
+            edit.putString(key, b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
         }
         edit.apply();
     }
@@ -698,28 +725,122 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         clearSharedPref("lastcheckedStageItems");
         clearSharedPref("lastcheckedTypeItems");
         clearSharedPref(activity.getString(R.string.Filter));
-        clearSharedPref(activity.getString(R.string.FilterTypeData));
-        clearSharedPref(activity.getString(R.string.FilterStageData)+"name");
-        clearSharedPref(activity.getString(R.string.FilterStageData)+"view");
+        if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterTypeData));
+        if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterStageData) + "name");
+        if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterStageData) + "view");
 
     }
+
     private void clearSharedPref(String dataName) {
         SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
         if (spref == null) return;
         SharedPreferences.Editor editData = spref.edit();
-      //  if (editData == null) return;
+        //  if (editData == null) return;
         editData.clear();
         editData.commit();
     }
 
-    public void savePrefBundle(String filterDataName, Bundle bundle) {
-        SharedPreferences spref = activity.getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.clear();
-        for (String key: bundle.keySet()) {
-            edit.putString(key,bundle.getString(key));
-        }
-        edit.apply();
+    public void savePrefBundle(final String filterDataName, final Bundle bundle) {
+        Thread t = new Thread(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        SharedPreferences spref = activity.getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = spref.edit();
+                        edit.clear();
+                        for (String key : bundle.keySet()) {
+                            edit.putString(key, bundle.getString(key));
+                        }
+                        edit.apply();
+                    }
+                });
+
+        t.start();
     }
 
+    public void searchBackProjectTypeName(String key) {
+
+        Realm realm = Realm.getDefaultInstance();
+        String projectName = "";
+        // check the grandchild-level (primary type) for a matching ID
+        PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key.trim())).findFirst();
+        if (primaryType != null) {
+            Log.d("mainTitle", "mainTitle" + primaryType.getTitle());
+            projectName = primaryType.getTitle();
+        }   // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
+      /*  else {
+            SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
+            if (category != null) {
+                projectName = category.getTitle();
+            }
+
+            // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
+            else {
+                SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key.trim())).findFirst(); //realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                if (mainType != null) {
+                    projectName = mainType.getTitle();
+                }
+            }
+        }*/
+        Log.d("noel", "key" + key + ": noel" + projectName);
+        if (!projectName.trim().isEmpty()) {
+            Bundle bundle = new Bundle();
+            bundle.putString(key, projectName);
+            setTypeSelect(projectName);
+            savePrefBundle(activity.getString(R.string.FilterTypeData), bundle);
+        }
+    }
+
+    String stageName = "", stageType = "";
+
+    public void searchBackStageName(final String key) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                SearchFilterStagesMain selectedParentStage = realm.where(SearchFilterStagesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                if (selectedParentStage != null) {
+                    stageName = selectedParentStage.getName();
+                    stageType = "" + SearchFilterStageSingleSelectAdapter.PARENT_VIEW_TYPE;
+                } else {
+                    SearchFilterStage childStage = realm.where(SearchFilterStage.class).equalTo("id", Integer.valueOf(key)).findFirst();
+                    if (childStage != null) {
+                        stageName = childStage.getName();
+                        stageType = "" + SearchFilterStageSingleSelectAdapter.CHILD_VIEW_TYPE;
+                    }
+                }
+
+
+            }
+        });
+
+
+        if (!stageName.trim().isEmpty()) {
+            Bundle bundle = new Bundle();
+            bundle.putString(SearchFilterStageViewModel.BUNDLE_KEY_ID, key);
+            bundle.putString(SearchFilterStageViewModel.BUNDLE_KEY_NAME, stageName);
+            bundle.putString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE, stageType);
+            Bundle bStage = new Bundle();
+            bStage.putBundle(key, bundle);
+            // bundle.putString(key, stageName);
+            setStageSelect(stageName);
+            savePrefBundleStageOnly(activity.getString(R.string.FilterStageData), bStage);
+        }
+    }
+/*
+    private RealmResults<SearchFilterProjectTypesMain> realmProjectTypes;
+    *//**
+     * Read Realm SearchFilterProjectTypesMain data
+     *//*
+    private void getProjectTypes() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realmProjectTypes = realm.where(SearchFilterProjectTypesMain.class).findAll();
+            }
+        });
+    }*/
 }

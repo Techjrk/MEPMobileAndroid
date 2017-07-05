@@ -66,6 +66,7 @@ public class AddProjectActivity extends AppCompatActivity {
             return;
         }
         Bundle bundle = data.getBundleExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE);
+        if (bundle == null || bundle.isEmpty()) return;
         if (requestCode == SearchFilterAllTabbedViewModel.TYPE) {
             processProjectType(bundle);
         }
@@ -81,7 +82,6 @@ public class AddProjectActivity extends AppCompatActivity {
      */
     private void processProjectType(final Bundle bundle) {
         viewModel.savePrefBundle(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
-
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -95,7 +95,7 @@ public class AddProjectActivity extends AppCompatActivity {
 
                     Object value = bundle.get(key);
                     Log.d(TAG, "processProjectType: " + key + ": " + value);
-                    displayStr = ""+value;  //for case 10627 - Single select Type only.
+                    displayStr = ""+value;
                  //   displayStr += value + ", "; //In case 9588 - It's present here in this case. This was deleted n bringing it back again for case 9929.
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
@@ -106,7 +106,7 @@ public class AddProjectActivity extends AppCompatActivity {
                     }
 
                     // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
-                    else {
+                   /* else {
                         SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
                         if (category != null) {
                             Log.d(TAG, "processProjectType: " + key + " is a Category ID.");
@@ -123,7 +123,7 @@ public class AddProjectActivity extends AppCompatActivity {
                                 break;
                             }
                         }
-                    }
+                    }*/
                 }
 
                 Log.d(TAG, "processProjectType: " + "displayStr: " + displayStr);

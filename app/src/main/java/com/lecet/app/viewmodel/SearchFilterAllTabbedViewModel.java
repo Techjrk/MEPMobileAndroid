@@ -189,6 +189,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setResultOwnerType("");
         setResultWorkType("");
     }
+    //Used this method to determine if the location needed to be hide ( Yes for using the ProjectNearMe section)
     @Bindable
     public boolean getUsingProjectNearMe() {
         return usingProjectNearMe;
