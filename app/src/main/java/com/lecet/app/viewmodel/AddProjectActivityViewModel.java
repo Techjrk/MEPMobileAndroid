@@ -409,11 +409,13 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
                     // view the project in Project Detail
                     if (createdProject != null && createdProject.getId() > 0) {
-                        Intent intent = new Intent(activity, ProjectDetailActivity.class);
-                        intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, createdProject.getId());
-                        activity.startActivity(intent);
-                    }
+                        if(!isEditMode()){
+                            Intent intent = new Intent(activity, ProjectDetailActivity.class);
+                            intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, createdProject.getId());
+                            activity.startActivity(intent);
 
+                        }
+                    }
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 } else {
