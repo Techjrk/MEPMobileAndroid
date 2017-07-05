@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.lecet.app.data.api.deserializer.ActivityUpdateDeserializer;
 import com.lecet.app.data.api.service.BidService;
 import com.lecet.app.data.api.service.CompanyService;
+import com.lecet.app.data.api.service.CountyService;
 import com.lecet.app.data.api.service.LocationService;
 import com.lecet.app.data.api.service.ProjectService;
 import com.lecet.app.data.api.service.SearchService;
@@ -43,7 +44,7 @@ public class LecetClient {
     private SearchService searchService;
     private CompanyService companyService;
     private LocationService locationService;
-
+    private CountyService countyService;
     public static LecetClient getInstance() {
         return ourInstance;
     }
@@ -75,7 +76,7 @@ public class LecetClient {
                 .baseUrl(ENDPOINT)
                 .client(httpClientBuilder.build())
                 .build();
-
+        countyService = retrofit.create(CountyService.class);
         bidService = retrofit.create(BidService.class);
         projectService = retrofit.create(ProjectService.class);
         userService = retrofit.create(UserService.class);
@@ -89,7 +90,9 @@ public class LecetClient {
     public BidService getBidService() {
         return bidService;
     }
-
+    public CountyService getCountyService(){
+        return countyService;
+    }
     public ProjectService getProjectService() {
         return projectService;
     }

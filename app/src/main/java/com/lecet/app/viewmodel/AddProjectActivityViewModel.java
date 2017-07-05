@@ -10,7 +10,9 @@ import android.databinding.Bindable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -21,6 +23,8 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
+import com.lecet.app.content.SearchFilterCountyActivity;
+import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
@@ -30,6 +34,7 @@ import com.lecet.app.data.models.Geocode;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.ProjectPost;
+import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.geocoding.AddressComponent;
 import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.geocoding.GeocodeResult;
@@ -86,7 +91,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     private String typeSelect;
     private String stageSelect;
     private Calendar calendar;
-
 
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, long projectId, ProjectDomain projectDomain, LocationDomain locationDomain) {
         super(appCompatActivity);
@@ -355,10 +359,13 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     private void postProject() {
-        Log.d(TAG, "postProject: projectPost post: " + projectPost);
-        Call<Project> call;
-        Log.d(TAG, "postProject: Project Post: " + projectPost);
 
+        Log.d(TAG, "postProject: Project Post: " + projectPost);
+        if(TextUtils.isEmpty(project.getCounty()) || TextUtils.isDigitsOnly(project.getFipsCounty())){
+            showCancelAlertDialog("",activity.getResources().getString(R.string.county_not_set_message));
+            return;
+        }
+        Call<Project> call;
         if(isEditMode()){
 
             if(projectPost.getAddress1() != project.getAddress1() ||
@@ -495,15 +502,24 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 new DatePickerDialog(activity, date, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
+                break;
+            case R.id.county:
+                i = new Intent(activity , SearchFilterCountyActivity.class);
+                i.putExtra(SearchFilterCountyActivity.REQUEST_STATE_EXTRA , projectPost.getState());
+                section =  SearchFilterCountyActivity.REQUEST_COUNTY;
+
+                break;
             default:
                 Log.w(TAG, "onClicked: Warning: Unsupported view id clicked: " + id);
                 return;
         }
-        activity.startActivityForResult(i, section);
+        if(i != null){
+            activity.startActivityForResult(i, section);
+        }
+
     }
 
     private void updateLabel() {
-
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         setTargetStartDate(sdf.format(calendar.getTime()));
@@ -721,5 +737,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         }
         edit.apply();
     }
-
+    public void setCounty(String id, String county) {
+        projectPost.setCounty(county);
+        projectPost.setFipsCounty(id);
+    }
 }

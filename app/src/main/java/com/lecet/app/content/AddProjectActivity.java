@@ -9,6 +9,7 @@ import android.util.Log;
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.PrimaryProjectType;
+import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
@@ -72,6 +73,16 @@ public class AddProjectActivity extends AppCompatActivity {
         if (requestCode == SearchFilterAllTabbedViewModel.STAGE) {
             processStage(bundle);
         }
+        if(requestCode == SearchFilterCountyActivity.REQUEST_COUNTY){
+            processCounty(bundle);
+        }
+    }
+
+    private void processCounty(Bundle bundle) {
+        String id = bundle.getString("id" , "None");
+        String display = bundle.getString("display" , "None");
+        viewModel.setCounty(id , display);
+
     }
 
 

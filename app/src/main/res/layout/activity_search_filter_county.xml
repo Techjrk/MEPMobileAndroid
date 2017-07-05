@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.lecet.app.viewmodel.SearchFilterCountyViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.Toolbar
+                android:id = "@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                bind:contentInsetLeft="0dp"
+                bind:contentInsetStart="0dp"
+                android:contentInsetRight="0dp"
+                android:contentInsetEnd="0dp"
+                bind:contentInsetRight="0dp"
+                bind:contentInsetEnd="0dp">
+                <LinearLayout
+                    android:weightSum="4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/lecetShareBlue"
+                    >
+                    <Button
+                        android:onClick="@{viewModel::cancel}"
+                        style = "@style/CountyStyle"
+                        android:text = "@string/cancel"
+                        android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackground" />
+                    <TextView
+                        style = "@style/CountyStyle"
+                        android:gravity="center"
+                        android:layout_weight="2"
+                        android:text = "@string/county"
+                        android:textStyle="bold"
+                        android:background="?android:attr/selectableItemBackground" />
+                    <Button
+                        android:onClick="@{viewModel::apply}"
+                        style = "@style/CountyStyle"
+                        android:layout_weight="1"
+                        android:text = "@string/apply"
+                        android:textColor="@color/lecetTextWhite"
+                        android:background="?android:attr/selectableItemBackground"
+                        />
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+            <android.support.v7.widget.RecyclerView
+                android:id = "@+id/recycler_county"
+                android:layout_below="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

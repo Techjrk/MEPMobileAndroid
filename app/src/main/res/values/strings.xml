@@ -430,4 +430,5 @@
     <string name="FilterResultBH">FilterResultBH</string>
     <string name="FilterResultOwnerType">FilterResultOwnerType</string>
     <string name="FilterResultWorkType">FilterResultWorkType</string>
+    <string name="county_not_set_message">County is not set</string>
 </resources>
