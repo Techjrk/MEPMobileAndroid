@@ -29,14 +29,16 @@ public class SearchFilterCountyActivity extends LecetBaseActivity{
     private SearchFilterCountyViewModel viewModel;
     public static final int REQUEST_COUNTY = 10;
     public static final String REQUEST_STATE_EXTRA = "requestState";
+    public static final String REQUEST_FIPSCOUNTY_EXTRA = "requestCounty";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySearchFilterCountyBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filter_county);
         CountyDomain countyDomain = new CountyDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
         String state = getIntent().getStringExtra(REQUEST_STATE_EXTRA);
+        String fipsCounty = getIntent().getStringExtra(REQUEST_FIPSCOUNTY_EXTRA);
         if(!TextUtils.isEmpty(state)){
-            viewModel = new SearchFilterCountyViewModel(this , countyDomain , state);
+            viewModel = new SearchFilterCountyViewModel(this , countyDomain , state , fipsCounty);
             sfilter.setViewModel(viewModel);
         }
         setUpToolbar();

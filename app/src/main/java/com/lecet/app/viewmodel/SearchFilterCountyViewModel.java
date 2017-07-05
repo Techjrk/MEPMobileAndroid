@@ -29,12 +29,14 @@ public class SearchFilterCountyViewModel extends BaseObservableViewModel {
     private CountyDomain countyDomain;
     private AppCompatActivity appCompatActivity;
     private String state;
-    SearchFilterCountyAdapter adapter;
-    public SearchFilterCountyViewModel(AppCompatActivity appCompatActivity, CountyDomain countyDomain , String state) {
+    private SearchFilterCountyAdapter adapter;
+    private String fipsCounty;
+    public SearchFilterCountyViewModel(AppCompatActivity appCompatActivity, CountyDomain countyDomain , String state , String fipsCounty) {
         super(appCompatActivity);
         this.countyDomain = countyDomain;
         this.appCompatActivity = appCompatActivity;
         this.state = state;
+        this.fipsCounty = fipsCounty;
         getCounty(state);
     }
     public void getCounty(String state){
@@ -62,8 +64,17 @@ public class SearchFilterCountyViewModel extends BaseObservableViewModel {
     }
 
     private void initRecyclerView(List<County> counties) {
+
+
         RecyclerView recycler_county = (RecyclerView)appCompatActivity.findViewById(R.id.recycler_county);
         adapter = new SearchFilterCountyAdapter(counties);
+        for(County county : counties){
+            if(county.getFipsCountyId().equals(fipsCounty)){
+                county.setSelected(true);
+                adapter.setSelectedCounty(county);
+                break;
+            }
+        }
         recycler_county.setLayoutManager(new LinearLayoutManager(appCompatActivity));
         recycler_county.setAdapter(adapter);
     }

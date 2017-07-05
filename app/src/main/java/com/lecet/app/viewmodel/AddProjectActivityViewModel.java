@@ -522,6 +522,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             case R.id.county:
                 i = new Intent(activity , SearchFilterCountyActivity.class);
                 i.putExtra(SearchFilterCountyActivity.REQUEST_STATE_EXTRA , projectPost.getState());
+                i.putExtra(SearchFilterCountyActivity.REQUEST_FIPSCOUNTY_EXTRA , projectPost.getFipsCounty());
                 section =  SearchFilterCountyActivity.REQUEST_COUNTY;
 
                 break;

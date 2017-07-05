@@ -23,6 +23,7 @@ import java.util.List;
 public class SearchFilterCountyAdapter extends RecyclerView.Adapter<SearchFilterCountyAdapter.SearchFilterCountyHolder> {
     private List<County> counties;
     private County selectedCounty;
+    private ListItemCountyBinding selectedBinding;
     public SearchFilterCountyAdapter(List<County> counties){
         this.counties = counties;
     }
@@ -36,6 +37,10 @@ public class SearchFilterCountyAdapter extends RecyclerView.Adapter<SearchFilter
     @Override
     public void onBindViewHolder(final SearchFilterCountyHolder holder, int position) {
         final County county = counties.get(position);
+        if(county.isSelected()){
+            selectedBinding = holder.getBinding();
+        }
+
         SearchCountyViewModel searchCountyViewModel = new SearchCountyViewModel(county);
         holder.getBinding().setViewModel(searchCountyViewModel);
         holder.getBinding().cbCounty.setOnCheckedChangeListener(null);
@@ -46,8 +51,12 @@ public class SearchFilterCountyAdapter extends RecyclerView.Adapter<SearchFilter
                 if(selectedCounty != null){
                     selectedCounty.setSelected(false);
                 }
+                if(selectedBinding != null){
+                    selectedBinding.cbCounty.setChecked(false);
+                }
                 county.setSelected(isChecked);
                 if(isChecked){
+                    selectedBinding = holder.getBinding();
                     setSelectedCounty(county);
                 }
                 else{
