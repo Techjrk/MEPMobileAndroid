@@ -86,6 +86,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         getLastCheckedItems();
         bundle = getPrefBundle();
         if (bundle == null) bundle = new Bundle();
+
      /*   if (getPrefBundle() == null)
             bundle = new Bundle();
         else bundle = getPrefBundle();*/

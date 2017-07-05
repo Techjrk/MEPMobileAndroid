@@ -96,6 +96,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
         this.activity = activity;
         getLastCheckedItems();
         bundle = getPrefBundle();
+        Log.d("bundleStage","bundleStage"+bundle);
         if (bundle == null) bundle = new Bundle();
 /*
         if (getPrefBundle() == null) {
@@ -310,6 +311,7 @@ void getLastCheckedItems(){
         Log.d("getPrefBundle","getPrefBundle"+sprefName);
         if (sprefName != null) {
             Set<String> sIDs = sprefName.getAll().keySet();
+            Log.d("sids","sids"+sIDs);
             if (sIDs == null || sIDs.size() == 0) return null;
             b = new Bundle();
 
@@ -321,6 +323,11 @@ void getLastCheckedItems(){
                 b.putBundle(keyID,b2);
                 Log.d("getPrefStageBundle2","getPrefStageBundle2"+keyID+" : "+sprefName.getString(keyID,"")+":"+sprefView.getString(keyID,""));
 
+                if (sprefView.getString(keyID,"").equals("")) lastFamilyChecked = Integer.valueOf(sprefView.getString(keyID,""));
+                setLastName(sprefName.getString(keyID, ""));
+                //lastPosition = Integer.valueOf(grandChildIndex);
+                //lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
+                //lastSection = section;
             }
         }
         return b;
