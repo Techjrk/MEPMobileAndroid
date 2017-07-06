@@ -33,7 +33,6 @@ public class BidItemViewModel extends BaseObservable {
     private boolean hasStarCard;
     private SearchDomain searchDomain;
     private Location currentLocation;
-    private boolean isPrebid;
 
     /*Created dummy server and upload these images on it and access it with piccasso*/
     public static final String STANDARD_PRE_BID_MARKER = "ic_standard_marker_pre_bid_kjselm.png";
@@ -48,13 +47,12 @@ public class BidItemViewModel extends BaseObservable {
     private final double METERS_PER_MILE = 1609.34;
     private final DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
 
-    public BidItemViewModel(Project project, String mapsApiKey, Location currentLocation , boolean isPrebid) {
+    public BidItemViewModel(Project project, String mapsApiKey, Location currentLocation) {
         this.project = project;
         this.mapsApiKey = mapsApiKey;
 
         searchDomain = new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
         this.currentLocation = currentLocation;
-        this.isPrebid = isPrebid;
         setStarCardStatus();
 
     }
@@ -89,21 +87,13 @@ public class BidItemViewModel extends BaseObservable {
             decimalFormat.setMaximumFractionDigits(0);
         }
         String distanceBetween = decimalFormat.format(distanceBetweenDouble);
-        if(isPrebid){
-            return distanceBetween + " miles away";
-        }
-        else{
-            return distanceBetween + " miles away";
-        }
+        return distanceBetween + " miles away";
     }
 
     private double meterToMiles(double meters){
         return meters / METERS_PER_MILE;
     }
 
-    public boolean isPrebid(){
-        return isPrebid;
-    }
     @Bindable
     public boolean getHasStarCard() {
         return hasStarCard;
@@ -120,6 +110,7 @@ public class BidItemViewModel extends BaseObservable {
     public String getProjectName() {
         return project.getTitle();
     }
+
     public String getProjectEstLow(){
         decimalFormat.setMinimumFractionDigits(0);
         decimalFormat.setMaximumFractionDigits(0);

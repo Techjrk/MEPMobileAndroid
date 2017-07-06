@@ -376,7 +376,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     private void postProject() {
         Log.d(TAG, "postProject: Project Post: " + projectPost);
-        if(TextUtils.isEmpty(project.getCounty()) || TextUtils.isDigitsOnly(project.getFipsCounty())){
+        if(TextUtils.isEmpty(projectPost.getCounty()) || TextUtils.isEmpty(projectPost.getFipsCounty())){
             showCancelAlertDialog("",activity.getResources().getString(R.string.county_not_set_message));
             return;
         }

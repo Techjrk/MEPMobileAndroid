@@ -37,7 +37,6 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     //ProjectsNearMeActivity activity;
     FragmentActivity factivity;
     private List data = Collections.emptyList();
-    private boolean isPreBid;
     private Location currentLocation;
  /*   public BidProjectListRecyclerViewAdapter(ProjectsNearMeActivity activity, int adapterType, List data) {
        // this.activity = activity;
@@ -46,11 +45,10 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 */
 //    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, int adapterType, List data) {
-    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, List data  , Location currentLocation , boolean isPreBid) {
+    public BidProjectListRecyclerViewAdapter(FragmentActivity activity, List data  , Location currentLocation ) {
         this.factivity = activity;
        // this.adapterType = adapterType;
         this.data = data;
-        this.isPreBid = isPreBid;
         this.currentLocation = currentLocation;
     }
     public void setData(List data) {
@@ -74,7 +72,7 @@ public class BidProjectListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 //        final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
         final String mapsApiKey = factivity.getBaseContext().getResources().getString(google_api_key);
         BidProjectViewHolder viewHolder = (BidProjectViewHolder) holder;
-        BidItemViewModel vm = new BidItemViewModel((Project) data.get(position), mapsApiKey, currentLocation  , isPreBid);
+        BidItemViewModel vm = new BidItemViewModel((Project) data.get(position), mapsApiKey, currentLocation );
         viewHolder.getBinding().setViewModel(vm);
     }
 
