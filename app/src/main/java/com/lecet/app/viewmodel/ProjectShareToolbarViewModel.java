@@ -234,9 +234,11 @@ public class ProjectShareToolbarViewModel extends ShareToolbarViewModel<Project,
                         setHideButtonTitle(getAppCompatActivity().getString(R.string.unhide));
                         dismissProgressDialog();
 
-                        // Finish the activity and clear the stack
+                        //replace Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK so that MainActivity
+                        //will not be included in 'clear task' and bring the instance of Main Activity (if there is any) from
+                        //the foreground to the front.
                         Intent intent = new Intent(getAppCompatActivity(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent. FLAG_ACTIVITY_SINGLE_TOP);
                         getAppCompatActivity().startActivity(intent);
                         getAppCompatActivity().finish();
 
