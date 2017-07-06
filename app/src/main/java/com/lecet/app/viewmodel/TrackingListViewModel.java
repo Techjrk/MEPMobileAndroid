@@ -53,13 +53,14 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
 
     private T adapterData;
     private long listItemId;
-    private boolean showUpdates = true;
+    private boolean showUpdates;
 
     public TrackingListViewModel(AppCompatActivity appCompatActivity, long listItemId) {
         super(appCompatActivity);
         this.appCompatActivity = appCompatActivity;
         this.listItemId = listItemId;
         init();
+        setShowUpdates(true);
     }
 
     public abstract String[] sortMenuOptions();
@@ -169,7 +170,10 @@ public abstract class TrackingListViewModel<T extends RealmResults> extends Base
         setupRecyclerView(recyclerView);
         listAdapter = recyclerViewAdapter();
         recyclerView.setAdapter(listAdapter);
-        setShowUpdates(true);
+       // setShowUpdates(true);
+        notifyPropertyChanged(BR.showUpdates);
+        listAdapter.setShowUpdates(this.showUpdates);
+        listAdapter.notifyDataSetChanged();
     }
 
     /**

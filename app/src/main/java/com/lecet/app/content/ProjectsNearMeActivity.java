@@ -245,7 +245,11 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (!viewModel.getRequestMPNFilter()) {
+            viewModel.clearSharedPref(getString(R.string.FilterTypeData));
+            viewModel.clearSharedPref(getString(R.string.FilterStageData) + "name");
+            viewModel.clearSharedPref(getString(R.string.FilterStageData) + "view");
+        }
         Log.e(TAG, "onResume "+enableLocationUpdates);
 
     }
@@ -283,10 +287,13 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
         else if (requestCode == REQUEST_FILTER_MPN) {
             Log.d(TAG, "onActivityResult: filtermpn");
+            viewModel.setRequestMPNFilter(true);
             processFilter(requestCode, data);
         }
 
-        else Log.w(TAG, "onActivityResult: WARNING: NO REQUEST CODE MATCH: requestCode: " + requestCode);
+        else{
+            Log.w(TAG, "onActivityResult: WARNING: NO REQUEST CODE MATCH: requestCode: " + requestCode);
+        }
     }
 
     ///*** Begin Filter Processing

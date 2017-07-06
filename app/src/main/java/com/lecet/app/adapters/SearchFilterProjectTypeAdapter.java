@@ -40,7 +40,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private static final int PARENT_VIEW_TYPE = 0;
     private static final int CHILD_VIEW_TYPE = 1;
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
-    public static boolean customSearch;
+    //public static boolean customSearch;
 
     //***
     private CheckBox cb = null;
@@ -49,9 +49,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
-
- //   private Bundle selectedParent = new Bundle(); //list of user's selected parent items
- //   private Bundle selectedChild = new Bundle();  //list of user's selected child items
 
     public SearchFilterProjectTypeAdapter(List<Parent> data, SearchFilterProjectTypeViewModel viewModel) {
 
@@ -76,14 +73,14 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         // Expanded scenario, where subtype and subsub are expanded
         Parent parent = data.get(section);
         List<Child> children = parent.getChildren();
-        if (customSearch)  {
+        if (viewModel.getCustomSearch())  {
             if (!expandedParents.contains(section)) {
                 expandedParents.add(section);   ///*** expanded
                 parent.isExpanded = true;
             }
         }
         if (children == null) return 0;
-        if (customSearch) {
+        if (viewModel.getCustomSearch()) {
             TreeMap<Integer, Integer> expanded = new TreeMap<>();
             for (Child child: children) {
                 if (children.get(0).getGrandChildren() !=null) {
@@ -154,10 +151,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
             childViewHolder.checkView.setText(child.name);
             childViewHolder.checkView.setChecked(child.getSelected());
-            /*if (selectedChild.containsKey(childViewHolder.checkView.getText().toString()))
-            {
-                childViewHolder.checkView.setChecked(true);
-            }*/
 
         if (!parent.isExpanded) childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
@@ -173,22 +166,19 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customSearch = false;
+                            //customSearch = false;
+                            viewModel.setCustomSearch(false);
                             cb = (CheckBox) view;
                             child.setSelected(cb.isChecked());
 
                             if (child.getSelected()) {
                                 child.setSelected(true);
-                                //viewModel.setLastChecked(childViewHolder.checkView);
-                               // selectedChild.putInt(child.getName(), truePosition);
                                 viewModel.addProjectTypeData(child.getId(), childViewHolder.checkView.getText().toString());
 
                             } else {
                                 child.setSelected(false);
-                                //selectedChild.remove(child.getName());
                                 viewModel.removeProjectTypeData(child.getId());
                             }
-                   //             viewModel.setJurisdictionData(CHILD_VIEW_TYPE, child.getId(), child.getRegionId(), child.getName(), child.getAbbreviation(), child.getLongName());
                             notifyDataSetChanged();
                         }
 
@@ -200,7 +190,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    customSearch=false;
+                    //customSearch=false;
+                    viewModel.setCustomSearch(false);
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
                         expanded = new TreeMap<>();
@@ -296,7 +287,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customSearch = false;
+                           // customSearch = false;
+                            viewModel.setCustomSearch(false);
                             CheckBox cb = (CheckBox) view;
 
                             grandChild.setSelected(cb.isChecked());
@@ -321,16 +313,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
         // Parent denoted by section number
         final Parent parent = data.get(section);
-       // parentViewHolder.imgView.setVisibility(View.GONE);
         parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
-        // parentViewHolder.id = parent.getId();
-
-//        if (selectedParent.containsKey(parentViewHolder.checkView.getText().toString()))
-        /*    if (viewModel.getSelectedParent().containsKey(parentViewHolder.checkView.getText().toString()))
-        {
-            parentViewHolder.checkView.setChecked(true);
-        }*/
         parentViewHolder.checkView.setChecked(parent.getSelected());
         if (parent.isExpanded)
             parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
@@ -342,19 +326,17 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-                        customSearch = false;
+                        //customSearch = false;
+                        viewModel.setCustomSearch(false);
                         cb = (CheckBox) view;
 
                         parent.setSelected(cb.isChecked());
 
                         if (parent.getSelected()) {
                             parent.setSelected(true);
-//                            selectedParent.putInt(parent.getName(),section);
-                          //  viewModel.getSelectedParent().putInt(parent.getName(),section);
                             viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
                         } else {
                             parent.setSelected(false);
-                          //  selectedParent.remove(parent.getName());
                             viewModel.removeProjectTypeData(parent.getId());
                         }
                         notifyDataSetChanged();
@@ -365,7 +347,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                customSearch=false;
+                //customSearch=false;
+                viewModel.setCustomSearch(false);
                 if (expandedParents.contains(section)) {
                     parent.isExpanded=false;
                     expandedParents.remove(Integer.valueOf(section));

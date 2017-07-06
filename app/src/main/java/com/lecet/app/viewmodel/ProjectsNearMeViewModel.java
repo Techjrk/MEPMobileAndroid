@@ -13,8 +13,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
 import android.graphics.Point;
@@ -79,8 +81,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private static final String TAG = "ProjectsNearMeViewModel";
 
-    private static final int DEFAULT_DISTANCE = 3;
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_DISTANCE = 5;
+    private static final float DEFAULT_ZOOM = 12.5f;
     private static final int REQUEST_FILTER_MPN = 8;
     private AppCompatActivity activity;
     private ProjectDomain projectDomain;
@@ -104,6 +106,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private View buttonClear;
     private View buttonSearch;
     private View buttonFilter;
+    private boolean requestMPNFilter;
+
 
     // Map Location for determining map panning API trigger
     Location prevLocation;
@@ -357,8 +361,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 double distance = prevLocation.distanceTo(curr);
 
                 if (distance > 1000) {
-
-                    fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
+                    //fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
                 }
             }
         }
@@ -542,7 +545,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             markers.clear();
 
             PointF infoWindowAnchorPos;
-
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
@@ -698,6 +700,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);
             } else {
+                setRequestMPNFilter(false);
                 Project project = (Project) marker.getTag();
                 Intent intent = new Intent(context, ProjectDetailActivity.class);
                 intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
@@ -731,6 +734,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         } else if (id == R.id.button_filter) {
             //search.setText(null);
             setProjectFilter("default");
+            setRequestMPNFilter(true);
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
             intent.putExtra(FILTER_INSTANT_SEARCH, false);
             intent.putExtra(activity.getString(R.string.using_project_near_me), true);
@@ -816,5 +820,20 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.tableViewDisplay = tableViewDisplay;
         notifyPropertyChanged(BR.tableViewDisplay);
     }
+    public void clearSharedPref(String dataName) {
+        SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
+        if (spref == null) return;
+        SharedPreferences.Editor editData = spref.edit();
+        //  if (editData == null) return;
+        editData.clear();
+        editData.commit();
+    }
 
+    public boolean getRequestMPNFilter() {
+        return requestMPNFilter;
+    }
+
+    public void setRequestMPNFilter(boolean requestMPNFilter) {
+        this.requestMPNFilter = requestMPNFilter;
+    }
 }

@@ -40,11 +40,57 @@ public class SearchFilterStageViewModel extends BaseObservable {
     private AppCompatActivity activity;
     public static final int NO_TYPE = -1;
 
-    public static int lastFamilyChecked = NO_TYPE;
-    public static int lastSection; //keep track of last section used by the selected item
-    public static int lastPosition; //keep track of last position used by the selected item
-    public static int lastChildParentPosition; //keep track of last child parent used by the selected item
-    private  String lastName;
+ //   public static int lastFamilyChecked = NO_TYPE;
+ //   public static int lastSection; //keep track of last section used by the selected item
+ //   public static int lastPosition; //keep track of last position used by the selected item
+ //   public static int lastChildParentPosition; //keep track of last child parent used by the selected item
+    private String lastName;
+    private int lastSection; //keep track of last section used by the selected item
+    private  int lastPosition; //keep track of last position used by the selected item
+    private int lastChildParentPosition; //keep track of last child parent used by the selected item
+    private int lastFamilyChecked = NO_TYPE;
+
+    public int getLastFamilyChecked() {
+        return lastFamilyChecked;
+    }
+
+    public void setLastFamilyChecked(int lastFamilyChecked) {
+        this.lastFamilyChecked = lastFamilyChecked;
+    }
+
+    public int getLastChildParentPosition() {
+        return lastChildParentPosition;
+    }
+
+    public void setLastChildParentPosition(int lastChildParentPosition) {
+        this.lastChildParentPosition = lastChildParentPosition;
+    }
+
+    public int getLastPosition() {
+        return lastPosition;
+    }
+
+    public void setLastPosition(int lastPosition) {
+        this.lastPosition = lastPosition;
+    }
+
+    public int getLastSection() {
+        return lastSection;
+    }
+
+    public void setLastSection(int lastSection) {
+        this.lastSection = lastSection;
+    }
+
+    private boolean customSearch;
+
+    public boolean getCustomSearch() {
+        return customSearch;
+    }
+
+    public void setCustomSearch(boolean customSearch) {
+        this.customSearch = customSearch;
+    }
 
     public  String getLastName() {
         return lastName;
@@ -183,13 +229,6 @@ void getLastCheckedItems(){
      * @viewType The adapter child type which is the source of the data passed (0=parent, 1=child, 2=grandchild)
      */
 
- /*   public void setStageCheck(String id, String name) {
-//        public void setStageData(int viewType, int id, String name) {
-    //    bundle.putString(String.valueOf(id),name);
-       bundleCheck.putString(id,name);
-    }*/
-
-
     public void setStageData(int viewType, int id, String name) {
 
         // overwrite the Bundle instance with each selection since Stage only supports single-selection
@@ -199,27 +238,14 @@ void getLastCheckedItems(){
         setBundleData(b, BUNDLE_KEY_NAME, name);
         String sid = Integer.toString(id);
         bundle.putBundle(sid,b);
-      //  setStageCheck(sid,name);
-      //  setBundleData(Integer.toString(id), name);
     }
 
-    public void setStageDataold(int viewType, int id, String name) {
-        // overwrite the Bundle instance with each selection since Stage only supports single-selection
-        //bundle = new Bundle();
-       // setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
-       // setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
-       // setBundleData(BUNDLE_KEY_NAME, name);
-    }
     public void removeStageData(String key) {
         bundle.remove(key);
-       // bundleCheck.remove(key);
     }
 
     private void setBundleData(Bundle b, String key, String value) {
         b.putString(key, value);
-    }
-    private void setBundleDataold (String key, String value) {
-        bundle.putString(key, value);
     }
     public RealmResults<SearchFilterStagesMain> getRealmStages() {
         return realmStages;
@@ -234,9 +260,11 @@ void getLastCheckedItems(){
         hasChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterStageAdapter.customSearch = true;
+            //SearchFilterStageAdapter.customSearch = true;
+            setCustomSearch(true);
         } else {
-            SearchFilterStageAdapter.customSearch = false;
+            //SearchFilterStageAdapter.customSearch = false;
+            setCustomSearch(false);
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
@@ -257,10 +285,6 @@ void getLastCheckedItems(){
             //***
             if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(parent.getId())) ) {
                 parent.setSelected(true);
-                //  getSelectedParent().putInt(parent.getName(), Integer.parseInt(parent.getId()));
-               /* for (String parentSelected : getSelectedParent().keySet()) {
-                    Log.d("selectParent0", "selectParent0" + parentSelected);
-                }*/
             }
 
             //***
@@ -280,7 +304,6 @@ void getLastCheckedItems(){
                         child.setSelected(true);
                     }
 
-
                     if (foundChild || foundParent) {
                         children.add(child);
                     }
@@ -293,8 +316,6 @@ void getLastCheckedItems(){
 
             if (parent != null && (hasChild || foundParent)) data.add(parent);
         }
-       // adapter = new SearchFilterStageAdapter(data, this);
-       // recyclerView.setAdapter(adapter);
 
         if (SearchFilterAllTabbedViewModel.userCreated) {
             SearchFilterStageSingleSelectAdapter adapter = new SearchFilterStageSingleSelectAdapter(data, this);
@@ -325,9 +346,6 @@ void getLastCheckedItems(){
 
                 if (sprefView.getString(keyID,"").equals("")) lastFamilyChecked = Integer.valueOf(sprefView.getString(keyID,""));
                 setLastName(sprefName.getString(keyID, ""));
-                //lastPosition = Integer.valueOf(grandChildIndex);
-                //lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
-                //lastSection = section;
             }
         }
         return b;
