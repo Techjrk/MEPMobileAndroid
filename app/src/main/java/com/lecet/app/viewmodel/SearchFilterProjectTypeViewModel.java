@@ -86,6 +86,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         getLastCheckedItems();
         bundle = getPrefBundle();
         if (bundle == null) bundle = new Bundle();
+
      /*   if (getPrefBundle() == null)
             bundle = new Bundle();
         else bundle = getPrefBundle();*/
@@ -264,7 +265,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         return b;
     }
     void saveLastCheckedItems() {
-        SharedPreferences spref = activity.getSharedPreferences("lastcheckedTypeItems", Context.MODE_PRIVATE);
+        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedTypeItems), Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = spref.edit();
         //edit.clear();
         edit.putInt("lastFamilyChecked",lastFamilyChecked);
@@ -276,7 +277,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
 
     }
     void getLastCheckedItems(){
-        SharedPreferences spref = activity.getSharedPreferences("lastcheckedTypeItems", Context.MODE_PRIVATE);
+        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedTypeItems), Context.MODE_PRIVATE);
         lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
         lastName=spref.getString("lastName",lastName);
         lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);

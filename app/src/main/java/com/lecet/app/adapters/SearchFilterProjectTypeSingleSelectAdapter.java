@@ -268,9 +268,15 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
             childViewHolder.checkView.setText(child.getName());
 
             checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
-            childViewHolder.checkView.setChecked(child.getSelected());
-            childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
+            //Note: generates an error on the server if the child has grandchildren is checkable. Only the bottom (grandchild) should be checkable)...
+            if ( child.getGrandChildren() !=null) {
+                childViewHolder.checkView.setButtonDrawable(null);
+            } else {
+                childViewHolder.checkView.setChecked(child.getSelected());
+                childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
+            }
+           // childViewHolder.checkView.setButtonDrawable(null);
            /* if (selectedChild.containsKey(childViewHolder.checkView.getText().toString()))
             {
                 childViewHolder.checkView.setChecked(true);
@@ -503,7 +509,9 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
         checkLastParentSelectName(true, parent, parentViewHolder, section);
-        parentViewHolder.checkView.setChecked(parent.getSelected());
+        //Note: generates an error in the server if the parent is checkable. Only the bottom (child) should be checkable)...
+        //parentViewHolder.checkView.setChecked(parent.getSelected());
+        parentViewHolder.checkView.setButtonDrawable(null);
 
         if (parent.getChildren() == null) {
             parentViewHolder.imgView.setImageResource(NO_IMAGE);

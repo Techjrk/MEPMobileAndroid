@@ -96,6 +96,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
         this.activity = activity;
         getLastCheckedItems();
         bundle = getPrefBundle();
+        Log.d("bundleStage","bundleStage"+bundle);
         if (bundle == null) bundle = new Bundle();
 /*
         if (getPrefBundle() == null) {
@@ -133,7 +134,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
     }
 
 void saveLastCheckedItems() {
-    SharedPreferences spref = activity.getSharedPreferences("lastcheckedStageItems", Context.MODE_PRIVATE);
+    SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
     SharedPreferences.Editor edit = spref.edit();
     //edit.clear();
     edit.putInt("lastFamilyChecked",lastFamilyChecked);
@@ -145,7 +146,7 @@ void saveLastCheckedItems() {
 
 }
 void getLastCheckedItems(){
-    SharedPreferences spref = activity.getSharedPreferences("lastcheckedStageItems", Context.MODE_PRIVATE);
+    SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
     lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
     lastName=spref.getString("lastName",lastName);
     lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);
@@ -310,6 +311,7 @@ void getLastCheckedItems(){
         Log.d("getPrefBundle","getPrefBundle"+sprefName);
         if (sprefName != null) {
             Set<String> sIDs = sprefName.getAll().keySet();
+            Log.d("sids","sids"+sIDs);
             if (sIDs == null || sIDs.size() == 0) return null;
             b = new Bundle();
 
@@ -321,6 +323,11 @@ void getLastCheckedItems(){
                 b.putBundle(keyID,b2);
                 Log.d("getPrefStageBundle2","getPrefStageBundle2"+keyID+" : "+sprefName.getString(keyID,"")+":"+sprefView.getString(keyID,""));
 
+                if (sprefView.getString(keyID,"").equals("")) lastFamilyChecked = Integer.valueOf(sprefView.getString(keyID,""));
+                setLastName(sprefName.getString(keyID, ""));
+                //lastPosition = Integer.valueOf(grandChildIndex);
+                //lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
+                //lastSection = section;
             }
         }
         return b;

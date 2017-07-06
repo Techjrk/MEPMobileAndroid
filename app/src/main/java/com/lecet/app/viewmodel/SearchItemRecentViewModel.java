@@ -300,6 +300,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
         }
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
+        SearchViewModel.usingInstantSearch=false;
         Log.d("projectsaved", "projectsaved");
         // saveRecentlyProject(SearchActivity.USER_ID,LecetSharedPreferenceUtil.getInstance(getContext()));
         view.getContext().startActivity(intent);
@@ -309,6 +310,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     public void onProjectClick(View view) {
         if (viewModel != null) viewModel.setDetailVisible(true);
         if (project == null) return;
+        SearchViewModel.usingInstantSearch=false;
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         viewModel.setDetailVisible(true);

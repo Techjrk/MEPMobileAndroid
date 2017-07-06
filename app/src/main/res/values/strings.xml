@@ -406,6 +406,7 @@
     <string name="FilterTypeData">FilterTypeData</string>
     <string name="FilterJurisdictionData">JurisdictionData</string>
     <string name="FilterStageData">FilterStageData</string>
+    <string name="FilterSharedJData">FilterJurisdictionSP</string>
     <string name="Filter">Filter</string>
     <string name="MAX">MAX</string>
     <string name="save_project">Save Project</string>
@@ -417,4 +418,17 @@
     <string name="save_project_city_required">A project city is required.</string>
     <string name="save_project_state_required">A project state is required.</string>
     <string name="save_project_title_required">A project title is required.</string>
+    <string name="LastCheckedJurisdictionItems">lastcheckedJurisdictionItems</string>
+    <string name="lastcheckedTypeItems">lastcheckedTypeItems</string>
+    <string name="lastcheckedStageItems">lastcheckedStageItems</string>
+    <string name="FilterResultJurisdiction">FilterResultJurisdiction</string>
+    <string name="FilterResultProjectType">FilterResultProjectType</string>
+    <string name="FilterResultValue">FilterResultValue</string>
+    <string name="FilterResultUpdatedWithin">FilterResultUpdatedWithin</string>
+    <string name="FilterResultStage">FilterResultStage</string>
+    <string name="FilterResultBiddingWithin">FilterResultBiddingWithin</string>
+    <string name="FilterResultBH">FilterResultBH</string>
+    <string name="FilterResultOwnerType">FilterResultOwnerType</string>
+    <string name="FilterResultWorkType">FilterResultWorkType</string>
+    <string name="county_not_set_message">County is not set</string>
 </resources>

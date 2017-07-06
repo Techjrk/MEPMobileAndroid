@@ -90,7 +90,9 @@ public class SearchViewModel extends BaseObservable {
     static final String COMPANY_TEXT = " Company";
     static final String PROJECT_TEXT = " Project";
 
-    private static boolean USING_INSTANT_SEARCH = false;
+    public static boolean usingInstantSearch;
+    //The companyInstantSearch will be true if the company tab is on the focus.
+    public static boolean companyInstantSearch=false;
     private static boolean INIT_SEARCH = true;
     private int seeAllForResult = SEE_ALL_NO_RESULT;
     private static AlertDialog.Builder dialogBuilder;
@@ -192,12 +194,12 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public static boolean isUsingInstantSearch() {
-        return USING_INSTANT_SEARCH;
+        return usingInstantSearch;
     }
 
-    public static void setUsingInstantSearch(boolean usingInstantSearch) {
-        USING_INSTANT_SEARCH = usingInstantSearch;
-    }
+ /*   public static void setUsingInstantSearch(boolean usingInstantSearch) {
+        usingInstantSearch = usingInstantSearch;
+    }*/
 
     public Filter getFilterSearchSaved() {
         return filterSearchSaved;
@@ -359,7 +361,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void updateViewQuery(/*String query*/) {
         //  Log.d("updateviewquery1","updateviewquery1");
-      /* if (!USING_INSTANT_SEARCH && query.equals("")) {
+      /* if (!usingInstantSearch && query.equals("")) {
             setIsMSE1SectionVisible(true);
             setIsMSE2SectionVisible(false);
             setIsMSR11Visible(false);
@@ -1132,7 +1134,7 @@ public class SearchViewModel extends BaseObservable {
         } else if (isMSE2SectionVisible) {
             /*setIsMSE2SectionVisible(false);
             setIsMSE1SectionVisible(true);*/
-            USING_INSTANT_SEARCH = true;
+            usingInstantSearch = true;
             INIT_SEARCH = true;
             callInit();
             return;
@@ -1213,7 +1215,7 @@ public class SearchViewModel extends BaseObservable {
     public void setQuery(String query) {
         this.query = query;
         if (query.equals("")) {
-            USING_INSTANT_SEARCH = false;
+            usingInstantSearch = false;
             setQueryEmpty(true);
         } else setQueryEmpty(false);
         notifyPropertyChanged(BR.query);
@@ -1387,8 +1389,8 @@ public class SearchViewModel extends BaseObservable {
 
     public void onFilterClicked(View view) {
         Intent intent = new Intent(activity, SearchFilterMPSActivity.class);
-        USING_INSTANT_SEARCH = getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
-        intent.putExtra(FILTER_INSTANT_SEARCH, USING_INSTANT_SEARCH);
+       // usingInstantSearch =     //getIsMSE1SectionVisible();                   // refers to whether or not we are launching from a Saved Search view or not
+        intent.putExtra(FILTER_INSTANT_SEARCH, usingInstantSearch);
         setDetailVisible(true);
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         activity.startActivityForResult(intent, REQUEST_CODE_ZERO);
@@ -1412,17 +1414,20 @@ public class SearchViewModel extends BaseObservable {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
         Log.d("all_project", "allproject" + SEE_ALL_PROJECTS);
+        usingInstantSearch=false;
     }
 
     public void onClickSeeAllCompany(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_COMPANY);
         setSeeAll(SEE_ALL_COMPANIES);
         Log.d("all_company", "allcompany:" + SEE_ALL_COMPANIES);
+        usingInstantSearch = true;
     }
 
     public void onClickSeeAllContact(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_CONTACT);
         setSeeAll(SEE_ALL_CONTACTS);
+        usingInstantSearch = false;
     }
 
     /**

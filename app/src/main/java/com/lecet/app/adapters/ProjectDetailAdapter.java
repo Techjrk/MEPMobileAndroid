@@ -257,11 +257,10 @@ public class ProjectDetailAdapter extends SectionedAdapter {
 
             }
         } else if (holder instanceof ShareViewHolder) {
-            Log.d("SHARE", "Section Share");
             TrackingListDomain trackingListDomain =  new TrackingListDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(appCompatActivity), Realm.getDefaultInstance(), new RealmChangeListener() {
                 @Override
                 public void onChange(Object element) {
-
+                    notifyDataSetChanged();
                 }
             }, projectDomain);
             ((ShareViewHolder) holder).getBinding().setViewModel(new ProjectShareToolbarViewModel(appCompatActivity, trackingListDomain, project));

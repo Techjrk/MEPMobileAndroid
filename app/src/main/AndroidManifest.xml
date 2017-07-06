@@ -334,6 +334,11 @@
             android:label="@string/title_activity_hidden_projects"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".content.SearchFilterCountyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".content.LocationDetailMapActivity"
             android:label="@string/title_activity_location_detail_map" />

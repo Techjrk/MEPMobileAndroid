@@ -71,6 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.d(TAG, "onResume");
+        SearchViewModel.usingInstantSearch=true;
 
         if (viewModel.getDetailVisible()) {
             viewModel.checkDisplayMSESectionOrMain();
@@ -203,6 +204,7 @@ public class SearchActivity extends AppCompatActivity {
             projectsSb.append(projectTypeIdFilter);
             //added to Companies filter the Project Type
             //if (isCompanyCateg) {
+           // projectTypeIdFilter = projectTypeIdFilter.replace("projectTypeId","projectTypes");
             if (esFilterSb.length() > 0) esFilterSb.append(",");
             esFilterSb.append(projectTypeIdFilter);
             // }
@@ -302,8 +304,13 @@ public class SearchActivity extends AppCompatActivity {
 
 //    if (companiesSb !=null && esFilterSb !=null && !companiesSb.toString().trim().equals("") && !esFilterSb.toString().trim().equals("")){
         if (esFilterSb != null && !esFilterSb.toString().trim().equals("")) {
-            viewModel.setCompanySearchFilter(companyFilter, esFilterSb.toString());
-//            viewModel.setCompanySearchFilter(companiesSb.toString(),esFilterSb.toString());
+           String esFilter = esFilterSb.toString();
+
+              esFilter = esFilter.replace("projectTypeId","projectTypes");
+            //parameter: searchFilter, esFilter
+            viewModel.setCompanySearchFilter(companyFilter, esFilter);
+
+//            viewModel.setCompanySearchFilter(companyFilter, esFilterSb.toString());
         }
         Log.d("companyfilterx", "companyfilterx:" + searchDomain.getCompanyFilter());
         companiesCombinedFilter.replaceFirst(",", "");

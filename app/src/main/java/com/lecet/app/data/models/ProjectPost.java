@@ -648,6 +648,7 @@ public class ProjectPost extends BaseObservable {
                 ", primaryProjectTypeId=" + primaryProjectTypeId +
                 ", projectStageId=" + projectStageId +
                 ", jurisdictionCityId=" + jurisdictionCityId +
+                ", fipsCountyId=" + jurisdictionCityId +
                 '}';
     }
 

@@ -84,6 +84,10 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_bid_detail);
         tabLayout.setupWithViewPager(viewPager);
         setupViewPager(viewPager);
+
+        enableLocationUpdates = true;
+        locationManager.startLocationUpdates();
+        //fetchProjects(false);
     }
 
     private void continueSetup() {
@@ -241,11 +245,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
-        if (enableLocationUpdates) {
-            locationManager.startLocationUpdates();
-        }
-        fetchProjects(false);
+
+        Log.e(TAG, "onResume "+enableLocationUpdates);
+
     }
 
     @Override

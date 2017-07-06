@@ -115,12 +115,14 @@
                     android:textAllCaps="true"
                     bind:typeface="@{`Lato-Bold.ttf`}"/>
 
+<!--
+        android:clickable="@{viewModel.countyIsEditable}"-->
             <EditText
                     android:id="@+id/county"
                     style="@style/AddProjectField"
                     android:hint="@string/county"
                     android:text="@={viewModel.projectPost.county}"
-                    android:clickable="@{viewModel.countyIsEditable}"
+                     android:onClick="@{viewModel::onClicked}"
                     android:cursorVisible="@{viewModel.countyIsEditable}"
                     android:focusable="@{viewModel.countyIsEditable}"
                     android:focusableInTouchMode="@{viewModel.countyIsEditable}" />
