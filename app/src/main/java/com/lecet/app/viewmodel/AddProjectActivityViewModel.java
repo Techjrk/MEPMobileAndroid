@@ -356,15 +356,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 //            if (project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
 //            if (project.getProjectStage() != null && project.getProjectStage().getName() != null)
 //                setStageSelect(project.getProjectStage().getName());
-/*
-
-            Log.w("eprostage", "eprostage:" + project.getProjectStage());
-            Log.w("eproprojprimId", "eprojprimid:" + project.getPrimaryProjectTypeId());
-            Log.w("eprostageId", "eprostageId" + project.getProjectStageId());
-            PrimaryProjectType ppt = project.getPrimaryProjectType();
-            if (ppt != null) Log.d("eproProjTypePrim", "eproProjPrim" + ppt.toString());
-            Log.d("eproProjTypes", "eproProjTypes" + project.getProjectTypes());
-*/
 
           //  if (getStageSelect() == null || getTypeSelect().isEmpty())
                 searchBackStageName(String.valueOf(project.getProjectStageId()));
@@ -745,7 +736,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterTypeData));
         if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterStageData) + "name");
         if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterStageData) + "view");
-
     }
 
     private void clearSharedPref(String dataName) {
@@ -786,21 +776,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             Log.d("mainTitle", "mainTitle" + primaryType.getTitle());
             projectName = primaryType.getTitle();
         }   // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
-      /*  else {
-            SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
-            if (category != null) {
-                projectName = category.getTitle();
-            }
 
-            // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
-            else {
-                SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key.trim())).findFirst(); //realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
-                if (mainType != null) {
-                    projectName = mainType.getTitle();
-                }
-            }
-        }*/
-        Log.d("noel", "key" + key + ": noel" + projectName);
         if (!projectName.trim().isEmpty()) {
             Bundle bundle = new Bundle();
             bundle.putString(key, projectName);

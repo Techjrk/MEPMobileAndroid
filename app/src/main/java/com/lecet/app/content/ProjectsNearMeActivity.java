@@ -245,7 +245,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     protected void onResume() {
         super.onResume();
-
+         viewModel.clearSharedPref(getString(R.string.FilterTypeData));
+         viewModel.clearSharedPref(getString(R.string.FilterStageData) + "name");
+         viewModel.clearSharedPref(getString(R.string.FilterStageData) + "view");
         Log.e(TAG, "onResume "+enableLocationUpdates);
 
     }

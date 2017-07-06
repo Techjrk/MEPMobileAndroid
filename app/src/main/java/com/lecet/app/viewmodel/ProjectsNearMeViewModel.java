@@ -13,8 +13,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.databinding.Bindable;
 import android.graphics.Point;
@@ -814,5 +816,12 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.tableViewDisplay = tableViewDisplay;
         notifyPropertyChanged(BR.tableViewDisplay);
     }
-
+    public void clearSharedPref(String dataName) {
+        SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
+        if (spref == null) return;
+        SharedPreferences.Editor editData = spref.edit();
+        //  if (editData == null) return;
+        editData.clear();
+        editData.commit();
+    }
 }
