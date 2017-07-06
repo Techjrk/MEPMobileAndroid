@@ -17,7 +17,6 @@ public class PostBidFragment extends BidFragment {
     public static PostBidFragment newInstance(ArrayList<Project> data , Location currentLocation) {
         PostBidFragment fragmentInstance = new PostBidFragment();
         fragmentInstance.setBidData(data);
-        fragmentInstance.setPreBid(false);
         fragmentInstance.setCurrentLocation(currentLocation);
         return fragmentInstance;
     }

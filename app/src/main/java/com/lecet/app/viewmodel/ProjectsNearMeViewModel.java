@@ -79,7 +79,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     private static final String TAG = "ProjectsNearMeViewModel";
 
-    private static final int DEFAULT_DISTANCE = 3;
+    private static final int DEFAULT_DISTANCE = 5;
     private static final int DEFAULT_ZOOM = 15;
     private static final int REQUEST_FILTER_MPN = 8;
     private AppCompatActivity activity;
@@ -357,8 +357,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 double distance = prevLocation.distanceTo(curr);
 
                 if (distance > 1000) {
-
-                    fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
+                    //fetchProjectsNearMeOnCameraIdle(map.getCameraPosition().target);
                 }
             }
         }
@@ -542,7 +541,6 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             markers.clear();
 
             PointF infoWindowAnchorPos;
-
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
 
