@@ -50,6 +50,15 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
     public static int lastPosition; //keep track of last position used by the selected item
     public static int lastChildParentPosition; //keep track of last child parent used by the selected item
     private  String lastName;
+    private boolean customSearch;
+
+    public boolean getCustomSearch() {
+        return customSearch;
+    }
+
+    public void setCustomSearch(boolean customSearch) {
+        this.customSearch = customSearch;
+    }
 
     public  String getLastName() {
         return lastName;
@@ -142,10 +151,11 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         hasGrandChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterProjectTypeAdapter.customSearch = true;
+           // SearchFilterProjectTypeAdapter.customSearch = true;
+            setCustomSearch(true);
         } else {
-            SearchFilterProjectTypeAdapter.customSearch = false;
-
+           // SearchFilterProjectTypeAdapter.customSearch = false;
+            setCustomSearch(false);
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
@@ -169,10 +179,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             //***
             if (!bundle.isEmpty() && bundle.containsKey(parent.getId()) ) {
                 parent.setSelected(true);
-              //  getSelectedParent().putInt(parent.getName(), Integer.parseInt(parent.getId()));
-               /* for (String parentSelected : getSelectedParent().keySet()) {
-                    Log.d("selectParent0", "selectParent0" + parentSelected);
-                }*/
             }
             //***
             children = new ArrayList<>();
