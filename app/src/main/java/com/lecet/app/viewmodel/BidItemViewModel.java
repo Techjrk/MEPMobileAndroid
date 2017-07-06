@@ -89,12 +89,7 @@ public class BidItemViewModel extends BaseObservable {
             decimalFormat.setMaximumFractionDigits(0);
         }
         String distanceBetween = decimalFormat.format(distanceBetweenDouble);
-        if(isPrebid){
-            return distanceBetween + " miles away";
-        }
-        else{
-            return distanceBetween + " miles away";
-        }
+        return distanceBetween + " miles away";
     }
 
     private double meterToMiles(double meters){
@@ -120,6 +115,7 @@ public class BidItemViewModel extends BaseObservable {
     public String getProjectName() {
         return project.getTitle();
     }
+
     public String getProjectEstLow(){
         decimalFormat.setMinimumFractionDigits(0);
         decimalFormat.setMaximumFractionDigits(0);
