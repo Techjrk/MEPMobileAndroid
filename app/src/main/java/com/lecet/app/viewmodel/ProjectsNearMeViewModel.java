@@ -106,6 +106,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private View buttonClear;
     private View buttonSearch;
     private View buttonFilter;
+    private boolean requestMPNFilter;
+
 
     // Map Location for determining map panning API trigger
     Location prevLocation;
@@ -698,6 +700,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);
             } else {
+                setRequestMPNFilter(false);
                 Project project = (Project) marker.getTag();
                 Intent intent = new Intent(context, ProjectDetailActivity.class);
                 intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
@@ -731,6 +734,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         } else if (id == R.id.button_filter) {
             //search.setText(null);
             setProjectFilter("default");
+            setRequestMPNFilter(true);
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
             intent.putExtra(FILTER_INSTANT_SEARCH, false);
             intent.putExtra(activity.getString(R.string.using_project_near_me), true);
@@ -823,5 +827,13 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         //  if (editData == null) return;
         editData.clear();
         editData.commit();
+    }
+
+    public boolean getRequestMPNFilter() {
+        return requestMPNFilter;
+    }
+
+    public void setRequestMPNFilter(boolean requestMPNFilter) {
+        this.requestMPNFilter = requestMPNFilter;
     }
 }
