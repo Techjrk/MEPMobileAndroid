@@ -82,7 +82,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private static final String TAG = "ProjectsNearMeViewModel";
 
     private static final int DEFAULT_DISTANCE = 5;
-    private static final int DEFAULT_ZOOM = 15;
+    private static final float DEFAULT_ZOOM = 12.5f;
     private static final int REQUEST_FILTER_MPN = 8;
     private AppCompatActivity activity;
     private ProjectDomain projectDomain;
