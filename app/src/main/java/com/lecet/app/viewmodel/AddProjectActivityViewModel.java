@@ -10,7 +10,6 @@ import android.databinding.Bindable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,7 +24,6 @@ import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterCountyActivity;
-import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
 import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
@@ -90,6 +88,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     // values for display only
     private String typeSelect;
     private String stageSelect;
+
     private Calendar calendar;
     private String stageName = "", stageType = "";
     public AddProjectActivityViewModel(AppCompatActivity appCompatActivity, double latitude, double longitude, long projectId, ProjectDomain projectDomain, LocationDomain locationDomain) {
@@ -353,13 +352,20 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             // special cases for display purposes of Type and Stage etc
             //Note: Since the rule in selecting the project type in the custom project is just a single item, and the parent items are not allowed,
             // the code below is no longer applicable
-//            if (project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
-//            if (project.getProjectStage() != null && project.getProjectStage().getName() != null)
-//                setStageSelect(project.getProjectStage().getName());
+            //            if (project.getProjectTypes() != null) setTypeSelect(project.getProjectTypes());
+            //            if (project.getProjectStage() != null && project.getProjectStage().getName() != null)
+            //                setStageSelect(project.getProjectStage().getName());
 
-          //  if (getStageSelect() == null || getTypeSelect().isEmpty())
+            // Note: With the the stageId from the project, the code below is used for bringing back the previous stage item selected by the user and
+            // put the stage value to respected stage field and also to
+            // save the extracted stage data to the sharedPreferences to be used later by the Stage Filter section to set the checkbox selection for this extracted stage data.
+            //  if (getStageSelect() == null || getTypeSelect().isEmpty()) //* commented this to check if this is no longer needed.
                 searchBackStageName(String.valueOf(project.getProjectStageId()));
-        //    if (getTypeSelect() == null || getTypeSelect().isEmpty())
+
+            // Note: With the the primaryProjectTypeId from the project, the code below is used for bringing back the previous project type item selected by the user and
+            // put the project type value to respected project type field and also to save
+            // the extracted project type data to the sharedPreferences to be used later by the Project Type Filter section to set the checkbox selection for this extracted project type data.
+            //    if (getTypeSelect() == null || getTypeSelect().isEmpty()) //* commented this to check if this is no longer needed.
                 searchBackProjectTypeName(String.valueOf(project.getPrimaryProjectTypeId()));
 
         }  //if project !=null
@@ -481,6 +487,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         Intent i = null;
         int id = view.getId();
         int section = 0;
+        //Note: Setting the userCreated to true to let the search functionality that we are going to use only a single-item selection for Project Type and Stage.
         SearchFilterAllTabbedViewModel.userCreated = true;
 
         switch (id) {
@@ -541,7 +548,11 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
     public void onClickSave(View view) {
         Log.d(TAG, "onClickSave");
+        //Note: this method below is used to delete all the SharedPref file that is no longer needed when exiting this Custom Project Activity.
+        // But if the mode is in editMode, the sharedPref for Type and Data data values will not be deleted because it migh be used later by this CustomProject Edit functionality,
+        // which will be called under the ProjectDetailActivity activity class.
         deletePrefFilterFieldValues();
+
         DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -691,6 +702,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         return p1;
     }
 
+    //Note: This method is used for saving the previous selected Stage item for later use if needed.
     public void savePrefBundleStageOnly(final String filterDataName, final Bundle bundle) {
 
         Thread t = new Thread(
@@ -716,6 +728,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         t.start();
     }
 
+    //Note: Continuation of saving the other part of the previous stage item to the sharedPreferences.
     public void savePrefBundleStageViewOnly(String filterDataName, Bundle bundle) {
         SharedPreferences spref = activity.getSharedPreferences(filterDataName + "view", Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = spref.edit();
@@ -729,6 +742,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         edit.apply();
     }
 
+    //Note: This is used for deleting the filter data stored in the SharedPreferences.
     public void deletePrefFilterFieldValues() {
         clearSharedPref("lastcheckedStageItems");
         clearSharedPref("lastcheckedTypeItems");
@@ -738,6 +752,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if (!isEditMode()) clearSharedPref(activity.getString(R.string.FilterStageData) + "view");
     }
 
+    //Note: This is used for processing the deletion of the filter data stored in the SharedPreferences.
     private void clearSharedPref(String dataName) {
         SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
         if (spref == null) return;
@@ -747,6 +762,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         editData.commit();
     }
 
+    //Note: This is used to save the filter data to the SharedPreferences.
     public void savePrefBundle(final String filterDataName, final Bundle bundle) {
         Thread t = new Thread(
                 new Runnable() {
@@ -766,6 +782,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         t.start();
     }
 
+    //Note: This is used of getting all the project type data needed based on the Project type id.
     public void searchBackProjectTypeName(String key) {
 
         Realm realm = Realm.getDefaultInstance();
@@ -781,16 +798,13 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             Bundle bundle = new Bundle();
             bundle.putString(key, projectName);
             setTypeSelect(projectName);
+
+            //Saving all the extracted project type data to the sharedprefences. This will be used when The Search ProjectType View model section is called (getPref).
             savePrefBundle(activity.getString(R.string.FilterTypeData), bundle);
         }
     }
-    public void setCounty(String id, String county) {
-        projectPost.setCounty(county);
-        projectPost.setFipsCounty(id);
-    }
 
-
-
+    //Note: This is used of getting all the Stage type data needed based on the Stage type id.
     public void searchBackStageName(final String key) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -813,7 +827,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             }
         });
 
-
         if (!stageName.trim().isEmpty()) {
             Bundle bundle = new Bundle();
             bundle.putString(SearchFilterStageViewModel.BUNDLE_KEY_ID, key);
@@ -821,10 +834,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             bundle.putString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE, stageType);
             Bundle bStage = new Bundle();
             bStage.putBundle(key, bundle);
-            // bundle.putString(key, stageName);
             setStageSelect(stageName);
+
+            //Saving all the extracted stage data to the sharedprefences. This will be used when The Search Stage View model section is called (getPref).
             savePrefBundleStageOnly(activity.getString(R.string.FilterStageData), bStage);
         }
+    }
+
+    public void setCounty(String id, String county) {
+        projectPost.setCounty(county);
+        projectPost.setFipsCounty(id);
     }
 
 }

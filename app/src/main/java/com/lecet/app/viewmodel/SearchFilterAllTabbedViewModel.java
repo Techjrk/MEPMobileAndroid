@@ -77,7 +77,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public static final String EXTRA_CBIDDING_WITHIN_DISPLAY_STR = "CompanyBiddingWithinDisplayStr";
     public static final String EXTRA_CBIDDING_WITHIN_DAYS_INT = "CompanyBiddingWithinDaysInt";
     public static final String EXTRA_CPROJECT_TYPE_ID = "CompanyProjectTypeId";
-
+    //Note: This static userCreated is needed because it used mostly from different parts of the code and needs to check whether the app is in the Project Near Me or in the Main Search section.
     public static boolean userCreated;
     private AppCompatActivity activity;
     private int id;
