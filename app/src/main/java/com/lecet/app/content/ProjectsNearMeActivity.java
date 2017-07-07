@@ -111,6 +111,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
+            //Note: setting up the native up button for Return to Home function.
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -245,6 +246,9 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     @Override
     protected void onResume() {
         super.onResume();
+
+        //Note: code below is used when the CustomProject Edit/Update has been closed. Need to delete the SharedPref used by this Edit function in order not to mix-up with the
+        // search filter item that could be used when retaining the filter data to be used for the search section.
         if (!viewModel.getRequestMPNFilter()) {
             viewModel.clearSharedPref(getString(R.string.FilterTypeData));
             viewModel.clearSharedPref(getString(R.string.FilterStageData) + "name");
@@ -272,7 +276,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //TODO: in future, each filter should have each request code and create a ticket to fogbugz - backlog,lecetv2 android .
+        //Note: in future, each filter should have each request code and create a ticket to fogbugz - backlog,lecetv2 android .
 
         Log.d(TAG, "onActivityResult: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
 
@@ -287,6 +291,8 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
         else if (requestCode == REQUEST_FILTER_MPN) {
             Log.d(TAG, "onActivityResult: filtermpn");
+
+            //Note: This code below is used later for the onResume of the ProjectsNearMeActivity not to delete the SharedPreferences for the filter data.
             viewModel.setRequestMPNFilter(true);
             processFilter(requestCode, data);
         }
@@ -698,11 +704,13 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         locationManager.startLocationUpdates();
     }
 
+    //Note: this is used to toggle the display from the map view to table view.
     public void onBidTableViewPressed(View view) {
         Log.d(TAG, "onBidTableViewPressed");
         viewModel.setTableViewDisplay(!viewModel.getTableViewDisplay());
     }
 
+    //Note: refresh the table view
     public void updateTableViewPager() {
         setupViewPager(viewPager);
         pagerAdapter.notifyDataSetChanged();
