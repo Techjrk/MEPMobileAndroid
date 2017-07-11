@@ -381,6 +381,15 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             return;
         }
         Call<Project> call;
+        Calendar c = Calendar.getInstance();
+        Log.d("CurrentTime","Current time => " + c.getTime());
+        /** Getting the date today for firstPublishDate for Recently Project Added and
+         * for lastPublishDat for Recently Project Updated
+         * Note: The date format should be in UTC and in the format of "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+         */
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+        //new SimpleDateFormat("MM/dd/yy"); // new SimpleDateFormat("dd-MMM-yyyy");
+        String today = df.format(c.getTime());
 
         if(isEditMode()){
 
@@ -391,22 +400,19 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 //                Give the projectPost a new Lat and lng that acurately tracks its location.
 //                resetLngAndLat();
             }
-
+            //Note:
+            //The saved edited project cannot be viewed immediately from the Recently Updated screen according to Harry.
+            //He said that when he discussed this with Devo, there's still some processing on the web side on the dodge system or something.
+            //Anyways, This code below is used for displaying the custom project in the RecentlyUpdated view.
+            projectPost.setLastPublishDate(today);
+            projectPost.setPriorPublishDate(today); //This is just in case it's needed.
             call = projectDomain.updateProject(projectId, projectPost);
 
         } else {
-            /**Note: Getting the date today for firstPublishDate for new recent project added
-             *
-             */
-
-            Calendar c = Calendar.getInstance();
-            System.out.println("Current time => " + c.getTime());
-
-            //Note: The date format should be in UTC.
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
-            //new SimpleDateFormat("MM/dd/yy"); // new SimpleDateFormat("dd-MMM-yyyy");
-            String today = df.format(c.getTime());
-            //Note: This is used for displaying the custom project in the RecentlyAdded view.
+            /**Note:
+             * This is used for displaying the custom project in the RecentlyAdded view.
+             * This could be view immediately from the Recently Added screen.
+             * */
             projectPost.setFirstPublishDate(today);
             call = projectDomain.postProject(projectPost);
         }
