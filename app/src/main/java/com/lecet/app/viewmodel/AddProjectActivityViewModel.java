@@ -22,6 +22,7 @@ import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.content.AddProjectActivity;
+import com.lecet.app.content.MainActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterCountyActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
@@ -44,8 +45,10 @@ import com.lecet.app.interfaces.ClickableMapInterface;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -108,7 +111,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         // create the new projectPost obj
         projectPost = new ProjectPost(latitude, longitude);
-
         // if creating a new project
         if (!isEditMode()) {
 
@@ -372,12 +374,14 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
     }
 
     private void postProject() {
+        SearchFilterAllTabbedViewModel.userCreated=true;
         Log.d(TAG, "postProject: Project Post: " + projectPost);
         if(TextUtils.isEmpty(projectPost.getCounty()) || TextUtils.isEmpty(projectPost.getFipsCounty())){
             showCancelAlertDialog("",activity.getResources().getString(R.string.county_not_set_message));
             return;
         }
         Call<Project> call;
+
         if(isEditMode()){
 
             if (projectPost.getAddress1() != project.getAddress1() ||
@@ -391,7 +395,19 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             call = projectDomain.updateProject(projectId, projectPost);
 
         } else {
+            /**Note: Getting the date today for firstPublishDate for new recent project added
+             *
+             */
 
+            Calendar c = Calendar.getInstance();
+            System.out.println("Current time => " + c.getTime());
+
+            //Note: The date format should be in UTC.
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+            //new SimpleDateFormat("MM/dd/yy"); // new SimpleDateFormat("dd-MMM-yyyy");
+            String today = df.format(c.getTime());
+            //Note: This is used for displaying the custom project in the RecentlyAdded view.
+            projectPost.setFirstPublishDate(today);
             call = projectDomain.postProject(projectPost);
         }
 
