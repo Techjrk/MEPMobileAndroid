@@ -37,18 +37,31 @@ public class SearchFilterStageViewModel extends BaseObservable {
     public static final String BUNDLE_KEY_VIEW_TYPE = "com.lecet.app.viewmodel.SearchFilterStageViewModel.viewType";
     public static final String BUNDLE_KEY_ID = "com.lecet.app.viewmodel.SearchFilterStageViewModel.id";
     public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterStageViewModel.name";
-    private AppCompatActivity activity;
     public static final int NO_TYPE = -1;
+    private AppCompatActivity activity;
 
- //   public static int lastFamilyChecked = NO_TYPE;
- //   public static int lastSection; //keep track of last section used by the selected item
- //   public static int lastPosition; //keep track of last position used by the selected item
- //   public static int lastChildParentPosition; //keep track of last child parent used by the selected item
     private String lastName;
     private int lastSection; //keep track of last section used by the selected item
     private  int lastPosition; //keep track of last position used by the selected item
     private int lastChildParentPosition; //keep track of last child parent used by the selected item
     private int lastFamilyChecked = NO_TYPE;
+    private boolean customSearch;
+    private Bundle bundle;
+    private RealmResults<SearchFilterStagesMain> realmStages;
+    private String query;
+    private CheckBox lastChecked;
+
+    /**
+     * Constructor
+     */
+    public SearchFilterStageViewModel(AppCompatActivity activity) {
+        this.activity = activity;
+        getLastCheckedItems();
+        bundle = getPrefBundle();
+        if (bundle == null) bundle = new Bundle();
+        getProjectStages();
+        searchItem("");
+    }
 
     public int getLastFamilyChecked() {
         return lastFamilyChecked;
@@ -82,7 +95,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
         this.lastSection = lastSection;
     }
 
-    private boolean customSearch;
 
     public boolean getCustomSearch() {
         return customSearch;
@@ -100,8 +112,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
         this.lastName = lastName;
     }
 
-    private Bundle bundle;
-
     public Bundle getBundle() {
         return bundle;
     }
@@ -109,12 +119,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
     public void setBundle(Bundle bundle) {
         this.bundle = bundle;
     }
-
-    // private Bundle bundleCheck;
-    private RealmResults<SearchFilterStagesMain> realmStages;
-    private String query;
-    private CheckBox lastChecked;
-  //  private SearchFilterStageAdapter adapter;
 
     public CheckBox getLastChecked() {
         return lastChecked;
@@ -135,29 +139,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
         searchItem(query);
     }
 
-    /**
-     * Constructor
-     */
-    public SearchFilterStageViewModel(AppCompatActivity activity) {
-        this.activity = activity;
-        getLastCheckedItems();
-        bundle = getPrefBundle();
-        Log.d("bundleStage","bundleStage"+bundle);
-        if (bundle == null) bundle = new Bundle();
-/*
-        if (getPrefBundle() == null) {
-            bundle = new Bundle();
-            //bundleCheck = new Bundle();
-        }
-        else {
-            bundle = getPrefBundle();
-           // bundleCheck = getPrefBundle();
-        }
-*/
-        //bundle = new Bundle();
-        getProjectStages();
-        searchItem("");
-    }
+
 
     /**
      * Clear the Stage bundle
@@ -182,7 +164,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
 void saveLastCheckedItems() {
     SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
     SharedPreferences.Editor edit = spref.edit();
-    //edit.clear();
     edit.putInt("lastFamilyChecked",lastFamilyChecked);
     edit.putString("lastName",lastName);
     edit.putInt("lastChildParentPosition",lastChildParentPosition);
@@ -206,20 +187,11 @@ void getLastCheckedItems(){
      */
     public void onApplyButtonClicked(View view) {
         if (SearchFilterAllTabbedViewModel.userCreated) {
-            //setLastChecked(null);
-            //clearLast();
             saveLastCheckedItems();
         }
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-       // intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundleCheck);
         activity.setResult(Activity.RESULT_OK, intent);
-       /* if (!bundle.isEmpty()) {
-            activity.setResult(Activity.RESULT_OK, intent);
-        } else {
-            activity.setResult(Activity.RESULT_CANCELED);
-        }*/
-
         activity.finish();
     }
 
@@ -260,10 +232,8 @@ void getLastCheckedItems(){
         hasChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            //SearchFilterStageAdapter.customSearch = true;
             setCustomSearch(true);
         } else {
-            //SearchFilterStageAdapter.customSearch = false;
             setCustomSearch(false);
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
@@ -282,12 +252,9 @@ void getLastCheckedItems(){
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
                 foundParent = true;
             }
-            //***
             if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(parent.getId())) ) {
                 parent.setSelected(true);
             }
-
-            //***
 
             children = new ArrayList<>();
             for (SearchFilterStage childStage : parentStage.getStages()) {
@@ -329,7 +296,6 @@ void getLastCheckedItems(){
         Bundle b = null;
         SharedPreferences sprefName = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"name", Context.MODE_PRIVATE);
         SharedPreferences sprefView = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"view", Context.MODE_PRIVATE);
-        Log.d("getPrefBundle","getPrefBundle"+sprefName);
         if (sprefName != null) {
             Set<String> sIDs = sprefName.getAll().keySet();
             Log.d("sids","sids"+sIDs);
@@ -342,7 +308,7 @@ void getLastCheckedItems(){
                 b2.putString(BUNDLE_KEY_NAME, sprefName.getString(keyID, ""));
                 b2.putString(BUNDLE_KEY_VIEW_TYPE,sprefView.getString(keyID,""));
                 b.putBundle(keyID,b2);
-                Log.d("getPrefStageBundle2","getPrefStageBundle2"+keyID+" : "+sprefName.getString(keyID,"")+":"+sprefView.getString(keyID,""));
+                Log.d("getPrefStageBundle","getPrefStageBundle"+keyID+" : "+sprefName.getString(keyID,"")+":"+sprefView.getString(keyID,""));
 
                 if (sprefView.getString(keyID,"").equals("")) lastFamilyChecked = Integer.valueOf(sprefView.getString(keyID,""));
                 setLastName(sprefName.getString(keyID, ""));

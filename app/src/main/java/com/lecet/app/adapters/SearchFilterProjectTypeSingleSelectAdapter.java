@@ -69,51 +69,51 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
     public void clearLast() {
         viewModel.setLastChecked(null);
-        viewModel.lastFamilyChecked = NO_TYPE;
+        viewModel.setLastFamilyChecked(NO_TYPE);
         viewModel.setLastName("");
         //Additional to clear
-        viewModel.lastChildParentPosition=0;
-        viewModel.lastSection=0;
-        viewModel.lastPosition=0;
+        viewModel.setLastChildParentPosition(0);
+        viewModel.setLastSection(0);
+        viewModel.setLastPosition(0);
     }
 
     private void checkLastSelect(boolean selected) {
 
-        if (viewModel.lastFamilyChecked != NO_TYPE) {
-            if (viewModel.lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
-                if (data != null && viewModel.lastSection < data.size() && data.get(viewModel.lastSection) != null && data.get(viewModel.lastSection).getChildren() != null
-                        && viewModel.lastChildParentPosition < data.get(viewModel.lastSection).getChildren().size() && data.get(viewModel.lastSection).getChildren().get(viewModel.lastChildParentPosition) != null
-                        && data.get(viewModel.lastSection).getChildren().get(viewModel.lastChildParentPosition).getGrandChildren() != null
-                        && viewModel.lastPosition < data.get(viewModel.lastSection).getChildren().get(viewModel.lastChildParentPosition).getGrandChildren().size()) {
-                    data.get(viewModel.lastSection).getChildren().get(viewModel.lastChildParentPosition).getGrandChildren().get(viewModel.lastPosition).setSelected(selected);
+        if (viewModel.getLastFamilyChecked() != NO_TYPE) {
+            if (viewModel.getLastFamilyChecked() == GRAND_CHILD_VIEW_TYPE) {
+                if (data != null && viewModel.getLastSection() < data.size() && data.get(viewModel.getLastSection()) != null && data.get(viewModel.getLastSection()).getChildren() != null
+                        && viewModel.getLastChildParentPosition() < data.get(viewModel.getLastSection()).getChildren().size() && data.get(viewModel.getLastSection()).getChildren().get(viewModel.getLastChildParentPosition()) != null
+                        && data.get(viewModel.getLastSection()).getChildren().get(viewModel.getLastChildParentPosition()).getGrandChildren() != null
+                        && viewModel.getLastPosition() < data.get(viewModel.getLastSection()).getChildren().get(viewModel.getLastChildParentPosition()).getGrandChildren().size()) {
+                    data.get(viewModel.getLastSection()).getChildren().get(viewModel.getLastChildParentPosition()).getGrandChildren().get(viewModel.getLastPosition()).setSelected(selected);
 
                 }
 
-            } else if (viewModel.lastFamilyChecked == CHILD_VIEW_TYPE) {
-                if (data != null && viewModel.lastSection < data.size() && data.get(viewModel.lastSection) != null
-                        && data.get(viewModel.lastSection).getChildren().size() > viewModel.lastPosition) {
-                    data.get(viewModel.lastSection).getChildren().get(viewModel.lastPosition).setSelected(selected);
+            } else if (viewModel.getLastFamilyChecked() == CHILD_VIEW_TYPE) {
+                if (data != null && viewModel.getLastSection() < data.size() && data.get(viewModel.getLastSection()) != null
+                        && data.get(viewModel.getLastSection()).getChildren().size() > viewModel.getLastPosition()) {
+                    data.get(viewModel.getLastSection()).getChildren().get(viewModel.getLastPosition()).setSelected(selected);
                 }
 
-            } else if (viewModel.lastFamilyChecked == PARENT_VIEW_TYPE) {
-                if (data != null && viewModel.lastSection < data.size())
-                    data.get(viewModel.lastSection).setSelected(selected);
+            } else if (viewModel.getLastFamilyChecked() == PARENT_VIEW_TYPE) {
+                if (data != null && viewModel.getLastSection() < data.size())
+                    data.get(viewModel.getLastSection()).setSelected(selected);
             }
         }
     }
 
     private void checkLastGChildSelectName(boolean selected, SearchFilterProjectTypeAdapter.GrandChild gcname, GrandChildTypeViewHolder vholder, int section, int grandChildParentIndex, int grandChildIndex) {
 
-        if (viewModel.lastFamilyChecked != NO_TYPE) {
-            if (viewModel.lastFamilyChecked == GRAND_CHILD_VIEW_TYPE) {
+        if (viewModel.getLastFamilyChecked() != NO_TYPE) {
+            if (viewModel.getLastFamilyChecked() == GRAND_CHILD_VIEW_TYPE) {
                 if (data != null && gcname != null && viewModel.getLastName() !=null) {
                     if (viewModel.getLastName().equals(gcname.getName().trim())) {
                         checkLastSelect(false);
                         gcname.setSelected(selected);
                         vholder.checkView.setSelected(selected);
-                        viewModel.lastPosition = Integer.valueOf(grandChildIndex);
-                        viewModel.lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
-                        viewModel.lastSection = section;
+                        viewModel.setLastPosition(Integer.valueOf(grandChildIndex));
+                        viewModel.setLastChildParentPosition(Integer.valueOf(grandChildParentIndex));
+                        viewModel.setLastSection(section);
                     } else if (gcname.getSelected() == true) gcname.setSelected(false);
                 }
             }
@@ -122,15 +122,15 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
     private void checkLastChildSelectName(boolean selected, SearchFilterProjectTypeAdapter.Child cname, ChildViewHolder vholder, int section, int truePosition) {
 
-        if (viewModel.lastFamilyChecked != NO_TYPE) {
-            if (viewModel.lastFamilyChecked == CHILD_VIEW_TYPE) {
+        if (viewModel.getLastFamilyChecked() != NO_TYPE) {
+            if (viewModel.getLastFamilyChecked() == CHILD_VIEW_TYPE) {
                 if (data != null && cname != null && viewModel.getLastName() !=null) {
                     if (viewModel.getLastName().equals(cname.getName().trim())) {
                         checkLastSelect(false);
                         cname.setSelected(selected);
                         vholder.checkView.setSelected(selected);
-                        viewModel.lastPosition = Integer.valueOf(truePosition);
-                        viewModel.lastSection = section;
+                        viewModel.setLastPosition(Integer.valueOf(truePosition));
+                        viewModel.setLastSection(section);
                     } else if (cname.getSelected() == true) cname.setSelected(false);
                 }
             }
@@ -139,15 +139,15 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
     private void checkLastParentSelectName(boolean selected, SearchFilterProjectTypeAdapter.Parent pname, ParentViewHolder vholder, int section) {
 
-        if (viewModel.lastFamilyChecked != NO_TYPE) {
-            if (viewModel.lastFamilyChecked == PARENT_VIEW_TYPE) {
+        if (viewModel.getLastFamilyChecked() != NO_TYPE) {
+            if (viewModel.getLastFamilyChecked() == PARENT_VIEW_TYPE) {
                 if (data != null && pname != null && viewModel.getLastName() !=null) {
                     if (viewModel.getLastName().equals(pname.getName().trim())) {
                         checkLastSelect(false);
                         pname.setSelected(selected);
                         checkLastSelect(true);
                         vholder.checkView.setSelected(selected);
-                        viewModel.lastSection = section;
+                        viewModel.setLastSection(section);
                     } else if (pname.getSelected() == true) pname.setSelected(false);
                 }
 
@@ -288,9 +288,9 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                                 }
 
                                 viewModel.setLastChecked(childViewHolder.checkView);
-                                viewModel.lastFamilyChecked = CHILD_VIEW_TYPE;
-                                viewModel.lastPosition = Integer.valueOf(truePosition);
-                                viewModel.lastSection = section;
+                                viewModel.setLastFamilyChecked(CHILD_VIEW_TYPE);
+                                viewModel.setLastPosition(Integer.valueOf(truePosition));
+                                viewModel.setLastSection(section);
                                 viewModel.setLastName(cb.getText().toString().trim());
                                 viewModel.clearBundle();
                                 selectedChild.putInt(child.getName(), truePosition);
@@ -419,10 +419,10 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                                 }
 
                                 viewModel.setLastChecked(grandChildViewHolder.checkView);
-                                viewModel.lastFamilyChecked = GRAND_CHILD_VIEW_TYPE;
-                                viewModel.lastPosition = Integer.valueOf(grandChildIndex);
-                                viewModel.lastChildParentPosition = Integer.valueOf(grandChildParentIndex);
-                                viewModel.lastSection = section;
+                                viewModel.setLastFamilyChecked(GRAND_CHILD_VIEW_TYPE);
+                                viewModel.setLastPosition(Integer.valueOf(grandChildIndex));
+                                viewModel.setLastChildParentPosition(Integer.valueOf(grandChildParentIndex));
+                                viewModel.setLastSection(section);
                                 viewModel.setLastName(cb.getText().toString().trim());
                                 viewModel.clearBundle();
                                 viewModel.addProjectTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
@@ -502,8 +502,8 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                             }
 
                             viewModel.setLastChecked(parentViewHolder.checkView);
-                            viewModel.lastFamilyChecked = PARENT_VIEW_TYPE;
-                            viewModel.lastSection = section;
+                            viewModel.setLastFamilyChecked(PARENT_VIEW_TYPE);
+                            viewModel.setLastSection(section);
                             viewModel.setLastName(cb.getText().toString().trim());
                             viewModel.clearBundle();
                             selectedParent.putInt(parent.getName(),section);
