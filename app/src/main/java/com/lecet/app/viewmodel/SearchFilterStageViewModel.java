@@ -1,7 +1,9 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
@@ -181,14 +183,49 @@ void getLastCheckedItems(){
     lastPosition=spref.getInt("lastPosition",lastPosition);
 
 }
+    void showAlertMessage() {
+        DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        //postProject();
+                        //dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+      AlertDialog  alert = new AlertDialog.Builder(activity).create();
+        String message = "Please Select A Stage Item.";
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(android.R.string.ok), onClickAddListener);
+        alert.setMessage(message);
+        alert.show();
+    }
+
 
     /**
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
         if (SearchFilterAllTabbedViewModel.userCreated) {
+            //setLastChecked(null);
+            //clearLast();
+            if (bundle.isEmpty() ) {
+                showAlertMessage();
+                return;
+            }
             saveLastCheckedItems();
         }
+
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         activity.setResult(Activity.RESULT_OK, intent);
