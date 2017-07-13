@@ -1,7 +1,9 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
@@ -117,11 +119,44 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         });
     }
 
+    void showAlertMessage() {
+        DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        //postProject();
+                        //dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+        AlertDialog alert = new AlertDialog.Builder(activity).create();
+        String message = "Please Select A Project Type Item.";
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(android.R.string.ok), onClickAddListener);
+        alert.setMessage(message);
+        alert.show();
+    }
+
+
     /**
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
         if (SearchFilterAllTabbedViewModel.userCreated) {
+            if (bundle.isEmpty() ) {
+                showAlertMessage();
+                return;
+            }
             saveLastCheckedItems();
         }
         Intent intent = activity.getIntent();
