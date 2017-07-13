@@ -394,11 +394,16 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         if(isEditMode()){
 
             if (projectPost.getAddress1() != project.getAddress1() ||
-                    projectPost.getState() != project.getState() ||
-                    projectPost.getCity() != project.getCity() ||
-                    projectPost.getAddress2() != project.getAddress2()) {
-//                Give the projectPost a new Lat and lng that acurately tracks its location.
-//                resetLngAndLat();
+                projectPost.getState() != project.getState() ||
+                projectPost.getCity() != project.getCity() ||
+                projectPost.getAddress2() != project.getAddress2()) {
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = format.format(new Date().getTime());
+                projectPost.setLastPublishDate(strDate);
+
+//              Give the projectPost a new Lat and lng that accurately tracks its location.
+//              resetLngAndLat();
             }
             //Note:
             //The saved edited project cannot be viewed immediately from the Recently Updated screen according to Harry.
