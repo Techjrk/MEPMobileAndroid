@@ -78,22 +78,29 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public static final String EXTRA_CBIDDING_WITHIN_DAYS_INT = "CompanyBiddingWithinDaysInt";
     public static final String EXTRA_CPROJECT_TYPE_ID = "CompanyProjectTypeId";
 
-    public static boolean userCreated;
     private AppCompatActivity activity;
     private int id;
     private Intent intent;
+
+    //Note: This static userCreated is needed because it used mostly from different parts of the code and needs to check whether the app is in the Project Near Me or in the Main Search section.
+    public static boolean userCreated;
+
+    //Note: This variable is used for instantSearch for determining if the user has selected the Project instant search tab against the Company instant search tab.
     private boolean isProjectViewVisible = true;
+
+    //Note; This variable is used for determining if the OwnerType field view and WorkType view should be showed or hide.
     private boolean moreOption;
-    private String persistProjectTypeIdInt;
-    ///
+
+    /**
+     * Note: This resultxxx variables is used for holding the url filter parameter to be passed for web api.
+     * These setter/getter methods of these variables are also used for saving/restoring the previous  selected filter items to the sharedPreferences.
+    */
     private String resultUpdateWithin;
     private String resultBiddingWithin;
     private String resultValue;
-
     private String resultProjectType;
     private String resultStage;
     private String resultJurisdiction;
-
     private String resultBH;
     private String resultOwnerType;
     private String resultWorkType;
@@ -139,6 +146,11 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private String[] persistedBuildingOrHighway;
     private String persistedOwnerType;
     private String persistedWorkType;
+    private String persistProjectTypeIdInt;
+
+    /** Note: This variable is used for viewing and hiding the search location field.
+     *      If the user is in the Project Near Me section, this search location field is hidden. If not, it is visible.
+     */
     private boolean usingProjectNearMe;
 
     // SharedPreferences spref;
@@ -176,6 +188,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             Log.d("sprefnull", "sprefnull");
         }
     }
+
+    //Note: Temporarily not used. This could be used in the code if needed to reset the value of resultxxx.
     void initResult(){
         setResultValue("");
         setResultBiddingWithin("");
@@ -189,7 +203,8 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setResultOwnerType("");
         setResultWorkType("");
     }
-    //Used this method to determine if the location needed to be hide ( Yes for using the ProjectNearMe section)
+
+    // Note: The setter/getter methods are used to determine if the location needed to be hide ( Yes for using the ProjectNearMe section)
     @Bindable
     public boolean getUsingProjectNearMe() {
         return usingProjectNearMe;
@@ -516,9 +531,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.ctype:
             case R.id.type:
                 section = TYPE;
-                // SearchFilterAllTabbedViewModel.userCreated = false;
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
-                //i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_DISPLAY_STR, getPRO));
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
                 i.putExtra(EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt());
                 break;
@@ -532,8 +545,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                     i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, value.substring(1, value.indexOf('-')).trim());
                     i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, value.substring(value.indexOf('-') + 3, value.length()).trim());
                 }
-//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MIN, getPersistedValueMin());
-//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_VALUE_MAX, getPersistedValueMax());
                 break;
 
             case R.id.updated_within:
@@ -541,7 +552,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                 i = new Intent(activity, SearchFilterUpdatedWithinActivity.class);
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
-
                 break;
 
             case R.id.cjurisdiction:
@@ -568,26 +578,21 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
             case R.id.bh:
                 section = BH;
                 i = new Intent(activity, SearchFilterBuildingOrHighwayActivity.class);
-//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_BUILDING_OR_HIGHWAY, getBh_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_BUILDING_OR_HIGHWAY, getPersistedBuildingOrHighway());
                 break;
 
             case R.id.ownertype:
                 section = OWNER_TYPE;
                 i = new Intent(activity, SearchFilterOwnerTypeActivity.class);
-                //setPersistedOwnerType(getOwner_type_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE, getOwner_type_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE_ID, getPersistedOwnerType());
-//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE, getPersistedOwnerType());
                 break;
 
             case R.id.worktype:
                 section = WORK_TYPE;
                 i = new Intent(activity, SearchFilterWorkTypeActivity.class);
-                //setPersistedWorkType(getWork_type_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE, getWork_type_select());
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE_ID, getPersistedWorkType());
-//                i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE, getPersistedWorkType());
                 break;
 
             case R.id.option:
@@ -621,12 +626,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         if (getIsProjectViewVisible()) {
             Log.d("SearchFilterMPFVM", "project tab clicked");
             SearchViewModel.companyInstantSearch=false;
-            //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_PROJECT);
         } else {
             Log.d("SearchFilterMPFVM", "company tab clicked");
             //Focus in company. Search for the Company.
             SearchViewModel.companyInstantSearch=true;
-            //   intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
@@ -649,7 +652,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         } else {
             intent.putExtra(SearchViewModel.SAVE_SEARCH_CATEGORY, SearchViewModel.SAVE_SEARCH_CATEGORY_COMPANY);
         }
-        //savePrefFilterFieldValues();
         activity.setResult(Activity.RESULT_OK, intent);
     }
 
@@ -672,11 +674,13 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         this.persistProjectTypeIdInt = persistProjectTypeIdInt;
     }
 
-
+    //Note: This method is used to extract all the filter saved from the SharedPreferences to be used to display again the previous selected item to the filter field section.
     void getPrefFilterFieldValues(SharedPreferences spref) {
 
+        /** Note: For displaying the project filter values to the project search field and project instant search tab fields (for instansearch)
+         *  and for extracting the filter data needed for processing.
+         */
         setLocation_select(spref.getString(EXTRA_LOCATION_CITY, getLocation_select()));
-
         setType_select(spref.getString(EXTRA_PROJECT_TYPE_ID, getType_select()));
         setPersistProjectTypeIdInt(spref.getString(EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt()));
 
@@ -685,32 +689,33 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
         setJurisdiction_select(spref.getString(EXTRA_JURISDICTION, getJurisdiction_select()));
         setStage_select(spref.getString(EXTRA_STAGE, getStage_select()));
-
         setBidding_within_select(spref.getString(EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select()));
         setPersistedBiddingWithin(spref.getString(EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin()));
 
         setBh_select(spref.getString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select()));
         if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
             persistedBuildingOrHighway[1] = spref.getString(EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
+
         setOwner_type_select(spref.getString(EXTRA_OWNER_TYPE, getOwner_type_select()));
         setPersistedOwnerType(spref.getString(EXTRA_OWNER_TYPE_ID, getPersistedOwnerType()));
+
         setWork_type_select(spref.getString(EXTRA_WORK_TYPE, getWork_type_select()));
         setPersistedWorkType(spref.getString(EXTRA_WORK_TYPE_ID, getPersistedWorkType()));
+
         setValue_select(spref.getString(EXTRA_VALUE, getValue_select()));
 
-        //For Company
+        //Note: For displaying the company filter values to the company instant search tab fields and for extracting the filter data needed for processing.
         setClocationSelect(spref.getString(EXTRA_CLOCATION_CITY, getClocationSelect()));
         setCvalueSelect(spref.getString(EXTRA_CVALUE, getCvalueSelect()));
         setCjurisdictionSelect(spref.getString(EXTRA_CJURISDICTION, getCjurisdictionSelect()));
         setCbiddingWithinSelect(spref.getString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect()));
         setCtypeSelect(spref.getString(EXTRA_CPROJECT_TYPE_ID, getCtypeSelect()));
 
-        //For Result
-        setResultUpdateWithin(spref.getString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin()));
-        setResultBiddingWithin(spref.getString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin()));
-        setResultValue(spref.getString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue()));
+        //setResultUpdateWithin(spref.getString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin()));
+        //setResultBiddingWithin(spref.getString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin()));
+        //setResultValue(spref.getString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue()));
 
-        //For FilterResult
+        //Note: For Resultset of the url filter parameter values that will be passed to the web api.
         setResultProjectType(spref.getString(activity.getString(R.string.FilterResultProjectType),""));
         setResultValue(spref.getString(activity.getString(R.string.FilterResultValue),""));
         setResultUpdateWithin(spref.getString(activity.getString(R.string.FilterResultUpdatedWithin),""));
@@ -721,41 +726,41 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setResultOwnerType(spref.getString(activity.getString(R.string.FilterResultOwnerType),""));
         setResultWorkType(spref.getString(activity.getString(R.string.FilterResultWorkType),""));
 
-
         //Then set all the previous result to the intent
         setAllFilterResults();
     }
 
 
-
+    /** Note: Used for setting all the previous url filter parameters extracted from the sharedpreferences
+     *  and place this filters to the intent where it will be used in  processing the search filter for web api in the MPSActivity class.
+     */
     void setAllFilterResults() {
         setFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
         setFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
         setFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
-
         setFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, getResultProjectType());
         setFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION,getResultJurisdiction());
-
         setFilterResult(SearchViewModel.FILTER_PROJECT_STAGE,getResultStage());
-
         setFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, getResultWorkType());
         setFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE,getResultOwnerType());
         setFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY,getResultBH());
 
-        Log.d("jnoel","jnoel"+intent.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION));
     }
-
+    // Note: Used for setting the extracted filter value with corresponding filter key name to the Intent object.
     void setFilterResult(String key, String value) {
         if (value != null && !value.isEmpty()) setSearchFilterResult(key, value);
         else setSearchFilterResult(key, "");
     }
 
+    // Note: Used for saving the filter data to the sharedPreferences.
     public void savePref(SharedPreferences.Editor edit, String key, String values) {
         // SharedPreferences.Editor edit = spref.edit();
         if (values != null && !values.isEmpty()) edit.putString(key, values);
     }
 
+    // Note: Used to save all previous selected filter items to the sharedpreferences named Filter.
     public void savePrefFilterFieldValues() {
+        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
         Thread t = new Thread(
                 new Runnable() {
 
@@ -802,7 +807,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                         savePref(edit, EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect());
                         savePref(edit, EXTRA_CPROJECT_TYPE_ID, getCtypeSelect());
 
-                        //Saving the Project/Company Filter Final Result values that could be used later
+                        //Saving the Project/Company Filter Final Result values for Web api that could be used later
                         savePref(edit,activity.getString(R.string.FilterResultProjectType),getResultProjectType());
                         savePref(edit,activity.getString(R.string.FilterResultValue),getResultValue());
                         savePref(edit,activity.getString(R.string.FilterResultUpdatedWithin),getResultUpdateWithin());
@@ -818,8 +823,14 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         t.start();
     }
 
-
+    /** Note: This method is used for saving the special filters data (Project types and Jurisdiction) to the sharedPreferences
+     *
+     * @param filterDataName - used as a filter key name for saving to sharedPreferences.
+     * @param bundle - hold the filter data to be saved to the sharedPreferences.
+     */
     public void savePrefBundle(final String filterDataName, final Bundle bundle) {
+
+        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
         Thread t = new Thread(
                 new Runnable() {
 
@@ -838,8 +849,15 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
     }
 
+    /** Note: This method is used for saving the special filter data (Stage) to the sharedPreferences
+     *
+     * @param filterDataName - used as a filter key name for saving to sharedPreferences.
+     * @param bundle - hold the filter data to be saved to the sharedPreferences.
+     */
     public void savePrefBundleStageOnly(String filterDataName, final Bundle bundle) {
         final String fName = filterDataName + "name";
+
+        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
         Thread t = new Thread(
                 new Runnable() {
 
@@ -863,10 +881,17 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         savePrefBundleStageViewOnly(filterDataName, bundle);
     }
 
+    /** Note: This method is used for saving the other special filter data (Stage) to the sharedPreferences
+     *
+     * @param filterDataName - used as a filter key name for saving to sharedPreferences.
+     * @param bundle - hold the filter data to be saved to the sharedPreferences.
+     */
     public void savePrefBundleStageViewOnly(String filterDataName, final Bundle bundle) {
         final String fViewType = filterDataName + "view";
         final SharedPreferences spref = getActivity().getSharedPreferences(fViewType, Context.MODE_PRIVATE);
         final SharedPreferences.Editor edit = spref.edit();
+
+        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
         Thread t = new Thread(
                 new Runnable() {
 
@@ -887,7 +912,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         t.start();
     }
 
-
+    /** Note: The setter/getter methods for resultxxx.
+     *
+     * @return
+     */
     public String getResultBH() {
         return resultBH;
     }

@@ -59,6 +59,7 @@ import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.TextViewUtility;
 import com.lecet.app.viewmodel.MainViewModel;
+import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.lang.reflect.Field;
@@ -77,7 +78,6 @@ import io.realm.RealmChangeListener;
  */
 public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
-
     private static final String TAG = "MainActivity";
     private MainViewModel viewModel;
     private SearchDomain searchDomain;
@@ -135,6 +135,13 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
         //clear the Shared pref for other filters
         clearSharedPref(getString(R.string.Filter));
+      //  if (viewModel !=null) viewModel.refreshMRA();
+        if (SearchFilterAllTabbedViewModel.userCreated) {
+            SearchFilterAllTabbedViewModel.userCreated=false;
+            Intent intent = new Intent(this, DashboardIntermediaryActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
       private void clearSharedPref(String dataName) {

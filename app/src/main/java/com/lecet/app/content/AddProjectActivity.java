@@ -57,6 +57,8 @@ public class AddProjectActivity extends AppCompatActivity {
         viewModel = new AddProjectActivityViewModel(this, latitude, longitude, projectId, projectDomain, locationDomain);
 
         binding.setViewModel(viewModel);
+
+        //Note: Delete all the saved filter from the SharedPreferences before processing the filter data.
         viewModel.deletePrefFilterFieldValues();
     }
 
@@ -86,12 +88,12 @@ public class AddProjectActivity extends AppCompatActivity {
 
     }
 
-
     /**
      * Process the Project Type Bundle extra data
      * Single type selection: "primaryProjectTypeId":503
      */
     private void processProjectType(final Bundle bundle) {
+        //Note: Saving the previous selected project type item to the sharedPreferences for later use if needed for bringing back again the Project Type item View.
         viewModel.savePrefBundle(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
@@ -115,26 +117,6 @@ public class AddProjectActivity extends AppCompatActivity {
                         primaryProjectTypeId = primaryType.getId();
                         break;
                     }
-
-                    // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
-                   /* else {
-                        SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
-                        if (category != null) {
-                            Log.d(TAG, "processProjectType: " + key + " is a Category ID.");
-                            primaryProjectTypeId = category.getId();
-                            break;
-                        }
-
-                        // if that's null, look for a matching parent-level (Main) ID and if found, add all of its child categories' IDs
-                        else {
-                            SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
-                            if (mainType != null) {
-                                Log.d(TAG, "processProjectType: " +  key + " is a Main Type ID.");
-                                primaryProjectTypeId = mainType.getId();
-                                break;
-                            }
-                        }
-                    }*/
                 }
 
                 Log.d(TAG, "processProjectType: " + "displayStr: " + displayStr);
@@ -154,6 +136,8 @@ public class AddProjectActivity extends AppCompatActivity {
      * Ex: "projectStageId":208
      */
     private void processStage(final Bundle bundle) {
+
+        //Note: Saving the previous selected stage item to the sharedPreferences for later use if needed for bringing back again the Stage item View.
         viewModel.savePrefBundleStageOnly(getString(R.string.FilterStageData), bundle); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
@@ -195,5 +179,4 @@ public class AddProjectActivity extends AppCompatActivity {
             }
         });
     }
-
 }
