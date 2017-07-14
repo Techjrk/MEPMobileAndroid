@@ -398,10 +398,6 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                 projectPost.getCity() != project.getCity() ||
                 projectPost.getAddress2() != project.getAddress2()) {
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                String strDate = format.format(new Date().getTime());
-                projectPost.setLastPublishDate(strDate);
-
 //              Give the projectPost a new Lat and lng that accurately tracks its location.
 //              resetLngAndLat();
             }
