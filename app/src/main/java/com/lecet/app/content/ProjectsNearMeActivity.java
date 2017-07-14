@@ -429,7 +429,10 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         //Final search filter result for Project
         String projectsCombinedFilter = projectsSb.toString();
         //String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\" " + projectsCombinedFilter + "}";
+        //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\" " + projectsCombinedFilter + "}";
+        //String filterMPN = "{\"include\":[\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
+        String filterMPN = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
+        Log.d("filterMPN","filterMPN1:"+filterMPN);
         viewModel.setProjectFilter(filterMPN);
         String plocation = viewModel.getSearch().getText().toString();
         if (!plocation.isEmpty()) {
