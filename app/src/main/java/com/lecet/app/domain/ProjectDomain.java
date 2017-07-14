@@ -203,7 +203,8 @@ public class ProjectDomain {
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
         Date current = new Date();
-        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
+        Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate
+        //Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
         int limit = DASHBOARD_CALL_LIMIT;
 
         return getProjectsHappeningSoon(current, endDate, limit, callback);
@@ -278,8 +279,12 @@ public class ProjectDomain {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formattedStart = sdf.format(publishDate);
 
+/*
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"lastPublishDate\":{\"lte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
+*/
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"lastPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"lastPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -454,9 +459,9 @@ public class ProjectDomain {
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mruItem", true)
-                .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
+                .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
-
+              //  .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         return projectsResult;
     }
 
@@ -468,7 +473,7 @@ public class ProjectDomain {
         if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
-                    .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
+                    .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .beginGroup()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
@@ -477,11 +482,11 @@ public class ProjectDomain {
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-
+                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
-                    .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
+                    .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .beginGroup()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
@@ -490,15 +495,16 @@ public class ProjectDomain {
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-
+                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         } else {
 
             projectsResult = realm.where(Project.class)
-                    .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
+                    .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
+                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         }
 
 
