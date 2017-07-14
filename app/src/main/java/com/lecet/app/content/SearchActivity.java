@@ -262,6 +262,8 @@ public class SearchActivity extends AppCompatActivity {
         //Final search filter result for Project
         String projectsCombinedFilter = projectsSb.toString();
         String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
+       // String projectsSearchStr = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\"]"+ projectsCombinedFilter + "}";
+
         viewModel.setProjectSearchFilter(projectsSearchStr);
 
 
