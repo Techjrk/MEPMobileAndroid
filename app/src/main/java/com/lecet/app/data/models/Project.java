@@ -534,7 +534,10 @@ public class Project extends RealmObject implements TrackedObject {
 
         if (this.state != null) {
 
-            fullAddress = fullAddress + ", " + this.state;
+            if(fullAddress.length() != 0) {
+                fullAddress = fullAddress + ", " + this.state;
+            }
+            else fullAddress = fullAddress + this.state;
         }
 
         if (this.zip5 != null) {
