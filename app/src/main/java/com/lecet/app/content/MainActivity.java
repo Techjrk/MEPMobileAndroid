@@ -1,10 +1,6 @@
 package com.lecet.app.content;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.SearchManager;
-import android.app.VoiceInteractor;
-import android.app.VoiceInteractor.PickOptionRequest.Option;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +8,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
@@ -113,24 +108,9 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())){
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            if(query == null || query.isEmpty()){
-                finish();
-                return;
-            }
-            if(containsProjectsNearMe(query)){
-                Intent intent2 = new Intent(this, ProjectsNearMeActivity.class);
-                startActivity(intent2);
-                finish();
 
-            }else if(containsTrackingList(query)){
-                //TODO: ADD FUNCTIONALITY, Probably a separate activity
-                finish();//This is here because there is not proper functionality.
-            }else{
-                finish();
-            }
-        }
+        checkForVoiceActivation(intent);
+
         setupBinding();
         setupToolbar();
 
@@ -142,25 +122,84 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     }
 
-    private boolean containsProjectsNearMe(String phrase){
-        String test = phrase.toLowerCase();
-        if(test.contains("projects near me") || test.contains("project near me")
-                || test.contains("projects by me") || test.contains("project by me")){
+
+    /*
+      Voice Activation
+     */
+
+    private void checkForVoiceActivation(Intent intent) {
+        Log.d(TAG, "checkForVoiceActivation");
+
+        if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())) {
+
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            if(query == null || query.isEmpty()){
+                finish();
+                return;
+            }
+
+            Intent newIntent;
+
+            // Projects Near Me
+            if(matchesPhraseProjectsNearMe(query)){
+                newIntent = new Intent(this, ProjectsNearMeActivity.class);
+                startActivity(newIntent);
+                finish();
+            }
+
+            // Projects Updated Recently
+            else if(matchesPhraseProjectsUpdatedRecently(query)) {
+                //TODO - launch Projects Updated Recently
+                finish();
+            }
+
+            // Tracking List
+            else if(matchesPhraseTrackingList(query)){
+                //TODO: ADD FUNCTIONALITY, Probably a separate activity
+                finish();//This is here because there is not proper functionality.
+            }else{
+                finish();
+            }
+        }
+    }
+
+    private boolean matchesPhraseProjectsNearMe(String rawPhrase){
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_project_near_me))
+        || phrase.contains(getString(R.string.voice_projects_near_me))
+        || phrase.contains(getString(R.string.voice_projects_by_me))
+        || phrase.contains(getString(R.string.voice_project_by_me))
+        || phrase.contains(getString(R.string.voice_projects_nearby))) {
             return true;
         }
-        Log.d(TAG, "containsOneOf: QUERY PHRASE WAS: " + phrase);
+        Log.d(TAG, "matchesPhraseProjectsNearMe: QUERY PHRASE WAS: " + rawPhrase);
+        return false;
+    }
+
+    private boolean matchesPhraseProjectsUpdatedRecently(String rawPhrase) {
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_projects_updated_recently))
+        || phrase.contains(getString(R.string.voice_recent_projects))) {
+            return true;
+        }
+        Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: QUERY PHRASE WAS: " + rawPhrase);
+        return false;
+    }
+
+    private boolean matchesPhraseTrackingList(String rawPhrase){
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_tracking_list))
+        || phrase.contains(getString(R.string.voice_tracking_lists))){
+            return true;
+        }
+        Log.d(TAG, "matchesPhraseTrackingList: QUERY PHRASE WAS: " + rawPhrase);
         return false;
     }
 
 
-    private boolean containsTrackingList(String phrase){
-        String test = phrase.toLowerCase();
-        if(test.contains("tracking list") || test.contains("tracking lists")){
-            return true;
-        }
-        Log.d(TAG, "containsOneOf: QUERY PHRASE WAS: " + phrase);
-        return false;
-    }
+    /*
+     Methods
+     */
 
     @Override
     protected void onResume() {
