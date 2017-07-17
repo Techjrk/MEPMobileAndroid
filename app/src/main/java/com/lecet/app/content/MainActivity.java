@@ -1,5 +1,10 @@
 package com.lecet.app.content;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.SearchManager;
+import android.app.VoiceInteractor;
+import android.app.VoiceInteractor.PickOptionRequest.Option;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +12,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.actions.SearchIntents;
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardPagerAdapter;
 import com.lecet.app.adapters.MTMMenuAdapter;
@@ -105,7 +112,25 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())){
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            if(query == null || query.isEmpty()){
+                finish();
+                return;
+            }
+            if(containsProjectsNearMe(query)){
+                Intent intent2 = new Intent(this, ProjectsNearMeActivity.class);
+                startActivity(intent2);
+                finish();
 
+            }else if(containsTrackingList(query)){
+                //TODO: ADD FUNCTIONALITY, Probably a separate activity
+                finish();//This is here because there is not proper functionality.
+            }else{
+                finish();
+            }
+        }
         setupBinding();
         setupToolbar();
 
@@ -115,6 +140,26 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             setupPageButtons();
         }
 
+    }
+
+    private boolean containsProjectsNearMe(String phrase){
+        String test = phrase.toLowerCase();
+        if(test.contains("projects near me") || test.contains("project near me")
+                || test.contains("projects by me") || test.contains("project by me")){
+            return true;
+        }
+        Log.d(TAG, "containsOneOf: QUERY PHRASE WAS: " + phrase);
+        return false;
+    }
+
+
+    private boolean containsTrackingList(String phrase){
+        String test = phrase.toLowerCase();
+        if(test.contains("tracking list") || test.contains("tracking lists")){
+            return true;
+        }
+        Log.d(TAG, "containsOneOf: QUERY PHRASE WAS: " + phrase);
+        return false;
     }
 
     @Override
