@@ -64,7 +64,6 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     private static final int PARTICIPANT_VIEW_TYPE = 4;
     private static final int BID_VIEW_TYPE = 5;
     private static final int FOOTER_VIEW_TYPE = 6;
-
     private static final int SECTION_DETAILS = 0;
     private static final int SECTION_NOTES = 1;
 
@@ -138,8 +137,9 @@ public class ProjectDetailAdapter extends SectionedAdapter {
     public int getItemCountForSection(int section) {
 
         if (section == SECTION_DETAILS) {
-
-            if (!isDetailsExpanded()) {
+            return projectDetails.size()-1;
+            
+          /*  if (!isDetailsExpanded()) {
 
                 // Show details up to Est. Low
                 return DETAILS_DEFAULT_COUNT;
@@ -147,7 +147,7 @@ public class ProjectDetailAdapter extends SectionedAdapter {
             } else {
 
                 return projectDetails.size();
-            }
+            }*/
         }
 
         if (notesDisplayed && section == SECTION_NOTES) {
