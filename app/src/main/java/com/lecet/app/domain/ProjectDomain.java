@@ -187,9 +187,17 @@ public class ProjectDomain {
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 */
 
+/*   // Will try checking again this if there will be an issue again in the bidding soon.
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"bidDate\":{\"lte\":\"%s\"}}," +
+                " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedEnd, limit);
+
+*/
+        //Original filter url
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -209,8 +217,9 @@ public class ProjectDomain {
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
 
         Date current = new Date();
-        Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate
-        //Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
+        //This commented code does not work when the date fetch will range up to next month. 0 projects will be displayed on the view.
+      //  Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate.
+        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
         int limit = DASHBOARD_CALL_LIMIT;
 
         return getProjectsHappeningSoon(current, endDate, limit, callback);
