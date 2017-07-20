@@ -407,7 +407,6 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-//                .findAllSorted("bidDate", Sort.DESCENDING);
                 .findAllSorted("bidDate", Sort.ASCENDING);
 
         return projectsResult;
@@ -437,12 +436,12 @@ public class ProjectDomain {
         return projectsResult;
     }
 
-
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
 
         RealmResults<Project> projectsResult;
 
-        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+        // 102+103
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -451,24 +450,33 @@ public class ProjectDomain {
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
                     .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "B")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
-
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+        }
+        // if 105 (UTILITIES) check if primaryProjectType is B or H, if B tag it as 101 (ENGINEERING) else 102 (BUILDING)
+        else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
                     .equalTo("mraItem", true)
                     .beginGroup()
-                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
-                    .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "H")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
-
-        } else {
+        }
+        else {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -477,7 +485,6 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
         }
-
 
         return projectsResult;
     }
@@ -490,7 +497,6 @@ public class ProjectDomain {
                 .equalTo("mruItem", true)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
-              //  .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         return projectsResult;
     }
 
@@ -499,7 +505,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
@@ -508,23 +514,30 @@ public class ProjectDomain {
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
                     .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "B")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+        }
+        else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .beginGroup()
-                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
-                    .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "H")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         } else {
 
             projectsResult = realm.where(Project.class)
@@ -533,7 +546,6 @@ public class ProjectDomain {
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         }
 
 

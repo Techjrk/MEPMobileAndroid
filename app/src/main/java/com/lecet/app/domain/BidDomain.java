@@ -1,6 +1,7 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.IntDef;
+import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
@@ -66,6 +67,7 @@ public class BidDomain {
      **/
 
     public Call<List<Bid>> getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
+        Log.d("BidDomain", "getBidsRecentlyMade() called with: startDate = [" + startDate + "], limit = [" + limit + "], callback = [" + callback + "]");
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -92,12 +94,14 @@ public class BidDomain {
 
 
     public Call<List<Bid>> getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
+        Log.d("BidDomain", "getBidsRecentlyMade() called with: limit = [" + limit + "], callback = [" + callback + "]");
 
         Date startDate = DateUtility.addDays(-30);
         return getBidsRecentlyMade(startDate, limit, callback);
     }
 
     public Call<List<Bid>> getBidsRecentlyMade(Callback<List<Bid>> callback) {
+        Log.d("BidDomain", "getBidsRecentlyMade() called with: callback = [" + callback + "]");
 
         int limit = DASHBOARD_CALL_LIMIT;
         return getBidsRecentlyMade(limit, callback);
@@ -130,6 +134,7 @@ public class BidDomain {
                 .findAllSorted(sortFilter, sort);
     }
 
+    //TODO - this is called when neither Building or Highway is selected
     public RealmResults<Bid> fetchBids(Date cutoffDate) {
 
         RealmResults<Bid> bids = realm.where(Bid.class)
@@ -137,6 +142,7 @@ public class BidDomain {
                 .equalTo("project.hidden", false)
                 .findAllSorted("createDate", Sort.DESCENDING);
 
+        Log.d("BidDomain", "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());
         return bids;
     }
 
@@ -151,6 +157,7 @@ public class BidDomain {
     }
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
+        Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "]");
 
         RealmResults<Bid> bids;
 
@@ -199,12 +206,13 @@ public class BidDomain {
         return convertedList;
     }
 
-
+    //TODO - it's this one
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId, Date cutoffDate) {
-
+        Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
 
         RealmResults<Bid> bids;
 
+        // 102+103
         if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             bids = realm.where(Bid.class)
@@ -212,22 +220,35 @@ public class BidDomain {
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
                     .or()
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("project.primaryProjectType.buildingOrHighway", "B")
+                    .endGroup()
                     .endGroup()
                     .equalTo("project.hidden", false)
                     .greaterThan("createDate", cutoffDate)
                     .findAllSorted("createDate", Sort.DESCENDING);
 
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+            Log.w("BidDomain", "fetchBids: CONSOLIDATED_CODE_B: filtering for Building. Size: " + bids.size());
+        }
+        // if 105 (UTILITIES) check if primaryProjectType is B or H, if B tag it as 101 (ENGINEERING) else 102 (BUILDING)
+        else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             bids = realm.where(Bid.class)
                     .beginGroup()
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
                     .or()
+                    .beginGroup()
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("project.primaryProjectType.buildingOrHighway", "H")
+                    .endGroup()
                     .endGroup()
                     .equalTo("project.hidden", false)
                     .greaterThan("createDate", cutoffDate)
                     .findAllSorted("createDate", Sort.DESCENDING);
+
+            Log.w("BidDomain", "fetchBids: CONSOLIDATED_CODE_H: filtering for Heavy Highway. Size: " + bids.size());
 
         } else {
 
@@ -236,6 +257,7 @@ public class BidDomain {
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("project.hidden", false)
                     .findAllSorted("createDate", Sort.DESCENDING);
+            Log.w("BidDomain", "fetchBids: Neither CONSOLIDATED_CODE_B or CONSOLIDATED_CODE_H was selected. Size: " + bids.size());
         }
 
 
@@ -243,6 +265,7 @@ public class BidDomain {
     }
 
     public List<Bid> fetchBidsSortedByProjectBidDate(@BidGroup int categoryId, Date cutoffDate) {
+        Log.d("BidDomain", "fetchBidsSortedByProjectBidDate() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
 
         RealmResults<Bid> results = fetchBids(categoryId, cutoffDate);
 
@@ -264,7 +287,7 @@ public class BidDomain {
     }
 
     public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
-
+        Log.d("BidDomain", "queryResult() called with: categoryId = [" + categoryId + "], result = [" + result + "]");
 
         if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
