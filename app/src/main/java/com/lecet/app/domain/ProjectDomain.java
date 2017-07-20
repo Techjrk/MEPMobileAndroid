@@ -26,9 +26,11 @@ import com.lecet.app.utility.DateUtility;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -177,7 +179,8 @@ public class ProjectDomain {
 
         String token = sharedPreferenceUtil.getAccessToken();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+     //   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
         String formattedStart = sdf.format(startDate);
         String formattedEnd = sdf.format(endDate);
 
@@ -194,10 +197,15 @@ public class ProjectDomain {
 
 */
         //Original filter url
+/*
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
-
+*/
+        //To match with iOS filter, the order is in firstPublishDate
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
+                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -215,8 +223,13 @@ public class ProjectDomain {
 
 
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
-
         Date current = new Date();
+
+       /* Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(now);
+        Date current = calendar.getTime();*/
         //This commented code does not work when the date fetch will range up to next month. 0 projects will be displayed on the view.
       //  Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate.
         Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
@@ -394,11 +407,12 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-                .findAllSorted("bidDate", Sort.DESCENDING);
-//                .findAllSorted("bidDate", Sort.ASCENDING);
+//                .findAllSorted("bidDate", Sort.DESCENDING);
+                .findAllSorted("bidDate", Sort.ASCENDING);
 
         return projectsResult;
     }
+
 
 
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
@@ -411,7 +425,6 @@ public class ProjectDomain {
 
         return projectsResult;
     }
-
 
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate) {
 
