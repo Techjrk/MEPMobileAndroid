@@ -112,7 +112,7 @@ public class ProjectDomain {
     }
 
     public Call<Project> updateProject(long projectId, ProjectPost projectPost) {
-        Log.d(TAG, "updateProject() called with: projectId = [" + projectId + "], projectPost = [" + projectPost + "]");
+        //Log.d(TAG, "updateProject() called with: projectId = [" + projectId + "], projectPost = [" + projectPost + "]");
 
         String token = sharedPreferenceUtil.getAccessToken();
         Call<Project> call = lecetClient.getProjectService().updateProject(token, projectId, projectPost);
@@ -440,7 +440,6 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-        // 102+103
         if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
@@ -459,7 +458,6 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
         }
-        // if 105 (UTILITIES) check if primaryProjectType is B or H, if B tag it as 101 (ENGINEERING) else 102 (BUILDING)
         else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
