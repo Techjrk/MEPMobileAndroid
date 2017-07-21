@@ -305,7 +305,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     ///*** Begin Filter Processing
 
     void processFilter(int requestCode, Intent data) {
-        Log.d("pnmdata","pnmdata"+data.toString());
         if (data == null) return;
 
         StringBuilder projectsSb = new StringBuilder();

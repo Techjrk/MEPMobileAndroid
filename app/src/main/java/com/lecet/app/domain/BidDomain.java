@@ -139,7 +139,8 @@ public class BidDomain {
         RealmResults<Bid> bids = realm.where(Bid.class)
                 .greaterThan("createDate", cutoffDate)
                 .equalTo("project.hidden", false)
-                .findAllSorted("createDate", Sort.DESCENDING);
+                .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
+              //  .findAllSorted("createDate", Sort.DESCENDING);
 
         //Log.d("BidDomain", "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());
         return bids;
