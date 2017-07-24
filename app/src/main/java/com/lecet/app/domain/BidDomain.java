@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -67,21 +66,25 @@ public class BidDomain {
      **/
 
     public Call<List<Bid>> getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
-        //Log.d("BidDomain", "getBidsRecentlyMade() called with: startDate = [" + startDate + "], limit = [" + limit + "], callback = [" + callback + "]");
+        Log.d("BidDomain", "getBidsRecentlyMade() called with: startDate = [" + startDate + "], limit = [" + limit + "], callback = [" + callback + "]");
 
         String token = sharedPreferenceUtil.getAccessToken();
 
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
 
-//        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
-//                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
-/*
-        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
-                ", \"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardType\":true}";
-*/
+/*        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
+                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
 
         String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
-                ", \"limit\":%d, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardType\":true}";
+                ", \"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
+
+
+        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
+                ", \"limit\":%d, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
+*/
+        // same query used in iOS
+        String rawQuery = "{\"include\":[\"contact\",\"company\",{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
+                "\"limit\":100, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"2017-06-24\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
 
 
         String filter = String.format(rawQuery, limit, formattedDate);
@@ -94,14 +97,14 @@ public class BidDomain {
 
 
     public Call<List<Bid>> getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
-        //Log.d("BidDomain", "getBidsRecentlyMade() called with: limit = [" + limit + "], callback = [" + callback + "]");
+        Log.d("BidDomain", "getBidsRecentlyMade() called with: limit = [" + limit + "], callback = [" + callback + "]");
 
         Date startDate = DateUtility.addDays(-30);
         return getBidsRecentlyMade(startDate, limit, callback);
     }
 
     public Call<List<Bid>> getBidsRecentlyMade(Callback<List<Bid>> callback) {
-        //Log.d("BidDomain", "getBidsRecentlyMade() called with: callback = [" + callback + "]");
+        Log.d("BidDomain", "getBidsRecentlyMade() called with: callback = [" + callback + "]");
 
         int limit = DASHBOARD_CALL_LIMIT;
         return getBidsRecentlyMade(limit, callback);
@@ -139,10 +142,11 @@ public class BidDomain {
         RealmResults<Bid> bids = realm.where(Bid.class)
                 .greaterThan("createDate", cutoffDate)
                 .equalTo("project.hidden", false)
+                .equalTo("rank", 1)
                 .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
               //  .findAllSorted("createDate", Sort.DESCENDING);
 
-        //Log.d("BidDomain", "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());
+        Log.d("BidDomain", "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());
         return bids;
     }
 
@@ -157,7 +161,7 @@ public class BidDomain {
     }
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
-        //Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "]");
+        Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "]");
 
         RealmResults<Bid> bids;
 
@@ -175,7 +179,7 @@ public class BidDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
         } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
@@ -189,17 +193,15 @@ public class BidDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
         } else {
 
             bids = realm.where(Bid.class)
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
-
-
 
         return bids;
     }
@@ -215,7 +217,7 @@ public class BidDomain {
     }
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId, Date cutoffDate) {
-        //Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
+        Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
 
         RealmResults<Bid> bids;
 
@@ -234,7 +236,7 @@ public class BidDomain {
                     .endGroup()
                     .equalTo("project.hidden", false)
                     .greaterThan("createDate", cutoffDate)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
             //Log.d("BidDomain", "fetchBids: CONSOLIDATED_CODE_B: filtering for Building. Size: " + bids.size());
         }
@@ -252,7 +254,7 @@ public class BidDomain {
                     .endGroup()
                     .equalTo("project.hidden", false)
                     .greaterThan("createDate", cutoffDate)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
             //Log.d("BidDomain", "fetchBids: CONSOLIDATED_CODE_H: filtering for Heavy Highway. Size: " + bids.size());
 
@@ -262,7 +264,7 @@ public class BidDomain {
                     .greaterThan("createDate", cutoffDate)
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
             //Log.d("BidDomain", "fetchBids: Neither CONSOLIDATED_CODE_B or CONSOLIDATED_CODE_H was selected. Size: " + bids.size());
         }
 
@@ -271,7 +273,7 @@ public class BidDomain {
     }
 
     public List<Bid> fetchBidsSortedByProjectBidDate(@BidGroup int categoryId, Date cutoffDate) {
-        //Log.d("BidDomain", "fetchBidsSortedByProjectBidDate() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
+        Log.d("BidDomain", "fetchBidsSortedByProjectBidDate() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
 
         RealmResults<Bid> results = fetchBids(categoryId, cutoffDate);
 
@@ -292,12 +294,14 @@ public class BidDomain {
         return realm.where(Project.class).equalTo("id", projectID).findFirst();
     }
 
-    public RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
-        //Log.d("BidDomain", "queryResult() called with: categoryId = [" + categoryId + "], result = [" + result + "]");
+    private RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
+        Log.d("BidDomain", "queryResult() called with: categoryId = [" + categoryId + "], result = [" + result + "]");
+
+        RealmResults<Bid> bidResults;
 
         if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
-            return result.where()
+            bidResults = result.where()
                     .beginGroup()
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
                     .or()
@@ -309,11 +313,11 @@ public class BidDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
         } else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
-            return result.where()
+            bidResults = result.where()
                     .beginGroup()
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
                     .or()
@@ -323,16 +327,17 @@ public class BidDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
         } else {
 
-            return result.where()
+            bidResults = result.where()
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("project.hidden", false)
-                    .findAllSorted("createDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
 
+        return bidResults;
     }
 
     public Bid copyToRealmTransaction(Bid bid) {
