@@ -203,9 +203,8 @@ public class ProjectDomain {
                 " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 */
         //To match with iOS filter, the order is in firstPublishDate
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
-                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]},\"limit\":%d,\"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+        //String iOSf   = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]},\"dashboardTypes\":true,\"limit\":%d,\"order\":\"firstPublishDate DESC\"}", formattedStart, formattedEnd, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -245,8 +244,9 @@ public class ProjectDomain {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formattedStart = sdf.format(startDate);
 
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
+        // seems to match iOS's params
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}},\"limit\":%d,\"dashboardTypes\":true,\"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
+        //String iOS  = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}},\"limit\":%d,\"dashboardTypes\":true,\"order\":\"firstPublishDate DESC\"}", formattedStart, limit);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -401,42 +401,50 @@ public class ProjectDomain {
         return results;
     }
 
+    /*
+      AKA Projects Bidding Soon
+     */
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
+        Log.d(TAG, "fetchProjectsHappeningSoon() called with: startDate = [" + startDate + "], endDate = [" + endDate + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-                .findAllSorted("bidDate", Sort.ASCENDING);
+                .findAllSorted(new String[]{"bidDate", "title"}, new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
 
         return projectsResult;
     }
 
-
-
+    /*
+      Called by the calendar (Projects Bidding Soon)
+     */
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
+        Log.d(TAG, "fetchProjectsByBidDate() called with: start = [" + start + "], end = [" + end + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", start, end)
-                .findAllSorted("bidDate", Sort.ASCENDING);
+                .findAllSorted(new String[]{"bidDate", "title"}, new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
 
         return projectsResult;
     }
 
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate) {
+        Log.d(TAG, "fetchProjectsRecentlyAdded() called with: publishDate = [" + publishDate + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mraItem", true)
                 .greaterThanOrEqualTo("firstPublishDate", publishDate)
-                .findAllSorted("firstPublishDate", Sort.DESCENDING);
+                .findAllSorted(new String[]{"firstPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
         return projectsResult;
     }
 
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
+        Log.d(TAG, "fetchProjectsRecentlyAdded() called with: publishDate = [" + publishDate + "], categoryId = [" + categoryId + "]");
 
         RealmResults<Project> projectsResult;
 
@@ -456,7 +464,7 @@ public class ProjectDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
-                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"firstPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
         else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
@@ -472,7 +480,7 @@ public class ProjectDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
-                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"firstPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
         else {
 
@@ -481,25 +489,29 @@ public class ProjectDomain {
                     .equalTo("mraItem", true)
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("hidden", false)
-                    .findAllSorted("firstPublishDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"firstPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
+
+        Log.d(TAG, "fetchProjectsRecentlyAdded() projectsResult: projectsResult = \n" + projectsResult);
 
         return projectsResult;
     }
 
 
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate) {
+        Log.d(TAG, "fetchProjectsRecentlyUpdated() called with: lastPublishDate = [" + lastPublishDate + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mruItem", true)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
-                .findAllSorted("lastPublishDate", Sort.DESCENDING);
+                .findAllSorted(new String[]{"lastPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         return projectsResult;
     }
 
 
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
+        Log.d(TAG, "fetchProjectsRecentlyUpdated() called with: lastPublishDate = [" + lastPublishDate + "], categoryId = [" + categoryId + "]");
 
         RealmResults<Project> projectsResult;
 
@@ -519,7 +531,7 @@ public class ProjectDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
-                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"lastPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
         else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
@@ -535,7 +547,7 @@ public class ProjectDomain {
                     .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
-                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"lastPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         } else {
 
             projectsResult = realm.where(Project.class)
@@ -543,7 +555,7 @@ public class ProjectDomain {
                     .equalTo("mruItem", true)
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("hidden", false)
-                    .findAllSorted("lastPublishDate", Sort.DESCENDING);
+                    .findAllSorted(new String[]{"lastPublishDate", "title"}, new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
         }
 
 

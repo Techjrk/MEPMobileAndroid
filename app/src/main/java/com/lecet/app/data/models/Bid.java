@@ -133,6 +133,7 @@ public class Bid extends RealmObject {
         return "Bid{" +
                 "awardInd=" + awardInd +
                 ", createDate=" + createDate +
+                ", project.title=" + project.getTitle() +
                 ", amount=" + amount +
                 ", bidderRole='" + bidderRole + '\'' +
                 ", rank=" + rank +
