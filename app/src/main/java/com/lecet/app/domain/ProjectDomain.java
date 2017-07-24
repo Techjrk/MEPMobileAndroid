@@ -26,6 +26,7 @@ import com.lecet.app.utility.DateUtility;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -178,9 +179,9 @@ public class ProjectDomain {
     public Call<List<Project>> getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-
-     //   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+        //Note: Removed the time to match with iOS
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
         String formattedStart = sdf.format(startDate);
         String formattedEnd = sdf.format(endDate);
 
@@ -204,9 +205,15 @@ public class ProjectDomain {
 */
         //To match with iOS filter, the order is in firstPublishDate
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lt\":\"%s\"}}]}," +
+                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+/*
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
-
+*/
+        TimeZone tz = TimeZone.getDefault();
+        Log.d("Timezone","TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
 
@@ -223,18 +230,23 @@ public class ProjectDomain {
 
 
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
-        Date current = new Date();
+       // Date current = new Date();
 
-       /* Date now = new Date();
+        Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTime(now);
-        Date current = calendar.getTime();*/
+        Date current = calendar.getTime();
         //This commented code does not work when the date fetch will range up to next month. 0 projects will be displayed on the view.
       //  Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate.
-        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
-        int limit = DASHBOARD_CALL_LIMIT;
 
+//        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
+        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
+        endDateMonth = DateUtility.addDays(endDateMonth,1);
+        calendar.setTime(endDateMonth);
+        Date endDate = calendar.getTime();
+        int limit = DASHBOARD_CALL_LIMIT;
+        beforeUpdateRealm4HappeningSoon(current,endDate);
         return getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
@@ -408,7 +420,10 @@ public class ProjectDomain {
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
                 .findAllSorted("bidDate", Sort.ASCENDING);
-
+        ArrayList<String> par = new ArrayList<String>();
+        for (int i=0; i < projectsResult.size(); i++) {
+            par.add("id="+projectsResult.get(i).getId()+":"+projectsResult.get(i).getBidDate());
+        }
         return projectsResult;
     }
 
@@ -670,7 +685,29 @@ public class ProjectDomain {
         realm.commitTransaction();
         return persistedProjects;
     }
+    public void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
+       // final Date startDate = new Date(), endDate = new Date();
 
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Project> storedProject = realm.where(Project.class)
+                        .between("bidDate", startDate, endDate)
+                        .findAllSorted("bidDate", Sort.ASCENDING);
+                for (Project project : storedProject) {
+                  //  Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+                    if (project != null) {
+                        project.setMbsItem(false);
+                        //storedProject.updateProject(realm, project, hidden);
+                        realm.copyToRealmOrUpdate(project);
+
+                    } else {
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        });
+    }
     public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
 
         realm.executeTransactionAsync(new Realm.Transaction() {

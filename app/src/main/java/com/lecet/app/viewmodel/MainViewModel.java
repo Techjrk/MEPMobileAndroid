@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -235,8 +236,19 @@ public class MainViewModel {
     }
 
     private RealmResults<Project> fetchProjectsHappeningSoon() {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(now);
+        Date current = calendar.getTime();
 
-        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
+        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
+        endDateMonth = DateUtility.addDays(endDateMonth,1);
+        calendar.setTime(endDateMonth);
+        Date endDate = calendar.getTime();
+
+        return projectDomain.fetchProjectsHappeningSoon(current, endDate);
+//        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
     }
 
     private RealmResults<Project> fetchProjectsRecentlyAdded() {
