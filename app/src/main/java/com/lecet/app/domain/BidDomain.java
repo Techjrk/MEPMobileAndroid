@@ -73,15 +73,19 @@ public class BidDomain {
 
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
 
-//        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
-//                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
-/*
-        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
-                ", \"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardType\":true}";
-*/
+/*        String filter = String.format("{\"include\":[{\"contact\":\"company\"},{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
+                "\"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}}, {\"rank\":1}]},\"dashboardTypes\":true}", limit, formattedDate);
 
         String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
-                ", \"limit\":%d, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardType\":true}";
+                ", \"limit\":%d, \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
+
+
+        String rawQuery = "{\"fields\":[\"id\",\"createDate\",\"projectId\",\"companyId\" ,\"amount\"], \"include\":[\"company\",{\"relation\":\"project\",\"scope\":{\"fields\":[\"id\",\"title\",\"bidDate\",\"city\",\"state\",\"zip5\",\"geocode\",\"unionDesignation\",\"primaryProjectTypeId\"],\"include\":{\"relation\":\"primaryProjectType\",\"scope\":{\"fields\":[\"id\",\"title\",\"projectCategoryId\"],\"include\":{\"projectCategory\":\"projectGroup\"}}}}}]" +
+                ", \"limit\":%d, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
+*/
+        // same query used in iOS
+        String rawQuery = "{\"include\":[\"contact\",\"company\",{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
+                "\"limit\":100, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"2017-06-24\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
 
 
         String filter = String.format(rawQuery, limit, formattedDate);
@@ -139,6 +143,7 @@ public class BidDomain {
         RealmResults<Bid> bids = realm.where(Bid.class)
                 .greaterThan("createDate", cutoffDate)
                 .equalTo("project.hidden", false)
+                .equalTo("rank", 1)
                 .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
               //  .findAllSorted("createDate", Sort.DESCENDING);
 
