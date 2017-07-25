@@ -63,6 +63,8 @@ import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -356,8 +358,17 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public void calendarSelected(Date selectedDate) {
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        String selectDate = df.format(selectedDate);
+        String prevDate = (viewModel.getPreviousDate() == null) ? null : df.format(viewModel.getPreviousDate());
+       if (!selectDate.equals(prevDate))
+        {  viewModel.fetchProjectsByBidDate(selectedDate);
+           viewModel.setPreviousDate(selectedDate);
+       } else {
+           viewModel.clickRefreshMHS();
 
-        viewModel.fetchProjectsByBidDate(selectedDate);
+       }
+
     }
 
     /**
