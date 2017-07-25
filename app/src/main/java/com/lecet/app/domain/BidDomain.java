@@ -84,7 +84,7 @@ public class BidDomain {
 */
         // same query used in iOS
         String rawQuery = "{\"include\":[\"contact\",\"company\",{\"project\":{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}}], " +
-                "\"limit\":100, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"2017-06-24\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
+                "\"limit\":%d, \"order\":\"createDate DESC\", \"where\":{\"and\":[{\"createDate\":{\"gt\":\"%s\"}},{\"rank\":1}]},\"dashboardTypes\":true}";
 
 
         String filter = String.format(rawQuery, limit, formattedDate);
