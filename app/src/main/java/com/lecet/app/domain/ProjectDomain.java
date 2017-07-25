@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -180,8 +181,8 @@ public class ProjectDomain {
 
         String token = sharedPreferenceUtil.getAccessToken();
         //Note: Removed the time to match with iOS
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
         String formattedStart = sdf.format(startDate);
         String formattedEnd = sdf.format(endDate);
 
@@ -208,7 +209,7 @@ public class ProjectDomain {
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lt\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 
-        filter = "{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"2017-07-25T00:00:00.000Z\"}},{\"bidDate\":{\"lt\":\"2017-08-01\"}}]},\"dashboardTypes\":true,\"limit\":250, \"order\":\"firstPublishDate DESC\"}";
+        //hardcoded filter = "{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"2017-07-25T00:00:00.000Z\"}},{\"bidDate\":{\"lt\":\"2017-08-01\"}}]},\"dashboardTypes\":true,\"limit\":250, \"order\":\"firstPublishDate DESC\"}";
 
 /*
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
@@ -219,6 +220,8 @@ public class ProjectDomain {
         //TimeZone tz = TimeZone.getDefault();
         //Log.d("Timezone","getProjectsHappeningSoon: TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
 
+        Log.d(TAG, "getProjectsHappeningSoon() called: formattedStart: " + formattedStart);
+        Log.d(TAG, "getProjectsHappeningSoon() called: formattedEnd: " + formattedEnd);
         Log.d(TAG, "getProjectsHappeningSoon() called: filter: " + filter);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
@@ -228,34 +231,40 @@ public class ProjectDomain {
     }
 
 
-    public Call<List<Project>> getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
+    /*public Call<List<Project>> getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
 
         Date current = new Date();
         Date endDate = DateUtility.addDays(30);
         return getProjectsHappeningSoon(current, endDate, limit, callback);
-    }
+    }*/
 
 
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
-       // Date current = new Date();
-
-        Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.setTime(now);
-        Date current = calendar.getTime();
-        //This commented code does not work when the date fetch will range up to next month. 0 projects will be displayed on the view.
-      //  Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate.
-
-//        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
-        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
-        endDateMonth = DateUtility.addDays(endDateMonth,1);
-        calendar.setTime(endDateMonth);
-        Date endDate = calendar.getTime();
-        int limit = DASHBOARD_CALL_LIMIT;
-        beforeUpdateRealm4HappeningSoon(current,endDate);
-        return getProjectsHappeningSoon(current, endDate, limit, callback);
+        beforeUpdateRealm4HappeningSoon(getStartDateMidnightUTC(), getLastDateOfCurrentMonthUTC());
+        return getProjectsHappeningSoon(getStartDateMidnightUTC(), getLastDateOfCurrentMonthUTC(), DASHBOARD_CALL_LIMIT, callback);
     }
+
+    private Date getStartDateMidnightUTC() {
+        Calendar startDateMidnight = new GregorianCalendar();
+        startDateMidnight.set(Calendar.HOUR_OF_DAY, 0);
+        startDateMidnight.set(Calendar.MINUTE, 0);
+        startDateMidnight.set(Calendar.SECOND, 0);
+        startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return startDateMidnight.getTime();
+    }
+
+    private Date getLastDateOfCurrentMonthUTC() {
+        Date lastDayOfThisMonth = DateUtility.getLastDateOfTheCurrentMonth();
+
+        Calendar lastDateOfCurrentMonth = new GregorianCalendar();
+        lastDateOfCurrentMonth.setTime(lastDayOfThisMonth);
+        lastDateOfCurrentMonth.set(Calendar.HOUR_OF_DAY, 23);
+        lastDateOfCurrentMonth.set(Calendar.MINUTE, 59);
+        lastDateOfCurrentMonth.set(Calendar.SECOND, 59);
+        lastDateOfCurrentMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return lastDateOfCurrentMonth.getTime();
+    }
+
 
     public Call<List<Project>> getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
