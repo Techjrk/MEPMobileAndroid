@@ -36,6 +36,8 @@ import retrofit2.Callback;
 
 public class BidDomain {
 
+    private static final String TAG = "BidDomain";
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({ENGINEERING, BUILDING, HOUSING, UTILITIES, CONSOLIDATED_CODE_B, CONSOLIDATED_CODE_H})
     public @interface BidGroup {
@@ -66,7 +68,7 @@ public class BidDomain {
      **/
 
     public Call<List<Bid>> getBidsRecentlyMade(Date startDate, int limit, Callback<List<Bid>> callback) {
-        Log.d("BidDomain", "getBidsRecentlyMade() called with: startDate = [" + startDate + "], limit = [" + limit + "], callback = [" + callback + "]");
+        Log.d(TAG, "getBidsRecentlyMade() called with: startDate = [" + startDate + "], limit = [" + limit + "], callback = [" + callback + "]");
 
         String token = sharedPreferenceUtil.getAccessToken();
 
@@ -89,6 +91,8 @@ public class BidDomain {
 
         String filter = String.format(rawQuery, limit, formattedDate);
 
+        Log.d(TAG, "getBidsRecentlyMade() called: filter: " + filter);
+
         Call<List<Bid>> call = lecetClient.getBidService().bids(token, filter);
         call.enqueue(callback);
 
@@ -97,14 +101,14 @@ public class BidDomain {
 
 
     public Call<List<Bid>> getBidsRecentlyMade(int limit, Callback<List<Bid>> callback) {
-        Log.d("BidDomain", "getBidsRecentlyMade() called with: limit = [" + limit + "], callback = [" + callback + "]");
+        Log.d(TAG, "getBidsRecentlyMade() called with: limit = [" + limit + "], callback = [" + callback + "]");
 
         Date startDate = DateUtility.addDays(-30);
         return getBidsRecentlyMade(startDate, limit, callback);
     }
 
     public Call<List<Bid>> getBidsRecentlyMade(Callback<List<Bid>> callback) {
-        Log.d("BidDomain", "getBidsRecentlyMade() called with: callback = [" + callback + "]");
+        Log.d(TAG, "getBidsRecentlyMade() called with: callback = [" + callback + "]");
 
         int limit = DASHBOARD_CALL_LIMIT;
         return getBidsRecentlyMade(limit, callback);
@@ -146,7 +150,7 @@ public class BidDomain {
                 .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
               //  .findAllSorted("createDate", Sort.DESCENDING);
 
-        Log.d("BidDomain", "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());
+        Log.d(TAG, "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());
         return bids;
     }
 
@@ -161,7 +165,7 @@ public class BidDomain {
     }
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId) {
-        Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "]");
+        Log.d(TAG, "fetchBids() called with: categoryId = [" + categoryId + "]");
 
         RealmResults<Bid> bids;
 
@@ -217,7 +221,7 @@ public class BidDomain {
     }
 
     public RealmResults<Bid> fetchBids(@BidGroup int categoryId, Date cutoffDate) {
-        Log.d("BidDomain", "fetchBids() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
+        Log.d(TAG, "fetchBids() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
 
         RealmResults<Bid> bids;
 
@@ -238,7 +242,7 @@ public class BidDomain {
                     .greaterThan("createDate", cutoffDate)
                     .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
-            //Log.d("BidDomain", "fetchBids: CONSOLIDATED_CODE_B: filtering for Building. Size: " + bids.size());
+            //Log.d(TAG, "fetchBids: CONSOLIDATED_CODE_B: filtering for Building. Size: " + bids.size());
         }
 
         else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
@@ -256,7 +260,7 @@ public class BidDomain {
                     .greaterThan("createDate", cutoffDate)
                     .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
 
-            //Log.d("BidDomain", "fetchBids: CONSOLIDATED_CODE_H: filtering for Heavy Highway. Size: " + bids.size());
+            //Log.d(TAG, "fetchBids: CONSOLIDATED_CODE_H: filtering for Heavy Highway. Size: " + bids.size());
 
         } else {
 
@@ -265,7 +269,7 @@ public class BidDomain {
                     .equalTo("project.primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("project.hidden", false)
                     .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
-            //Log.d("BidDomain", "fetchBids: Neither CONSOLIDATED_CODE_B or CONSOLIDATED_CODE_H was selected. Size: " + bids.size());
+            //Log.d(TAG, "fetchBids: Neither CONSOLIDATED_CODE_B or CONSOLIDATED_CODE_H was selected. Size: " + bids.size());
         }
 
 
@@ -273,7 +277,7 @@ public class BidDomain {
     }
 
     public List<Bid> fetchBidsSortedByProjectBidDate(@BidGroup int categoryId, Date cutoffDate) {
-        Log.d("BidDomain", "fetchBidsSortedByProjectBidDate() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
+        Log.d(TAG, "fetchBidsSortedByProjectBidDate() called with: categoryId = [" + categoryId + "], cutoffDate = [" + cutoffDate + "]");
 
         RealmResults<Bid> results = fetchBids(categoryId, cutoffDate);
 
@@ -295,7 +299,7 @@ public class BidDomain {
     }
 
     private RealmResults<Bid> queryResult(@BidGroup int categoryId, RealmResults<Bid> result) {
-        Log.d("BidDomain", "queryResult() called with: categoryId = [" + categoryId + "], result = [" + result + "]");
+        Log.d(TAG, "queryResult() called with: categoryId = [" + categoryId + "], result = [" + result + "]");
 
         RealmResults<Bid> bidResults;
 

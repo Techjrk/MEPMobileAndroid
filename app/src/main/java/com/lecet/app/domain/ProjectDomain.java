@@ -214,6 +214,10 @@ public class ProjectDomain {
 */
         TimeZone tz = TimeZone.getDefault();
         Log.d("Timezone","TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
+
+        Log.d(TAG, "getProjectsHappeningSoon() called: filter: " + filter);
+
+
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
 
@@ -259,6 +263,8 @@ public class ProjectDomain {
 
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
+
+        Log.d(TAG, "getProjectsRecentlyAdded() called: filter: " + filter);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -325,6 +331,8 @@ public class ProjectDomain {
 */
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"lastPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"lastPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
+
+        Log.d(TAG, "getProjectsRecentlyUpdated() called: filter: " + filter);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
