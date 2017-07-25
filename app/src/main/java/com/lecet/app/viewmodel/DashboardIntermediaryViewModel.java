@@ -281,10 +281,13 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                 if (response.isSuccessful()) {
 
                     // Store in Realm
-                    List<Project> body = response.body();
+                    final List<Project> body = response.body();
                     projectDomain.asyncCopyToRealm(body, null, new Boolean(true), null, null, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
+
+                            Log.d(TAG, "getProjectsHappeningSoon() called: body size: " + body.size());
+
 
                             // data received, lets see if we should display main content
                             fetchedMHS = true;

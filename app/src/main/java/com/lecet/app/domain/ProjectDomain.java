@@ -207,16 +207,19 @@ public class ProjectDomain {
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lt\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+
+        filter = "{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"2017-07-25T00:00:00.000Z\"}},{\"bidDate\":{\"lt\":\"2017-08-01\"}}]},\"dashboardTypes\":true,\"limit\":250, \"order\":\"firstPublishDate DESC\"}";
+
 /*
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 */
-        TimeZone tz = TimeZone.getDefault();
-        Log.d("Timezone","TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
+        //TODO - ?
+        //TimeZone tz = TimeZone.getDefault();
+        //Log.d("Timezone","getProjectsHappeningSoon: TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
 
         Log.d(TAG, "getProjectsHappeningSoon() called: filter: " + filter);
-
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -421,29 +424,38 @@ public class ProjectDomain {
         return results;
     }
 
+    //TODO - check
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
+        Log.d(TAG, "fetchProjectsHappeningSoon() called with: startDate = [" + startDate + "], endDate = [" + endDate + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-                .findAllSorted("bidDate", Sort.ASCENDING);
+                .findAllSorted(new String[]{"bidDate","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
+
         ArrayList<String> par = new ArrayList<String>();
         for (int i=0; i < projectsResult.size(); i++) {
             par.add("id="+projectsResult.get(i).getId()+":"+projectsResult.get(i).getBidDate());
         }
+
+        Log.d(TAG, "fetchProjectsHappeningSoon() called projectsResult size: " + projectsResult.size());
+
         return projectsResult;
     }
 
 
-
+    //TODO - check
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
+        Log.d(TAG, "fetchProjectsByBidDate() called with: start = [" + start + "], end = [" + end + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", start, end)
-                .findAllSorted("bidDate", Sort.ASCENDING);
+                .findAllSorted(new String[]{"bidDate","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
+
+        Log.d(TAG, "fetchProjectsByBidDate() called projectsResult size: " + projectsResult.size());
 
         return projectsResult;
     }
@@ -691,7 +703,8 @@ public class ProjectDomain {
         realm.commitTransaction();
         return persistedProjects;
     }
-    public void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
+
+    private void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
        // final Date startDate = new Date(), endDate = new Date();
 
         realm.executeTransactionAsync(new Realm.Transaction() {
