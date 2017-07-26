@@ -425,30 +425,40 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             projectsSb.append("}");
 
         }
-        //Final search filter result for Project
+
         String projectsCombinedFilter = projectsSb.toString();
-        //String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\" " + projectsCombinedFilter + "}";
-        //String filterMPN = "{\"include\":[\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
+
+        /** Note: don't erase this. This is the original filter that might be used later.
+         * String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"]+ projectsCombinedFilter +,\"limit\":200,\"order\":\"id DESC\"}";//internal server error
+         */
+
         String filterMPN = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"]+ projectsCombinedFilter +,\"limit\":200,\"order\":\"id DESC\"}";//internal server error
+
         if (projectsCombinedFilter.isEmpty()) {
          filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"],\"limit\":200,\"order\":\"id DESC\"}";
         }
-        Log.d("filterMPN","filterMPN1:"+filterMPN+":combined:"+projectsCombinedFilter);
+
         viewModel.setProjectFilter(filterMPN);
+
         String plocation = viewModel.getSearch().getText().toString();
+
         if (!plocation.isEmpty()) {
+
             viewModel.searchAddress(plocation);
+
         } else if (mpnLocation != null && !mpnLocation.isEmpty()) {
+
             viewModel.searchAddress(mpnLocation);
         } else {
+
             enableLocationUpdates = true;
             updateLocation();
+
             if (lastKnowLocation != null) {
-                Log.d(TAG, "processFilter: pn2" + lastKnowLocation.getLongitude() + ":" + lastKnowLocation.getLatitude());
+
                 fetchProjects(true);
             }
+
             locationManager.startLocationUpdates();
         }
     }
