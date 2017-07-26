@@ -45,28 +45,92 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     public static final String BUNDLE_KEY_NAME = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.name";
     public static final String BUNDLE_KEY_ABBREVIATION = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.abbreviation";
     public static final String BUNDLE_KEY_LONG_NAME = "com.lecet.app.viewmodel.SearchFilterJurisdictionViewModel.longName";
-    private SearchFilterJurisdictionActivity activity;
     public static final int NO_TYPE = -1;
+    private SearchFilterJurisdictionActivity activity;
 
-    public static int lastFamilyChecked = NO_TYPE;
-    public static int lastSection; //keep track of last section used by the selected item
-    public static int lastPosition; //keep track of last position used by the selected item
-    public static int lastChildParentPosition; //keep track of last child parent used by the selected item
-    private  String lastName;
+    // Note: For tracking last checked name item
+    private String lastName;
+    private int lastSection; //keep track of last section used by the selected item
+    private int lastFamilyChecked = NO_TYPE;
+    private int lastPosition; //keep track of last position used by the selected item
+    private int lastChildParentPosition; //keep track of last child parent used by the selected item
+
+    // Note: for searching the text typed by the user if the customSearch is true.
+    private boolean customSearch;
     private Bundle bundle;
-
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
     private String query;
     private List<SearchFilterJurisdictionAdapter.Parent> data;
     private SearchFilterJurisdictionAdapter adapter;
 
-    public  String getLastName() {
+    /**
+     * Constructor
+     */
+    public SearchFilterJurisdictionViewModel(AppCompatActivity activity) {
+        this.activity = (SearchFilterJurisdictionActivity) activity;
+        //Note: process the getting  the last jurisdiction item selected by the user.
+        getLastCheckedItems();
+
+        //Note: process of getting the saved jurisdiction filter data.
+        bundle = getPrefBundle();
+        if (bundle == null) bundle = new Bundle();
+
+        //Note: get all the jurisdiction items to be displayed from the Realm.
+        getJurisdictions();
+
+        //Note: start the initial process of searching the required jurisdiction items to be displayed.
+        searchItem("");
+    }
+
+    // Setter & getter methods
+    public int getLastChildParentPosition() {
+        return lastChildParentPosition;
+    }
+
+    public void setLastChildParentPosition(int lastChildParentPosition) {
+        this.lastChildParentPosition = lastChildParentPosition;
+    }
+
+    public int getLastFamilyChecked() {
+        return lastFamilyChecked;
+    }
+
+    public void setLastFamilyChecked(int lastFamilyChecked) {
+        this.lastFamilyChecked = lastFamilyChecked;
+    }
+
+    public int getLastPosition() {
+        return lastPosition;
+    }
+
+    public void setLastPosition(int lastPosition) {
+        this.lastPosition = lastPosition;
+    }
+
+    public int getLastSection() {
+        return lastSection;
+    }
+
+    public void setLastSection(int lastSection) {
+        this.lastSection = lastSection;
+    }
+
+    public String getLastName() {
         return lastName;
     }
 
-    public  void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public boolean getCustomSearch() {
+        return customSearch;
+    }
+
+    public void setCustomSearch(boolean customSearch) {
+        this.customSearch = customSearch;
+    }
+
 
     public Bundle getBundle() {
         return bundle;
@@ -76,19 +140,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         this.bundle = bundle;
     }
 
-
-    /**
-     * Constructor
-     */
-    public SearchFilterJurisdictionViewModel(AppCompatActivity activity) {
-        this.activity = (SearchFilterJurisdictionActivity) activity;
-       // bundle = new Bundle();
-        getLastCheckedItems();
-        bundle = getPrefBundle();
-        if (bundle == null) bundle = new Bundle();
-        getJurisdictions();
-        searchItem("");
-    }
 
     public CheckBox getLastChecked() {
         return lastChecked;
@@ -119,18 +170,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-        //clearLast();
         saveLastCheckedItems();
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
-        Log.d("jurisdictiondatab","jurisdictiondatab"+bundle);
         activity.setResult(Activity.RESULT_OK, intent);
-       /* if (!bundle.isEmpty()) {
-            activity.setResult(Activity.RESULT_OK, intent);
-        } else {
-            activity.setResult(Activity.RESULT_CANCELED);
-        }*/
-
         activity.finish();
     }
 
@@ -143,7 +186,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      */
     public void setJurisdictionData(int viewType, int id, int regionId, String name, String abbreviation, String longName) {
         // overwrite the Bundle instance with each selection since Jurisdiction only supports single-selection
-       // bundle = new Bundle();
+        // bundle = new Bundle();
         setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
         setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
         setBundleData(BUNDLE_KEY_REGION_ID, Integer.toString(regionId));
@@ -176,9 +219,9 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         hasGrandChild = false;
         String searchKey = key;
         if (!searchKey.equals("")) {
-            SearchFilterJurisdictionAdapter.customSearch = true;
+            setCustomSearch(true);
         } else {
-            SearchFilterJurisdictionAdapter.customSearch = false;
+            setCustomSearch(false);
             if (adapter != null) adapter.notifyDataSetChanged();
         }
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
@@ -203,17 +246,9 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
                 foundParent = true;
             }
-
-            //***
-//            if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(parent.getId()))) {
-                if (!bundle.isEmpty() &&  bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(parent.getId()))) {
+            if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(parent.getId()))) {
                 parent.setSelected(true);
-                //  getSelectedParent().putInt(parent.getName(), Integer.parseInt(parent.getId()));
-               /* for (String parentSelected : getSelectedParent().keySet()) {
-                    Log.d("selectParent0", "selectParent0" + parentSelected);
-                }*/
             }
-            //***
             children = new ArrayList<>();
 
             /*** For processing the No DistrictCouncil */
@@ -233,8 +268,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
 
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
-
     }
 
     private void processDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.Child> children, String searchKey) {
@@ -252,7 +285,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                     hasChild = true;
                     foundChild = true;
                 }
-                if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(child.getId())) ) {
+                if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(child.getId()))) {
                     child.setSelected(true);
                 }
                 if (dcouncil.getLocals() != null) {
@@ -272,7 +305,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                                 containGrandChild.add(hasGrandChild);
                             }
                             //Restore the grandchildren selected item later if needed
-                            if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(grandChild1.getId())) ) {
+                            if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(grandChild1.getId()))) {
                                 grandChild1.setSelected(true);
                             }
 
@@ -305,7 +338,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                     hasChild = true;
                     foundChild = true;
                 }
-                if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(child.getId())) ) {
+                if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(child.getId()))) {
                     child.setSelected(true);
                 }
                 if ((foundChild || containGrandChild.contains(true)) || foundParent) {
@@ -326,6 +359,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         notifyPropertyChanged(BR.query);
 
     }
+
     public Bundle getPrefBundle() {
         Bundle b = null;
         SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.FilterSharedJData), Context.MODE_PRIVATE);
@@ -335,38 +369,30 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             b = new Bundle();
             for (String keyID : sIDs) {
                 b.putString(keyID, spref.getString(keyID, ""));
-                Log.d("getPrefJBundle2","getPrefJBundle2"+keyID+" : "+spref.getString(keyID,""));
+                Log.d("getPrefBundle", "getPrefBundle" + keyID + " : " + spref.getString(keyID, ""));
             }
         }
         return b;
     }
-/*    setBundleData(BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
-    setBundleData(BUNDLE_KEY_ID, Integer.toString(id));
-    setBundleData(BUNDLE_KEY_REGION_ID, Integer.toString(regionId));
-    setBundleData(BUNDLE_KEY_NAME, name);
-    setBundleData(BUNDLE_KEY_ABBREVIATION, abbreviation);
-    setBundleData(BUNDLE_KEY_LONG_NAME, longName);
-    */
+
     void saveLastCheckedItems() {
         SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = spref.edit();
-        //edit.clear();
-        edit.putInt("lastFamilyChecked",lastFamilyChecked);
-        edit.putString("lastName",lastName);
-        edit.putInt("lastChildParentPosition",lastChildParentPosition);
-        edit.putInt("lastSection",lastSection);
-        edit.putInt("lastPosition",lastPosition);
+        edit.putInt(activity.getString(R.string.lastFamilyChecked), getLastFamilyChecked());
+        edit.putString(activity.getString(R.string.lastName), lastName);
+        edit.putInt(activity.getString(R.string.lastChildParentPosition), getLastChildParentPosition());
+        edit.putInt(activity.getString(R.string.lastSection), getLastSection());
+        edit.putInt(activity.getString(R.string.lastPosition), getLastPosition());
         edit.apply();
-
     }
-    void getLastCheckedItems(){
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
-        lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
-        lastName=spref.getString("lastName",lastName);
-        lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);
-        lastSection=spref.getInt("lastSection",lastSection);
-        lastPosition=spref.getInt("lastPosition",lastPosition);
 
+    void getLastCheckedItems() {
+        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
+        setLastFamilyChecked(spref.getInt(activity.getString(R.string.lastFamilyChecked), lastFamilyChecked));
+        setLastName(spref.getString(activity.getString(R.string.lastName), getLastName()));
+        setLastChildParentPosition(spref.getInt(activity.getString(R.string.lastChildParentPosition), getLastChildParentPosition()));
+        setLastSection(spref.getInt(activity.getString(R.string.lastSection), getLastSection()));
+        setLastPosition(spref.getInt(activity.getString(R.string.lastPosition), getLastPosition()));
     }
 
 }

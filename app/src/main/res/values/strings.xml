@@ -207,6 +207,8 @@
     <string name="error_fetching_address">Address not found.</string>
     <string name="error_unauthorized_user">Invalid Session. Please login again.</string>
     <string name="error_user_not_found">User not found. Please login again.</string>
+    <string name="error_project_update_failed_title">Update Failed</string>
+    <string name="error_project_update_failed">The project update was not successful.</string>
 
 
     <!-- Web links -->
@@ -431,4 +433,9 @@
     <string name="FilterResultOwnerType">FilterResultOwnerType</string>
     <string name="FilterResultWorkType">FilterResultWorkType</string>
     <string name="county_not_set_message">County is not set</string>
+    <string name="lastPosition">lastPosition</string>
+    <string name="lastSection">lastSection</string>
+    <string name="lastChildParentPosition">lastChildParentPosition</string>
+    <string name="lastName">lastName</string>
+    <string name="lastFamilyChecked">lastFamilyChecked</string>
 </resources>

@@ -40,11 +40,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private static final int PARENT_VIEW_TYPE = 0;
     private static final int CHILD_VIEW_TYPE = 1;
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
-    //public static boolean customSearch;
-
-    //***
     private CheckBox cb = null;
-    //***
     private List<Parent> data;
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
@@ -166,7 +162,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //customSearch = false;
                             viewModel.setCustomSearch(false);
                             cb = (CheckBox) view;
                             child.setSelected(cb.isChecked());
@@ -190,7 +185,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //customSearch=false;
                     viewModel.setCustomSearch(false);
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
@@ -287,7 +281,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           // customSearch = false;
                             viewModel.setCustomSearch(false);
                             CheckBox cb = (CheckBox) view;
 
@@ -326,7 +319,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-                        //customSearch = false;
                         viewModel.setCustomSearch(false);
                         cb = (CheckBox) view;
 
@@ -347,7 +339,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         ((ParentViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //customSearch=false;
                 viewModel.setCustomSearch(false);
                 if (expandedParents.contains(section)) {
                     parent.isExpanded=false;

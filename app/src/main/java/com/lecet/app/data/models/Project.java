@@ -528,17 +528,24 @@ public class Project extends RealmObject implements TrackedObject {
         String fullAddress = "";
 
         if (this.address1 != null) {
-
             fullAddress = this.address1;
         }
 
-        if (this.state != null) {
+        if (this.city != null) {
+            if(fullAddress.length() != 0) {
+                fullAddress = fullAddress + ", " + this.city;
+            }
+            else fullAddress = fullAddress + this.city;
+        }
 
-            fullAddress = fullAddress + ", " + this.state;
+        if (this.state != null) {
+            if(fullAddress.length() != 0) {
+                fullAddress = fullAddress + ", " + this.state;
+            }
+            else fullAddress = fullAddress + this.state;
         }
 
         if (this.zip5 != null) {
-
             fullAddress = fullAddress + " " + zip5;
         }
 
@@ -770,6 +777,8 @@ public class Project extends RealmObject implements TrackedObject {
                 "id=" + id +
                 ", dodgeNumber='" + dodgeNumber + '\'' +
                 ", dodgeVersion='" + dodgeVersion + '\'' +
+                ", firstPublishDate=" + firstPublishDate +
+                ", lastPublishDate=" + lastPublishDate +
                 ", title='" + title + '\'' +
                 ", address1='" + address1 + '\'' +
                 ", address2='" + address2 + '\'' +
@@ -791,7 +800,6 @@ public class Project extends RealmObject implements TrackedObject {
                 ", contractNbr='" + contractNbr + '\'' +
                 ", numberOfFloorsAboveGround='" + numberOfFloorsAboveGround + '\'' +
                 ", details='" + details + '\'' +
-                ", lastPublishDate=" + lastPublishDate +
                 ", contractType='" + contractType + '\'' +
                 ", projDlvrySys='" + projDlvrySys + '\'' +
                 ", planInd='" + planInd + '\'' +
@@ -808,7 +816,6 @@ public class Project extends RealmObject implements TrackedObject {
                 ", projectNotes='" + projectNotes + '\'' +
                 ", targetStartDate=" + targetStartDate +
                 ", geoLocationType='" + geoLocationType + '\'' +
-                ", firstPublishDate=" + firstPublishDate +
                 ", addendaInd='" + addendaInd + '\'' +
                 ", availableFrom='" + availableFrom + '\'' +
                 ", geoType='" + geoType + '\'' +

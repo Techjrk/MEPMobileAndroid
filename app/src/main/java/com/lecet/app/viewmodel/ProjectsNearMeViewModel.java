@@ -700,6 +700,9 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 intent.putExtra(EXTRA_MARKER_LONGITUDE, marker.getPosition().longitude);
                 context.startActivity(intent);
             } else {
+                //Note: Setting the requestMPNFilter to false so that when the ProjectDetailActivity is destroyed, it would process the
+                // filter data sharedPreferences deletion from the onResume of the ProjectsNearMeActivity class.
+                // The filter data SharedPreferences is made in the CustomProject Edit/Update functionality.
                 setRequestMPNFilter(false);
                 Project project = (Project) marker.getTag();
                 Intent intent = new Intent(context, ProjectDetailActivity.class);
@@ -734,6 +737,9 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         } else if (id == R.id.button_filter) {
             //search.setText(null);
             setProjectFilter("default");
+            //Note: Setting the requestMPNFilter to true so that when the ProjectDetailActivity is destroyed, it would NOT process the
+            // filter data sharedPreferences deletion from the onResume of the ProjectsNearMeActivity class.
+            // The filter data SharedPreferences is made in the MAIN Search Section functionality.
             setRequestMPNFilter(true);
             Intent intent = new Intent(getActivityWeakReference().get(), SearchFilterMPSActivity.class);
             intent.putExtra(FILTER_INSTANT_SEARCH, false);

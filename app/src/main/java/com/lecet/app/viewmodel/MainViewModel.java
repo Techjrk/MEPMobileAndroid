@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -42,6 +43,7 @@ import retrofit2.Callback;
 public class MainViewModel {
 
     private static final String TAG = "MainViewModel";
+    private Date previousDate;
 
     @IntDef({DASHBOARD_POSITION_MBR, DASHBOARD_POSITION_MHS, DASHBOARD_POSITION_MRA, DASHBOARD_POSITION_MRU})
     public @interface DashboardPosition {
@@ -107,8 +109,8 @@ public class MainViewModel {
             setupAdapterWithBids(realmResultsMBR);
         }
     }
-
     public void getProjectsHappeningSoon(@NonNull final LecetCallback<Project[]> callback) {
+
 
 
         // Check if data has been recently fetched and display those results from Realm
@@ -116,8 +118,9 @@ public class MainViewModel {
         callback.onSuccess(realmResultsMHS != null ? realmResultsMHS.toArray(new Project[realmResultsMHS.size()]) : new Project[0]);
 
         if (dashboardPosition == DASHBOARD_POSITION_MHS) {
-
-            setupAdapterWithProjects(realmResultsMHS);
+           // setupAdapterWithProjects(realmResultsMHS);
+            clickRefreshMHS();
+            setPreviousDate(null); 
         }
 
     }
@@ -233,10 +236,21 @@ public class MainViewModel {
 
         return bidDomain.fetchBids(bidGroup);
     }
-
+    Date current, endDate;
     private RealmResults<Project> fetchProjectsHappeningSoon() {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(now);
+         current = calendar.getTime();
 
-        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
+        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
+        endDateMonth = DateUtility.addDays(endDateMonth,1);
+        calendar.setTime(endDateMonth);
+         endDate = calendar.getTime();
+
+        return projectDomain.fetchProjectsHappeningSoon(current, endDate);
+//        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
     }
 
     private RealmResults<Project> fetchProjectsRecentlyAdded() {
@@ -283,7 +297,7 @@ public class MainViewModel {
     public void currentPagerPosition(int position) {
 
         if (dashboardPosition == position) return;
-
+        if (dashboardPosition == DASHBOARD_POSITION_MHS) clickRefreshMHS();
         if (layoutManager.findFirstCompletelyVisibleItemPosition() != -1) {
             layoutManager.scrollToPosition(0);
         }
@@ -381,4 +395,19 @@ public class MainViewModel {
         dashboardAdapter.setAdapterType(dashboardPosition);
         dashboardAdapter.notifyDataSetChanged();
     }
+    public void clickRefreshMHS(){
+        realmResultsMHS = projectDomain.fetchProjectsHappeningSoon(current, endDate);
+        setupAdapterWithProjects(realmResultsMHS);
+        setPreviousDate(null);
+    }
+
+
+    public Date getPreviousDate() {
+        return previousDate;
+    }
+
+    public void setPreviousDate(Date previousDate) {
+        this.previousDate = previousDate;
+    }
+
 }

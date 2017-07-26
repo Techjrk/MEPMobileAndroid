@@ -139,6 +139,8 @@ public class SearchDomain {
     //passing the search filter content only of the project
     public void setProjectFilterOnly(String filter) {
         String pfilter = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{"+filter+"}}";
+//        String pfilter = "{\"include\":[{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},\"secondaryProjectTypes\",\"projectStage\",{\"bids\"],\"searchFilter\":{"+filter+"}}";
+
         this.projectFilter = pfilter;
     }
 

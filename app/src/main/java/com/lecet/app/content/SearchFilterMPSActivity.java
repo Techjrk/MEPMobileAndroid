@@ -279,7 +279,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      */
     private void processProjectType(final Bundle bundle) {
         viewModel.savePrefBundle(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
-
+        if (bundle.isEmpty()) {
+            viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, "");
+            viewModel.setType_select("");
+            viewModel.setResultProjectType("");
+            return;
+        }
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -349,9 +354,11 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 if (!idList.isEmpty()) {
                     types = "\"projectTypeId\":{\"inq\":" + idList + "}";
                     viewModel.setResultProjectType(types);
+                    Log.d("type3","type3"+types);
                     viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
                 } else {
                     viewModel.setResultProjectType("");
+                    viewModel.setType_select("");
                 }
             }
         });
@@ -661,6 +668,14 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             else {
                 bhList.add("\"B\"");
                 bhList.add("\"H\"");
+                //** Using this to improve searching in bh.
+                bhList.clear();
+                viewModel.setResultBH("");
+                viewModel.setBh_select("Any");
+                bhChar="";
+                viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
+                return;
+                //***
             }
             bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
             viewModel.setResultBH(bhChar);
