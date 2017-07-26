@@ -1,5 +1,7 @@
 package com.lecet.app.utility;
 
+import android.util.Log;
+
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * File: DateUtility Created: 10/5/16 Author: domandtom
@@ -113,6 +116,7 @@ public class DateUtility {
         List<Calendar> bidDates = new ArrayList<>();
         for (Project project : projects) {
             Calendar calendar = Calendar.getInstance();
+            calendar.setTimeZone(TimeZone.getDefault());
             Date date = project.getBidDate();
             calendar.setTime(date);
             calendar.set(Calendar.MILLISECOND, 0);
@@ -120,6 +124,7 @@ public class DateUtility {
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.HOUR, 0);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
+
             bidDates.add(calendar);
         }
         return bidDates;
@@ -127,6 +132,7 @@ public class DateUtility {
 
     public static Calendar getCalendarHour0(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getDefault());
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
@@ -135,6 +141,57 @@ public class DateUtility {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
+
         return calendar;
+    }
+    public static Date addHours(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance(); // this would default to now
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, hours);
+
+        return calendar.getTime();
+    }
+
+    public static Date convertUTCDate2LocalDate(Date UTCDate) {
+        if (UTCDate == null) return null;
+        int hoursdiff=0;
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        cal.setTimeZone(tz);
+        sdf.setTimeZone(tz);
+        cal.setTime(UTCDate);
+
+        long longUTC = cal.getTimeInMillis();
+        int inUTC = tz.getOffset(longUTC);
+
+        String sdate = sdf.format(UTCDate);
+
+        Log.d("Time zone1: ", "Timezone1:" + tz.getDisplayName() + "date: " + sdate);
+        //  sdf.setTimeZone(cal.getTimeZone());
+
+        // TimeZone tz = cal.getTimeZone();
+        tz = TimeZone.getDefault();
+        cal.setTimeZone(tz);
+        sdf.setTimeZone(tz);
+        long longLocal = cal.getTimeInMillis();
+        int inLocal = tz.getOffset(longLocal);
+        hoursdiff = (inUTC - inLocal)/ (1000 * 60 * 60);
+        Log.d("Time diff: ", "Timezonediff:" + hoursdiff);
+
+        sdate = sdf.format(UTCDate);
+
+        Log.d("Time zone2: ", "Timezone2:" + tz.getDisplayName() + "date: " + sdate);
+
+/* date formatter in local timezone */
+
+        Date ddate = null;
+        try {
+            ddate = sdf.parse(sdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return DateUtility.addHours(UTCDate,-hoursdiff);
     }
 }

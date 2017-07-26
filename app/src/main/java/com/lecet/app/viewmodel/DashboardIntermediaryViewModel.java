@@ -427,7 +427,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                         @Override
                         public void onError(Throwable error) {
 
-                            Log.e(TAG, "getProjectsRecentlyUpdated : " + error.getMessage());
+                            Log.e(TAG, "getProjectsRecentlyUpdated error: " + error.getMessage());
                             // data received, lets see if we should display main content
                             checkDataDownloaded();
                         }
@@ -435,7 +435,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
 
                 } else {
 
-                    Log.e(TAG, "getProjectsRecentlyUpdated : " + response.message());
+                    Log.e(TAG, "getProjectsRecentlyUpdated1 : " + response.message());
 
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {

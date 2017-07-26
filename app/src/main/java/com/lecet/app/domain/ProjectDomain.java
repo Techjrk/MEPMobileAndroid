@@ -250,6 +250,7 @@ public class ProjectDomain {
         startDateMidnight.set(Calendar.MINUTE, 0);
         startDateMidnight.set(Calendar.SECOND, 0);
         startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Log.d("timezonedate","timezonedate"+": month="+startDateMidnight.get(Calendar.MONTH)+": hour_day="+startDateMidnight.get(Calendar.HOUR_OF_DAY)+" : hour=" +startDateMidnight.get(Calendar.HOUR)+": min="+startDateMidnight.get(Calendar.MINUTE));
         return startDateMidnight.getTime();
     }
 
@@ -794,6 +795,7 @@ public class ProjectDomain {
 
                 for (Project project : projects) {
 
+                    project.convertBidUTCDate2LocalDate();
                     Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
 
                     if (storedProject != null) {
