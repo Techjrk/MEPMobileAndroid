@@ -85,6 +85,7 @@
             <ImageView android:id="@+id/bid_location_image_view"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
+                       android:scaleY="1.73"
                        bind:imageUrl="@{viewModel.mapUrl}"/>
 
             <TextView android:id="@+id/bid_union_text_view"

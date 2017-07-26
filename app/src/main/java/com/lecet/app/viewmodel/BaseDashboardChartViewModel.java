@@ -155,6 +155,7 @@ public class BaseDashboardChartViewModel extends BaseObservable implements Dashb
         pieChartView.setCenterText("");
         pieChartView.setRotationEnabled(false);
         pieChartView.setHighlightPerTapEnabled(true);
+        pieChartView.setRotation(90.0f);
 
         Description description = pieChartView.getDescription();
         description.setEnabled(false);

@@ -26,9 +26,12 @@ import com.lecet.app.utility.DateUtility;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -110,7 +113,7 @@ public class ProjectDomain {
     }
 
     public Call<Project> updateProject(long projectId, ProjectPost projectPost) {
-        Log.d(TAG, "updateProject() called with: projectId = [" + projectId + "], projectPost = [" + projectPost + "]");
+        //Log.d(TAG, "updateProject() called with: projectId = [" + projectId + "], projectPost = [" + projectPost + "]");
 
         String token = sharedPreferenceUtil.getAccessToken();
         Call<Project> call = lecetClient.getProjectService().updateProject(token, projectId, projectPost);
@@ -176,8 +179,9 @@ public class ProjectDomain {
     public Call<List<Project>> getProjectsHappeningSoon(Date startDate, Date endDate, int limit, Callback<List<Project>> callback) {
 
         String token = sharedPreferenceUtil.getAccessToken();
-
+        //Note: Removed the time to match with iOS
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
         String formattedStart = sdf.format(startDate);
         String formattedEnd = sdf.format(endDate);
 
@@ -187,9 +191,32 @@ public class ProjectDomain {
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 */
 
+/*   // Will try checking again this if there will be an issue again in the bidding soon.
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"bidDate\":{\"lte\":\"%s\"}}," +
+                " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedEnd, limit);
+
+*/
+        //Original filter url
+/*
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+*/
+        //To match with iOS filter, the order is in firstPublishDate
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lt\":\"%s\"}}]}," +
+                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+/*
+        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
+                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
+                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+*/
+        TimeZone tz = TimeZone.getDefault();
+        Log.d("Timezone","TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
+
+        Log.d(TAG, "getProjectsHappeningSoon() called: filter: " + filter);
+
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -207,12 +234,23 @@ public class ProjectDomain {
 
 
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
+       // Date current = new Date();
 
-        Date current = new Date();
-        Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate
-        //Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(now);
+        Date current = calendar.getTime();
+        //This commented code does not work when the date fetch will range up to next month. 0 projects will be displayed on the view.
+      //  Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate.
+
+//        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
+        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
+        endDateMonth = DateUtility.addDays(endDateMonth,1);
+        calendar.setTime(endDateMonth);
+        Date endDate = calendar.getTime();
         int limit = DASHBOARD_CALL_LIMIT;
-
+        beforeUpdateRealm4HappeningSoon(current,endDate);
         return getProjectsHappeningSoon(current, endDate, limit, callback);
     }
 
@@ -225,6 +263,8 @@ public class ProjectDomain {
 
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"firstPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
+
+        Log.d(TAG, "getProjectsRecentlyAdded() called: filter: " + filter);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -291,6 +331,8 @@ public class ProjectDomain {
 */
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"lastPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"lastPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
+
+        Log.d(TAG, "getProjectsRecentlyUpdated() called: filter: " + filter);
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -385,11 +427,14 @@ public class ProjectDomain {
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
                 .between("bidDate", startDate, endDate)
-                .findAllSorted("bidDate", Sort.DESCENDING);
-//                .findAllSorted("bidDate", Sort.ASCENDING);
-
+                .findAllSorted("bidDate", Sort.ASCENDING);
+        ArrayList<String> par = new ArrayList<String>();
+        for (int i=0; i < projectsResult.size(); i++) {
+            par.add("id="+projectsResult.get(i).getId()+":"+projectsResult.get(i).getBidDate());
+        }
         return projectsResult;
     }
+
 
 
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
@@ -403,7 +448,6 @@ public class ProjectDomain {
         return projectsResult;
     }
 
-
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate) {
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
@@ -415,12 +459,11 @@ public class ProjectDomain {
         return projectsResult;
     }
 
-
     public RealmResults<Project> fetchProjectsRecentlyAdded(Date publishDate, int categoryId) {
 
         RealmResults<Project> projectsResult;
 
-        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -429,24 +472,32 @@ public class ProjectDomain {
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
                     .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "B")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
-
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+        }
+        else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
                     .equalTo("mraItem", true)
                     .beginGroup()
-                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
-                    .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "H")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
-
-        } else {
+        }
+        else {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("firstPublishDate", publishDate)
@@ -455,7 +506,6 @@ public class ProjectDomain {
                     .equalTo("hidden", false)
                     .findAllSorted("firstPublishDate", Sort.DESCENDING);
         }
-
 
         return projectsResult;
     }
@@ -468,7 +518,6 @@ public class ProjectDomain {
                 .equalTo("mruItem", true)
                 .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
-              //  .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         return projectsResult;
     }
 
@@ -477,7 +526,7 @@ public class ProjectDomain {
 
         RealmResults<Project> projectsResult;
 
-        if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
+        if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
@@ -486,23 +535,30 @@ public class ProjectDomain {
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.HOUSING)
                     .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.BUILDING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "B")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
-        } else if (categoryId == BidDomain.CONSOLIDATED_CODE_B) {
+        }
+        else if (categoryId == BidDomain.CONSOLIDATED_CODE_H) {
 
             projectsResult = realm.where(Project.class)
                     .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
                     .equalTo("mruItem", true)
                     .beginGroup()
-                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
-                    .or()
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.ENGINEERING)
+                    .or()
+                    .beginGroup()
+                    .equalTo("primaryProjectType.projectCategory.projectGroupId", BidDomain.UTILITIES)
+                    .equalTo("primaryProjectType.buildingOrHighway", "H")
+                    .endGroup()
                     .endGroup()
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         } else {
 
             projectsResult = realm.where(Project.class)
@@ -511,7 +567,6 @@ public class ProjectDomain {
                     .equalTo("primaryProjectType.projectCategory.projectGroupId", categoryId)
                     .equalTo("hidden", false)
                     .findAllSorted("lastPublishDate", Sort.DESCENDING);
-                    // .lessThanOrEqualTo("lastPublishDate", lastPublishDate)
         }
 
 
@@ -636,7 +691,29 @@ public class ProjectDomain {
         realm.commitTransaction();
         return persistedProjects;
     }
+    public void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
+       // final Date startDate = new Date(), endDate = new Date();
 
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Project> storedProject = realm.where(Project.class)
+                        .between("bidDate", startDate, endDate)
+                        .findAllSorted("bidDate", Sort.ASCENDING);
+                for (Project project : storedProject) {
+                  //  Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+                    if (project != null) {
+                        project.setMbsItem(false);
+                        //storedProject.updateProject(realm, project, hidden);
+                        realm.copyToRealmOrUpdate(project);
+
+                    } else {
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        });
+    }
     public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
 
         realm.executeTransactionAsync(new Realm.Transaction() {

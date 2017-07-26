@@ -341,9 +341,8 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             projectPost.setCounty(project.getCounty());
             projectPost.setFipsCounty(project.getFipsCounty());
             projectPost.setCountry(project.getCountry());
-            projectPost.setProjectStageId(Integer.parseInt(project.getProjectStageId()));
-            if (project.getBidDate() != null)
-                projectPost.setBidDate(project.getBidDate().toString());
+            if (project.getProjectStageId() != null) projectPost.setProjectStageId(Integer.parseInt(project.getProjectStageId()));
+            if (project.getBidDate() != null) projectPost.setBidDate(project.getBidDate().toString());
             projectPost.setPrimaryProjectTypeId(project.getPrimaryProjectTypeId());
             projectPost.setEstLow(project.getEstLow());
             if (project.getTargetStartDate() != null) {
@@ -362,13 +361,13 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             // put the stage value to respected stage field and also to
             // save the extracted stage data to the sharedPreferences to be used later by the Stage Filter section to set the checkbox selection for this extracted stage data.
             //  if (getStageSelect() == null || getTypeSelect().isEmpty()) //* commented this to check if this is no longer needed.
-                searchBackStageName(String.valueOf(project.getProjectStageId()));
+            if (project.getProjectStageId() != null) searchBackStageName(String.valueOf(project.getProjectStageId()));
 
             // Note: With the the primaryProjectTypeId from the project, the code below is used for bringing back the previous project type item selected by the user and
             // put the project type value to respected project type field and also to save
             // the extracted project type data to the sharedPreferences to be used later by the Project Type Filter section to set the checkbox selection for this extracted project type data.
             //    if (getTypeSelect() == null || getTypeSelect().isEmpty()) //* commented this to check if this is no longer needed.
-                searchBackProjectTypeName(String.valueOf(project.getPrimaryProjectTypeId()));
+            searchBackProjectTypeName(String.valueOf(project.getPrimaryProjectTypeId()));
 
         }  //if project !=null
     }
@@ -440,14 +439,14 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
                     activity.finish();
                 } else {
                     Log.e(TAG, "postProject: onResponse: projectPost post failed");
-                    // TODO: Alert HTTP call error
+                    showPostProjectFailedDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<Project> call, Throwable t) {
                 Log.e(TAG, "postProject: onFailure: projectPost post failed"+t.getMessage());
-                //TODO: Display alert noting network failure
+                showPostProjectFailedDialog();
             }
 
         });
@@ -499,6 +498,12 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             alert.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(android.R.string.cancel), onClick);
             alert.show();
         }
+    }
+
+    private void showPostProjectFailedDialog() {
+        String title = activity.getString(R.string.error_project_update_failed_title);
+        String message = activity.getString(R.string.error_project_update_failed);
+        showCancelAlertDialog(title, message);
     }
 
 

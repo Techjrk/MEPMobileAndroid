@@ -42,31 +42,43 @@ public class CompanyDetailBidViewModel extends BaseObservable {
     }
 
     public String getStartDateString() {
-
+        if (project == null) return "";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         if (project.getBidDate() == null) return ""; //NOTE: Based on HockeyApp, dated 2017-05-26 . added this code just in case it was not resolved yet to prevent NullPointerException error from keep crashing the app.
         return simpleDateFormat.format(project.getBidDate());
     }
 
     public String getProjectName() {
+        if (project == null) return "";
         if (project.getTitle() == null) return ""; //NOTE: Based on HockeyApp, dated 2017-04-03 . added this code just in case it was not resolved yet to prevent NullPointerException error from keep crashing the app.
         return project.getTitle();
     }
 
     public String getClientLocation() {
 
-        return project.getCity() + " , " + project.getState();
+        if (project == null) return "";
+
+        String location = "";
+        if(project.getCity() != null) location += project.getCity();
+        if(location.length() > 0) location += ", ";
+        if(project.getState() != null) location += project.getState();
+
+        return location;
     }
 
     public String getMapUrl() {
 
+        if (project == null) return null;
         if (project.getGeocode() == null) return null;
 
         return String.format("https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=20&size=400x400&" +
                         "markers=icon:"+getMarkerIcon(project)+"|%.6f,%.6f&key=%s", project.getGeocode().getLat(), project.getGeocode().getLng(),
                 project.getGeocode().getLat(), project.getGeocode().getLng(), mapsApiKey);
     }
+
     private String getMarkerIcon(Project project) {
+        if (project == null) return null;
+
         StringBuilder urlBuilder = new StringBuilder(BidItemViewModel.url);
         boolean hasUpdates = projectHasUpdates(project);
 
@@ -108,6 +120,7 @@ public class CompanyDetailBidViewModel extends BaseObservable {
         }
         return urlBuilder.toString();
     }
+
     private boolean projectHasUpdates(Project project) {
         if(project == null) return false;
         if(project.getUserNotes() == null || project.getImages() == null) {

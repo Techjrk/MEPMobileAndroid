@@ -305,7 +305,6 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     ///*** Begin Filter Processing
 
     void processFilter(int requestCode, Intent data) {
-
         if (data == null) return;
 
         StringBuilder projectsSb = new StringBuilder();
@@ -432,7 +431,11 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\" " + projectsCombinedFilter + "}";
         //String filterMPN = "{\"include\":[\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
         String filterMPN = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        Log.d("filterMPN","filterMPN1:"+filterMPN);
+        //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"]+ projectsCombinedFilter +,\"limit\":200,\"order\":\"id DESC\"}";//internal server error
+        if (projectsCombinedFilter.isEmpty()) {
+         filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"],\"limit\":200,\"order\":\"id DESC\"}";
+        }
+        Log.d("filterMPN","filterMPN1:"+filterMPN+":combined:"+projectsCombinedFilter);
         viewModel.setProjectFilter(filterMPN);
         String plocation = viewModel.getSearch().getText().toString();
         if (!plocation.isEmpty()) {

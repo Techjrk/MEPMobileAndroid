@@ -235,9 +235,11 @@ public class RecentBidItemViewModel extends BaseObservable{
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
-            if (project.getBidDate() == null) return "[ not provided ]";
+            if (bid.getCreateDate() == null) return "[ not provided ]";
+//            if (project.getBidDate() == null) return "[ not provided ]";
 
-            return simpleDateFormat.format(project.getBidDate());
+            return simpleDateFormat.format(bid.getCreateDate());
+//            return simpleDateFormat.format(project.getBidDate());
         }
 
         return "[ not provided ]";
