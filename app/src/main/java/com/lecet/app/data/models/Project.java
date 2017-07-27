@@ -89,6 +89,9 @@ public class Project extends RealmObject implements TrackedObject {
     @SerializedName("bidDate")
     private Date bidDate;
 
+    @SerializedName("bidDateCalendar")
+    private Date bidDateCalendar;
+
     @SerializedName("primaryProjectTypeId")
     private long primaryProjectTypeId;
 
@@ -298,6 +301,9 @@ public class Project extends RealmObject implements TrackedObject {
 
     public Date getBidDate() {
         return bidDate;
+    }
+    public Date getBidDateCalendar() {
+        return bidDateCalendar;
     }
 
     public String getCity() {
@@ -1022,6 +1028,6 @@ public class Project extends RealmObject implements TrackedObject {
         return result;
     }
     public void convertBidUTCDate2LocalDate() {
-        bidDate = DateUtility.convertUTCDate2LocalDate(bidDate);
+        bidDateCalendar = DateUtility.convertUTCDate2LocalDate(bidDate);
     }
 }

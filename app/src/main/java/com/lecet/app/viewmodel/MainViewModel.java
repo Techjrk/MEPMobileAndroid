@@ -270,7 +270,7 @@ public class MainViewModel {
         startDateMidnight.set(Calendar.HOUR_OF_DAY, 0);
         startDateMidnight.set(Calendar.MINUTE, 0);
         startDateMidnight.set(Calendar.SECOND, 0);
-        startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
+ //       startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
         return startDateMidnight.getTime();
     }
 
@@ -282,7 +282,7 @@ public class MainViewModel {
         lastDateOfCurrentMonth.set(Calendar.HOUR_OF_DAY, 23);
         lastDateOfCurrentMonth.set(Calendar.MINUTE, 59);
         lastDateOfCurrentMonth.set(Calendar.SECOND, 59);
-        lastDateOfCurrentMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
+     //   lastDateOfCurrentMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
         return lastDateOfCurrentMonth.getTime();
     }
 

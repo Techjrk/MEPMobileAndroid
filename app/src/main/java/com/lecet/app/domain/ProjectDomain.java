@@ -437,17 +437,11 @@ public class ProjectDomain {
     //TODO - check
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
         Log.d(TAG, "fetchProjectsHappeningSoon() called with: startDate = [" + startDate + "], endDate = [" + endDate + "]");
-
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
-                .between("bidDate", startDate, endDate)
-                .findAllSorted(new String[]{"bidDate","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
-
-        ArrayList<String> par = new ArrayList<String>();
-        for (int i=0; i < projectsResult.size(); i++) {
-            par.add("id="+projectsResult.get(i).getId()+":"+projectsResult.get(i).getBidDate());
-        }
+                .between("bidDateCalendar", startDate, endDate)
+                .findAllSorted(new String[]{"bidDateCalendar","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
 
         Log.d(TAG, "fetchProjectsHappeningSoon() called projectsResult size: " + projectsResult.size());
 
@@ -462,8 +456,8 @@ public class ProjectDomain {
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
-                .between("bidDate", start, end)
-                .findAllSorted(new String[]{"bidDate","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
+                .between("bidDateCalendar", start, end)
+                .findAllSorted(new String[]{"bidDateCalendar","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
 
         Log.d(TAG, "fetchProjectsByBidDate() called projectsResult size: " + projectsResult.size());
 

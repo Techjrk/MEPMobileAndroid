@@ -117,7 +117,9 @@ public class DateUtility {
         for (Project project : projects) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeZone(TimeZone.getDefault());
-            Date date = project.getBidDate();
+            //calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = project.getBidDateCalendar();
+            //Date date = project.getBidDate();
             calendar.setTime(date);
             calendar.set(Calendar.MILLISECOND, 0);
             calendar.set(Calendar.SECOND, 0);
@@ -132,6 +134,7 @@ public class DateUtility {
 
     public static Calendar getCalendarHour0(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
+        //calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTimeZone(TimeZone.getDefault());
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
