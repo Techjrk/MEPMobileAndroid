@@ -80,9 +80,11 @@
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 tools:text="@string/testing_purposes_lorem_ipsum"/>
 
+            <!-- BOTTOM INFO: AUTHOR / DATE / LOCATION / TIME -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:orientation="horizontal"
                 android:layout_marginBottom="10dp">
 
                 <!-- PROFILE ICON -->
@@ -109,7 +111,7 @@
                     android:id="@+id/textView"
                     tools:text="Erin Bernardin"/>
 
-                <!-- TIMESTAMP -->
+                <!-- RELATIVE TIMESTAMP -->
                 <TextView
                     android:layout_marginRight="10dp"
                     android:layout_width="0dp"
@@ -123,6 +125,44 @@
                     android:text="@{viewModel.timeDifference}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="30 minutes ago"/>
+
+            </LinearLayout>
+
+            <!-- BOTTOM INFO WITH LOCATION AND TIMESTAMP -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                <!-- LOCATION -->
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="12sp"
+                        android:textColor="@color/lecetLightGray"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center"
+                        android:text="@{viewModel.getLocation}"
+                        android:maxLines="1"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Brooklyn, NY"/>
+
+                <!-- RELATIVE TIMESTAMP -->
+                <TextView
+                        android:layout_marginRight="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:maxLines="1"
+                        android:textSize="12sp"
+                        android:textColor="@color/lecetLightGray"
+                        android:gravity="right"
+                        android:text="@{viewModel.getDateUpdatedForDisplay}"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="July 26, 2017, 2:35pm"/>
 
             </LinearLayout>
 

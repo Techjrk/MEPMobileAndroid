@@ -62,7 +62,7 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.companyId = companyId;
         this.projectId = projectId;
         this.authorId = authorId;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt; //TODO - check if there is a conversion happening with timezones here and with updatedAt
         this.updatedAt = updatedAt;
     }
 
@@ -81,9 +81,13 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.id = id;
     }
 
-    public String getTitle() {return title;}
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title) {this.title = title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getText() {
         return text;

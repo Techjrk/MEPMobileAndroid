@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Formatter;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +16,11 @@ import com.lecet.app.content.ProjectAddNoteActivity;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.DateUtility;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import retrofit2.Call;
@@ -109,6 +114,18 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
     public long getId() {
         return note.getId();
+    }
+
+    public String getDateUpdatedForDisplay() {
+        TimeZone localTimeZone = TimeZone.getDefault();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d yyyy, hh:mm aaa");
+        simpleDateFormat.setTimeZone(localTimeZone);
+        String displayDate = simpleDateFormat.format(note.getUpdatedAt());
+        return displayDate;
+    }
+
+    public String getLocation() {
+        return "Unknown location"; //TODO ********************* HARDCODED UNTIL WE HAVE API SUPPORT *****************************
     }
 
 

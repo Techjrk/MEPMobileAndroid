@@ -1,9 +1,11 @@
 package com.lecet.app.viewmodel;
 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +13,14 @@ import android.view.View;
 import com.lecet.app.BR;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.ProjectNote;
+import com.lecet.app.data.models.geocoding.AddressComponent;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
+import com.lecet.app.data.models.geocoding.GeocodeResult;
+import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.SimpleLecetDefaultAlert;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +28,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.lecet.app.R.string.google_api_key;
 
 /**
  * Created by ludwigvondrake on 3/24/17.
@@ -35,23 +44,81 @@ public class ProjectAddNoteViewModel extends BaseObservable {
     private String title = "";
     private String body = "";
     private ProjectDomain projectDomain;
+    private LocationDomain locationDomain;
+    private String mapsApiKey;
+    private String formattedAddress;
     private int newTitleLength = 0;
     private AlertDialog alert;
 
 
-    public ProjectAddNoteViewModel(AppCompatActivity activity, long projectId, long noteId, String title, String body, ProjectDomain projectDomain) {
+    public ProjectAddNoteViewModel(AppCompatActivity activity, long projectId, long noteId, String title, String body, ProjectDomain projectDomain, LocationDomain locationDomain) {
         this.activity = activity;
         this.projectId = projectId;
         this.noteId = noteId;
         this.title = title;
         this.body = body;
         this.projectDomain = projectDomain;
+        this.locationDomain = locationDomain;
 
         Log.d(TAG, "Constructor: projectId: " + projectId);
         Log.d(TAG, "Constructor: noteId: " + noteId);
         Log.d(TAG, "Constructor: title: " + title);
         Log.d(TAG, "Constructor: body: " + body);
+
     }
+
+    @Bindable
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
+        notifyPropertyChanged(BR.formattedAddress);
+    }
+
+    public void handleLocationChanged(Location location) {
+        Log.d(TAG, "handleLocationChanged() called with: location = [" + location + "]");
+
+        mapsApiKey = activity.getResources().getString(google_api_key);
+        generateAddress(location.getLatitude(), location.getLongitude(), mapsApiKey);
+        Log.d(TAG, "handleLocationChanged() formattedAddress = [" + formattedAddress + "]");
+
+    }
+
+    private void generateAddress(double latitude, double longitude, String mapsApiKey) {
+        Log.d(TAG, "generateAddress: lat, lng: " + latitude + ", " + longitude);
+
+        Call<GeocodeAddress> call = locationDomain.getAddressFromLocation(latitude, longitude, "street_address", mapsApiKey);
+
+        call.enqueue(new Callback<GeocodeAddress>() {
+            @Override
+            public void onResponse(Call<GeocodeAddress> call, Response<GeocodeAddress> response) {
+                Log.d(TAG, "generateAddress: onResponse: response.body: " + response.body());
+
+                if (response.isSuccessful()) {
+                    GeocodeAddress geocodeAddress = response.body();
+                    if (geocodeAddress != null && geocodeAddress.getResults().size() > 0) {
+                        GeocodeResult firstResult = geocodeAddress.getResults().get(0);
+                        if (firstResult != null) {
+                            setFormattedAddress(firstResult.getFormattedAddress());    // the one-line formatted address for display
+                            Log.d(TAG, "generateAddress: onResponse: address request successful. formattedAddress: " + formattedAddress);
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "generateAddress: onResponse: get address failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeocodeAddress> call, Throwable t) {
+                Log.e(TAG, "generateAddress: onFailure: get address failed");
+            }
+        });
+    }
+
+
+
 
     public void onClickCancel(View view){
         activity.setResult(RESULT_CANCELED);
@@ -258,10 +325,6 @@ public class ProjectAddNoteViewModel extends BaseObservable {
     public boolean getEditMode() {
         return noteId > -1;
     }
-
-
-
-
 
 }
 

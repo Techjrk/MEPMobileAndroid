@@ -86,6 +86,7 @@
                 android:layout_margin="15dp"
                 android:orientation="vertical">
 
+                <!-- TITLE -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="25dp">
@@ -135,6 +136,32 @@
                     android:textSize="14sp"
                     android:text='@{viewModel.newTitleLength + "/55"}'/>
 
+                <!-- LOCATION -->
+                <TextView
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:text="@string/location"
+                        android:textAllCaps="true"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lecetDarkestBlue"
+                        android:gravity="center_vertical"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <EditText
+                        android:id="@+id/location_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={viewModel.formattedAddress}"
+                        android:maxLines="1"
+                        android:hint="@string/location"
+                        android:textColorHint="@color/lecetTextLightGray"
+                        android:background="@drawable/shape_rect_solid_border_1"
+                        android:padding="12dp"
+                        android:layout_marginBottom="20dp"
+                        bind:typeface="@{`Lato-Bold.ttf`}" />
+
+                <!-- BODY -->
                 <TextView
                     android:layout_height="match_parent"
                     android:layout_width="55dp"
