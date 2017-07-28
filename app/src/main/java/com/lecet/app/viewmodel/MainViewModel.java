@@ -7,6 +7,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ViewSwitcher;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -236,21 +238,15 @@ public class MainViewModel {
 
         return bidDomain.fetchBids(bidGroup);
     }
-    Date current, endDate;
+
     private RealmResults<Project> fetchProjectsHappeningSoon() {
-        Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.setTime(now);
-         current = calendar.getTime();
 
-        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
-        endDateMonth = DateUtility.addDays(endDateMonth,1);
-        calendar.setTime(endDateMonth);
-         endDate = calendar.getTime();
+        Date startDateMidnight = getStartDateMidnightUTC();
+        Date endDateMidnight   = getLastDateOfCurrentMonthUTC();
 
-        return projectDomain.fetchProjectsHappeningSoon(current, endDate);
-//        return projectDomain.fetchProjectsHappeningSoon(new Date(), DateUtility.getLastDateOfTheCurrentMonth());
+        Log.d(TAG, "fetchProjectsHappeningSoon() called: startDateMidnight: " + startDateMidnight + ", endDateMidnight: " + endDateMidnight);
+
+        return projectDomain.fetchProjectsHappeningSoon(startDateMidnight, endDateMidnight);
     }
 
     private RealmResults<Project> fetchProjectsRecentlyAdded() {
@@ -267,6 +263,27 @@ public class MainViewModel {
         calendar.add(Calendar.DAY_OF_MONTH, -30);
 
         return projectDomain.fetchProjectsRecentlyUpdated(calendar.getTime());
+    }
+
+    private Date getStartDateMidnightUTC() {
+        Calendar startDateMidnight = new GregorianCalendar();
+        startDateMidnight.set(Calendar.HOUR_OF_DAY, 0);
+        startDateMidnight.set(Calendar.MINUTE, 0);
+        startDateMidnight.set(Calendar.SECOND, 0);
+ //       startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return startDateMidnight.getTime();
+    }
+
+    private Date getLastDateOfCurrentMonthUTC() {
+        Date lastDayOfThisMonth = DateUtility.getLastDateOfTheCurrentMonth();
+
+        Calendar lastDateOfCurrentMonth = new GregorianCalendar();
+        lastDateOfCurrentMonth.setTime(lastDayOfThisMonth);
+        lastDateOfCurrentMonth.set(Calendar.HOUR_OF_DAY, 23);
+        lastDateOfCurrentMonth.set(Calendar.MINUTE, 59);
+        lastDateOfCurrentMonth.set(Calendar.SECOND, 59);
+     //   lastDateOfCurrentMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return lastDateOfCurrentMonth.getTime();
     }
 
 
@@ -395,12 +412,12 @@ public class MainViewModel {
         dashboardAdapter.setAdapterType(dashboardPosition);
         dashboardAdapter.notifyDataSetChanged();
     }
+
     public void clickRefreshMHS(){
-        realmResultsMHS = projectDomain.fetchProjectsHappeningSoon(current, endDate);
+        realmResultsMHS = projectDomain.fetchProjectsHappeningSoon(getStartDateMidnightUTC(), getLastDateOfCurrentMonthUTC());
         setupAdapterWithProjects(realmResultsMHS);
         setPreviousDate(null);
     }
-
 
     public Date getPreviousDate() {
         return previousDate;

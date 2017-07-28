@@ -120,14 +120,14 @@ public class DashboardProjectItemViewModel {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
 
-        return simpleDateFormat.format(project.getBidDate());
+        return simpleDateFormat.format(project.getBidDateCalendar());
     }
 
     public String getStartDateString() {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM d");
 
-        return simpleDateFormat.format(project.getBidDate());
+        return simpleDateFormat.format(project.getBidDateCalendar());
     }
 
 

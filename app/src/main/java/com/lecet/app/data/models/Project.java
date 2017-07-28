@@ -1,13 +1,19 @@
 package com.lecet.app.data.models;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.interfaces.TrackedObject;
+import com.lecet.app.utility.DateUtility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -82,6 +88,9 @@ public class Project extends RealmObject implements TrackedObject {
 
     @SerializedName("bidDate")
     private Date bidDate;
+
+    @SerializedName("bidDateCalendar")
+    private Date bidDateCalendar;
 
     @SerializedName("primaryProjectTypeId")
     private long primaryProjectTypeId;
@@ -292,6 +301,9 @@ public class Project extends RealmObject implements TrackedObject {
 
     public Date getBidDate() {
         return bidDate;
+    }
+    public Date getBidDateCalendar() {
+        return bidDateCalendar;
     }
 
     public String getCity() {
@@ -1014,5 +1026,8 @@ public class Project extends RealmObject implements TrackedObject {
         result = 31 * result + (mraItem ? 1 : 0);
         result = 31 * result + (mruItem ? 1 : 0);
         return result;
+    }
+    public void convertBidUTCDate2LocalDate() {
+        bidDateCalendar = DateUtility.convertUTCDate2LocalDate(bidDate);
     }
 }

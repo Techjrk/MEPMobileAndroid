@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -180,8 +181,8 @@ public class ProjectDomain {
 
         String token = sharedPreferenceUtil.getAccessToken();
         //Note: Removed the time to match with iOS
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
         String formattedStart = sdf.format(startDate);
         String formattedEnd = sdf.format(endDate);
 
@@ -207,16 +208,21 @@ public class ProjectDomain {
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lt\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
+
+        //hardcoded filter = "{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"2017-07-25T00:00:00.000Z\"}},{\"bidDate\":{\"lt\":\"2017-08-01\"}}]},\"dashboardTypes\":true,\"limit\":250, \"order\":\"firstPublishDate DESC\"}";
+
 /*
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
 */
-        TimeZone tz = TimeZone.getDefault();
-        Log.d("Timezone","TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
+        //TODO - ?
+        //TimeZone tz = TimeZone.getDefault();
+        //Log.d("Timezone","getProjectsHappeningSoon: TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
 
+        Log.d(TAG, "getProjectsHappeningSoon() called: formattedStart: " + formattedStart);
+        Log.d(TAG, "getProjectsHappeningSoon() called: formattedEnd: " + formattedEnd);
         Log.d(TAG, "getProjectsHappeningSoon() called: filter: " + filter);
-
 
         Call<List<Project>> call = lecetClient.getProjectService().projects(token, filter);
         call.enqueue(callback);
@@ -225,34 +231,41 @@ public class ProjectDomain {
     }
 
 
-    public Call<List<Project>> getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
+    /*public Call<List<Project>> getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
 
         Date current = new Date();
         Date endDate = DateUtility.addDays(30);
         return getProjectsHappeningSoon(current, endDate, limit, callback);
-    }
+    }*/
 
 
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
-       // Date current = new Date();
-
-        Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.setTime(now);
-        Date current = calendar.getTime();
-        //This commented code does not work when the date fetch will range up to next month. 0 projects will be displayed on the view.
-      //  Date endDate = DateUtility.addDays(30); //Note: same with iOS endDate.
-
-//        Date endDate = DateUtility.getLastDateOfTheCurrentMonth();
-        Date endDateMonth = DateUtility.getLastDateOfTheCurrentMonth();
-        endDateMonth = DateUtility.addDays(endDateMonth,1);
-        calendar.setTime(endDateMonth);
-        Date endDate = calendar.getTime();
-        int limit = DASHBOARD_CALL_LIMIT;
-        beforeUpdateRealm4HappeningSoon(current,endDate);
-        return getProjectsHappeningSoon(current, endDate, limit, callback);
+        beforeUpdateRealm4HappeningSoon(getStartDateMidnightUTC(), getLastDateOfCurrentMonthUTC());
+        return getProjectsHappeningSoon(getStartDateMidnightUTC(), getLastDateOfCurrentMonthUTC(), DASHBOARD_CALL_LIMIT, callback);
     }
+
+    private Date getStartDateMidnightUTC() {
+        Calendar startDateMidnight = new GregorianCalendar();
+        startDateMidnight.set(Calendar.HOUR_OF_DAY, 0);
+        startDateMidnight.set(Calendar.MINUTE, 0);
+        startDateMidnight.set(Calendar.SECOND, 0);
+        startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Log.d("timezonedate","timezonedate"+": month="+startDateMidnight.get(Calendar.MONTH)+": hour_day="+startDateMidnight.get(Calendar.HOUR_OF_DAY)+" : hour=" +startDateMidnight.get(Calendar.HOUR)+": min="+startDateMidnight.get(Calendar.MINUTE));
+        return startDateMidnight.getTime();
+    }
+
+    private Date getLastDateOfCurrentMonthUTC() {
+        Date lastDayOfThisMonth = DateUtility.getLastDateOfTheCurrentMonth();
+
+        Calendar lastDateOfCurrentMonth = new GregorianCalendar();
+        lastDateOfCurrentMonth.setTime(lastDayOfThisMonth);
+        lastDateOfCurrentMonth.set(Calendar.HOUR_OF_DAY, 23);
+        lastDateOfCurrentMonth.set(Calendar.MINUTE, 59);
+        lastDateOfCurrentMonth.set(Calendar.SECOND, 59);
+        lastDateOfCurrentMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return lastDateOfCurrentMonth.getTime();
+    }
+
 
     public Call<List<Project>> getProjectsRecentlyAdded(Date startDate, int limit, Callback<List<Project>> callback) {
 
@@ -421,29 +434,32 @@ public class ProjectDomain {
         return results;
     }
 
+    //TODO - check
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
-
+        Log.d(TAG, "fetchProjectsHappeningSoon() called with: startDate = [" + startDate + "], endDate = [" + endDate + "]");
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
-                .between("bidDate", startDate, endDate)
-                .findAllSorted("bidDate", Sort.ASCENDING);
-        ArrayList<String> par = new ArrayList<String>();
-        for (int i=0; i < projectsResult.size(); i++) {
-            par.add("id="+projectsResult.get(i).getId()+":"+projectsResult.get(i).getBidDate());
-        }
+                .between("bidDateCalendar", startDate, endDate)
+                .findAllSorted(new String[]{"bidDateCalendar","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
+
+        Log.d(TAG, "fetchProjectsHappeningSoon() called projectsResult size: " + projectsResult.size());
+
         return projectsResult;
     }
 
 
-
+    //TODO - check
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
+        Log.d(TAG, "fetchProjectsByBidDate() called with: start = [" + start + "], end = [" + end + "]");
 
         RealmResults<Project> projectsResult = realm.where(Project.class)
                 .equalTo("hidden", false)
                 .equalTo("mbsItem", true)
-                .between("bidDate", start, end)
-                .findAllSorted("bidDate", Sort.ASCENDING);
+                .between("bidDateCalendar", start, end)
+                .findAllSorted(new String[]{"bidDateCalendar","title"},new Sort[]{Sort.ASCENDING,Sort.ASCENDING});
+
+        Log.d(TAG, "fetchProjectsByBidDate() called projectsResult size: " + projectsResult.size());
 
         return projectsResult;
     }
@@ -691,7 +707,8 @@ public class ProjectDomain {
         realm.commitTransaction();
         return persistedProjects;
     }
-    public void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
+
+    private void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
        // final Date startDate = new Date(), endDate = new Date();
 
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -772,6 +789,7 @@ public class ProjectDomain {
 
                 for (Project project : projects) {
 
+                    project.convertBidUTCDate2LocalDate();
                     Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
 
                     if (storedProject != null) {
