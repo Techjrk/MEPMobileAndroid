@@ -46,6 +46,7 @@ import io.realm.Realm;
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback,
         LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
 
+    public static final String EXTRA_VOICE_ACTIVATED = "com.lecet.app.content.ProjectsNearMeActivity.voice.activated";
     public static final String EXTRA_MARKER_LATITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
     public static final String EXTRA_MARKER_LONGITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.longitude.extra";
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
@@ -79,7 +80,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupToolbar();
         checkPermissions();
         viewPager = (ViewPager) findViewById(R.id.view_pager_bid);
-// set up TabLayout
+        // set up TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_bid_detail);
         tabLayout.setupWithViewPager(viewPager);
         setupViewPager(viewPager);

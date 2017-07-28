@@ -76,6 +76,8 @@ import java.util.TreeSet;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 
+import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_VOICE_ACTIVATED;
+
 /**
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
@@ -142,11 +144,19 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
             Intent newIntent;
 
-            // Projects Near Me
+            /*
+            Projects Near Me Functionality:
+            Voice Activation Results
+            The User will be shown the projects that are near their current location, including both pre & post-bid,
+            in a list view within the voice feature display. There will be a max of the 30 nearest projects.
+            The User can select any of the listed items to be taken directly into the MEP app to view the project details.
+             */
             if(matchesPhraseProjectsNearMe(query)){
                 newIntent = new Intent(this, ProjectsNearMeActivity.class);
+                newIntent.putExtra(EXTRA_VOICE_ACTIVATED, 1);
+
                 startActivity(newIntent);
-                finish();
+                finish();   // removing this finish() call would mean that the user returns to the MainActivity after backing out of the list activity
             }
 
             // Projects Updated Recently

@@ -440,6 +440,7 @@
     <string name="lastFamilyChecked">lastFamilyChecked</string>
 
     <!-- Search -->
+    <!-- Note on phrasing: Use "[Search for] [query] [in/on] [LECET] -->
     <string name="voice_projects_near_me">projects near me</string>
     <string name="voice_project_near_me">project near me</string>
     <string name="voice_projects_by_me">projects by me</string>
