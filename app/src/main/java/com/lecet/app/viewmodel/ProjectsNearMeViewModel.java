@@ -1,16 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -41,6 +30,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
@@ -130,6 +129,19 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private BitmapDescriptor pinMarkerSelected;
     private BitmapDescriptor pinMarkerSelectedWithUpdate;
 
+    /**
+     * Note: Listed below are used to match the list of projects in the Project Near Me based on iOS implementation.
+     */
+
+    //Note: Used for comparing this old latitude/longitude location value to the current/new latitude/longitude location.
+    private LatLng oldLatLang;
+
+    //Note: Used for checking if there's the same location when processing the project near me.
+    // If yes after using the filter, this will be used to select the projects based on the filter selected.
+    private boolean sameLocation;
+
+    //Note: Store the previous preBid and postBid projects for comparison.
+    private ArrayList<Project> oldPreBidProjects, oldPostBidProjects;
 
     public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer, LocationManager locationManager) {
         super(activity);
@@ -426,8 +438,18 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
         return map != null;
     }
-    public void fetchProjectsNearMe(final LatLng location) {
 
+    public void fetchProjectsNearMe(final LatLng location) {
+        if (location == oldLatLang || location.equals(oldLatLang)) {
+            Log.w("latlang", "latlang  found!");
+            sameLocation = true;
+
+        } else {
+            Log.w("latlang", "latlang NOT found!");
+            sameLocation = false;
+        }
+
+        oldLatLang = location;
         prevLocation = new Location("Prev");
         prevLocation.setLatitude(location.latitude);
         prevLocation.setLongitude(location.longitude);
@@ -478,9 +500,10 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             }
         });
     }
+
     public void fetchProjectsNearMeOnCameraIdle(final LatLng location) {
 
-        if(projectsNearResponseCall != null){
+        if (projectsNearResponseCall != null) {
             projectsNearResponseCall.cancel();
         }
         projectsNearResponseCall = projectDomain.getProjectsNear(location.latitude, location.longitude, DEFAULT_DISTANCE, new Callback<ProjectsNearResponse>() {
@@ -512,7 +535,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     }
 
     public void moveMapCamera(LatLng location) {
-        if(location == null){
+        if (location == null) {
             SimpleLecetDefaultAlert alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.CUSTIOM_DIALOG, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -521,7 +544,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             });
             alert.setMessage("Improper Location, Please Try Again.");
             alert.show();
-        }else {
+        } else {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
         }
     }
@@ -530,14 +553,18 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
     }
 
+
+
     private void populateMap(List<Project> projects) {
         if (isActivityAlive()) {
             if (prebidProjects == null || postbidProjects == null) {
                 prebidProjects = new ArrayList<>();
                 postbidProjects = new ArrayList<>();
+                oldPreBidProjects = new ArrayList<>();
+                oldPostBidProjects = new ArrayList<>();
             } else {
-                prebidProjects.clear();
-                postbidProjects.clear();
+                    prebidProjects.clear();
+                    postbidProjects.clear();
             }
 
             // Clear existing markers
@@ -553,15 +580,29 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                     // define as pre- or post-bid
                     if (project.getProjectStage() == null) {
-                        prebidProjects.add(project);
+
+                        if (sameLocation) {
+                            checkSameListPreBidProjects(oldPreBidProjects, project);
+                        } else {
+                            prebidProjects.add(project);
+                        }
                     } else {
                         if (project.getProjectStage().getParentId() == 102) {
-                            prebidProjects.add(project);
+                            if (sameLocation) {
+                                checkSameListPreBidProjects(oldPreBidProjects, project);
+                            } else {
+                                prebidProjects.add(project);
+                            }
                         } else {
-                            postbidProjects.add(project);
+                            if (sameLocation) {
+                                checkSameListPostBidProjects(oldPostBidProjects, project);
+                            } else {
+                                postbidProjects.add(project);
+                            }
                         }
                     }
-
+                    if (!sameLocation) oldPreBidProjects = (ArrayList<Project>) prebidProjects.clone();
+                    if (!sameLocation) oldPostBidProjects = (ArrayList<Project>) postbidProjects.clone();
                     // set the position of the info window
                     infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
 
@@ -573,6 +614,36 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     marker.setTag(project);
                     markers.put(project.getId(), marker);
                 }
+            }
+        }
+    }
+
+    /**
+     * Note: This method is used in comparing the list of first 200 preBid projects stored in the arraylist. Once found, this project will be stored to the other preBid arraylist used for displaying on the map.
+     *
+     * @param oldBid  - List of first 200 projects stored for the comparison needed when the filter has been applied.
+     * @param project - The id of the project will be used in comparing the projects.
+     */
+    public void checkSameListPreBidProjects(ArrayList<Project> oldBid, Project project) {
+        for (int i = 0; i < oldBid.size(); i++) {
+            if (oldBid.get(i).getId() == project.getId()) {
+                prebidProjects.add(project);
+                Log.w("found", "found pre " + project.getTitle());
+            }
+        }
+    }
+
+    /**
+     * Note: This method is used in comparing the list of first 200 postBid projects stored in the arraylist. Once found, this project will be stored to the other postBid arraylist used for displaying on the map.
+     *
+     * @param oldBid  - List of first 200 projects stored for the comparison needed when the filter has been applied.
+     * @param project - The id of the project will be used in comparing the projects.
+     */
+    public void checkSameListPostBidProjects(ArrayList<Project> oldBid, Project project) {
+        for (int i = 0; i < oldBid.size(); i++) {
+            if (oldBid.get(i).getId() == project.getId()) {
+                postbidProjects.add(project);
+                Log.w("found", "found post " + project.getTitle());
             }
         }
     }
@@ -826,6 +897,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         this.tableViewDisplay = tableViewDisplay;
         notifyPropertyChanged(BR.tableViewDisplay);
     }
+
     public void clearSharedPref(String dataName) {
         SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
         if (spref == null) return;

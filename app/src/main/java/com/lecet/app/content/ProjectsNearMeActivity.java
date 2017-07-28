@@ -1,12 +1,5 @@
 package com.lecet.app.content;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -29,6 +22,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
@@ -254,7 +253,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             viewModel.clearSharedPref(getString(R.string.FilterStageData) + "name");
             viewModel.clearSharedPref(getString(R.string.FilterStageData) + "view");
         }
-        Log.e(TAG, "onResume "+enableLocationUpdates);
+        Log.w(TAG, "onResume " + enableLocationUpdates);
 
     }
 
@@ -287,17 +286,13 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
                     checkGps();
                 }
             }, 500);
-        }
-
-        else if (requestCode == REQUEST_FILTER_MPN) {
+        } else if (requestCode == REQUEST_FILTER_MPN) {
             Log.d(TAG, "onActivityResult: filtermpn");
 
             //Note: This code below is used later for the onResume of the ProjectsNearMeActivity not to delete the SharedPreferences for the filter data.
             viewModel.setRequestMPNFilter(true);
             processFilter(requestCode, data);
-        }
-
-        else{
+        } else {
             Log.w(TAG, "onActivityResult: WARNING: NO REQUEST CODE MATCH: requestCode: " + requestCode);
         }
     }
@@ -425,30 +420,36 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
             projectsSb.append("}");
 
         }
-        //Final search filter result for Project
+
         String projectsCombinedFilter = projectsSb.toString();
-        //String projectsSearchStr = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\" " + projectsCombinedFilter + "}";
-        //String filterMPN = "{\"include\":[\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        String filterMPN = "{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]" + projectsCombinedFilter + "}";
-        //String filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"]+ projectsCombinedFilter +,\"limit\":200,\"order\":\"id DESC\"}";//internal server error
+
+        String filterMPN = "{\"include\":[\"workTypes\",\"userNotes\",\"images\",\"projectStage\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},{\"contacts\":[\"company\"]}]" + projectsCombinedFilter + ",\"limit\":200, \"order\":\"id DESC\"}";
+
         if (projectsCombinedFilter.isEmpty()) {
-         filterMPN = "{\"include\":[\"projectStage\",{\"contacts\":[\"company\"]},\"userNotes\",\"images\"],\"limit\":200,\"order\":\"id DESC\"}";
+            filterMPN = "{\"include\":[\"workTypes\",\"userNotes\",\"images\",\"projectStage\",{\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}},{\"contacts\":[\"company\"]}],\"limit\":200, \"order\":\"id DESC\"}";
         }
-        Log.d("filterMPN","filterMPN1:"+filterMPN+":combined:"+projectsCombinedFilter);
+
         viewModel.setProjectFilter(filterMPN);
+
         String plocation = viewModel.getSearch().getText().toString();
+
         if (!plocation.isEmpty()) {
+
             viewModel.searchAddress(plocation);
+
         } else if (mpnLocation != null && !mpnLocation.isEmpty()) {
+
             viewModel.searchAddress(mpnLocation);
         } else {
+
             enableLocationUpdates = true;
             updateLocation();
+
             if (lastKnowLocation != null) {
-                Log.d(TAG, "processFilter: pn2" + lastKnowLocation.getLongitude() + ":" + lastKnowLocation.getLatitude());
+
                 fetchProjects(true);
             }
+
             locationManager.startLocationUpdates();
         }
     }
@@ -736,14 +737,14 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // add the prebid fragment
-        PreBidFragment preBidFragment = PreBidFragment.newInstance(viewModel.getPrebidProjects() , lastKnowLocation);
-        if(!preBidFragment.isAdded()) {
+        PreBidFragment preBidFragment = PreBidFragment.newInstance(viewModel.getPrebidProjects(), lastKnowLocation);
+        if (!preBidFragment.isAdded()) {
             pagerAdapter.addFragment(preBidFragment, getResources().getString(R.string.reg_pre_bid), preSize);
         }
 
         // add the postbid fragment
         PostBidFragment postBidFragment = PostBidFragment.newInstance(viewModel.getPostbidProjects(), lastKnowLocation);
-        if(!postBidFragment.isAdded()) {
+        if (!postBidFragment.isAdded()) {
             pagerAdapter.addFragment(postBidFragment, getResources().getString(R.string.reg_post_bid), postSize);
         }
 

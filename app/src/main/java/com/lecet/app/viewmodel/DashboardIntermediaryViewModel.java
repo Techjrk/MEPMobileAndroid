@@ -281,10 +281,13 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                 if (response.isSuccessful()) {
 
                     // Store in Realm
-                    List<Project> body = response.body();
+                    final List<Project> body = response.body();
                     projectDomain.asyncCopyToRealm(body, null, new Boolean(true), null, null, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
+
+                            Log.d(TAG, "getProjectsHappeningSoon() called: body size: " + body.size());
+
 
                             // data received, lets see if we should display main content
                             fetchedMHS = true;
@@ -424,7 +427,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
                         @Override
                         public void onError(Throwable error) {
 
-                            Log.e(TAG, "getProjectsRecentlyUpdated : " + error.getMessage());
+                            Log.e(TAG, "getProjectsRecentlyUpdated error: " + error.getMessage());
                             // data received, lets see if we should display main content
                             checkDataDownloaded();
                         }
@@ -432,7 +435,7 @@ public class DashboardIntermediaryViewModel extends BaseObservableViewModel {
 
                 } else {
 
-                    Log.e(TAG, "getProjectsRecentlyUpdated : " + response.message());
+                    Log.e(TAG, "getProjectsRecentlyUpdated1 : " + response.message());
 
                     // data received, lets see if we should display main content
                     if (isSessionUnauthorized(response)) {
