@@ -1,7 +1,6 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.County;
@@ -15,6 +14,7 @@ import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.utility.Log;
 
 import java.util.List;
 

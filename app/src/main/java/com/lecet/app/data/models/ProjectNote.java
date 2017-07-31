@@ -1,8 +1,9 @@
 package com.lecet.app.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.support.annotation.NonNull;
 
-import com.google.gson.annotations.SerializedName;
 import com.lecet.app.interfaces.ProjectAdditionalData;
 
 import java.util.Date;

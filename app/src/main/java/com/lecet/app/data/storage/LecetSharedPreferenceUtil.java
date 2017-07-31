@@ -3,7 +3,8 @@ package com.lecet.app.data.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
+import com.lecet.app.utility.Log;
 
 /**
  * File: LecetSharedPreferenceUtil Created: 8/24/16 Author: domandtom

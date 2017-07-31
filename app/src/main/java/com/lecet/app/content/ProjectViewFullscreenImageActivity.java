@@ -3,11 +3,11 @@ package com.lecet.app.content;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectViewFullscreenImageBinding;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectViewFullscreenImageViewModel;
 
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;

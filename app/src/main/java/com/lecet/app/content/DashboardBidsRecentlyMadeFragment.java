@@ -4,7 +4,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import com.lecet.app.databinding.FragmentDashboardChartBaseBinding;
 import com.lecet.app.interfaces.DashboardChart;
 import com.lecet.app.interfaces.MBRDataSource;
 import com.lecet.app.interfaces.MBRDelegate;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.BaseDashboardChartViewModel;
 
 /**

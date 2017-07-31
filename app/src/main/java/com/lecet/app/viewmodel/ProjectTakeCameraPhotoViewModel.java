@@ -11,7 +11,6 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.lecet.app.content.ProjectTakeCameraPhotoFragment;
+import com.lecet.app.utility.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -207,7 +207,7 @@ public class ProjectTakeCameraPhotoViewModel extends BaseObservable {
                             setCameraDisplayOrientation(fragment.getActivity().getWindowManager().getDefaultDisplay().getRotation());
                         }
                     } catch (Exception e) {
-                        Log.w(TAG, "Error while onOrientationChanged", e);
+                        Log.w(TAG, "Error while onOrientationChanged: " + e);
                     }
                 }
             };

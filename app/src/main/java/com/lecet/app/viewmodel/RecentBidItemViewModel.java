@@ -3,11 +3,9 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Company;
@@ -17,13 +15,12 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.BidDomain;
 import com.lecet.app.domain.CompanyDomain;
 import com.lecet.app.interfaces.RealmFetchCallback;
+import com.lecet.app.utility.Log;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 
 /**
  * File: RecentBidItemViewModel Created: 10/13/16 Author: domandtom

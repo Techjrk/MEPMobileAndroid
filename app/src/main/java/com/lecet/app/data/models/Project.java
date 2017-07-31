@@ -1,19 +1,14 @@
 package com.lecet.app.data.models;
 
-import android.support.annotation.Nullable;
-import android.util.Log;
-
 import com.google.gson.annotations.SerializedName;
-import com.lecet.app.domain.BidDomain;
+
+import android.support.annotation.Nullable;
+
 import com.lecet.app.interfaces.TrackedObject;
 import com.lecet.app.utility.DateUtility;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import io.realm.Realm;
 import io.realm.RealmList;

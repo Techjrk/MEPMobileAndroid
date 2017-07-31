@@ -6,11 +6,11 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 
 import com.lecet.app.BR;
+import com.lecet.app.utility.Log;
 
 /**
  * Created by getdevsinc on 12/29/16.

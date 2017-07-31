@@ -5,22 +5,17 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.R;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.Log;
 
 import java.util.TimeZone;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_BODY_EXTRA;
 import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_ID_EXTRA;

@@ -6,14 +6,13 @@ import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.content.widget.ControllableImageView;
 import com.lecet.app.content.widget.PannableImageView;
+import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
 

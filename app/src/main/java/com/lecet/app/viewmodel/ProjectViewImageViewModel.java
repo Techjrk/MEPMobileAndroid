@@ -6,14 +6,12 @@ import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.content.ProjectDetailActivity;
-import com.lecet.app.content.ProjectViewFullscreenImageActivity;
 import com.lecet.app.content.ProjectViewPannableImageActivity;
+import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;

@@ -2,12 +2,12 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.utility.Log;
 
 import java.text.SimpleDateFormat;
 

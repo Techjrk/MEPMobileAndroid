@@ -3,11 +3,6 @@ package com.lecet.app.data.models;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONObject;
-import org.json.JSONStringer;
-
-import io.realm.RealmObject;
-
 /**
  * Created by getdevsinc on 11/23/16.
  */

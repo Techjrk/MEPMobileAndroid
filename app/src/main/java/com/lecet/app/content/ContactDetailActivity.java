@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -15,6 +14,7 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityContactDetailBinding;
 import com.lecet.app.domain.CompanyDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ContactViewModel;
 
 import io.realm.Realm;
