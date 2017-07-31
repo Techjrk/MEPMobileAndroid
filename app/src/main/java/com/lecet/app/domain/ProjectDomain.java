@@ -185,40 +185,11 @@ public class ProjectDomain {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
         String formattedStart = sdf.format(startDate);
         String formattedEnd = sdf.format(endDate);
-
-/*
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
-                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
-*/
-
-/*   // Will try checking again this if there will be an issue again in the bidding soon.
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"bidDate\":{\"lte\":\"%s\"}}," +
-                " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedEnd, limit);
-
-*/
-        //Original filter url
-/*
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
-                " \"limit\":%d, \"order\":\"bidDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
-*/
+ 
         //To match with iOS filter, the order is in firstPublishDate
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lt\":\"%s\"}}]}," +
                 " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
-
-        //hardcoded filter = "{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}],\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"2017-07-25T00:00:00.000Z\"}},{\"bidDate\":{\"lt\":\"2017-08-01\"}}]},\"dashboardTypes\":true,\"limit\":250, \"order\":\"firstPublishDate DESC\"}";
-
-/*
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"and\":[{\"bidDate\":{\"gte\":\"%s\"}},{\"bidDate\":{\"lte\":\"%s\"}}]}," +
-                " \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, formattedEnd, limit);
-*/
-        //TODO - ?
-        //TimeZone tz = TimeZone.getDefault();
-        //Log.d("Timezone","getProjectsHappeningSoon: TimeZone   "+tz.getDisplayName(false, TimeZone.SHORT)+" Timezon id :: " +tz.getID());
 
         Log.d(TAG, "getProjectsHappeningSoon() called: formattedStart: " + formattedStart);
         Log.d(TAG, "getProjectsHappeningSoon() called: formattedEnd: " + formattedEnd);
@@ -229,15 +200,6 @@ public class ProjectDomain {
 
         return call;
     }
-
-
-    /*public Call<List<Project>> getProjectsHappeningSoon(int limit, Callback<List<Project>> callback) {
-
-        Date current = new Date();
-        Date endDate = DateUtility.addDays(30);
-        return getProjectsHappeningSoon(current, endDate, limit, callback);
-    }*/
-
 
     public Call<List<Project>> getProjectsHappeningSoon(Callback<List<Project>> callback) {
         beforeUpdateRealm4HappeningSoon(getStartDateMidnightUTC(), getLastDateOfCurrentMonthUTC());
@@ -338,10 +300,6 @@ public class ProjectDomain {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formattedStart = sdf.format(publishDate);
 
-/*
-        String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
-                "\"where\":{\"lastPublishDate\":{\"lte\":\"%s\"}}, \"limit\":%d, \"order\":\"firstPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
-*/
         String filter = String.format("{\"include\":[\"projectStage\", {\"primaryProjectType\":{\"projectCategory\":\"projectGroup\"}}], " +
                 "\"where\":{\"lastPublishDate\":{\"gte\":\"%s\"}}, \"limit\":%d, \"order\":\"lastPublishDate DESC\",\"dashboardTypes\":true}", formattedStart, limit);
 
@@ -434,7 +392,6 @@ public class ProjectDomain {
         return results;
     }
 
-    //TODO - check
     public RealmResults<Project> fetchProjectsHappeningSoon(Date startDate, Date endDate) {
         Log.d(TAG, "fetchProjectsHappeningSoon() called with: startDate = [" + startDate + "], endDate = [" + endDate + "]");
         RealmResults<Project> projectsResult = realm.where(Project.class)
@@ -449,7 +406,6 @@ public class ProjectDomain {
     }
 
 
-    //TODO - check
     public RealmResults<Project> fetchProjectsByBidDate(Date start, Date end) {
         Log.d(TAG, "fetchProjectsByBidDate() called with: start = [" + start + "], end = [" + end + "]");
 
@@ -709,7 +665,6 @@ public class ProjectDomain {
     }
 
     private void beforeUpdateRealm4HappeningSoon(final Date startDate, final Date endDate) {
-       // final Date startDate = new Date(), endDate = new Date();
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -718,10 +673,9 @@ public class ProjectDomain {
                         .between("bidDate", startDate, endDate)
                         .findAllSorted("bidDate", Sort.ASCENDING);
                 for (Project project : storedProject) {
-                  //  Project storedProject = realm.where(Project.class).equalTo("id", project.getId()).findFirst();
+
                     if (project != null) {
                         project.setMbsItem(false);
-                        //storedProject.updateProject(realm, project, hidden);
                         realm.copyToRealmOrUpdate(project);
 
                     } else {

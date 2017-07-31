@@ -117,9 +117,7 @@ public class DateUtility {
         for (Project project : projects) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeZone(TimeZone.getDefault());
-            //calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = project.getBidDateCalendar();
-            //Date date = project.getBidDate();
             calendar.setTime(date);
             calendar.set(Calendar.MILLISECOND, 0);
             calendar.set(Calendar.SECOND, 0);
@@ -134,7 +132,6 @@ public class DateUtility {
 
     public static Calendar getCalendarHour0(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
-        //calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         calendar.setTimeZone(TimeZone.getDefault());
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
@@ -164,16 +161,8 @@ public class DateUtility {
         cal.setTimeZone(tz);
         sdf.setTimeZone(tz);
         cal.setTime(UTCDate);
-
         long longUTC = cal.getTimeInMillis();
         int inUTC = tz.getOffset(longUTC);
-
-        String sdate = sdf.format(UTCDate);
-
-        Log.d("Time zone1: ", "Timezone1:" + tz.getDisplayName() + "date: " + sdate);
-        //  sdf.setTimeZone(cal.getTimeZone());
-
-        // TimeZone tz = cal.getTimeZone();
         tz = TimeZone.getDefault();
         cal.setTimeZone(tz);
         sdf.setTimeZone(tz);
@@ -181,19 +170,6 @@ public class DateUtility {
         int inLocal = tz.getOffset(longLocal);
         hoursdiff = (inUTC - inLocal)/ (1000 * 60 * 60);
         Log.d("Time diff: ", "Timezonediff:" + hoursdiff);
-
-        sdate = sdf.format(UTCDate);
-
-        Log.d("Time zone2: ", "Timezone2:" + tz.getDisplayName() + "date: " + sdate);
-
-/* date formatter in local timezone */
-
-        Date ddate = null;
-        try {
-            ddate = sdf.parse(sdate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         return DateUtility.addHours(UTCDate,-hoursdiff);
     }

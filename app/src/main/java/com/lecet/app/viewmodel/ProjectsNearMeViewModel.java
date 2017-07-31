@@ -902,7 +902,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
         SharedPreferences spref = activity.getSharedPreferences(dataName, Context.MODE_PRIVATE);
         if (spref == null) return;
         SharedPreferences.Editor editData = spref.edit();
-        //  if (editData == null) return;
+
         editData.clear();
         editData.commit();
     }
