@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.BR;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddImageActivity;
@@ -22,6 +23,7 @@ import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import retrofit2.Call;
@@ -48,6 +50,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
+    private String location = "Unknown Location";
     private boolean canEdit;
     private ImageView imageView;
 
@@ -56,24 +59,24 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         this.activity = activity;
         this.imageView = imageView;
 
-        fetchImageAuthor(photo, userDomain);
+        setAuthorNameFromUser(photo);
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
             setCanEdit(photo.getAuthorId() == getLoggedInUserId());
         }
     }
 
-    private void fetchImageAuthor(ProjectPhoto photo, UserDomain userDomain) {
-        final User imageAuthor = photo.getAuthor();
-        if(imageAuthor == null){
+    private void setAuthorNameFromUser(ProjectPhoto photo) {
+        final User author = photo.getAuthor();
+
+        if(author == null){
             Log.e(TAG, "fetchImageAuthor: No Author Attached");
         }
         else {
-            setAuthorName(imageAuthor.getFirstName() + " " + imageAuthor.getLastName());
+            setAuthorName(author.getFirstName() + " " + author.getLastName());
             notifyChange();
         }
     }
-
 
 
     @Bindable
@@ -83,8 +86,18 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
     private void setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
+        notifyPropertyChanged(BR.canEdit);
     }
 
+    @Bindable
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+        notifyPropertyChanged(BR.location);
+    }
 
     public String getImageUrl() {
         //Log.d(TAG, "getImageUrl: photo url: " + photo.getUrl());
@@ -96,12 +109,14 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         return photo.getSrc();
     }
 
+    @Bindable
     public String getAuthorName(){
         return authorName;
     }
 
     private void setAuthorName(String name){
         authorName = name;
+        notifyPropertyChanged(BR.authorName);
     }
 
     public long getLoggedInUserId() {
@@ -133,6 +148,15 @@ public class ListItemProjectImageViewModel extends BaseObservable {
                 .placeholder(null)  //TODO - use any placeholder image during load?
                 .into(view);
     }
+
+    public String getDateUpdatedForDisplay() {
+        TimeZone localTimeZone = TimeZone.getDefault();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d yyyy, hh:mm aaa");
+        simpleDateFormat.setTimeZone(localTimeZone);
+        String displayDate = simpleDateFormat.format(photo.getUpdatedAt());
+        return displayDate;
+    }
+
 
     ///////////////////////////
     // Click Events

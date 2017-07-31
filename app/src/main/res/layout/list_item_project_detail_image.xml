@@ -156,6 +156,7 @@
                         android:textColor="@color/lecetLightGray"
                         android:gravity="center_vertical"
                         android:layout_gravity="center"
+                        android:text="@{viewModel.location}"
                         android:maxLines="1"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="Brooklyn, NY"/>
@@ -171,6 +172,7 @@
                         android:textSize="12sp"
                         android:textColor="@color/lecetLightGray"
                         android:gravity="right"
+                        android:text="@{viewModel.getDateUpdatedForDisplay}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="July 26, 2017, 2:35pm"/>
 

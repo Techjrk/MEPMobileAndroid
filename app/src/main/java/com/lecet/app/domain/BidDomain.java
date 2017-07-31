@@ -147,7 +147,7 @@ public class BidDomain {
                 .greaterThan("createDate", cutoffDate)
                 .equalTo("project.hidden", false)
                 .equalTo("rank", 1)
-                .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
+                .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});  //TODO - filter out projectGroupId of 104 (unclassified)
               //  .findAllSorted("createDate", Sort.DESCENDING);
 
         Log.d(TAG, "fetchBids() called with: cutoffDate = [" + cutoffDate + "]. Size: " + bids.size());

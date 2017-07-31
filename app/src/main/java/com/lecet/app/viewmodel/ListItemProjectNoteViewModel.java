@@ -9,7 +9,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.R;
+import com.lecet.app.BR;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
@@ -44,13 +44,14 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     //private long authorId = -1;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
+    private String location = "Unknown Location";
     private boolean canEdit;
 
     public ListItemProjectNoteViewModel(ProjectNote note, AppCompatActivity activity, final UserDomain userDomain) {
         this.note = note;
         this.activity = activity;
 
-        setAuthorName(note);
+        setAuthorNameFromUser(note);
 
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
@@ -58,14 +59,14 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         }
     }
 
-    private void setAuthorName(ProjectNote note) {
-        User noteAuthor = note.getAuthor();
+    private void setAuthorNameFromUser(ProjectNote note) {
+        final User author = note.getAuthor();
 
-        if(noteAuthor == null){
+        if(author == null){
             Log.e(TAG, "fetchNoteAuthor: User Author is null");
         } else {
             Log.d(TAG, "fetchNoteAuthor: Set Author Name");
-            setAuthorName(noteAuthor.getFirstName() + " " + noteAuthor.getLastName());
+            setAuthorName(author.getFirstName() + " " + author.getLastName());
         }
     }
 
@@ -77,23 +78,27 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
     private void setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
+        notifyPropertyChanged(BR.canEdit);
     }
 
-    /*public long getAuthorId() {
-        return authorId;
+    @Bindable
+    public String getLocation() {
+        return location;
     }
 
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
-    }*/
+    public void setLocation(String location) {
+        this.location = location;
+        notifyPropertyChanged(BR.location);
+    }
 
+    @Bindable
     public String getAuthorName(){
         return authorName;
     }
 
     private void setAuthorName(String name){
         authorName = name;
-        notifyChange();
+        notifyPropertyChanged(BR.authorName);
     }
 
     public long getLoggedInUserId() {
@@ -122,10 +127,6 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         simpleDateFormat.setTimeZone(localTimeZone);
         String displayDate = simpleDateFormat.format(note.getUpdatedAt());
         return displayDate;
-    }
-
-    public String getLocation() {
-        return "Unknown location"; //TODO ********************* HARDCODED UNTIL WE HAVE API SUPPORT *****************************
     }
 
 
@@ -163,8 +164,13 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         }
     }
 
+
+    /*
+     * Helpers
+     */
+
     //TODO - move to utils class?
-    public String getTimeDifference() {
+    public String getTimeDifference(){
         long currentTime = System.currentTimeMillis();
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
@@ -172,7 +178,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         long difference =  currentTime - note.getCreatedAt().getTime();
 
         if(difference < 0){
-            Log.d(TAG, "getTimeDifference: Less then 0");
+            Log.e(TAG, "getTimeDifference: Less then 0");
         }
         if(difference < 30000L){//less then 30 seconds
             return "Just Now";
@@ -190,12 +196,12 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
         difference /= 60L;//to hours
 
-        if(difference < 24L){
+        if(difference < 60L){
             return difference + " Hour(s) Ago";
         }
         difference /= 24L;
 
-        if(difference < 365) {//less then a Day
+        if(difference < 24L) {//less then a Day
             return difference + " Days(s) Ago";
         }
         difference /= 365L;//to Years
