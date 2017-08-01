@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.databinding.Bindable;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.drawable.Icon;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -574,6 +575,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             PointF infoWindowAnchorPos;
             for (Project project : projects) {
                 if (!markers.containsKey(project.getId())) {
+                    // set the position of the info window
+                    infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
 
                     // set the map marker style
                     BitmapDescriptor icon = getMarkerIcon(project, false);
@@ -582,20 +585,20 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     if (project.getProjectStage() == null) {
 
                         if (sameLocation) {
-                            checkSameListPreBidProjects(oldPreBidProjects, project);
+                            checkSameListPreBidProjects(oldPreBidProjects, project, infoWindowAnchorPos, icon);
                         } else {
                             prebidProjects.add(project);
                         }
                     } else {
                         if (project.getProjectStage().getParentId() == 102) {
                             if (sameLocation) {
-                                checkSameListPreBidProjects(oldPreBidProjects, project);
+                                checkSameListPreBidProjects(oldPreBidProjects, project, infoWindowAnchorPos,icon);
                             } else {
                                 prebidProjects.add(project);
                             }
                         } else {
                             if (sameLocation) {
-                                checkSameListPostBidProjects(oldPostBidProjects, project);
+                                checkSameListPostBidProjects(oldPostBidProjects, project, infoWindowAnchorPos, icon);
                             } else {
                                 postbidProjects.add(project);
                             }
@@ -604,15 +607,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                     if (!sameLocation) oldPreBidProjects = (ArrayList<Project>) prebidProjects.clone();
                     if (!sameLocation) oldPostBidProjects = (ArrayList<Project>) postbidProjects.clone();
                     // set the position of the info window
-                    infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
+                    //infoWindowAnchorPos = getInfoWindowAnchorPosition(project);
 
                     // add the marker to the map, add the Project as its Tag, and add the marker to a list
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
-                            .icon(icon)
-                            .position(project.getGeocode().toLatLng()));
-                    marker.setTag(project);
-                    markers.put(project.getId(), marker);
+                    if (!sameLocation) {
+                        Marker marker = map.addMarker(new MarkerOptions()
+                                .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
+                                .icon(icon)
+                                .position(project.getGeocode().toLatLng()));
+                        marker.setTag(project);
+                        markers.put(project.getId(), marker);
+                    }
                 }
             }
         }
@@ -624,10 +629,17 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
      * @param oldBid  - List of first 200 projects stored for the comparison needed when the filter has been applied.
      * @param project - The id of the project will be used in comparing the projects.
      */
-    public void checkSameListPreBidProjects(ArrayList<Project> oldBid, Project project) {
+    public void checkSameListPreBidProjects(ArrayList<Project> oldBid, Project project, PointF infoWindowAnchorPos, BitmapDescriptor icon) {
         for (int i = 0; i < oldBid.size(); i++) {
             if (oldBid.get(i).getId() == project.getId()) {
                 prebidProjects.add(project);
+                // add the marker to the map, add the Project as its Tag, and add the marker to a list
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
+                        .icon(icon)
+                        .position(project.getGeocode().toLatLng()));
+                marker.setTag(project);
+                markers.put(project.getId(), marker);
                 Log.w("found", "found pre " + project.getTitle());
             }
         }
@@ -639,10 +651,16 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
      * @param oldBid  - List of first 200 projects stored for the comparison needed when the filter has been applied.
      * @param project - The id of the project will be used in comparing the projects.
      */
-    public void checkSameListPostBidProjects(ArrayList<Project> oldBid, Project project) {
+    public void checkSameListPostBidProjects(ArrayList<Project> oldBid, Project project, PointF infoWindowAnchorPos, BitmapDescriptor icon) {
         for (int i = 0; i < oldBid.size(); i++) {
             if (oldBid.get(i).getId() == project.getId()) {
                 postbidProjects.add(project);
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .infoWindowAnchor(infoWindowAnchorPos.x, infoWindowAnchorPos.y)
+                        .icon(icon)
+                        .position(project.getGeocode().toLatLng()));
+                marker.setTag(project);
+                markers.put(project.getId(), marker);
                 Log.w("found", "found post " + project.getTitle());
             }
         }
