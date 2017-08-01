@@ -670,8 +670,8 @@ public class ProjectDomain {
             @Override
             public void execute(Realm realm) {
                 RealmResults<Project> storedProject = realm.where(Project.class)
-                        .between("bidDate", startDate, endDate)
-                        .findAllSorted("bidDate", Sort.ASCENDING);
+                        .between("bidDateCalendar", startDate, endDate)
+                        .findAllSorted("bidDateCalendar", Sort.ASCENDING);
                 for (Project project : storedProject) {
 
                     if (project != null) {
@@ -683,7 +683,16 @@ public class ProjectDomain {
                     }
                 }
             }
-        });
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d("realmsoonsuccess","realm soon success");
+            }},new Realm.Transaction.OnError() {
+
+                @Override
+                public void onError(Throwable error) {
+                    Log.d("realmsoonerror","realm soon error");
+                }});
     }
     public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
 
