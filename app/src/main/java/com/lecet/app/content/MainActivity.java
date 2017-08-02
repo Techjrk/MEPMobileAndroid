@@ -84,7 +84,13 @@ import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_VOICE_ACTIVATED
  */
 public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
+
     private static final String TAG = "MainActivity";
+    private static final int VOICE_LAUNCH_CODE_NONE = -1;
+    private static final int VOICE_LAUNCH_CODE_PROJECTS_NEAR_ME = 0;
+    private static final int VOICE_LAUNCH_CODE_PROJECTS_UPDATED_RECENTLY = 1;
+    private static final int VOICE_LAUNCH_CODE_TRACKING_LISTS = 2;
+
     private MainViewModel viewModel;
     private SearchDomain searchDomain;
 
@@ -113,13 +119,13 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        checkForVoiceActivation(intent);
+        int voiceLaunchCode = checkForVoiceActivation(intent);     //TODO -- *************** REMOVE 2nd ARG BEFORE QA **************************
 
         setupBinding();
         setupToolbar();
 
         if (isNetworkConnected()) {
-            setupViewPager();
+            setupViewPager(voiceLaunchCode);
             setupPageIndicator();
             setupPageButtons();
         }
@@ -131,51 +137,53 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
       Voice Activation
      */
 
-    private void checkForVoiceActivation(Intent intent) {
+    /**
+     * @param intent
+     */
+    private int checkForVoiceActivation(Intent intent) {
         Log.d(TAG, "checkForVoiceActivation");
 
         if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())) {
 
             String query = intent.getStringExtra(SearchManager.QUERY);
-            if(query == null || query.isEmpty()){
+            if((query == null || query.isEmpty())) {
                 finish();
-                return;
+                return VOICE_LAUNCH_CODE_NONE;
             }
 
             Intent newIntent;
 
-            /*
-            Projects Near Me Functionality:
-            Voice Activation Results
-            The User will be shown the projects that are near their current location, including both pre & post-bid,
-            in a list view within the voice feature display. There will be a max of the 30 nearest projects.
-            The User can select any of the listed items to be taken directly into the MEP app to view the project details.
-             */
+            // Launch Projects Near Me and go directly to Table View
             if(matchesPhraseProjectsNearMe(query)){
                 newIntent = new Intent(this, ProjectsNearMeActivity.class);
-                newIntent.putExtra(EXTRA_VOICE_ACTIVATED, 1);
+                newIntent.putExtra(EXTRA_VOICE_ACTIVATED, true);
 
                 startActivity(newIntent);
                 finish();   // removing this finish() call would mean that the user returns to the MainActivity after backing out of the list activity
+                return VOICE_LAUNCH_CODE_PROJECTS_NEAR_ME;
             }
 
-            // Projects Updated Recently
+            // Stay on Dashboard (i.e. MainActivity) and to Projects Updated Recently tab
             else if(matchesPhraseProjectsUpdatedRecently(query)) {
-                //TODO - launch Projects Updated Recently
-                finish();
+                //functionality will be handled in rest of onCreate() flow in this Activity
+                return VOICE_LAUNCH_CODE_PROJECTS_UPDATED_RECENTLY;
             }
 
-            // Tracking List
+            // Stay on Dashboard (i.e. MainActivity) and show the Tracking Lists dropdown menu
             else if(matchesPhraseTrackingList(query)){
-                //TODO: ADD FUNCTIONALITY, Probably a separate activity
                 finish();//This is here because there is not proper functionality.
+                return VOICE_LAUNCH_CODE_TRACKING_LISTS;
             }else{
                 finish();
             }
         }
+
+        return VOICE_LAUNCH_CODE_NONE;
     }
 
     private boolean matchesPhraseProjectsNearMe(String rawPhrase){
+        if(rawPhrase == null) return false;
+
         String phrase = rawPhrase.toLowerCase();
         if(phrase.contains(getString(R.string.voice_project_near_me))
         || phrase.contains(getString(R.string.voice_projects_near_me))
@@ -189,6 +197,8 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     private boolean matchesPhraseProjectsUpdatedRecently(String rawPhrase) {
+        if(rawPhrase == null) return false;
+
         String phrase = rawPhrase.toLowerCase();
         if(phrase.contains(getString(R.string.voice_projects_updated_recently))
         || phrase.contains(getString(R.string.voice_recent_projects))) {
@@ -199,6 +209,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     private boolean matchesPhraseTrackingList(String rawPhrase){
+        if(rawPhrase == null) return false;
         String phrase = rawPhrase.toLowerCase();
         if(phrase.contains(getString(R.string.voice_tracking_list))
         || phrase.contains(getString(R.string.voice_tracking_lists))){
@@ -252,7 +263,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
         if (isConnected && viewPager == null) {
 
-            setupViewPager();
+            setupViewPager(-1);
             setupPageIndicator();
             setupPageButtons();
         }
@@ -328,7 +339,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
      * Set up the Fragment Pager which contains the four main fragments used in the upper third of
      * the Dashboard
      */
-    private void setupViewPager() {
+    private void setupViewPager(int voiceLaunchCode) {
 
         viewPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
         viewPager.setOffscreenPageLimit(DashboardPagerAdapter.NUM_ITEMS);
@@ -368,6 +379,11 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 }
             }
         });
+
+        if(voiceLaunchCode > -1) {
+            viewPager.setCurrentItem(3);
+        }
+
     }
 
     /**
