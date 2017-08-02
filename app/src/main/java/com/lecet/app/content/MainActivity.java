@@ -135,6 +135,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     /*
       Voice Activation
+      Syntax: "Search for Projects Near Me in le-CET"
      */
 
     /**
@@ -190,6 +191,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         || phrase.contains(getString(R.string.voice_projects_by_me))
         || phrase.contains(getString(R.string.voice_project_by_me))
         || phrase.contains(getString(R.string.voice_projects_nearby))) {
+            Log.d(TAG, "matchesPhraseProjectsNearMe: MATCH FOUND. QUERY PHRASE WAS: " + rawPhrase);
             return true;
         }
         Log.d(TAG, "matchesPhraseProjectsNearMe: QUERY PHRASE WAS: " + rawPhrase);
@@ -201,7 +203,11 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
         String phrase = rawPhrase.toLowerCase();
         if(phrase.contains(getString(R.string.voice_projects_updated_recently))
+        || phrase.contains(getString(R.string.voice_projects_recently_updated))
+        || phrase.contains(getString(R.string.voice_recent_project_updates))
+        || phrase.contains(getString(R.string.voice_recently_updated_projects))
         || phrase.contains(getString(R.string.voice_recent_projects))) {
+            Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: MATCH FOUND. QUERY PHRASE WAS: " + rawPhrase);
             return true;
         }
         Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: QUERY PHRASE WAS: " + rawPhrase);
@@ -213,6 +219,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         String phrase = rawPhrase.toLowerCase();
         if(phrase.contains(getString(R.string.voice_tracking_list))
         || phrase.contains(getString(R.string.voice_tracking_lists))){
+            Log.d(TAG, "matchesPhraseTrackingList: MATCH FOUND. QUERY PHRASE WAS: " + rawPhrase);
             return true;
         }
         Log.d(TAG, "matchesPhraseTrackingList: QUERY PHRASE WAS: " + rawPhrase);
