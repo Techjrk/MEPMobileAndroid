@@ -32,7 +32,6 @@ public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
 
             if (sdataId != null && !sdataId.isEmpty())
             {
-                //Log.d("ownertypeid","ownertypeid"+sdataId);
                 viewModel.setLastChecked((CheckBox)findViewById(Integer.valueOf(sdataId)));
             }
 

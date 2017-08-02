@@ -77,18 +77,12 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-            //LayoutInflater inflater = getLayoutInflater();
-            //View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
-            //viewModel.setToolbar(searchBarView);
-            //  actionBar.setCustomView(searchBarView);
-            //actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowCustomEnabled(false);
         }
     }
@@ -246,20 +240,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, null);
         if (!viewModel.getIsProjectViewVisible()) {
-            /*projectLocation = sb.toString();
-            if (!projectLocation.trim().equals("")) {
-                projectLocation = "\"projectLocation\":{" + projectLocation + "}";
-            }
-            viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_LOCATION, projectLocation);  // this should work whether or not projectLocation is empty
-           // Log.d("project view","project view");
-        } else {*/
             companyLocation = sb.toString();
             if (!companyLocation.trim().equals("")) {
                 companyLocation = "\"companyLocation\":{" + companyLocation + "}";
             }
 
             viewModel.setSearchFilterResult(SearchViewModel.FILTER_COMPANY_LOCATION, companyLocation);  // this should work whether or not companyLocation is empty
-            Log.d("companyresult", "companyresult:" + companyLocation);
+           // Log.d("companyresult", "companyresult:" + companyLocation);
         }
         projectLocation = sb.toString();
 
@@ -386,8 +373,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         } else {
             viewModel.setResultValue("");
         }
-
-        // Log.d("valuestr","valuestr"+valueStr);
 
         if (instantSearch && !viewModel.getIsProjectViewVisible()) {
             viewModel.setCvalueSelect(valueStr);
@@ -569,7 +554,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                         viewType = Integer.valueOf(bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));  // view type (parent, child)
                         stageStr += bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME) + ", ";                        // text display
-//                    stageStr = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME);                        // text display
                         stageId = bundle.getString(SearchFilterStageViewModel.BUNDLE_KEY_ID);
                         //   stageStrId += String.valueOf(stageId)+", ";
                         // ID
@@ -612,7 +596,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
                     viewModel.setResultStage(stages);
                 } else viewModel.setResultStage("");
-               // Log.d("slistid", "slistid" + sList.toString());
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, stages);
                 if (stageStr.length() > 2) {
                     stageStr = stageStr.substring(0, stageStr.length() - 2);         //trim trailing ", "

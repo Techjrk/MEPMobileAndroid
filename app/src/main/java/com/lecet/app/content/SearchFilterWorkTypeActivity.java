@@ -24,18 +24,15 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String sdata = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE);
         String sdataId = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE_ID);
-      //  String sdataCB = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE_CB);
         viewModel = new SearchFilterWorkTypeViewModel(this);
 
         if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
-            Log.d("anywork", "anywork");
-            // SearchFilterWorkTypeViewModel.lastChecked=null;
+           // Log.d("anywork", "anywork");
             viewModel.setLastChecked(null);
         }
 
         if (sdataId != null && !sdataId.isEmpty())
         {
-           // Log.d("ownertypeid","ownertypeid"+sdataId);
             viewModel.setLastChecked((CheckBox)findViewById(Integer.valueOf(sdataId)));
         }
         sfilter.setViewModel(viewModel);
@@ -45,7 +42,6 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //  SearchFilterWorkTypeViewModel.lastChecked=null;
         viewModel.setLastChecked(null);
     }
     private void setupToolbar() {
