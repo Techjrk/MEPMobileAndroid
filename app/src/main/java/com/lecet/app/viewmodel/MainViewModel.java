@@ -427,4 +427,14 @@ public class MainViewModel {
         this.previousDate = previousDate;
     }
 
+    /*public void showProgressDialog() {
+        showProgressDialog();
+    }
+
+    public void hideProgressDialog() {
+        hideProgressDialog();
+    }*/
+
+
+
 }

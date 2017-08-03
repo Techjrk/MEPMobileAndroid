@@ -72,7 +72,7 @@ public class SearchDomain {
 //               "\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "},\"esFilter\":{\" +xfilter + \" }}";
        if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
        this.companyFilter = sCompanyFilter;
-       Log.d("companyfilter",xfilter+":companyfilter"+sCompanyFilter);
+       //Log.d("companyfilter",xfilter+":companyfilter"+sCompanyFilter);
 
     }
     public void setCompanyFilter(String searchFilter, String esFilter) {
@@ -94,7 +94,7 @@ public class SearchDomain {
                "\"limit\":28,\"skip\":0, \"searchFilter\":{" +searchFilter + "},\"esFilter\":{" +esFilter + " }}";
         if (searchFilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
         this.companyFilter = sCompanyFilter;
-        Log.d("companyfilter","searchFilter & esFilter"+sCompanyFilter);
+        //Log.d("companyfilter","searchFilter & esFilter"+sCompanyFilter);
 
     }
     public void setCompanyFilter2(String xfilter) {
@@ -103,7 +103,7 @@ public class SearchDomain {
         if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
         this.companyFilter = sCompanyFilter;
         // setCompanyFilter(sCompanyFilter);
-        Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
+        //Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
 
     }
     public void setCompanyFilterComplete(String sCompanyFilter) {

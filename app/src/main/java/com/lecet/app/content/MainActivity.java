@@ -9,11 +9,13 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -119,10 +122,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        int voiceLaunchCode = checkForVoiceActivation(intent);     //TODO -- *************** REMOVE 2nd ARG BEFORE QA **************************
-
         setupBinding();
         setupToolbar();
+
+        int voiceLaunchCode = checkForVoiceActivation(intent);
 
         if (isNetworkConnected()) {
             setupViewPager(voiceLaunchCode);
@@ -132,15 +135,14 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     }
 
-
     /*
       Voice Activation
-      Syntax: "Search for Projects Near Me in le-CET"
+      Required Phrasing:
+      "Search for Projects Near Me in MEP"
+      "Search for Projects Recently Updated in MEP"
+      "Search for Tracking Lists in MEP"
      */
 
-    /**
-     * @param intent
-     */
     private int checkForVoiceActivation(Intent intent) {
         Log.d(TAG, "checkForVoiceActivation");
 
@@ -156,6 +158,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
             // Launch Projects Near Me and go directly to Table View
             if(matchesPhraseProjectsNearMe(query)){
+                Log.d(TAG, "checkForVoiceActivation: MATCH with Projects Near Me");
                 newIntent = new Intent(this, ProjectsNearMeActivity.class);
                 newIntent.putExtra(EXTRA_VOICE_ACTIVATED, true);
 
@@ -166,15 +169,31 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
             // Stay on Dashboard (i.e. MainActivity) and to Projects Updated Recently tab
             else if(matchesPhraseProjectsUpdatedRecently(query)) {
+                Log.d(TAG, "checkForVoiceActivation: MATCH with Projects Recently Updated");
                 //functionality will be handled in rest of onCreate() flow in this Activity
                 return VOICE_LAUNCH_CODE_PROJECTS_UPDATED_RECENTLY;
             }
 
             // Stay on Dashboard (i.e. MainActivity) and show the Tracking Lists dropdown menu
             else if(matchesPhraseTrackingList(query)){
-                finish();//This is here because there is not proper functionality.
+                Log.d(TAG, "checkForVoiceActivation: MATCH with Tracking Lists");
+
+                // TODO - show progress dialog
+
+                //create a handler to delay a call and show the progress screen in the meantime //TODO - convert this to a listener for when the layouts have completed being drawn
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "onCreate: opening MTM menu");
+                        ActionMenuItemView folderMenu = (ActionMenuItemView) findViewById(R.id.menu_item_folder);
+                        Log.d(TAG, "onCreate: folderMenu: " + folderMenu);
+                        toogleMTMMenu();
+                        //TODO - hide progress dialog
+                    }
+                }, 1000);
                 return VOICE_LAUNCH_CODE_TRACKING_LISTS;
-            }else{
+            }else {
                 finish();
             }
         }
@@ -191,10 +210,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         || phrase.contains(getString(R.string.voice_projects_by_me))
         || phrase.contains(getString(R.string.voice_project_by_me))
         || phrase.contains(getString(R.string.voice_projects_nearby))) {
-            Log.d(TAG, "matchesPhraseProjectsNearMe: MATCH FOUND. QUERY PHRASE WAS: " + rawPhrase);
+            Log.d(TAG, "matchesPhraseProjectsNearMe: MATCH FOUND. query phrase was: " + rawPhrase);
             return true;
         }
-        Log.d(TAG, "matchesPhraseProjectsNearMe: QUERY PHRASE WAS: " + rawPhrase);
+        Log.d(TAG, "matchesPhraseProjectsNearMe: query phrase was: " + rawPhrase);
         return false;
     }
 
@@ -207,10 +226,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         || phrase.contains(getString(R.string.voice_recent_project_updates))
         || phrase.contains(getString(R.string.voice_recently_updated_projects))
         || phrase.contains(getString(R.string.voice_recent_projects))) {
-            Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: MATCH FOUND. QUERY PHRASE WAS: " + rawPhrase);
+            Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: MATCH FOUND. query phrase was: " + rawPhrase);
             return true;
         }
-        Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: QUERY PHRASE WAS: " + rawPhrase);
+        Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: query phrase was: " + rawPhrase);
         return false;
     }
 
@@ -219,10 +238,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         String phrase = rawPhrase.toLowerCase();
         if(phrase.contains(getString(R.string.voice_tracking_list))
         || phrase.contains(getString(R.string.voice_tracking_lists))){
-            Log.d(TAG, "matchesPhraseTrackingList: MATCH FOUND. QUERY PHRASE WAS: " + rawPhrase);
+            Log.d(TAG, "matchesPhraseTrackingList: MATCH FOUND. query phrase was: " + rawPhrase);
             return true;
         }
-        Log.d(TAG, "matchesPhraseTrackingList: QUERY PHRASE WAS: " + rawPhrase);
+        Log.d(TAG, "matchesPhraseTrackingList: query phrase was: " + rawPhrase);
         return false;
     }
 
@@ -234,6 +253,8 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     @Override
     protected void onResume() {
         super.onResume();
+
+
         SearchViewModel.companyInstantSearch=false;
         //clear the Shared pref for Project Type
         clearSharedPref(getString(R.string.FilterTypeData));
@@ -258,13 +279,14 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         }
     }
 
-      private void clearSharedPref(String dataName) {
-          SharedPreferences spref = getSharedPreferences(dataName, Context.MODE_PRIVATE);
-          if (spref == null) return;
-          SharedPreferences.Editor editData = spref.edit();
-          editData.clear();
-          editData.commit();
-      }
+    private void clearSharedPref(String dataName) {
+      SharedPreferences spref = getSharedPreferences(dataName, Context.MODE_PRIVATE);
+      if (spref == null) return;
+      SharedPreferences.Editor editData = spref.edit();
+      editData.clear();
+      editData.commit();
+    }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
 
@@ -537,6 +559,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: " + item);
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_item_arrow:
@@ -567,6 +590,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     private void toogleMTMMenu() {
+        Log.d(TAG, "toogleMTMMenu");
         if (mtmMenu == null) {
             createMTMMenu(findViewById(R.id.menu_item_folder));
         } else {
@@ -575,7 +599,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
             mtmAdapter.notifyDataSetChanged();
         }
-        mtmMenu.show();
+        if(mtmMenu != null) mtmMenu.show();
     }
 
     private void createOverflowMenu(View anchor) {
@@ -622,6 +646,9 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     private void createMTMMenu(View anchor) {
+        Log.d(TAG, "createMTMMenu: " + anchor);
+        if(anchor == null) return;
+
         if (mtmMenu == null) {
             mtmMenu = new ListPopupWindow(this);
 
