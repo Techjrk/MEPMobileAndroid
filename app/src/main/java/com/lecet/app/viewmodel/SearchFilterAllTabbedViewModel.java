@@ -41,19 +41,18 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public static final int BH = 7;
     public static final int OWNER_TYPE = 8;
     public static final int WORK_TYPE = 9;
-
     public static int VALUE_MAX = 999999999;
-    public static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
-    public static final String EXTRA_LOCATION_STATE = "persistedLocationState";
-    public static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
-    public static final String EXTRA_LOCATION_ZIP = "persistedLocationZip";
-    public static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
-    public static final String EXTRA_PROJECT_TYPE_ID_INT = "persistedProjectTypeIdInt";
+
+    private static final String EXTRA_LOCATION_CITY = "persistedLocationCity";
+    private static final String EXTRA_LOCATION_STATE = "persistedLocationState";
+    private static final String EXTRA_LOCATION_COUNTY = "persistedLocationCounty";
+    private static final String EXTRA_LOCATION_ZIP = "persistedLocationZip";
+    private static final String EXTRA_PROJECT_TYPE_ID = "persistedProjectTypeId";
+    private static final String EXTRA_PROJECT_TYPE_ID_INT = "persistedProjectTypeIdInt";
 
     public static final String EXTRA_VALUE_MIN = "persistedValueMin";
     public static final String EXTRA_VALUE_MAX = "persistedValueMax";
     public static final String EXTRA_VALUE = "persistedValue";
-    //    public static final String EXTRA_UPDATED_WITHIN = "persistedUpdatedWithin";
     public static final String EXTRA_JURISDICTION = "persistedJurisdiction";
     public static final String EXTRA_STAGE = "persistedStage";
     public static final String EXTRA_BIDDING_WITHIN_DISPLAY_STR = "persistedBiddingWithinDisplayStr";
@@ -66,17 +65,15 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public static final String EXTRA_OWNER_TYPE_ID = "persistedOwnerTypeId";
     public static final String EXTRA_WORK_TYPE = "persistedWorkType";
     public static final String EXTRA_WORK_TYPE_ID = "persistedWorkTypeId";
-//    public static final String EXTRA_WORK_TYPE_CB = "persistedWorkTypeCB";
-
     public static final String ANY = "Any";
 
     //For Company
-    public static final String EXTRA_CLOCATION_CITY = "CompanyLocationCity";
-    public static final String EXTRA_CVALUE = "CompanyValue";
-    public static final String EXTRA_CJURISDICTION = "CompanyJurisdiction";
-    public static final String EXTRA_CBIDDING_WITHIN_DISPLAY_STR = "CompanyBiddingWithinDisplayStr";
-    public static final String EXTRA_CBIDDING_WITHIN_DAYS_INT = "CompanyBiddingWithinDaysInt";
-    public static final String EXTRA_CPROJECT_TYPE_ID = "CompanyProjectTypeId";
+    private static final String EXTRA_CLOCATION_CITY = "CompanyLocationCity";
+    private static final String EXTRA_CVALUE = "CompanyValue";
+    private static final String EXTRA_CJURISDICTION = "CompanyJurisdiction";
+    private static final String EXTRA_CBIDDING_WITHIN_DISPLAY_STR = "CompanyBiddingWithinDisplayStr";
+    private static final String EXTRA_CBIDDING_WITHIN_DAYS_INT = "CompanyBiddingWithinDaysInt";
+    private static final String EXTRA_CPROJECT_TYPE_ID = "CompanyProjectTypeId";
 
     private AppCompatActivity activity;
     private int id;
@@ -175,14 +172,13 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCjurisdictionSelect(ANY);
         setCbiddingWithinSelect(ANY);
         setCtypeSelect(ANY);
-       // initResult();
+
         intent = activity.getIntent();
         //Then set all the previous result to the intent
        // setAllFilterResults();
         setUsingProjectNearMe(intent.getBooleanExtra(activity.getString(R.string.using_project_near_me), false));
         SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
         if (spref != null) {
-            Log.d("spref", "spref");
             getPrefFilterFieldValues(spref);
         } else {
             Log.d("sprefnull", "sprefnull");
@@ -190,7 +186,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     }
 
     //Note: Temporarily not used. This could be used in the code if needed to reset the value of resultxxx.
-    void initResult(){
+ /*   void initResult(){
         setResultValue("");
         setResultBiddingWithin("");
         setResultUpdateWithin("");
@@ -202,7 +198,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setResultBH("");
         setResultOwnerType("");
         setResultWorkType("");
-    }
+    }*/
 
     // Note: The setter/getter methods are used to determine if the location needed to be hide ( Yes for using the ProjectNearMe section)
     @Bindable
@@ -307,7 +303,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         return persistedBuildingOrHighway;
     }
 
-    //    public void setPersistedBuildingOrHighway(String[] persistedBuildingOrHighway) {
     public void setPersistedBuildingOrHighway(Bundle bundle) {
         String arr[] = {"", ""};
         arr[0] = bundle.getString(SearchFilterBuildingOrHighwayViewModel.BUNDLE_KEY_DISPLAY_STR);  //arr[0];      // could come in as "Both", "Any", "Building" or "Heavy-Highway", to be converted to array ["B"] or ["H"] or ["B","H"]
@@ -710,10 +705,6 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCjurisdictionSelect(spref.getString(EXTRA_CJURISDICTION, getCjurisdictionSelect()));
         setCbiddingWithinSelect(spref.getString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect()));
         setCtypeSelect(spref.getString(EXTRA_CPROJECT_TYPE_ID, getCtypeSelect()));
-
-        //setResultUpdateWithin(spref.getString(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin()));
-        //setResultBiddingWithin(spref.getString(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin()));
-        //setResultValue(spref.getString(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue()));
 
         //Note: For Resultset of the url filter parameter values that will be passed to the web api.
         setResultProjectType(spref.getString(activity.getString(R.string.FilterResultProjectType),""));

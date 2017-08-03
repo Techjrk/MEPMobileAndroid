@@ -49,7 +49,7 @@ public class SearchFilterOwnerTypeViewModel extends BaseObservable {
         displayStr = cb.getText().toString();
         ownertype[0] = displayStr;
         ownertype[1] = String.valueOf(cb.getId());
-       // Log.d("checkselected","checkselected"+cb.isChecked());
+
         if (cb.isChecked()) {
             if (lastChecked != null) {
                 lastChecked.setChecked(false);
@@ -60,7 +60,6 @@ public class SearchFilterOwnerTypeViewModel extends BaseObservable {
             ownertype[0]="";
             ownertype[1]="";
             lastChecked=null;
-          //  Log.d("empty","empty"+ownertype[1]);
         }
     }
 

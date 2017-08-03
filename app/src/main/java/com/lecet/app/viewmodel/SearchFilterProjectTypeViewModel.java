@@ -151,8 +151,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        //postProject();
-                        //dialog.dismiss();
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -234,11 +232,11 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
                 foundParent = true;
             }
-            //***
+
             if (!bundle.isEmpty() && bundle.containsKey(parent.getId()) ) {
                 parent.setSelected(true);
             }
-            //***
+
             children = new ArrayList<>();
             for (SearchFilterProjectTypesProjectCategory ptpc : ptMain.getProjectCategories()) {
                 if (ptpc != null) {
@@ -271,7 +269,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                             if (!bundle.isEmpty() && bundle.containsKey(gchild.getId()) ) {
                                 gchild.setSelected(true);
                             }
-                            // grandChildren.add(gchild);
+
                             if (foundGrandChild || foundChild || foundParent)
                                 grandChildren.add(gchild);
                         }
@@ -291,7 +289,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
 
-//SearchFilterAllTabbedViewModel.userCreated=true;
+        //SearchFilterAllTabbedViewModel.userCreated=true; //might be needing this.
         if (SearchFilterAllTabbedViewModel.userCreated) {
             SearchFilterProjectTypeSingleSelectAdapter adapter = new SearchFilterProjectTypeSingleSelectAdapter(data, this);
             recyclerView.setAdapter(adapter);
@@ -323,7 +321,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             b = new Bundle();
             for (String keyID : sIDs) {
                 b.putString(keyID, spref.getString(keyID, ""));
-                Log.d("getPrefTypeBundle","getPrefTypeBundle"+keyID+" : "+spref.getString(keyID,""));
+               // Log.d("getPrefTypeBundle","getPrefTypeBundle"+keyID+" : "+spref.getString(keyID,""));
             }
         }
         return b;

@@ -35,7 +35,7 @@ public class SearchFilterValueViewModel extends BaseObservable {
 
     public void onApplyButtonClick(View view) {
         if (getMin() != null && getMax() != null) {
-            Log.d("maxchar", "maxchar" + getMin().length());
+            //Log.d("maxchar", "maxchar" + getMin().length());
 
             if (getMax().length() > MAX_CHAR || getMin().length() > MAX_CHAR) {
                 showCharMaxDialog();

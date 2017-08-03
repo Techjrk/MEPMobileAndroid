@@ -301,7 +301,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         SearchViewModel.usingInstantSearch=false;
-        Log.d("projectsaved", "projectsaved");
+        //Log.d("projectsaved", "projectsaved");
         // saveRecentlyProject(SearchActivity.USER_ID,LecetSharedPreferenceUtil.getInstance(getContext()));
         view.getContext().startActivity(intent);
     }
@@ -326,7 +326,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
         Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
         view.getContext().startActivity(intent);
-        Log.d("company", "company");
+        //Log.d("company", "company");
         saveRecentlyCompany(company.getId());
     }
 
@@ -336,7 +336,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         Intent intent = new Intent(view.getContext(), ContactDetailActivity.class);
         intent.putExtra(ContactDetailActivity.CONTACT_ID_EXTRA, contact.getId());
         intent.putExtra("contact", (Serializable) contact);
-
         view.getContext().startActivity(intent);
     }
 
@@ -346,7 +345,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 String slist;
                 if (response.isSuccessful()) {
-                    // slist = response.body();
+
                     try {
                         Log.d("saverecentproject", "saverecentproject" + response.body().string() + ":" + projectId);
                     } catch (IOException e) {
@@ -354,7 +353,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
                     }
 
                 } else {
-                    //errorDisplayMsg(response.message());
+
                     try {
                         Log.e("unsuccessful", "unsuccessul response : " + response.errorBody().string() + ":" + projectId);
                     } catch (IOException e) {
@@ -366,7 +365,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                //errorDisplayMsg(t.getLocalizedMessage());
+
                 Log.e("unsuccessful", "unsuccessul response failure");
             }
         });
@@ -374,15 +373,14 @@ public class SearchItemRecentViewModel extends BaseObservable {
 
     public void saveRecentlyCompany(final long companyId) {
         //Using the searchDomain to call the method to start retrofitting...
-        //String projectId=""+project.getId();
 
         searchDomain.saveRecentCompany(companyId, new Callback<ResponseBody>() {
 
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                String slist;
+
                 if (response.isSuccessful()) {
-                    // slist = response.body();
+
                     try {
                         Log.d("saverecentcompany", "saverecentcompany" + response.body().string() + ":" + companyId);
                     } catch (IOException e) {
@@ -390,7 +388,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
                     }
 
                 } else {
-                    //errorDisplayMsg(response.message());
                     try {
                         Log.e("unsuccessful", "unsuccessul response : " + response.errorBody().string() + ":" + companyId);
                     } catch (IOException e) {

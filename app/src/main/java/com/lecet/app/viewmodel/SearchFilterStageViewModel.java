@@ -141,8 +141,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
         searchItem(query);
     }
 
-
-
     /**
      * Clear the Stage bundle
      */
@@ -190,8 +188,6 @@ void getLastCheckedItems(){
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        //postProject();
-                        //dialog.dismiss();
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -217,8 +213,6 @@ void getLastCheckedItems(){
      */
     public void onApplyButtonClicked(View view) {
         if (SearchFilterAllTabbedViewModel.userCreated) {
-            //setLastChecked(null);
-            //clearLast();
             if (bundle.isEmpty() ) {
                 showAlertMessage();
                 return;

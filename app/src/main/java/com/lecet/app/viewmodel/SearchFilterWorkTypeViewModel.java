@@ -61,7 +61,6 @@ public class SearchFilterWorkTypeViewModel extends BaseObservable {
             worktype[1]="";
             worktype[2]="";
             lastChecked=null;
-          //  Log.d("empty","empty"+worktype[1]);
         }
     }
 
