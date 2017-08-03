@@ -153,6 +153,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={viewModel.formattedAddress}"
+                        android:textSize="14sp"
+                        android:lines="1"
                         android:maxLines="1"
                         android:hint="@string/location"
                         android:textColorHint="@color/lecetTextLightGray"

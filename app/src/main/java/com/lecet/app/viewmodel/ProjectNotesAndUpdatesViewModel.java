@@ -3,7 +3,6 @@ package com.lecet.app.viewmodel;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.BaseObservable;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.adapters.ProjectNotesAdapter;
+import com.lecet.app.adapters.ProjectUserCreatedContentAdapter;
 import com.lecet.app.content.ProjectAddImageActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
@@ -24,11 +22,9 @@ import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.interfaces.ProjectAdditionalData;
-import com.squareup.picasso.Picasso;
+import com.lecet.app.interfaces.ProjectUserCreatedContent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,8 +57,8 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
     private final ProjectDomain projectDomain;
     private final  ProjectNotesAndUpdatesFragment.ProjectNotesFragmentListener listener;
 
-    private ProjectNotesAdapter projectNotesAdapter;
-    private List<ProjectAdditionalData> additionalNotes;
+    private ProjectUserCreatedContentAdapter projectUserCreatedContentAdapter;
+    private List<ProjectUserCreatedContent> additionalNotes;
 
     private Call<List<ProjectNote>> additonalNotesCall;
     private Call<List<ProjectPhoto>> additonalImagesCall;
@@ -150,14 +146,14 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
         AppCompatActivity activity = getActivityWeakReference().get();
 
         additionalNotes = new ArrayList<>();
-        projectNotesAdapter = new ProjectNotesAdapter(additionalNotes, activity);
+        projectUserCreatedContentAdapter = new ProjectUserCreatedContentAdapter(additionalNotes, activity);
 
         //Scope Limit the Location Recycler View
         LinearLayoutManager layoutManager = new LinearLayoutManager(parent.getContext());
 
         RecyclerView recyclerView = (RecyclerView) parent.findViewById(R.id.recycler_view_project_notes);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(projectNotesAdapter);
+        recyclerView.setAdapter(projectUserCreatedContentAdapter);
     }
 
 
@@ -181,13 +177,13 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
 
                     if (responseBody != null && additionalNotes != null) {
                         additionalNotes.addAll(responseBody);
-                        projectNotesAdapter.notifyDataSetChanged();
+                        projectUserCreatedContentAdapter.notifyDataSetChanged();
                     }
 
                     if (additionalNotes != null) {
                         Collections.sort(additionalNotes);
                         Collections.reverse(additionalNotes);
-                        projectNotesAdapter.notifyDataSetChanged();
+                        projectUserCreatedContentAdapter.notifyDataSetChanged();
                     }
 
                 } else {
@@ -233,13 +229,13 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
 
                     if (responseBody != null && additionalNotes != null) {
                         additionalNotes.addAll(responseBody);
-                        projectNotesAdapter.notifyDataSetChanged();
+                        projectUserCreatedContentAdapter.notifyDataSetChanged();
                     }
 
                     if (additionalNotes != null) {
                         Collections.sort(additionalNotes);
                         Collections.reverse(additionalNotes);
-                        projectNotesAdapter.notifyDataSetChanged();
+                        projectUserCreatedContentAdapter.notifyDataSetChanged();
                     }
 
                 } else {
@@ -286,13 +282,13 @@ public class ProjectNotesAndUpdatesViewModel extends BaseObservableViewModel {
 
                     if (responseBody != null && additionalNotes != null) {
                         additionalNotes.addAll(responseBody);
-                        projectNotesAdapter.notifyDataSetChanged();
+                        projectUserCreatedContentAdapter.notifyDataSetChanged();
                     }
 
                     if (additionalNotes != null) {
                         Collections.sort(additionalNotes);
                         Collections.reverse(additionalNotes);
-                        projectNotesAdapter.notifyDataSetChanged();
+                        projectUserCreatedContentAdapter.notifyDataSetChanged();
                     }
 
                 } else {

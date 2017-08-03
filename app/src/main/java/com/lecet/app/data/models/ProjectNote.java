@@ -3,7 +3,7 @@ package com.lecet.app.data.models;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
-import com.lecet.app.interfaces.ProjectAdditionalData;
+import com.lecet.app.interfaces.ProjectUserCreatedContent;
 
 import java.util.Date;
 
@@ -15,7 +15,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNote extends RealmObject implements ProjectAdditionalData{
+public class ProjectNote extends RealmObject implements ProjectUserCreatedContent {
 
     @PrimaryKey
     @SerializedName("id")
@@ -70,7 +70,6 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this(id, title, text, true, false, companyId, projectId, authorId, createdAt, createdAt);
 
     }
-
 
     //Getters And Setters
     public long getId() {
@@ -161,10 +160,8 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.updatedAt = updatedAt;
     }
 
-
-
     @Override
-    public int compareTo(@NonNull ProjectAdditionalData other) {
+    public int compareTo(@NonNull ProjectUserCreatedContent other) {
         if(other instanceof ProjectNote){
             return (int)(id - ((ProjectNote) other).getId());
         }else{
@@ -209,7 +206,6 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         if (updatedAt != null ? !updatedAt.equals(that.updatedAt) : that.updatedAt != null)
             return false;
         return author != null ? author.equals(that.author) : that.author == null;
-
     }
 
     @Override
