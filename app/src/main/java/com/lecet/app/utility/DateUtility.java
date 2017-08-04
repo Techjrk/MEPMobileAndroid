@@ -1,7 +1,5 @@
 package com.lecet.app.utility;
 
-import android.util.Log;
-
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 

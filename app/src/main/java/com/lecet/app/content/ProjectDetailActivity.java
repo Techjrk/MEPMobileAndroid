@@ -9,7 +9,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -18,8 +17,8 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectDetailBinding;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectDetailViewModel;
-import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
 
 import io.realm.Realm;
 

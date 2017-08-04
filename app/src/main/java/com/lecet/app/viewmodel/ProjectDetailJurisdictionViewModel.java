@@ -1,10 +1,9 @@
 package com.lecet.app.viewmodel;
 
-import android.util.Log;
-
 import com.lecet.app.data.models.DistrictCouncil;
 import com.lecet.app.data.models.Jurisdiction;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.Log;
 
 import java.util.List;
 

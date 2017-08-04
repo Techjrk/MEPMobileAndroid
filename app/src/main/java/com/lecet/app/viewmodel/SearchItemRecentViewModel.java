@@ -3,7 +3,6 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.content.CompanyDetailActivity;
@@ -16,6 +15,7 @@ import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.SearchDomain;
+import com.lecet.app.utility.Log;
 
 import java.io.IOException;
 import java.io.Serializable;

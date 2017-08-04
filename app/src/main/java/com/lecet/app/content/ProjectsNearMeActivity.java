@@ -1,5 +1,12 @@
 package com.lecet.app.content;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -17,17 +24,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
@@ -35,6 +35,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectsNearMeBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
@@ -95,7 +96,13 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     private boolean getIsVoiceActivated() {
         Bundle extras = getIntent().getExtras();
-        boolean isVoiceActivated = extras.getBoolean(EXTRA_VOICE_ACTIVATED);
+        boolean isVoiceActivated = false;
+        try {
+            isVoiceActivated = extras.getBoolean(EXTRA_VOICE_ACTIVATED);
+        }
+        catch (NullPointerException e) {
+            return false;
+        }
         Log.e(TAG, "checkForVoiceActivation() called: isVoiceActivated = [" + isVoiceActivated + "]");
         return isVoiceActivated;
     }

@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import com.lecet.app.R;
 import com.lecet.app.databinding.FragmentProjectNotesAndUpdatesBinding;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;

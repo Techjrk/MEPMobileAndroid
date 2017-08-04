@@ -1,9 +1,5 @@
 package com.lecet.app.interfaces;
 
-import com.lecet.app.data.models.ProjectPhoto;
-
-import java.util.Comparator;
-
 /**
  * Created by ludwigvondrake on 3/23/17.
  */

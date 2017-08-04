@@ -7,7 +7,6 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ViewSwitcher;
 
@@ -21,6 +20,7 @@ import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.utility.DateUtility;
+import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 

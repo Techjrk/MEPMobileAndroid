@@ -1,19 +1,14 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectDetailAdapter;
-import com.lecet.app.adapters.ProjectNotesAdapter;
-import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectDetailFragment;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.api.LecetClient;
@@ -22,8 +17,8 @@ import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.interfaces.ProjectAdditionalData;
 import com.lecet.app.utility.DateUtility;
+import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;

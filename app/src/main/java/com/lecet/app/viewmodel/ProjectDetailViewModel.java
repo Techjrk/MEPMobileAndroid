@@ -13,10 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
@@ -27,6 +24,7 @@ import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseMapObservableViewModel;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
+import com.lecet.app.utility.Log;
 import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import java.util.ArrayList;

@@ -1,30 +1,22 @@
 package com.lecet.app.content;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectImageChooserBinding;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectImageChooserViewModel;
-import com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel;
-import com.lecet.app.viewmodel.ProjectSelectLibraryPhotoViewModel;
-import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
-import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModelApi21;
 
 import java.util.ArrayList;
 import java.util.List;

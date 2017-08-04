@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,21 +18,17 @@ import com.lecet.app.content.ProjectViewImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
 import java.util.TimeZone;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_ID_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_URL_EXTRA;
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
-import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
 /**
  * Created by ludwigvondrake on 3/23/17.

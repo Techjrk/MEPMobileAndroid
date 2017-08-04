@@ -1,6 +1,7 @@
 package com.lecet.app.data.api.response;
 
 import com.google.gson.annotations.SerializedName;
+
 import com.lecet.app.data.models.UserData;
 
 /**

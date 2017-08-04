@@ -3,7 +3,6 @@ package com.lecet.app.adapters;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.lecet.app.R;
-import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 
 import java.lang.annotation.Retention;

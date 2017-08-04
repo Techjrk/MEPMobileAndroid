@@ -5,12 +5,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityLauncherBinding;
-import com.lecet.app.viewmodel.DashboardIntermediaryViewModel;
 import com.lecet.app.viewmodel.LauncherViewModel;
 
 

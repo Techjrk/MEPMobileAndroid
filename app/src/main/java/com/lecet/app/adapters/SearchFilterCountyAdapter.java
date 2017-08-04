@@ -2,15 +2,12 @@ package com.lecet.app.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.lecet.app.R;
 import com.lecet.app.data.models.County;
-import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.databinding.ListItemCountyBinding;
 import com.lecet.app.viewmodel.SearchCountyViewModel;
 

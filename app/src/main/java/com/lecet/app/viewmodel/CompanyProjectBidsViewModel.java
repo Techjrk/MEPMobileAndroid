@@ -1,6 +1,5 @@
 package com.lecet.app.viewmodel;
 
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Point;
 import android.support.design.widget.TabLayout;
@@ -9,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import com.lecet.app.R;
 import com.lecet.app.adapters.CompanyProjectBidsAdapter;
 import com.lecet.app.adapters.MenuTitleListAdapter;
-import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.CompanyProjectBidsActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Bid;

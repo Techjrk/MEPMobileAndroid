@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.content.DashboardBidsHappeningSoonFragment;
 import com.lecet.app.content.DashboardBidsRecentlyMadeFragment;
 import com.lecet.app.content.DashboardProjectsRecentlyAddedFragment;
 import com.lecet.app.content.DashboardProjectsRecentlyUpdatedFragment;
+import com.lecet.app.utility.Log;
 
 /**
  * Created by jasonm on 10/5/16.

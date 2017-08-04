@@ -2,8 +2,8 @@ package com.lecet.app.data.api.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.ActivityUpdate;
+import com.lecet.app.data.models.PrimaryProjectType;
 
 import java.util.List;
 

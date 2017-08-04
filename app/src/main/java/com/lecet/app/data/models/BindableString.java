@@ -2,7 +2,6 @@ package com.lecet.app.data.models;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.renderscript.Sampler;
 
 public class BindableString extends BaseObservable {
     private String value;

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterJurisdictionAdapter;
@@ -22,6 +21,7 @@ import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.databinding.ActivitySearchFiltersAllRefineBinding;
 import com.lecet.app.databinding.ActivitySearchFiltersAllTabbedBinding;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterBiddingWithinViewModel;
 import com.lecet.app.viewmodel.SearchFilterBuildingOrHighwayViewModel;
