@@ -1,6 +1,5 @@
 package com.lecet.app.data.api.service;
 
-import com.lecet.app.data.api.request.ChangePasswordRequest;
 import com.lecet.app.data.api.request.FirebaseTokenRequest;
 import com.lecet.app.data.api.request.UpdateUserProfileRequest;
 import com.lecet.app.data.models.Access;

@@ -1,5 +1,7 @@
 package com.lecet.app.viewmodel;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -12,17 +14,14 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.content.AddProjectActivity;
-import com.lecet.app.content.MainActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.SearchFilterCountyActivity;
 import com.lecet.app.content.SearchFilterProjectTypeActivity;
@@ -33,7 +32,6 @@ import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectPost;
-
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
 import com.lecet.app.data.models.geocoding.AddressComponent;
@@ -42,13 +40,12 @@ import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ClickableMapInterface;
+import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -252,7 +249,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
             });
 
         } catch (Exception e) {
-            Log.e(TAG, "getFipsCounty: EXCEPTION", e);
+            Log.e(TAG, "getFipsCounty: EXCEPTION: " + e);
         }
 
         return fipsCounty[0];   // could be valid string or null

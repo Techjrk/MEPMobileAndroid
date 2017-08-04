@@ -1,7 +1,6 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.api.request.MoveCompanyFromListRequest;
@@ -14,6 +13,7 @@ import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.LecetCallback;
 import com.lecet.app.utility.DateUtility;
+import com.lecet.app.utility.Log;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -369,7 +369,7 @@ public class TrackingListDomain {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "deleteProjectsFromTrackingListAsync", e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
+                    Log.e(TAG, "deleteProjectsFromTrackingListAsync: " + e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
                 }
 
             }
@@ -419,7 +419,7 @@ public class TrackingListDomain {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "deleteCompaniesFromTrackingListAsync", e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
+                    Log.e(TAG, "deleteCompaniesFromTrackingListAsync: " + e); //decided to use try-catch because intermittent occurs if a simple null condition is used in using the async process.
                     }
             //}
             }

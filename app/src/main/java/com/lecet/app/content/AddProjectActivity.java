@@ -4,22 +4,20 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.SearchFilter;
-import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityAddProjectBinding;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.AddProjectActivityViewModel;
 import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
 import com.lecet.app.viewmodel.SearchFilterStageViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
+
 import io.realm.Realm;
 
 import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_MARKER_LATITUDE;

@@ -1,27 +1,15 @@
 package com.lecet.app.content;
 
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.WindowManager;
 
 import com.lecet.app.R;
-
-import com.lecet.app.adapters.SearchFilterProjectTypeAdapter;
-import com.lecet.app.data.models.PrimaryProjectType;
-import com.lecet.app.data.models.SearchFilterProjectTypesMain;
-import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
 import com.lecet.app.databinding.ActivitySearchFilterProjectTypeBinding;
 import com.lecet.app.viewmodel.SearchFilterProjectTypeViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

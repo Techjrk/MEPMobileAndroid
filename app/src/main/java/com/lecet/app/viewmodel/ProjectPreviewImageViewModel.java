@@ -10,13 +10,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.content.ProjectAddImageActivity;
 import com.lecet.app.content.ProjectImageChooserActivity;
 import com.lecet.app.content.ProjectSelectLibraryPhotoFragment;
+import com.lecet.app.utility.Log;
 
 import java.io.IOException;
 

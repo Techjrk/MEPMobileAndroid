@@ -8,9 +8,9 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
-import android.util.Log;
 
 import com.lecet.app.R;
+import com.lecet.app.utility.Log;
 
 import java.io.Serializable;
 import java.util.List;

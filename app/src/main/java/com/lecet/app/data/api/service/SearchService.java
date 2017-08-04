@@ -1,11 +1,9 @@
 package com.lecet.app.data.api.service;
 
-import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.County;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
-import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterStagesMain;

@@ -1,17 +1,13 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.DashboardIntermediaryActivity;
-import com.lecet.app.content.MainActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Access;
 import com.lecet.app.data.models.User;

@@ -1,10 +1,6 @@
 package com.lecet.app.content;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.SearchManager;
-import android.app.VoiceInteractor;
-import android.app.VoiceInteractor.PickOptionRequest.Option;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,22 +8,23 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -64,6 +61,7 @@ import com.lecet.app.interfaces.MRUDelegate;
 import com.lecet.app.interfaces.MTMMenuCallback;
 import com.lecet.app.interfaces.OverflowMenuCallback;
 import com.lecet.app.utility.DateUtility;
+import com.lecet.app.utility.Log;
 import com.lecet.app.utility.TextViewUtility;
 import com.lecet.app.viewmodel.MainViewModel;
 import com.lecet.app.viewmodel.SearchFilterAllTabbedViewModel;
@@ -81,13 +79,21 @@ import java.util.TreeSet;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 
+import static com.lecet.app.content.ProjectsNearMeActivity.EXTRA_VOICE_ACTIVATED;
+
 /**
  * MainActivity Created by jasonm on 8/15/16. This Activity represents the Dashboard, landed on
  * after logging in.
  */
 public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSDataSource, MBRDelegate, MBRDataSource, OverflowMenuCallback, MRADataSource,
         MRADelegate, MRUDelegate, MRUDataSource, MTMMenuCallback {
+
     private static final String TAG = "MainActivity";
+    private static final int VOICE_LAUNCH_CODE_NONE = -1;
+    private static final int VOICE_LAUNCH_CODE_PROJECTS_NEAR_ME = 0;
+    private static final int VOICE_LAUNCH_CODE_PROJECTS_UPDATED_RECENTLY = 1;
+    private static final int VOICE_LAUNCH_CODE_TRACKING_LISTS = 2;
+
     private MainViewModel viewModel;
     private SearchDomain searchDomain;
 
@@ -115,58 +121,140 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())){
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            if(query == null || query.isEmpty()){
-                finish();
-                return;
-            }
-            if(containsProjectsNearMe(query)){
-                Intent intent2 = new Intent(this, ProjectsNearMeActivity.class);
-                startActivity(intent2);
-                finish();
 
-            }else if(containsTrackingList(query)){
-                //TODO: ADD FUNCTIONALITY, Probably a separate activity
-                finish();//This is here because there is not proper functionality.
-            }else{
-                finish();
-            }
-        }
         setupBinding();
         setupToolbar();
 
+        int voiceLaunchCode = checkForVoiceActivation(intent);
+
         if (isNetworkConnected()) {
-            setupViewPager();
+            setupViewPager(voiceLaunchCode);
             setupPageIndicator();
             setupPageButtons();
         }
 
     }
 
-    private boolean containsProjectsNearMe(String phrase){
-        String test = phrase.toLowerCase();
-        if(test.contains("projects near me") || test.contains("project near me")
-                || test.contains("projects by me") || test.contains("project by me")){
+    /*
+      Voice Activation
+      Required Phrasing:
+      "Search for Projects Near Me in MEP"
+      "Search for Projects Recently Updated in MEP"
+      "Search for Tracking Lists in MEP"
+     */
+
+    private int checkForVoiceActivation(Intent intent) {
+        Log.d(TAG, "checkForVoiceActivation");
+
+        if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())) {
+
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            if((query == null || query.isEmpty())) {
+                finish();
+                return VOICE_LAUNCH_CODE_NONE;
+            }
+
+            Intent newIntent;
+
+            // Launch Projects Near Me and go directly to Table View
+            if(matchesPhraseProjectsNearMe(query)){
+                Log.d(TAG, "checkForVoiceActivation: MATCH with Projects Near Me");
+                newIntent = new Intent(this, ProjectsNearMeActivity.class);
+                newIntent.putExtra(EXTRA_VOICE_ACTIVATED, true);
+
+                startActivity(newIntent);
+                finish();   // removing this finish() call would mean that the user returns to the MainActivity after backing out of the list activity
+                return VOICE_LAUNCH_CODE_PROJECTS_NEAR_ME;
+            }
+
+            // Stay on Dashboard (i.e. MainActivity) and to Projects Updated Recently tab
+            else if(matchesPhraseProjectsUpdatedRecently(query)) {
+                Log.d(TAG, "checkForVoiceActivation: MATCH with Projects Recently Updated");
+                //functionality will be handled in rest of onCreate() flow in this Activity
+                return VOICE_LAUNCH_CODE_PROJECTS_UPDATED_RECENTLY;
+            }
+
+            // Stay on Dashboard (i.e. MainActivity) and show the Tracking Lists dropdown menu
+            else if(matchesPhraseTrackingList(query)){
+                Log.d(TAG, "checkForVoiceActivation: MATCH with Tracking Lists");
+
+                // TODO - show progress dialog
+
+                //create a handler to delay a call and show the progress screen in the meantime //TODO - convert this to a listener for when the layouts have completed being drawn
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "onCreate: opening MTM menu");
+                        ActionMenuItemView folderMenu = (ActionMenuItemView) findViewById(R.id.menu_item_folder);
+                        Log.d(TAG, "onCreate: folderMenu: " + folderMenu);
+                        toogleMTMMenu();
+                        //TODO - hide progress dialog
+                    }
+                }, 1000);
+                return VOICE_LAUNCH_CODE_TRACKING_LISTS;
+            }else {
+                finish();
+            }
+        }
+
+        return VOICE_LAUNCH_CODE_NONE;
+    }
+
+    private boolean matchesPhraseProjectsNearMe(String rawPhrase){
+        if(rawPhrase == null) return false;
+
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_project_near_me))
+        || phrase.contains(getString(R.string.voice_projects_near_me))
+        || phrase.contains(getString(R.string.voice_projects_by_me))
+        || phrase.contains(getString(R.string.voice_project_by_me))
+        || phrase.contains(getString(R.string.voice_projects_nearby))) {
+            Log.d(TAG, "matchesPhraseProjectsNearMe: MATCH FOUND. query phrase was: " + rawPhrase);
             return true;
         }
-        Log.d(TAG, "containsOneOf: QUERY PHRASE WAS: " + phrase);
+        Log.d(TAG, "matchesPhraseProjectsNearMe: query phrase was: " + rawPhrase);
+        return false;
+    }
+
+    private boolean matchesPhraseProjectsUpdatedRecently(String rawPhrase) {
+        if(rawPhrase == null) return false;
+
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_projects_updated_recently))
+        || phrase.contains(getString(R.string.voice_projects_recently_updated))
+        || phrase.contains(getString(R.string.voice_recent_project_updates))
+        || phrase.contains(getString(R.string.voice_recently_updated_projects))
+        || phrase.contains(getString(R.string.voice_recent_projects))) {
+            Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: MATCH FOUND. query phrase was: " + rawPhrase);
+            return true;
+        }
+        Log.d(TAG, "matchesPhraseProjectsUpdatedRecently: query phrase was: " + rawPhrase);
+        return false;
+    }
+
+    private boolean matchesPhraseTrackingList(String rawPhrase){
+        if(rawPhrase == null) return false;
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_tracking_list))
+        || phrase.contains(getString(R.string.voice_tracking_lists))){
+            Log.d(TAG, "matchesPhraseTrackingList: MATCH FOUND. query phrase was: " + rawPhrase);
+            return true;
+        }
+        Log.d(TAG, "matchesPhraseTrackingList: query phrase was: " + rawPhrase);
         return false;
     }
 
 
-    private boolean containsTrackingList(String phrase){
-        String test = phrase.toLowerCase();
-        if(test.contains("tracking list") || test.contains("tracking lists")){
-            return true;
-        }
-        Log.d(TAG, "containsOneOf: QUERY PHRASE WAS: " + phrase);
-        return false;
-    }
+    /*
+     Methods
+     */
 
     @Override
     protected void onResume() {
         super.onResume();
+
+
         SearchViewModel.companyInstantSearch=false;
         //clear the Shared pref for Project Type
         clearSharedPref(getString(R.string.FilterTypeData));
@@ -191,19 +279,20 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         }
     }
 
-      private void clearSharedPref(String dataName) {
-          SharedPreferences spref = getSharedPreferences(dataName, Context.MODE_PRIVATE);
-          if (spref == null) return;
-          SharedPreferences.Editor editData = spref.edit();
-          editData.clear();
-          editData.commit();
-      }
+    private void clearSharedPref(String dataName) {
+      SharedPreferences spref = getSharedPreferences(dataName, Context.MODE_PRIVATE);
+      if (spref == null) return;
+      SharedPreferences.Editor editData = spref.edit();
+      editData.clear();
+      editData.commit();
+    }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
 
         if (isConnected && viewPager == null) {
 
-            setupViewPager();
+            setupViewPager(-1);
             setupPageIndicator();
             setupPageButtons();
         }
@@ -279,7 +368,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
      * Set up the Fragment Pager which contains the four main fragments used in the upper third of
      * the Dashboard
      */
-    private void setupViewPager() {
+    private void setupViewPager(int voiceLaunchCode) {
 
         viewPager = (ViewPager) findViewById(R.id.dashboard_viewpager);
         viewPager.setOffscreenPageLimit(DashboardPagerAdapter.NUM_ITEMS);
@@ -319,6 +408,11 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 }
             }
         });
+
+        if(voiceLaunchCode > -1) {
+            viewPager.setCurrentItem(3);
+        }
+
     }
 
     /**
@@ -465,6 +559,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: " + item);
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_item_arrow:
@@ -495,6 +590,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     private void toogleMTMMenu() {
+        Log.d(TAG, "toogleMTMMenu");
         if (mtmMenu == null) {
             createMTMMenu(findViewById(R.id.menu_item_folder));
         } else {
@@ -503,7 +599,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             mtmAdapter.setProjectTrackingList(trackingListDomain.fetchUserProjectTrackingList());
             mtmAdapter.notifyDataSetChanged();
         }
-        mtmMenu.show();
+        if(mtmMenu != null) mtmMenu.show();
     }
 
     private void createOverflowMenu(View anchor) {
@@ -550,6 +646,9 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     private void createMTMMenu(View anchor) {
+        Log.d(TAG, "createMTMMenu: " + anchor);
+        if(anchor == null) return;
+
         if (mtmMenu == null) {
             mtmMenu = new ListPopupWindow(this);
 

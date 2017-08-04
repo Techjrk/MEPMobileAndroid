@@ -2,9 +2,9 @@ package com.lecet.app.contentbase;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.lecet.app.utility.Log;
 
 
 /**

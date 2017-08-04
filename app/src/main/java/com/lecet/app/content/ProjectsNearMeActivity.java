@@ -1,5 +1,12 @@
 package com.lecet.app.content;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -17,17 +24,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.data.api.LecetClient;
@@ -35,6 +35,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityProjectsNearMeBinding;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectsNearMeViewModel;
 import com.lecet.app.viewmodel.SearchViewModel;
 
@@ -43,9 +44,12 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
+
 public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapReadyCallback,
         LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
 
+    public static final String EXTRA_VOICE_ACTIVATED = "com.lecet.app.content.ProjectsNearMeActivity.voice.activated";
     public static final String EXTRA_MARKER_LATITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.latitude.extra";
     public static final String EXTRA_MARKER_LONGITUDE = "com.lecet.app.content.ProjectsNearMeActivity.marker.longitude.extra";
     public static final String EXTRA_ENABLE_LOCATION = "enable_location";
@@ -71,6 +75,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         enableLocationUpdates = false;
         isAskingForPermission = false;
         isLocationManagerConnected = false;
@@ -79,7 +84,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         setupToolbar();
         checkPermissions();
         viewPager = (ViewPager) findViewById(R.id.view_pager_bid);
-// set up TabLayout
+        // set up TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout_bid_detail);
         tabLayout.setupWithViewPager(viewPager);
         setupViewPager(viewPager);
@@ -87,6 +92,19 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         enableLocationUpdates = true;
         locationManager.startLocationUpdates();
         //fetchProjects(false);
+    }
+
+    private boolean getIsVoiceActivated() {
+        Bundle extras = getIntent().getExtras();
+        boolean isVoiceActivated = false;
+        try {
+            isVoiceActivated = extras.getBoolean(EXTRA_VOICE_ACTIVATED);
+        }
+        catch (NullPointerException e) {
+            return false;
+        }
+        Log.e(TAG, "checkForVoiceActivation() called: isVoiceActivated = [" + isVoiceActivated + "]");
+        return isVoiceActivated;
     }
 
     private void continueSetup() {
@@ -101,7 +119,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     private void setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_projects_near_me);
         ProjectDomain projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(getApplication()), Realm.getDefaultInstance());
-        viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler(), locationManager);
+        viewModel = new ProjectsNearMeViewModel(this, projectDomain, new Handler(), locationManager, getIsVoiceActivated());
         binding.setViewModel(viewModel);
     }
 
@@ -123,6 +141,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
     }
 
     private void setupMap() {
+        Log.e(TAG, "setupMap");
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.map_container, mapFragment).commit();
         mapFragment.getMapAsync(this);
@@ -130,6 +149,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap map) {
+        Log.e(TAG, "onMapReady");
         MapsInitializer.initialize(this);
         //map.setInfoWindowAdapter(new LecetInfoWindowAdapter(this));     // TODO - this is where the info_window_layout is set as the default info window for the map
         viewModel.setMap(map);
@@ -462,7 +482,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
         if (projectLocation != null && !projectLocation.equals("")) {
-            Log.d(TAG, "onActivityResult: projectLocation: " + projectLocation);
+            Log.d(TAG, "processProjectLocationFilter: projectLocation: " + projectLocation);
             filter = projectLocation;
         }
 
@@ -477,7 +497,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE);
         if (projectType != null && !projectType.equals("")) {
-            Log.d(TAG, "onActivityResult: projectType: " + projectType);
+            Log.d(TAG, "processPrimaryProjectTypeFilter: projectType: " + projectType);
             filter = projectType;
         }
         return filter;
@@ -491,7 +511,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectTypeIds = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE_ID);
         if (projectTypeIds != null && !projectTypeIds.equals("")) {
-            Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
+            Log.d(TAG, "processProjectTypeIdFilter: projectTypeIds: " + projectTypeIds);
             filter = projectTypeIds;
         }
         return filter;
@@ -505,7 +525,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectValue = data.getStringExtra(SearchViewModel.FILTER_PROJECT_VALUE);
         if (projectValue != null && !projectValue.equals("")) {
-            Log.d(TAG, "onActivityResult: projectValue: " + projectValue);
+            Log.d(TAG, "processValueFilter: projectValue: " + projectValue);
             filter = projectValue;
         }
         return filter;
@@ -519,7 +539,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectUpdatedWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST);
         if (projectUpdatedWithin != null && !projectUpdatedWithin.equals("")) {
-            Log.d(TAG, "onActivityResult: projectUpdatedWithin: " + projectUpdatedWithin);
+            Log.d(TAG, "processUpdatedWithinFilter: projectUpdatedWithin: " + projectUpdatedWithin);
             filter = projectUpdatedWithin;
         }
         return filter;
@@ -533,7 +553,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String jurisdiction = data.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION);
         if (jurisdiction != null && !jurisdiction.equals("")) {
-            Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
+            Log.d(TAG, "processJurisdictionFilter: jurisdiction: " + jurisdiction);
             filter = jurisdiction;
         }
         return filter;
@@ -547,7 +567,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String stage = data.getStringExtra(SearchViewModel.FILTER_PROJECT_STAGE);
         if (stage != null && !stage.equals("")) {
-            Log.d(TAG, "onActivityResult: stage: " + stage);
+            Log.d(TAG, "processStageFilter: stage: " + stage);
             filter = stage;
         }
         return filter;
@@ -561,7 +581,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectBiddingWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN);
         if (projectBiddingWithin != null && !projectBiddingWithin.equals("")) {
-            Log.d(TAG, "onActivityResult: projectBiddingWithin: " + projectBiddingWithin);
+            Log.d(TAG, "processBiddingWithinFilter: projectBiddingWithin: " + projectBiddingWithin);
             filter = projectBiddingWithin;
         }
         return filter;
@@ -575,7 +595,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String projectBuildingOrHighwayWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY);
         if (projectBuildingOrHighwayWithin != null && !projectBuildingOrHighwayWithin.equals("")) {
-            Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
+            Log.d(TAG, "processBuildingOrHighwayFilter: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
             filter = projectBuildingOrHighwayWithin;
         }
         return filter;
@@ -589,7 +609,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String ownerType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_OWNER_TYPE);
         if (ownerType != null && !ownerType.equals("")) {
-            Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
+            Log.d(TAG, "processOwnerTypeFilter: ownerType: " + ownerType);
             filter = ownerType;
         }
         return filter;
@@ -603,7 +623,7 @@ public class ProjectsNearMeActivity extends LecetBaseActivity implements OnMapRe
         String filter = "";
         String workType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_WORK_TYPE);
         if (workType != null && !workType.equals("")) {
-            Log.d(TAG, "onActivityResult: workType: " + workType);
+            Log.d(TAG, "processWorkTypeFilter: workType: " + workType);
             filter = workType;
         }
         return filter;

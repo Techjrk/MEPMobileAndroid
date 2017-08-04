@@ -3,7 +3,6 @@ package com.lecet.app.viewmodel;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectTrackingListAdapter;

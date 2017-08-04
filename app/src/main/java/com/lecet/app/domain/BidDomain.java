@@ -1,7 +1,6 @@
 package com.lecet.app.domain;
 
 import android.support.annotation.IntDef;
-import android.util.Log;
 
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.Bid;
@@ -9,6 +8,7 @@ import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.utility.DateUtility;
+import com.lecet.app.utility.Log;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

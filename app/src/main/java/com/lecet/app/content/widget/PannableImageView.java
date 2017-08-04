@@ -6,13 +6,10 @@ import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.widget.ImageView;
 
-import javax.security.auth.login.LoginException;
+import com.lecet.app.utility.Log;
 
 /**
  * Created by alionque on 6/1/17.

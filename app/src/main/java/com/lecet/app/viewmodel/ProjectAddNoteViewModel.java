@@ -6,7 +6,6 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -17,6 +16,7 @@ import com.lecet.app.data.models.geocoding.GeocodeAddress;
 import com.lecet.app.data.models.geocoding.GeocodeResult;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import retrofit2.Call;

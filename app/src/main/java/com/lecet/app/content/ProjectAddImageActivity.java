@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -21,6 +20,7 @@ import com.lecet.app.databinding.ActivityProjectAddImageBinding;
 import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectAddImageViewModel;
 
 import io.realm.Realm;

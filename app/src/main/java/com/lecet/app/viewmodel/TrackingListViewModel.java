@@ -1,7 +1,6 @@
 package com.lecet.app.viewmodel;
 
 import android.content.Intent;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Point;
 import android.support.annotation.IdRes;
@@ -10,12 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.lecet.app.BR;
@@ -23,6 +20,7 @@ import com.lecet.app.R;
 import com.lecet.app.adapters.MenuTitleListAdapter;
 import com.lecet.app.adapters.TrackingListAdapter;
 import com.lecet.app.contentbase.BaseObservableViewModel;
+import com.lecet.app.utility.Log;
 
 import io.realm.RealmResults;
 

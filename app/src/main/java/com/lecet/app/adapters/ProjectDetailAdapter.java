@@ -2,11 +2,9 @@ package com.lecet.app.adapters;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +36,6 @@ import com.lecet.app.viewmodel.ProjectDetailContactViewModel;
 import com.lecet.app.viewmodel.ProjectDetailHeaderViewModel;
 import com.lecet.app.viewmodel.ProjectShareToolbarViewModel;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import io.realm.Realm;

@@ -5,15 +5,14 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.lecet.app.R;
 import com.lecet.app.databinding.FragmentProjectTakeCameraPhotoBinding;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectTakeCameraPhotoViewModel;
 
 

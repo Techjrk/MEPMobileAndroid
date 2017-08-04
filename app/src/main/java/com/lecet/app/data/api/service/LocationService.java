@@ -2,7 +2,6 @@ package com.lecet.app.data.api.service;
 
 import com.lecet.app.data.models.geocoding.GeocodeAddress;
 
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

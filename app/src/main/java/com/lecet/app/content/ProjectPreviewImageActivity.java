@@ -3,16 +3,16 @@ package com.lecet.app.content;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
 import com.lecet.app.databinding.ActivityProjectPreviewImageBinding;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ProjectPreviewImageViewModel;
 
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
-import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.FROM_CAMERA;
+import static com.lecet.app.content.ProjectTakeCameraPhotoFragment.IMAGE_PATH;
 
 /**
  * Created by jasonm on 4/11/17.

@@ -3,8 +3,6 @@ package com.lecet.app.data.api.request;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-
 /**
  * File: Geocode Created: 10/5/16 Author: domandtom
  * <p>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lecet</string>
+    <string name="app_name">MEP</string>
 
     <!-- Common -->
     <string name="password">Password</string>
@@ -446,4 +446,21 @@
     <string name="lastChildParentPosition">lastChildParentPosition</string>
     <string name="lastName">lastName</string>
     <string name="lastFamilyChecked">lastFamilyChecked</string>
+
+    <!-- Search -->
+    <!-- Note on phrasing: Use "[Search for] [query] [in/on] [LECET] -->
+    <string name="voice_projects_near_me">projects near me</string>
+    <string name="voice_project_near_me">project near me</string>
+    <string name="voice_projects_by_me">projects by me</string>
+    <string name="voice_project_by_me">project by me</string>
+    <string name="voice_projects_nearby">projects nearby</string>
+    <string name="voice_recently_updated_projects">recently updated projects</string>
+    <string name="voice_projects_updated_recently">projects updated recently</string>
+    <string name="voice_projects_recently_updated">projects recently updated</string>
+    <string name="voice_recent_projects">recent projects</string>
+    <string name="voice_recent_project_updates">recent project updates</string>
+    <string name="voice_tracking_list">tracking list</string>
+    <string name="voice_tracking_lists">tracking lists</string>
+
+
 </resources>

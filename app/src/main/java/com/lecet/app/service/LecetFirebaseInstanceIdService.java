@@ -3,11 +3,10 @@ package com.lecet.app.service;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import android.util.Log;
-
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.Log;
 
 import java.io.IOException;
 
@@ -75,7 +74,7 @@ public class LecetFirebaseInstanceIdService extends FirebaseInstanceIdService {
                 }
 
             } catch (IOException e) {
-                Log.getStackTraceString(e);
+                Log.e(TAG, e.getStackTrace().toString());
             }
         }
     }

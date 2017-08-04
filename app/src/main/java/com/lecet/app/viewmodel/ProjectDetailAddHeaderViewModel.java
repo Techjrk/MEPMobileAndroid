@@ -1,8 +1,9 @@
 package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
-import android.util.Log;
 import android.view.View;
+
+import com.lecet.app.utility.Log;
 
 /**
  * Created by ludwigvondrake on 3/24/17.

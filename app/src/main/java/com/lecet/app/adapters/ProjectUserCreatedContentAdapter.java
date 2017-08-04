@@ -3,7 +3,6 @@ package com.lecet.app.adapters;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -16,8 +15,9 @@ import com.lecet.app.databinding.ListItemProjectDetailImageBinding;
 import com.lecet.app.databinding.ListItemProjectDetailNoteBinding;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.interfaces.ProjectUserCreatedContent;
-import com.lecet.app.viewmodel.ListItemProjectNoteViewModel;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ListItemProjectImageViewModel;
+import com.lecet.app.viewmodel.ListItemProjectNoteViewModel;
 
 import java.util.List;
 

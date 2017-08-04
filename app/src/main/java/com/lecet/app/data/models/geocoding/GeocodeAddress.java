@@ -1,8 +1,9 @@
 package com.lecet.app.data.models.geocoding;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by jasonm on 5/30/17.

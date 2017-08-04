@@ -2,7 +2,6 @@ package com.lecet.app.utility;
 
 import android.databinding.BindingAdapter;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputLayout;
 import android.text.Spannable;
 import android.widget.ImageView;

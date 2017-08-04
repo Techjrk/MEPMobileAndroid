@@ -3,8 +3,6 @@ package com.lecet.app.content;
 import android.databinding.DataBindingUtil;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,6 +13,7 @@ import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityLoginBinding;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.LoginViewModel;
 
 import io.realm.Realm;

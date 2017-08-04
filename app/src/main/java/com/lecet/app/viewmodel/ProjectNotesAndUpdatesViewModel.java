@@ -9,20 +9,21 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.adapters.ProjectUserCreatedContentAdapter;
 import com.lecet.app.content.ProjectAddImageActivity;
-import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
+import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectNotesAndUpdatesFragment;
 import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.interfaces.ProjectUserCreatedContent;
+import com.lecet.app.utility.Log;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
