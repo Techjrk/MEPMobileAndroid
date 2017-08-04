@@ -181,17 +181,5 @@ public class SearchFilter {
         result = 31 * result + (city != null ? city.hashCode() : 0);
         return result;
     }
-/*
-
-    public SearchFilter getSearchFilter() {
-        return searchFilter;
-    }
-
-    public SearchFilter getJurisdictions() {
-        return jurisdictions;
-    }
-
-*/
-
 
 }

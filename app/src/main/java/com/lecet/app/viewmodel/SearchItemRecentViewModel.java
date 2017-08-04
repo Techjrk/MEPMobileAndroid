@@ -59,16 +59,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         projectDomain = new ProjectDomain(LecetClient.getInstance(), LecetSharedPreferenceUtil.getInstance(viewModel.getActivity().getApplication()), Realm.getDefaultInstance());
     }
 
-    /**
-     * This is for Recently viewed section
-     * <p>
-     * public SearchItemRecentViewModel(Project project, String mapsApiKey) {
-     * this.project = project;
-     * this.mapsApiKey = mapsApiKey;
-     * searchDomain= new SearchDomain(LecetClient.getInstance(), Realm.getDefaultInstance());
-     * this.viewModel =viewModel;
-     * }
-     */
     public SearchItemRecentViewModel(Company company, String mapsApiKey, SearchViewModel viewModel) {
         this.company = company;
         this.mapsApiKey = mapsApiKey;
@@ -97,7 +87,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
     }
 
     public String getTitle() {
-        //    if (project == null) return "Unknown";
         return project != null ? project.getTitle() : company != null ? company.getName() : "Unknown";
     }
 
@@ -301,8 +290,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         Intent intent = new Intent(view.getContext(), ProjectDetailActivity.class);
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         SearchViewModel.usingInstantSearch=false;
-        //Log.d("projectsaved", "projectsaved");
-        // saveRecentlyProject(SearchActivity.USER_ID,LecetSharedPreferenceUtil.getInstance(getContext()));
         view.getContext().startActivity(intent);
     }
 
@@ -315,7 +302,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         intent.putExtra(ProjectDetailActivity.PROJECT_ID_EXTRA, project.getId());
         viewModel.setDetailVisible(true);
         view.getContext().startActivity(intent);
-        Log.d("project", "project");
         saveRecentlyProject(project.getId());
     }
 
@@ -326,7 +312,6 @@ public class SearchItemRecentViewModel extends BaseObservable {
         Intent intent = new Intent(view.getContext(), CompanyDetailActivity.class);
         intent.putExtra(CompanyDetailActivity.COMPANY_ID_EXTRA, company.getId());
         view.getContext().startActivity(intent);
-        //Log.d("company", "company");
         saveRecentlyCompany(company.getId());
     }
 
@@ -343,9 +328,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
         searchDomain.saveRecentProject(projectId, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                String slist;
                 if (response.isSuccessful()) {
-
                     try {
                         Log.d("saverecentproject", "saverecentproject" + response.body().string() + ":" + projectId);
                     } catch (IOException e) {

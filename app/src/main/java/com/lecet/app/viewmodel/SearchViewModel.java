@@ -359,16 +359,7 @@ public class SearchViewModel extends BaseObservable {
         setQueryEmpty(true);
     }
 
-    public void updateViewQuery(/*String query*/) {
-        //  Log.d("updateviewquery1","updateviewquery1");
-      /* if (!usingInstantSearch && query.equals("")) {
-            setIsMSE1SectionVisible(true);
-            setIsMSE2SectionVisible(false);
-            setIsMSR11Visible(false);
-            setIsMSR12Visible(false);
-            setIsMSR13Visible(false);
-            return;
-        }*/
+    public void updateViewQuery() {
         if (INIT_SEARCH) {
             INIT_SEARCH = false;
             setIsMSE1SectionVisible(true);

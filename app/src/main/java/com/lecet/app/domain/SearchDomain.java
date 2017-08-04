@@ -49,10 +49,7 @@ public class SearchDomain {
         return companyFilter;
     }
 
-   /* public void setCompanyFilter(String companyFilter) {
-        this.companyFilter = companyFilter;
-    }
-   */
+
    public void setCompanyFilter(String xfilter) {
         String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}"; //#1
 
@@ -76,7 +73,6 @@ public class SearchDomain {
 
     }
     public void setCompanyFilter(String searchFilter, String esFilter) {
- //       String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +sFilter + "}}"; //#1
 
         /**
          * Commented below are different scenarios for reviewing the esFilter and searchFilter.
@@ -97,28 +93,15 @@ public class SearchDomain {
         Log.d("companyfilter","searchFilter & esFilter"+sCompanyFilter);
 
     }
-    public void setCompanyFilter2(String xfilter) {
-//        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0, \"searchFilter\":{" +xfilter + "}}";
-        String sCompanyFilter = "{\"include\":[\"contacts\",{\"projects\":[\"projectStage\"]},{\"projectContacts\":[\"contactType\"]}],\"limit\":28,\"skip\":0," +xfilter + "}";
-        if (xfilter.equals("{\"searchFilter\":{}}")) sCompanyFilter = "{\"searchFilter\":{}}";
-        this.companyFilter = sCompanyFilter;
-        // setCompanyFilter(sCompanyFilter);
-        Log.d("companyfilter2",xfilter+":companyfilter2"+sCompanyFilter);
 
-    }
     public void setCompanyFilterComplete(String sCompanyFilter) {
         this.companyFilter = sCompanyFilter;
     }
     public void initFilter() {
         //This is the default search filter for Project filter when no custom search filter occurs.
         setProjectFilter("{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"],\"searchFilter\":{},\"skip\":0}");
-        //{"include":["primaryProjectType","secondaryProjectTypes","bids","projectStage"],"searchFilter":{}}
         setCompanyFilter("{\"searchFilter\":{}}");
-        //***
-
-
         setContactFilter("{\"include\":[\"company\"],\"searchFilter\":{}}");
-        //  {\"include\":[\"company\"]}
     }
     public String getContactFilter() {
         return contactFilter;
@@ -163,7 +146,6 @@ public class SearchDomain {
      * @param callback
      */
     public Call<List<SearchFilterStagesMain>> getStagesList(Callback<List<SearchFilterStagesMain>> callback) {
-        //if (SearchViewModel.stageMainList !=null) return;
         String filter = "stages";
         String token = sharedPreferenceUtil.getAccessToken();
         Call<List<SearchFilterStagesMain>> call = lecetClient.getSearchService().getSearchFilterStagesItems(token, filter);
@@ -270,7 +252,6 @@ public class SearchDomain {
      * @param callback
      */
     public Call<List<SearchFilterJurisdictionMain>> getJurisdictionList(Callback<List<SearchFilterJurisdictionMain>> callback) {
-        //if (SearchViewModel.jurisdictionMainList !=null) return;
         Call<List<SearchFilterJurisdictionMain>> call = lecetClient.getSearchService().getSearchFilterJurisdictionItems();
         call.enqueue(callback);
 
@@ -285,7 +266,6 @@ public class SearchDomain {
         Call<List<SearchFilterJurisdictionMain>> call = getJurisdictionList(new Callback<List<SearchFilterJurisdictionMain>>() {
             @Override
             public void onResponse(Call<List<SearchFilterJurisdictionMain>> call, Response<List<SearchFilterJurisdictionMain>> response) {
-               // Log.d(TAG, "Create list of Jurisdictions");
                 if (response.isSuccessful()) {
                     final List<SearchFilterJurisdictionMain> jurisdictionMainList = response.body();
 
@@ -371,7 +351,6 @@ public class SearchDomain {
         String token = sharedPreferenceUtil.getAccessToken();
         String filter = "{\"include\":[\"project\",\"company\"],\"where\":{\"code\":{\"inq\":[\"VIEW_PROJECT\",\"VIEW_COMPANY\"]}},\"limit\":10,\"order\":\"updatedAt DESC\"}";
         Call<List<SearchResult>> call = lecetClient.getSearchService().getSearchRecentlyViewedWithFilter(token, userId, filter);
-//        Call<List<SearchResult>> call = lecetClient.getSearchService().getSearchRecentlyViewed(token, userId);
         call.enqueue(callback);
     }
 
@@ -385,48 +364,27 @@ public class SearchDomain {
 
 
     public void getSearchProjectQuery(String q, Callback<SearchProject> callback) {
-        //  String filter="{\"include\":[\"primaryProjectType\",\"secondaryProjectTypes\",\"bids\",\"projectStage\"]}";
         String token = sharedPreferenceUtil.getAccessToken();
-//        Call<SearchProject> call = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
-  //      if (q !=null && q.equals("")) q="{}";
         callProjectService = lecetClient.getSearchService().getSearchProjectQuery(token, q, getProjectFilter());
         callProjectService.enqueue(callback);
     }
 
     public void getSearchCompanyQuery(String q, Callback<SearchCompany> callback) {
-        //   String filter = "{}";
-//        if (q !=null && q.equals("")) q="{}";
         String token = sharedPreferenceUtil.getAccessToken();
-//        Call<SearchCompany> call = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         callCompanyService = lecetClient.getSearchService().getSearchCompanyQuery(token, q, getCompanyFilter());
         callCompanyService.enqueue(callback);
-        Log.d("companyfilter3","companyfilter3"+getCompanyFilter());
-        Log.d("query1","query1:"+q+":filter:"+getCompanyFilter());
     }
 
     public void getSearchContactQuery(String q, Callback<SearchContact> callback) {
-        //   String filter = "{}";
-    //    if (q !=null && q.equals("")) q="{}";
         String token = sharedPreferenceUtil.getAccessToken();
-//        Call<SearchContact> call = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
         callContactService = lecetClient.getSearchService().getSearchContactQuery(token, q, getContactFilter());
         callContactService.enqueue(callback);
     }
-
-/*
-    public void getProjectDetail(long pId, Callback<Project> callback) {
-
-        String token = sharedPreferenceUtil.getAccessToken();
-        Call<Project> call = lecetClient.getSearchService().getProjectDetail(token, pId);
-        call.enqueue(callback);
-    }
-*/
 
     public void saveRecentProject(long projId, Callback<ResponseBody> callback) {
         String bodyContent ="{ \"code\" : \"VIEW_PROJECT\" , \"projectId\" : "+projId+" }";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
         Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
-      //  Log.d("body","body "+bodyContent);
         call.enqueue(callback);
     }
 
@@ -434,22 +392,15 @@ public class SearchDomain {
         String bodyContent ="{ \"code\" : \"VIEW_COMPANY\" , \"companyId\" : "+companyId+" }";
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
         Call<ResponseBody> call = lecetClient.getSearchService().saveRecent(recentToken, body);
-        //Log.d("body","body "+bodyContent);
         call.enqueue(callback);
     }
 
     public void saveCurrentProjectSearch(String title, String query, Callback<ResponseBody> callback) {
         String searchFilter =  getProjectFilter();
         if(searchFilter !=  null && searchFilter.length() > 0) {
-            Log.d(TAG, "saveCurrentProjectSearch: title: " + title + ", query: " + query + ", searchFilter: " + searchFilter);
-
             //works String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"apartment\",\"filter\":{\"include\":[{\"bids\":[\"company\",{\"project\":[\"projectStage\"]}]},{\"contacts\":[\"company\",\"contact\",\"contactType\"]},\"csiCodes\",{\"primaryProjectType\":[\"projectCategory\"]},\"projectStage\",\"secondaryProjectTypes\",\"specAlerts\",\"userNotes\",\"workTypes\"],\"jurisdiction\":true,\"limit\":28,\"searchFilter\":{\"projectValue\":{\"min\":333,\"max\":9999999},\"projectLocation\":{\"city\":\"Brookfield\"}},\"skip\":0}}";
             String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"" + query + "\",\"filter\":" + searchFilter + "}";
-            //String bodyContent ="{ \"title\" : " + title + " , \"modelName\" : " + "project" + " }";
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),bodyContent);
-
-            //RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
-            //"application/json; charset=utf-8"
             Call<ResponseBody> call = lecetClient.getSearchService().saveProjectSearch(recentToken, body);
             Log.d(TAG,"saveCurrentProjectSearch: bodyContent: " + bodyContent);
             call.enqueue(callback);
@@ -459,11 +410,8 @@ public class SearchDomain {
     public void saveCurrentCompanySearch(String title, String query, Callback<ResponseBody> callback) {
         String searchFilter =  getCompanyFilter();
         if(searchFilter !=  null && searchFilter.length() > 0) {
-            Log.d(TAG, "saveCurrentCompanySearch: title: " + title + ", query: " + query + ", searchFilter: " + searchFilter);
-
             //works String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"project\",\"query\":\"apartment\",\"filter\":{\"include\":[{\"bids\":[\"company\",{\"project\":[\"projectStage\"]}]},{\"contacts\":[\"company\",\"contact\",\"contactType\"]},\"csiCodes\",{\"primaryProjectType\":[\"projectCategory\"]},\"projectStage\",\"secondaryProjectTypes\",\"specAlerts\",\"userNotes\",\"workTypes\"],\"jurisdiction\":true,\"limit\":28,\"searchFilter\":{\"projectValue\":{\"min\":333,\"max\":9999999},\"projectLocation\":{\"city\":\"Brookfield\"}},\"skip\":0}}";
             String bodyContent ="{\"title\":\""+title+"\",\"modelName\":\"company\",\"query\":\"" + query + "\",\"filter\":" + searchFilter + "}";
-            //String bodyContent ="{ \"title\" : " + title + " , \"modelName\" : " + "project" + " }";
             RequestBody body = RequestBody.create(MediaType.parse("text/plain"),bodyContent);
             Call<ResponseBody> call = lecetClient.getSearchService().saveProjectSearch(recentToken, body);
             Log.d(TAG,"saveCurrentCompanySearch: bodyContent: " + bodyContent);
