@@ -3,6 +3,7 @@ package com.lecet.app.data.models;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
+
 import com.lecet.app.interfaces.ProjectUserCreatedContent;
 
 import java.util.Date;
@@ -51,9 +52,16 @@ public class ProjectNote extends RealmObject implements ProjectUserCreatedConten
     @SerializedName("author")
     private User author;
 
+    @SerializedName("geocode")
+    private Geocode geocode;
+
+    @SerializedName("fullAddress")
+    private String fullAddress;
+
+
     public ProjectNote(){}
 
-    public ProjectNote(long id, String title, String text, boolean isPublic, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt) {
+    public ProjectNote(long id, String title, String text, boolean isPublic, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, Geocode geocode, String fullAddress) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -64,11 +72,12 @@ public class ProjectNote extends RealmObject implements ProjectUserCreatedConten
         this.authorId = authorId;
         this.createdAt = createdAt; //TODO - check if there is a conversion happening with timezones here and with updatedAt
         this.updatedAt = updatedAt;
+        this.geocode = geocode;
+        this.fullAddress = fullAddress;
     }
 
     public ProjectNote(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt) {
-        this(id, title, text, true, false, companyId, projectId, authorId, createdAt, createdAt);
-
+        this(id, title, text, true, false, companyId, projectId, authorId, createdAt, createdAt, null, null);
     }
 
     //Getters And Setters
@@ -160,7 +169,22 @@ public class ProjectNote extends RealmObject implements ProjectUserCreatedConten
         this.updatedAt = updatedAt;
     }
 
-    @Override
+    public Geocode getGeocode() {
+        return geocode;
+    }
+
+    public void setGeocode(Geocode geocode) {
+        this.geocode = geocode;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
     public int compareTo(@NonNull ProjectUserCreatedContent other) {
         if(other instanceof ProjectNote){
             return (int)(id - ((ProjectNote) other).getId());

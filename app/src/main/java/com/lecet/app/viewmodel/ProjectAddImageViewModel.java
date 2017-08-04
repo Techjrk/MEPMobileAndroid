@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -23,10 +24,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.lecet.app.BR;
-import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.content.ProjectImageChooserActivity;
+import com.lecet.app.data.api.request.GeocodeRequest;
 import com.lecet.app.data.models.PhotoPost;
 import com.lecet.app.data.models.ProjectPhoto;
+import com.lecet.app.data.models.geocoding.GeocodeAddress;
+import com.lecet.app.data.models.geocoding.GeocodeResult;
+import com.lecet.app.domain.LocationDomain;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.SimpleLecetDefaultAlert;
 import com.squareup.picasso.Picasso;
@@ -43,6 +47,8 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.lecet.app.R.string.google_api_key;
+
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
 import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_ASK_PERMISSIONS;
@@ -63,52 +69,59 @@ public class ProjectAddImageViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private AlertDialog alert;
     private long projectId;
+    private long id;
+    private String title = "";
+    private String body = "";
+    private GeocodeRequest geocode;
+    private String fullAddress = "";
     private boolean replaceImage;
-    private long photoID;
     private static Bitmap bitmap;   //TODO - does this need to be static?
     private String imagePath;
     private Uri uri;
-    private String title;
-    private String body = "";
-	private ProjectDomain projectDomain;
+    private ProjectDomain projectDomain;
+    private LocationDomain locationDomain;
+    private String mapsApiKey;
     private int newTitleLength = 0;
     private Target picassoTarget;
 
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long photoID, String title, String body, String imagePath, ProjectDomain projectDomain) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long id, String title, String body, String imagePath, ProjectDomain projectDomain, LocationDomain locationDomain) {
         this.activity = activity;
         this.projectId = projectId;
         this.replaceImage = replaceImage;
-        this.photoID = photoID;
+        this.id = id;
         this.title = title;
         this.body = body;
         this.imagePath = imagePath;
-		this.projectDomain = projectDomain;
+        this.geocode = new GeocodeRequest();
+        this.projectDomain = projectDomain;
+        this.locationDomain = locationDomain;
 
         Log.d(TAG, "Constructor 1: projectId: " + projectId);
         Log.d(TAG, "Constructor 1: replaceImage: " + replaceImage);
-        Log.d(TAG, "Constructor 1: photoID: " + photoID);
+        Log.d(TAG, "Constructor 1: id: " + id);
         Log.d(TAG, "Constructor 1: title: " + title);
         Log.d(TAG, "Constructor 1: body: " + body);
         Log.d(TAG, "Constructor 1: imagePath: " + imagePath);
 
         this.bitmap = BitmapFactory.decodeFile(imagePath);  //TODO - access of static var
-
     }
 
-    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long photoID, String title, String body, Uri uri, ProjectDomain projectDomain, final float neededRotation) {
+    public ProjectAddImageViewModel(AppCompatActivity activity, long projectId, boolean replaceImage, long id, String title, String body, Uri uri, final float neededRotation, ProjectDomain projectDomain, LocationDomain locationDomain) {
         this.activity = activity;
         this.projectId = projectId;
         this.replaceImage = replaceImage;
-        this.photoID = photoID;
+        this.id = id;
         this.title = title;
         this.body = body;
         this.uri = uri;
+        this.geocode = new GeocodeRequest();
         this.projectDomain = projectDomain;
+        this.locationDomain = locationDomain;
 
         Log.d(TAG, "Constructor 2: projectId: " + projectId);
         Log.d(TAG, "Constructor 2: replaceImage: " + replaceImage);
-        Log.d(TAG, "Constructor 2: photoID: " + photoID);
+        Log.d(TAG, "Constructor 2: id: " + id);
         Log.d(TAG, "Constructor 2: title: " + title);
         Log.d(TAG, "Constructor 2: body: " + body);
         Log.d(TAG, "Constructor 2: uri: " + uri);
@@ -150,18 +163,114 @@ public class ProjectAddImageViewModel extends BaseObservable {
         }
     }
 
-    private void startProjectDetailActivity() {
-        Log.d(TAG, "startProjectDetailActivity");
+    @Bindable
+    public String getFullAddress() {
+        return fullAddress;
+    }
 
-        Intent intent = new Intent(activity, ProjectDetailActivity.class);
-        intent.putExtra(PROJECT_ID_EXTRA, projectId);
-        activity.startActivity(intent);
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+        notifyPropertyChanged(BR.fullAddress);
+    }
+
+    public GeocodeRequest getGeocode() {
+        return geocode;
+    }
+
+    public void setGeocode(GeocodeRequest geocode) {
+        this.geocode = geocode;
+    }
+
+    public void handleLocationChanged(Location location) {
+        Log.d(TAG, "handleLocationChanged() called with: location = [" + location + "]");
+
+        geocode = new GeocodeRequest(location.getLatitude(), location.getLongitude());
+        mapsApiKey = activity.getResources().getString(google_api_key);
+        generateAddress(location.getLatitude(), location.getLongitude(), mapsApiKey);
+        Log.d(TAG, "handleLocationChanged() fullAddress = [" + fullAddress + "]");
+    }
+
+    private void generateAddress(double latitude, double longitude, String mapsApiKey) {
+        Log.d(TAG, "generateAddress: lat, lng: " + latitude + ", " + longitude);
+
+        Call<GeocodeAddress> call = locationDomain.getAddressFromLocation(latitude, longitude, "street_address", mapsApiKey);
+
+        call.enqueue(new Callback<GeocodeAddress>() {
+            @Override
+            public void onResponse(Call<GeocodeAddress> call, Response<GeocodeAddress> response) {
+                Log.d(TAG, "generateAddress: onResponse: response.body: " + response.body());
+
+                if (response.isSuccessful()) {
+                    GeocodeAddress geocodeAddress = response.body();
+                    if (geocodeAddress != null && geocodeAddress.getResults().size() > 0) {
+                        GeocodeResult firstResult = geocodeAddress.getResults().get(0);
+                        if (firstResult != null) {
+                            setFullAddress(firstResult.getFormattedAddress());    // the one-line formatted address for display
+                            Log.d(TAG, "generateAddress: onResponse: address request successful. fullAddress: " + fullAddress);
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "generateAddress: onResponse: get address failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeocodeAddress> call, Throwable t) {
+                Log.e(TAG, "generateAddress: onFailure: get address failed");
+            }
+        });
     }
 
     public void onClickCancel(View view) {
         Log.d(TAG, "onClickCancel");
         activity.setResult(RESULT_CANCELED);
         activity.finish();
+    }
+
+    public void onClickAdd(View view){
+        DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener(){//On Click Listener For Dialog
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        post(false);
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showPostAlertDialog(view, onClickAddListener);
+    }
+
+    public void onClickDelete(View view) {
+        DialogInterface.OnClickListener onClickDeleteListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        delete();
+                        break;
+
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        showDeleteAlertDialog(view, onClickDeleteListener);
     }
 
     public void onClickReplaceImage(View view) {
@@ -175,51 +284,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         }
     }
 
-    public void onClickAdd(View view){
-        DialogInterface.OnClickListener onClick = new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        postImage(false);
-                        break;
 
-                    case DialogInterface.BUTTON_NEUTRAL:
-                        dialog.dismiss();
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-
-        showPostPhotoAlertDialog(view, onClick);
-    }
-
-    public void onClickDelete(View view) {
-        DialogInterface.OnClickListener onClickDeleteListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        deletePhoto();
-                        break;
-
-                    case DialogInterface.BUTTON_NEUTRAL:
-                        dialog.dismiss();
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-
-        showDeletePhotoAlertDialog(view, onClickDeleteListener);
-    }
 
     private boolean canSetup(){
         if(Build.VERSION.SDK_INT >= 23) {
@@ -253,33 +318,31 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return  true;
     }
 
+    private void post(boolean replaceExisting) {
+        Log.d(TAG, "post: replaceExisting: " + replaceExisting);
 
-
-    private void postImage(boolean replaceExisting) {
-        Log.d(TAG, "postImage: replaceExisting: " + replaceExisting);
-
-        Log.d(TAG, "postImage: encoding to base64...");
+        Log.d(TAG, "post: encoding to base64...");
         String base64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 90);
-        Log.d(TAG, "postImage: encoded length: " + base64Image.length());
+        Log.d(TAG, "post: encoded length: " + base64Image.length());
 
-        Log.d(TAG, "postImage: compressing...");
+        Log.d(TAG, "post: compressing...");
         //String compressedImage = compressImageData(base64Image);
         String compressedImage = resizeBase64Image(base64Image);
-        Log.d(TAG, "postImage: compressed base64 image length: " + compressedImage.length());
+        Log.d(TAG, "post: compressed base64 image length: " + compressedImage.length());
 
-        PhotoPost photoPost = new PhotoPost(title, body, true, compressedImage);
+        PhotoPost photoPost = new PhotoPost(title, body, true, compressedImage, geocode, fullAddress);
 
         Call<ProjectPhoto> call;
 
         // for a new post
         if (!replaceExisting) {
-            Log.d(TAG, "postImage: new image post");
+            Log.d(TAG, "post: new image post");
             call = projectDomain.postPhoto(projectId, photoPost);
         }
         // for updating an existing post
         else {
-            Log.d(TAG, "postImage: update to existing image post");
-            call = projectDomain.updatePhoto(photoID, new PhotoPost(title, body, true, compressedImage));
+            Log.d(TAG, "post: update to existing image post");
+            call = projectDomain.updatePhoto(id, new PhotoPost(title, body, true, compressedImage, geocode, fullAddress));
         }
 
         call.enqueue(new Callback<ProjectPhoto>() {
@@ -287,12 +350,12 @@ public class ProjectAddImageViewModel extends BaseObservable {
             public void onResponse(Call<ProjectPhoto> call, Response<ProjectPhoto> response) {
 
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "postImage: onResponse: image post successful");
+                    Log.d(TAG, "post: onResponse: image post successful");
                     activity.setResult(RESULT_OK);
                     activity.finish();
                 }
                 else {
-                    Log.e(TAG, "postImage: onResponse: image post failed");
+                    Log.e(TAG, "post: onResponse: image post failed");
                     alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
                     alert.show();
                 }
@@ -300,7 +363,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
             @Override
             public void onFailure(Call<ProjectPhoto> call, Throwable t) {
-                Log.e(TAG, "postImage: onFailure: image post failed");
+                Log.e(TAG, "post: onFailure: image post failed");
                 alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
                 alert.show();
             }
@@ -308,10 +371,10 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
     }
 
-    private void deletePhoto() {
-        Log.d(TAG, "deletePhoto");
+    private void delete() {
+        Log.d(TAG, "delete");
 
-        Call<ProjectPhoto> call = projectDomain.deletePhoto(photoID);
+        Call<ProjectPhoto> call = projectDomain.deletePhoto(id);
 
         call.enqueue(new Callback<ProjectPhoto>() {
             @Override
@@ -319,12 +382,12 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
                 if (response.isSuccessful()) {
 
-                    Log.d(TAG, "deletePhoto: onResponse: photo deletion successful");
+                    Log.d(TAG, "delete: onResponse: photo deletion successful");
                     activity.setResult(RESULT_OK);
                     activity.finish();
 
                 } else {
-                    Log.e(TAG, "deletePhoto: onResponse: photo deletion failed");
+                    Log.e(TAG, "delete: onResponse: photo deletion failed");
                     alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.HTTP_CALL_ERROR);
                     alert.show();
                 }
@@ -332,7 +395,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
 
             @Override
             public void onFailure(Call<ProjectPhoto> call, Throwable t) {
-                Log.e(TAG, "deletePhoto: onFailure: photo deletion failed");
+                Log.e(TAG, "delete: onFailure: photo deletion failed");
                 alert = SimpleLecetDefaultAlert.newInstance(activity, SimpleLecetDefaultAlert.NETWORK_FAILURE);
                 alert.show();
             }
@@ -345,7 +408,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        postImage(true);
+                        post(true);
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -359,7 +422,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
             }
         };
 
-        showPostPhotoAlertDialog(view, onClick);
+        showPostAlertDialog(view, onClick);
     }
 
     private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
@@ -448,7 +511,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         return  compressedBase64Image;
     }
 
-    private void showPostPhotoAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+    private void showPostAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         //Required Content of image
@@ -466,7 +529,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
         }
     }
 
-    private void showDeletePhotoAlertDialog(View view, DialogInterface.OnClickListener onClick) {
+    private void showDeleteAlertDialog(View view, DialogInterface.OnClickListener onClick) {
         alert = new AlertDialog.Builder(view.getContext()).create();
 
         //Are you sure?
@@ -510,7 +573,7 @@ public class ProjectAddImageViewModel extends BaseObservable {
     }
 
     public boolean getEditMode() {
-        return photoID > -1;
+        return id > -1;
     }
 
     public boolean canDelete() {

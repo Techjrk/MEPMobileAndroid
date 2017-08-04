@@ -3,6 +3,7 @@ package com.lecet.app.data.models;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
+
 import com.lecet.app.interfaces.ProjectUserCreatedContent;
 
 import java.util.Date;
@@ -54,9 +55,15 @@ public class ProjectPhoto extends RealmObject implements ProjectUserCreatedConte
     @SerializedName("user")
     private User author;
 
+    @SerializedName("geocode")
+    private Geocode geocode;
+
+    @SerializedName("fullAddress")
+    private String fullAddress;
+
     public ProjectPhoto(){}
 
-    public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src, String url) {
+    public ProjectPhoto(long id, String title, String text, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, String src, String url, Geocode geocode, String fullAddress) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -68,18 +75,20 @@ public class ProjectPhoto extends RealmObject implements ProjectUserCreatedConte
         this.updatedAt = updatedAt;
         this.src = src;
         this.url = url;
+        this.geocode = geocode;
+        this.fullAddress = fullAddress;
     }
 
     public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt, String src, String url) {
-        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src, url);
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src, url, null, null);
     }
 
     public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt, String src) {
-        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src, null);
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, src, null, null, null);
     }
 
     public ProjectPhoto(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt) {
-        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, null, null);
+        this(id, title, text, false, companyId, projectId, authorId, createdAt, createdAt, null, null, null, null);
     }
 
     //Getters And Setters
@@ -177,6 +186,22 @@ public class ProjectPhoto extends RealmObject implements ProjectUserCreatedConte
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Geocode getGeocode() {
+        return geocode;
+    }
+
+    public void setGeocode(Geocode geocode) {
+        this.geocode = geocode;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
     }
 
     @Override

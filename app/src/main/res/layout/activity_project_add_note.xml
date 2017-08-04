@@ -58,11 +58,11 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:text="@string/add"
-                    android:onClick="@{viewModel::onClickAdd}"
                     android:visibility="@{viewModel.editMode ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:onClick="@{viewModel::onClickAdd}"/>
 
                 <!-- UPDATE BUTTON -->
                 <Button
@@ -72,11 +72,11 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:text="@string/update"
-                    android:onClick="@{viewModel::onClickUpdate}"
                     android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
                     android:textColor="@color/lecetLightBlueTransp"
                     android:textSize="16sp"
-                    bind:typeface="@{`Lato-Bold.ttf`}" />
+                    bind:typeface="@{`Lato-Bold.ttf`}"
+                    android:onClick="@{viewModel::onClickUpdate}"/>
 
             </LinearLayout>
 
@@ -140,7 +140,7 @@
                 <TextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
-                        android:text="@string/location"
+                        android:text="@string/fullAddress"
                         android:textAllCaps="true"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -152,11 +152,11 @@
                         android:id="@+id/location_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={viewModel.formattedAddress}"
+                        android:text="@={viewModel.fullAddress}"
                         android:textSize="14sp"
                         android:lines="1"
                         android:maxLines="1"
-                        android:hint="@string/location"
+                        android:hint="@string/fullAddress"
                         android:textColorHint="@color/lecetTextLightGray"
                         android:background="@drawable/shape_rect_solid_border_1"
                         android:padding="12dp"

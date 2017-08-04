@@ -170,7 +170,7 @@ public class DateUtility {
 
         String sdate = sdf.format(UTCDate);
 
-        Log.d("Time zone1: ", "Timezone1:" + tz.getDisplayName() + "date: " + sdate);
+        //Log.d("Time zone1: ", "Timezone1:" + tz.getDisplayName() + "date: " + sdate);
         //  sdf.setTimeZone(cal.getTimeZone());
 
         // TimeZone tz = cal.getTimeZone();
@@ -180,11 +180,11 @@ public class DateUtility {
         long longLocal = cal.getTimeInMillis();
         int inLocal = tz.getOffset(longLocal);
         hoursdiff = (inUTC - inLocal)/ (1000 * 60 * 60);
-        Log.d("Time diff: ", "Timezonediff:" + hoursdiff);
+        //Log.d("Time diff: ", "Timezonediff:" + hoursdiff);
 
         sdate = sdf.format(UTCDate);
 
-        Log.d("Time zone2: ", "Timezone2:" + tz.getDisplayName() + "date: " + sdate);
+        //Log.d("Time zone2: ", "Timezone2:" + tz.getDisplayName() + "date: " + sdate);
 
 /* date formatter in local timezone */
 

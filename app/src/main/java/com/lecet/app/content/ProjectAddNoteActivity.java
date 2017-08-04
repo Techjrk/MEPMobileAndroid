@@ -31,17 +31,17 @@ import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 
 public class ProjectAddNoteActivity extends LecetBaseActivity  implements LocationManager.LocationManagerListener, LecetConfirmDialogFragment.ConfirmDialogListener {
 
+    private static final String TAG = "ProjectAddNoteAct";
+
     public static final String NOTE_ID_EXTRA    = "com.lecet.app.content.ProjectAddNoteActivity.note.id.extra";
     public static final String NOTE_TITLE_EXTRA = "com.lecet.app.content.ProjectAddNoteActivity.note.title.extra";
     public static final String NOTE_BODY_EXTRA  = "com.lecet.app.content.ProjectAddNoteActivity.note.body.extra";
     public static final String NOTE_EXTRA       = "com.lecet.app.content.ProjectAddNoteActivity.note.extra";
 
-    private static final String TAG = "ProjectAddNoteAct";
-
     private long projectId;
-    private long noteId;
-    private String noteTitle;
-    private String noteBody;
+    private long id;
+    private String title;
+    private String body;
     private LocationManager locationManager;
     ProjectAddNoteViewModel viewModel;
 
@@ -55,25 +55,25 @@ public class ProjectAddNoteActivity extends LecetBaseActivity  implements Locati
         projectId = getIntent().getLongExtra(PROJECT_ID_EXTRA, -1);
 
         // in the case of editing an existing note look for its id, title and body
-        noteId    = getIntent().getLongExtra(NOTE_ID_EXTRA, -1);
-        noteTitle = getIntent().getStringExtra(NOTE_TITLE_EXTRA);
-        noteBody  = getIntent().getStringExtra(NOTE_BODY_EXTRA);
+        id = getIntent().getLongExtra(NOTE_ID_EXTRA, -1);
+        title = getIntent().getStringExtra(NOTE_TITLE_EXTRA);
+        body = getIntent().getStringExtra(NOTE_BODY_EXTRA);
 
         Log.d(TAG, "onCreate: projectId: " + projectId);
-        Log.d(TAG, "onCreate: noteId: " + noteId);
-        Log.d(TAG, "onCreate: noteTitle: " + noteTitle);
-        Log.d(TAG, "onCreate: noteBody: " + noteBody);
+        Log.d(TAG, "onCreate: id: " + id);
+        Log.d(TAG, "onCreate: title: " + title);
+        Log.d(TAG, "onCreate: body: " + body);
 
-        setupLocationManager();
+        //setupLocationManager();
         setupBinding(projectDomain, locationDomain);
-        checkPermissions();
+        //checkPermissions();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart() called");
-        locationManager.startLocationUpdates();
+        //locationManager.startLocationUpdates();
     }
 
     @Override
@@ -83,37 +83,43 @@ public class ProjectAddNoteActivity extends LecetBaseActivity  implements Locati
         locationManager.handleOnStop();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+        setupLocationManager();
+        checkPermissions();
+    }
+
     private void setupLocationManager() {
         Log.d(TAG, "setupLocationManager() called");
-        locationManager = new LocationManager(this, this);
+        if(locationManager == null ) {
+            locationManager = new LocationManager(this, this);
+        }
         locationManager.handleOnStart();
-        Location m = locationManager.retrieveLastKnownLocation();
-        Log.d(TAG, "setupLocationManager() called. Location: " + m);
+        locationManager.startLocationUpdates();
+        //Location lastKnownLocation = locationManager.retrieveLastKnownLocation();
+        //Log.d(TAG, "setupLocationManager() called. Location: " + lastKnownLocation);
     }
 
     private void setupBinding(ProjectDomain projectDomain, LocationDomain locationDomain) {
         Log.d(TAG, "setupBinding() called with: projectDomain = [" + projectDomain + "], locationDomain = [" + locationDomain + "]");
         ActivityProjectAddNoteBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_project_add_note);
-        viewModel = new ProjectAddNoteViewModel(this, projectId, noteId, noteTitle, noteBody, projectDomain, locationDomain);
+        viewModel = new ProjectAddNoteViewModel(this, projectId, id, title, body, projectDomain, locationDomain);
         binding.setViewModel(viewModel);
     }
 
     private void checkPermissions() {
         if (locationManager.isLocationPermissionEnabled()) {
-            checkGps();
+            if (!locationManager.isGpsEnabled()) {
+                showEnableLocationDialog();
+            }
         } else {
             showLocationPermissionRequiredDialog();
         }
     }
 
-    private void checkGps() {
-        if (!locationManager.isGpsEnabled()) {
-            showLocationEnableRequired();
-        }
-    }
-
     private void showLocationPermissionRequiredDialog() {
-        //isAskingForPermission = true;
         LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(getString(R.string.confirm_share_your_location_description)
                 , getString(R.string.confirm_share_your_location), getString(android.R.string.cancel));
 
@@ -122,7 +128,7 @@ public class ProjectAddNoteActivity extends LecetBaseActivity  implements Locati
     }
 
 
-    private void showLocationEnableRequired() {
+    private void showEnableLocationDialog() {
         LecetConfirmDialogFragment dialogFragment = LecetConfirmDialogFragment.newInstance(getString(R.string.confirm_enable_your_location_description)
                 , getString(R.string.confirm_go_to_settings), getString(android.R.string.cancel));
 
@@ -154,8 +160,10 @@ public class ProjectAddNoteActivity extends LecetBaseActivity  implements Locati
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged() called with: location = [" + location + "]");
-        viewModel.handleLocationChanged(location);
-        //locationManager.stopLocationUpdates();
+        if(location != null) {
+            locationManager.stopLocationUpdates();
+            viewModel.handleLocationChanged(location);
+        }
     }
 
 

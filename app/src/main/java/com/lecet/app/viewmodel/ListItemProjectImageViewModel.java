@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
@@ -26,17 +25,12 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static com.lecet.app.content.ProjectDetailActivity.PROJECT_ID_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_ID_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_TITLE_EXTRA;
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_URL_EXTRA;
 import static com.lecet.app.content.ProjectImageChooserActivity.PROJECT_REPLACE_IMAGE_EXTRA;
-import static com.lecet.app.viewmodel.ProjectNotesAndUpdatesViewModel.REQUEST_CODE_REPLACE_IMAGE;
 
 /**
  * Created by ludwigvondrake on 3/23/17.
@@ -50,7 +44,6 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
-    private String location = "Unknown Location";
     private boolean canEdit;
     private ImageView imageView;
 
@@ -90,13 +83,13 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     }
 
     @Bindable
-    public String getLocation() {
-        return location;
+    public String getFullAddress() {
+        return photo.getFullAddress();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-        notifyPropertyChanged(BR.location);
+    public void setFullAddress(String fullAddress) {
+        this.photo.setFullAddress(fullAddress);
+        notifyPropertyChanged(BR.fullAddress);
     }
 
     public String getImageUrl() {

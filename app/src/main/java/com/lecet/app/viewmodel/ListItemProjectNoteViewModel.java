@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.Formatter;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
@@ -16,16 +15,9 @@ import com.lecet.app.content.ProjectAddNoteActivity;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
-import com.lecet.app.utility.DateUtility;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_BODY_EXTRA;
 import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_ID_EXTRA;
@@ -44,7 +36,6 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     //private long authorId = -1;
     private String authorName = "Unknown Author";
     private long loggedInUserId = -1;
-    private String location = "Unknown Location";
     private boolean canEdit;
 
     public ListItemProjectNoteViewModel(ProjectNote note, AppCompatActivity activity, final UserDomain userDomain) {
@@ -82,13 +73,13 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     }
 
     @Bindable
-    public String getLocation() {
-        return location;
+    public String getFullAddress() {
+        return note.getFullAddress();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-        notifyPropertyChanged(BR.location);
+    public void setFullAddress(String fullAddress) {
+        this.note.setFullAddress(fullAddress);
+        notifyPropertyChanged(BR.fullAddress);
     }
 
     @Bindable

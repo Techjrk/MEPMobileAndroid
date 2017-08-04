@@ -156,7 +156,7 @@
                         android:textColor="@color/lecetLightGray"
                         android:gravity="center_vertical"
                         android:layout_gravity="center"
-                        android:text="@{viewModel.location}"
+                        android:text="@{viewModel.fullAddress}"
                         android:maxLines="1"
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="Brooklyn, NY"/>

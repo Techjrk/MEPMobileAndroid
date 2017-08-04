@@ -331,7 +331,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
 
         if (project != null) {
             Log.d(TAG, "getEditableProject: FOUND PROJECT: " + project);
-            projectPost.setGeocode(project.getGeocode());
+            projectPost.setGeocode(new GeocodeRequest(project.getGeocode().getLat(), project.getGeocode().getLng()));
             projectPost.setTitle(project.getTitle());
             projectPost.setAddress1(project.getAddress1());
             projectPost.setAddress2(project.getAddress2());

@@ -1,5 +1,6 @@
 package com.lecet.app.interfaces;
 
+import com.lecet.app.data.models.Geocode;
 import com.lecet.app.data.models.User;
 
 import java.util.Date;
@@ -45,5 +46,13 @@ public interface ProjectUserCreatedContent extends Comparable<ProjectUserCreated
     Date getUpdatedAt();
 
     void setUpdatedAt(Date updatedAt);
+
+    Geocode getGeocode();
+
+    void setGeocode(Geocode geocode);
+
+    String getFullAddress();
+
+    void setFullAddress(String fullAddress);
 
 }
