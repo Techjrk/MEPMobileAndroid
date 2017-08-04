@@ -1,10 +1,6 @@
 package com.lecet.app.data.models;
 
-import com.google.gson.annotations.SerializedName;
-
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by getdevsinc on 1/13/17.

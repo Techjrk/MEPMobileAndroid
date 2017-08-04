@@ -5,16 +5,13 @@ import android.app.ProgressDialog;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Point;
-import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.lecet.app.BR;

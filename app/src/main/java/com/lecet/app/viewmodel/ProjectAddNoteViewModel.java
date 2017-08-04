@@ -5,13 +5,13 @@ import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.data.models.NotePost;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.domain.ProjectDomain;
+import com.lecet.app.utility.Log;
 import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import retrofit2.Call;

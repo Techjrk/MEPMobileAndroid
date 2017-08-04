@@ -1,5 +1,16 @@
 package com.lecet.app.viewmodel;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -22,7 +33,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -31,16 +41,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.lecet.app.R;
 import com.lecet.app.content.AddProjectActivity;
 import com.lecet.app.content.ProjectDetailActivity;
@@ -53,6 +53,7 @@ import com.lecet.app.data.api.response.ProjectsNearResponse;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.utility.LocationManager;
+import com.lecet.app.utility.Log;
 import com.lecet.app.utility.SimpleLecetDefaultAlert;
 
 import java.io.IOException;

@@ -3,7 +3,8 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+
+import com.lecet.app.utility.Log;
 
 
 /**

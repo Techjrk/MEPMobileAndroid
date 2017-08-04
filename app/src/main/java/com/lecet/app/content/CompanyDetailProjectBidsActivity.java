@@ -3,10 +3,10 @@ package com.lecet.app.content;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
+import com.lecet.app.utility.Log;
 
 /**
  * CompanyDetailProjectBidsActivity

@@ -3,10 +3,8 @@ package com.lecet.app.viewmodel;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
-import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.content.ProjectDetailActivity;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;

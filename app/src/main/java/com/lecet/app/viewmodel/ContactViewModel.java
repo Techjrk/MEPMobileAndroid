@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +17,7 @@ import com.lecet.app.content.CompanyDetailActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.domain.CompanyDomain;
+import com.lecet.app.utility.Log;
 
 /**
  * File: ContactViewModel Created: 1/26/17 Author: domandtom

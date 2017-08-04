@@ -1,20 +1,17 @@
 package com.lecet.app.domain;
 
-import android.util.Log;
-
 import com.lecet.app.data.api.LecetClient;
 import com.lecet.app.data.models.ActivityUpdate;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.interfaces.RealmFetchCallback;
+import com.lecet.app.utility.Log;
 
 import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;

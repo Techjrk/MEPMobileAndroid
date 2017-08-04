@@ -6,7 +6,6 @@ import android.databinding.Bindable;
 import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.data.models.Bid;
@@ -35,6 +33,7 @@ import com.lecet.app.interfaces.MRADataSource;
 import com.lecet.app.interfaces.MRADelegate;
 import com.lecet.app.interfaces.MRUDataSource;
 import com.lecet.app.interfaces.MRUDelegate;
+import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,6 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.lecet.app.BR;
@@ -23,6 +22,7 @@ import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterValueActivity;
 import com.lecet.app.content.SearchFilterWorkTypeActivity;
+import com.lecet.app.utility.Log;
 
 /**
  * Created by DomandTom 2016.

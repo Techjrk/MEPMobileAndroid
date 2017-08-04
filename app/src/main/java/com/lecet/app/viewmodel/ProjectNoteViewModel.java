@@ -2,12 +2,11 @@ package com.lecet.app.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.text.format.Time;
-import android.util.Log;
 
-import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.Log;
 
 import java.util.TimeZone;
 

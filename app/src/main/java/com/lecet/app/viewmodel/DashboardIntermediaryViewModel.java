@@ -2,7 +2,6 @@ package com.lecet.app.viewmodel;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.lecet.app.content.MainActivity;
 import com.lecet.app.contentbase.BaseObservableViewModel;
@@ -19,6 +18,7 @@ import com.lecet.app.domain.ProjectDomain;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.domain.TrackingListDomain;
 import com.lecet.app.interfaces.LecetCallback;
+import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.List;

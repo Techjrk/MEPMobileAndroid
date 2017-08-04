@@ -7,11 +7,11 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.lecet.app.R;
+import com.lecet.app.utility.Log;
 
 /**
  * Created by getdevsinc on 12/29/16.

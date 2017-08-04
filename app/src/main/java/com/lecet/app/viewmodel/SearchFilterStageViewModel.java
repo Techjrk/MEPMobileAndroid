@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -22,6 +21,7 @@ import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
+import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.List;

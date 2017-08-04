@@ -6,23 +6,14 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
-import com.lecet.app.data.api.LecetClient;
-import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityTrackingListBinding;
-import com.lecet.app.domain.ProjectDomain;
-import com.lecet.app.domain.TrackingListDomain;
-import com.lecet.app.viewmodel.CompanyTrackingListViewModel;
-import com.lecet.app.viewmodel.ProjectTrackingListViewModel;
+import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.TrackingListViewModel;
-
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
 
 /**
  * TrackingListActivity Created by jasonm on 11/2/16.
