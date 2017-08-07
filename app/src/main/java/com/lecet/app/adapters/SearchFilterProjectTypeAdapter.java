@@ -286,7 +286,6 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
 
                             grandChild.setSelected(cb.isChecked());
                             if (grandChild.getSelected()){
-                                // viewModel.setJurisdictionData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), -1, grandChild.getName(), grandChild.getAbbreviation(), grandChild.getLongName());    //NOTE - we are not using regionId as it is not easily avail from here. we look up regionId in the main activity's processing function.
                                 viewModel.addProjectTypeData(grandChild.getId(), grandChildViewHolder.checkView.getText().toString());
                             } else {
                                 viewModel.removeProjectTypeData(grandChild.getId());

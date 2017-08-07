@@ -30,18 +30,15 @@ import com.lecet.app.content.SearchActivity;
 import com.lecet.app.content.SearchFilterMPSActivity;
 import com.lecet.app.data.models.Company;
 import com.lecet.app.data.models.Contact;
-import com.lecet.app.data.models.Filter;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.SearchCompany;
 import com.lecet.app.data.models.SearchContact;
-import com.lecet.app.data.models.SearchFilter;
 import com.lecet.app.data.models.SearchProject;
 import com.lecet.app.data.models.SearchResult;
 import com.lecet.app.data.models.SearchSaved;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.domain.SearchDomain;
 import com.lecet.app.utility.Log;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -79,16 +76,16 @@ public class SearchViewModel extends BaseObservable {
     public static final String SAVE_SEARCH_CATEGORY_PROJECT = "project";
     public static final String SAVE_SEARCH_CATEGORY_COMPANY = "company";
     public static final String SAVE_SEARCH_CATEGORY_CONTACT = "contact";
-    public static final int REQUEST_CODE_ZERO = 0;
-    public static final int SEE_ALL_NO_RESULT = -1;
-    public static final int SEE_ALL_PROJECTS = 0;
-    public static final int SEE_ALL_COMPANIES = 1;
-    public static final int SEE_ALL_CONTACTS = 2;
+    private static final int REQUEST_CODE_ZERO = 0;
+    private static final int SEE_ALL_NO_RESULT = -1;
+    private static final int SEE_ALL_PROJECTS = 0;
+    private static final int SEE_ALL_COMPANIES = 1;
+    private static final int SEE_ALL_CONTACTS = 2;
 
 
-    static final String CONTACT_TEXT = " Contact";
-    static final String COMPANY_TEXT = " Company";
-    static final String PROJECT_TEXT = " Project";
+    private static final String CONTACT_TEXT = " Contact";
+    private static final String COMPANY_TEXT = " Company";
+    private static final String PROJECT_TEXT = " Project";
 
     public static boolean usingInstantSearch;
     //The companyInstantSearch will be true if the company tab is on the focus.
@@ -97,8 +94,6 @@ public class SearchViewModel extends BaseObservable {
     private int seeAllForResult = SEE_ALL_NO_RESULT;
     private static AlertDialog.Builder dialogBuilder;
     private String errorMessage = null;
-    private Filter filterSearchSaved;
-    private SearchFilter searchFilterSearchSaved;
     private String saveSearchCategory = SAVE_SEARCH_CATEGORY_PROJECT;
     private String saveCompanyFilter;
 
@@ -110,15 +105,15 @@ public class SearchViewModel extends BaseObservable {
     public @interface SearchAdapterType {
     }
 
-    public static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
-    public static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
-    public static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
-    public static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY = 3;  // Project Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY = 4;  // Company Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY = 5;  // Contact Query Summary
-    public static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL = 6;      // Project Query All
-    public static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL = 7;      // Company Query All
-    public static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL = 8;      // Contact Query All
+    private static final int SEARCH_ADAPTER_TYPE_RECENT = 0;
+    private static final int SEARCH_ADAPTER_TYPE_PROJECTS = 1;
+    private static final int SEARCH_ADAPTER_TYPE_COMPANIES = 2;
+    private static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY = 3;  // Project Query Summary
+    private static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY = 4;  // Company Query Summary
+    private static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY = 5;  // Contact Query Summary
+    private static final int SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL = 6;      // Project Query All
+    private static final int SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL = 7;      // Company Query All
+    private static final int SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL = 8;      // Contact Query All
 
     private SearchActivity activity;
     private final SearchDomain searchDomain;
@@ -184,37 +179,8 @@ public class SearchViewModel extends BaseObservable {
     private boolean loadingContact;
     private int contactSkipCounter;
 
-
-    public static boolean isInitSearch() {
-        return INIT_SEARCH;
-    }
-
     public static void setInitSearch(boolean initSearch) {
         INIT_SEARCH = initSearch;
-    }
-
-    public static boolean isUsingInstantSearch() {
-        return usingInstantSearch;
-    }
-
- /*   public static void setUsingInstantSearch(boolean usingInstantSearch) {
-        usingInstantSearch = usingInstantSearch;
-    }*/
-
-    public Filter getFilterSearchSaved() {
-        return filterSearchSaved;
-    }
-
-    public void setFilterSearchSaved(Filter filterSearchSaved) {
-        this.filterSearchSaved = filterSearchSaved;
-    }
-
-    public SearchFilter getSearchFilterSearchSaved() {
-        return searchFilterSearchSaved;
-    }
-
-    public void setSearchFilterSearchSaved(SearchFilter searchFilterSearchSaved) {
-        this.searchFilterSearchSaved = searchFilterSearchSaved;
     }
 
     public String getSaveSearchCategory() {
@@ -225,6 +191,11 @@ public class SearchViewModel extends BaseObservable {
     public void setSaveSearchCategory(String saveSearchCategory) {
         Log.d(TAG, "setSaveSearchCategory: " + saveSearchCategory);
         this.saveSearchCategory = saveSearchCategory;
+    }
+
+    //passing the search filter content only of the project
+    public void setProjectSearchFilterOnly(String filter) {
+        searchDomain.setProjectFilterOnly(filter);
     }
 
 
@@ -242,7 +213,7 @@ public class SearchViewModel extends BaseObservable {
         return hideProjectSummary;
     }
 
-    public void setHideProjectSummary(int hideProjectSummary) {
+    private void setHideProjectSummary(int hideProjectSummary) {
         this.hideProjectSummary = hideProjectSummary;
         notifyPropertyChanged(BR.hideProjectSummary);
     }
@@ -252,7 +223,7 @@ public class SearchViewModel extends BaseObservable {
         return hideCompanySummary;
     }
 
-    public void setHideCompanySummary(int hideCompanySummary) {
+    private void setHideCompanySummary(int hideCompanySummary) {
         this.hideCompanySummary = hideCompanySummary;
         notifyPropertyChanged(BR.hideCompanySummary);
     }
@@ -262,18 +233,13 @@ public class SearchViewModel extends BaseObservable {
         return hideContactSummary;
     }
 
-    public void setHideContactSummary(int hideContactSummary) {
+    private void setHideContactSummary(int hideContactSummary) {
         this.hideContactSummary = hideContactSummary;
         notifyPropertyChanged(BR.hideContactSummary);
     }
 
     public void setProjectSearchFilter(String filter) {
         searchDomain.setProjectFilter(filter);
-    }
-
-    //passing the search filter content only of the project
-    public void setProjectSearchFilterOnly(String filter) {
-        searchDomain.setProjectFilterOnly(filter);
     }
 
     public void setCompanySearchFilter(String filter) {
@@ -288,42 +254,39 @@ public class SearchViewModel extends BaseObservable {
     }
 
     //Passing the whole search filter content coming from the web.
-    public void setCompanySearchFilterComplete(String filter) {
+     void setCompanySearchFilterComplete(String filter) {
         searchDomain.setCompanyFilterComplete(filter);
         Log.d("filtercomplete", "filtercomplete" + filter);
 
     }
 
-    public void setContactSearchFilter(String filter) {
-        searchDomain.setContactFilter(filter);
-    }
 
-    public void setQueryProjectTotal(int queryProjectTotal) {
+     private void setQueryProjectTotal(int queryProjectTotal) {
         this.queryProjectTotal = queryProjectTotal;
         notifyPropertyChanged(BR.queryProjectTotal);
     }
 
-    public void setQueryCompanyTotal(int queryCompanyTotal) {
+     private void setQueryCompanyTotal(int queryCompanyTotal) {
         this.queryCompanyTotal = queryCompanyTotal;
         notifyPropertyChanged(BR.queryCompanyTotal);
     }
 
-    public void setQueryContactTotal(int queryContactTotal) {
+     private void setQueryContactTotal(int queryContactTotal) {
         this.queryContactTotal = queryContactTotal;
         notifyPropertyChanged(BR.queryContactTotal);
     }
 
-    public void setQueryProjectTitle(String queryProjectTitle) {
+     private void setQueryProjectTitle(String queryProjectTitle) {
         this.queryProjectTitle = queryProjectTitle;
         notifyPropertyChanged(BR.queryProjectTitle);
     }
 
-    public void setQueryCompanyTitle(String queryCompanyTitle) {
+     private void setQueryCompanyTitle(String queryCompanyTitle) {
         this.queryCompanyTitle = queryCompanyTitle;
         notifyPropertyChanged(BR.queryCompanyTitle);
     }
 
-    public void setQueryContactTitle(String queryContactTitle) {
+     private void setQueryContactTitle(String queryContactTitle) {
         this.queryContactTitle = queryContactTitle;
         notifyPropertyChanged(BR.queryContactTitle);
     }
@@ -401,18 +364,18 @@ public class SearchViewModel extends BaseObservable {
      * Get the list of Project in Query Search Summary
      */
     private void checkQueryAndTotal() {
-        /** For Project query total view
+        /* For Project query total view
          */
         getProjectQuery(query);
         getQueryProjectTotal();
         setHideProjectSummary(View.VISIBLE);
-        /**
+        /*
          * For Company query total view
          */
         getCompanyQuery(query);
         getQueryCompanyTotal();
         setHideCompanySummary(View.VISIBLE);
-        /**
+        /*
          * For Contact query total view
          */
         getContactQuery(query);
@@ -421,7 +384,7 @@ public class SearchViewModel extends BaseObservable {
     }
 
 
-    public void getProjectQueryListSummary(SearchProject sp) {
+    private void getProjectQueryListSummary(SearchProject sp) {
         RealmList<Project> slist = sp.getResults();
 
         adapterDataProjectSummary.clear();
@@ -431,7 +394,6 @@ public class SearchViewModel extends BaseObservable {
             if (s != null) {
                 adapterDataProjectAll.add(s);
                 if (ctr < CONTENT_MAX_SIZE) adapterDataProjectSummary.add(s);
-                //else break;
                 ctr++;
 
             }
@@ -444,7 +406,7 @@ public class SearchViewModel extends BaseObservable {
      * Get the list of Company in Query Search Summary
      */
 
-    public void getCompanyQueryListSummary(SearchCompany sp) {
+    private void getCompanyQueryListSummary(SearchCompany sp) {
         RealmList<Company> slist = sp.getResults();
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -470,7 +432,7 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Get the list of Contacts in Query Search Summary
      */
-    public void getContactQueryListSummary(SearchContact sp) {
+    private void getContactQueryListSummary(SearchContact sp) {
         RealmList<Contact> slist = sp.getResults();
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -503,9 +465,7 @@ public class SearchViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
                     slist = response.body();
                     adapterDataRecentlyViewed.clear();
-                    int ctr = 0;
                     for (SearchResult s : slist) {
-                        ctr++;
                         if (s != null) {
                             adapterDataRecentlyViewed.add(s);
                         }
@@ -564,7 +524,7 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
-    public void getProjectQuery(String q) {
+    private void getProjectQuery(String q) {
         searchDomain.getSearchProjectQuery(q, new Callback<SearchProject>() {
             @Override
             public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
@@ -629,7 +589,7 @@ public class SearchViewModel extends BaseObservable {
     /**
      * Show the Saved Search Dialog for user to confirm saving of the current search query and filter.
      */
-    public void showSaveSearchDialog() {
+    private void showSaveSearchDialog() {
         if (saveSearchDialog != null && saveSearchDialog.isShowing()) {
             saveSearchDialog.dismiss();
         }
@@ -655,11 +615,7 @@ public class SearchViewModel extends BaseObservable {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = nameInput.getText().toString();
                         if (title != null && title.length() > 0) {
-                            Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
-                            // String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
-                            //String saveCompanyFilter = ((SearchActivity) getActivity()).getCompanyFilter();
-                            Log.d("saveCompany", "saveCompany" + saveCompanyFilter);
-                            // if (saveCompanyFilter != null && !saveCompanyFilter.equals("")) {
+                            //Log.d(TAG, "showSaveSearchDialog: Save: title: " + title);
                             if (SAVE_SEARCH_CATEGORY != null && getSaveSearchCategory().equals(SAVE_SEARCH_CATEGORY_COMPANY)) {
                                 saveCurrentCompanySearch(title, saveCompanyFilter);
                             } else {
@@ -700,8 +656,6 @@ public class SearchViewModel extends BaseObservable {
 
     private void saveCurrentCompanySearch(String title, String filter) {
         searchDomain.setCompanyFilter(filter);
-        Log.d("SearchActivity", "saveCurrentCompanySearch: searchDomain.getCompanyFilter(): " + searchDomain.getCompanyFilter());
-
         searchDomain.saveCurrentCompanySearch(title, this.getQuery(), new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -784,7 +738,7 @@ public class SearchViewModel extends BaseObservable {
         });
     }
 
-    /**
+    /*
      * Initialize Contact Items Adapter Search Query All
      */
     private void initializeAdapterContactQueryAll() {
@@ -793,20 +747,20 @@ public class SearchViewModel extends BaseObservable {
         contactSkipCounter = 0;
         loadingContact = true;
 
-        adapterDataContactAll = new ArrayList<Contact>();
+        adapterDataContactAll = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterContactAll = new SearchAllContactRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_ALL, adapterDataContactAll);
         recyclerView.setAdapter(searchAdapterContactAll);
         final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        /**
+        /*
          * Variables for checking if the display reaches the bottom recycle's items list.
          */
         visibleItemCount = layoutManager.getChildCount();
         totalItemCount = layoutManager.getItemCount();
         pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-        /**
+        /*
          * Scroll event for triggering the fetching of the next 25 project results to be displayed.
          *
          */
@@ -847,7 +801,7 @@ public class SearchViewModel extends BaseObservable {
      * @param q - query search value
      */
 
-    public void getCompanyAdditionalData(String q) {
+    private void getCompanyAdditionalData(String q) {
         searchDomain.getSearchCompanyQuery(q, new Callback<SearchCompany>() {
             @Override
             public void onResponse(Call<SearchCompany> call, Response<SearchCompany> response) {
@@ -884,20 +838,20 @@ public class SearchViewModel extends BaseObservable {
     private void initializeAdapterCompanyQueryAll() {
         companySkipCounter = 0;
         loadingCompany = true;
-        adapterDataCompanyAll = new ArrayList<Company>();
+        adapterDataCompanyAll = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_all);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterCompanyAll = new SearchAllCompanyRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_ALL, adapterDataCompanyAll);
         recyclerView.setAdapter(searchAdapterCompanyAll);
         final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        /**
+        /*
          * Variables for checking if the display reaches the bottom recycle's items list.
          */
         visibleItemCount = layoutManager.getChildCount();
         totalItemCount = layoutManager.getItemCount();
         pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-        /**
+        /*
          * Scroll event for triggering the fetching of the next 25 project results to be displayed.
          *
          */
@@ -908,7 +862,6 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                // Log.v("scroll", "filterCompany" + searchDomain.getCompanyFilter());
                 if (dy > 0) //check for scroll down
                 {
                     if (loadingCompany) {
@@ -924,7 +877,6 @@ public class SearchViewModel extends BaseObservable {
                             }
                             searchDomain.setCompanyFilterComplete(sf);
                             getCompanyAdditionalData(getQuery());
-                            //           Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
                 }
@@ -938,7 +890,7 @@ public class SearchViewModel extends BaseObservable {
      * @param q - query search value
      */
 
-    public void getProjectAdditionalData(String q) {
+    private void getProjectAdditionalData(String q) {
         searchDomain.getSearchProjectQuery(q, new Callback<SearchProject>() {
             @Override
             public void onResponse(Call<SearchProject> call, Response<SearchProject> response) {
@@ -977,21 +929,21 @@ public class SearchViewModel extends BaseObservable {
     private void initializeAdapterProjectQueryAll() {
         projectSkipCounter = 0;
         loadingProject = true;
-        adapterDataProjectAll = new ArrayList<Project>();
+        adapterDataProjectAll = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_all);
         setupRecyclerView(recyclerView, LinearLayout.VERTICAL);
         searchAdapterProjectAll = new SearchAllProjectRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_PROJECT_QUERY_ALL, adapterDataProjectAll);
         //recyclerView.scrollToPosition(1);
         recyclerView.setAdapter(searchAdapterProjectAll);
         final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        /**
+        /*
          * Variables for checking if the display reaches the bottom recycle's items list.
          */
         visibleItemCount = layoutManager.getChildCount();
         totalItemCount = layoutManager.getItemCount();
         pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-        /**
+        /*
          * Scroll event for triggering the fetching of the next 25 project results to be displayed.
          *
          */
@@ -1002,8 +954,7 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                // Log.d("count3","count visible:"+visibleItemCount+" total:"+totalItemCount+" past:"+pastVisiblesItems);
-                Log.v("scroll", "filter" + searchDomain.getProjectFilter());
+
                 if (dy > 0) //check for scroll down
                 {
                     if (loadingProject) {
@@ -1019,7 +970,6 @@ public class SearchViewModel extends BaseObservable {
                             }
                             searchDomain.setProjectFilter(sf);
                             getProjectAdditionalData(getQuery());
-                            Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
                 }
@@ -1031,7 +981,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Project Items Adapter Search Query Summary
      */
     private void initializeAdapterProjectQuerySummary() {
-        adapterDataProjectSummary = new ArrayList<Project>();
+        adapterDataProjectSummary = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterProjectSummary = new SearchSummaryProjectRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_PROJECT_QUERY_SUMMARY, adapterDataProjectSummary);
@@ -1042,7 +992,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Company Items Adapter Search Query
      */
     private void initializeAdapterCompanyQuerySummary() {
-        adapterDataCompanySummary = new ArrayList<Company>();
+        adapterDataCompanySummary = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterCompanySummary = new SearchSummaryCompanyRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_COMPANY_QUERY_SUMMARY, adapterDataCompanySummary);
@@ -1053,7 +1003,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Project Items Adapter Search Query
      */
     private void initializeAdapterContactQuerySummary() {
-        adapterDataContactSummary = new ArrayList<Contact>();
+        adapterDataContactSummary = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_contact_query_summary);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterContactSummary = new SearchSummaryContactRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_CONTACT_QUERY_SUMMARY, adapterDataContactSummary);
@@ -1064,7 +1014,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Recent Items Adapter
      */
     private void initializeAdapterRecentlyViewed() {
-        adapterDataRecentlyViewed = new ArrayList<SearchResult>();
+        adapterDataRecentlyViewed = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_recent);
         setupRecyclerView(recyclerView, LinearLayoutManager.HORIZONTAL);
         searchAdapterRecentlyViewed = new SearchRecentRecyclerViewAdapter(this.activity, SEARCH_ADAPTER_TYPE_RECENT, adapterDataRecentlyViewed);
@@ -1075,7 +1025,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Saved Projects Adapter
      */
     private void initializeAdapterSavedProject() {
-        adapterDataProjectSearchSaved = new ArrayList<SearchSaved>();
+        adapterDataProjectSearchSaved = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_project);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterProject = new SearchProjectRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_PROJECTS, this, adapterDataProjectSearchSaved);
@@ -1086,7 +1036,7 @@ public class SearchViewModel extends BaseObservable {
      * Initialize Saved Company Adapter
      */
     private void initializeAdapterSavedCompany() {
-        adapterDataCompanySearchSaved = new ArrayList<SearchSaved>();
+        adapterDataCompanySearchSaved = new ArrayList<>();
         RecyclerView recyclerView = getRecyclerViewById(R.id.recycler_view_company);
         setupRecyclerView(recyclerView, LinearLayoutManager.VERTICAL);
         searchAdapterCompany = new SearchCompanyRecyclerViewAdapter(SEARCH_ADAPTER_TYPE_COMPANIES, this, adapterDataCompanySearchSaved);
@@ -1111,63 +1061,58 @@ public class SearchViewModel extends BaseObservable {
     public void checkDisplayMSESectionOrMain() {
         Log.d("detailvisible", "detailvisible" + getDetailVisible());
         if (getDetailVisible()) {
-            // setIsMSE2SectionVisible(false);
             if (getIsMSR11Visible()) setIsMSR11Visible(true);
             else if (getIsMSR12Visible()) setIsMSR12Visible(true);
             else if (getIsMSR13Visible()) setIsMSR13Visible(true);
             else if (getIsMSE2SectionVisible()) setIsMSE2SectionVisible(true);
             else setIsMSE1SectionVisible(true);
             setDetailVisible(false);
-            return;
+            //return;
         } else if (isMSE1SectionVisible) {
             activity.finish();
-            return;
+            //return;
         } else if (isMSE2SectionVisible) {
-            /*setIsMSE2SectionVisible(false);
-            setIsMSE1SectionVisible(true);*/
             usingInstantSearch = true;
             INIT_SEARCH = true;
             callInit();
-            return;
-            //  setQuery("");
+           // return;
         } else if (isMSR13Visible) {
             setIsMSR13Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
-
-            return;
+           // return;
         } else if (isMSR12Visible) {
             setIsMSR12Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
-            return;
+           // return;
         } else if (isMSR11Visible) {
             setIsMSR11Visible(false);
             setIsMSE2SectionVisible(true);
             setIsMSE1SectionVisible(false);
-            return;
+           // return;
         } else {
             activity.finish();
         }
     }
 
-    void callInit() {
+    private void callInit() {
         searchDomain.initFilter();
         init();
         updateViewQuery();
     }
 
-    public void setDisplaySeeAllProject(boolean displaySeeAllProject) {
+     private void setDisplaySeeAllProject(boolean displaySeeAllProject) {
         this.displaySeeAllProject = displaySeeAllProject;
         notifyPropertyChanged(BR.displaySeeAllProject);
     }
 
-    public void setDisplaySeeAllCompany(boolean displaySeeAllCompany) {
+     private void setDisplaySeeAllCompany(boolean displaySeeAllCompany) {
         this.displaySeeAllCompany = displaySeeAllCompany;
         notifyPropertyChanged(BR.displaySeeAllCompany);
     }
 
-    public void setDisplaySeeAllContact(boolean displaySeeAllContact) {
+     private void setDisplaySeeAllContact(boolean displaySeeAllContact) {
         this.displaySeeAllContact = displaySeeAllContact;
         notifyPropertyChanged(BR.displaySeeAllContact);
     }
@@ -1194,7 +1139,7 @@ public class SearchViewModel extends BaseObservable {
         return queryEmpty;
     }
 
-    public void setQueryEmpty(boolean queryEmpty) {
+    private void setQueryEmpty(boolean queryEmpty) {
         this.queryEmpty = queryEmpty;
     }
 
@@ -1397,10 +1342,6 @@ public class SearchViewModel extends BaseObservable {
         showSaveSearchDialog();
     }
 
-    public int getSeeAllForResult() {
-        return seeAllForResult;
-    }
-
     public void onClickSeeAllProject(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
@@ -1424,13 +1365,13 @@ public class SearchViewModel extends BaseObservable {
     /**
      * setSeeAll - Used to display the previous search view correctly  after using the search filter section by the user.
      *
-     * @param seeOrder
+     * @param seeOrder - order of list
      */
 
 
     public void setSeeAll(int seeOrder) {
         seeAllForResult = seeOrder;
-        Log.d("all_see", "all_see" + seeOrder);
+        //Log.d("all_see", "all_see" + seeOrder);
         switch (seeAllForResult) {
             case SEE_ALL_PROJECTS:  //for see all Project
                 setIsMSR11Visible(true);
@@ -1457,24 +1398,4 @@ public class SearchViewModel extends BaseObservable {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
-
-    public String parseSearchFilter(String parse1) {
-        parse1 = parse1.replace("{", "").replace("}", "");
-        Log.d("companysearchfilter2", "companysearchfilter2" + parse1);
-        String parseLoc[] = parse1.split(",");
-        Log.d("parseLength", "parseLength: " + parseLoc.length);
-        if (parseLoc == null) return null;
-        String st = "";
-        int j = 0;
-        for (int i = 0; ; ++i) {
-            String[] parseEach = parseLoc[i].split("=");
-            st += "\"" + parseEach[0].trim() + "\":" + "\"" + parseEach[1].trim() + "\"";
-            ++j;
-            if (i == (parseLoc.length - 1)) break;
-            st += ",";
-        }
-        Log.d("st", "st:" + st);
-        return st;
-    }
-
 }

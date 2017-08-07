@@ -35,11 +35,11 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     @IntDef({PARENT_VIEW_TYPE, CHILD_VIEW_TYPE, GRAND_CHILD_VIEW_TYPE})
     @interface ViewTypes {
     }
+
     public static final int NO_TYPE = -1;
     private static final int PARENT_VIEW_TYPE = 0;
     private static final int CHILD_VIEW_TYPE = 1;
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
-//    public static boolean customSearch;
 
     private static int NO_IMAGE = 0;
     private CheckBox cb = null;
@@ -52,7 +52,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     private Bundle selectedParent = new Bundle(); //list of user's selected parent items
     private Bundle selectedChild = new Bundle();  //list of user's selected child item
 
-    public SearchFilterProjectTypeSingleSelectAdapter(List <SearchFilterProjectTypeAdapter.Parent>  data, SearchFilterProjectTypeViewModel viewModel) {
+    public SearchFilterProjectTypeSingleSelectAdapter(List<SearchFilterProjectTypeAdapter.Parent> data, SearchFilterProjectTypeViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;
@@ -63,7 +63,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
     }
 
-    public void clearLast() {
+    private void clearLast() {
         viewModel.setLastChecked(null);
         viewModel.setLastFamilyChecked(NO_TYPE);
         viewModel.setLastName("");
@@ -102,7 +102,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == GRAND_CHILD_VIEW_TYPE) {
-                if (data != null && gcname != null && viewModel.getLastName() !=null) {
+                if (data != null && gcname != null && viewModel.getLastName() != null) {
                     if (viewModel.getLastName().equals(gcname.getName().trim())) {
                         checkLastSelect(false);
                         gcname.setSelected(selected);
@@ -110,7 +110,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                         viewModel.setLastPosition(Integer.valueOf(grandChildIndex));
                         viewModel.setLastChildParentPosition(Integer.valueOf(grandChildParentIndex));
                         viewModel.setLastSection(section);
-                    } else if (gcname.getSelected() == true) gcname.setSelected(false);
+                    } else if (gcname.getSelected()) gcname.setSelected(false);
                 }
             }
         }
@@ -120,14 +120,14 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == CHILD_VIEW_TYPE) {
-                if (data != null && cname != null && viewModel.getLastName() !=null) {
+                if (data != null && cname != null && viewModel.getLastName() != null) {
                     if (viewModel.getLastName().equals(cname.getName().trim())) {
                         checkLastSelect(false);
                         cname.setSelected(selected);
                         vholder.checkView.setSelected(selected);
                         viewModel.setLastPosition(Integer.valueOf(truePosition));
                         viewModel.setLastSection(section);
-                    } else if (cname.getSelected() == true) cname.setSelected(false);
+                    } else if (cname.getSelected()) cname.setSelected(false);
                 }
             }
         }
@@ -137,14 +137,14 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == PARENT_VIEW_TYPE) {
-                if (data != null && pname != null && viewModel.getLastName() !=null) {
+                if (data != null && pname != null && viewModel.getLastName() != null) {
                     if (viewModel.getLastName().equals(pname.getName().trim())) {
                         checkLastSelect(false);
                         pname.setSelected(selected);
                         checkLastSelect(true);
                         vholder.checkView.setSelected(selected);
                         viewModel.setLastSection(section);
-                    } else if (pname.getSelected() == true) pname.setSelected(false);
+                    } else if (pname.getSelected()) pname.setSelected(false);
                 }
 
             }
@@ -164,7 +164,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         // Expanded scenario, where subtype and subsub are expanded
         SearchFilterProjectTypeAdapter.Parent parent = data.get(section);
         List<SearchFilterProjectTypeAdapter.Child> children = parent.getChildren();
-        if (viewModel.getCustomSearch())  {
+        if (viewModel.getCustomSearch()) {
             if (!expandedParents.contains(section)) {
                 expandedParents.add(section);   ///*** expanded
                 parent.isExpanded = true;
@@ -173,9 +173,9 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         if (children == null) return 0;
         if (viewModel.getCustomSearch()) {
             TreeMap<Integer, Integer> expanded = new TreeMap<>();
-            for (SearchFilterProjectTypeAdapter.Child child: children) {
-                if (children.get(0).getGrandChildren() !=null) {
-                    children.get(0).isExpanded=true;
+            for (SearchFilterProjectTypeAdapter.Child child : children) {
+                if (children.get(0).getGrandChildren() != null) {
+                    children.get(0).isExpanded = true;
                     expanded.put(0, children.get(0).getGrandChildren().size());
                     expandedChildren.put(section, expanded);
                 }
@@ -200,7 +200,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
                 return childrenSize + grandChildrenSize;
             } else { //for single-select PNM
-                /**
+                /*
                  * When the parent is no longer expanded, the children of this parent should be also in the mode of not be expanded.
                  */
                 int k = 0;
@@ -232,6 +232,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     public int getFooterViewType(int section) {
         return 0;
     }
+
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
@@ -253,18 +254,19 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
             checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
 
             //Note: generates an error on the server if the child has grandchildren is checkable. Only the bottom (grandchild) should be checkable)...
-            if ( child.getGrandChildren() !=null) {
+            if (child.getGrandChildren() != null) {
                 childViewHolder.checkView.setButtonDrawable(null);
             } else {
                 childViewHolder.checkView.setChecked(child.getSelected());
                 childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
             }
 
-        if (!parent.isExpanded) childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
+            if (!parent.isExpanded)
+                childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
             TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
 
-            if (child.isExpanded && expanded !=null  )
+            if (child.isExpanded && expanded != null)
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_up_black);
             else
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
@@ -274,7 +276,6 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           // customSearch = false;
                             viewModel.setCustomSearch(false);
                             cb = (CheckBox) view;
                             child.setSelected(cb.isChecked());
@@ -308,7 +309,6 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //customSearch=false;
                     viewModel.setCustomSearch(false);
                     TreeMap<Integer, Integer> expanded = expandedChildren.get(section);
                     if (expanded == null) {
@@ -405,7 +405,6 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           // customSearch = false;
                             viewModel.setCustomSearch(false);
                             CheckBox cb = (CheckBox) view;
                             grandChild.setSelected(cb.isChecked());
@@ -460,12 +459,10 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
             else
                 parentViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
         }
-        //checkLastParentSelectName(true, parent, parentViewHolder, section);
         parentViewHolder.imgView.setOnClickListener(null);
         parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //customSearch = false;
                 viewModel.setCustomSearch(false);
                 if (parent.getChildren() != null) {
                     if (expandedParents.contains(section)) {
@@ -486,14 +483,12 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //customSearch = false;
                         viewModel.setCustomSearch(false);
                         CheckBox cb = (CheckBox) view;
                         parent.setSelected(cb.isChecked());
 
                         if (cb.isChecked()) {
                             if (viewModel.getLastName() != null) {
-                               // viewModel.getLastChecked().setChecked(false);
                                 checkLastSelect(false);
                             }
 
@@ -502,22 +497,19 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                             viewModel.setLastSection(section);
                             viewModel.setLastName(cb.getText().toString().trim());
                             viewModel.clearBundle();
-                            selectedParent.putInt(parent.getName(),section);
+                            selectedParent.putInt(parent.getName(), section);
                             viewModel.addProjectTypeData(parent.getId(), parentViewHolder.checkView.getText().toString());
                         } else {
                             clearLast();
                             viewModel.clearBundle();
                             parent.setSelected(false);
                             selectedParent.remove(parent.getName());
-                           // viewModel.removeProjectTypeData(parent.getId());
                         }
 
                         notifyDataSetChanged();
                     } //end of onClick();
                 }
         );
-
-
     }
 
     @Override
@@ -644,7 +636,6 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         return position;
     }
 
-    //***
     public Integer grandChildParentIndex(Integer section, Integer adapterPosition) {
 
         if (expandedChildren.get(section).floorKey(adapterPosition) == null)
@@ -659,10 +650,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         return adapterPosition - parentPosition - 1;
     }
 
-
-    //***
     public class ParentViewHolder extends RecyclerView.ViewHolder {
-        //        public TextView textView;
         public CheckBox checkView;
         public ImageView imgView;
 
@@ -685,7 +673,6 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     }
 
     public class GrandChildTypeViewHolder extends RecyclerView.ViewHolder {
-        //        public TextView textView;
         public CheckBox checkView;
 
         public GrandChildTypeViewHolder(View itemView) {

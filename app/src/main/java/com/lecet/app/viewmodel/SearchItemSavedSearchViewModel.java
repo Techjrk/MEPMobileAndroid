@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.data.models.SearchSaved;
-import com.lecet.app.utility.Log;
 
 /**
  * File: SearchItemRecentViewModel Created: 10/17/16 Author: domandtom

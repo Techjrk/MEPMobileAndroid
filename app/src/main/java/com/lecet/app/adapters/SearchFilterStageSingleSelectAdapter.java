@@ -115,7 +115,7 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
                         viewModel.setLastPosition(Integer.valueOf(grandChildIndex));
                         viewModel.setLastChildParentPosition(Integer.valueOf(grandChildParentIndex));
                         viewModel.setLastSection(section);
-                    } else if (gcname.getSelected() == true) gcname.setSelected(false);
+                    } else if (gcname.getSelected()) gcname.setSelected(false);
                 }
             }
         }
@@ -132,7 +132,7 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
                         vholder.checkView.setSelected(selected);
                         viewModel.setLastPosition(Integer.valueOf(truePosition));
                         viewModel.setLastSection(section);
-                    } else if (cname.getSelected() == true) cname.setSelected(false);
+                    } else if (cname.getSelected()) cname.setSelected(false);
                 }
             }
         }
@@ -148,7 +148,7 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
                         checkLastSelect(true);
                         vholder.checkView.setSelected(selected);
                         viewModel.setLastSection(section);
-                    } else if (pname.getSelected() == true) pname.setSelected(false);
+                    } else if (pname.getSelected()) pname.setSelected(false);
                 }
             }
         }
@@ -249,14 +249,11 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //customSearch = false;
                             viewModel.setCustomSearch(false);
                             cb = (CheckBox) view;
                             child.setSelected(cb.isChecked());
-                            //if (child.getSelected()) {
                              if (cb.isChecked()) {
                                 if (viewModel.getLastName() != null) {
-                                  //  viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
                                 //storing the properties of the last item
@@ -379,21 +376,17 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
             final SearchFilterStageAdapter.GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
 
             grandChildViewHolder.checkView.setText(grandChild.getName());
-            //checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
             grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
             grandChildViewHolder.checkView.setOnClickListener(null);
             grandChildViewHolder.checkView.setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //customSearch = false;
                             viewModel.setCustomSearch(false);
                             CheckBox cb = (CheckBox) view;
                             grandChild.setSelected(cb.isChecked());
-                         //   if (grandChild.getSelected()){
                             if (cb.isChecked()) {
                                 if (viewModel.getLastName() != null) {
-                                  //  viewModel.getLastChecked().setChecked(false);
                                     checkLastSelect(false);
                                 }
 
@@ -436,7 +429,6 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
         parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
 
-     //   checkLastParentSelectName(true, parent, parentViewHolder, section);
         //Note: generates an error in the server if the parent is checkable. Only the bottom (child) should be checkable)...
         //parentViewHolder.checkView.setChecked(parent.getSelected());
         parentViewHolder.checkView.setButtonDrawable(null);
@@ -451,14 +443,12 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //customSearch = false;
                         viewModel.setCustomSearch(false);
                         CheckBox cb = (CheckBox) view;
                         parent.setSelected(cb.isChecked());
 
                         if (cb.isChecked()) {
                             if (viewModel.getLastName() != null) {
-                               // viewModel.getLastChecked().setChecked(false);
                                 checkLastSelect(false);
                             }
 
@@ -485,7 +475,6 @@ public class SearchFilterStageSingleSelectAdapter extends SectionedAdapter {
         parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //customSearch = false;
                 viewModel.setCustomSearch(false);
                 if (expandedParents.contains(section)) {
                     parent.setExpanded(false);

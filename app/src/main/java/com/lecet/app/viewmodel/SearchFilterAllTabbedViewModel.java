@@ -502,9 +502,9 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
      **/
 
     public void onClicked(View view) {
-        Intent i = null;
+        Intent i;
         id = view.getId();
-        int section = 0;
+        int section;
         SearchFilterAllTabbedViewModel.userCreated = false;
         switch (id) {
 

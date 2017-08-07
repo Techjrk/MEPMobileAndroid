@@ -166,11 +166,10 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             else
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
-           // checkLastChildSelectName(true, child, childViewHolder, section, truePosition);
             childViewHolder.checkView.setChecked(child.getSelected());
             childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
-            /**
+            /*
              * Checkbox OnClickListener for Child
              */
             childViewHolder.checkView.setOnClickListener(null);
@@ -178,7 +177,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           // customSearch = false;
                             viewModel.setCustomSearch(false);
                             cb = (CheckBox) view;
                             child.setSelected(cb.isChecked());
@@ -189,8 +187,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                             } else {
                                 child.setSelected(false);
                                 viewModel.removeStageData(Integer.toString(child.getId()));
-                                //clearLast();
-                                //viewModel.clearBundle();
                             }
 
                             notifyDataSetChanged();
@@ -301,18 +297,14 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //customSearch = false;
                             viewModel.setCustomSearch(false);
                             CheckBox cb = (CheckBox) view;
                             grandChild.setSelected(cb.isChecked());
                             if (grandChild.getSelected()){
-                          //  if (cb.isChecked()) {
                                 viewModel.setStageData(GRAND_CHILD_VIEW_TYPE, grandChild.getId(), grandChild.getName());
 
                             } else {
                                 viewModel.removeStageData(Integer.toString(grandChild.getId()));
-                              //  clearLast();
-                              //  viewModel.clearBundle();
                             }
 
                             notifyDataSetChanged();
@@ -348,7 +340,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //customSearch = false;
                         viewModel.setCustomSearch(false);
                         CheckBox cb = (CheckBox) view;
                         parent.setSelected(cb.isChecked());
@@ -370,7 +361,6 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         parentViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // customSearch = false;
                 viewModel.setCustomSearch(false);
                 if (expandedParents.contains(section)) {
                     parent.isExpanded = false;

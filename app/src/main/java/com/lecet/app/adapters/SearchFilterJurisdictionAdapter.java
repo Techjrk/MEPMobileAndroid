@@ -101,7 +101,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         viewModel.setLastPosition(Integer.valueOf(grandChildIndex));
                         viewModel.setLastChildParentPosition(Integer.valueOf(grandChildParentIndex));
                         viewModel.setLastSection(section);
-                    } else if (gcname.getSelected() == true) gcname.setSelected(false);
+                    } else if (gcname.getSelected()) gcname.setSelected(false);
                 }
             }
         }
@@ -118,7 +118,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         vholder.checkView.setSelected(selected);
                         viewModel.setLastPosition(Integer.valueOf(truePosition));
                         viewModel.setLastSection(section);
-                    } else if (cname.getSelected() == true) cname.setSelected(false);
+                    } else if (cname.getSelected()) cname.setSelected(false);
                 }
             }
         }
@@ -135,7 +135,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                         checkLastSelect(true);
                         vholder.checkView.setSelected(selected);
                         viewModel.setLastSection(section);
-                    } else if (pname.getSelected() == true) pname.setSelected(false);
+                    } else if (pname.getSelected()) pname.setSelected(false);
                 }
 
             }
@@ -192,7 +192,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 }
                 return childrenSize + grandChildrenSize;
             } else {
-                /**
+                /*
                  * When the parent is no longer expanded, the children of this parent should be also in the mode of not be expanded.
                  */
                 int k = 0;
@@ -252,7 +252,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             else
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
-            /**
+            /*
              * Checkbox OnClickListener for Child
              */
             childViewHolder.checkView.setOnClickListener(null);
@@ -789,10 +789,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             return regionId;
         }
 
-        public void setRegionId(int regionId) {
-            this.regionId = regionId;
-        }
-
         public void setName(String name) {
             this.name = name;
         }
@@ -805,17 +801,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             return abbreviation;
         }
 
-        public void setAbbreviation(String abbreviation) {
-            this.abbreviation = abbreviation;
-        }
-
         public String getLongName() {
             return longName;
         }
 
-        public void setLongName(String longName) {
-            this.longName = longName;
-        }
 
         public void setGrandChildren(List<GrandChild> grandChildren) {
             this.grandChildren = grandChildren;
@@ -825,13 +814,6 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             return grandChildren;
         }
 
-        public void setDistrictCouncilId(Integer districtCouncilId) {
-            this.districtCouncilId = districtCouncilId;
-        }
-
-        public Integer getDistrictCouncilId() {
-            return districtCouncilId;
-        }
     }
 
     public static class GrandChild {
@@ -871,17 +853,10 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             return abbreviation;
         }
 
-        public void setAbbreviation(String abbreviation) {
-            this.abbreviation = abbreviation;
-        }
-
         public String getLongName() {
             return longName;
         }
 
-        public void setLongName(String longName) {
-            this.longName = longName;
-        }
     }
 
 
