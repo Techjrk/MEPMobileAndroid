@@ -826,6 +826,8 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
             //  ((ProjectsNearMeActivity) activity).setupViewPager();
         } else if (id == R.id.button_filter) {
             //search.setText(null);
+            //Note: This will prevent displaying the Company tab instant search in Project Near Me filter section.
+            SearchViewModel.usingInstantSearch=false;
             setProjectFilter("default");
             //Note: Setting the requestMPNFilter to true so that when the ProjectDetailActivity is destroyed, it would NOT process the
             // filter data sharedPreferences deletion from the onResume of the ProjectsNearMeActivity class.
