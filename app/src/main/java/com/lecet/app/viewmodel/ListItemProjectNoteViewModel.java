@@ -83,6 +83,10 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         notifyPropertyChanged(BR.fullAddress);
     }
 
+    public boolean showFullAddress() {
+        return (getFullAddress() != null && !getFullAddress().isEmpty());
+    }
+
     @Bindable
     public String getAuthorName(){
         return authorName;
@@ -93,11 +97,11 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         notifyPropertyChanged(BR.authorName);
     }
 
-    public long getLoggedInUserId() {
+    private long getLoggedInUserId() {
         return loggedInUserId;
     }
 
-    public void setLoggedInUserId(long id) {
+    private void setLoggedInUserId(long id) {
         this.loggedInUserId = id;
     }
 

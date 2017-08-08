@@ -92,14 +92,8 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         notifyPropertyChanged(BR.fullAddress);
     }
 
-    public String getImageUrl() {
-        //Log.d(TAG, "getImageUrl: photo url: " + photo.getUrl());
-        return photo.getUrl();
-    }
-
-    public String getSrc() {
-        Log.d(TAG, "getSrc: photo src: " + photo.getSrc());
-        return photo.getSrc();
+    public boolean showFullAddress() {
+        return (getFullAddress() != null && !getFullAddress().isEmpty());
     }
 
     @Bindable
@@ -112,11 +106,11 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         notifyPropertyChanged(BR.authorName);
     }
 
-    public long getLoggedInUserId() {
+    private long getLoggedInUserId() {
         return loggedInUserId;
     }
 
-    public void setLoggedInUserId(long id) {
+    private void setLoggedInUserId(long id) {
         this.loggedInUserId = id;
     }
 
@@ -131,6 +125,18 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     public long getId() {
         return photo.getId();
     }
+
+    public String getImageUrl() {
+        //Log.d(TAG, "getImageUrl: photo url: " + photo.getUrl());
+        return photo.getUrl();
+    }
+
+    public String getSrc() {
+        Log.d(TAG, "getSrc: photo src: " + photo.getSrc());
+        return photo.getSrc();
+    }
+
+
 
     @BindingAdapter("bind:projectImageUrl")
     public static void loadImage(ImageView view, String url) {

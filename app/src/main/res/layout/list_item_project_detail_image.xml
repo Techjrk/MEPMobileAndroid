@@ -35,7 +35,7 @@
                 tools:src="@drawable/sample_construction_site"
                 android:onClick="@{viewModel::onImageClick}"/>
 
-            <!-- Edit Button -->
+            <!-- EDIT BUTTON -->
             <ImageView
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
@@ -76,6 +76,32 @@
 
             <include layout="@layout/rule_horiz_blue"/>
 
+            <!-- LOCATION -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:visibility="@{viewModel.showFullAddress() ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_grey_marker"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="4dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/lecetLightGray"
+                        android:text="@{viewModel.fullAddress}"
+                        android:maxLines="1"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Brooklyn, NY"/>
+
+            </LinearLayout>
+
             <!-- BODY TEXT-->
             <TextView
                 android:id="@+id/image_body_text"
@@ -99,7 +125,7 @@
 
                 <!-- PROFILE ICON -->
                 <ImageView
-                    android:id="@+id/image_author_profile_view"
+                    android:id="@+id/author_profile_view"
                     android:scaleType="fitStart"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -109,7 +135,7 @@
 
                 <!-- AUTHOR NAME -->
                 <TextView
-                    android:id="@+id/image_author"
+                    android:id="@+id/author_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
@@ -122,7 +148,7 @@
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="Erin Bernardin"/>
 
-                <!-- TIMESTAMP -->
+                <!-- RELATIVE TIMESTAMP -->
                 <TextView
                     android:id="@+id/image_timestamp"
                     android:layout_marginRight="10dp"
@@ -140,28 +166,14 @@
 
             </LinearLayout>
 
-            <!-- BOTTOM INFO WITH LOCATION AND TIMESTAMP -->
+            <!-- BOTTOM INFO WITH TIMESTAMP -->
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:orientation="horizontal"
                     android:layout_marginBottom="10dp">
 
-                <!-- LOCATION -->
-                <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:textSize="12sp"
-                        android:textColor="@color/lecetLightGray"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center"
-                        android:text="@{viewModel.fullAddress}"
-                        android:maxLines="1"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Brooklyn, NY"/>
-
-                <!-- RELATIVE TIMESTAMP -->
+                <!-- LAST UPDATED TIMESTAMP -->
                 <TextView
                         android:layout_marginRight="10dp"
                         android:layout_width="0dp"

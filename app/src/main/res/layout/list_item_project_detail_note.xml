@@ -49,7 +49,7 @@
                     bind:typeface="@{`Lato-Regular.ttf`}"
                     tools:text="This is my New Post Title"/>
 
-                <!-- EDIT ICON -->
+                <!-- EDIT BUTTON -->
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -65,15 +65,41 @@
 
             <include layout="@layout/rule_horiz_blue"/>
 
+            <!-- LOCATION -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:visibility="@{viewModel.showFullAddress() ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_grey_marker"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="4dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/lecetLightGray"
+                        android:text="@{viewModel.fullAddress}"
+                        android:maxLines="1"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Brooklyn, NY"/>
+
+            </LinearLayout>
+
             <!-- BODY TEXT-->
             <TextView
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="14dp"
+                android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1dp"
                 android:textColor="@color/pureBlack"
-                android:textSize="16sp"
                 android:text="@{viewModel.text}"
                 android:maxLines="8"
                 android:ellipsize="end"
@@ -83,12 +109,12 @@
             <!-- BOTTOM INFO: AUTHOR / DATE / LOCATION / TIME -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:orientation="horizontal"
+                android:layout_height="18dp"
                 android:layout_marginBottom="10dp">
 
                 <!-- PROFILE ICON -->
                 <ImageView
+                    android:id="@+id/author_profile_view"
                     android:scaleType="fitStart"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -98,6 +124,7 @@
 
                 <!-- AUTHOR NAME -->
                 <TextView
+                    android:id="@+id/author_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
@@ -108,7 +135,6 @@
                     android:text="@{viewModel.authorName}"
                     android:maxLines="1"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    android:id="@+id/textView"
                     tools:text="Erin Bernardin"/>
 
                 <!-- RELATIVE TIMESTAMP -->
@@ -121,35 +147,21 @@
                     android:maxLines="1"
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:text="@{viewModel.timeDifference}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="30 minutes ago"/>
+                    tools:text="1 day ago"/>
 
             </LinearLayout>
 
-            <!-- BOTTOM INFO WITH LOCATION AND TIMESTAMP -->
+            <!-- BOTTOM INFO WITH TIMESTAMP -->
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:orientation="horizontal"
                     android:layout_marginBottom="10dp">
 
-                <!-- LOCATION -->
-                <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:textSize="12sp"
-                        android:textColor="@color/lecetLightGray"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center"
-                        android:text="@{viewModel.fullAddress}"
-                        android:maxLines="1"
-                        bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="Brooklyn, NY"/>
-
-                <!-- RELATIVE TIMESTAMP -->
+                <!-- LAST UPDATED TIMESTAMP -->
                 <TextView
                         android:layout_marginRight="10dp"
                         android:layout_width="0dp"
