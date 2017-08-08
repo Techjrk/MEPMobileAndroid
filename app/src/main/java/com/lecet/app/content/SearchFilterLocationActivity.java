@@ -30,6 +30,7 @@ public class SearchFilterLocationActivity extends AppCompatActivity {
         String zip    = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_LOCATION_ZIP);*/
 
         SearchFilterLocationViewModel viewModel = new SearchFilterLocationViewModel(this);
+
         /*viewModel.setCity(city);
         viewModel.setState(state);
         viewModel.setCounty(county);
@@ -40,18 +41,12 @@ public class SearchFilterLocationActivity extends AppCompatActivity {
     }
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-            LayoutInflater inflater = getLayoutInflater();
-            //View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
-            //viewModel.setToolbar(searchBarView);
-            //  actionBar.setCustomView(searchBarView);
-            //actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowCustomEnabled(false);
         }
     }

@@ -52,11 +52,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         Intent i = getIntent();
         instantSearch = i.getBooleanExtra(FILTER_INSTANT_SEARCH, true);
 
-        //Log.d(TAG, "onCreate: instantSearch: " + instantSearch);
-
         // if coming from Search Activity when no text has been input or Saved Search used, use the tabbed Projects/Companies filter layout
         if (SearchViewModel.usingInstantSearch) {
-//            if (instantSearch) {
             ActivitySearchFiltersAllTabbedBinding sfilter = DataBindingUtil.setContentView(this, R.layout.activity_search_filters_all_tabbed);       //Projects/Companies
             sfilter.setViewModel(viewModel);
         }
@@ -140,7 +137,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
             // Activities which return result in Bundle format
             else if (bundle != null) {
-                Log.d(TAG, "onActivityResult: using Bundle");
+                //Log.d(TAG, "onActivityResult: using Bundle");
                 switch (requestCode) {
 
                     // Project Type
@@ -215,7 +212,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
             viewModel.setPersistedLocationZip(zip);
             viewModel.setLocation_select(locationText);
         }
-        Log.d(TAG, "location: " + locationText);
+       // Log.d(TAG, "location: " + locationText);
 
 
         // StringBuilder used for generating query with commas as appropriate
@@ -286,13 +283,13 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 for (String key : bundle.keySet()) {
 
                     Object value = bundle.get(key);
-                    Log.d("processProjectType: ", key + ": " + value);
+                   // Log.d("processProjectType: ", key + ": " + value);
                     displayStr += value + ", ";
 
                     // check the grandchild-level (primary type) for a matching ID
                     PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key)).findFirst();
                     if (primaryType != null) {
-                        Log.d("processProjectType: ", key + " is a Primary Type ID.");
+                    //    Log.d("processProjectType: ", key + " is a Primary Type ID.");
                         idSet.add(primaryType.getId());
                     }
 
@@ -300,7 +297,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     else {
                         SearchFilterProjectTypesProjectCategory category = realm.where(SearchFilterProjectTypesProjectCategory.class).equalTo("id", Integer.valueOf(key)).findFirst();
                         if (category != null) {
-                            Log.d("processProjectType: ", key + " is a Category ID.");
+                        //    Log.d("processProjectType: ", key + " is a Category ID.");
                             for (PrimaryProjectType primaryProjectType : category.getProjectTypes()) {
                                 idSet.add(primaryProjectType.getId());
                             }
@@ -310,7 +307,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                         else {
                             SearchFilterProjectTypesMain mainType = realm.where(SearchFilterProjectTypesMain.class).equalTo("id", Integer.valueOf(key)).findFirst();
                             if (mainType != null) {
-                                Log.d("processProjectType: ", key + " is a Main Type ID.");
+                             //   Log.d("processProjectType: ", key + " is a Main Type ID.");
                                 for (SearchFilterProjectTypesProjectCategory projectCategory : mainType.getProjectCategories()) {
                                     for (PrimaryProjectType primary : projectCategory.getProjectTypes()) {
                                         idSet.add(primary.getId());
@@ -325,8 +322,8 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     displayStr = displayStr.substring(0, displayStr.length() - 2);         //trim trailing ", "
                 }
                 idList = new ArrayList<>(idSet);
-                Log.d("processProjectType", "displayStr: " + displayStr);
-                Log.d("processProjectType", "ids: " + idList);
+               // Log.d("processProjectType", "displayStr: " + displayStr);
+               // Log.d("processProjectType", "ids: " + idList);
 
                 if (displayStr != null && displayStr.length() > MAXCHARFIELD)
                     displayStr = "\r\n" + displayStr;
@@ -341,7 +338,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 if (!idList.isEmpty()) {
                     types = "\"projectTypeId\":{\"inq\":" + idList + "}";
                     viewModel.setResultProjectType(types);
-                    Log.d("type3","type3"+types);
+                  //  Log.d("type3","type3"+types);
                     viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, types);
                 } else {
                     viewModel.setResultProjectType("");
@@ -450,21 +447,21 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                     // for a Local within a District Council which was selected directly
                     if (jurisdictionViewType == SearchFilterJurisdictionAdapter.GRAND_CHILD_VIEW_TYPE) {
-                        Log.d(TAG, "processJurisdiction: GrandChild (Local) Type Selected.");
+                       // Log.d(TAG, "processJurisdiction: GrandChild (Local) Type Selected.");
                         jList.add(jurisdictionId);
                     }
                     // for a child (District Council) selection type (1), get the District Council which name matches the jurisdictionName and only add Local IDs within that DC
                     else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.CHILD_VIEW_TYPE) {
                         SearchFilterJurisdictionDistrictCouncil selectedDistrictCouncil = realm.where(SearchFilterJurisdictionDistrictCouncil.class).equalTo("name", jurisdictionName).findFirst();
                         if (selectedDistrictCouncil != null) {
-                            Log.d(TAG, "processJurisdiction: Child Type (District Council) Selected: " + selectedDistrictCouncil);
+                          //  Log.d(TAG, "processJurisdiction: Child Type (District Council) Selected: " + selectedDistrictCouncil);
                             for (SearchFilterJurisdictionLocal local : selectedDistrictCouncil.getLocals()) {
                                 jList.add(Integer.toString(local.getId()));
                             }
                         }
                         // or if an orphaned Local with no District Council was selected
                         else {
-                            Log.d(TAG, "processJurisdiction: Child Type (Orphan Local with no District Council) Selected: " + jurisdictionName);
+                         //   Log.d(TAG, "processJurisdiction: Child Type (Orphan Local with no District Council) Selected: " + jurisdictionName);
                             SearchFilterJurisdictionLocal selectedOrphanLocal = realm.where(SearchFilterJurisdictionLocal.class).equalTo("name", jurisdictionName).findFirst();
                             jList.add(Integer.toString(selectedOrphanLocal.getId()));
                         }
@@ -473,7 +470,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     else if (jurisdictionViewType == SearchFilterJurisdictionAdapter.PARENT_VIEW_TYPE) {
                         SearchFilterJurisdictionMain mainJurisdiction = realm.where(SearchFilterJurisdictionMain.class).equalTo("name", jurisdictionName).findFirst();
                         if (mainJurisdiction != null) {
-                            Log.d(TAG, "processJurisdiction: Parent Type (Region) Selected: " + mainJurisdiction);
+                          //  Log.d(TAG, "processJurisdiction: Parent Type (Region) Selected: " + mainJurisdiction);
 
                             // first add any orphan Locals which are part of this parent Region but have no District Council
                             for (SearchFilterJurisdictionNoDistrictCouncil orphanLocal : mainJurisdiction.getLocalsWithNoDistrict()) {
@@ -494,19 +491,20 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                     String js = jList.toString();
                     jurisdictions = "\"jurisdictions\":{\"inq\":" + js + "}";
 
-                    Log.d(TAG, "processJurisdiction: jurisdictionViewType: " + jurisdictionViewType);
+                   /* Log.d(TAG, "processJurisdiction: jurisdictionViewType: " + jurisdictionViewType);
                     Log.d(TAG, "processJurisdiction: jurisdictionId: " + jurisdictionId);
                     Log.d(TAG, "processJurisdiction: jurisdictionRegionId: " + jurisdictionRegionId);
                     Log.d(TAG, "processJurisdiction: jurisdictionName: " + jurisdictionName);
                     Log.d(TAG, "processJurisdiction: jurisdictionAbbrev: " + jurisdictionAbbrev);
                     Log.d(TAG, "processJurisdiction: jurisdictionLongName: " + jurisdictionLongName);
                     Log.d(TAG, "processJurisdiction: jList for filter: " + jList);
-                    Log.d(TAG, "processJurisdiction: final filter for jurisdictions: " + jurisdictions);
+                    Log.d(TAG, "processJurisdiction: final filter for jurisdictions: " + jurisdictions);*/
+
                     viewModel.setResultJurisdiction(jurisdictions);
                 } else {
                     viewModel.setResultJurisdiction("");
                 }
-                Log.d("jurisdictiondata","jurisdictiondata"+jurisdictions);
+                // Log.d("jurisdictiondata","jurisdictiondata"+jurisdictions);
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, jurisdictions);
 
                 // display
@@ -589,9 +587,9 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
 
                 if (stageStr != null && !stageStr.trim().equals("")) {
 
-                    Log.d(TAG, "processStage: viewType: " + viewType);
+                   /* Log.d(TAG, "processStage: viewType: " + viewType);
                     Log.d(TAG, "processStage: input Stage name: " + stageStr);
-                    Log.d(TAG, "processStage: IDs: " + sList);
+                    Log.d(TAG, "processStage: IDs: " + sList);*/
 
                     stages = "\"projectStageId\":{\"inq\":" + sList.toString() + "}";
                     viewModel.setResultStage(stages);
@@ -658,7 +656,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
                 bhChar="";
                 viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, bhChar);
                 return;
-                //***
             }
             bhChar = "\"buildingOrHighway\":{\"inq\":" + bhList.toString() + "}";
             viewModel.setResultBH(bhChar);
@@ -702,7 +699,6 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
         }
         viewModel.setWork_type_select(workTypeStr);
         viewModel.setPersistedWorkType(workTypeCBId);
-        // viewModel.setPersistedWorkType(workTypeInt);
         List<String> wList = new ArrayList<>();
         if (workTypeInt != null && !workTypeInt.trim().equals("") && !workTypeStr.equalsIgnoreCase(getString(R.string.any))) {
             wList.add(workTypeInt);

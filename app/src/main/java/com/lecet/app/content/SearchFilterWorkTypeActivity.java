@@ -27,7 +27,6 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
         viewModel = new SearchFilterWorkTypeViewModel(this);
 
         if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
-           // Log.d("anywork", "anywork");
             viewModel.setLastChecked(null);
         }
 

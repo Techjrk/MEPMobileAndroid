@@ -51,7 +51,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // toolbar.setContentInsetStartWithNavigation(0);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
@@ -60,8 +59,6 @@ public class SearchActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
             LayoutInflater inflater = getLayoutInflater();
             View searchBarView = inflater.inflate(R.layout.projects_near_me_search_bar_layout, null);
-            //viewModel.setToolbar(searchBarView);
-            //  actionBar.setCustomView(searchBarView);
             actionBar.setDisplayShowCustomEnabled(true);
         }
     }
@@ -70,7 +67,6 @@ public class SearchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        Log.d(TAG, "onResume");
         SearchViewModel.usingInstantSearch=true;
 
         if (viewModel.getDetailVisible()) {
@@ -90,16 +86,6 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed");
-
-       /* if (viewModel.getIsMSE2SectionVisible()) {
-            searchDomain.initFilter();
-            viewModel.init();
-            viewModel.updateViewQuery();
-        }*/
-       /*if (viewModel.getDetailVisible()) {
-           viewModel.setDetailVisible(false);
-       } else*/
         viewModel.checkDisplayMSESectionOrMain();
     }
 
@@ -175,10 +161,6 @@ public class SearchActivity extends AppCompatActivity {
 
         // Company Location Filter e.g. {"companyLocation":{"city":"Brooklyn","state":"NY","county":"Kings","zip5":"11215"}}
         companyFilter = processCompanyLocationFilter(data);
-        // String companyLocationFilter = processCompanyLocationFilter(data);
-        /*if(companyLocationFilter.length() > 0) {
-            companiesSb.append(companyLocationFilter);
-        }*/
         if (companyFilter.length() > 0) {
             companiesSb.append(companyFilter);
         }
@@ -268,16 +250,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
         projectsCombinedFilter.replaceFirst(",", "");
-        Log.d(TAG, "onActivityResult: projectsSearchStr: " + projectsSearchStr);
-        Log.d(TAG, "onActivityResult: projectsCombinedFilter: " + projectsCombinedFilter);
+        //Log.d(TAG, "onActivityResult: projectsSearchStr: " + projectsSearchStr);
+        //Log.d(TAG, "onActivityResult: projectsCombinedFilter: " + projectsCombinedFilter);
 
         // company search with searchFilter
-/*
-        if(companiesSb.length() > 0) {
-            companiesSb.insert(0, ",\"searchFilter\":{");
-            companiesSb.append("}");
-        }
-*/
 
         String companiesCombinedFilter = companiesSb.toString();
 
@@ -286,9 +262,7 @@ public class SearchActivity extends AppCompatActivity {
          * If it is not needed, then we could comment the conditional statement below.
          */
 
-
         if (companiesSb == null || companiesSb.toString().trim().equals("")) {
-//            if (companyFilter == null || companyFilter.trim().equals("")){
             String locationFilter = projectLocationFilter.substring(projectLocationFilter.indexOf(':') + 1);
             String cFilter = "";
             if (locationFilter == null || locationFilter.toString().trim().equals("")) {
@@ -300,24 +274,19 @@ public class SearchActivity extends AppCompatActivity {
 
         } else {
             companyFilter = companiesSb.toString();
-//            viewModel.setCompanySearchFilter(companiesSb.toString());
             viewModel.setCompanySearchFilter(companyFilter);
         }
 
-//    if (companiesSb !=null && esFilterSb !=null && !companiesSb.toString().trim().equals("") && !esFilterSb.toString().trim().equals("")){
         if (esFilterSb != null && !esFilterSb.toString().trim().equals("")) {
            String esFilter = esFilterSb.toString();
 
               esFilter = esFilter.replace("projectTypeId","projectTypes");
             //parameter: searchFilter, esFilter
             viewModel.setCompanySearchFilter(companyFilter, esFilter);
-
-//            viewModel.setCompanySearchFilter(companyFilter, esFilterSb.toString());
         }
-        Log.d("companyfilterx", "companyfilterx:" + searchDomain.getCompanyFilter());
+
         companiesCombinedFilter.replaceFirst(",", "");
-        Log.d(TAG, "onActivityResult: companySb: " + companiesSb.toString());
-//        Log.d(TAG, "onActivityResult: companyCombinedFilter: " + companiesCombinedFilter);
+        // Log.d(TAG, "onActivityResult: companySb: " + companiesSb.toString());
 
         //Default section page once you clicked the Apply button of the Search Filter section page.
         viewModel.setIsMSE2SectionVisible(true);
@@ -356,7 +325,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectLocation = data.getStringExtra(SearchViewModel.FILTER_PROJECT_LOCATION);
         if (projectLocation != null && !projectLocation.equals("")) {
-            Log.d(TAG, "onActivityResult: projectLocation: " + projectLocation);
+            //Log.d(TAG, "onActivityResult: projectLocation: " + projectLocation);
             filter = projectLocation;
         }
 
@@ -370,8 +339,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String companyLocation = data.getStringExtra(SearchViewModel.FILTER_COMPANY_LOCATION);
         if (companyLocation != null) {
-            Log.d(TAG, "onActivityResult: companyLocation: " + companyLocation);
-            Log.d("companyfilterl", "companyfilterl:" + companyLocation);
+            // Log.d(TAG, "onActivityResult: companyLocation: " + companyLocation);
 
             filter = companyLocation;
         }
@@ -386,7 +354,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE);
         if (projectType != null && !projectType.equals("")) {
-            Log.d(TAG, "onActivityResult: projectType: " + projectType);
+            //Log.d(TAG, "onActivityResult: projectType: " + projectType);
             filter = projectType;
         }
         return filter;
@@ -400,7 +368,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectTypeIds = data.getStringExtra(SearchViewModel.FILTER_PROJECT_TYPE_ID);
         if (projectTypeIds != null && !projectTypeIds.equals("")) {
-            Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
+            //Log.d(TAG, "onActivityResult: projectTypeIds: " + projectTypeIds);
             filter = projectTypeIds;
         }
         return filter;
@@ -414,7 +382,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectValue = data.getStringExtra(SearchViewModel.FILTER_PROJECT_VALUE);
         if (projectValue != null && !projectValue.equals("")) {
-            Log.d(TAG, "onActivityResult: projectValue: " + projectValue);
+            //Log.d(TAG, "onActivityResult: projectValue: " + projectValue);
             filter = projectValue;
         }
         return filter;
@@ -428,7 +396,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectUpdatedWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST);
         if (projectUpdatedWithin != null && !projectUpdatedWithin.equals("")) {
-            Log.d(TAG, "onActivityResult: projectUpdatedWithin: " + projectUpdatedWithin);
+            //Log.d(TAG, "onActivityResult: projectUpdatedWithin: " + projectUpdatedWithin);
             filter = projectUpdatedWithin;
         }
         return filter;
@@ -442,7 +410,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String jurisdiction = data.getStringExtra(SearchViewModel.FILTER_PROJECT_JURISDICTION);
         if (jurisdiction != null && !jurisdiction.equals("")) {
-            Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
+            //Log.d(TAG, "onActivityResult: jurisdiction: " + jurisdiction);
             filter = jurisdiction;
         }
         return filter;
@@ -456,7 +424,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String stage = data.getStringExtra(SearchViewModel.FILTER_PROJECT_STAGE);
         if (stage != null && !stage.equals("")) {
-            Log.d(TAG, "onActivityResult: stage: " + stage);
+            //Log.d(TAG, "onActivityResult: stage: " + stage);
             filter = stage;
         }
         return filter;
@@ -470,7 +438,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectBiddingWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN);
         if (projectBiddingWithin != null && !projectBiddingWithin.equals("")) {
-            Log.d(TAG, "onActivityResult: projectBiddingWithin: " + projectBiddingWithin);
+            //Log.d(TAG, "onActivityResult: projectBiddingWithin: " + projectBiddingWithin);
             filter = projectBiddingWithin;
         }
         return filter;
@@ -484,7 +452,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String projectBuildingOrHighwayWithin = data.getStringExtra(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY);
         if (projectBuildingOrHighwayWithin != null && !projectBuildingOrHighwayWithin.equals("")) {
-            Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
+            //Log.d(TAG, "onActivityResult: projectBuildingOrHighwayWithin: " + projectBuildingOrHighwayWithin);
             filter = projectBuildingOrHighwayWithin;
         }
         return filter;
@@ -498,7 +466,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String ownerType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_OWNER_TYPE);
         if (ownerType != null && !ownerType.equals("")) {
-            Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
+            //Log.d(TAG, "onActivityResult: ownerType: " + ownerType);
             filter = ownerType;
         }
         return filter;
@@ -512,7 +480,7 @@ public class SearchActivity extends AppCompatActivity {
         String filter = "";
         String workType = data.getStringExtra(SearchViewModel.FILTER_PROJECT_WORK_TYPE);
         if (workType != null && !workType.equals("")) {
-            Log.d(TAG, "onActivityResult: workType: " + workType);
+            //Log.d(TAG, "onActivityResult: workType: " + workType);
             filter = workType;
         }
         return filter;

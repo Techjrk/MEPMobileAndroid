@@ -42,7 +42,6 @@ public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-       // SearchFilterOwnerTypeViewModel.lastChecked=null;
         viewModel.setLastChecked(null);
     }
     private void setupToolbar() {
