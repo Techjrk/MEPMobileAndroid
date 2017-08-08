@@ -446,6 +446,12 @@
     <string name="lastChildParentPosition">lastChildParentPosition</string>
     <string name="lastName">lastName</string>
     <string name="lastFamilyChecked">lastFamilyChecked</string>
+    <string name="seconds_ago">Seconds Ago</string>
+    <string name="just_now">Just Now</string>
+    <string name="minutes_ago">Minute(s) Ago</string>
+    <string name="hours_ago">Hour(s) Ago</string>
+    <string name="days_ago">Days(s) Ago</string>
+    <string name="years_ago">Year(s) Ago</string>
 
     <!-- Search -->
     <!-- Note on phrasing: Use "[Search for] [query] [in/on] [LECET] -->

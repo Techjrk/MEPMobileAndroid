@@ -81,7 +81,7 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingLeft="4dp"
+                        android:paddingStart="4dp"
                         android:textSize="12sp"
                         android:textColor="@color/lecetLightGray"
                         android:text="@{viewModel.fullAddress}"
@@ -93,8 +93,9 @@
 
             <!-- BODY TEXT-->
             <TextView
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="14dp"
+                android:id="@+id/image_body_text"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,75 +107,73 @@
                 bind:typeface="@{`Lato-Regular.ttf`}"
                 tools:text="@string/testing_purposes_lorem_ipsum"/>
 
-            <!-- BOTTOM INFO: AUTHOR / DATE / LOCATION / TIME -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="18dp"
                 android:layout_marginBottom="10dp">
 
-                <!-- PROFILE ICON -->
-                <ImageView
-                    android:id="@+id/author_profile_view"
-                    android:scaleType="fitStart"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/ic_image_placeholder"/>
-
-                <!-- AUTHOR NAME -->
-                <TextView
-                    android:id="@+id/author_name"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:textSize="14sp"
-                    android:textColor="@color/lecetMediumBlue"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center"
-                    android:text="@{viewModel.authorName}"
-                    android:maxLines="1"
-                    bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="Erin Bernardin"/>
-
                 <!-- RELATIVE TIMESTAMP -->
                 <TextView
-                    android:layout_marginRight="10dp"
-                    android:layout_width="0dp"
+                    android:id="@+id/image_timestamp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="3"
                     android:maxLines="1"
                     android:textSize="12sp"
                     android:textColor="@color/lecetLightGray"
-                    android:gravity="end"
-                    android:text="@{viewModel.timeDifference}"
+                    android:text="@{viewModel.getDateUpdatedForDisplay()}"
                     bind:typeface="@{`Lato-Regular.ttf`}"
-                    tools:text="1 day ago"/>
+                    tools:text="Last updated: 30 minutes ago"/>
 
             </LinearLayout>
 
             <!-- BOTTOM INFO WITH TIMESTAMP -->
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="14dp"
                     android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginBottom="10dp">
 
-                <!-- LAST UPDATED TIMESTAMP -->
+                <!-- PROFILE ICON -->
+                <ImageView
+                        android:id="@+id/author_profile_view"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="fitStart"
+                        android:adjustViewBounds="true"
+                        android:src="@mipmap/ic_image_placeholder"/>
+
+                <!-- AUTHOR NAME -->
                 <TextView
-                        android:layout_marginRight="10dp"
+                        android:id="@+id/author_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12"
+                        android:textSize="12sp"
+                        android:textColor="@color/lecetMediumBlue"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center"
+                        android:text="@{viewModel.authorName}"
+                        android:maxLines="1"
+                        bind:typeface="@{`Lato-Regular.ttf`}"
+                        tools:text="Erin Bernardin"/>
+
+                <!-- DATE CREATED TIMESTAMP -->
+                <TextView
+                        android:layout_marginEnd="10dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:maxLines="1"
                         android:textSize="12sp"
-                        android:textColor="@color/lecetLightGray"
-                        android:gravity="right"
-                        android:text="@{viewModel.getDateUpdatedForDisplay}"
+                        android:textColor="@color/lecetTextDarkGray"
+                        android:gravity="end"
+                        android:text="@{viewModel.getDateCreatedForDisplay()}"
                         bind:typeface="@{`Lato-Regular.ttf`}"
-                        tools:text="July 26, 2017, 2:35pm"/>
+                        tools:text="July 16, 2017"/>
 
             </LinearLayout>
 

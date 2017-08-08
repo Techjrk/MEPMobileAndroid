@@ -118,13 +118,16 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     }
 
     public String getDateUpdatedForDisplay() {
-        TimeZone localTimeZone = TimeZone.getDefault();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d yyyy, hh:mm aaa");
-        simpleDateFormat.setTimeZone(localTimeZone);
-        String displayDate = simpleDateFormat.format(note.getUpdatedAt());
-        return displayDate;
+        return "Last updated: " + getTimeDifference();
     }
 
+    public String getDateCreatedForDisplay() {
+        TimeZone localTimeZone = TimeZone.getDefault();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d yyyy");
+        simpleDateFormat.setTimeZone(localTimeZone);
+        String displayDate = simpleDateFormat.format(note.getCreatedAt());
+        return displayDate;
+    }
 
     ///////////////////////////
     // Click Events
@@ -166,7 +169,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
      */
 
     //TODO - move to utils class?
-    public String getTimeDifference(){
+    private String getTimeDifference(){
         long currentTime = System.currentTimeMillis();
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
@@ -175,34 +178,34 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
         if(difference < 0){
             Log.e(TAG, "getTimeDifference: Less then 0");
+            return "";
         }
         if(difference < 30000L){//less then 30 seconds
-            return "Just Now";
+            return activity.getString(R.string.just_now);
         }
         difference /= 1000L;//to seconds
 
         if(difference < 60L){//less then a minute
-            return difference + " Seconds Ago";
+            return difference + " " + activity.getString(R.string.seconds_ago);
         }
         difference /= 60L;//to minutes
 
         if(difference < 60L){//less then an hour
-            return difference + " Minute(s) Ago";
+            return difference + " " + activity.getString(R.string.minutes_ago);
         }
 
         difference /= 60L;//to hours
 
         if(difference < 60L){
-            return difference + " Hour(s) Ago";
+            return difference + " " + activity.getString(R.string.hours_ago);
         }
         difference /= 24L;
 
         if(difference < 24L) {//less then a Day
-            return difference + " Days(s) Ago";
+            return difference + " " + activity.getString(R.string.days_ago);
         }
         difference /= 365L;//to Years
-        return difference + " Year(s) Ago";
-
+        return difference + " " + activity.getString(R.string.years_ago);
     }
 
 }
