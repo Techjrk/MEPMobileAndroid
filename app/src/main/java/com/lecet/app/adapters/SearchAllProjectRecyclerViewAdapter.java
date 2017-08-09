@@ -53,10 +53,7 @@ public class SearchAllProjectRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-//        final String mapsApiKey = appCompatActivity.getBaseContext().getResources().getString(google_api_key);
         final String mapsApiKey = activity.getBaseContext().getResources().getString(google_api_key);
-
         ProjectQuerySearchViewHolder viewHolder = (ProjectQuerySearchViewHolder) holder;
         SearchItemRecentViewModel vm = new SearchItemRecentViewModel((Project) data.get(position), mapsApiKey, activity.getViewModel());
         viewHolder.getBinding().setViewModel(vm);

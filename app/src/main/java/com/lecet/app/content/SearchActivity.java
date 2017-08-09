@@ -250,8 +250,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
         projectsCombinedFilter.replaceFirst(",", "");
-        //Log.d(TAG, "onActivityResult: projectsSearchStr: " + projectsSearchStr);
-        //Log.d(TAG, "onActivityResult: projectsCombinedFilter: " + projectsCombinedFilter);
+        Log.d(TAG, "onActivityResult: projectsSearchStr: " + projectsSearchStr);
 
         // company search with searchFilter
 
@@ -286,7 +285,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         companiesCombinedFilter.replaceFirst(",", "");
-        // Log.d(TAG, "onActivityResult: companySb: " + companiesSb.toString());
+         //Log.d(TAG, "onActivityResult: companySb: " + companiesSb.toString());
 
         //Default section page once you clicked the Apply button of the Search Filter section page.
         viewModel.setIsMSE2SectionVisible(true);

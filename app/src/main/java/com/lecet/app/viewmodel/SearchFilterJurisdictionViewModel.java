@@ -369,7 +369,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             b = new Bundle();
             for (String keyID : sIDs) {
                 b.putString(keyID, spref.getString(keyID, ""));
-                Log.d("getPrefBundle", "getPrefBundle" + keyID + " : " + spref.getString(keyID, ""));
+                Log.d(TAG, "getPrefBundle: Preference Bundle keyID: " + keyID + " : " + spref.getString(keyID, ""));
             }
         }
         return b;

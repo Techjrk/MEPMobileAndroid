@@ -18,6 +18,7 @@ import com.lecet.app.utility.Log;
 
 public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
     private AppCompatActivity activity;
+    private static final String TAG ="SearchFilterUpdatedWithinViewModel";
     public static final String BUNDLE_KEY_DISPLAY_STR = "com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel.display.displayText.extra";
     public static final String BUNDLE_KEY_DAYS_INT = "com.lecet.app.viewmodel.SearchFilterUpdatedWithinViewModel.display.daysInt.extra";
     private String displayStr = "Any";
@@ -33,7 +34,7 @@ public class SearchFilterUpdatedWithinViewModel extends BaseObservable {
         Intent i = activity.getIntent();
         String display = i.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DISPLAY_STR);
         String dayValue = i.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_UPDATED_WITHIN_DAYS_INT);
-        Log.d("display","display"+display+" dayValue"+dayValue);
+        Log.d(TAG,"constructor: display"+display+" dayValue"+dayValue);
         if (display !=null && !display.isEmpty() && dayValue !=null && !dayValue.isEmpty()) {
             setUpdatedWithinData(i.getStringExtra(display), i.getStringExtra(dayValue));
         }

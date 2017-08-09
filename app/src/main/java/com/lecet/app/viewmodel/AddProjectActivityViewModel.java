@@ -378,7 +378,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         }
         Call<Project> call;
         Calendar c = Calendar.getInstance();
-        Log.d("CurrentTime","Current time => " + c.getTime());
+        Log.d(TAG,"postProject: Current time => " + c.getTime());
         /** Getting the date today for firstPublishDate for Recently Project Added and
          * for lastPublishDat for Recently Project Updated
          * Note: The date format should be in UTC and in the format of "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
@@ -815,7 +815,7 @@ public class AddProjectActivityViewModel extends BaseObservableViewModel impleme
         // check the grandchild-level (primary type) for a matching ID
         PrimaryProjectType primaryType = realm.where(PrimaryProjectType.class).equalTo("id", Integer.valueOf(key.trim())).findFirst();
         if (primaryType != null) {
-            Log.d("mainTitle", "mainTitle" + primaryType.getTitle());
+            Log.d(TAG, "searchBackProjectTypeName: mainTitle" + primaryType.getTitle());
             projectName = primaryType.getTitle();
         }   // if that's null, look for a matching child-level (subcategory) ID and if found, add all of its primary type IDs
 

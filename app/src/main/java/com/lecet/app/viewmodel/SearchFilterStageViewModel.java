@@ -329,7 +329,7 @@ void getLastCheckedItems(){
         SharedPreferences sprefView = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"view", Context.MODE_PRIVATE);
         if (sprefName != null) {
             Set<String> sIDs = sprefName.getAll().keySet();
-            Log.d("sids","sids"+sIDs);
+            Log.d(TAG,"getPrefBundle: SharedPreferences stage bundle key ids:"+sIDs);
             if (sIDs == null || sIDs.size() == 0) return null;
             b = new Bundle();
 
@@ -339,8 +339,7 @@ void getLastCheckedItems(){
                 b2.putString(BUNDLE_KEY_NAME, sprefName.getString(keyID, ""));
                 b2.putString(BUNDLE_KEY_VIEW_TYPE,sprefView.getString(keyID,""));
                 b.putBundle(keyID,b2);
-                Log.d("getPrefStageBundle","getPrefStageBundle"+keyID+" : "+sprefName.getString(keyID,"")+":"+sprefView.getString(keyID,""));
-
+                Log.d(TAG,"getPrefBundle: Preferences Stage Bundle id="+keyID+" : name="+sprefName.getString(keyID,""));
                 if (sprefView.getString(keyID,"").equals("")) lastFamilyChecked = Integer.valueOf(sprefView.getString(keyID,""));
                 setLastName(sprefName.getString(keyID, ""));
             }

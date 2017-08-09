@@ -26,7 +26,6 @@ public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
          viewModel = new SearchFilterOwnerTypeViewModel(this);
 
         if (sdata.equalsIgnoreCase(SearchFilterAllTabbedViewModel.ANY)) {
-            Log.d("any","any");
             viewModel.setLastChecked(null);
         }
 

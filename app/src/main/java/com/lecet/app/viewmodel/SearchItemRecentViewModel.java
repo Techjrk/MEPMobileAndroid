@@ -43,7 +43,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
     SearchViewModel viewModel;
     private boolean hasStarCard;
     ProjectDomain projectDomain;
-
+    private static final String TAG = "SearchItemRecentViewModel";
     /**
      * This is for viewing all section for project, company and contacts with SearchViewModel
      *
@@ -330,7 +330,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     try {
-                        Log.d("saverecentproject", "saverecentproject" + response.body().string() + ":" + projectId);
+                        Log.d(TAG, "saveRecentlyProject: save recently project body " + response.body().string() + ":" + projectId);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -338,10 +338,10 @@ public class SearchItemRecentViewModel extends BaseObservable {
                 } else {
 
                     try {
-                        Log.e("unsuccessful", "unsuccessul response : " + response.errorBody().string() + ":" + projectId);
+                        Log.e(TAG, "saveRecentlyProject: unsuccessul response : " + response.errorBody().string() + ":" + projectId);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.e("unsuccessful", "unsuccessul response ioexception");
+                        Log.e(TAG, "saveRecentlyProject: unsuccessul response ioexception");
                     }
                 }
             }
@@ -349,7 +349,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                Log.e("unsuccessful", "unsuccessul response failure");
+                Log.e(TAG, "saveRecentlyProject: unsuccessul response failure");
             }
         });
     }
@@ -365,17 +365,17 @@ public class SearchItemRecentViewModel extends BaseObservable {
                 if (response.isSuccessful()) {
 
                     try {
-                        Log.d("saverecentcompany", "saverecentcompany" + response.body().string() + ":" + companyId);
+                        Log.d(TAG, "saveRecentlyCompany: save recently company body: " + response.body().string() + ":" + companyId);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 } else {
                     try {
-                        Log.e("unsuccessful", "unsuccessul response : " + response.errorBody().string() + ":" + companyId);
+                        Log.e(TAG, "saveRecentlyCompany: unsuccessul response : " + response.errorBody().string() + ":" + companyId);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.e("unsuccessful", "unsuccessul response ioexception");
+                        Log.e(TAG, "saveRecentlyCompany: unsuccessul response ioexception");
                     }
                 }
             }
@@ -383,7 +383,7 @@ public class SearchItemRecentViewModel extends BaseObservable {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //errorDisplayMsg(t.getLocalizedMessage());
-                Log.e("unsuccessful", "unsuccessul response failure");
+                Log.e(TAG, "saveRecentlyCompany: unsuccessul response failure");
             }
         });
     }

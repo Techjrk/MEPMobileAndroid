@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.nfc.Tag;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.v7.app.AlertDialog;
@@ -244,19 +245,19 @@ public class SearchViewModel extends BaseObservable {
 
     public void setCompanySearchFilter(String filter) {
         searchDomain.setCompanyFilter(filter);
-        Log.d("setcompanyfilter", "setcompanyfilter" + filter);
+        Log.d(TAG, "setCompanySearchFilter: set company sfilter value: " + filter);
 
     }
 
     public void setCompanySearchFilter(String sFilter, String esFilter) {
         searchDomain.setCompanyFilter(sFilter, esFilter);
-        Log.d("setcompanyfilter2", "setcompanyfilter2 sFilter:" + sFilter + " esFilter:" + esFilter);
+        Log.d(TAG, "setCompanySearchFilter:  sFilter:" + sFilter + " esFilter:" + esFilter);
     }
 
     //Passing the whole search filter content coming from the web.
      void setCompanySearchFilterComplete(String filter) {
         searchDomain.setCompanyFilterComplete(filter);
-        Log.d("filtercomplete", "filtercomplete" + filter);
+        Log.d(TAG, "setCompanySearchFilterComplete: filter=" + filter);
 
     }
 
@@ -299,7 +300,6 @@ public class SearchViewModel extends BaseObservable {
         this.searchDomain = sd;
         setErrorMessage(null);
         seeAllForResult = -1;
-        //init();
     }
 
 
@@ -634,7 +634,7 @@ public class SearchViewModel extends BaseObservable {
      * Make the save search call and handle its callback
      */
     private void saveCurrentProjectSearch(String title) {
-        Log.d("SearchActivity", "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
+        Log.d(TAG, "saveCurrentProjectSearch: searchDomain.getProjectFilter(): " + searchDomain.getProjectFilter());
 
 
         searchDomain.saveCurrentProjectSearch(title, this.getQuery(), new Callback<ResponseBody>() {
@@ -684,10 +684,10 @@ public class SearchViewModel extends BaseObservable {
             if (dialogBuilder == null)
                 dialogBuilder = new AlertDialog.Builder(activity); //Applying singleton;
             dialogBuilder.setTitle(activity.getString(R.string.error_network_title) + "\r\n" + errorMessage + "\r\n");
-            Log.e("Error:", "Error " + errorMessage);
+            Log.e(TAG, "Error " + errorMessage);
             dialogBuilder.setMessage(errorMessage);
             dialogBuilder.setNegativeButton(activity.getString(R.string.ok), null);
-            Log.e("SearchViewModel", "onFailure: " + errorMessage);
+            Log.e(TAG, "onFailure: " + errorMessage);
             dialogBuilder.show();
         } catch (Exception e) {
             handleError(message);
@@ -698,7 +698,7 @@ public class SearchViewModel extends BaseObservable {
      * Handle error
      */
     private void handleError(String errMsg) {
-        Log.e("SearchViewModel", "ERROR: " + errMsg);
+        Log.e(TAG, "ERROR: " + errMsg);
     }
 
     /**
@@ -771,7 +771,6 @@ public class SearchViewModel extends BaseObservable {
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                //   Log.v("scroll", "filterContact" + searchDomain.getContactFilter());
                 if (dy > 0) //check for scroll down
                 {
                     if (loadingContact) {
@@ -787,7 +786,6 @@ public class SearchViewModel extends BaseObservable {
                             }
                             searchDomain.setContactFilter(sf);
                             getContactAdditionalData(getQuery());
-                            //     Log.v("Bottom", "Bottom. filter:" + sf);
                         }
                     }
                 }
@@ -1059,7 +1057,7 @@ public class SearchViewModel extends BaseObservable {
     }
 
     public void checkDisplayMSESectionOrMain() {
-        Log.d("detailvisible", "detailvisible" + getDetailVisible());
+        Log.d(TAG, "checkDisplayMSESectionOrMain: detailvisible value: " + getDetailVisible());
         if (getDetailVisible()) {
             if (getIsMSR11Visible()) setIsMSR11Visible(true);
             else if (getIsMSR12Visible()) setIsMSR12Visible(true);
@@ -1345,14 +1343,14 @@ public class SearchViewModel extends BaseObservable {
     public void onClickSeeAllProject(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_PROJECT);
         setSeeAll(SEE_ALL_PROJECTS);
-        Log.d("all_project", "allproject" + SEE_ALL_PROJECTS);
+        Log.d(TAG, "onClickSeeAllProject: allproject=" + SEE_ALL_PROJECTS);
         usingInstantSearch=false;
     }
 
     public void onClickSeeAllCompany(View view) {
         setSaveSearchCategory(SAVE_SEARCH_CATEGORY_COMPANY);
         setSeeAll(SEE_ALL_COMPANIES);
-        Log.d("all_company", "allcompany:" + SEE_ALL_COMPANIES);
+        Log.d(TAG, "onClickSeeAllCompany: allcompany=:" + SEE_ALL_COMPANIES);
         usingInstantSearch = true;
     }
 
@@ -1371,7 +1369,7 @@ public class SearchViewModel extends BaseObservable {
 
     public void setSeeAll(int seeOrder) {
         seeAllForResult = seeOrder;
-        //Log.d("all_see", "all_see" + seeOrder);
+        Log.d(TAG, "setSeeAll: all_see order: " + seeOrder);
         switch (seeAllForResult) {
             case SEE_ALL_PROJECTS:  //for see all Project
                 setIsMSR11Visible(true);

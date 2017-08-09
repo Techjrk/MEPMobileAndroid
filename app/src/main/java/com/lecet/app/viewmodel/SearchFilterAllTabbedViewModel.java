@@ -181,7 +181,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         if (spref != null) {
             getPrefFilterFieldValues(spref);
         } else {
-            Log.d("sprefnull", "sprefnull");
+            Log.d(TAG, "SharedPreferences is null");
         }
     }
 
@@ -619,10 +619,10 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     public void onClickedProjectCompanyTab(View view) {
         isProjectViewVisible = view.getId() == R.id.btn_project;
         if (getIsProjectViewVisible()) {
-            Log.d("SearchFilterMPFVM", "project tab clicked");
+            Log.d(TAG, "onClickedProjectCompanyTab: project tab clicked");
             SearchViewModel.companyInstantSearch=false;
         } else {
-            Log.d("SearchFilterMPFVM", "company tab clicked");
+            Log.d(TAG, "onClickedProjectCompanyTab: company tab clicked");
             //Focus in company. Search for the Company.
             SearchViewModel.companyInstantSearch=true;
         }
@@ -969,7 +969,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
 
     public void setResultBiddingWithin(String resultBiddingWithin) {
         this.resultBiddingWithin = resultBiddingWithin;
-        Log.d("resultBW", "resultBW" + resultBiddingWithin);
+        Log.d(TAG, "setResultBiddingWithin: result value of BiddingWithn: " + resultBiddingWithin);
     }
 
     public String getResultValue() {

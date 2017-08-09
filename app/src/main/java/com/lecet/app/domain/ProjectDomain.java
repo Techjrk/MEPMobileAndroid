@@ -210,7 +210,7 @@ public class ProjectDomain {
         startDateMidnight.set(Calendar.MINUTE, 0);
         startDateMidnight.set(Calendar.SECOND, 0);
         startDateMidnight.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Log.d("timezonedate","timezonedate"+": month="+startDateMidnight.get(Calendar.MONTH)+": hour_day="+startDateMidnight.get(Calendar.HOUR_OF_DAY)+" : hour=" +startDateMidnight.get(Calendar.HOUR)+": min="+startDateMidnight.get(Calendar.MINUTE));
+        Log.d(TAG,"getStartDateMidnightUTC: timezonedate"+": month="+startDateMidnight.get(Calendar.MONTH)+": hour_day="+startDateMidnight.get(Calendar.HOUR_OF_DAY)+" : hour=" +startDateMidnight.get(Calendar.HOUR)+": min="+startDateMidnight.get(Calendar.MINUTE));
         return startDateMidnight.getTime();
     }
 
@@ -684,12 +684,12 @@ public class ProjectDomain {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Log.d("realmsoonsuccess","realm soon success");
+                Log.d(TAG,"beforeUpdateRealm4HappeningSoon: realm soon success");
             }},new Realm.Transaction.OnError() {
 
                 @Override
                 public void onError(Throwable error) {
-                    Log.d("realmsoonerror","realm soon error");
+                    Log.e(TAG,"beforeUpdateRealm4HappeningSoon: realm soon error");
                 }});
     }
     public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {

@@ -18,7 +18,7 @@ import java.util.TimeZone;
  */
 
 public class DateUtility {
-
+    private static final String TAG ="DateUtility";
     private static final SimpleDateFormat sBidFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     private static final SimpleDateFormat sDisplayFormat = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -167,7 +167,7 @@ public class DateUtility {
         long longLocal = cal.getTimeInMillis();
         int inLocal = tz.getOffset(longLocal);
         hoursdiff = (inUTC - inLocal)/ (1000 * 60 * 60);
-        Log.d("Time diff: ", "Timezonediff:" + hoursdiff);
+        Log.d(TAG, "convertUTCDate2LocalDate: Timezonediff:" + hoursdiff);
 
         return DateUtility.addHours(UTCDate,-hoursdiff);
     }
