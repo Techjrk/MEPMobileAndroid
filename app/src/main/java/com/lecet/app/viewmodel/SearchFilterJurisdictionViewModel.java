@@ -60,7 +60,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     private Bundle bundle;
     private RealmResults<SearchFilterJurisdictionMain> realmJurisdictions;
     private String query;
-    private List<SearchFilterJurisdictionAdapter.Parent> data;
+    private List<SearchFilterJurisdictionAdapter.JurisdictionMain> data;
     private SearchFilterJurisdictionAdapter adapter;
 
     /**
@@ -238,16 +238,16 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             hasChild = false;
             foundParent = false;
             containGrandChild.clear();
-            SearchFilterJurisdictionAdapter.Parent parent = new SearchFilterJurisdictionAdapter.Parent();
-            parent.setId(jMain.getId());
-            parent.setName(jMain.getName());
-            parent.setAbbreviation(jMain.getAbbreviation());
-            parent.setLongName(jMain.getLongName());
-            if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
+            SearchFilterJurisdictionAdapter.JurisdictionMain adapterMain = new SearchFilterJurisdictionAdapter.JurisdictionMain();
+            adapterMain.setId(jMain.getId());
+            adapterMain.setName(jMain.getName());
+            adapterMain.setAbbreviation(jMain.getAbbreviation());
+            adapterMain.setLongName(jMain.getLongName());
+            if (adapterMain.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
                 foundParent = true;
             }
-            if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(parent.getId()))) {
-                parent.setSelected(true);
+            if (!bundle.isEmpty() && bundle.getString(BUNDLE_KEY_ID).equalsIgnoreCase(String.valueOf(adapterMain.getId()))) {
+                adapterMain.setSelected(true);
             }
             children = new ArrayList<>();
 
@@ -258,10 +258,10 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             processDistrict(jMain, children, searchKey);
 
             if (!children.isEmpty()) {
-                parent.setChildren(children);
+                adapterMain.setChildren(children);
             }
 
-            if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
+            if (adapterMain != null && (hasChild || hasGrandChild) || foundParent) data.add(adapterMain);
         }
 
         adapter = new SearchFilterJurisdictionAdapter(data, this);
