@@ -189,7 +189,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 else voiceLaunchCode = -1;
 
                 //create a handler to delay a call and show the progress screen in the meantime //TODO - convert this to a listener for when the layouts have completed being drawn
-                // TODO - show progress dialog
+                viewModel.showProgressDialog();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -198,7 +198,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                         ActionMenuItemView folderMenu = (ActionMenuItemView) findViewById(R.id.menu_item_folder);
                         Log.d(TAG, "onCreate: folderMenu: " + folderMenu);
                         toogleMTMMenu(voiceLaunchCode);
-                        //TODO - hide progress dialog
+                        viewModel.dismissProgressDialog();
                     }
                 }, 1000);
                 return voiceLaunchCode;
