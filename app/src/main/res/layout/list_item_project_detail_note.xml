@@ -102,9 +102,9 @@
                 android:lineSpacingExtra="1dp"
                 android:textColor="@color/pureBlack"
                 android:text="@{viewModel.text}"
-                android:maxLines="8"
                 android:ellipsize="end"
                 bind:typeface="@{`Lato-Regular.ttf`}"
+                tools:maxLines="8"
                 tools:text="@string/testing_purposes_lorem_ipsum"/>
 
             <LinearLayout

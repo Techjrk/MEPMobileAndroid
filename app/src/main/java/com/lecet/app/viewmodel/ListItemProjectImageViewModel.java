@@ -150,6 +150,10 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     }
 
     public String getDateUpdatedForDisplay() {
+        // not updated since created? no need to display updated at
+        if(photo.getUpdatedAt().getTime() - photo.getCreatedAt().getTime() < 3000) {
+            return "";
+        }
         return "Last updated: " + getTimeDifference();
     }
 

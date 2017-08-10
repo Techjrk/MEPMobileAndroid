@@ -118,6 +118,10 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     }
 
     public String getDateUpdatedForDisplay() {
+        // not updated since created? no need to display updated at
+        if(note.getUpdatedAt().getTime() - note.getCreatedAt().getTime() < 3000) {
+            return "";
+        }
         return "Last updated: " + getTimeDifference();
     }
 
