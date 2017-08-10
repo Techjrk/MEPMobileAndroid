@@ -107,7 +107,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         }
     }
 
-    private void checkLastChildSelectName(boolean selected, Child cname, ChildViewHolder vholder, int section, int truePosition) {
+    private void checkLastChildSelectName(boolean selected, JurisdictionCouncil cname, ChildViewHolder vholder, int section, int truePosition) {
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == CHILD_VIEW_TYPE) {
@@ -155,7 +155,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         // Expanded scenario, where subtype and subsub are expanded
         JurisdictionMain jurisdictionMain = data.get(section);
-        List<Child> children = jurisdictionMain.getChildren();
+        List<JurisdictionCouncil> children = jurisdictionMain.getChildren();
         if (viewModel.getCustomSearch()) {
             if (!expandedParents.contains(section)) {
                 expandedParents.add(section);   ///*** expanded
@@ -166,7 +166,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         if (viewModel.getCustomSearch()) {
             TreeMap<Integer, Integer> expanded = new TreeMap<>();
 
-            for (Child child : children) {
+            for (JurisdictionCouncil child : children) {
                 if (children.get(0).getGrandChildren() != null) {
                     children.get(0).isExpanded = true;
                     expanded.put(0, children.get(0).getGrandChildren().size());
@@ -197,7 +197,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                  */
                 int k = 0;
                 if (children != null)
-                    for (Child child : children) {
+                    for (JurisdictionCouncil child : children) {
                         children.get(k).isExpanded = false;
                         k++;
                     }
@@ -234,7 +234,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
 
         if (holder instanceof ChildViewHolder && isChild) {
             final Integer truePosition = childPositionInIndex(section, position);
-            final Child child = jurisdictionMain.getChildren().get(truePosition);
+            final JurisdictionCouncil child = jurisdictionMain.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
 
             childViewHolder.imgView.setVisibility(View.GONE);
@@ -253,7 +253,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
                 childViewHolder.imgView.setImageResource(R.mipmap.ic_chevron_down_black);
 
             /*
-             * Checkbox OnClickListener for Child
+             * Checkbox OnClickListener for JurisdictionCouncil
              */
             childViewHolder.checkView.setOnClickListener(null);
             childViewHolder.checkView.setOnClickListener(
@@ -289,7 +289,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             );
 
             /**
-             * Image OnClickListener for Child
+             * Image OnClickListener for JurisdictionCouncil
              */
             childViewHolder.imgView.setOnClickListener(null);
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
@@ -690,7 +690,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private String name;
         private String abbreviation;
         private String longName;
-        private List<Child> children;
+        private List<JurisdictionCouncil> children;
         private boolean isExpanded;
         private boolean isSelected = false;
 
@@ -747,16 +747,16 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             this.longName = longName;
         }
 
-        public void setChildren(List<Child> children) {
+        public void setChildren(List<JurisdictionCouncil> children) {
             this.children = children;
         }
 
-        public List<Child> getChildren() {
+        public List<JurisdictionCouncil> getChildren() {
             return children;
         }
     }
 
-    public static class Child {
+    public static class JurisdictionCouncil {
 
         private int id;
         private int regionId;

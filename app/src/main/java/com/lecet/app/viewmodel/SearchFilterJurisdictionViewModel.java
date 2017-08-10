@@ -231,7 +231,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         else
             data = new ArrayList<>();
 
-        List<SearchFilterJurisdictionAdapter.Child> children = null;
+        List<SearchFilterJurisdictionAdapter.JurisdictionCouncil> children = null;
 
         for (SearchFilterJurisdictionMain jMain : getRealmJurisdictions()) {
             hasGrandChild = false;
@@ -270,7 +270,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         adapter.notifyDataSetChanged();
     }
 
-    private void processDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.Child> children, String searchKey) {
+    private void processDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.JurisdictionCouncil> children, String searchKey) {
         foundChild = false;
         foundGrandChild = false;
         containGrandChild.clear();
@@ -279,7 +279,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             if (dcouncil != null) {
                 foundChild = false;
                 containGrandChild.clear();
-                SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
+                SearchFilterJurisdictionAdapter.JurisdictionCouncil child = new SearchFilterJurisdictionAdapter.JurisdictionCouncil();
                 child.setName(dcouncil.getName());
                 if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
                     hasChild = true;
@@ -324,7 +324,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         }
     }
 
-    private void processNoDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.Child> children, String searchKey) {
+    private void processNoDistrict(SearchFilterJurisdictionMain jMain, List<SearchFilterJurisdictionAdapter.JurisdictionCouncil> children, String searchKey) {
         foundChild = false;
         foundGrandChild = false;
         containGrandChild.clear();
@@ -332,7 +332,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
             if (dcouncil != null) {
                 foundChild = false;
                 containGrandChild.clear();
-                SearchFilterJurisdictionAdapter.Child child = new SearchFilterJurisdictionAdapter.Child();
+                SearchFilterJurisdictionAdapter.JurisdictionCouncil child = new SearchFilterJurisdictionAdapter.JurisdictionCouncil();
                 child.setName(dcouncil.getName());
                 if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
                     hasChild = true;
