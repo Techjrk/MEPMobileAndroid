@@ -43,7 +43,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
 
     private static int NO_IMAGE = 0;
     private CheckBox cb = null;
-    private List<SearchFilterProjectTypeAdapter.Parent> data;
+    private List<SearchFilterProjectTypeAdapter.ProjectTypeMain> data;
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
@@ -52,7 +52,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     private Bundle selectedParent = new Bundle(); //list of user's selected parent items
     private Bundle selectedChild = new Bundle();  //list of user's selected child item
 
-    public SearchFilterProjectTypeSingleSelectAdapter(List<SearchFilterProjectTypeAdapter.Parent> data, SearchFilterProjectTypeViewModel viewModel) {
+    public SearchFilterProjectTypeSingleSelectAdapter(List<SearchFilterProjectTypeAdapter.ProjectTypeMain> data, SearchFilterProjectTypeViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;
@@ -98,7 +98,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         }
     }
 
-    private void checkLastGChildSelectName(boolean selected, SearchFilterProjectTypeAdapter.GrandChild gcname, GrandChildTypeViewHolder vholder, int section, int grandChildParentIndex, int grandChildIndex) {
+    private void checkLastGChildSelectName(boolean selected, SearchFilterProjectTypeAdapter.ProjectTypeLocal gcname, GrandChildTypeViewHolder vholder, int section, int grandChildParentIndex, int grandChildIndex) {
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == GRAND_CHILD_VIEW_TYPE) {
@@ -116,7 +116,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         }
     }
 
-    private void checkLastChildSelectName(boolean selected, SearchFilterProjectTypeAdapter.Child cname, ChildViewHolder vholder, int section, int truePosition) {
+    private void checkLastChildSelectName(boolean selected, SearchFilterProjectTypeAdapter.ProjectTypeCouncil cname, ChildViewHolder vholder, int section, int truePosition) {
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == CHILD_VIEW_TYPE) {
@@ -133,7 +133,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         }
     }
 
-    private void checkLastParentSelectName(boolean selected, SearchFilterProjectTypeAdapter.Parent pname, ParentViewHolder vholder, int section) {
+    private void checkLastParentSelectName(boolean selected, SearchFilterProjectTypeAdapter.ProjectTypeMain pname, ParentViewHolder vholder, int section) {
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == PARENT_VIEW_TYPE) {
@@ -162,8 +162,8 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     @Override
     public int getItemCountForSection(int section) {
         // Expanded scenario, where subtype and subsub are expanded
-        SearchFilterProjectTypeAdapter.Parent parent = data.get(section);
-        List<SearchFilterProjectTypeAdapter.Child> children = parent.getChildren();
+        SearchFilterProjectTypeAdapter.ProjectTypeMain parent = data.get(section);
+        List<SearchFilterProjectTypeAdapter.ProjectTypeCouncil> children = parent.getChildren();
         if (viewModel.getCustomSearch()) {
             if (!expandedParents.contains(section)) {
                 expandedParents.add(section);   ///*** expanded
@@ -173,7 +173,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         if (children == null) return 0;
         if (viewModel.getCustomSearch()) {
             TreeMap<Integer, Integer> expanded = new TreeMap<>();
-            for (SearchFilterProjectTypeAdapter.Child child : children) {
+            for (SearchFilterProjectTypeAdapter.ProjectTypeCouncil child : children) {
                 if (children.get(0).getGrandChildren() != null) {
                     children.get(0).isExpanded = true;
                     expanded.put(0, children.get(0).getGrandChildren().size());
@@ -205,7 +205,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
                  */
                 int k = 0;
                 if (children != null)
-                    for (SearchFilterProjectTypeAdapter.Child child : children) {
+                    for (SearchFilterProjectTypeAdapter.ProjectTypeCouncil child : children) {
                         children.get(k).isExpanded = false;
                         k++;
                     }
@@ -236,13 +236,13 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
-        final SearchFilterProjectTypeAdapter.Parent parent = data.get(section);
+        final SearchFilterProjectTypeAdapter.ProjectTypeMain parent = data.get(section);
         boolean isChild = isChild(section, position);
 
         if (holder instanceof ChildViewHolder && isChild) {
 
             final Integer truePosition = childPositionInIndex(section, position);
-            final SearchFilterProjectTypeAdapter.Child child = parent.getChildren().get(truePosition);
+            final SearchFilterProjectTypeAdapter.ProjectTypeCouncil child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
 
             childViewHolder.imgView.setVisibility(View.GONE);
@@ -394,7 +394,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
             final Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
             final Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
             final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
-            final SearchFilterProjectTypeAdapter.GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
+            final SearchFilterProjectTypeAdapter.ProjectTypeLocal grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
 
             grandChildViewHolder.checkView.setText(grandChild.getName());
             checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
@@ -441,8 +441,8 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
-        // Parent denoted by section number
-        final SearchFilterProjectTypeAdapter.Parent parent = data.get(section);
+        // ProjectTypeMain denoted by section number
+        final SearchFilterProjectTypeAdapter.ProjectTypeMain parent = data.get(section);
         if (parent == null) return;
         parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
@@ -547,7 +547,7 @@ public class SearchFilterProjectTypeSingleSelectAdapter extends SectionedAdapter
         }
     }
 
-    /* We Use the Parent as the Header */
+    /* We Use the ProjectTypeMain as the Header */
     @Override
     public boolean enableHeaderForSection(int section) {
         return true;

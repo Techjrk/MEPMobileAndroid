@@ -217,8 +217,8 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        List<SearchFilterProjectTypeAdapter.Parent> data = new ArrayList<>();
-        List<SearchFilterProjectTypeAdapter.Child> children = null;
+        List<SearchFilterProjectTypeAdapter.ProjectTypeMain> data = new ArrayList<>();
+        List<SearchFilterProjectTypeAdapter.ProjectTypeCouncil> children = null;
         for (SearchFilterProjectTypesMain ptMain : getRealmProjectTypes()) {
             hasGrandChild = false;
             hasChild = false;
@@ -226,7 +226,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             foundChild = false;
             foundGrandChild = false;
             containGrandChild.clear();
-            SearchFilterProjectTypeAdapter.Parent parent = new SearchFilterProjectTypeAdapter.Parent();
+            SearchFilterProjectTypeAdapter.ProjectTypeMain parent = new SearchFilterProjectTypeAdapter.ProjectTypeMain();
             parent.setName(ptMain.getTitle());
             parent.setId("" + ptMain.getId());
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
@@ -242,7 +242,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                 if (ptpc != null) {
                     foundChild = false;
                     containGrandChild.clear();
-                    SearchFilterProjectTypeAdapter.Child child = new SearchFilterProjectTypeAdapter.Child();
+                    SearchFilterProjectTypeAdapter.ProjectTypeCouncil child = new SearchFilterProjectTypeAdapter.ProjectTypeCouncil();
                     child.setName(ptpc.getTitle());
                     child.setId("" + ptpc.getId());
                     if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
@@ -253,11 +253,11 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                         child.setSelected(true);
                     }
                     List<PrimaryProjectType> gchildTypes = ptpc.getProjectTypes();
-                    List<SearchFilterProjectTypeAdapter.GrandChild> grandChildren = new ArrayList<>();
+                    List<SearchFilterProjectTypeAdapter.ProjectTypeLocal> grandChildren = new ArrayList<>();
                     for (PrimaryProjectType ppType : gchildTypes) {
                         if (ppType != null) {
                             foundGrandChild = false;
-                            SearchFilterProjectTypeAdapter.GrandChild gchild = new SearchFilterProjectTypeAdapter.GrandChild();
+                            SearchFilterProjectTypeAdapter.ProjectTypeLocal gchild = new SearchFilterProjectTypeAdapter.ProjectTypeLocal();
                             gchild.setName(ppType.getTitle());
                             gchild.setId("" + ppType.getId());
                             if (gchild.getName().toLowerCase().contains(searchKey.toLowerCase())) {

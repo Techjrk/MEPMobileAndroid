@@ -41,12 +41,12 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     private static final int CHILD_VIEW_TYPE = 1;
     private static final int GRAND_CHILD_VIEW_TYPE = 2;
     private CheckBox cb = null;
-    private List<Parent> data;
+    private List<ProjectTypeMain> data;
     private SearchFilterProjectTypeViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public SearchFilterProjectTypeAdapter(List<Parent> data, SearchFilterProjectTypeViewModel viewModel) {
+    public SearchFilterProjectTypeAdapter(List<ProjectTypeMain> data, SearchFilterProjectTypeViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;
@@ -67,8 +67,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     @Override
     public int getItemCountForSection(int section) {
         // Expanded scenario, where subtype and subsub are expanded
-        Parent parent = data.get(section);
-        List<Child> children = parent.getChildren();
+        ProjectTypeMain parent = data.get(section);
+        List<ProjectTypeCouncil> children = parent.getChildren();
         if (viewModel.getCustomSearch())  {
             if (!expandedParents.contains(section)) {
                 expandedParents.add(section);   ///*** expanded
@@ -78,7 +78,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         if (children == null) return 0;
         if (viewModel.getCustomSearch()) {
             TreeMap<Integer, Integer> expanded = new TreeMap<>();
-            for (Child child: children) {
+            for (ProjectTypeCouncil child: children) {
                 if (children.get(0).getGrandChildren() !=null) {
                     children.get(0).isExpanded=true;
                     expanded.put(0, children.get(0).getGrandChildren().size());
@@ -130,13 +130,13 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
-        final Parent parent = data.get(section);
+        final ProjectTypeMain parent = data.get(section);
         boolean isChild = isChild(section, position);
 
         if (holder instanceof ChildViewHolder && isChild) {
 
             final Integer truePosition = childPositionInIndex(section, position);
-            final Child child = parent.getChildren().get(truePosition);
+            final ProjectTypeCouncil child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
 
             childViewHolder.imgView.setVisibility(View.GONE);
@@ -271,7 +271,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             final Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
             final Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
             final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
-            final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
+            final ProjectTypeLocal grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
 
             grandChildViewHolder.checkView.setText(grandChild.name);
             grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
@@ -303,8 +303,8 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, final int section) {
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
-        // Parent denoted by section number
-        final Parent parent = data.get(section);
+        // ProjectTypeMain denoted by section number
+        final ProjectTypeMain parent = data.get(section);
         parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
         parentViewHolder.checkView.setChecked(parent.getSelected());
@@ -389,7 +389,7 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         }
     }
 
-    /* We Use the Parent as the Header */
+    /* We Use the ProjectTypeMain as the Header */
     @Override
     public boolean enableHeaderForSection(int section) {
         return true;
@@ -528,11 +528,11 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
         }
     }
 
-    public static class Parent {
+    public static class ProjectTypeMain {
 
         private String name;
         private String id;
-        private List<Child> children;
+        private List<ProjectTypeCouncil> children;
         public boolean isExpanded;
         private boolean isSelected = false;
 
@@ -560,19 +560,19 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             return name;
         }
 
-        public void setChildren(List<Child> children) {
+        public void setChildren(List<ProjectTypeCouncil> children) {
             this.children = children;
         }
 
-        public List<Child> getChildren() {
+        public List<ProjectTypeCouncil> getChildren() {
             return children;
         }
     }
 
-    public static class Child {
+    public static class ProjectTypeCouncil {
         private String name;
         private String id;
-        private List<SearchFilterProjectTypeAdapter.GrandChild> grandChildren;
+        private List<SearchFilterProjectTypeAdapter.ProjectTypeLocal> grandChildren;
         public boolean isExpanded;
         public boolean isSelected = false;
 
@@ -600,16 +600,16 @@ public class SearchFilterProjectTypeAdapter extends SectionedAdapter {
             return name;
         }
 
-        public void setGrandChildren(List<GrandChild> grandChildren) {
+        public void setGrandChildren(List<ProjectTypeLocal> grandChildren) {
             this.grandChildren = grandChildren;
         }
 
-        public List<GrandChild> getGrandChildren() {
+        public List<ProjectTypeLocal> getGrandChildren() {
             return grandChildren;
         }
     }
 
-    public static class GrandChild {
+    public static class ProjectTypeLocal {
 
         private String name;
         private String id;
