@@ -42,12 +42,12 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
     private CheckBox cb = null;
 
-    private List<Parent> data;
+    private List<StageMain> data;
     private SearchFilterStageViewModel viewModel;
     private List<Integer> expandedParents; // Keep track of expanded parents
     private Map<Integer, TreeMap<Integer, Integer>> expandedChildren; // Key maps to section, Value maps to a TreeMap which keeps track of selected child position and grandchildren count.
 
-    public SearchFilterStageAdapter(List<Parent> data, SearchFilterStageViewModel viewModel) {
+    public SearchFilterStageAdapter(List<StageMain> data, SearchFilterStageViewModel viewModel) {
 
         this.data = data;
         this.viewModel = viewModel;
@@ -93,8 +93,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     public int getItemCountForSection(int section) {
 
         // Expanded scenario, where subtype and subsub are expanded
-        Parent parent = data.get(section);
-        List<Child> children = parent.getChildren();
+        StageMain parent = data.get(section);
+        List<StageCouncil> children = parent.getChildren();
         if (viewModel.getCustomSearch()) {
             expandedParents.add(section);   ///*** expanded
             parent.isExpanded = true;
@@ -146,7 +146,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, final int section, final int position) {
 
-        final Parent parent = data.get(section);
+        final StageMain parent = data.get(section);
         boolean isChild = isChild(section, position);
 
         // Mid-level categories. (District Councils and unaffiliated Locals directly under regions)
@@ -154,7 +154,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         if (holder instanceof ChildViewHolder && isChild) {
 
             final Integer truePosition = childPositionInIndex(section, position);
-            final Child child = parent.getChildren().get(truePosition);
+            final StageCouncil child = parent.getChildren().get(truePosition);
             final ChildViewHolder childViewHolder = (ChildViewHolder) holder;
             childViewHolder.imgView.setVisibility(View.GONE);
             childViewHolder.checkView.setChecked(false);
@@ -170,7 +170,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             childViewHolder.checkView.setTag(Integer.valueOf(truePosition));
 
             /*
-             * Checkbox OnClickListener for Child
+             * Checkbox OnClickListener for StageCouncil
              */
             childViewHolder.checkView.setOnClickListener(null);
             childViewHolder.checkView.setOnClickListener(
@@ -197,7 +197,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             );
 
             /**
-             * Image OnClickListener for Child
+             * Image OnClickListener for StageCouncil
              */
             childViewHolder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -288,7 +288,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             final Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
             final Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
             final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
-            final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
+            final StageLocal grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
             //checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
             grandChildViewHolder.checkView.setChecked(grandChild.getSelected());
@@ -325,8 +325,8 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
 
         final ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
 
-        // Parent denoted by section number
-        final Parent parent = data.get(section);
+        // StageMain denoted by section number
+        final StageMain parent = data.get(section);
         parentViewHolder.checkView.setChecked(false);
         parentViewHolder.checkView.setText(parent.getName());
         parentViewHolder.checkView.setChecked(parent.getSelected());
@@ -410,7 +410,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         }
     }
 
-    /* We Use the Parent as the Header */
+    /* We Use the StageMain as the Header */
     @Override
     public boolean enableHeaderForSection(int section) {
         return true;
@@ -548,12 +548,12 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         }
     }
 
-    public static class Parent {
+    public static class StageMain {
         private int id;
         private String name;
         private String abbreviation;
         private String longName;
-        private List<Child> children;
+        private List<StageCouncil> children;
         private boolean isExpanded;
         private boolean isSelected = false;
 
@@ -610,16 +610,16 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             this.longName = longName;
         }
 
-        public void setChildren(List<Child> children) {
+        public void setChildren(List<StageCouncil> children) {
             this.children = children;
         }
 
-        public List<Child> getChildren() {
+        public List<StageCouncil> getChildren() {
             return children;
         }
     }
 
-    public static class Child {
+    public static class StageCouncil {
 
         private int id;
         private int regionId;
@@ -627,7 +627,7 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
         private String abbreviation;
         private String longName;
         private boolean isExpanded;
-        private List<GrandChild> grandChildren;
+        private List<StageLocal> grandChildren;
         public boolean isSelected = false;
 
         public boolean getSelected() {
@@ -686,17 +686,17 @@ public class SearchFilterStageAdapter extends SectionedAdapter {
             this.longName = longName;
         }
 
-        public void setGrandChildren(List<GrandChild> grandChildren) {
+        public void setGrandChildren(List<StageLocal> grandChildren) {
             this.grandChildren = grandChildren;
         }
 
-        public List<GrandChild> getGrandChildren() {
+        public List<StageLocal> getGrandChildren() {
             return grandChildren;
         }
 
     }
 
-    public static class GrandChild {
+    public static class StageLocal {
 
         private int id;
         private String name;

@@ -271,13 +271,13 @@ void getLastCheckedItems(){
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        List<SearchFilterStageAdapter.Parent> data = new ArrayList<>();
-        List<SearchFilterStageAdapter.Child> children = null;
+        List<SearchFilterStageAdapter.StageMain> data = new ArrayList<>();
+        List<SearchFilterStageAdapter.StageCouncil> children = null;
         for (SearchFilterStagesMain parentStage : getRealmStages()) {
             hasChild = false;
             foundParent = false;
             foundChild = false;
-            SearchFilterStageAdapter.Parent parent = new SearchFilterStageAdapter.Parent();
+            SearchFilterStageAdapter.StageMain parent = new SearchFilterStageAdapter.StageMain();
             parent.setId(parentStage.getId());
             parent.setName(parentStage.getName());
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
@@ -291,7 +291,7 @@ void getLastCheckedItems(){
             for (SearchFilterStage childStage : parentStage.getStages()) {
                 if (childStage != null) {
                     foundChild = false;
-                    SearchFilterStageAdapter.Child child = new SearchFilterStageAdapter.Child();
+                    SearchFilterStageAdapter.StageCouncil child = new SearchFilterStageAdapter.StageCouncil();
                     child.setId(childStage.getId());
                     child.setName(childStage.getName());
                     if (child.getName().trim().toLowerCase().contains(searchKey.toLowerCase())) {
