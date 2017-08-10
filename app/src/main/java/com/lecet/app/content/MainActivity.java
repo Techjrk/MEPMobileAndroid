@@ -136,7 +136,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     }
 
     /*
-      Voice Activation
+      Voice Activation - TODO: move to view model
       Required Phrasing:
       "Search for Projects Near Me in MEP"
       "Search for Projects Recently Updated in MEP"
