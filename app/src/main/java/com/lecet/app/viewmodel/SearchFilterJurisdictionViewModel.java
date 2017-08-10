@@ -290,13 +290,13 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 }
                 if (dcouncil.getLocals() != null) {
 
-                    List<SearchFilterJurisdictionAdapter.GrandChild> grandChildren1 = new ArrayList<>();
+                    List<SearchFilterJurisdictionAdapter.JurisdictionLocal> grandChildren1 = new ArrayList<>();
                     // Locals
                     for (SearchFilterJurisdictionLocal dclocals : dcouncil.getLocals()) {
                         if (dclocals != null) {
 
                             foundGrandChild = false;
-                            SearchFilterJurisdictionAdapter.GrandChild grandChild1 = new SearchFilterJurisdictionAdapter.GrandChild();
+                            SearchFilterJurisdictionAdapter.JurisdictionLocal grandChild1 = new SearchFilterJurisdictionAdapter.JurisdictionLocal();
                             grandChild1.setId(dclocals.getId());
                             grandChild1.setName(dclocals.getName());
                             if (grandChild1.getName().toLowerCase().contains(searchKey.toLowerCase())) {

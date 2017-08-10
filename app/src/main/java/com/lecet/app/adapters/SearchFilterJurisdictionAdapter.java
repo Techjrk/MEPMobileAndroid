@@ -89,7 +89,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         }
     }
 
-    private void checkLastGChildSelectName(boolean selected, GrandChild gcname, GrandChildTypeViewHolder vholder, int section, int grandChildParentIndex, int grandChildIndex) {
+    private void checkLastGChildSelectName(boolean selected, JurisdictionLocal gcname, GrandChildTypeViewHolder vholder, int section, int grandChildParentIndex, int grandChildIndex) {
 
         if (viewModel.getLastFamilyChecked() != NO_TYPE) {
             if (viewModel.getLastFamilyChecked() == GRAND_CHILD_VIEW_TYPE) {
@@ -386,7 +386,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
             Integer grandChildParentAdapterIndex = grandChildParentIndex(section, position);
             final Integer grandChildParentIndex = childPositionInIndex(section, grandChildParentAdapterIndex);
             final Integer grandChildIndex = grandChildIndexInParent(grandChildParentAdapterIndex, position);
-            final GrandChild grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
+            final JurisdictionLocal grandChild = data.get(section).getChildren().get(grandChildParentIndex).getGrandChildren().get(grandChildIndex);
             grandChildViewHolder.checkView.setText(grandChild.getName());
 
             checkLastGChildSelectName(true, grandChild, grandChildViewHolder, section, grandChildParentIndex, grandChildIndex);
@@ -764,7 +764,7 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         private String abbreviation;
         private String longName;
         private boolean isExpanded;
-        private List<GrandChild> grandChildren;
+        private List<JurisdictionLocal> grandChildren;
         private Integer districtCouncilId;
 
         public boolean isSelected = false;
@@ -806,17 +806,17 @@ public class SearchFilterJurisdictionAdapter extends SectionedAdapter {
         }
 
 
-        public void setGrandChildren(List<GrandChild> grandChildren) {
+        public void setGrandChildren(List<JurisdictionLocal> grandChildren) {
             this.grandChildren = grandChildren;
         }
 
-        public List<GrandChild> getGrandChildren() {
+        public List<JurisdictionLocal> getGrandChildren() {
             return grandChildren;
         }
 
     }
 
-    public static class GrandChild {
+    public static class JurisdictionLocal {
 
         private int id;
         private String name;
