@@ -42,7 +42,7 @@
                     android:paddingRight="@dimen/info_window_padding">
 
                 <TextView
-                        android:id="@+id/project_name"
+                        android:id="@+id/participant"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -53,7 +53,7 @@
                         tools:text="This is  long title"/>
 
                 <TextView
-                        android:id="@+id/location"
+                        android:id="@+id/companyLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -72,7 +72,7 @@
                     android:orientation="vertical">
 
                 <TextView
-                        android:id="@+id/address1"
+                        android:id="@+id/project_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -85,12 +85,11 @@
                         tools:text="LIUNA Headquarters FACILITY"/>
 
                 <TextView
-                        android:id="@+id/address2"
+                        android:id="@+id/address1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"
-                        android:lines="2"
                         android:maxLines="2"
                         android:paddingLeft="@dimen/info_window_padding"
                         android:paddingRight="@dimen/info_window_padding"
@@ -99,7 +98,20 @@
                         bind:typeface="@{`Lato-Regular.ttf`}"
                         tools:text="905 16th St NW Washingntong, DC 2006"/>
 
-
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:ellipsize="end"
+                    android:lines="2"
+                    android:maxLines="2"
+                    android:paddingLeft="@dimen/info_window_padding"
+                    android:paddingRight="@dimen/info_window_padding"
+                    android:textColor="@color/lecetTextLightGray"
+                    android:textSize="13sp"
+                    bind:typeface="@{`Lato-Regular.ttf`}"
+                    tools:text="905 16th St NW Washingntong, DC 2006"/>
                 <TextView
                         android:visibility="gone"
                         android:id="@+id/get_directions"

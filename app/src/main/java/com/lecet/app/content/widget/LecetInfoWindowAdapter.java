@@ -36,9 +36,11 @@ public class LecetInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             binding.bidingStatus.setBackgroundResource(viewModel.getBidBackground());
             binding.bidingStatus.setText(viewModel.getBidStatus());
             binding.projectName.setText(viewModel.getProjectTitle());
-            binding.location.setText(viewModel.getProjectLocation());
             binding.address1.setText(viewModel.getAddress1());
-            binding.address2.setText(viewModel.getAddress2());
+           // binding.address2.setText(viewModel.getAddress2());
+            binding.location.setText(viewModel.getProjectLocation());
+            binding.participant.setText(viewModel.getParticipant());
+            binding.companyLocation.setText(viewModel.getCompanyLocation());
         }
 
         return binding.getRoot();

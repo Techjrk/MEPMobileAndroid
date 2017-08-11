@@ -10,11 +10,15 @@ import android.view.View;
 
 import com.lecet.app.BR;
 import com.lecet.app.R;
+import com.lecet.app.data.models.Company;
+import com.lecet.app.data.models.Contact;
 import com.lecet.app.data.models.Project;
+
+import io.realm.RealmList;
 
 /**
  * File: MapInfoWindowViewModel Created: 2/22/17 Author: domandtom
- *
+ * <p>
  * This code is copyright (c) 2017 Dom & Tom Inc.
  */
 
@@ -29,6 +33,8 @@ public class MapInfoWindowViewModel extends BaseObservable {
     private String address2;
     private boolean postBid;
     private String bidStatus;
+    private String participant;
+    private String companyLocation;
 
     public MapInfoWindowViewModel(Context context, Project project) {
 
@@ -39,6 +45,21 @@ public class MapInfoWindowViewModel extends BaseObservable {
         setProjectLocation(String.format("%s, %s", project.getCity(), project.getState()));
         setAddress1(project.getAddress1());
         setAddress2(project.getAddress2());
+        /*
+          Note: This code below will get the Company details coming from Contact of the Project and set the
+          company details to be viewed to the info window.
+         */
+        RealmList listContacts = project.getContacts();
+        if (listContacts != null && listContacts.size() > 0) {
+            Contact contact = project.getContacts().get(0);
+            if (contact != null) {
+                Company company = contact.getCompany();
+                if (company != null) {
+                    setParticipant(company.getName());
+                    setCompanyLocation(String.format("%s, %s", company.getCity(), company.getState()));
+                }
+            } else setParticipant("");
+        }
 
         if (project.getProjectStage() == null) {
             setPostBid(false);
@@ -69,6 +90,24 @@ public class MapInfoWindowViewModel extends BaseObservable {
     public void setProjectLocation(String projectLocation) {
         this.projectLocation = projectLocation;
         notifyPropertyChanged(BR.projectLocation);
+    }
+
+    @Bindable
+    public String getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(String participant) {
+        this.participant = participant;
+    }
+
+    @Bindable
+    public String getCompanyLocation() {
+        return companyLocation;
+    }
+
+    public void setCompanyLocation(String companyLocation) {
+        this.companyLocation = companyLocation;
     }
 
     @Bindable
