@@ -93,6 +93,8 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     private static final int VOICE_LAUNCH_CODE_PROJECTS_NEAR_ME = 0;
     private static final int VOICE_LAUNCH_CODE_PROJECTS_UPDATED_RECENTLY = 1;
     private static final int VOICE_LAUNCH_CODE_TRACKING_LISTS = 2;
+    private static final int VOICE_LAUNCH_CODE_PROJECT_TRACKING_LISTS = 3;
+    private static final int VOICE_LAUNCH_CODE_COMPANY_TRACKING_LISTS = 4;
 
     private MainViewModel viewModel;
     private SearchDomain searchDomain;
@@ -132,7 +134,6 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             setupPageIndicator();
             setupPageButtons();
         }
-
     }
 
     /*
@@ -175,12 +176,20 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             }
 
             // Stay on Dashboard (i.e. MainActivity) and show the Tracking Lists dropdown menu
-            else if(matchesPhraseTrackingList(query)){
-                Log.d(TAG, "checkForVoiceActivation: MATCH with Tracking Lists");
+            else if(matchesPhraseProjectTrackingList(query) || matchesPhraseCompanyTrackingList(query)){
+                Log.d(TAG, "checkForVoiceActivation: MATCH with either Project or Company Tracking Lists");
 
-                // TODO - show progress dialog
+                final int voiceLaunchCode;
+                if(matchesPhraseProjectTrackingList(query)) {
+                    voiceLaunchCode = VOICE_LAUNCH_CODE_PROJECT_TRACKING_LISTS;
+                }
+                else if(matchesPhraseCompanyTrackingList(query)) {
+                    voiceLaunchCode = VOICE_LAUNCH_CODE_COMPANY_TRACKING_LISTS;
+                }
+                else voiceLaunchCode = -1;
 
                 //create a handler to delay a call and show the progress screen in the meantime //TODO - convert this to a listener for when the layouts have completed being drawn
+                viewModel.showProgressDialog();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -188,12 +197,13 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                         Log.d(TAG, "onCreate: opening MTM menu");
                         ActionMenuItemView folderMenu = (ActionMenuItemView) findViewById(R.id.menu_item_folder);
                         Log.d(TAG, "onCreate: folderMenu: " + folderMenu);
-                        toogleMTMMenu();
-                        //TODO - hide progress dialog
+                        toogleMTMMenu(voiceLaunchCode);
+                        viewModel.dismissProgressDialog();
                     }
                 }, 1000);
-                return VOICE_LAUNCH_CODE_TRACKING_LISTS;
-            }else {
+                return voiceLaunchCode;
+            }
+            else {
                 finish();
             }
         }
@@ -233,15 +243,27 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         return false;
     }
 
-    private boolean matchesPhraseTrackingList(String rawPhrase){
+    private boolean matchesPhraseProjectTrackingList(String rawPhrase){
         if(rawPhrase == null) return false;
         String phrase = rawPhrase.toLowerCase();
-        if(phrase.contains(getString(R.string.voice_tracking_list))
-        || phrase.contains(getString(R.string.voice_tracking_lists))){
-            Log.d(TAG, "matchesPhraseTrackingList: MATCH FOUND. query phrase was: " + rawPhrase);
+        if(phrase.contains(getString(R.string.voice_project_tracking_list))
+        || phrase.contains(getString(R.string.voice_project_tracking_lists))){
+            Log.d(TAG, "matchesPhraseProjectTrackingList: MATCH FOUND. query phrase was: " + rawPhrase);
             return true;
         }
-        Log.d(TAG, "matchesPhraseTrackingList: query phrase was: " + rawPhrase);
+        Log.d(TAG, "matchesPhraseProjectTrackingList: query phrase was: " + rawPhrase);
+        return false;
+    }
+
+    private boolean matchesPhraseCompanyTrackingList(String rawPhrase){
+        if(rawPhrase == null) return false;
+        String phrase = rawPhrase.toLowerCase();
+        if(phrase.contains(getString(R.string.voice_company_tracking_list))
+        || phrase.contains(getString(R.string.voice_company_tracking_lists))){
+            Log.d(TAG, "matchesPhraseCompanyTrackingList: MATCH FOUND. query phrase was: " + rawPhrase);
+            return true;
+        }
+        Log.d(TAG, "matchesPhraseCompanyTrackingList: query phrase was: " + rawPhrase);
         return false;
     }
 
@@ -566,7 +588,7 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 startActivity(new Intent(this, ProjectsNearMeActivity.class));
                 return true;
             case R.id.menu_item_folder:
-                toogleMTMMenu();
+                toogleMTMMenu(-1);
                 return true;
             case R.id.menu_item_search:
                 SearchViewModel.setInitSearch(true);
@@ -589,8 +611,8 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         overflowMenu.show();
     }
 
-    private void toogleMTMMenu() {
-        Log.d(TAG, "toogleMTMMenu");
+    private void toogleMTMMenu(int voiceLaunchCode) {
+        Log.d(TAG, "toogleMTMMenu: voiceLaunchCode: " + voiceLaunchCode);
         if (mtmMenu == null) {
             createMTMMenu(findViewById(R.id.menu_item_folder));
         } else {
@@ -600,6 +622,16 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
             mtmAdapter.notifyDataSetChanged();
         }
         if(mtmMenu != null) mtmMenu.show();
+
+        if(voiceLaunchCode == VOICE_LAUNCH_CODE_PROJECT_TRACKING_LISTS) {
+            mtmAdapter.setProjectListVisible(true, true);
+            mtmAdapter.setCompanyListVisible(false, true);
+        }
+        else if(voiceLaunchCode == VOICE_LAUNCH_CODE_COMPANY_TRACKING_LISTS) {
+            mtmAdapter.setCompanyListVisible(true, true);
+            mtmAdapter.setProjectListVisible(false, true);
+        }
+
     }
 
     private void createOverflowMenu(View anchor) {

@@ -468,6 +468,10 @@
     <string name="voice_recent_project_updates">recent project updates</string>
     <string name="voice_tracking_list">tracking list</string>
     <string name="voice_tracking_lists">tracking lists</string>
+    <string name="voice_project_tracking_list">project tracking list</string>
+    <string name="voice_project_tracking_lists">project tracking lists</string>
+    <string name="voice_company_tracking_list">company tracking list</string>
+    <string name="voice_company_tracking_lists">company tracking lists</string>
 
 
 </resources>
