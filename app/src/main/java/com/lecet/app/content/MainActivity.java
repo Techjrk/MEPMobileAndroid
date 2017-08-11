@@ -147,6 +147,8 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     private int checkForVoiceActivation(Intent intent) {
         Log.d(TAG, "checkForVoiceActivation");
 
+        Intent newIntent;
+
         if(SearchIntents.ACTION_SEARCH.equals(intent.getAction())) {
 
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -155,14 +157,22 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                 return VOICE_LAUNCH_CODE_NONE;
             }
 
-            Intent newIntent;
+            // if not authenticated, don't launch voice; jump to LoginActivity instead
+            String token = LecetSharedPreferenceUtil.getInstance(this).getAccessToken();
+            if(token == null || token.length() == 0) {
+                Log.e(TAG, "User Not Authenticated. Taking user to Login Activity.");
+                newIntent = new Intent(this, LoginActivity.class);
+                newIntent.putExtra(EXTRA_VOICE_ACTIVATED, false);
+                startActivity(newIntent);
+                finish();
+                return VOICE_LAUNCH_CODE_NONE;
+            }
 
             // Launch Projects Near Me and go directly to Table View
             if(matchesPhraseProjectsNearMe(query)){
                 Log.d(TAG, "checkForVoiceActivation: MATCH with Projects Near Me");
                 newIntent = new Intent(this, ProjectsNearMeActivity.class);
                 newIntent.putExtra(EXTRA_VOICE_ACTIVATED, true);
-
                 startActivity(newIntent);
                 finish();   // removing this finish() call would mean that the user returns to the MainActivity after backing out of the list activity
                 return VOICE_LAUNCH_CODE_PROJECTS_NEAR_ME;
