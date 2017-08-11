@@ -281,6 +281,12 @@ public class ProjectAddNoteViewModel extends BaseObservable {
             alert.setMessage("Note body is required.");
             alert.show();
         }
+        //Required location of note
+        else if((geocode == null || (geocode.getLat() == 0 && geocode.getLng() == 0)) || (getFullAddress() == null || getFullAddress().isEmpty()) ) {
+            alert.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", onClick);
+            alert.setMessage("A location is required.");
+            alert.show();
+        }
         //Are you sure?
         else {
             alert.setMessage("You are about to post a public note.");

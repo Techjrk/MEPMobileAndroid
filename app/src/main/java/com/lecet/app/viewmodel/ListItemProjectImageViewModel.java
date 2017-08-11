@@ -154,12 +154,12 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         if(photo.getUpdatedAt().getTime() - photo.getCreatedAt().getTime() < 3000) {
             return "";
         }
-        return "Last updated: " + getTimeDifference();
+        return activity.getString(R.string.last_updated) + ": " + getTimeDifference();
     }
 
     public String getDateCreatedForDisplay() {
         TimeZone localTimeZone = TimeZone.getDefault();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy");
         simpleDateFormat.setTimeZone(localTimeZone);
         String displayDate = simpleDateFormat.format(photo.getCreatedAt());
         return displayDate;
