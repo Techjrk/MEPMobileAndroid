@@ -167,8 +167,7 @@ public class DateUtility {
         long longLocal = cal.getTimeInMillis();
         int inLocal = tz.getOffset(longLocal);
         hoursdiff = (inUTC - inLocal)/ (1000 * 60 * 60);
-        Log.d(TAG, "convertUTCDate2LocalDate: Timezonediff:" + hoursdiff);
-
+        //Log.d(TAG, "convertUTCDate2LocalDate: Timezonediff:" + hoursdiff);
         return DateUtility.addHours(UTCDate,-hoursdiff);
     }
 }

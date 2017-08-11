@@ -443,11 +443,11 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
     public void fetchProjectsNearMe(final LatLng location) {
         if (location == oldLatLang || location.equals(oldLatLang)) {
-            Log.w("latlang", "latlang  found!");
+            Log.d(TAG, "fetchProjectsNearMe: latlang  found!");
             sameLocation = true;
 
         } else {
-            Log.w("latlang", "latlang NOT found!");
+            Log.d(TAG, "fetchProjectsNearMe: latlang NOT found!");
             sameLocation = false;
         }
 
@@ -641,7 +641,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                         .position(project.getGeocode().toLatLng()));
                 marker.setTag(project);
                 markers.put(project.getId(), marker);
-                Log.w("found", "found pre " + project.getTitle());
+                Log.d(TAG, "checkSameListPreBidProjects: found pre " + project.getTitle());
             }
         }
     }
@@ -662,7 +662,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                         .position(project.getGeocode().toLatLng()));
                 marker.setTag(project);
                 markers.put(project.getId(), marker);
-                Log.w("found", "found post " + project.getTitle());
+                Log.d(TAG, "checkSameListPostBidProjects: found post " + project.getTitle());
             }
         }
     }
