@@ -122,12 +122,12 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         if(note.getUpdatedAt().getTime() - note.getCreatedAt().getTime() < 3000) {
             return "";
         }
-        return "Last updated: " + getTimeDifference();
+        return activity.getString(R.string.last_updated) + ": " + getTimeDifference();
     }
 
     public String getDateCreatedForDisplay() {
         TimeZone localTimeZone = TimeZone.getDefault();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy");
         simpleDateFormat.setTimeZone(localTimeZone);
         String displayDate = simpleDateFormat.format(note.getCreatedAt());
         return displayDate;
