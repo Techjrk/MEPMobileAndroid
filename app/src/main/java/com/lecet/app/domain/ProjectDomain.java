@@ -321,6 +321,7 @@ public class ProjectDomain {
 
         int limit = DASHBOARD_CALL_LIMIT;
         Date publishDate = DateUtility.addDays(-30);
+        beforeUpdateRealm4RecentlyUpdated(publishDate);
         return getProjectsRecentlyUpdated(publishDate, limit, callback);
     }
 
@@ -490,7 +491,35 @@ public class ProjectDomain {
                 .findAllSorted("lastPublishDate", Sort.DESCENDING);
         return projectsResult;
     }
+    private void beforeUpdateRealm4RecentlyUpdated(final Date lastPublishDate) {
 
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Project> storedProject = realm.where(Project.class)
+                        .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                        .findAllSorted("lastPublishDate", Sort.ASCENDING);
+                for (Project project : storedProject) {
+                    if (project != null) {
+                        project.setMruItem(false);
+                        realm.copyToRealmOrUpdate(project);
+
+                    } else {
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG,"beforeUpdateRealm4RecentlyUpdated: realm soon success");
+            }},new Realm.Transaction.OnError() {
+
+            @Override
+            public void onError(Throwable error) {
+                Log.e(TAG,"beforeUpdateRealm4RecentlyUpdated: realm soon error");
+            }});
+    }
 
     public RealmResults<Project> fetchProjectsRecentlyUpdated(Date lastPublishDate, int categoryId) {
 
@@ -692,6 +721,7 @@ public class ProjectDomain {
                     Log.e(TAG,"beforeUpdateRealm4HappeningSoon: realm soon error");
                 }});
     }
+
     public void asyncCopyToRealm(final List<Project> projects, final boolean hidden, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
 
         realm.executeTransactionAsync(new Realm.Transaction() {
