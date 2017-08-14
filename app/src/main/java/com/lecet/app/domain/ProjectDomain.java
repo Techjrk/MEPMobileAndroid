@@ -321,7 +321,38 @@ public class ProjectDomain {
 
         int limit = DASHBOARD_CALL_LIMIT;
         Date publishDate = DateUtility.addDays(-30);
+        beforeUpdateRealm4RecentlyUpdated(publishDate);
         return getProjectsRecentlyUpdated(publishDate, limit, callback);
+    }
+
+    private void beforeUpdateRealm4RecentlyUpdated(final Date lastPublishDate) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Project> storedProject = realm.where(Project.class)
+                        .greaterThanOrEqualTo("lastPublishDate", lastPublishDate)
+                        .findAllSorted("lastPublishDate", Sort.ASCENDING);
+                for (Project project : storedProject) {
+                    if (project != null) {
+                        project.setMruItem(false);
+                        realm.copyToRealmOrUpdate(project);
+
+                    } else {
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG,"beforeUpdateRealm4RecentlyUpdated: Realm Recently Updated Success");
+            }},new Realm.Transaction.OnError() {
+
+            @Override
+            public void onError(Throwable error) {
+                Log.e(TAG,"beforeUpdateRealm4RecentlyUpdated: Realm Recently Updated Error");
+            }});
     }
 
     public Call<ProjectsNearResponse> getProjectsNear(double lat, double lng, int distance, Callback<ProjectsNearResponse> callback) {
