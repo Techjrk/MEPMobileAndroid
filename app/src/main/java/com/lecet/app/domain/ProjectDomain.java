@@ -249,8 +249,37 @@ public class ProjectDomain {
     public Call<List<Project>> getProjectsRecentlyAdded(int limit, Callback<List<Project>> callback) {
 
         Date endDate = DateUtility.addDays(-30);
-
+        beforeUpdateRealm4RecentlyAdded(endDate);
         return getProjectsRecentlyAdded(endDate, limit, callback);
+    }
+    private void beforeUpdateRealm4RecentlyAdded(final Date lastAddedDate) {
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Project> storedProject = realm.where(Project.class)
+                        .greaterThanOrEqualTo("firstPublishDate", lastAddedDate)
+                        .findAllSorted("firstPublishDate", Sort.ASCENDING);
+                for (Project project : storedProject) {
+                    if (project != null) {
+                        project.setMraItem(false);
+                        realm.copyToRealmOrUpdate(project);
+
+                    } else {
+                        realm.copyToRealmOrUpdate(project);
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG,"beforeUpdateRealm4RecentlyAdded: Realm Recently Added Success");
+            }},new Realm.Transaction.OnError() {
+
+            @Override
+            public void onError(Throwable error) {
+                Log.e(TAG,"beforeUpdateRealm4RecentlyAdded: Realm Recently Added Error");
+            }});
     }
 
     public Call<List<Project>> getProjectsRecentlyAdded(Callback<List<Project>> callback) {
