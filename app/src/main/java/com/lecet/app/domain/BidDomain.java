@@ -137,6 +137,7 @@ public class BidDomain {
                 .greaterThan("createDate", cutoffDate)
                 .equalTo("project.hidden", false)
                 .equalTo("rank", 1)
+                .notEqualTo("project.primaryProjectType.title","Unclassified")
                 .findAllSorted(new String[]{"createDate","project.title"},new Sort[]{Sort.DESCENDING,Sort.ASCENDING});
               //  .findAllSorted("createDate", Sort.DESCENDING);
 
