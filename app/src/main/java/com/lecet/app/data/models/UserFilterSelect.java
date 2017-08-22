@@ -4,18 +4,20 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by getdevsinc on 8/17/17.
  */
-//TODO: make this class as RealmObject (superclass)
-public class UserFilterSelect {
+
+public class UserFilterSelect extends RealmObject{
     @PrimaryKey
     @SerializedName("id")
     private long id;
 
-    //Note: Display values for the project fields (with Select-end as name)
+    //Note: Display values for the project fields (with Select-end as name). Checked/actual value item uses simple variable name.
     @SerializedName("locationSelect")
     private String locationSelect;
 
@@ -29,10 +31,10 @@ public class UserFilterSelect {
     private String valueSelect;
 
     @SerializedName("valueMin")
-    private String valueMin; //checked values for value min
+    private String valueMin; //actual value for value min
 
     @SerializedName("valueMax")
-    private String valueMax; //checked values for value max
+    private String valueMax; //actual value for value max
 
     @SerializedName("updatedWithinSelect")
     private String updatedWithinSelect;
@@ -118,31 +120,75 @@ public class UserFilterSelect {
 
     //Note: This is for single & multi-selected complex items
 
+
     //A. Project Type
 
     @SerializedName("typeKey")
-    private String[] typeKey;
+    private RealmList<UserFilterName> typeKey;
 
     @SerializedName("typeValue")
-    private String[] typeValue;
+    private RealmList<UserFilterName> typeValue;
 
     //B. Stage
 
     @SerializedName("stageKey")
-    private String[] stageKey;
+    private RealmList<UserFilterName> stageKey;
 
     @SerializedName("stageValue")
-    private String[] stageValue;
+    private RealmList<UserFilterName> stageValue;
 
     //C. Jurisdiction
 
     @SerializedName("jurisdictionKey")
-    private String[] jurisdictionKey;
+    private RealmList<UserFilterName> jurisdictionKey;
 
     @SerializedName("jurisdictionValue")
-    private String[] jurisdictionValue;
+    private RealmList<UserFilterName> jurisdictionValue;
+
+    //Note: instance method
+    public void clear() {
+        setBh("");
+        setBhResult("");
+        setBhSelect("");
+        setBiddingWithin("");
+        setBiddingWithinResult("");
+        setBiddingWithinSelect("");
+        setcBiddingWithinSelect("");
+        setcJurisdictionSelect("");
+        setcLocationSelect("");
+        setcTypeSelect("");
+        setcValueSelect("");
+        setJurisdictionKey(null);
+        setJurisdictionResult("");
+        setJurisdictionSelect("");
+        setJurisdictionValue(null);
+        setLocationSelect("");
+        setOwnerType("");
+        setOwnerTypeResult("");
+        setOwnerTypeSelect("");
+        setStageKey(null);
+        setStageResult("");
+        setStageSelect("");
+        setStageValue(null);
+        setTypeIdInt("");
+        setTypeIdSelect("");
+        setTypeKey(null);
+        setTypeResult("");
+        setTypeValue(null);
+        setUpdatedWithin("");
+        setUpdatedWithinResult("");
+        setUpdatedWithinSelect("");
+        setValueMax("");
+        setValueMin("");
+        setValueResult("");
+        setValueSelect("");
+        setWorkType("");
+        setWorkTypeResult("");
+        setWorkTypeSelect("");
+    }
 
     //Note: Setter/Getter methods
+
     public String getLocationSelect() {
         return locationSelect;
     }
@@ -399,58 +445,59 @@ public class UserFilterSelect {
         this.workTypeResult = workTypeResult;
     }
 
-    public String[] getTypeKey() {
+    public RealmList<UserFilterName> getTypeKey() {
         return typeKey;
     }
 
-    public void setTypeKey(String[] typeKey) {
+    public void setTypeKey(RealmList<UserFilterName> typeKey) {
         this.typeKey = typeKey;
     }
 
-    public String[] getTypeValue() {
+    public RealmList<UserFilterName> getTypeValue() {
         return typeValue;
     }
 
-    public void setTypeValue(String[] typeValue) {
+    public void setTypeValue(RealmList<UserFilterName> typeValue) {
         this.typeValue = typeValue;
     }
 
-    public String[] getStageKey() {
+    public RealmList<UserFilterName> getStageKey() {
         return stageKey;
     }
 
-    public void setStageKey(String[] stageKey) {
+    public void setStageKey(RealmList<UserFilterName> stageKey) {
         this.stageKey = stageKey;
     }
 
-    public String[] getStageValue() {
+    public RealmList<UserFilterName> getStageValue() {
         return stageValue;
     }
 
-    public void setStageValue(String[] stageValue) {
+    public void setStageValue(RealmList<UserFilterName> stageValue) {
         this.stageValue = stageValue;
     }
 
-    public String[] getJurisdictionKey() {
+    public RealmList<UserFilterName> getJurisdictionKey() {
         return jurisdictionKey;
     }
 
-    public void setJurisdictionKey(String[] jurisdictionKey) {
+    public void setJurisdictionKey(RealmList<UserFilterName> jurisdictionKey) {
         this.jurisdictionKey = jurisdictionKey;
     }
 
-    public String[] getJurisdictionValue() {
+    public RealmList<UserFilterName> getJurisdictionValue() {
         return jurisdictionValue;
     }
 
-    public void setJurisdictionValue(String[] jurisdictionValue) {
+    public void setJurisdictionValue(RealmList<UserFilterName> jurisdictionValue) {
         this.jurisdictionValue = jurisdictionValue;
     }
 
     @Override
     public String toString() {
         return "UserFilterSelect{" +
-                "locationSelect='" + locationSelect + '\'' +
+                "id=" + id +
+                ", locationSelect='" + locationSelect + '\'' +
                 ", typeIdSelect='" + typeIdSelect + '\'' +
                 ", typeIdInt='" + typeIdInt + '\'' +
                 ", valueSelect='" + valueSelect + '\'' +
@@ -482,12 +529,12 @@ public class UserFilterSelect {
                 ", bhResult='" + bhResult + '\'' +
                 ", ownerTypeResult='" + ownerTypeResult + '\'' +
                 ", workTypeResult='" + workTypeResult + '\'' +
-                ", typeKey=" + Arrays.toString(typeKey) +
-                ", typeValue=" + Arrays.toString(typeValue) +
-                ", stageKey=" + Arrays.toString(stageKey) +
-                ", stageValue=" + Arrays.toString(stageValue) +
-                ", jurisdictionKey=" + Arrays.toString(jurisdictionKey) +
-                ", jurisdictionValue=" + Arrays.toString(jurisdictionValue) +
+                ", typeKey=" + typeKey +
+                ", typeValue=" + typeValue +
+                ", stageKey=" + stageKey +
+                ", stageValue=" + stageValue +
+                ", jurisdictionKey=" + jurisdictionKey +
+                ", jurisdictionValue=" + jurisdictionValue +
                 '}';
     }
 
@@ -498,6 +545,7 @@ public class UserFilterSelect {
 
         UserFilterSelect that = (UserFilterSelect) o;
 
+        if (id != that.id) return false;
         if (locationSelect != null ? !locationSelect.equals(that.locationSelect) : that.locationSelect != null)
             return false;
         if (typeIdSelect != null ? !typeIdSelect.equals(that.typeIdSelect) : that.typeIdSelect != null)
@@ -561,24 +609,23 @@ public class UserFilterSelect {
             return false;
         if (workTypeResult != null ? !workTypeResult.equals(that.workTypeResult) : that.workTypeResult != null)
             return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(typeKey, that.typeKey)) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(typeValue, that.typeValue)) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(stageKey, that.stageKey)) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(stageValue, that.stageValue)) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(jurisdictionKey, that.jurisdictionKey)) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(jurisdictionValue, that.jurisdictionValue);
+        if (typeKey != null ? !typeKey.equals(that.typeKey) : that.typeKey != null) return false;
+        if (typeValue != null ? !typeValue.equals(that.typeValue) : that.typeValue != null)
+            return false;
+        if (stageKey != null ? !stageKey.equals(that.stageKey) : that.stageKey != null)
+            return false;
+        if (stageValue != null ? !stageValue.equals(that.stageValue) : that.stageValue != null)
+            return false;
+        if (jurisdictionKey != null ? !jurisdictionKey.equals(that.jurisdictionKey) : that.jurisdictionKey != null)
+            return false;
+        return jurisdictionValue != null ? jurisdictionValue.equals(that.jurisdictionValue) : that.jurisdictionValue == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = locationSelect != null ? locationSelect.hashCode() : 0;
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (locationSelect != null ? locationSelect.hashCode() : 0);
         result = 31 * result + (typeIdSelect != null ? typeIdSelect.hashCode() : 0);
         result = 31 * result + (typeIdInt != null ? typeIdInt.hashCode() : 0);
         result = 31 * result + (valueSelect != null ? valueSelect.hashCode() : 0);
@@ -610,12 +657,13 @@ public class UserFilterSelect {
         result = 31 * result + (bhResult != null ? bhResult.hashCode() : 0);
         result = 31 * result + (ownerTypeResult != null ? ownerTypeResult.hashCode() : 0);
         result = 31 * result + (workTypeResult != null ? workTypeResult.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(typeKey);
-        result = 31 * result + Arrays.hashCode(typeValue);
-        result = 31 * result + Arrays.hashCode(stageKey);
-        result = 31 * result + Arrays.hashCode(stageValue);
-        result = 31 * result + Arrays.hashCode(jurisdictionKey);
-        result = 31 * result + Arrays.hashCode(jurisdictionValue);
+        result = 31 * result + (typeKey != null ? typeKey.hashCode() : 0);
+        result = 31 * result + (typeValue != null ? typeValue.hashCode() : 0);
+        result = 31 * result + (stageKey != null ? stageKey.hashCode() : 0);
+        result = 31 * result + (stageValue != null ? stageValue.hashCode() : 0);
+        result = 31 * result + (jurisdictionKey != null ? jurisdictionKey.hashCode() : 0);
+        result = 31 * result + (jurisdictionValue != null ? jurisdictionValue.hashCode() : 0);
         return result;
     }
+
 }
