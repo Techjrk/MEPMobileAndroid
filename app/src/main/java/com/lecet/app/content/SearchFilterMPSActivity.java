@@ -69,7 +69,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.savePrefFilterFieldValues();
+        viewModel.saveFilterToRealm();
     }
 
     private void setupToolbar() {
@@ -262,7 +262,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Single type parent category selection Engineering: projectTypeId":{"inq":[501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530]}
      */
     private void processProjectType(final Bundle bundle) {
-        viewModel.savePrefBundle(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
+        viewModel.saveExtraFilterData(getString(R.string.FilterTypeData), bundle); //saved the selected project type items to process later when needed.
         if (bundle.isEmpty()) {
             viewModel.setSearchFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, "");
             viewModel.setType_select("");
@@ -413,7 +413,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Region (Parent) selection ex with IDs of Locals with and without District Councils: "jurisdictions": { "inq": [8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 1, 2, 3, 4, 5, 6] }
      */
     private void processJurisdiction(final Bundle bundle) {
-        viewModel.savePrefBundle(getString(R.string.FilterSharedJData), bundle); //saved the selected project type items to process later when needed.
+        viewModel.saveExtraFilterData(getString(R.string.FilterJurisdictionData), bundle); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -530,7 +530,7 @@ public class SearchFilterMPSActivity extends AppCompatActivity {
      * Ex: "projectStageId":{"inq":[208,209,210,211]}}
      */
     private void processStage(final Bundle b) {
-        viewModel.savePrefBundleStageOnly(getString(R.string.FilterStageData), b); //saved the selected project type items to process later when needed.
+        viewModel.saveExtraFilterData(getString(R.string.FilterStageData), b); //saved the selected project type items to process later when needed.
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {

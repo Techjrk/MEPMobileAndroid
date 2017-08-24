@@ -1,7 +1,6 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
@@ -9,7 +8,6 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
 import com.lecet.app.BR;
 import com.lecet.app.R;
 import com.lecet.app.content.SearchFilterBiddingWithinActivity;
@@ -22,7 +20,12 @@ import com.lecet.app.content.SearchFilterStageActivity;
 import com.lecet.app.content.SearchFilterUpdatedWithinActivity;
 import com.lecet.app.content.SearchFilterValueActivity;
 import com.lecet.app.content.SearchFilterWorkTypeActivity;
+import com.lecet.app.data.models.UserFilterExtra;
+import com.lecet.app.data.models.UserFilterSelect;
 import com.lecet.app.utility.Log;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by DomandTom 2016.
@@ -78,6 +81,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private AppCompatActivity activity;
     private int id;
     private Intent intent;
+    private Realm realm;
 
     //Note: This static userCreated is needed because it used mostly from different parts of the code and needs to check whether the app is in the Project Near Me or in the Main Search section.
     public static boolean userCreated;
@@ -91,7 +95,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     /**
      * Note: This resultxxx variables is used for holding the url filter parameter to be passed for web api.
      * These setter/getter methods of these variables are also used for saving/restoring the previous  selected filter items to the sharedPreferences.
-    */
+     */
     private String resultUpdateWithin;
     private String resultBiddingWithin;
     private String resultValue;
@@ -145,19 +149,19 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     private String persistedWorkType;
     private String persistProjectTypeIdInt;
 
-    /** Note: This variable is used for viewing and hiding the search location field.
-     *      If the user is in the Project Near Me section, this search location field is hidden. If not, it is visible.
+    /**
+     * Note: This variable is used for viewing and hiding the search location field.
+     * If the user is in the Project Near Me section, this search location field is hidden. If not, it is visible.
      */
     private boolean usingProjectNearMe;
-
-    // SharedPreferences spref;
+    private UserFilterSelect saveFilter;
+    private Bundle typeData, jurisdictionData, stageData;
 
     /**
      * Constructor
      */
     public SearchFilterAllTabbedViewModel(AppCompatActivity activity) {
         this.activity = activity;
-        //   spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
 
         setLocation_select("");
         setType_select("");
@@ -173,16 +177,20 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setCbiddingWithinSelect(ANY);
         setCtypeSelect(ANY);
 
+        realm = Realm.getDefaultInstance();
+
         intent = activity.getIntent();
-        //Then set all the previous result to the intent
-       // setAllFilterResults();
         setUsingProjectNearMe(intent.getBooleanExtra(activity.getString(R.string.using_project_near_me), false));
-        SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
-        if (spref != null) {
-            getPrefFilterFieldValues(spref);
+        saveFilter = realm.where(UserFilterSelect.class).findFirst();
+        if (saveFilter != null) {
+            getSavedFilterFromRealm();
+            typeData = getTypeDataFromRealmList();
+            jurisdictionData = getJurisdictionDataFromRealmList();
+            stageData = getStageDataFromRealmList();
         } else {
-            Log.d(TAG, "SharedPreferences is null");
+            Log.d(TAG, "constructor: saveFilter is null");
         }
+
     }
 
     //Note: Temporarily not used. This could be used in the code if needed to reset the value of resultxxx.
@@ -199,6 +207,61 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         setResultOwnerType("");
         setResultWorkType("");
     }*/
+
+    public Bundle getTypeDataFromRealmList() {
+        Bundle b = null;
+        if (saveFilter != null) {
+            Log.d(TAG, "getTypeDataFromRealmList: saveFilter is NOT null");
+            b = new Bundle();
+            RealmList<UserFilterExtra> uList = saveFilter.getTypeKey();
+            for (UserFilterExtra keyID : uList) {
+                b.putString(keyID.getName(), keyID.getValue());
+                Log.d(TAG, "getTypeDataFromRealmList: " + keyID.getName() + ":" + keyID.getValue());
+            }
+        } else {
+            Log.d(TAG, "getTypeDataFromRealmList: saveFilter is null");
+        }
+        return b;
+    }
+
+    public Bundle getJurisdictionDataFromRealmList() {
+        Bundle b = null;
+        if (saveFilter != null) {
+            Log.d(TAG, "getJurisdictionDataFromRealmList: saveFilter jurisdiction is NOT null");
+            b = new Bundle();
+            RealmList<UserFilterExtra> uList = saveFilter.getJurisdictionKey();
+            if (uList == null || uList.size() == 0) return null;
+            for (UserFilterExtra keyID : uList) {
+                b.putString(keyID.getName(), keyID.getValue());
+                Log.d(TAG, "getJurisdictionDataFromRealmList: " + keyID.getName() + ":" + keyID.getValue());
+            }
+        } else {
+            Log.d(TAG, "getJurisdictionDataFromRealmList: saveFilter jurisdiction is null");
+        }
+        return b;
+    }
+
+    public Bundle getStageDataFromRealmList() {
+        Bundle b = null;
+        if (saveFilter != null) {
+            Log.d(TAG, "getStageDataFromRealmList:: saveFilter stage is NOT null");
+            RealmList<UserFilterExtra> uList = saveFilter.getStageKey();
+            if (uList == null || uList.size() == 0) return null;
+            b = new Bundle();
+            for (UserFilterExtra uname : uList) {
+                Bundle b2 = new Bundle();
+                b2.putString(SearchFilterStageViewModel.BUNDLE_KEY_ID, uname.getName());
+                b2.putString(SearchFilterStageViewModel.BUNDLE_KEY_NAME, uname.getValue());
+                b2.putString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE, uname.getValueStage());
+                b.putBundle(uname.getName(), b2);
+                Log.d(TAG, "getStageDataFromRealmList: " + uname.getName() + ":" + uname.getValue());
+            }
+        } else {
+            Log.d(TAG, "getStageDataFromRealmList: saveFilter stage is null");
+        }
+
+        return b;
+    }
 
     // Note: The setter/getter methods are used to determine if the location needed to be hide ( Yes for using the ProjectNearMe section)
     @Bindable
@@ -529,6 +592,7 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                 i = new Intent(activity, SearchFilterProjectTypeActivity.class);
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_PROJECT_TYPE_ID, getPersistedProjectTypeId());
                 i.putExtra(EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt());
+                i.putExtra(activity.getString(R.string.FilterTypeData), typeData);
                 break;
 
             case R.id.cvalue:
@@ -554,12 +618,14 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
                 section = JURISDICTION;
                 i = new Intent(activity, SearchFilterJurisdictionActivity.class);
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_JURISDICTION, getPersistedJurisdiction());
+                i.putExtra(activity.getString(R.string.FilterJurisdictionData), jurisdictionData);
                 break;
 
             case R.id.stage:
                 section = STAGE;
                 i = new Intent(activity, SearchFilterStageActivity.class);
                 i.putExtra(SearchFilterAllTabbedViewModel.EXTRA_STAGE, getPersistedStage());
+                i.putExtra(activity.getString(R.string.FilterStageData), stageData);
                 break;
 
             case R.id.cbidding_within:
@@ -620,11 +686,11 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
         isProjectViewVisible = view.getId() == R.id.btn_project;
         if (getIsProjectViewVisible()) {
             Log.d(TAG, "onClickedProjectCompanyTab: project tab clicked");
-            SearchViewModel.companyInstantSearch=false;
+            SearchViewModel.companyInstantSearch = false;
         } else {
             Log.d(TAG, "onClickedProjectCompanyTab: company tab clicked");
             //Focus in company. Search for the Company.
-            SearchViewModel.companyInstantSearch=true;
+            SearchViewModel.companyInstantSearch = true;
         }
         notifyPropertyChanged(BR.isProjectViewVisible);
     }
@@ -670,240 +736,224 @@ public class SearchFilterAllTabbedViewModel extends BaseObservable {
     }
 
     //Note: This method is used to extract all the filter saved from the SharedPreferences to be used to display again the previous selected item to the filter field section.
-    void getPrefFilterFieldValues(SharedPreferences spref) {
+    void getSavedFilterFromRealm() {
 
         /** Note: For displaying the project filter values to the project search field and project instant search tab fields (for instansearch)
          *  and for extracting the filter data needed for processing.
          */
-        setLocation_select(spref.getString(EXTRA_LOCATION_CITY, getLocation_select()));
-        setType_select(spref.getString(EXTRA_PROJECT_TYPE_ID, getType_select()));
-        setPersistProjectTypeIdInt(spref.getString(EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt()));
 
-        setUpdated_within_select(spref.getString(EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select()));
-        setPersistedUpdatedWithin(spref.getString(EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin()));
+        setLocation_select(saveFilter.getLocationSelect());
+        setType_select(saveFilter.getTypeIdSelect());
+        setPersistProjectTypeIdInt(saveFilter.getTypeIdInt());
 
-        setJurisdiction_select(spref.getString(EXTRA_JURISDICTION, getJurisdiction_select()));
-        setStage_select(spref.getString(EXTRA_STAGE, getStage_select()));
-        setBidding_within_select(spref.getString(EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select()));
-        setPersistedBiddingWithin(spref.getString(EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin()));
+        setUpdated_within_select(saveFilter.getUpdatedWithinSelect());
+        setPersistedUpdatedWithin(saveFilter.getUpdatedWithin());
+        Log.d(TAG, "getPref: updatedwithin select: " + saveFilter.getUpdatedWithinSelect());
+        Log.d(TAG, "getPref: updatedwithin: " + saveFilter.getUpdatedWithin());
 
-        setBh_select(spref.getString(EXTRA_BUILDING_OR_HIGHWAY, getBh_select()));
-        if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
-            persistedBuildingOrHighway[1] = spref.getString(EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
+        setJurisdiction_select(saveFilter.getJurisdictionSelect());
+        setStage_select(saveFilter.getStageSelect());
+        setBidding_within_select(saveFilter.getBiddingWithinSelect());
+        setPersistedBiddingWithin(saveFilter.getBiddingWithin());
 
-        setOwner_type_select(spref.getString(EXTRA_OWNER_TYPE, getOwner_type_select()));
-        setPersistedOwnerType(spref.getString(EXTRA_OWNER_TYPE_ID, getPersistedOwnerType()));
+        setBh_select(saveFilter.getBhSelect());
 
-        setWork_type_select(spref.getString(EXTRA_WORK_TYPE, getWork_type_select()));
-        setPersistedWorkType(spref.getString(EXTRA_WORK_TYPE_ID, getPersistedWorkType()));
+        if (persistedBuildingOrHighway == null ) persistedBuildingOrHighway = new String[2];
+        persistedBuildingOrHighway[0] = saveFilter.getBhStr();
+        persistedBuildingOrHighway[1] = saveFilter.getBh();
 
-        setValue_select(spref.getString(EXTRA_VALUE, getValue_select()));
+        setOwner_type_select(saveFilter.getOwnerTypeSelect());
+        setPersistedOwnerType(saveFilter.getOwnerType());
+
+        setWork_type_select(saveFilter.getWorkTypeSelect());
+        setPersistedWorkType(saveFilter.getWorkType());
+
+        setValue_select(saveFilter.getValueSelect());
 
         //Note: For displaying the company filter values to the company instant search tab fields and for extracting the filter data needed for processing.
-        setClocationSelect(spref.getString(EXTRA_CLOCATION_CITY, getClocationSelect()));
-        setCvalueSelect(spref.getString(EXTRA_CVALUE, getCvalueSelect()));
-        setCjurisdictionSelect(spref.getString(EXTRA_CJURISDICTION, getCjurisdictionSelect()));
-        setCbiddingWithinSelect(spref.getString(EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect()));
-        setCtypeSelect(spref.getString(EXTRA_CPROJECT_TYPE_ID, getCtypeSelect()));
+        setClocationSelect(saveFilter.getcLocationSelect());
+        setCvalueSelect(saveFilter.getcValueSelect());
+        setCjurisdictionSelect(saveFilter.getcJurisdictionSelect());
+        setCbiddingWithinSelect(saveFilter.getcBiddingWithinSelect());
+        setCtypeSelect(saveFilter.getcTypeSelect());
 
         //Note: For Resultset of the url filter parameter values that will be passed to the web api.
-        setResultProjectType(spref.getString(activity.getString(R.string.FilterResultProjectType),""));
-        setResultValue(spref.getString(activity.getString(R.string.FilterResultValue),""));
-        setResultUpdateWithin(spref.getString(activity.getString(R.string.FilterResultUpdatedWithin),""));
-        setResultJurisdiction(spref.getString(activity.getString(R.string.FilterResultJurisdiction),""));
-        setResultStage(spref.getString(activity.getString(R.string.FilterResultStage),""));
-        setResultBiddingWithin(spref.getString(activity.getString(R.string.FilterResultBiddingWithin),""));
-        setResultBH(spref.getString(activity.getString(R.string.FilterResultBH),""));
-        setResultOwnerType(spref.getString(activity.getString(R.string.FilterResultOwnerType),""));
-        setResultWorkType(spref.getString(activity.getString(R.string.FilterResultWorkType),""));
+        setResultProjectType(saveFilter.getTypeResult());
+        setResultValue(saveFilter.getValueResult());
+        setResultUpdateWithin(saveFilter.getUpdatedWithinResult());
+        setResultJurisdiction(saveFilter.getJurisdictionResult());
+        setResultStage(saveFilter.getStageResult());
+        setResultBiddingWithin(saveFilter.getBiddingWithinResult());
+        setResultBH(saveFilter.getBhResult());
+        setResultOwnerType(saveFilter.getOwnerTypeResult());
+        setResultWorkType(saveFilter.getWorkTypeResult());
 
-        //Then set all the previous result to the intent
+        //Then set all the previous result to intent
         setAllFilterResults();
     }
 
-
-    /** Note: Used for setting all the previous url filter parameters extracted from the sharedpreferences
-     *  and place this filters to the intent where it will be used in  processing the search filter for web api in the MPSActivity class.
+    /**
+     * Note: Used for setting all the previous url filter parameters extracted from the sharedpreferences
+     * and place this filters to the intent where it will be used in  processing the search filter for web api in the MPSActivity class.
      */
     void setAllFilterResults() {
         setFilterResult(SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
         setFilterResult(SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
         setFilterResult(SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
         setFilterResult(SearchViewModel.FILTER_PROJECT_TYPE, getResultProjectType());
-        setFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION,getResultJurisdiction());
-        setFilterResult(SearchViewModel.FILTER_PROJECT_STAGE,getResultStage());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_JURISDICTION, getResultJurisdiction());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_STAGE, getResultStage());
         setFilterResult(SearchViewModel.FILTER_PROJECT_WORK_TYPE, getResultWorkType());
-        setFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE,getResultOwnerType());
-        setFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY,getResultBH());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_OWNER_TYPE, getResultOwnerType());
+        setFilterResult(SearchViewModel.FILTER_PROJECT_BUILDING_OR_HIGHWAY, getResultBH());
 
     }
+
     // Note: Used for setting the extracted filter value with corresponding filter key name to the Intent object.
     void setFilterResult(String key, String value) {
         if (value != null && !value.isEmpty()) setSearchFilterResult(key, value);
         else setSearchFilterResult(key, "");
     }
 
-    // Note: Used for saving the filter data to the sharedPreferences.
-    public void savePref(SharedPreferences.Editor edit, String key, String values) {
-        // SharedPreferences.Editor edit = spref.edit();
-        if (values != null && !values.isEmpty()) edit.putString(key, values);
-    }
 
     // Note: Used to save all previous selected filter items to the sharedpreferences named Filter.
-    public void savePrefFilterFieldValues() {
-        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
-        Thread t = new Thread(
-                new Runnable() {
+    public void saveFilterToRealm() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                saveFilter = new UserFilterSelect();
 
-                    @Override
-                    public void run() {
-                        SharedPreferences spref = getActivity().getSharedPreferences(activity.getString(R.string.Filter), Context.MODE_PRIVATE);
-                        SharedPreferences.Editor edit = spref.edit();
-                        edit.clear();
+                saveFilter.setLocationSelect(getLocation_select());
+                saveFilter.setTypeIdSelect(getType_select());
+                saveFilter.setTypeIdInt(getPersistProjectTypeIdInt());
 
-                        //Saving the Project Filter display values that could be used later
-                        savePref(edit, SearchViewModel.FILTER_PROJECT_UPDATED_IN_LAST, getResultUpdateWithin());
-                        savePref(edit, SearchViewModel.FILTER_PROJECT_BIDDING_WITHIN, getResultBiddingWithin());
-                        savePref(edit, SearchViewModel.FILTER_PROJECT_VALUE, getResultValue());
-                        savePref(edit, EXTRA_LOCATION_CITY, getLocation_select());
-                        savePref(edit, EXTRA_PROJECT_TYPE_ID, getType_select());
-                        savePref(edit, EXTRA_PROJECT_TYPE_ID_INT, getPersistProjectTypeIdInt());
+                saveFilter.setValueSelect(getValue_select());
+                saveFilter.setValueMin(persistedValueMin);
+                saveFilter.setValueMax(persistedValueMax);
 
-                        savePref(edit, EXTRA_VALUE, getValue_select());
-                        savePref(edit, EXTRA_VALUE_MIN, persistedValueMin);
-                        savePref(edit, EXTRA_VALUE_MAX, persistedValueMax);
+                saveFilter.setUpdatedWithinSelect(getUpdated_within_select());
+                saveFilter.setUpdatedWithin(getPersistedUpdatedWithin());
+                Log.d(TAG, "getPrefsave: updatedwithin select: " + saveFilter.getUpdatedWithinSelect());
+                Log.d(TAG, "getPrefsave: updatedwithin: " + saveFilter.getUpdatedWithin());
 
-                        savePref(edit, EXTRA_UPDATED_WITHIN_DISPLAY_STR, getUpdated_within_select());
-                        savePref(edit, EXTRA_UPDATED_WITHIN_DAYS_INT, getPersistedUpdatedWithin());
+                saveFilter.setJurisdictionSelect(getJurisdiction_select());
+                saveFilter.setStageSelect(getStage_select());
 
-                        savePref(edit, EXTRA_JURISDICTION, getJurisdiction_select());
-                        savePref(edit, EXTRA_STAGE, getStage_select());
+                saveFilter.setBiddingWithinSelect(getBidding_within_select());
+                saveFilter.setBiddingWithin(getPersistedBiddingWithin());
 
-                        savePref(edit, EXTRA_BIDDING_WITHIN_DISPLAY_STR, getBidding_within_select());
-                        savePref(edit, EXTRA_BIDDING_WITHIN_DAYS_INT, getPersistedBiddingWithin());
+                saveFilter.setBhSelect(getBh_select());
 
-                        savePref(edit, EXTRA_BUILDING_OR_HIGHWAY, getBh_select());
-                        if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0)
-                            savePref(edit, EXTRA_BUILDING_OR_HIGHWAY_TAG, getPersistedBuildingOrHighway()[1]);
+                if (getPersistedBuildingOrHighway() != null && getPersistedBuildingOrHighway().length > 0) {
+                    saveFilter.setBhStr(getPersistedBuildingOrHighway()[0]);
+                    saveFilter.setBh(getPersistedBuildingOrHighway()[1]);
+                }
 
-                        savePref(edit, EXTRA_OWNER_TYPE, getOwner_type_select());
-                        savePref(edit, EXTRA_OWNER_TYPE_ID, getPersistedOwnerType());
-                        savePref(edit, EXTRA_WORK_TYPE, getWork_type_select());
-                        savePref(edit, EXTRA_WORK_TYPE_ID, getPersistedWorkType());
+                saveFilter.setOwnerTypeSelect(getOwner_type_select());
+                saveFilter.setOwnerType(getPersistedOwnerType());
+                saveFilter.setWorkTypeSelect(getWork_type_select());
+                saveFilter.setWorkType(getPersistedWorkType());
 
-                        //Saving the Company Filter display values that could be used later
-                        savePref(edit, EXTRA_CLOCATION_CITY, getClocationSelect());
-                        savePref(edit, EXTRA_CVALUE, getCvalueSelect());
-                        savePref(edit, EXTRA_CJURISDICTION, getCjurisdictionSelect());
-                        savePref(edit, EXTRA_CBIDDING_WITHIN_DISPLAY_STR, getCbiddingWithinSelect());
-                        savePref(edit, EXTRA_CPROJECT_TYPE_ID, getCtypeSelect());
+                saveFilter.setcLocationSelect(getClocationSelect());
+                saveFilter.setcValueSelect(getCvalueSelect());
+                saveFilter.setcJurisdictionSelect(getCjurisdictionSelect());
+                saveFilter.setcBiddingWithinSelect(getCbiddingWithinSelect());
+                saveFilter.setcTypeSelect(getCtypeSelect());
 
-                        //Saving the Project/Company Filter Final Result values for Web api that could be used later
-                        savePref(edit,activity.getString(R.string.FilterResultProjectType),getResultProjectType());
-                        savePref(edit,activity.getString(R.string.FilterResultValue),getResultValue());
-                        savePref(edit,activity.getString(R.string.FilterResultUpdatedWithin),getResultUpdateWithin());
-                        savePref(edit,activity.getString(R.string.FilterResultJurisdiction),getResultJurisdiction());
-                        savePref(edit,activity.getString(R.string.FilterResultStage),getResultStage());
-                        savePref(edit,activity.getString(R.string.FilterResultBiddingWithin),getResultBiddingWithin());
-                        savePref(edit,activity.getString(R.string.FilterResultBH),getResultBH());
-                        savePref(edit,activity.getString(R.string.FilterResultOwnerType),getResultOwnerType());
-                        savePref(edit,activity.getString(R.string.FilterResultWorkType),getResultWorkType());
-                        edit.apply();
+                //Saving the Project/Company Filter Final Result values for Web api that could be used later
+
+                saveFilter.setTypeResult(getResultProjectType());
+                saveFilter.setJurisdictionResult(getResultJurisdiction());
+                saveFilter.setStageResult(getResultStage());
+                saveFilter.setBhResult(getResultBH());
+                saveFilter.setOwnerTypeResult(getResultOwnerType());
+                saveFilter.setWorkTypeResult(getResultWorkType());
+                saveFilter.setUpdatedWithinResult(getResultUpdateWithin());
+                saveFilter.setBiddingWithinResult(getResultBiddingWithin());
+                saveFilter.setValueResult(getResultValue());
+
+                //Note: For setting the Project Type list for realm
+                if (typeData != null) {
+                    RealmList<UserFilterExtra> userList = new RealmList<UserFilterExtra>();
+                    for (String key : typeData.keySet()) {
+                        UserFilterExtra uname = new UserFilterExtra();
+                        uname.setName(key);
+                        uname.setValue(typeData.getString(key));
+                        userList.add(uname);
                     }
-                });
-        t.start();
+                    saveFilter.setTypeKey(userList);
+                }
+
+                //Note: For Jurisdiction list
+                if (jurisdictionData != null) {
+                    RealmList<UserFilterExtra> userList = new RealmList<UserFilterExtra>();
+                    for (String key : jurisdictionData.keySet()) {
+                        UserFilterExtra uname = new UserFilterExtra();
+                        uname.setName(key);
+                        uname.setValue(jurisdictionData.getString(key));
+                        userList.add(uname);
+                    }
+                    saveFilter.setJurisdictionKey(userList);
+                }
+
+                //Note: For setting the Stage list to realm
+                if (stageData != null) {
+                    RealmList<UserFilterExtra> userList = new RealmList<UserFilterExtra>();
+                    for (String key : stageData.keySet()) {
+                        Bundle b = stageData.getBundle(key);
+                        if (b == null) continue;
+
+                        UserFilterExtra uname = new UserFilterExtra();
+                        uname.setName(key);
+                        uname.setValue(b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
+                        uname.setValueStage(b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
+                        userList.add(uname);
+                    }
+                    saveFilter.setStageKey(userList);
+                }
+                //Note: Save all user selected filters to realm
+                realm.copyToRealmOrUpdate(saveFilter);
+            }
+
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "saveFilterToRealm: filter saved success");
+            }
+        }, new Realm.Transaction.OnError() {
+
+            @Override
+            public void onError(Throwable error) {
+                Log.e(TAG, "saveFilterToRealm: filter saved error" + error.getMessage());
+            }
+        });
+
     }
 
-    /** Note: This method is used for saving the special filters data (Project types and Jurisdiction) to the sharedPreferences
+    /**
+     * Note: This method is used for saving the special filters data (Project types and Jurisdiction) to the sharedPreferences
      *
      * @param filterDataName - used as a filter key name for saving to sharedPreferences.
-     * @param bundle - hold the filter data to be saved to the sharedPreferences.
+     * @param bundle         - hold the filter data to be saved to the sharedPreferences.
      */
-    public void savePrefBundle(final String filterDataName, final Bundle bundle) {
 
-        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
-        Thread t = new Thread(
-                new Runnable() {
+    public void saveExtraFilterData(final String filterDataName, final Bundle bundle) {
+        Log.d(TAG, "saveExtraFilterData: filter name: " + filterDataName);
 
-                    @Override
-                    public void run() {
-                        SharedPreferences spref = getActivity().getSharedPreferences(filterDataName, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor edit = spref.edit();
-                        edit.clear();
-                        for (String key : bundle.keySet()) {
-                            edit.putString(key, bundle.getString(key));
-                        }
-                        edit.apply();
-                    }
-                });
-        t.start();
+        if (filterDataName == null) return;
+        if (filterDataName.equalsIgnoreCase(activity.getString(R.string.FilterTypeData)))
+            this.typeData = bundle;
 
+        if (filterDataName.equalsIgnoreCase(activity.getString(R.string.FilterJurisdictionData)))
+            this.jurisdictionData = bundle;
+
+        if (filterDataName.equalsIgnoreCase(activity.getString(R.string.FilterStageData)))
+            this.stageData = bundle;
     }
 
-    /** Note: This method is used for saving the special filter data (Stage) to the sharedPreferences
-     *
-     * @param filterDataName - used as a filter key name for saving to sharedPreferences.
-     * @param bundle - hold the filter data to be saved to the sharedPreferences.
-     */
-    public void savePrefBundleStageOnly(String filterDataName, final Bundle bundle) {
-        final String fName = filterDataName + "name";
 
-        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
-        Thread t = new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-                        SharedPreferences spref = getActivity().getSharedPreferences(fName, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor edit = spref.edit();
-                        edit.clear();
-                        for (String key : bundle.keySet()) {
-                            //  edit.putString(key,bundle.getString(key));
-                            Bundle b = bundle.getBundle(key);
-
-                            if (b == null) continue;
-                            edit.putString(key, b.getString(SearchFilterStageViewModel.BUNDLE_KEY_NAME));
-                        }
-                        edit.apply();
-                    }
-                });
-        t.start();
-
-        savePrefBundleStageViewOnly(filterDataName, bundle);
-    }
-
-    /** Note: This method is used for saving the other special filter data (Stage) to the sharedPreferences
-     *
-     * @param filterDataName - used as a filter key name for saving to sharedPreferences.
-     * @param bundle - hold the filter data to be saved to the sharedPreferences.
-     */
-    public void savePrefBundleStageViewOnly(String filterDataName, final Bundle bundle) {
-        final String fViewType = filterDataName + "view";
-        final SharedPreferences spref = getActivity().getSharedPreferences(fViewType, Context.MODE_PRIVATE);
-        final SharedPreferences.Editor edit = spref.edit();
-
-        // Note: The use of thread object here is not to hinder the processing of the filter to the web api while the filter data is saving to the sharedPreferences file.
-        Thread t = new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // SharedPreferences spref = getActivity().getSharedPreferences(fViewType, Context.MODE_PRIVATE);
-                        // SharedPreferences.Editor edit = spref.edit();
-                        edit.clear();
-                        for (String key : bundle.keySet()) {
-                            //  edit.putString(key,bundle.getString(key));
-                            Bundle b = bundle.getBundle(key);
-                            if (b == null) continue;
-                            edit.putString(key, b.getString(SearchFilterStageViewModel.BUNDLE_KEY_VIEW_TYPE));
-                        }
-                        edit.apply();
-                    }
-                });
-        t.start();
-    }
-
-    /** Note: The setter/getter methods for resultxxx.
+    /**
+     * Note: The setter/getter methods for resultxxx.
      *
      * @return
      */

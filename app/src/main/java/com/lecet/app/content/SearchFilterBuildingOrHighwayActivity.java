@@ -28,6 +28,7 @@ public class SearchFilterBuildingOrHighwayActivity extends AppCompatActivity {
             //   viewModel.setBh(bhArr);
             viewModel.setStrBH(bhArr[0]);
             viewModel.setTagBH(bhArr[1]);
+            viewModel.setBHData(bhArr[0],bhArr[1]);
         }
         sfilter.setViewModel(viewModel);
         setupToolbar();

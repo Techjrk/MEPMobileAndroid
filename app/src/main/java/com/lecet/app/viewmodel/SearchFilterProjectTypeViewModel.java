@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -58,8 +59,8 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
      */
     public SearchFilterProjectTypeViewModel(AppCompatActivity activity) {
         this.activity = activity;
-        getLastCheckedItems();
-        bundle = getPrefBundle();
+        Intent i = activity.getIntent();
+        bundle = i.getBundleExtra(activity.getString(R.string.FilterTypeData));
         if (bundle == null) bundle = new Bundle();
         getProjectTypes();
         searchItem("");
@@ -170,7 +171,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         alert.show();
     }
 
-
     /**
      * Apply the filter and return to the main Search activity
      */
@@ -180,7 +180,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                 showAlertMessage();
                 return;
             }
-            saveLastCheckedItems();
         }
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
@@ -289,7 +288,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             if (parent != null && (hasChild || hasGrandChild) || foundParent) data.add(parent);
         }
 
-        //SearchFilterAllTabbedViewModel.userCreated=true; //might be needing this.
         if (SearchFilterAllTabbedViewModel.userCreated) {
             SearchFilterProjectTypeSingleSelectAdapter adapter = new SearchFilterProjectTypeSingleSelectAdapter(data, this);
             recyclerView.setAdapter(adapter);
@@ -298,7 +296,6 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
             recyclerView.setAdapter(adapter);
         }
     }
-
 
     public void clearBundle() {
         bundle.clear();
@@ -312,37 +309,4 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         this.lastChecked = lastChecked;
     }
 
-    public Bundle getPrefBundle() {
-        Bundle b = null;
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.FilterTypeData), Context.MODE_PRIVATE);
-        if (spref != null) {
-            Set<String> sIDs = spref.getAll().keySet();
-            if (sIDs == null || sIDs.size() == 0) return null;
-            b = new Bundle();
-            for (String keyID : sIDs) {
-                b.putString(keyID, spref.getString(keyID, ""));
-               // Log.d("getPrefTypeBundle","getPrefTypeBundle"+keyID+" : "+spref.getString(keyID,""));
-            }
-        }
-        return b;
-    }
-    void saveLastCheckedItems() {
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedTypeItems), Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.putInt(activity.getString(R.string.lastFamilyChecked),getLastFamilyChecked());
-        edit.putString(activity.getString(R.string.lastName),lastName);
-        edit.putInt(activity.getString(R.string.lastChildParentPosition),getLastChildParentPosition());
-        edit.putInt(activity.getString(R.string.lastSection),getLastSection());
-        edit.putInt(activity.getString(R.string.lastPosition),getLastPosition());
-        edit.apply();
-
-    }
-    void getLastCheckedItems(){
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedTypeItems), Context.MODE_PRIVATE);
-        setLastFamilyChecked(spref.getInt(activity.getString(R.string.lastFamilyChecked),getLastFamilyChecked()));
-        setLastName(spref.getString(activity.getString(R.string.lastName),getLastName()));
-        setLastChildParentPosition(spref.getInt(activity.getString(R.string.lastChildParentPosition),getLastChildParentPosition()));
-        setLastSection(spref.getInt(activity.getString(R.string.lastSection),getLastSection()));
-        setLastPosition(spref.getInt(activity.getString(R.string.lastPosition),getLastPosition()));
-    }
 }

@@ -21,6 +21,8 @@ import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterJurisdictionNoDistrictCouncil;
+import com.lecet.app.data.models.UserFilterExtra;
+import com.lecet.app.data.models.UserFilterSelect;
 import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -69,10 +72,8 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
     public SearchFilterJurisdictionViewModel(AppCompatActivity activity) {
         this.activity = (SearchFilterJurisdictionActivity) activity;
         //Note: process the getting  the last jurisdiction item selected by the user.
-        getLastCheckedItems();
-
-        //Note: process of getting the saved jurisdiction filter data.
-        bundle = getPrefBundle();
+        Intent i = activity.getIntent();
+        bundle = i.getBundleExtra(activity.getString(R.string.FilterJurisdictionData));
         if (bundle == null) bundle = new Bundle();
 
         //Note: get all the jurisdiction items to be displayed from the Realm.
@@ -170,7 +171,7 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
      * Apply the filter and return to the main Search activity
      */
     public void onApplyButtonClicked(View view) {
-        saveLastCheckedItems();
+
         Intent intent = activity.getIntent();
         intent.putExtra(SearchViewModel.FILTER_EXTRA_DATA_BUNDLE, bundle);
         activity.setResult(Activity.RESULT_OK, intent);
@@ -358,41 +359,6 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
         searchItem(query);
         notifyPropertyChanged(BR.query);
 
-    }
-
-    public Bundle getPrefBundle() {
-        Bundle b = null;
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.FilterSharedJData), Context.MODE_PRIVATE);
-        if (spref != null) {
-            Set<String> sIDs = spref.getAll().keySet();
-            if (sIDs == null || sIDs.size() == 0) return null;
-            b = new Bundle();
-            for (String keyID : sIDs) {
-                b.putString(keyID, spref.getString(keyID, ""));
-                Log.d(TAG, "getPrefBundle: Preference Bundle keyID: " + keyID + " : " + spref.getString(keyID, ""));
-            }
-        }
-        return b;
-    }
-
-    void saveLastCheckedItems() {
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = spref.edit();
-        edit.putInt(activity.getString(R.string.lastFamilyChecked), getLastFamilyChecked());
-        edit.putString(activity.getString(R.string.lastName), lastName);
-        edit.putInt(activity.getString(R.string.lastChildParentPosition), getLastChildParentPosition());
-        edit.putInt(activity.getString(R.string.lastSection), getLastSection());
-        edit.putInt(activity.getString(R.string.lastPosition), getLastPosition());
-        edit.apply();
-    }
-
-    void getLastCheckedItems() {
-        SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.LastCheckedJurisdictionItems), Context.MODE_PRIVATE);
-        setLastFamilyChecked(spref.getInt(activity.getString(R.string.lastFamilyChecked), lastFamilyChecked));
-        setLastName(spref.getString(activity.getString(R.string.lastName), getLastName()));
-        setLastChildParentPosition(spref.getInt(activity.getString(R.string.lastChildParentPosition), getLastChildParentPosition()));
-        setLastSection(spref.getInt(activity.getString(R.string.lastSection), getLastSection()));
-        setLastPosition(spref.getInt(activity.getString(R.string.lastPosition), getLastPosition()));
     }
 
 }

@@ -25,13 +25,15 @@ public class SearchFilterOwnerTypeActivity extends AppCompatActivity {
         String sdataId = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_OWNER_TYPE_ID);
          viewModel = new SearchFilterOwnerTypeViewModel(this);
 
-        if (sdata.equalsIgnoreCase(SearchFilterAllTabbedViewModel.ANY)) {
-            viewModel.setLastChecked(null);
-        }
+
 
             if (sdataId != null && !sdataId.isEmpty())
             {
+                if (sdata.equalsIgnoreCase(SearchFilterAllTabbedViewModel.ANY)) {
+                    viewModel.setLastChecked(null);
+                } else
                 viewModel.setLastChecked((CheckBox)findViewById(Integer.valueOf(sdataId)));
+
             }
 
         sfilter.setViewModel(viewModel);

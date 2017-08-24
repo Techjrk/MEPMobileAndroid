@@ -59,7 +59,7 @@ public class UserFilterSelect extends RealmObject{
 
     @SerializedName("bh")
     private String bh; //checked values for BH
-
+    private String bhStr; //string text for BH
     @SerializedName("ownerTypeSelect")
     private String ownerTypeSelect;
 
@@ -124,26 +124,26 @@ public class UserFilterSelect extends RealmObject{
     //A. Project Type
 
     @SerializedName("typeKey")
-    private RealmList<UserFilterName> typeKey;
+    private RealmList<UserFilterExtra> typeKey;
 
     @SerializedName("typeValue")
-    private RealmList<UserFilterName> typeValue;
+    private RealmList<UserFilterExtra> typeValue;
 
     //B. Stage
 
     @SerializedName("stageKey")
-    private RealmList<UserFilterName> stageKey;
+    private RealmList<UserFilterExtra> stageKey;
 
     @SerializedName("stageValue")
-    private RealmList<UserFilterName> stageValue;
+    private RealmList<UserFilterExtra> stageValue;
 
     //C. Jurisdiction
 
     @SerializedName("jurisdictionKey")
-    private RealmList<UserFilterName> jurisdictionKey;
+    private RealmList<UserFilterExtra> jurisdictionKey;
 
     @SerializedName("jurisdictionValue")
-    private RealmList<UserFilterName> jurisdictionValue;
+    private RealmList<UserFilterExtra> jurisdictionValue;
 
     //Note: instance method
     public void clear() {
@@ -301,6 +301,14 @@ public class UserFilterSelect extends RealmObject{
         this.bh = bh;
     }
 
+    public String getBhStr() {
+        return bhStr;
+    }
+
+    public void setBhStr(String bhStr) {
+        this.bhStr = bhStr;
+    }
+
     public String getOwnerTypeSelect() {
         return ownerTypeSelect;
     }
@@ -445,51 +453,51 @@ public class UserFilterSelect extends RealmObject{
         this.workTypeResult = workTypeResult;
     }
 
-    public RealmList<UserFilterName> getTypeKey() {
+    public RealmList<UserFilterExtra> getTypeKey() {
         return typeKey;
     }
 
-    public void setTypeKey(RealmList<UserFilterName> typeKey) {
+    public void setTypeKey(RealmList<UserFilterExtra> typeKey) {
         this.typeKey = typeKey;
     }
 
-    public RealmList<UserFilterName> getTypeValue() {
+    public RealmList<UserFilterExtra> getTypeValue() {
         return typeValue;
     }
 
-    public void setTypeValue(RealmList<UserFilterName> typeValue) {
+    public void setTypeValue(RealmList<UserFilterExtra> typeValue) {
         this.typeValue = typeValue;
     }
 
-    public RealmList<UserFilterName> getStageKey() {
+    public RealmList<UserFilterExtra> getStageKey() {
         return stageKey;
     }
 
-    public void setStageKey(RealmList<UserFilterName> stageKey) {
+    public void setStageKey(RealmList<UserFilterExtra> stageKey) {
         this.stageKey = stageKey;
     }
 
-    public RealmList<UserFilterName> getStageValue() {
+    public RealmList<UserFilterExtra> getStageValue() {
         return stageValue;
     }
 
-    public void setStageValue(RealmList<UserFilterName> stageValue) {
+    public void setStageValue(RealmList<UserFilterExtra> stageValue) {
         this.stageValue = stageValue;
     }
 
-    public RealmList<UserFilterName> getJurisdictionKey() {
+    public RealmList<UserFilterExtra> getJurisdictionKey() {
         return jurisdictionKey;
     }
 
-    public void setJurisdictionKey(RealmList<UserFilterName> jurisdictionKey) {
+    public void setJurisdictionKey(RealmList<UserFilterExtra> jurisdictionKey) {
         this.jurisdictionKey = jurisdictionKey;
     }
 
-    public RealmList<UserFilterName> getJurisdictionValue() {
+    public RealmList<UserFilterExtra> getJurisdictionValue() {
         return jurisdictionValue;
     }
 
-    public void setJurisdictionValue(RealmList<UserFilterName> jurisdictionValue) {
+    public void setJurisdictionValue(RealmList<UserFilterExtra> jurisdictionValue) {
         this.jurisdictionValue = jurisdictionValue;
     }
 

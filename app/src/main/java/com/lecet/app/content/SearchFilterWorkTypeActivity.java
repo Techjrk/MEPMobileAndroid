@@ -26,12 +26,11 @@ public class SearchFilterWorkTypeActivity extends AppCompatActivity {
         String sdataId = intent.getStringExtra(SearchFilterAllTabbedViewModel.EXTRA_WORK_TYPE_ID);
         viewModel = new SearchFilterWorkTypeViewModel(this);
 
-        if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
-            viewModel.setLastChecked(null);
-        }
-
         if (sdataId != null && !sdataId.isEmpty())
         {
+            if (sdata.equals(SearchFilterAllTabbedViewModel.ANY)) {
+                viewModel.setLastChecked(null);
+            } else
             viewModel.setLastChecked((CheckBox)findViewById(Integer.valueOf(sdataId)));
         }
         sfilter.setViewModel(viewModel);

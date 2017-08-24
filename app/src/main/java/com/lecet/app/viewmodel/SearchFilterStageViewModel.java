@@ -58,8 +58,9 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public SearchFilterStageViewModel(AppCompatActivity activity) {
         this.activity = activity;
-        getLastCheckedItems();
-        bundle = getPrefBundle();
+        //getLastCheckedItems();
+        Intent i = activity.getIntent();
+        bundle = i.getBundleExtra(activity.getString(R.string.FilterStageData));
         if (bundle == null) bundle = new Bundle();
         getProjectStages();
         searchItem("");
@@ -161,26 +162,6 @@ public class SearchFilterStageViewModel extends BaseObservable {
         });
     }
 
-void saveLastCheckedItems() {
-    SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
-    SharedPreferences.Editor edit = spref.edit();
-    edit.putInt("lastFamilyChecked",lastFamilyChecked);
-    edit.putString("lastName",lastName);
-    edit.putInt("lastChildParentPosition",lastChildParentPosition);
-    edit.putInt("lastSection",lastSection);
-    edit.putInt("lastPosition",lastPosition);
-    edit.apply();
-
-}
-void getLastCheckedItems(){
-    SharedPreferences spref = activity.getSharedPreferences(activity.getString(R.string.lastcheckedStageItems), Context.MODE_PRIVATE);
-    lastFamilyChecked= spref.getInt("lastFamilyChecked",lastFamilyChecked);
-    lastName=spref.getString("lastName",lastName);
-    lastChildParentPosition=spref.getInt("lastChildParentPosition",lastChildParentPosition);
-    lastSection=spref.getInt("lastSection",lastSection);
-    lastPosition=spref.getInt("lastPosition",lastPosition);
-
-}
     void showAlertMessage() {
         DialogInterface.OnClickListener onClickAddListener = new DialogInterface.OnClickListener() {
             @Override
@@ -217,7 +198,7 @@ void getLastCheckedItems(){
                 showAlertMessage();
                 return;
             }
-            saveLastCheckedItems();
+           // saveLastCheckedItems();
         }
 
         Intent intent = activity.getIntent();
@@ -322,28 +303,5 @@ void getLastCheckedItems(){
             SearchFilterStageAdapter adapter = new SearchFilterStageAdapter(data, this);
             recyclerView.setAdapter(adapter);
         }
-    }
-    public Bundle getPrefBundle() {
-        Bundle b = null;
-        SharedPreferences sprefName = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"name", Context.MODE_PRIVATE);
-        SharedPreferences sprefView = activity.getSharedPreferences(activity.getString(R.string.FilterStageData)+"view", Context.MODE_PRIVATE);
-        if (sprefName != null) {
-            Set<String> sIDs = sprefName.getAll().keySet();
-            Log.d(TAG,"getPrefBundle: SharedPreferences stage bundle key ids:"+sIDs);
-            if (sIDs == null || sIDs.size() == 0) return null;
-            b = new Bundle();
-
-            for (String keyID : sIDs) {
-                Bundle b2 = new Bundle();
-                b2.putString(BUNDLE_KEY_ID,keyID);
-                b2.putString(BUNDLE_KEY_NAME, sprefName.getString(keyID, ""));
-                b2.putString(BUNDLE_KEY_VIEW_TYPE,sprefView.getString(keyID,""));
-                b.putBundle(keyID,b2);
-                Log.d(TAG,"getPrefBundle: Preferences Stage Bundle id="+keyID+" : name="+sprefName.getString(keyID,""));
-                if (sprefView.getString(keyID,"").equals("")) lastFamilyChecked = Integer.valueOf(sprefView.getString(keyID,""));
-                setLastName(sprefName.getString(keyID, ""));
-            }
-        }
-        return b;
     }
 }

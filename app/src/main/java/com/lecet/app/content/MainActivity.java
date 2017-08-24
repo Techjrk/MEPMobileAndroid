@@ -36,6 +36,7 @@ import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.data.models.User;
+import com.lecet.app.data.models.UserFilterSelect;
 import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ActivityMainBinding;
 import com.lecet.app.domain.BidDomain;
@@ -122,37 +123,42 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     @Override
     protected void onResume() {
         super.onResume();
-        SearchViewModel.companyInstantSearch=false;
-        //clear the Shared pref for Project Type
-        clearSharedPref(getString(R.string.FilterTypeData));
-        //clear the Shared pref for Stage with name content
-        clearSharedPref(getString(R.string.FilterStageData)+"name");
-        //clear the Shared pref for Stage with view type content
-        clearSharedPref(getString(R.string.FilterStageData)+"view");
-        clearSharedPref(getString(R.string.FilterSharedJData));
+        SearchViewModel.companyInstantSearch = false;
+        //Note: reset all the user selected filters in realm
+        resetFilterFromRealm();
 
-        clearSharedPref(getString(R.string.LastCheckedJurisdictionItems));
-        clearSharedPref(getString(R.string.lastcheckedTypeItems));
-        clearSharedPref(getString(R.string.lastcheckedStageItems));
-
-        //clear the Shared pref for other filters
-        clearSharedPref(getString(R.string.Filter));
-      //  if (viewModel !=null) viewModel.refreshMRA();
         if (SearchFilterAllTabbedViewModel.userCreated) {
-            SearchFilterAllTabbedViewModel.userCreated=false;
+            SearchFilterAllTabbedViewModel.userCreated = false;
             Intent intent = new Intent(this, DashboardIntermediaryActivity.class);
             startActivity(intent);
             finish();
         }
     }
 
-      private void clearSharedPref(String dataName) {
-          SharedPreferences spref = getSharedPreferences(dataName, Context.MODE_PRIVATE);
-          if (spref == null) return;
-          SharedPreferences.Editor editData = spref.edit();
-          editData.clear();
-          editData.commit();
-      }
+    public void resetFilterFromRealm() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                UserFilterSelect saveFilter = new UserFilterSelect();
+                realm.copyToRealmOrUpdate(saveFilter);
+            }
+
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "saveFilterToRealm: filter saved success");
+            }
+        }, new Realm.Transaction.OnError() {
+
+            @Override
+            public void onError(Throwable error) {
+                Log.e(TAG, "saveFilterToRealm: filter saved error" + error.getMessage());
+            }
+        });
+
+    }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected, NetworkInfo networkInfo) {
 
@@ -361,13 +367,13 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         String selectDate = df.format(selectedDate);
         String prevDate = (viewModel.getPreviousDate() == null) ? null : df.format(viewModel.getPreviousDate());
-       if (!selectDate.equals(prevDate))
-        {  viewModel.fetchProjectsByBidDate(selectedDate);
-           viewModel.setPreviousDate(selectedDate);
-       } else {
-           viewModel.clickRefreshMHS();
+        if (!selectDate.equals(prevDate)) {
+            viewModel.fetchProjectsByBidDate(selectedDate);
+            viewModel.setPreviousDate(selectedDate);
+        } else {
+            viewModel.clickRefreshMHS();
 
-       }
+        }
 
     }
 
