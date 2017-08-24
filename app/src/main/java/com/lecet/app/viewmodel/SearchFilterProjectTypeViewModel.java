@@ -2,10 +2,8 @@ package com.lecet.app.viewmodel;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
@@ -22,14 +20,11 @@ import com.lecet.app.adapters.SearchFilterProjectTypeSingleSelectAdapter;
 import com.lecet.app.data.models.PrimaryProjectType;
 import com.lecet.app.data.models.SearchFilterProjectTypesMain;
 import com.lecet.app.data.models.SearchFilterProjectTypesProjectCategory;
-import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -65,6 +60,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         getProjectTypes();
         searchItem("");
     }
+
     public int getLastFamilyChecked() {
         return lastFamilyChecked;
     }
@@ -105,11 +101,11 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
         this.customSearch = customSearch;
     }
 
-    public  String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public  void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -176,7 +172,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
      */
     public void onApplyButtonClicked(View view) {
         if (SearchFilterAllTabbedViewModel.userCreated) {
-            if (bundle.isEmpty() ) {
+            if (bundle.isEmpty()) {
                 showAlertMessage();
                 return;
             }
@@ -232,7 +228,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                 foundParent = true;
             }
 
-            if (!bundle.isEmpty() && bundle.containsKey(parent.getId()) ) {
+            if (!bundle.isEmpty() && bundle.containsKey(parent.getId())) {
                 parent.setSelected(true);
             }
 
@@ -248,7 +244,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                         hasChild = true;
                         foundChild = true;
                     }
-                    if (!bundle.isEmpty() && bundle.containsKey(child.getId()) ) {
+                    if (!bundle.isEmpty() && bundle.containsKey(child.getId())) {
                         child.setSelected(true);
                     }
                     List<PrimaryProjectType> gchildTypes = ptpc.getProjectTypes();
@@ -265,7 +261,7 @@ public class SearchFilterProjectTypeViewModel extends BaseObservable {
                                 containGrandChild.add(hasGrandChild);
                             }
                             //Restore the grandchildren selected item later if needed
-                            if (!bundle.isEmpty() && bundle.containsKey(gchild.getId()) ) {
+                            if (!bundle.isEmpty() && bundle.containsKey(gchild.getId())) {
                                 gchild.setSelected(true);
                             }
 

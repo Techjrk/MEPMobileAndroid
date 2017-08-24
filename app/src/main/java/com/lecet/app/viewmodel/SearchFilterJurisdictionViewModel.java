@@ -1,9 +1,7 @@
 package com.lecet.app.viewmodel;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
@@ -21,16 +19,11 @@ import com.lecet.app.data.models.SearchFilterJurisdictionDistrictCouncil;
 import com.lecet.app.data.models.SearchFilterJurisdictionLocal;
 import com.lecet.app.data.models.SearchFilterJurisdictionMain;
 import com.lecet.app.data.models.SearchFilterJurisdictionNoDistrictCouncil;
-import com.lecet.app.data.models.UserFilterExtra;
-import com.lecet.app.data.models.UserFilterSelect;
-import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -262,7 +255,8 @@ public class SearchFilterJurisdictionViewModel extends BaseObservable {
                 adapterMain.setChildren(children);
             }
 
-            if (adapterMain != null && (hasChild || hasGrandChild) || foundParent) data.add(adapterMain);
+            if (adapterMain != null && (hasChild || hasGrandChild) || foundParent)
+                data.add(adapterMain);
         }
 
         adapter = new SearchFilterJurisdictionAdapter(data, this);

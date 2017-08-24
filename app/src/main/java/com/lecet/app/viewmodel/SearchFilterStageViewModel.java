@@ -2,10 +2,8 @@ package com.lecet.app.viewmodel;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
@@ -21,11 +19,9 @@ import com.lecet.app.adapters.SearchFilterStageAdapter;
 import com.lecet.app.adapters.SearchFilterStageSingleSelectAdapter;
 import com.lecet.app.data.models.SearchFilterStage;
 import com.lecet.app.data.models.SearchFilterStagesMain;
-import com.lecet.app.utility.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -44,7 +40,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
 
     private String lastName;
     private int lastSection; //keep track of last section used by the selected item
-    private  int lastPosition; //keep track of last position used by the selected item
+    private int lastPosition; //keep track of last position used by the selected item
     private int lastChildParentPosition; //keep track of last child parent used by the selected item
     private int lastFamilyChecked = NO_TYPE;
     private boolean customSearch;
@@ -107,11 +103,11 @@ public class SearchFilterStageViewModel extends BaseObservable {
         this.customSearch = customSearch;
     }
 
-    public  String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public  void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -181,7 +177,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
                 }
             }
         };
-      AlertDialog  alert = new AlertDialog.Builder(activity).create();
+        AlertDialog alert = new AlertDialog.Builder(activity).create();
         String message = "Please Select A Stage Item.";
         alert.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(android.R.string.ok), onClickAddListener);
         alert.setMessage(message);
@@ -194,11 +190,11 @@ public class SearchFilterStageViewModel extends BaseObservable {
      */
     public void onApplyButtonClicked(View view) {
         if (SearchFilterAllTabbedViewModel.userCreated) {
-            if (bundle.isEmpty() ) {
+            if (bundle.isEmpty()) {
                 showAlertMessage();
                 return;
             }
-           // saveLastCheckedItems();
+            // saveLastCheckedItems();
         }
 
         Intent intent = activity.getIntent();
@@ -216,12 +212,12 @@ public class SearchFilterStageViewModel extends BaseObservable {
     public void setStageData(int viewType, int id, String name) {
 
         // overwrite the Bundle instance with each selection since Stage only supports single-selection
-        Bundle  b = new Bundle();
+        Bundle b = new Bundle();
         setBundleData(b, BUNDLE_KEY_VIEW_TYPE, Integer.toString(viewType));
         setBundleData(b, BUNDLE_KEY_ID, Integer.toString(id));
         setBundleData(b, BUNDLE_KEY_NAME, name);
         String sid = Integer.toString(id);
-        bundle.putBundle(sid,b);
+        bundle.putBundle(sid, b);
     }
 
     public void removeStageData(String key) {
@@ -231,6 +227,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
     private void setBundleData(Bundle b, String key, String value) {
         b.putString(key, value);
     }
+
     public RealmResults<SearchFilterStagesMain> getRealmStages() {
         return realmStages;
     }
@@ -264,7 +261,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
             if (parent.getName().trim().toLowerCase().contains(searchKey.trim().toLowerCase())) {
                 foundParent = true;
             }
-            if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(parent.getId())) ) {
+            if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(parent.getId()))) {
                 parent.setSelected(true);
             }
 
@@ -279,7 +276,7 @@ public class SearchFilterStageViewModel extends BaseObservable {
                         hasChild = true;
                         foundChild = true;
                     }
-                    if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(child.getId())) ) {
+                    if (!bundle.isEmpty() && bundle.containsKey(String.valueOf(child.getId()))) {
                         child.setSelected(true);
                     }
 
