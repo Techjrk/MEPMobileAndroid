@@ -89,6 +89,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     private ProjectDomain projectDomain;
     private Handler timer;
     private LocationManager locationManager;
+    private boolean isVoiceActivated;
     private GoogleMap map;
     private Marker currLocationMarker;
     private Marker lastMarkerTapped;
@@ -145,14 +146,23 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
     //Note: Store the previous preBid and postBid projects for comparison.
     private ArrayList<Project> oldPreBidProjects, oldPostBidProjects;
 
-    public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer, LocationManager locationManager) {
+    public ProjectsNearMeViewModel(AppCompatActivity activity, ProjectDomain projectDomain, Handler timer, LocationManager locationManager, boolean isVoiceActivated) {
         super(activity);
         this.activity = activity;
         this.projectDomain = projectDomain;
         this.markers = new HashMap<>();
         this.timer = timer;
         this.locationManager = locationManager;
+        this.isVoiceActivated = isVoiceActivated;
         this.isSearching = true;
+
+        showProgressDialogIfVoiceActivated();
+    }
+
+    private void showProgressDialogIfVoiceActivated() {
+        if(isVoiceActivated) {
+            showProgressDialog();
+        }
     }
 
     public void setProjectFilter(String filter) {
@@ -467,6 +477,7 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
                 if (!isActivityAlive()) return;
 
                 if (response.isSuccessful()) {
+                    Log.e(TAG, "fetchProjectsNearMe: onResponse: success");
 
                     List<Project> projects = response.body().getResults();
 
@@ -474,10 +485,13 @@ public class ProjectsNearMeViewModel extends BaseObservableViewModel implements 
 
                     populateMap(projects);
 
-                    dismissProgressDialog();
+                    if(isVoiceActivated) {
+                        //setTableViewDisplay(!getTableViewDisplay());
+                        setTableViewDisplay(true);
+                    }
                     ((ProjectsNearMeActivity) activity).updateTableViewPager();
+                    dismissProgressDialog();
                     if (projects == null || projects.size() == 0) {
-
                         showCancelAlertDialog("", getActivityWeakReference().get().getString(R.string.no_projects_found));
                     }
 

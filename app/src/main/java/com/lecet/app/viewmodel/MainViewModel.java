@@ -13,6 +13,7 @@ import android.widget.ViewSwitcher;
 import com.lecet.app.R;
 import com.lecet.app.adapters.DashboardRecyclerViewAdapter;
 import com.lecet.app.content.MainActivity;
+import com.lecet.app.contentbase.BaseObservableViewModel;
 import com.lecet.app.data.models.Bid;
 import com.lecet.app.data.models.Project;
 import com.lecet.app.domain.BidDomain;
@@ -41,7 +42,7 @@ import retrofit2.Callback;
  * This code is copyright (c) 2016 Dom & Tom Inc.
  */
 
-public class MainViewModel {
+public class MainViewModel extends BaseObservableViewModel {
 
     private static final String TAG = "MainViewModel";
     private Date previousDate;
@@ -83,6 +84,7 @@ public class MainViewModel {
     private List<RealmObject> adapterData;
 
     public MainViewModel(AppCompatActivity appCompatActivity, BidDomain bidDomain, ProjectDomain projectDomain, Calendar calendar, TrackingListDomain trackingListDomain) {
+        super(appCompatActivity);
 
         this.bidDomain = bidDomain;
         this.projectDomain = projectDomain;
@@ -425,5 +427,15 @@ public class MainViewModel {
     public void setPreviousDate(Date previousDate) {
         this.previousDate = previousDate;
     }
+
+    /*public void showProgressDialog() {
+        showProgressDialog();
+    }
+
+    public void hideProgressDialog() {
+        hideProgressDialog();
+    }*/
+
+
 
 }

@@ -21,6 +21,11 @@ public class GeocodeRequest {
     public GeocodeRequest() {
     }
 
+    public GeocodeRequest(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+
     public double getLng() {
         return lng;
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lecet</string>
+    <string name="app_name">MEP</string>
 
     <!-- Common -->
     <string name="password">Password</string>
@@ -152,7 +152,7 @@
     <string name="edit_profile">Edit Profile</string>
 
     <!-- Projects Near Me -->
-    <string name="no_projects_found">No projects found near your location</string>
+    <string name="no_projects_found">No projects found near your fullAddress</string>
 
     <!-- Home Fragment -->
     <string name="title_activity_main">Main</string>
@@ -220,11 +220,18 @@
     <string name="pre_bid">PRE BID</string>
 
     <!-- Projects Near Me Confirm Dialog Fragment -->
-    <string name="confirm_share_your_location_description">This feature is only available\nwhen you
-        share your location\nwith this app. Please tap OK\nwhen prompted.
+    <string name="confirm_share_your_location_description">This feature is only available\n
+        when you share your fullAddress\nwith this app. Please tap OK\nwhen prompted.
+    </string>
+    <string name="confirm_share_your_location_description_optional">
+        This feature can include fullAddress\n
+        information in your post when\n
+        you share your fullAddress with this app.\n
+        Please tap OK if you wish to include\n
+        your fullAddress.
     </string>
     <string name="confirm_enable_your_location_description">This feature is only available\nwhen you
-        share your location\nwith this app.
+        share your fullAddress\nwith this app.
     </string>
     <string name="confirm_share_your_location">SHARE MY LOCATION</string>
     <string name="confirm_go_to_settings">GO TO SETTINGS</string>
@@ -376,6 +383,7 @@
     <string name="optional">Optional</string>
     <string name="title_all_caps">TITLE</string>
     <string name="body_all_caps">BODY</string>
+    <string name="fullAddress">Location</string>
     <string name="testing_purposes_lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and
         typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the
         1500s, when an unknown printer took a galley of type and scrambled it to make a type
@@ -415,7 +423,7 @@
     <string name="update_project">Update Project</string>
     <string name="save_project_confirm">You are about to save this new project.</string>
     <string name="update_project_confirm">You are about to update this project.</string>
-    <string name="save_project_location_required">A project location is required.</string>
+    <string name="save_project_location_required">A project fullAddress is required.</string>
     <string name="save_project_address_required">A project address is required.</string>
     <string name="save_project_city_required">A project city is required.</string>
     <string name="save_project_state_required">A project state is required.</string>
@@ -438,4 +446,32 @@
     <string name="lastChildParentPosition">lastChildParentPosition</string>
     <string name="lastName">lastName</string>
     <string name="lastFamilyChecked">lastFamilyChecked</string>
+    <string name="seconds_ago">Seconds Ago</string>
+    <string name="just_now">Just Now</string>
+    <string name="minutes_ago">Minute(s) Ago</string>
+    <string name="hours_ago">Hour(s) Ago</string>
+    <string name="days_ago">Days(s) Ago</string>
+    <string name="years_ago">Year(s) Ago</string>
+
+    <!-- Search -->
+    <!-- Note on phrasing: Use "[Search for] [query] [in/on] [MEP] -->
+    <!-- Also works: Use "[Search MEP for] [query] [in/on]. -->
+    <string name="voice_projects_near_me">projects near me</string>
+    <string name="voice_project_near_me">project near me</string>
+    <string name="voice_projects_by_me">projects by me</string>
+    <string name="voice_project_by_me">project by me</string>
+    <string name="voice_projects_nearby">projects nearby</string>
+    <string name="voice_recently_updated_projects">recently updated projects</string>
+    <string name="voice_projects_updated_recently">projects updated recently</string>
+    <string name="voice_projects_recently_updated">projects recently updated</string>
+    <string name="voice_recent_projects">recent projects</string>
+    <string name="voice_recent_project_updates">recent project updates</string>
+    <string name="voice_tracking_list">tracking list</string>
+    <string name="voice_tracking_lists">tracking lists</string>
+    <string name="voice_project_tracking_list">project tracking list</string>
+    <string name="voice_project_tracking_lists">project tracking lists</string>
+    <string name="voice_company_tracking_list">company tracking list</string>
+    <string name="voice_company_tracking_lists">company tracking lists</string>
+
+
 </resources>

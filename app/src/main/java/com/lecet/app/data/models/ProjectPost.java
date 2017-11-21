@@ -582,13 +582,13 @@ public class ProjectPost extends BaseObservable {
         this.geocode = geocode;
     }
 
-    public void setGeocode(Geocode geocode){
+    /*public void setGeocode(Geocode geocode){
         if(geocode == null){
             this.geocode = null;
         }
         this.geocode.setLng(geocode.getLng());
         this.geocode.setLat(geocode.getLat());
-    }
+    }*/
 
     public String toConvertedString() {
         return "ProjectPost{" +

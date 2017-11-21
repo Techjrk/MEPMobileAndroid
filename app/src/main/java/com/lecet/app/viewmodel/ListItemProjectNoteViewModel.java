@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.view.View;
 
+import com.lecet.app.BR;
+import com.lecet.app.R;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddNoteActivity;
@@ -15,6 +17,7 @@ import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
 import com.lecet.app.utility.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_BODY_EXTRA;
@@ -40,7 +43,7 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         this.note = note;
         this.activity = activity;
 
-        setAuthorName(note);
+        setAuthorNameFromUser(note);
 
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
@@ -48,14 +51,14 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         }
     }
 
-    private void setAuthorName(ProjectNote note) {
-        User noteAuthor = note.getAuthor();
+    private void setAuthorNameFromUser(ProjectNote note) {
+        final User author = note.getAuthor();
 
-        if(noteAuthor == null){
+        if(author == null){
             Log.e(TAG, "fetchNoteAuthor: User Author is null");
         } else {
             Log.d(TAG, "fetchNoteAuthor: Set Author Name");
-            setAuthorName(noteAuthor.getFirstName() + " " + noteAuthor.getLastName());
+            setAuthorName(author.getFirstName() + " " + author.getLastName());
         }
     }
 
@@ -67,30 +70,38 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
 
     private void setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
+        notifyPropertyChanged(BR.canEdit);
     }
 
-    /*public long getAuthorId() {
-        return authorId;
+    @Bindable
+    public String getFullAddress() {
+        return note.getFullAddress();
     }
 
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
-    }*/
+    public void setFullAddress(String fullAddress) {
+        this.note.setFullAddress(fullAddress);
+        notifyPropertyChanged(BR.fullAddress);
+    }
 
+    public boolean showFullAddress() {
+        return (getFullAddress() != null && !getFullAddress().isEmpty());
+    }
+
+    @Bindable
     public String getAuthorName(){
         return authorName;
     }
 
     private void setAuthorName(String name){
         authorName = name;
-        notifyChange();
+        notifyPropertyChanged(BR.authorName);
     }
 
-    public long getLoggedInUserId() {
+    private long getLoggedInUserId() {
         return loggedInUserId;
     }
 
-    public void setLoggedInUserId(long id) {
+    private void setLoggedInUserId(long id) {
         this.loggedInUserId = id;
     }
 
@@ -106,6 +117,21 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         return note.getId();
     }
 
+    public String getDateUpdatedForDisplay() {
+        // not updated since created? no need to display updated at
+        if(note.getUpdatedAt().getTime() - note.getCreatedAt().getTime() < 3000) {
+            return "";
+        }
+        return activity.getString(R.string.last_updated) + ": " + getTimeDifference();
+    }
+
+    public String getDateCreatedForDisplay() {
+        TimeZone localTimeZone = TimeZone.getDefault();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy h:mm a");
+        simpleDateFormat.setTimeZone(localTimeZone);
+        String displayDate = simpleDateFormat.format(note.getCreatedAt());
+        return displayDate;
+    }
 
     ///////////////////////////
     // Click Events
@@ -141,8 +167,13 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         }
     }
 
+
+    /*
+     * Helpers
+     */
+
     //TODO - move to utils class?
-    public String getTimeDifference() {
+    private String getTimeDifference(){
         long currentTime = System.currentTimeMillis();
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
@@ -150,35 +181,35 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
         long difference =  currentTime - note.getCreatedAt().getTime();
 
         if(difference < 0){
-            Log.d(TAG, "getTimeDifference: Less then 0");
+            Log.e(TAG, "getTimeDifference: Less then 0");
+            return "";
         }
         if(difference < 30000L){//less then 30 seconds
-            return "Just Now";
+            return activity.getString(R.string.just_now);
         }
         difference /= 1000L;//to seconds
 
         if(difference < 60L){//less then a minute
-            return difference + " Seconds Ago";
+            return difference + " " + activity.getString(R.string.seconds_ago);
         }
         difference /= 60L;//to minutes
 
         if(difference < 60L){//less then an hour
-            return difference + " Minute(s) Ago";
+            return difference + " " + activity.getString(R.string.minutes_ago);
         }
 
         difference /= 60L;//to hours
 
-        if(difference < 24L){
-            return difference + " Hour(s) Ago";
+        if(difference < 60L){
+            return difference + " " + activity.getString(R.string.hours_ago);
         }
         difference /= 24L;
 
-        if(difference < 365) {//less then a Day
-            return difference + " Days(s) Ago";
+        if(difference < 24L) {//less then a Day
+            return difference + " " + activity.getString(R.string.days_ago);
         }
         difference /= 365L;//to Years
-        return difference + " Year(s) Ago";
-
+        return difference + " " + activity.getString(R.string.years_ago);
     }
 
 }

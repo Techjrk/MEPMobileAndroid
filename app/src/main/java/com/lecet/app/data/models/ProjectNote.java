@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import android.support.annotation.NonNull;
 
-import com.lecet.app.interfaces.ProjectAdditionalData;
+
+import com.lecet.app.interfaces.ProjectUserCreatedContent;
 
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jasonm on 3/9/17.
  */
 
-public class ProjectNote extends RealmObject implements ProjectAdditionalData{
+public class ProjectNote extends RealmObject implements ProjectUserCreatedContent {
 
     @PrimaryKey
     @SerializedName("id")
@@ -52,9 +53,16 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
     @SerializedName("author")
     private User author;
 
+    @SerializedName("geocode")
+    private Geocode geocode;
+
+    @SerializedName("fullAddress")
+    private String fullAddress;
+
+
     public ProjectNote(){}
 
-    public ProjectNote(long id, String title, String text, boolean isPublic, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt) {
+    public ProjectNote(long id, String title, String text, boolean isPublic, boolean pending, long companyId, long projectId, long authorId, Date createdAt, Date updatedAt, Geocode geocode, String fullAddress) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -63,15 +71,15 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.companyId = companyId;
         this.projectId = projectId;
         this.authorId = authorId;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt; //TODO - check if there is a conversion happening with timezones here and with updatedAt
         this.updatedAt = updatedAt;
+        this.geocode = geocode;
+        this.fullAddress = fullAddress;
     }
 
     public ProjectNote(long id, String title, String text, long companyId, long projectId, long authorId, Date createdAt) {
-        this(id, title, text, true, false, companyId, projectId, authorId, createdAt, createdAt);
-
+        this(id, title, text, true, false, companyId, projectId, authorId, createdAt, createdAt, null, null);
     }
-
 
     //Getters And Setters
     public long getId() {
@@ -82,9 +90,13 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.id = id;
     }
 
-    public String getTitle() {return title;}
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title) {this.title = title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getText() {
         return text;
@@ -158,10 +170,23 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         this.updatedAt = updatedAt;
     }
 
+    public Geocode getGeocode() {
+        return geocode;
+    }
 
+    public void setGeocode(Geocode geocode) {
+        this.geocode = geocode;
+    }
 
-    @Override
-    public int compareTo(@NonNull ProjectAdditionalData other) {
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
+    public int compareTo(@NonNull ProjectUserCreatedContent other) {
         if(other instanceof ProjectNote){
             return (int)(id - ((ProjectNote) other).getId());
         }else{
@@ -206,7 +231,6 @@ public class ProjectNote extends RealmObject implements ProjectAdditionalData{
         if (updatedAt != null ? !updatedAt.equals(that.updatedAt) : that.updatedAt != null)
             return false;
         return author != null ? author.equals(that.author) : that.author == null;
-
     }
 
     @Override

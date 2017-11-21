@@ -14,7 +14,7 @@ import com.lecet.app.data.storage.LecetSharedPreferenceUtil;
 import com.lecet.app.databinding.ListItemProjectDetailImageBinding;
 import com.lecet.app.databinding.ListItemProjectDetailNoteBinding;
 import com.lecet.app.domain.UserDomain;
-import com.lecet.app.interfaces.ProjectAdditionalData;
+import com.lecet.app.interfaces.ProjectUserCreatedContent;
 import com.lecet.app.utility.Log;
 import com.lecet.app.viewmodel.ListItemProjectImageViewModel;
 import com.lecet.app.viewmodel.ListItemProjectNoteViewModel;
@@ -27,17 +27,17 @@ import io.realm.Realm;
  * Created by ludwigvondrake on 3/23/17.
  */
 
-public class ProjectNotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ProjectUserCreatedContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private static final String TAG = "ProjectNotesAdapter";
+    private static final String TAG = "ProjUserCrContAdapter";
     private static final int NOTE_VIEW_TYPE = 0;
     private static final int PHOTO_VIEW_TYPE = 1;
     private AppCompatActivity activity;
     private UserDomain userDomain;
 
-    List<ProjectAdditionalData> data;
+    List<ProjectUserCreatedContent> data;
 
-    public ProjectNotesAdapter(List<ProjectAdditionalData> data, AppCompatActivity activity) {
+    public ProjectUserCreatedContentAdapter(List<ProjectUserCreatedContent> data, AppCompatActivity activity) {
         this.data = data;
         this.activity = activity;
 

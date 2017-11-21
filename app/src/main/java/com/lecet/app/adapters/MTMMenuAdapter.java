@@ -12,6 +12,7 @@ import com.lecet.app.R;
 import com.lecet.app.data.models.CompanyTrackingList;
 import com.lecet.app.data.models.ProjectTrackingList;
 import com.lecet.app.interfaces.MTMMenuCallback;
+import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.List;
  */
 
 public class MTMMenuAdapter extends BaseAdapter {
+
+    private static final String TAG = "MTMMenuAdapter";
 
     private Context context;
     private String[] titles;
@@ -76,7 +79,8 @@ public class MTMMenuAdapter extends BaseAdapter {
         }
     }
 
-    private void setProjectListVisible(boolean projectListVisible, boolean notifyDataSetChanged) {
+    public void setProjectListVisible(boolean projectListVisible, boolean notifyDataSetChanged) {
+        Log.d(TAG, "setProjectListVisible: projectListVisible: " + projectListVisible);
         boolean oldValue = isProjectListVisible;
         isProjectListVisible = projectListVisible;
         if (oldValue != isProjectListVisible) { //means the value changed and we need to update the size
@@ -91,7 +95,8 @@ public class MTMMenuAdapter extends BaseAdapter {
         }
     }
 
-    private void setCompanyListVisible(boolean companyListVisible, boolean notifyDataSetChanged) {
+    public void setCompanyListVisible(boolean companyListVisible, boolean notifyDataSetChanged) {
+        Log.d(TAG, "setCompanyListVisible: companyListVisible: " + companyListVisible);
         boolean oldValue = isCompanyListVisible;
         isCompanyListVisible = companyListVisible;
 

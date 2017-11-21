@@ -9,6 +9,8 @@ import android.text.format.Time;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lecet.app.BR;
+import com.lecet.app.R;
 import com.lecet.app.content.ContactDetailActivity;
 import com.lecet.app.content.ProfileActivity;
 import com.lecet.app.content.ProjectAddImageActivity;
@@ -21,6 +23,7 @@ import com.lecet.app.domain.UserDomain;
 import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
@@ -50,24 +53,24 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         this.activity = activity;
         this.imageView = imageView;
 
-        fetchImageAuthor(photo, userDomain);
+        setAuthorNameFromUser(photo);
         if(userDomain.fetchLoggedInUser() != null) {
             setLoggedInUserId(userDomain.fetchLoggedInUser().getId());
             setCanEdit(photo.getAuthorId() == getLoggedInUserId());
         }
     }
 
-    private void fetchImageAuthor(ProjectPhoto photo, UserDomain userDomain) {
-        final User imageAuthor = photo.getAuthor();
-        if(imageAuthor == null){
+    private void setAuthorNameFromUser(ProjectPhoto photo) {
+        final User author = photo.getAuthor();
+
+        if(author == null){
             Log.e(TAG, "fetchImageAuthor: No Author Attached");
         }
         else {
-            setAuthorName(imageAuthor.getFirstName() + " " + imageAuthor.getLastName());
+            setAuthorName(author.getFirstName() + " " + author.getLastName());
             notifyChange();
         }
     }
-
 
 
     @Bindable
@@ -77,32 +80,38 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
     private void setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
+        notifyPropertyChanged(BR.canEdit);
     }
 
-
-    public String getImageUrl() {
-        //Log.d(TAG, "getImageUrl: photo url: " + photo.getUrl());
-        return photo.getUrl();
+    @Bindable
+    public String getFullAddress() {
+        return photo.getFullAddress();
     }
 
-    public String getSrc() {
-        Log.d(TAG, "getSrc: photo src: " + photo.getSrc());
-        return photo.getSrc();
+    public void setFullAddress(String fullAddress) {
+        this.photo.setFullAddress(fullAddress);
+        notifyPropertyChanged(BR.fullAddress);
     }
 
+    public boolean showFullAddress() {
+        return (getFullAddress() != null && !getFullAddress().isEmpty());
+    }
+
+    @Bindable
     public String getAuthorName(){
         return authorName;
     }
 
     private void setAuthorName(String name){
         authorName = name;
+        notifyPropertyChanged(BR.authorName);
     }
 
-    public long getLoggedInUserId() {
+    private long getLoggedInUserId() {
         return loggedInUserId;
     }
 
-    public void setLoggedInUserId(long id) {
+    private void setLoggedInUserId(long id) {
         this.loggedInUserId = id;
     }
 
@@ -118,6 +127,18 @@ public class ListItemProjectImageViewModel extends BaseObservable {
         return photo.getId();
     }
 
+    public String getImageUrl() {
+        //Log.d(TAG, "getImageUrl: photo url: " + photo.getUrl());
+        return photo.getUrl();
+    }
+
+    public String getSrc() {
+        Log.d(TAG, "getSrc: photo src: " + photo.getSrc());
+        return photo.getSrc();
+    }
+
+
+
     @BindingAdapter("bind:projectImageUrl")
     public static void loadImage(ImageView view, String url) {
         Log.d(TAG, "loadImage: url: " + url);
@@ -127,6 +148,23 @@ public class ListItemProjectImageViewModel extends BaseObservable {
                 .placeholder(null)  //TODO - use any placeholder image during load?
                 .into(view);
     }
+
+    public String getDateUpdatedForDisplay() {
+        // not updated since created? no need to display updated at
+        if(photo.getUpdatedAt().getTime() - photo.getCreatedAt().getTime() < 3000) {
+            return "";
+        }
+        return activity.getString(R.string.last_updated) + ": " + getTimeDifference();
+    }
+
+    public String getDateCreatedForDisplay() {
+        TimeZone localTimeZone = TimeZone.getDefault();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy h:mm a");
+        simpleDateFormat.setTimeZone(localTimeZone);
+        String displayDate = simpleDateFormat.format(photo.getCreatedAt());
+        return displayDate;
+    }
+
 
     ///////////////////////////
     // Click Events
@@ -190,7 +228,7 @@ public class ListItemProjectImageViewModel extends BaseObservable {
      */
 
     //TODO - move to utils class?
-    public String getTimeDifference(){
+    private String getTimeDifference(){
         long currentTime = System.currentTimeMillis();
 
         currentTime -= TimeZone.getTimeZone(Time.getCurrentTimezone()).getOffset(currentTime);
@@ -199,34 +237,34 @@ public class ListItemProjectImageViewModel extends BaseObservable {
 
         if(difference < 0){
             Log.e(TAG, "getTimeDifference: Less then 0");
+            return "";
         }
         if(difference < 30000L){//less then 30 seconds
-            return "Just Now";
+            return activity.getString(R.string.just_now);
         }
         difference /= 1000L;//to seconds
 
         if(difference < 60L){//less then a minute
-            return difference + " Seconds Ago";
+            return difference + " " + activity.getString(R.string.seconds_ago);
         }
         difference /= 60L;//to minutes
 
         if(difference < 60L){//less then an hour
-            return difference + " Minute(s) Ago";
+            return difference + " " + activity.getString(R.string.minutes_ago);
         }
 
         difference /= 60L;//to hours
 
         if(difference < 60L){
-            return difference + " Hour(s) Ago";
+            return difference + " " + activity.getString(R.string.hours_ago);
         }
         difference /= 24L;
 
         if(difference < 24L) {//less then a Day
-            return difference + " Days(s) Ago";
+            return difference + " " + activity.getString(R.string.days_ago);
         }
         difference /= 365L;//to Years
-        return difference + " Year(s) Ago";
-
+        return difference + " " + activity.getString(R.string.years_ago);
     }
 
 }
