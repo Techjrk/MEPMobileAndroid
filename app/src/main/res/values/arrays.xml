@@ -4,6 +4,7 @@
         <item>My Profile</item>
         <item>Hidden Projects</item>
         <item>Settings</item>
+        <item>Help</item>
     </string-array>
 
     <string-array name="mtm_menu">

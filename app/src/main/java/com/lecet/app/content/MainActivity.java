@@ -686,6 +686,12 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                         case 3:
                             MainActivity.this.onSettingsClicked();
                             break;
+                        case 4:
+                            MainActivity.this.onHelpClicked();
+                            break;
+                        default:
+                            android.util.Log.w(TAG, "onItemClick: WARNING: No case for menu item position: " + position);
+                            break;
                     }
                 }
             }); // the callback for when a list item is selected
@@ -744,6 +750,13 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     public void onSettingsClicked() {
 
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onHelpClicked() {
+
+        Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }
 

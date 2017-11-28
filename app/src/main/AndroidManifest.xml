@@ -83,8 +83,8 @@
             android:label="@string/title_activity_company_detail_project_bids"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
             android:value=".content.MainActivity" />
         </activity>
         <activity
@@ -92,18 +92,18 @@
             android:label="@string/title_activity_project_tracking_list"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".content.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
         </activity>
         <activity
             android:name=".content.ModifyCompanyTrackingListActivity"
             android:label="@string/title_activity_project_tracking_list"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".content.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".content.MainActivity" />
         </activity>
         <activity
             android:name=".content.ContactDetailActivity"
@@ -118,6 +118,11 @@
         <activity
             android:name=".content.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".content.HelpActivity"
+            android:label="@string/title_activity_help"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity

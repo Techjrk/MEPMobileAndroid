@@ -10,4 +10,6 @@ public interface OverflowMenuCallback {
     void onHiddenObjectsClicked();
 
     void onSettingsClicked();
+
+    void onHelpClicked();
 }

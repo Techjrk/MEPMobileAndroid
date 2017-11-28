@@ -147,6 +147,9 @@
     <string name="update_your_profile">Update your profile</string>
     <string name="logout">Logout</string>
 
+    <!-- Help -->
+    <string name="title_activity_help">Help</string>
+
     <!-- Profile -->
     <string name="title_activity_profile">Profile</string>
     <string name="edit_profile">Edit Profile</string>
