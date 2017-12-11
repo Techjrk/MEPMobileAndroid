@@ -734,30 +734,30 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
 
     @Override
     public void onProfileClicked() {
-
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
+        overflowMenu.dismiss();
     }
 
     @Override
     public void onHiddenObjectsClicked() {
-
         Intent intent = new Intent(this, HiddenProjectsActivity.class);
         startActivity(intent);
+        overflowMenu.dismiss();
     }
 
     @Override
     public void onSettingsClicked() {
-
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+        overflowMenu.dismiss();
     }
 
     @Override
     public void onHelpClicked() {
-
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
+        overflowMenu.dismiss();
     }
 
     @Override

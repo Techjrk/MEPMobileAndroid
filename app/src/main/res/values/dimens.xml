@@ -25,7 +25,7 @@
 
     <!-- Overflow Menu -->
     <dimen name="overflow_menu_margin_space">14dp</dimen>
-    <dimen name="overflow_menu_height">270dp</dimen>
+    <dimen name="overflow_menu_height">320dp</dimen>
 
     <!-- Map Info Window -->
     <dimen name="info_window_height">175dp</dimen>

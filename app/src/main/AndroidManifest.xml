@@ -66,7 +66,8 @@
             android:name=".content.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="com.google.android.gms.actions.SEARCH_ACTION"/>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -124,7 +125,8 @@
             android:name=".content.HelpActivity"
             android:label="@string/title_activity_help"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:noHistory="true"/>
         <activity
             android:name=".content.SearchActivity"
             android:screenOrientation="portrait"
