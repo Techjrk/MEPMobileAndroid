@@ -85,8 +85,9 @@ public class HelpActivity extends LecetBaseActivity {
     private void initZendesk() {
         Log.d(TAG, "initZendesk");
 
-        //TODO: replace with Lecet Zendesk credentials
-        ZendeskConfig.INSTANCE.init(this, "https://omniwear.zendesk.com", "23705744c16d8e0698b45920f18aa26e43d7", "mobile_sdk_client_b7fd695c0e9a6056");
+        // Support site to view these values: https://lecet.zendesk.com/agent/admin/mobile_sdk
+
+        ZendeskConfig.INSTANCE.init(this, "https://lecet.zendesk.com", "ed763d8b11a15c4a4b1a6b47e3bc9f08bc95426b46095699", "mobile_sdk_client_8d4371dd0f8c080b525d");
 
         ZendeskConfig.INSTANCE.setCoppaEnabled(true);
         Identity identity = new AnonymousIdentity.Builder().build();
