@@ -684,10 +684,10 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
                             MainActivity.this.onHiddenObjectsClicked();
                             break;
                         case 3:
-                            MainActivity.this.onSettingsClicked();
+                            MainActivity.this.onHelpClicked();
                             break;
                         case 4:
-                            MainActivity.this.onHelpClicked();
+                            MainActivity.this.onSettingsClicked();
                             break;
                         default:
                             android.util.Log.w(TAG, "onItemClick: WARNING: No case for menu item position: " + position);
