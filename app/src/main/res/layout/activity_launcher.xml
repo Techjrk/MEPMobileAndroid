@@ -19,12 +19,5 @@
         <ImageView style="@style/FullScreenImageBackground"
                    android:src="@drawable/content_bg_splash"/>
 
-        <ImageView android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:layout_marginLeft="48dp"
-                   android:layout_marginRight="48dp"
-                   android:layout_marginTop="176dp"
-                   android:src="@drawable/logo_mep"/>
-
     </RelativeLayout>
 </layout>
