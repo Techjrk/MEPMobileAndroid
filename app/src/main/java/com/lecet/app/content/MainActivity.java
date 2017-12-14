@@ -123,6 +123,9 @@ public class MainActivity extends LecetBaseActivity implements MHSDelegate, MHSD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        android.util.Log.d(TAG, "onCreate");
+
         Intent intent = getIntent();
 
         setupBinding();

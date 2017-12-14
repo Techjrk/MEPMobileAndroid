@@ -11,18 +11,10 @@
     <ImageView style="@style/FullScreenImageBackground"
                android:src="@drawable/content_bg_splash"/>
 
-    <ImageView android:id="@+id/title_image_view"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="48dp"
-               android:layout_marginRight="48dp"
-               android:layout_marginTop="176dp"
-               android:src="@drawable/logo_mep"/>
-
     <ProgressBar android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:layout_below="@id/title_image_view"
                  android:layout_centerHorizontal="true"
+                 android:layout_centerVertical="true"
                  android:indeterminate="true"/>
 
 </RelativeLayout>

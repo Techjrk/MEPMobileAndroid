@@ -2,6 +2,7 @@ package com.lecet.app.content;
 
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.lecet.app.R;
 import com.lecet.app.contentbase.LecetBaseActivity;
@@ -23,6 +24,8 @@ public class DashboardIntermediaryActivity extends LecetBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_intermediary);
+
+        Log.d("DashboardInterm", "onCreate");
 
         Realm realm;
 
