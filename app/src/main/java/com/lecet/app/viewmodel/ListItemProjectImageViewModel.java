@@ -20,10 +20,12 @@ import com.lecet.app.content.ProjectViewImageActivity;
 import com.lecet.app.data.models.ProjectPhoto;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.Log;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
 import static com.lecet.app.content.ProjectAddImageActivity.IMAGE_BODY_EXTRA;
@@ -158,10 +160,11 @@ public class ListItemProjectImageViewModel extends BaseObservable {
     }
 
     public String getDateCreatedForDisplay() {
+        Date convertedDate = DateUtility.convertUTCDate2LocalDate(photo.getCreatedAt());
         TimeZone localTimeZone = TimeZone.getDefault();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy h:mm a");
         simpleDateFormat.setTimeZone(localTimeZone);
-        String displayDate = simpleDateFormat.format(photo.getCreatedAt());
+        String displayDate = simpleDateFormat.format(convertedDate);
         return displayDate;
     }
 

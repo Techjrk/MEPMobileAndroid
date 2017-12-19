@@ -15,9 +15,11 @@ import com.lecet.app.content.ProjectAddNoteActivity;
 import com.lecet.app.data.models.ProjectNote;
 import com.lecet.app.data.models.User;
 import com.lecet.app.domain.UserDomain;
+import com.lecet.app.utility.DateUtility;
 import com.lecet.app.utility.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
 import static com.lecet.app.content.ProjectAddNoteActivity.NOTE_BODY_EXTRA;
@@ -126,10 +128,11 @@ public class ListItemProjectNoteViewModel extends BaseObservable {
     }
 
     public String getDateCreatedForDisplay() {
+        Date convertedDate = DateUtility.convertUTCDate2LocalDate(note.getCreatedAt());
         TimeZone localTimeZone = TimeZone.getDefault();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy h:mm a");
         simpleDateFormat.setTimeZone(localTimeZone);
-        String displayDate = simpleDateFormat.format(note.getCreatedAt());
+        String displayDate = simpleDateFormat.format(convertedDate);
         return displayDate;
     }
 
