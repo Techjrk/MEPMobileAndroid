@@ -22,7 +22,7 @@ public class LauncherActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);z
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_launcher);
         setupBinding();
