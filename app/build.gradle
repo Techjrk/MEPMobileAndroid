@@ -10,7 +10,7 @@ android {
         applicationId "com.lecet.app"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 20
+        versionCode 21
         versionName "3.0.5"
 
         // HockeyApp
